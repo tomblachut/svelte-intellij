@@ -1,19 +1,33 @@
 <idea-plugin>
-    <id>dev.svelte.svelte-intellij</id>
-    <name>Hello Action Project</name>
-    <version>0.0.1</version>
-    <vendor email="dummy" url="dummy">dummy</vendor>
+    <id>dev.blachut.svelte.lang</id>
+    <name>Svelte</name>
+    <vendor url="https://github.com/tomblachut">Tomasz Błachut</vendor>
+
+    <description><![CDATA[
+Support for <a href="https://svelte.dev/">Svelte</a>.
+
+<h3>Features</h3>
+
+<ul>
+    <li>Syntax highlighting</li>
+    <li>Coding assistance</li>
+    <li>Navigation from the components to their definition</li>
+</ul>
+    ]]></description>
 
     <depends>com.intellij.modules.lang</depends>
+    <depends>JavaScript</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-    </extensions>
+        <fileTypeFactory implementation="dev.blachut.svelte.lang.SvelteFileTypeFactory"/>
+        <lang.fileViewProviderFactory language="Svelte"
+                                      implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
+        <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.SvelteParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="Svelte"
+                                       implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
+        <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
+        <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
 
-    <actions>
-        <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
-            <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="Myplugin.Textboxes" class="HelloAction" text="Hello" description="Says hello"/>
-        </group>
-    </actions>
+    </extensions>
 
 </idea-plugin>

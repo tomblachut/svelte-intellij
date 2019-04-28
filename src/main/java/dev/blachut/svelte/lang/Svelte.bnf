@@ -1,0 +1,62 @@
+{
+  parserClass="dev.blachut.svelte.lang.SvelteParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Svelte"
+  psiImplClassSuffix="Impl"
+  psiPackage="dev.blachut.svelte.lang.psi"
+  psiImplPackage="dev.blachut.svelte.lang.psi.impl"
+
+  elementTypeHolderClass="dev.blachut.svelte.lang.psi.SvelteTypes"
+  elementTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
+  tokenTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
+
+  tokens = [
+    START_MUSTACHE="{"
+    END_MUSTACHE="}"
+    IF="#if"
+    ELSE_IF="if"
+    END_IF="/if"
+    EACH="#each"
+    AS="as"
+    COMMA=","
+    START_PAREN="("
+    END_PAREN=")"
+    END_EACH="/each"
+    AWAIT="#await"
+    AWAIT_THEN="then"
+    THEN=":then"
+    CATCH=":catch"
+    AWAIT_END="/await"
+    ELSE=":else"
+  ]
+}
+
+svelteComponent ::= scope
+
+scope ::= (block|HTML_FRAGMENT)*
+
+private block ::= ifBlock | eachBlock | awaitBlock
+
+ifBlock ::= ifBlockOpening scope (ifElseContinuation scope)* (elseContinuation scope)? ifBlockClosing
+eachBlock ::= eachBlockOpening scope (elseContinuation scope)? eachBlockClosing
+awaitBlock ::= (awaitThenBlockOpening scope | awaitBlockOpening scope thenContinuation scope) (catchContinuation scope)? awaitBlockClosing
+
+ifBlockOpening ::= '{' '#if' expression '}'
+ifElseContinuation ::= '{' ':else' 'if' expression '}'
+ifBlockClosing ::= '{' '/if' '}'
+
+eachBlockOpening ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
+eachBlockClosing ::= '{' '/each' '}'
+
+awaitBlockOpening ::= '{' '#await' expression '}'
+awaitThenBlockOpening ::= '{' '#await' expression 'then' parameter '}'
+thenContinuation ::= '{' ':then' parameter '}'
+catchContinuation ::= '{' ':catch' parameter '}'
+awaitBlockClosing ::= '{' '/await' '}'
+
+elseContinuation ::= '{' ':else' '}'
+
+expression ::= CODE_FRAGMENT
+parameter ::= CODE_FRAGMENT
