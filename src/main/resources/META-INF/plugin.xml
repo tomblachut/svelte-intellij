@@ -1,4 +1,4 @@
-<idea-plugin>
+<idea-plugin url="https://github.com/tomblachut/svelte-intellij">
     <id>dev.blachut.svelte.lang</id>
     <name>Svelte</name>
     <vendor url="https://github.com/tomblachut">Tomasz Błachut</vendor>

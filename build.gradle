@@ -27,7 +27,7 @@ sourceSets {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version 'IU-LATEST-EAP-SNAPSHOT'
+    version 'IU-191.6707.61'
     plugins = ['JavaScriptLanguage', 'CSS', 'PsiViewer:191.4212']
 }
 
