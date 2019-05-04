@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface SvelteIfBlockOpening extends PsiElement {
 
-  @NotNull
+  @Nullable
   SvelteExpression getExpression();
 
 }

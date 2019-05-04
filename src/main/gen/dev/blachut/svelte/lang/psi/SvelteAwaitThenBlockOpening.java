@@ -10,7 +10,7 @@ public interface SvelteAwaitThenBlockOpening extends PsiElement {
   @NotNull
   SvelteExpression getExpression();
 
-  @NotNull
+  @Nullable
   SvelteParameter getParameter();
 
 }

@@ -60,13 +60,22 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
     override fun visitEachBlock(eachBlockElement: SvelteEachBlock) {
         ensureStartInjecting()
 
-        val items = eachBlockElement.eachBlockOpening.expressionList[0]
-        val item = eachBlockElement.eachBlockOpening.parameterList[0]
+        val items = eachBlockElement.eachBlockOpening.expressionList.getOrNull(0)
+        val item = eachBlockElement.eachBlockOpening.parameterList.getOrNull(0)
         val index = eachBlockElement.eachBlockOpening.parameterList.getOrNull(1)
         val key = eachBlockElement.eachBlockOpening.expressionList.getOrNull(1)
 
-        stitchScript("if (${items.text}) { [...", items, "]") // nullish guard, cast Iterable to Array
-        stitchScript(".forEach((", item)
+        if (items != null) {
+            stitchScript("if (${items.text}) { [...", items, "]") // nullish guard, cast Iterable to Array
+        } else {
+            appendPrefix("if (false) { []") // in case of parse error
+
+        }
+        if (item != null) {
+            stitchScript(".forEach((", item)
+        } else {
+            appendPrefix(".forEach((")
+        }
 
         if (index != null) stitchScript(",", index)
 
@@ -101,6 +110,25 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
         element.acceptChildren(this)
     }
 
+    private fun ensureStartInjecting() {
+        if (!started) {
+            registrar.startInjecting(JavascriptLanguage.INSTANCE, "js")
+            started = true
+        }
+    }
+
+    private fun appendPrefix(prefix: String) {
+        danglingPrefix += prefix
+    }
+
+    /**
+     * Adds script injection place. Handles dangling prefix, so that resulting file is well formed
+     * After visitor completes traversal there can be remaining prefix, but IntelliJ doesn't mind
+     */
+    private fun stitchScript(prefix: String, host: PsiLanguageInjectionHost, suffix: String? = null) {
+        registrar.addPlace(prependDanglingPrefix(prefix), suffix, host, TextRange.from(0, host.textLength))
+    }
+
     /**
      * Consumes accumulated danglingPrefix and prepends provided prefix with it
      */
@@ -112,20 +140,5 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
         } else {
             basePrefix
         }
-    }
-
-    private fun ensureStartInjecting() {
-        if (!started) {
-            registrar.startInjecting(JavascriptLanguage.INSTANCE, "js")
-            started = true
-        }
-    }
-
-    /**
-     * Adds script injection place. Handles dangling prefix, so that resulting file is well formed
-     * After visitor completes traversal there can be remaining prefix, but IntelliJ doesn't mind
-     */
-    private fun stitchScript(prefix: String, host: PsiLanguageInjectionHost, suffix: String? = null) {
-        registrar.addPlace(prependDanglingPrefix(prefix), suffix, host, TextRange.from(0, host.textLength))
     }
 }

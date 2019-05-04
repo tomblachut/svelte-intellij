@@ -27,9 +27,9 @@ public class SvelteAwaitBlockImpl extends ASTWrapperPsiElement implements Svelte
   }
 
   @Override
-  @NotNull
+  @Nullable
   public SvelteAwaitBlockClosing getAwaitBlockClosing() {
-    return findNotNullChildByClass(SvelteAwaitBlockClosing.class);
+    return findChildByClass(SvelteAwaitBlockClosing.class);
   }
 
   @Override

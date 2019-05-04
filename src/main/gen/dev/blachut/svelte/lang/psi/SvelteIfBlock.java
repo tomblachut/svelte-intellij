@@ -10,7 +10,7 @@ public interface SvelteIfBlock extends PsiElement {
   @Nullable
   SvelteElseContinuation getElseContinuation();
 
-  @NotNull
+  @Nullable
   SvelteIfBlockClosing getIfBlockClosing();
 
   @NotNull

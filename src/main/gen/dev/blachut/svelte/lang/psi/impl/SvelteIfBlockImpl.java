@@ -33,9 +33,9 @@ public class SvelteIfBlockImpl extends ASTWrapperPsiElement implements SvelteIfB
   }
 
   @Override
-  @NotNull
+  @Nullable
   public SvelteIfBlockClosing getIfBlockClosing() {
-    return findNotNullChildByClass(SvelteIfBlockClosing.class);
+    return findChildByClass(SvelteIfBlockClosing.class);
   }
 
   @Override

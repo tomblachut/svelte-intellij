@@ -42,13 +42,14 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean awaitBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "awaitBlock")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, AWAIT_BLOCK, null);
     r = awaitBlock_0(b, l + 1);
-    r = r && awaitBlock_1(b, l + 1);
-    r = r && awaitBlockClosing(b, l + 1);
-    exit_section_(b, m, AWAIT_BLOCK, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, awaitBlock_1(b, l + 1));
+    r = p && awaitBlockClosing(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // awaitThenBlockOpening scope | awaitBlockOpening scope thenContinuation scope
@@ -109,11 +110,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean awaitBlockClosing(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "awaitBlockClosing")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, AWAIT_END, END_MUSTACHE);
-    exit_section_(b, m, AWAIT_BLOCK_CLOSING, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, AWAIT_BLOCK_CLOSING, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, AWAIT_END, END_MUSTACHE);
+    p = r; // pin = 2
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -121,13 +123,14 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean awaitBlockOpening(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "awaitBlockOpening")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, AWAIT);
-    r = r && expression(b, l + 1);
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, AWAIT_BLOCK_OPENING, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, AWAIT_BLOCK_OPENING, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, AWAIT);
+    p = r; // pin = 2
+    r = r && report_error_(b, expression(b, l + 1));
+    r = p && consumeToken(b, END_MUSTACHE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -135,15 +138,16 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean awaitThenBlockOpening(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "awaitThenBlockOpening")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, AWAIT_THEN_BLOCK_OPENING, null);
     r = consumeTokens(b, 0, START_MUSTACHE, AWAIT);
     r = r && expression(b, l + 1);
     r = r && consumeToken(b, AWAIT_THEN);
-    r = r && parameter(b, l + 1);
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, AWAIT_THEN_BLOCK_OPENING, r);
-    return r;
+    p = r; // pin = 4
+    r = r && report_error_(b, parameter(b, l + 1));
+    r = p && consumeToken(b, END_MUSTACHE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -163,13 +167,14 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean catchContinuation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "catchContinuation")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, CATCH);
-    r = r && parameter(b, l + 1);
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, CATCH_CONTINUATION, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, CATCH_CONTINUATION, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, CATCH);
+    p = r; // pin = 2
+    r = r && report_error_(b, parameter(b, l + 1));
+    r = p && consumeToken(b, END_MUSTACHE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -177,14 +182,15 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean eachBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "eachBlock")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, EACH_BLOCK, null);
     r = eachBlockOpening(b, l + 1);
-    r = r && scope(b, l + 1);
-    r = r && eachBlock_2(b, l + 1);
-    r = r && eachBlockClosing(b, l + 1);
-    exit_section_(b, m, EACH_BLOCK, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, scope(b, l + 1));
+    r = p && report_error_(b, eachBlock_2(b, l + 1)) && r;
+    r = p && eachBlockClosing(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (elseContinuation scope)?
@@ -210,11 +216,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean eachBlockClosing(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "eachBlockClosing")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, END_EACH, END_MUSTACHE);
-    exit_section_(b, m, EACH_BLOCK_CLOSING, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, EACH_BLOCK_CLOSING, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, END_EACH, END_MUSTACHE);
+    p = r; // pin = 2
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -222,17 +229,18 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean eachBlockOpening(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "eachBlockOpening")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, EACH);
-    r = r && expression(b, l + 1);
-    r = r && consumeToken(b, AS);
-    r = r && parameter(b, l + 1);
-    r = r && eachBlockOpening_5(b, l + 1);
-    r = r && eachBlockOpening_6(b, l + 1);
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, EACH_BLOCK_OPENING, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, EACH_BLOCK_OPENING, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, EACH);
+    p = r; // pin = 2
+    r = r && report_error_(b, expression(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, AS)) && r;
+    r = p && report_error_(b, parameter(b, l + 1)) && r;
+    r = p && report_error_(b, eachBlockOpening_5(b, l + 1)) && r;
+    r = p && report_error_(b, eachBlockOpening_6(b, l + 1)) && r;
+    r = p && consumeToken(b, END_MUSTACHE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (',' parameter)?
@@ -277,11 +285,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean elseContinuation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "elseContinuation")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, ELSE, END_MUSTACHE);
-    exit_section_(b, m, ELSE_CONTINUATION, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ELSE_CONTINUATION, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, ELSE, END_MUSTACHE);
+    p = r; // pin = 2
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -301,15 +310,16 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean ifBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ifBlock")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, IF_BLOCK, null);
     r = ifBlockOpening(b, l + 1);
-    r = r && scope(b, l + 1);
-    r = r && ifBlock_2(b, l + 1);
-    r = r && ifBlock_3(b, l + 1);
-    r = r && ifBlockClosing(b, l + 1);
-    exit_section_(b, m, IF_BLOCK, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, scope(b, l + 1));
+    r = p && report_error_(b, ifBlock_2(b, l + 1)) && r;
+    r = p && report_error_(b, ifBlock_3(b, l + 1)) && r;
+    r = p && ifBlockClosing(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (ifElseContinuation scope)*
@@ -357,11 +367,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean ifBlockClosing(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ifBlockClosing")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, END_IF, END_MUSTACHE);
-    exit_section_(b, m, IF_BLOCK_CLOSING, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, IF_BLOCK_CLOSING, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, END_IF, END_MUSTACHE);
+    p = r; // pin = 2
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -369,13 +380,14 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean ifBlockOpening(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ifBlockOpening")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, IF);
-    r = r && expression(b, l + 1);
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, IF_BLOCK_OPENING, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, IF_BLOCK_OPENING, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, IF);
+    p = r; // pin = 2
+    r = r && report_error_(b, expression(b, l + 1));
+    r = p && consumeToken(b, END_MUSTACHE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -383,26 +395,39 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean ifElseContinuation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ifElseContinuation")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, ELSE, ELSE_IF);
-    r = r && expression(b, l + 1);
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, IF_ELSE_CONTINUATION, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, IF_ELSE_CONTINUATION, null);
+    r = consumeTokens(b, 3, START_MUSTACHE, ELSE, ELSE_IF);
+    p = r; // pin = 3
+    r = r && report_error_(b, expression(b, l + 1));
+    r = p && consumeToken(b, END_MUSTACHE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
   // '{' expression '}'
   public static boolean interpolation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "interpolation")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, INTERPOLATION, "<interpolation>");
     r = consumeToken(b, START_MUSTACHE);
     r = r && expression(b, l + 1);
+    p = r; // pin = 2
     r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, INTERPOLATION, r);
+    exit_section_(b, l, m, r, p, interpolation_recover_parser_);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // &'}'
+  static boolean interpolation_recover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "interpolation_recover")) return false;
+    if (!nextTokenIs(b, END_MUSTACHE)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = consumeToken(b, END_MUSTACHE);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -436,9 +461,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   private static boolean scope_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "scope_0")) return false;
     boolean r;
+    Marker m = enter_section_(b);
     r = block(b, l + 1);
     if (!r) r = interpolation(b, l + 1);
     if (!r) r = consumeToken(b, HTML_FRAGMENT);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -453,13 +480,19 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   public static boolean thenContinuation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "thenContinuation")) return false;
     if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, START_MUSTACHE, THEN);
-    r = r && parameter(b, l + 1);
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, m, THEN_CONTINUATION, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, THEN_CONTINUATION, null);
+    r = consumeTokens(b, 2, START_MUSTACHE, THEN);
+    p = r; // pin = 2
+    r = r && report_error_(b, parameter(b, l + 1));
+    r = p && consumeToken(b, END_MUSTACHE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
+  static final Parser interpolation_recover_parser_ = new Parser() {
+    public boolean parse(PsiBuilder b, int l) {
+      return interpolation_recover(b, l + 1);
+    }
+  };
 }

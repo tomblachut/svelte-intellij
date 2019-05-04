@@ -39,26 +39,27 @@ scope ::= (block|interpolation|HTML_FRAGMENT)*
 
 private block ::= ifBlock | eachBlock | awaitBlock
 
-ifBlock ::= ifBlockOpening scope (ifElseContinuation scope)* (elseContinuation scope)? ifBlockClosing
-eachBlock ::= eachBlockOpening scope (elseContinuation scope)? eachBlockClosing
-awaitBlock ::= (awaitThenBlockOpening scope | awaitBlockOpening scope thenContinuation scope) (catchContinuation scope)? awaitBlockClosing
+ifBlock ::= ifBlockOpening scope (ifElseContinuation scope)* (elseContinuation scope)? ifBlockClosing {pin=1}
+eachBlock ::= eachBlockOpening scope (elseContinuation scope)? eachBlockClosing {pin=1}
+awaitBlock ::= (awaitThenBlockOpening scope | awaitBlockOpening scope thenContinuation scope) (catchContinuation scope)? awaitBlockClosing {pin=1}
 
-ifBlockOpening ::= '{' '#if' expression '}'
-ifElseContinuation ::= '{' ':else' 'if' expression '}'
-ifBlockClosing ::= '{' '/if' '}'
+ifBlockOpening ::= '{' '#if' expression '}' {pin=2}
+ifElseContinuation ::= '{' ':else' 'if' expression '}' {pin=3}
+ifBlockClosing ::= '{' '/if' '}' {pin=2}
 
-eachBlockOpening ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
-eachBlockClosing ::= '{' '/each' '}'
+eachBlockOpening ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}' {pin=2}
+eachBlockClosing ::= '{' '/each' '}' {pin=2}
 
-awaitBlockOpening ::= '{' '#await' expression '}'
-awaitThenBlockOpening ::= '{' '#await' expression 'then' parameter '}'
-thenContinuation ::= '{' ':then' parameter '}'
-catchContinuation ::= '{' ':catch' parameter '}'
-awaitBlockClosing ::= '{' '/await' '}'
+awaitBlockOpening ::= '{' '#await' expression '}' {pin=2}
+awaitThenBlockOpening ::= '{' '#await' expression 'then' parameter '}' {pin=4}
+thenContinuation ::= '{' ':then' parameter '}' {pin=2}
+catchContinuation ::= '{' ':catch' parameter '}' {pin=2}
+awaitBlockClosing ::= '{' '/await' '}' {pin=2}
 
-elseContinuation ::= '{' ':else' '}'
+elseContinuation ::= '{' ':else' '}' {pin=2}
 
-interpolation ::= '{' expression '}'
+interpolation ::= '{' expression '}' {pin=2; recoverWhile="interpolation_recover"}
+private interpolation_recover ::= &'}'
 
 expression ::= CODE_FRAGMENT {
                                extends="dev.blachut.svelte.lang.psi.SvelteCodeInjectionHostImpl"

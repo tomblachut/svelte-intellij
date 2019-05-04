@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface SvelteIfElseContinuation extends PsiElement {
 
-  @NotNull
+  @Nullable
   SvelteExpression getExpression();
 
 }

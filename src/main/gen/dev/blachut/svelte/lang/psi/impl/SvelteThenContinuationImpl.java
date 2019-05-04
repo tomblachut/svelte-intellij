@@ -27,9 +27,9 @@ public class SvelteThenContinuationImpl extends ASTWrapperPsiElement implements 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public SvelteParameter getParameter() {
-    return findNotNullChildByClass(SvelteParameter.class);
+    return findChildByClass(SvelteParameter.class);
   }
 
 }

@@ -27,9 +27,9 @@ public class SvelteEachBlockImpl extends ASTWrapperPsiElement implements SvelteE
   }
 
   @Override
-  @NotNull
+  @Nullable
   public SvelteEachBlockClosing getEachBlockClosing() {
-    return findNotNullChildByClass(SvelteEachBlockClosing.class);
+    return findChildByClass(SvelteEachBlockClosing.class);
   }
 
   @Override

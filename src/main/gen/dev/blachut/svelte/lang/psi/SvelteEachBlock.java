@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface SvelteEachBlock extends PsiElement {
 
-  @NotNull
+  @Nullable
   SvelteEachBlockClosing getEachBlockClosing();
 
   @NotNull

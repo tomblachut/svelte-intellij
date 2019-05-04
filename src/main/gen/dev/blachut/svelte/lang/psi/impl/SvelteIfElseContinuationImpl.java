@@ -27,9 +27,9 @@ public class SvelteIfElseContinuationImpl extends ASTWrapperPsiElement implement
   }
 
   @Override
-  @NotNull
+  @Nullable
   public SvelteExpression getExpression() {
-    return findNotNullChildByClass(SvelteExpression.class);
+    return findChildByClass(SvelteExpression.class);
   }
 
 }

@@ -33,9 +33,9 @@ public class SvelteAwaitThenBlockOpeningImpl extends ASTWrapperPsiElement implem
   }
 
   @Override
-  @NotNull
+  @Nullable
   public SvelteParameter getParameter() {
-    return findNotNullChildByClass(SvelteParameter.class);
+    return findChildByClass(SvelteParameter.class);
   }
 
 }
