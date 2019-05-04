@@ -22,7 +22,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Work
 <h3>Known issues</h3>
 
 <ul>
-    <li>$ subscriptions don't work</li>
+    <li>$ subscriptions aren't recognised properly</li>
     <li>...</li>
 </ul>
 
