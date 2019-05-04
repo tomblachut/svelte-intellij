@@ -297,11 +297,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // CODE_FRAGMENT
   public static boolean expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expression")) return false;
-    if (!nextTokenIs(b, CODE_FRAGMENT)) return false;
+    if (!nextTokenIs(b, "<expression>", CODE_FRAGMENT)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, EXPRESSION, "<expression>");
     r = consumeToken(b, CODE_FRAGMENT);
-    exit_section_(b, m, EXPRESSION, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -435,11 +435,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // CODE_FRAGMENT
   public static boolean parameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "parameter")) return false;
-    if (!nextTokenIs(b, CODE_FRAGMENT)) return false;
+    if (!nextTokenIs(b, "<parameter>", CODE_FRAGMENT)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, PARAMETER, "<parameter>");
     r = consumeToken(b, CODE_FRAGMENT);
-    exit_section_(b, m, PARAMETER, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
