@@ -60,5 +60,11 @@ elseContinuation ::= '{' ':else' '}'
 
 interpolation ::= '{' expression '}'
 
-expression ::= CODE_FRAGMENT {extends="dev.blachut.svelte.lang.psi.SvelteCodeInjectionHost"}
-parameter ::= CODE_FRAGMENT {extends="dev.blachut.svelte.lang.psi.SvelteCodeInjectionHost"}
+expression ::= CODE_FRAGMENT {
+                               extends="dev.blachut.svelte.lang.psi.SvelteCodeInjectionHostImpl"
+                               implements="com.intellij.psi.PsiLanguageInjectionHost"
+                             }
+parameter ::= CODE_FRAGMENT {
+                              extends="dev.blachut.svelte.lang.psi.SvelteCodeInjectionHostImpl"
+                              implements="com.intellij.psi.PsiLanguageInjectionHost"
+                            }

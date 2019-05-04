@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import dev.blachut.svelte.lang.psi.SvelteCodeInjectionHost;
+import dev.blachut.svelte.lang.psi.SvelteCodeInjectionHostImpl;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteExpressionImpl extends SvelteCodeInjectionHost implements SvelteExpression {
+public class SvelteExpressionImpl extends SvelteCodeInjectionHostImpl implements SvelteExpression {
 
   public SvelteExpressionImpl(@NotNull ASTNode node) {
     super(node);

@@ -4,6 +4,7 @@ package dev.blachut.svelte.lang.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class SvelteVisitor extends PsiElementVisitor {
 
@@ -44,7 +45,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitExpression(@NotNull SvelteExpression o) {
-    visitPsiElement(o);
+    visitPsiLanguageInjectionHost(o);
   }
 
   public void visitIfBlock(@NotNull SvelteIfBlock o) {
@@ -68,7 +69,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitParameter(@NotNull SvelteParameter o) {
-    visitPsiElement(o);
+    visitPsiLanguageInjectionHost(o);
   }
 
   public void visitScope(@NotNull SvelteScope o) {
@@ -77,6 +78,10 @@ public class SvelteVisitor extends PsiElementVisitor {
 
   public void visitThenContinuation(@NotNull SvelteThenContinuation o) {
     visitPsiElement(o);
+  }
+
+  public void visitPsiLanguageInjectionHost(@NotNull PsiLanguageInjectionHost o) {
+    visitElement(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

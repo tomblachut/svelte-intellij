@@ -8,7 +8,7 @@ import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.impl.source.tree.injected.InjectionBackgroundSuppressor
 
-open class SvelteCodeInjectionHost(node: ASTNode) : ASTWrapperPsiElement(node), PsiLanguageInjectionHost, InjectionBackgroundSuppressor {
+open class SvelteCodeInjectionHostImpl(node: ASTNode) : ASTWrapperPsiElement(node), PsiLanguageInjectionHost, InjectionBackgroundSuppressor {
     override fun updateText(text: String): PsiLanguageInjectionHost {
         val valueNode = node.firstChildNode
         assert(valueNode is LeafElement)
@@ -26,7 +26,7 @@ open class SvelteCodeInjectionHost(node: ASTNode) : ASTWrapperPsiElement(node), 
 }
 
 
-class SvelteLiteralTextEscaper(host: SvelteCodeInjectionHost) : LiteralTextEscaper<SvelteCodeInjectionHost>(host) {
+class SvelteLiteralTextEscaper(host: SvelteCodeInjectionHostImpl) : LiteralTextEscaper<SvelteCodeInjectionHostImpl>(host) {
     override fun isOneLine(): Boolean = false
 
     override fun getOffsetInHost(offsetInDecoded: Int, rangeInsideHost: TextRange): Int {

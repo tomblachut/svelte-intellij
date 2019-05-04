@@ -4,7 +4,8 @@ package dev.blachut.svelte.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
-public interface SvelteExpression extends PsiElement {
+public interface SvelteExpression extends PsiLanguageInjectionHost {
 
 }
