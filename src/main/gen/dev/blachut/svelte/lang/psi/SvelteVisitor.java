@@ -63,6 +63,10 @@ public class SvelteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitInterpolation(@NotNull SvelteInterpolation o) {
+    visitPsiElement(o);
+  }
+
   public void visitParameter(@NotNull SvelteParameter o) {
     visitPsiElement(o);
   }

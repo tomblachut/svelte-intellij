@@ -22,6 +22,7 @@ public interface SvelteTypes {
   IElementType IF_BLOCK_CLOSING = new SvelteElementType("IF_BLOCK_CLOSING");
   IElementType IF_BLOCK_OPENING = new SvelteElementType("IF_BLOCK_OPENING");
   IElementType IF_ELSE_CONTINUATION = new SvelteElementType("IF_ELSE_CONTINUATION");
+  IElementType INTERPOLATION = new SvelteElementType("INTERPOLATION");
   IElementType PARAMETER = new SvelteElementType("PARAMETER");
   IElementType SCOPE = new SvelteElementType("SCOPE");
   IElementType THEN_CONTINUATION = new SvelteElementType("THEN_CONTINUATION");
@@ -90,6 +91,9 @@ public interface SvelteTypes {
       }
       else if (type == IF_ELSE_CONTINUATION) {
         return new SvelteIfElseContinuationImpl(node);
+      }
+      else if (type == INTERPOLATION) {
+        return new SvelteInterpolationImpl(node);
       }
       else if (type == PARAMETER) {
         return new SvelteParameterImpl(node);

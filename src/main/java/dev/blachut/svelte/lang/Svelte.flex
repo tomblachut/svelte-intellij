@@ -44,14 +44,15 @@ WHITE_SPACE=\s+
 %state VERBATIM_HTML
 %state HTML_TAG
 %state TAG_STRING
+%state SVELTE_INTERPOLATION
 %state SVELTE_TAG
-// Interpolation is handled separately (well, currently not at all)
 
 %%
 <YYINITIAL> {
   "<script" | "<style"  { yybegin(VERBATIM_HTML); return HTML_FRAGMENT; }
   "<"  { yybegin(HTML_TAG); return HTML_FRAGMENT; }
   "{" / \s*[#:/] { yybegin(SVELTE_TAG); return START_MUSTACHE; }
+  "{" { yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
 }
 
 <SVELTE_TAG> {
@@ -61,7 +62,7 @@ WHITE_SPACE=\s+
 
   "#each"            { return EACH; }
   "as"               { return AS; }
-  ","                { return COMMA; }
+  ","                { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
   "("                { return START_PAREN; }
   ")"                { return END_PAREN; }
   "/each"            { return END_EACH; }
@@ -73,7 +74,10 @@ WHITE_SPACE=\s+
   "/await"           { return AWAIT_END; }
 
   ":else"            { return ELSE; }
-  {WHITE_SPACE}      { return WHITE_SPACE; }
+  {WHITE_SPACE}      { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
+}
+
+<SVELTE_INTERPOLATION, SVELTE_TAG> {
   [^{}]              { return CODE_FRAGMENT; }
 
   "{"                {   leftBraceCount += 1; return CODE_FRAGMENT; }

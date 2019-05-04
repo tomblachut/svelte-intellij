@@ -393,6 +393,20 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '{' expression '}'
+  public static boolean interpolation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "interpolation")) return false;
+    if (!nextTokenIs(b, START_MUSTACHE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, START_MUSTACHE);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, END_MUSTACHE);
+    exit_section_(b, m, INTERPOLATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // CODE_FRAGMENT
   public static boolean parameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "parameter")) return false;
@@ -405,7 +419,7 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (block|HTML_FRAGMENT)*
+  // (block|interpolation|HTML_FRAGMENT)*
   public static boolean scope(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "scope")) return false;
     Marker m = enter_section_(b, l, _NONE_, SCOPE, "<scope>");
@@ -418,11 +432,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // block|HTML_FRAGMENT
+  // block|interpolation|HTML_FRAGMENT
   private static boolean scope_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "scope_0")) return false;
     boolean r;
     r = block(b, l + 1);
+    if (!r) r = interpolation(b, l + 1);
     if (!r) r = consumeToken(b, HTML_FRAGMENT);
     return r;
   }

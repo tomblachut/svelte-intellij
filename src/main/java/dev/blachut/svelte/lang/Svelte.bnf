@@ -35,7 +35,7 @@
 
 svelteComponent ::= scope
 
-scope ::= (block|HTML_FRAGMENT)*
+scope ::= (block|interpolation|HTML_FRAGMENT)*
 
 private block ::= ifBlock | eachBlock | awaitBlock
 
@@ -57,6 +57,8 @@ catchContinuation ::= '{' ':catch' parameter '}'
 awaitBlockClosing ::= '{' '/await' '}'
 
 elseContinuation ::= '{' ':else' '}'
+
+interpolation ::= '{' expression '}'
 
 expression ::= CODE_FRAGMENT
 parameter ::= CODE_FRAGMENT

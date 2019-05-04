@@ -44,4 +44,10 @@ public class SvelteScopeImpl extends ASTWrapperPsiElement implements SvelteScope
     return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteIfBlock.class);
   }
 
+  @Override
+  @NotNull
+  public List<SvelteInterpolation> getInterpolationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteInterpolation.class);
+  }
+
 }

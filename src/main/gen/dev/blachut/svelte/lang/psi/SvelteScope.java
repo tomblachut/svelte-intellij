@@ -16,4 +16,7 @@ public interface SvelteScope extends PsiElement {
   @NotNull
   List<SvelteIfBlock> getIfBlockList();
 
+  @NotNull
+  List<SvelteInterpolation> getInterpolationList();
+
 }
