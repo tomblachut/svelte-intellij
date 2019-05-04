@@ -6,147 +6,126 @@ import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.openapi.progress.ProgressIndicatorProvider
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiLanguageInjectionHost
 import dev.blachut.svelte.lang.psi.*
 
 class SvelteCodeMultiHostInjector : MultiHostInjector {
     override fun elementsToInjectIn(): MutableList<out Class<out PsiElement>> {
-        println("elementsToInjectIn")
         return mutableListOf(SvelteFile::class.java)
-//        return mutableListOf(SvelteExpressionImpl::class.java, SvelteParameterImpl::class.java)
     }
 
     override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
-        println("getLanguagesToInject")
+//        println("getLanguagesToInject")
         val visitor = SvelteCodeInjectionVisitor(registrar)
-        visitor.visitElement(context)
+        visitor.visitElement(context.containingFile)
         if (visitor.started) {
             registrar.doneInjecting()
+//             For debug
+//             (registrar as InjectionRegistrarImpl).resultFiles[0].viewProvider.virtualFile
+//             println(registrar.toString())
         }
     }
 }
 
-
 class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : SvelteVisitor() {
     var started = false
 
-    private val standardExpressionPrefix = "String("
-    private val standardExpressionSuffix = ");"
+    private val expressionPrefix = "String("
+    private val expressionSuffix = ");"
 
     private var danglingPrefix = "'use strict';"
 
+    /**
+     * This method stitches together call to forEach Array method
+     *
+     * IN:
+     * {#each items as item, index (key)}
+     * Note that [as item] part is currently required
+     *
+     * items: SvelteExpression
+     * item: SvelteParameter
+     * index: SvelteParameter?
+     * key: SvelteExpression?
+     *
+     * OUT:
+     *  if (items) {
+     *      [...items].forEach((item, index) => {
+     *          String(key);
+     *          <each body>
+     *      });
+     *  } else {
+     *      <else body>
+     *  }
+     */
     override fun visitEachBlock(eachBlockElement: SvelteEachBlock) {
-        /*
-        This method stitches together call to forEach Array method
-
-        IN:
-        {#each items as item, index (key)}
-
-        items: SvelteExpression
-        item: SvelteParameter
-        index: SvelteParameter
-        key: SvelteExpression
-
-        Note that as item part is currently required
-
-        OUT:
-
-        if (items) {
-            [...items].forEach((item, index) => {
-                String(key);
-                <each body>
-            });
-        } else {
-            <else body>
-        }
-        */
-
-        if (!started) {
-            registrar.startInjecting(JavascriptLanguage.INSTANCE)
-            started = true
-        }
+        ensureStartInjecting()
 
         val items = eachBlockElement.eachBlockOpening.expressionList[0]
         val item = eachBlockElement.eachBlockOpening.parameterList[0]
         val index = eachBlockElement.eachBlockOpening.parameterList.getOrNull(1)
         val key = eachBlockElement.eachBlockOpening.expressionList.getOrNull(1)
 
-        var ifPrefix = "if (${items.text}) { [..."
-        if (danglingPrefix.isNotEmpty()) {
-            ifPrefix = danglingPrefix + standardExpressionPrefix
-            danglingPrefix = ""
-        }
+        stitchScript("if (${items.text}) { [...", items, "]") // nullish guard, cast Iterable to Array
+        stitchScript(".forEach((", item)
 
-        registrar.addPlace(ifPrefix, "]", items, range(items))
-        registrar.addPlace(".forEach((", "", item, range(item))
+        if (index != null) stitchScript(",", index)
 
-        val arrowDelimiter = ")=>{"
-        var arrowDelimiterAppended = false
+        danglingPrefix += ") => {"
 
-        if (index != null) {
-            registrar.addPlace(",", arrowDelimiter, index, range(index))
-            arrowDelimiterAppended = true
-        }
+        if (key != null) stitchScript(expressionPrefix, key, expressionSuffix)
 
-        if (key != null) {
-            val prefix = if (arrowDelimiterAppended) standardExpressionPrefix else arrowDelimiter + standardExpressionPrefix
-            arrowDelimiterAppended = true
-            registrar.addPlace(prefix, standardExpressionSuffix, key, range(key))
-        }
+        // Scope after each block opening  is guaranteed by the parser
+        visitScope(eachBlockElement.scopeList[0])
 
-
-        if (!arrowDelimiterAppended) {
-            danglingPrefix += arrowDelimiter
-        }
-
-
-        val eachBodyElement = eachBlockElement.scopeList[0] // Guaranteed by the parser
-        visitScope(eachBodyElement)
-
-        danglingPrefix += "})}"
+        danglingPrefix += "}) }" // arrow end, forEach end, if end
 
         if (eachBlockElement.elseContinuation != null) {
             danglingPrefix += "else {"
             visitScope(eachBlockElement.scopeList[1])
-            danglingPrefix += "}"
+            danglingPrefix += "}" // else end
         }
     }
 
     override fun visitExpression(context: SvelteExpression) {
-        println(context.textRange)
-        if (!started) {
-            registrar.startInjecting(JavascriptLanguage.INSTANCE)
-            started = true
-        }
-
-        var prefix = standardExpressionPrefix
-        if (danglingPrefix.isNotEmpty()) {
-            prefix = danglingPrefix + standardExpressionPrefix
-            danglingPrefix = ""
-        }
-        registrar.addPlace(prefix, standardExpressionSuffix, context, range(context))
+        ensureStartInjecting()
+        stitchScript(expressionPrefix, context, expressionSuffix)
     }
 
     override fun visitParameter(context: SvelteParameter) {
-        println(context.textRange)
-        if (!started) {
-            registrar.startInjecting(JavascriptLanguage.INSTANCE)
-            started = true
-        }
-
-        var prefix = "("
-        if (danglingPrefix.isNotEmpty()) {
-            prefix = danglingPrefix + standardExpressionPrefix
-            danglingPrefix = ""
-        }
-        registrar.addPlace(prefix, ") => null;", context, range(context))
+        ensureStartInjecting()
+        stitchScript("(", context, ") => null;")
     }
 
     override fun visitElement(element: PsiElement) {
         ProgressIndicatorProvider.checkCanceled()
         element.acceptChildren(this)
     }
-}
 
-fun range(length: PsiElement): TextRange {
-    return TextRange.from(0, length.textLength)
+    /**
+     * Consumes accumulated danglingPrefix and prepends provided prefix with it
+     */
+    private fun prependDanglingPrefix(basePrefix: String): String {
+        return if (danglingPrefix.isNotEmpty()) {
+            val newPrefix = danglingPrefix + basePrefix
+            danglingPrefix = ""
+            newPrefix
+        } else {
+            basePrefix
+        }
+    }
+
+    private fun ensureStartInjecting() {
+        if (!started) {
+            registrar.startInjecting(JavascriptLanguage.INSTANCE, "js")
+            started = true
+        }
+    }
+
+    /**
+     * Adds script injection place. Handles dangling prefix, so that resulting file is well formed
+     * After visitor completes traversal there can be remaining prefix, but IntelliJ doesn't mind
+     */
+    private fun stitchScript(prefix: String, host: PsiLanguageInjectionHost, suffix: String? = null) {
+        registrar.addPlace(prependDanglingPrefix(prefix), suffix, host, TextRange.from(0, host.textLength))
+    }
 }
