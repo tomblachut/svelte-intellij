@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import dev.blachut.svelte.lang.psi.SvelteCodeInjectionHost;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteParameterImpl extends ASTWrapperPsiElement implements SvelteParameter {
+public class SvelteParameterImpl extends SvelteCodeInjectionHost implements SvelteParameter {
 
   public SvelteParameterImpl(@NotNull ASTNode node) {
     super(node);
