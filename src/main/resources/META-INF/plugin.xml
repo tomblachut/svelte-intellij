@@ -4,14 +4,18 @@
     <vendor url="https://github.com/tomblachut">Tomasz Błachut</vendor>
 
     <description><![CDATA[
-Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
+<p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>
+
+<b>PLEASE NOTE THAT THIS IS WORK IN PROGRESS</b>
+
+<p>Please report issues on GitHub</p>
 
 <h3>Features</h3>
 
 <ul>
     <li>Syntax highlighting</li>
     <li>Coding assistance</li>
-    <li>Navigation from the components to their definition</li>
+    <li>Navigation from components to their definition</li>
 </ul>
     ]]></description>
 

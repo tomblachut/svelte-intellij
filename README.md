@@ -6,8 +6,10 @@
 
 Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Works in JetBrains products that support JavaScript.
 
+<b>PLEASE NOTE THAT THIS IS WORK IN PROGRESS</b>
+
 <h3>Installation</h3>
-* (soon) Use official [Plugin Repository](https://plugins.jetbrains.com/)
+* Use official [Plugin Repository](https://plugins.jetbrains.com/plugin/12375-svelte)
 * Head over to [releases tab](https://github.com/tomblachut/svelte-intellij/releases), download `.jar` archive and <a href="https://www.jetbrains.com/help/webstorm/managing-plugins.html#install_plugin_from_disk">Install plugin from disk</a>
 
 <h3>Features</h3>
@@ -22,7 +24,9 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Work
 <h3>Known issues</h3>
 
 <ul>
+    <li>Component imports are marked as unused</li>
     <li>$ subscriptions aren't recognised properly</li>
+    <li>Props completion and validation isn't provided</li>
     <li>...</li>
 </ul>
 
