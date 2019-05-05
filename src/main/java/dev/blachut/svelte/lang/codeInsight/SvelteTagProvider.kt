@@ -52,8 +52,8 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         val binding = importVisitor.bindings.find { it.name == tag.name } ?: return null
 
         // TODO Support reexports
-        // TODO Look into caching SvelteTagDescriptor in CachedValuesManager
-        return SvelteTagDescriptor(tag.name, binding)
+        // TODO Look into caching SvelteComponentTagDescriptor in CachedValuesManager
+        return SvelteComponentTagDescriptor(tag.name, binding)
     }
 
     override fun addTagNameVariants(elements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {

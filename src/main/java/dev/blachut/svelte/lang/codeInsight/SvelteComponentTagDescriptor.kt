@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NonNls
  * @ TODO Consider using BaseXmlElementDescriptorImpl, there are cache implementations there
  * @ TODO HtmlElementDescriptorImpl is used for example in HtmlUnknownTagInspectionBase: extending it could help or hinder code insight
  */
-class SvelteTagDescriptor(private val myName: String, private val myDeclaration: JSElement) : XmlElementDescriptor {
+class SvelteComponentTagDescriptor(private val myName: String, private val myDeclaration: JSElement) : XmlElementDescriptor {
     override fun getName(context: PsiElement): String = name
 
     override fun getName(): String = myName
