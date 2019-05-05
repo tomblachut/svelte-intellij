@@ -77,19 +77,19 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
 
         if (index != null) stitchScript(",", index)
 
-        danglingPrefix += ") => {"
+        appendPrefix(") => {")
 
         if (key != null) stitchScript(expressionPrefix, key, expressionSuffix)
 
         // Scope after each block opening  is guaranteed by the parser
         visitScope(eachBlockElement.scopeList[0])
 
-        danglingPrefix += "}) }" // arrow end, forEach end, if end
+        appendPrefix("}) }") // arrow end, forEach end, if end
 
         if (eachBlockElement.elseContinuation != null) {
-            danglingPrefix += "else {"
+            appendPrefix("else {")
             visitScope(eachBlockElement.scopeList[1])
-            danglingPrefix += "}" // else end
+            appendPrefix("}") // else end
         }
     }
 
