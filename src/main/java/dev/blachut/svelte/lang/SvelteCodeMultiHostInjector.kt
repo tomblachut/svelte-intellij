@@ -58,8 +58,6 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
      *  }
      */
     override fun visitEachBlock(eachBlockElement: SvelteEachBlock) {
-        ensureStartInjecting()
-
         val items = eachBlockElement.eachBlockOpening.expressionList.getOrNull(0)
         val item = eachBlockElement.eachBlockOpening.parameterList.getOrNull(0)
         val index = eachBlockElement.eachBlockOpening.parameterList.getOrNull(1)
@@ -96,25 +94,16 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
     }
 
     override fun visitExpression(context: SvelteExpression) {
-        ensureStartInjecting()
         stitchScript(expressionPrefix, context, expressionSuffix)
     }
 
     override fun visitParameter(context: SvelteParameter) {
-        ensureStartInjecting()
         stitchScript("(", context, ") => null;")
     }
 
     override fun visitElement(element: PsiElement) {
         ProgressIndicatorProvider.checkCanceled()
         element.acceptChildren(this)
-    }
-
-    private fun ensureStartInjecting() {
-        if (!started) {
-            registrar.startInjecting(JavascriptLanguage.INSTANCE, "js")
-            started = true
-        }
     }
 
     private fun appendPrefix(prefix: String) {
@@ -126,6 +115,10 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
      * After visitor completes traversal there can be remaining prefix, but IntelliJ doesn't mind
      */
     private fun stitchScript(prefix: String, host: PsiLanguageInjectionHost, suffix: String? = null) {
+        if (!started) {
+            registrar.startInjecting(JavascriptLanguage.INSTANCE, "js")
+            started = true
+        }
         registrar.addPlace(prependDanglingPrefix(prefix), suffix, host, TextRange.from(0, host.textLength))
     }
 
