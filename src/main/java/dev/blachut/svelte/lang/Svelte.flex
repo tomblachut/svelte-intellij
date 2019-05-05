@@ -12,7 +12,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 %{
   private char quote;
   private int leftBraceCount;
-//  private int leftParenCount;
+  private int leftParenCount;
 
 //  private Stack<Integer> stack = new Stack<>();
 //
@@ -36,7 +36,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 %eof{
   leftBraceCount = 0;
-//  leftParenCount = 0;
+  leftParenCount = 0;
 %eof}
 
 WHITE_SPACE=\s+
@@ -46,25 +46,24 @@ WHITE_SPACE=\s+
 %state TAG_STRING
 %state SVELTE_INTERPOLATION
 %state SVELTE_TAG
+%state SVELTE_TAG_PAREN_AWARE
 
 %%
 <YYINITIAL> {
-  "<script" | "<style"  { yybegin(VERBATIM_HTML); return HTML_FRAGMENT; }
-  "<"  { yybegin(HTML_TAG); return HTML_FRAGMENT; }
-  "{" / \s*[#:/] { yybegin(SVELTE_TAG); return START_MUSTACHE; }
-  "{" { yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
+  "<script" | "<style"    { yybegin(VERBATIM_HTML); return HTML_FRAGMENT; }
+  "<"                     { yybegin(HTML_TAG); return HTML_FRAGMENT; }
+  "{" / \s*[#:/]          { yybegin(SVELTE_TAG); return START_MUSTACHE; }
+  "{"                     { yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
 }
 
-<SVELTE_TAG> {
+<SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
   "#if"              { return IF; }
   "if"               { return ELSE_IF; }
   "/if"              { return END_IF; }
 
   "#each"            { return EACH; }
-  "as"               { return AS; }
+  "as"               { yybegin(SVELTE_TAG_PAREN_AWARE); return AS; }
   ","                { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
-  "("                { return START_PAREN; }
-  ")"                { return END_PAREN; }
   "/each"            { return END_EACH; }
 
   "#await"           { return AWAIT; }
@@ -77,19 +76,16 @@ WHITE_SPACE=\s+
   {WHITE_SPACE}      { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
 }
 
-<SVELTE_INTERPOLATION, SVELTE_TAG> {
-  [^{}]              { return CODE_FRAGMENT; }
+<SVELTE_TAG_PAREN_AWARE> {
+  "("                { leftParenCount += 1; if (leftParenCount == 1) { return START_PAREN; } else { return CODE_FRAGMENT; } }
+  ")"                { leftParenCount -= 1; if (leftParenCount == 0) { return END_PAREN; } else { return CODE_FRAGMENT; } }
+}
 
-  "{"                {   leftBraceCount += 1; return CODE_FRAGMENT; }
-  "}"                {
-                          if (leftBraceCount == 0) {
-                              yybegin(YYINITIAL);
-                              return END_MUSTACHE;
-                          } else {
-                              leftBraceCount -= 1;
-                              return CODE_FRAGMENT;
-                          }
-                     }
+<SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
+  "{"                { leftBraceCount += 1; return CODE_FRAGMENT; }
+  "}"                { if (leftBraceCount == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { leftBraceCount -= 1; return CODE_FRAGMENT; } }
+
+  [^]                { return CODE_FRAGMENT; }
 }
 
 <VERBATIM_HTML> {
@@ -107,4 +103,4 @@ WHITE_SPACE=\s+
   "\""                        { if (quote == '"') yybegin(HTML_TAG); return HTML_FRAGMENT; }
 }
 
-[^] { return HTML_FRAGMENT; }
+[^]                           { return HTML_FRAGMENT; }
