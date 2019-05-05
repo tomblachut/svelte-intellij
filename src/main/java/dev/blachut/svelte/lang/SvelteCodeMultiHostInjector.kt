@@ -114,7 +114,7 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
 
         visitScope(eachBlock.eachBlockOpening.scope)
 
-        appendPrefix("})") // arrow end, forEach end
+        appendPrefix("});") // arrow end, forEach end
 
         val elseContinuation = eachBlock.elseContinuation
         if (elseContinuation != null) {
@@ -123,6 +123,54 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
         }
 
         appendPrefix("}") // if/else end
+    }
+
+    override fun visitAwaitBlock(awaitBlock: SvelteAwaitBlock) {
+        val promiseExpression: SvelteExpression?
+        val thenParameter: SvelteParameter?
+        val thenScope: SvelteScope
+
+        val awaitThenBlockOpening = awaitBlock.awaitThenBlockOpening
+        if (awaitThenBlockOpening != null) {
+            promiseExpression = awaitThenBlockOpening.awaitThenBlockOpeningTag.expression
+            thenParameter = awaitThenBlockOpening.awaitThenBlockOpeningTag.parameter
+            thenScope = awaitThenBlockOpening.scope
+        } else {
+            promiseExpression = awaitBlock.awaitBlockOpening!!.awaitBlockOpeningTag.expression
+            thenParameter = awaitBlock.thenContinuation!!.thenContinuationTag.parameter
+            thenScope = awaitBlock.thenContinuation!!.scope
+
+            // Await block scope visit should be lifted before call to then
+            visitScope(awaitBlock.awaitBlockOpening!!.scope)
+        }
+
+        if (promiseExpression != null) {
+            stitchScript("new Promise(", promiseExpression, ")")
+        } else {
+            appendPrefix("Promise.resolve()")
+        }
+
+        if (thenParameter != null) {
+            stitchScript(".then((", thenParameter, ") => {")
+        } else {
+            appendPrefix(".then(() => {")
+        }
+
+        visitScope(thenScope)
+
+        val catchContinuation = awaitBlock.catchContinuation
+        if (catchContinuation != null) {
+            val catchParameter = catchContinuation.catchContinuationTag.parameter
+            if (catchParameter != null) {
+                stitchScript("}).catch((", catchParameter, ") => {")
+            } else {
+                appendPrefix("}).catch(() => {")
+            }
+
+            visitScope(catchContinuation.scope)
+        }
+
+        appendPrefix("});")
     }
 
     override fun visitExpression(context: SvelteExpression) {
