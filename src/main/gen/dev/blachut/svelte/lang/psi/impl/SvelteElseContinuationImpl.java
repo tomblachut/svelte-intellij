@@ -26,4 +26,16 @@ public class SvelteElseContinuationImpl extends ASTWrapperPsiElement implements 
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public SvelteElseContinuationTag getElseContinuationTag() {
+    return findNotNullChildByClass(SvelteElseContinuationTag.class);
+  }
+
+  @Override
+  @NotNull
+  public SvelteScope getScope() {
+    return findNotNullChildByClass(SvelteScope.class);
+  }
+
 }

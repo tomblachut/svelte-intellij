@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SvelteEachBlockOpening extends PsiElement {
 
   @NotNull
-  List<SvelteExpression> getExpressionList();
+  SvelteEachBlockOpeningTag getEachBlockOpeningTag();
 
   @NotNull
-  List<SvelteParameter> getParameterList();
+  SvelteScope getScope();
 
 }

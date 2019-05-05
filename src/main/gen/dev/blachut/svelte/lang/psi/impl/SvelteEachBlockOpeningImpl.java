@@ -28,14 +28,14 @@ public class SvelteEachBlockOpeningImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public List<SvelteExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteExpression.class);
+  public SvelteEachBlockOpeningTag getEachBlockOpeningTag() {
+    return findNotNullChildByClass(SvelteEachBlockOpeningTag.class);
   }
 
   @Override
   @NotNull
-  public List<SvelteParameter> getParameterList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteParameter.class);
+  public SvelteScope getScope() {
+    return findNotNullChildByClass(SvelteScope.class);
   }
 
 }

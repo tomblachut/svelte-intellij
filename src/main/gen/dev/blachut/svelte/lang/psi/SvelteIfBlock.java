@@ -10,16 +10,13 @@ public interface SvelteIfBlock extends PsiElement {
   @Nullable
   SvelteElseContinuation getElseContinuation();
 
+  @NotNull
+  List<SvelteElseIfContinuation> getElseIfContinuationList();
+
   @Nullable
   SvelteIfBlockClosing getIfBlockClosing();
 
   @NotNull
   SvelteIfBlockOpening getIfBlockOpening();
-
-  @NotNull
-  List<SvelteIfElseContinuation> getIfElseContinuationList();
-
-  @NotNull
-  List<SvelteScope> getScopeList();
 
 }

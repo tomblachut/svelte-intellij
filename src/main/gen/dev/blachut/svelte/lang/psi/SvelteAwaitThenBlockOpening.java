@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SvelteAwaitThenBlockOpening extends PsiElement {
 
   @NotNull
-  SvelteExpression getExpression();
+  SvelteAwaitThenBlockOpeningTag getAwaitThenBlockOpeningTag();
 
-  @Nullable
-  SvelteParameter getParameter();
+  @NotNull
+  SvelteScope getScope();
 
 }

@@ -51,12 +51,6 @@ public class SvelteAwaitBlockImpl extends ASTWrapperPsiElement implements Svelte
   }
 
   @Override
-  @NotNull
-  public List<SvelteScope> getScopeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteScope.class);
-  }
-
-  @Override
   @Nullable
   public SvelteThenContinuation getThenContinuation() {
     return findChildByClass(SvelteThenContinuation.class);

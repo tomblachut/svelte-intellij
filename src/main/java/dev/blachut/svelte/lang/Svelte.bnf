@@ -39,24 +39,32 @@ scope ::= (block|interpolation|HTML_FRAGMENT)*
 
 private block ::= ifBlock | eachBlock | awaitBlock
 
-ifBlock ::= ifBlockOpening scope (ifElseContinuation scope)* (elseContinuation scope)? ifBlockClosing {pin=1}
-eachBlock ::= eachBlockOpening scope (elseContinuation scope)? eachBlockClosing {pin=1}
-awaitBlock ::= (awaitThenBlockOpening scope | awaitBlockOpening scope thenContinuation scope) (catchContinuation scope)? awaitBlockClosing {pin=1}
+ifBlock ::= ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosing {pin=1}
+eachBlock ::= eachBlockOpening elseContinuation? eachBlockClosing {pin=1}
+awaitBlock ::= (awaitThenBlockOpening | awaitBlockOpening thenContinuation) (catchContinuation)? awaitBlockClosing {pin=1}
 
-ifBlockOpening ::= '{' '#if' expression '}' {pin=2}
-ifElseContinuation ::= '{' ':else' 'if' expression '}' {pin=3}
+ifBlockOpening ::= ifBlockOpeningTag scope
+ifBlockOpeningTag ::= '{' '#if' expression '}' {pin=2}
+elseIfContinuation ::= elseIfContinuationTag scope
+elseIfContinuationTag ::= '{' ':else' 'if' expression '}' {pin=3}
 ifBlockClosing ::= '{' '/if' '}' {pin=2}
 
-eachBlockOpening ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}' {pin=2}
+eachBlockOpening ::= eachBlockOpeningTag scope
+eachBlockOpeningTag ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}' {pin=2}
 eachBlockClosing ::= '{' '/each' '}' {pin=2}
 
-awaitBlockOpening ::= '{' '#await' expression '}' {pin=2}
-awaitThenBlockOpening ::= '{' '#await' expression 'then' parameter '}' {pin=4}
-thenContinuation ::= '{' ':then' parameter '}' {pin=2}
-catchContinuation ::= '{' ':catch' parameter '}' {pin=2}
+awaitBlockOpening ::= awaitBlockOpeningTag scope
+awaitBlockOpeningTag ::= '{' '#await' expression '}' {pin=2}
+awaitThenBlockOpening ::= awaitThenBlockOpeningTag scope
+awaitThenBlockOpeningTag ::= '{' '#await' expression 'then' parameter '}' {pin=4}
+thenContinuation ::= thenContinuationTag scope
+thenContinuationTag ::= '{' ':then' parameter '}' {pin=2}
+catchContinuation ::= catchContinuationTag scope
+catchContinuationTag::= '{' ':catch' parameter '}' {pin=2}
 awaitBlockClosing ::= '{' '/await' '}' {pin=2}
 
-elseContinuation ::= '{' ':else' '}' {pin=2}
+elseContinuation ::= elseContinuationTag scope
+elseContinuationTag ::= '{' ':else' '}' {pin=2}
 
 interpolation ::= '{' expression '}' {pin=2; recoverWhile="interpolation_recover"}
 private interpolation_recover ::= &'}'

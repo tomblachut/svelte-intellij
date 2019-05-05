@@ -28,14 +28,14 @@ public class SvelteAwaitThenBlockOpeningImpl extends ASTWrapperPsiElement implem
 
   @Override
   @NotNull
-  public SvelteExpression getExpression() {
-    return findNotNullChildByClass(SvelteExpression.class);
+  public SvelteAwaitThenBlockOpeningTag getAwaitThenBlockOpeningTag() {
+    return findNotNullChildByClass(SvelteAwaitThenBlockOpeningTag.class);
   }
 
   @Override
-  @Nullable
-  public SvelteParameter getParameter() {
-    return findChildByClass(SvelteParameter.class);
+  @NotNull
+  public SvelteScope getScope() {
+    return findNotNullChildByClass(SvelteScope.class);
   }
 
 }

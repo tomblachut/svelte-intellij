@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteIfBlockOpening extends PsiElement {
+public interface SvelteEachBlockOpeningTag extends PsiElement {
 
   @NotNull
-  SvelteIfBlockOpeningTag getIfBlockOpeningTag();
+  List<SvelteExpression> getExpressionList();
 
   @NotNull
-  SvelteScope getScope();
+  List<SvelteParameter> getParameterList();
 
 }

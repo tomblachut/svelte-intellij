@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface SvelteElseContinuation extends PsiElement {
 
+  @NotNull
+  SvelteElseContinuationTag getElseContinuationTag();
+
+  @NotNull
+  SvelteScope getScope();
+
 }

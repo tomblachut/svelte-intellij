@@ -19,9 +19,6 @@ public interface SvelteAwaitBlock extends PsiElement {
   @Nullable
   SvelteCatchContinuation getCatchContinuation();
 
-  @NotNull
-  List<SvelteScope> getScopeList();
-
   @Nullable
   SvelteThenContinuation getThenContinuation();
 

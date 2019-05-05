@@ -57,17 +57,17 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
      *      <else body>
      *  }
      */
-    override fun visitEachBlock(eachBlockElement: SvelteEachBlock) {
-        val items = eachBlockElement.eachBlockOpening.expressionList.getOrNull(0)
-        val item = eachBlockElement.eachBlockOpening.parameterList.getOrNull(0)
-        val index = eachBlockElement.eachBlockOpening.parameterList.getOrNull(1)
-        val key = eachBlockElement.eachBlockOpening.expressionList.getOrNull(1)
+    override fun visitEachBlock(eachBlock: SvelteEachBlock) {
+        val openingTag = eachBlock.eachBlockOpening.eachBlockOpeningTag
+        val items = openingTag.expressionList.getOrNull(0)
+        val item = openingTag.parameterList.getOrNull(0)
+        val index = openingTag.parameterList.getOrNull(1)
+        val key = openingTag.expressionList.getOrNull(1)
 
         if (items != null) {
             stitchScript("if (${items.text}) { [...", items, "]") // nullish guard, cast Iterable to Array
         } else {
-            appendPrefix("if (false) { []") // in case of parse error
-
+            appendPrefix("if (undefined) { []") // in case of parse error
         }
         if (item != null) {
             stitchScript(".forEach((", item)
@@ -81,14 +81,14 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
 
         if (key != null) stitchScript(expressionPrefix, key, expressionSuffix)
 
-        // Scope after each block opening  is guaranteed by the parser
-        visitScope(eachBlockElement.scopeList[0])
+        visitScope(eachBlock.eachBlockOpening.scope)
 
         appendPrefix("}) }") // arrow end, forEach end, if end
 
-        if (eachBlockElement.elseContinuation != null) {
+        val elseContinuation = eachBlock.elseContinuation
+        if (elseContinuation != null) {
             appendPrefix("else {")
-            visitScope(eachBlockElement.scopeList[1])
+            visitScope(elseContinuation.scope)
             appendPrefix("}") // else end
         }
     }

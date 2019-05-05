@@ -16,7 +16,4 @@ public interface SvelteEachBlock extends PsiElement {
   @Nullable
   SvelteElseContinuation getElseContinuation();
 
-  @NotNull
-  List<SvelteScope> getScopeList();
-
 }

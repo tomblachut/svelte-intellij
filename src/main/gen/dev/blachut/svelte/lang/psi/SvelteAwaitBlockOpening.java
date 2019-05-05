@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface SvelteAwaitBlockOpening extends PsiElement {
 
-  @Nullable
-  SvelteExpression getExpression();
+  @NotNull
+  SvelteAwaitBlockOpeningTag getAwaitBlockOpeningTag();
+
+  @NotNull
+  SvelteScope getScope();
 
 }

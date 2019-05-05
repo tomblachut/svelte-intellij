@@ -27,9 +27,15 @@ public class SvelteIfBlockOpeningImpl extends ASTWrapperPsiElement implements Sv
   }
 
   @Override
-  @Nullable
-  public SvelteExpression getExpression() {
-    return findChildByClass(SvelteExpression.class);
+  @NotNull
+  public SvelteIfBlockOpeningTag getIfBlockOpeningTag() {
+    return findNotNullChildByClass(SvelteIfBlockOpeningTag.class);
+  }
+
+  @Override
+  @NotNull
+  public SvelteScope getScope() {
+    return findNotNullChildByClass(SvelteScope.class);
   }
 
 }

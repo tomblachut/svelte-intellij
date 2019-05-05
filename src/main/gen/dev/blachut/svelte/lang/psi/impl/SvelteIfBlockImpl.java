@@ -33,6 +33,12 @@ public class SvelteIfBlockImpl extends ASTWrapperPsiElement implements SvelteIfB
   }
 
   @Override
+  @NotNull
+  public List<SvelteElseIfContinuation> getElseIfContinuationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteElseIfContinuation.class);
+  }
+
+  @Override
   @Nullable
   public SvelteIfBlockClosing getIfBlockClosing() {
     return findChildByClass(SvelteIfBlockClosing.class);
@@ -42,18 +48,6 @@ public class SvelteIfBlockImpl extends ASTWrapperPsiElement implements SvelteIfB
   @NotNull
   public SvelteIfBlockOpening getIfBlockOpening() {
     return findNotNullChildByClass(SvelteIfBlockOpening.class);
-  }
-
-  @Override
-  @NotNull
-  public List<SvelteIfElseContinuation> getIfElseContinuationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteIfElseContinuation.class);
-  }
-
-  @Override
-  @NotNull
-  public List<SvelteScope> getScopeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteScope.class);
   }
 
 }

@@ -5,10 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteIfBlockOpening extends PsiElement {
+public interface SvelteElseIfContinuation extends PsiElement {
 
   @NotNull
-  SvelteIfBlockOpeningTag getIfBlockOpeningTag();
+  SvelteElseIfContinuationTag getElseIfContinuationTag();
 
   @NotNull
   SvelteScope getScope();

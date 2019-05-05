@@ -11,14 +11,14 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteEachBlockImpl extends ASTWrapperPsiElement implements SvelteEachBlock {
+public class SvelteAwaitBlockOpeningTagImpl extends ASTWrapperPsiElement implements SvelteAwaitBlockOpeningTag {
 
-  public SvelteEachBlockImpl(@NotNull ASTNode node) {
+  public SvelteAwaitBlockOpeningTagImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SvelteVisitor visitor) {
-    visitor.visitEachBlock(this);
+    visitor.visitAwaitBlockOpeningTag(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,20 +28,8 @@ public class SvelteEachBlockImpl extends ASTWrapperPsiElement implements SvelteE
 
   @Override
   @Nullable
-  public SvelteEachBlockClosing getEachBlockClosing() {
-    return findChildByClass(SvelteEachBlockClosing.class);
-  }
-
-  @Override
-  @NotNull
-  public SvelteEachBlockOpening getEachBlockOpening() {
-    return findNotNullChildByClass(SvelteEachBlockOpening.class);
-  }
-
-  @Override
-  @Nullable
-  public SvelteElseContinuation getElseContinuation() {
-    return findChildByClass(SvelteElseContinuation.class);
+  public SvelteExpression getExpression() {
+    return findChildByClass(SvelteExpression.class);
   }
 
 }

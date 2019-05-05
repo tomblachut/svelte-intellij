@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteIfElseContinuation extends PsiElement {
-
-  @Nullable
-  SvelteExpression getExpression();
+public interface SvelteElseContinuationTag extends PsiElement {
 
 }
