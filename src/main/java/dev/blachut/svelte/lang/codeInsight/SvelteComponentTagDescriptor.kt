@@ -2,16 +2,16 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.psi.PsiElement
-import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl
 import com.intellij.psi.impl.source.xml.XmlDescriptorUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
-import com.intellij.util.containers.ContainerUtil
 import com.intellij.xml.XmlAttributeDescriptor
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlElementsGroup
 import com.intellij.xml.XmlNSDescriptor
+import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
 import org.jetbrains.annotations.NonNls
+import java.util.*
 
 /**
  * Each Svelte component or special HTML tag has one instance bound. We can control for example completion of props here.
@@ -32,8 +32,9 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
     override fun getDeclaration(): JSElement = myDeclaration
 
     override fun getAttributesDescriptors(context: XmlTag?): Array<XmlAttributeDescriptor> {
-        // TODO Find props and global Svelte attributes, e.g. slot
-        return HtmlNSDescriptorImpl.getCommonAttributeDescriptors(context)
+        // TODO Find props and global Svelte attributes besides slot
+        return knownAttributeDescriptors
+//        return HtmlNSDescriptorImpl.getCommonAttributeDescriptors(context)
     }
 
     override fun getAttributeDescriptor(attribute: XmlAttribute): XmlAttributeDescriptor? {
@@ -41,8 +42,16 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
     }
 
     override fun getAttributeDescriptor(@NonNls attributeName: String, context: XmlTag?): XmlAttributeDescriptor? {
-        return ContainerUtil.find(getAttributesDescriptors(context)
-        ) { descriptor1 -> attributeName == descriptor1.name }
+        val descriptor = attributeDescriptorCache[attributeName]
+        if (descriptor == null) {
+            val d = AnyXmlAttributeDescriptor(attributeName)
+            attributeDescriptorCache[attributeName] = d
+            return d
+        }
+
+        return descriptor
+
+//        return ContainerUtil.find(getAttributesDescriptors(context)) { descriptor1 -> attributeName == descriptor1.name }
     }
 
     override fun getContentType(): Int = XmlElementDescriptor.CONTENT_TYPE_ANY
@@ -62,4 +71,14 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
     override fun getDefaultValue(): String? = null
 
     override fun init(element: PsiElement) {}
+
+    companion object {
+        private val slotDescriptor = AnyXmlAttributeDescriptor("slot")
+        private val knownAttributeDescriptors = arrayOf<XmlAttributeDescriptor>(slotDescriptor)
+        private val attributeDescriptorCache = HashMap<String, XmlAttributeDescriptor>()
+
+        init {
+            attributeDescriptorCache["slot"] = slotDescriptor
+        }
+    }
 }
