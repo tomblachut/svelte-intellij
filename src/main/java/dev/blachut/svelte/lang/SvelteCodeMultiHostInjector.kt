@@ -35,6 +35,37 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
 
     private var danglingPrefix = "'use strict';"
 
+
+    override fun visitIfBlock(ifBlock: SvelteIfBlock) {
+        val expression = ifBlock.ifBlockOpening.ifBlockOpeningTag.expression
+
+        if (expression != null) {
+            stitchScript("if (", expression, ") {")
+        } else {
+            appendPrefix("if (undefined) {")
+        }
+
+        visitScope(ifBlock.ifBlockOpening.scope)
+
+        for (elseIfContinuation in ifBlock.elseIfContinuationList) {
+            val innerExpression = elseIfContinuation.elseIfContinuationTag.expression
+            if (innerExpression != null) {
+                stitchScript("} else if (", innerExpression, ") {")
+            } else {
+                appendPrefix("} else if (undefined) {")
+            }
+            visitScope(elseIfContinuation.scope)
+        }
+
+        val elseContinuation = ifBlock.elseContinuation
+        if (elseContinuation != null) {
+            appendPrefix("} else {")
+            visitScope(elseContinuation.scope)
+        }
+
+        appendPrefix("}")
+    }
+
     /**
      * This method stitches together call to forEach Array method
      *
@@ -83,14 +114,15 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
 
         visitScope(eachBlock.eachBlockOpening.scope)
 
-        appendPrefix("}) }") // arrow end, forEach end, if end
+        appendPrefix("})") // arrow end, forEach end
 
         val elseContinuation = eachBlock.elseContinuation
         if (elseContinuation != null) {
-            appendPrefix("else {")
+            appendPrefix("} else {")
             visitScope(elseContinuation.scope)
-            appendPrefix("}") // else end
         }
+
+        appendPrefix("}") // if/else end
     }
 
     override fun visitExpression(context: SvelteExpression) {
