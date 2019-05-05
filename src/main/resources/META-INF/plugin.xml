@@ -25,6 +25,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
         <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.SvelteParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
+        <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
