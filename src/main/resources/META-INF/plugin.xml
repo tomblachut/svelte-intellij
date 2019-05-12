@@ -30,6 +30,7 @@
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
         <lang.commenter language="Svelte" implementationClass="com.intellij.lang.xml.XmlCommenter"/>
+        <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
