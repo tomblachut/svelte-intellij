@@ -16,12 +16,12 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
-            SvelteTypes.START_MUSTACHE,
-            SvelteTypes.END_MUSTACHE -> SvelteSyntaxHighlighter.MUSTACHES_KEYS
-
-            SvelteTypes.COMMA,
             SvelteTypes.START_PAREN,
-            SvelteTypes.END_PAREN,
+            SvelteTypes.END_PAREN -> PARENS_KEYS
+
+            SvelteTypes.START_MUSTACHE,
+            SvelteTypes.END_MUSTACHE,
+            SvelteTypes.COMMA,
             SvelteTypes.IF,
             SvelteTypes.ELSE_IF,
             SvelteTypes.END_IF,
@@ -33,20 +33,20 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
             SvelteTypes.EACH,
             SvelteTypes.AS,
             SvelteTypes.END_EACH,
-            SvelteTypes.ELSE -> SvelteSyntaxHighlighter.KEY_KEYS
+            SvelteTypes.ELSE -> KEY_KEYS
 
             else -> super.getTokenHighlights(tokenType)
         }
     }
 
     companion object {
-        private val MUSTACHES = createTextAttributesKey("SVELTE_MUSTACHES", DefaultLanguageHighlighterColors.BRACES)
+        //        private val MUSTACHES = createTextAttributesKey("SVELTE_MUSTACHES", DefaultLanguageHighlighterColors.BRACES)
         private val KEY = createTextAttributesKey("SVELTE_KEY", DefaultLanguageHighlighterColors.KEYWORD)
-//        private val PARENS = createTextAttributesKey("SVELTE_PARENS", DefaultLanguageHighlighterColors.PARENTHESES)
+        private val PARENS = createTextAttributesKey("SVELTE_PARENS", DefaultLanguageHighlighterColors.PARENTHESES)
 //        val COMMENT = createTextAttributesKey("SVELTE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
 
-        private val MUSTACHES_KEYS = arrayOf(MUSTACHES)
+        //        private val MUSTACHES_KEYS = arrayOf(MUSTACHES)
         private val KEY_KEYS = arrayOf(KEY)
-//        private val PARENS_KEYS = arrayOf(PARENS)
+        private val PARENS_KEYS = arrayOf(PARENS)
     }
 }
