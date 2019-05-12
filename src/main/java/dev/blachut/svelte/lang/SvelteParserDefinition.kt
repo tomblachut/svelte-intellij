@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.lang.ASTNode
+import com.intellij.lang.LanguageUtil
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
 import com.intellij.lexer.Lexer
@@ -48,7 +49,8 @@ class SvelteParserDefinition : ParserDefinition {
     }
 
     override fun spaceExistenceTypeBetweenTokens(left: ASTNode, right: ASTNode): ParserDefinition.SpaceRequirements {
-        return ParserDefinition.SpaceRequirements.MAY
+        val lexer = this.createLexer(left.psi.project)
+        return LanguageUtil.canStickTokensTogetherByLexer(left, right, lexer)
     }
 
     override fun createElement(node: ASTNode): PsiElement {
@@ -61,36 +63,3 @@ class SvelteParserDefinition : ParserDefinition {
         val FILE = IFileElementType(SvelteLanguage.INSTANCE)
     }
 }
-
-//public class SvelteParserDefinition extends HTMLParserDefinition {
-//    private static final IFileElementType HTML_FILE = new IStubFileElementType<PsiFileStub<HtmlFileImpl>>(SvelteLanguage.INSTANCE) {
-//        @Override
-//        public int getStubVersion() {
-//            return super.getStubVersion() + JSFileElementType.getVersion();
-//        }
-//    };
-//
-//    @Override
-//    @NotNull
-//    public Lexer createLexer(Project project) {
-//        JSLanguageLevel level = JSRootConfiguration.getInstance(project).getLanguageLevel();
-//
-//        return new SvelteLexer(level.isES6Compatible() ? level : JSLanguageLevel.ES6);
-//    }
-//
-//    @Override
-//    @NotNull
-//    public PsiParser createParser(final Project project) {
-//        return new HTMLParser();
-//    }
-//
-//    @Override
-//    public IFileElementType getFileNodeType() {
-//        return HTML_FILE;
-//    }
-//
-//    @Override
-//    public PsiFile createFile(FileViewProvider viewProvider) {
-//        return new HtmlFileImpl(viewProvider, HTML_FILE);
-//    }
-//}

@@ -7,11 +7,11 @@ import javax.swing.Icon
 class SvelteFileType private constructor() : LanguageFileType(SvelteLanguage.INSTANCE) {
 
     override fun getName(): String {
-        return "Svelte Component"
+        return "Svelte"
     }
 
     override fun getDescription(): String {
-        return "Svelte Single File Component"
+        return "Svelte Component"
     }
 
     override fun getDefaultExtension(): String {
