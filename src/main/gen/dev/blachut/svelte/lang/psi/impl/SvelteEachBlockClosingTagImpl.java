@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteEachBlockClosingTagImpl extends ASTWrapperPsiElement implements SvelteEachBlockClosingTag {
+public class SvelteEachBlockClosingTagImpl extends SvelteClosingTagImpl implements SvelteEachBlockClosingTag {
 
   public SvelteEachBlockClosingTagImpl(@NotNull ASTNode node) {
     super(node);

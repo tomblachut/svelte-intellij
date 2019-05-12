@@ -38,7 +38,10 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(AWAIT_BLOCK_CLOSING_TAG, EACH_BLOCK_CLOSING_TAG, IF_BLOCK_CLOSING_TAG),
     create_token_set_(AWAIT_BLOCK, BLOCK, EACH_BLOCK, IF_BLOCK),
+    create_token_set_(AWAIT_BLOCK_OPENING_TAG, AWAIT_THEN_BLOCK_OPENING_TAG, EACH_BLOCK_OPENING_TAG, IF_BLOCK_OPENING_TAG),
+    create_token_set_(CATCH_CONTINUATION_TAG, ELSE_CONTINUATION_TAG, ELSE_IF_CONTINUATION_TAG, THEN_CONTINUATION_TAG),
   };
 
   /* ********************************************************** */

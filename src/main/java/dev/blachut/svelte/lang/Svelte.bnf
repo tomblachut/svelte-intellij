@@ -42,6 +42,9 @@
   ]
 
   extends(".*Block")=block
+  extends(".*OpeningTag")=openingTag
+  extends(".*ContinuationTag")=continuationTag
+  extends(".*ClosingTag")=closingTag
 }
 
 svelteComponent ::= scope
@@ -79,6 +82,10 @@ elseContinuationTag ::= '{' ':else' '}' {pin=2}
 
 interpolation ::= '{' expression '}' {pin=2; recoverWhile="interpolation_recover"}
 private interpolation_recover ::= &'}'
+
+fake openingTag ::= '{' '#foo' '}'
+fake continuationTag ::= '{' ':foo' '}'
+fake closingTag ::= '{' '/foo' '}'
 
 expression ::= CODE_FRAGMENT {
                                name="expression"

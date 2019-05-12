@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteElseIfContinuationTagImpl extends ASTWrapperPsiElement implements SvelteElseIfContinuationTag {
+public class SvelteElseIfContinuationTagImpl extends SvelteContinuationTagImpl implements SvelteElseIfContinuationTag {
 
   public SvelteElseIfContinuationTagImpl(@NotNull ASTNode node) {
     super(node);
