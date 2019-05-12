@@ -15,539 +15,534 @@ import com.intellij.lang.LightPsiParser;
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class SvelteParser implements PsiParser, LightPsiParser {
 
-  public ASTNode parse(IElementType t, PsiBuilder b) {
-    parseLight(t, b);
-    return b.getTreeBuilt();
+  public ASTNode parse(IElementType type, PsiBuilder builder) {
+    parseLight(type, builder);
+    return builder.getTreeBuilt();
   }
 
-  public void parseLight(IElementType t, PsiBuilder b) {
-    boolean r;
-    b = adapt_builder_(t, b, this, null);
-    Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t instanceof IFileElementType) {
-      r = parse_root_(t, b, 0);
+  public void parseLight(IElementType type, PsiBuilder builder) {
+    boolean result;
+    builder = adapt_builder_(type, builder, this, null);
+    Marker marker = enter_section_(builder, 0, _COLLAPSE_, null);
+    if (type instanceof IFileElementType) {
+      result = parse_root_(type, builder, 0);
     }
     else {
-      r = false;
+      result = false;
     }
-    exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
+    exit_section_(builder, 0, marker, type, result, true, TRUE_CONDITION);
   }
 
-  protected boolean parse_root_(IElementType t, PsiBuilder b, int l) {
-    return svelteComponent(b, l + 1);
+  protected boolean parse_root_(IElementType type, PsiBuilder builder, int level) {
+    return svelteComponent(builder, level + 1);
   }
 
   /* ********************************************************** */
   // (awaitThenBlockOpening | awaitBlockOpening thenContinuation) (catchContinuation)? awaitBlockClosing
-  public static boolean awaitBlock(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlock")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, AWAIT_BLOCK, null);
-    r = awaitBlock_0(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, awaitBlock_1(b, l + 1));
-    r = p && awaitBlockClosing(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean awaitBlock(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlock")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_BLOCK, null);
+    result = awaitBlock_0(builder, level + 1);
+    pinned = result; // pin = 1
+    result = result && report_error_(builder, awaitBlock_1(builder, level + 1));
+    result = pinned && awaitBlockClosing(builder, level + 1) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   // awaitThenBlockOpening | awaitBlockOpening thenContinuation
-  private static boolean awaitBlock_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlock_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = awaitThenBlockOpening(b, l + 1);
-    if (!r) r = awaitBlock_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+  private static boolean awaitBlock_0(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlock_0")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = awaitThenBlockOpening(builder, level + 1);
+    if (!result) result = awaitBlock_0_1(builder, level + 1);
+    exit_section_(builder, marker, null, result);
+    return result;
   }
 
   // awaitBlockOpening thenContinuation
-  private static boolean awaitBlock_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlock_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = awaitBlockOpening(b, l + 1);
-    r = r && thenContinuation(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+  private static boolean awaitBlock_0_1(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlock_0_1")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = awaitBlockOpening(builder, level + 1);
+    result = result && thenContinuation(builder, level + 1);
+    exit_section_(builder, marker, null, result);
+    return result;
   }
 
   // (catchContinuation)?
-  private static boolean awaitBlock_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlock_1")) return false;
-    awaitBlock_1_0(b, l + 1);
+  private static boolean awaitBlock_1(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlock_1")) return false;
+    awaitBlock_1_0(builder, level + 1);
     return true;
   }
 
   // (catchContinuation)
-  private static boolean awaitBlock_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlock_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = catchContinuation(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+  private static boolean awaitBlock_1_0(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlock_1_0")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = catchContinuation(builder, level + 1);
+    exit_section_(builder, marker, null, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' '/await' '}'
-  public static boolean awaitBlockClosing(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlockClosing")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, AWAIT_BLOCK_CLOSING, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, AWAIT_END, END_MUSTACHE);
-    p = r; // pin = 2
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean awaitBlockClosing(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlockClosing")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_BLOCK_CLOSING, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, AWAIT_END, END_MUSTACHE);
+    pinned = result; // pin = 2
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // awaitBlockOpeningTag scope
-  public static boolean awaitBlockOpening(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlockOpening")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = awaitBlockOpeningTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, AWAIT_BLOCK_OPENING, r);
-    return r;
+  public static boolean awaitBlockOpening(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlockOpening")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = awaitBlockOpeningTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, AWAIT_BLOCK_OPENING, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' '#await' expression '}'
-  public static boolean awaitBlockOpeningTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitBlockOpeningTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, AWAIT_BLOCK_OPENING_TAG, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, AWAIT);
-    p = r; // pin = 2
-    r = r && report_error_(b, expression(b, l + 1));
-    r = p && consumeToken(b, END_MUSTACHE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean awaitBlockOpeningTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitBlockOpeningTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_BLOCK_OPENING_TAG, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, AWAIT);
+    pinned = result; // pin = 2
+    result = result && report_error_(builder, expression(builder, level + 1));
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // awaitThenBlockOpeningTag scope
-  public static boolean awaitThenBlockOpening(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitThenBlockOpening")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = awaitThenBlockOpeningTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, AWAIT_THEN_BLOCK_OPENING, r);
-    return r;
+  public static boolean awaitThenBlockOpening(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitThenBlockOpening")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = awaitThenBlockOpeningTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, AWAIT_THEN_BLOCK_OPENING, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' '#await' expression 'then' parameter '}'
-  public static boolean awaitThenBlockOpeningTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "awaitThenBlockOpeningTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, AWAIT_THEN_BLOCK_OPENING_TAG, null);
-    r = consumeTokens(b, 0, START_MUSTACHE, AWAIT);
-    r = r && expression(b, l + 1);
-    r = r && consumeToken(b, AWAIT_THEN);
-    p = r; // pin = 4
-    r = r && report_error_(b, parameter(b, l + 1));
-    r = p && consumeToken(b, END_MUSTACHE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean awaitThenBlockOpeningTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitThenBlockOpeningTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_THEN_BLOCK_OPENING_TAG, null);
+    result = consumeTokens(builder, 0, START_MUSTACHE, AWAIT);
+    result = result && expression(builder, level + 1);
+    result = result && consumeToken(builder, AWAIT_THEN);
+    pinned = result; // pin = 4
+    result = result && report_error_(builder, parameter(builder, level + 1));
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // ifBlock | eachBlock | awaitBlock
-  static boolean block(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    r = ifBlock(b, l + 1);
-    if (!r) r = eachBlock(b, l + 1);
-    if (!r) r = awaitBlock(b, l + 1);
-    return r;
+  static boolean block(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "block")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    result = ifBlock(builder, level + 1);
+    if (!result) result = eachBlock(builder, level + 1);
+    if (!result) result = awaitBlock(builder, level + 1);
+    return result;
   }
 
   /* ********************************************************** */
   // catchContinuationTag scope
-  public static boolean catchContinuation(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "catchContinuation")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = catchContinuationTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, CATCH_CONTINUATION, r);
-    return r;
+  public static boolean catchContinuation(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "catchContinuation")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = catchContinuationTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, CATCH_CONTINUATION, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' ':catch' parameter '}'
-  public static boolean catchContinuationTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "catchContinuationTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, CATCH_CONTINUATION_TAG, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, CATCH);
-    p = r; // pin = 2
-    r = r && report_error_(b, parameter(b, l + 1));
-    r = p && consumeToken(b, END_MUSTACHE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean catchContinuationTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "catchContinuationTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, CATCH_CONTINUATION_TAG, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, CATCH);
+    pinned = result; // pin = 2
+    result = result && report_error_(builder, parameter(builder, level + 1));
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // eachBlockOpening elseContinuation? eachBlockClosing
-  public static boolean eachBlock(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlock")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, EACH_BLOCK, null);
-    r = eachBlockOpening(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, eachBlock_1(b, l + 1));
-    r = p && eachBlockClosing(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean eachBlock(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlock")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, EACH_BLOCK, null);
+    result = eachBlockOpening(builder, level + 1);
+    pinned = result; // pin = 1
+    result = result && report_error_(builder, eachBlock_1(builder, level + 1));
+    result = pinned && eachBlockClosing(builder, level + 1) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   // elseContinuation?
-  private static boolean eachBlock_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlock_1")) return false;
-    elseContinuation(b, l + 1);
+  private static boolean eachBlock_1(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlock_1")) return false;
+    elseContinuation(builder, level + 1);
     return true;
   }
 
   /* ********************************************************** */
   // '{' '/each' '}'
-  public static boolean eachBlockClosing(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlockClosing")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, EACH_BLOCK_CLOSING, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, END_EACH, END_MUSTACHE);
-    p = r; // pin = 2
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean eachBlockClosing(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlockClosing")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, EACH_BLOCK_CLOSING, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, END_EACH, END_MUSTACHE);
+    pinned = result; // pin = 2
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // eachBlockOpeningTag scope
-  public static boolean eachBlockOpening(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlockOpening")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = eachBlockOpeningTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, EACH_BLOCK_OPENING, r);
-    return r;
+  public static boolean eachBlockOpening(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlockOpening")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = eachBlockOpeningTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, EACH_BLOCK_OPENING, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
-  public static boolean eachBlockOpeningTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlockOpeningTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, EACH_BLOCK_OPENING_TAG, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, EACH);
-    p = r; // pin = 2
-    r = r && report_error_(b, expression(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, AS)) && r;
-    r = p && report_error_(b, parameter(b, l + 1)) && r;
-    r = p && report_error_(b, eachBlockOpeningTag_5(b, l + 1)) && r;
-    r = p && report_error_(b, eachBlockOpeningTag_6(b, l + 1)) && r;
-    r = p && consumeToken(b, END_MUSTACHE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean eachBlockOpeningTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlockOpeningTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, EACH_BLOCK_OPENING_TAG, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, EACH);
+    pinned = result; // pin = 2
+    result = result && report_error_(builder, expression(builder, level + 1));
+    result = pinned && report_error_(builder, consumeToken(builder, AS)) && result;
+    result = pinned && report_error_(builder, parameter(builder, level + 1)) && result;
+    result = pinned && report_error_(builder, eachBlockOpeningTag_5(builder, level + 1)) && result;
+    result = pinned && report_error_(builder, eachBlockOpeningTag_6(builder, level + 1)) && result;
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   // (',' parameter)?
-  private static boolean eachBlockOpeningTag_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlockOpeningTag_5")) return false;
-    eachBlockOpeningTag_5_0(b, l + 1);
+  private static boolean eachBlockOpeningTag_5(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlockOpeningTag_5")) return false;
+    eachBlockOpeningTag_5_0(builder, level + 1);
     return true;
   }
 
   // ',' parameter
-  private static boolean eachBlockOpeningTag_5_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlockOpeningTag_5_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && parameter(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+  private static boolean eachBlockOpeningTag_5_0(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlockOpeningTag_5_0")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = consumeToken(builder, COMMA);
+    result = result && parameter(builder, level + 1);
+    exit_section_(builder, marker, null, result);
+    return result;
   }
 
   // ('(' expression ')')?
-  private static boolean eachBlockOpeningTag_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlockOpeningTag_6")) return false;
-    eachBlockOpeningTag_6_0(b, l + 1);
+  private static boolean eachBlockOpeningTag_6(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlockOpeningTag_6")) return false;
+    eachBlockOpeningTag_6_0(builder, level + 1);
     return true;
   }
 
   // '(' expression ')'
-  private static boolean eachBlockOpeningTag_6_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "eachBlockOpeningTag_6_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, START_PAREN);
-    r = r && expression(b, l + 1);
-    r = r && consumeToken(b, END_PAREN);
-    exit_section_(b, m, null, r);
-    return r;
+  private static boolean eachBlockOpeningTag_6_0(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "eachBlockOpeningTag_6_0")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = consumeToken(builder, START_PAREN);
+    result = result && expression(builder, level + 1);
+    result = result && consumeToken(builder, END_PAREN);
+    exit_section_(builder, marker, null, result);
+    return result;
   }
 
   /* ********************************************************** */
   // elseContinuationTag scope
-  public static boolean elseContinuation(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "elseContinuation")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = elseContinuationTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, ELSE_CONTINUATION, r);
-    return r;
+  public static boolean elseContinuation(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "elseContinuation")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = elseContinuationTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, ELSE_CONTINUATION, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' ':else' '}'
-  public static boolean elseContinuationTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "elseContinuationTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ELSE_CONTINUATION_TAG, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, ELSE, END_MUSTACHE);
-    p = r; // pin = 2
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean elseContinuationTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "elseContinuationTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, ELSE_CONTINUATION_TAG, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, ELSE, END_MUSTACHE);
+    pinned = result; // pin = 2
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // elseIfContinuationTag scope
-  public static boolean elseIfContinuation(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "elseIfContinuation")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = elseIfContinuationTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, ELSE_IF_CONTINUATION, r);
-    return r;
+  public static boolean elseIfContinuation(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "elseIfContinuation")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = elseIfContinuationTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, ELSE_IF_CONTINUATION, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' ':else' 'if' expression '}'
-  public static boolean elseIfContinuationTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "elseIfContinuationTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ELSE_IF_CONTINUATION_TAG, null);
-    r = consumeTokens(b, 3, START_MUSTACHE, ELSE, ELSE_IF);
-    p = r; // pin = 3
-    r = r && report_error_(b, expression(b, l + 1));
-    r = p && consumeToken(b, END_MUSTACHE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean elseIfContinuationTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "elseIfContinuationTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, ELSE_IF_CONTINUATION_TAG, null);
+    result = consumeTokens(builder, 3, START_MUSTACHE, ELSE, ELSE_IF);
+    pinned = result; // pin = 3
+    result = result && report_error_(builder, expression(builder, level + 1));
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // CODE_FRAGMENT
-  public static boolean expression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expression")) return false;
-    if (!nextTokenIs(b, "<expression>", CODE_FRAGMENT)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, EXPRESSION, "<expression>");
-    r = consumeToken(b, CODE_FRAGMENT);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+  public static boolean expression(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "expression")) return false;
+    if (!nextTokenIs(builder, "<expression>", CODE_FRAGMENT)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder, level, _NONE_, EXPRESSION, "<expression>");
+    result = consumeToken(builder, CODE_FRAGMENT);
+    exit_section_(builder, level, marker, result, false, null);
+    return result;
   }
 
   /* ********************************************************** */
   // ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosing
-  public static boolean ifBlock(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ifBlock")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, IF_BLOCK, null);
-    r = ifBlockOpening(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, ifBlock_1(b, l + 1));
-    r = p && report_error_(b, ifBlock_2(b, l + 1)) && r;
-    r = p && ifBlockClosing(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean ifBlock(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "ifBlock")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, IF_BLOCK, null);
+    result = ifBlockOpening(builder, level + 1);
+    pinned = result; // pin = 1
+    result = result && report_error_(builder, ifBlock_1(builder, level + 1));
+    result = pinned && report_error_(builder, ifBlock_2(builder, level + 1)) && result;
+    result = pinned && ifBlockClosing(builder, level + 1) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   // elseIfContinuation*
-  private static boolean ifBlock_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ifBlock_1")) return false;
+  private static boolean ifBlock_1(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "ifBlock_1")) return false;
     while (true) {
-      int c = current_position_(b);
-      if (!elseIfContinuation(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ifBlock_1", c)) break;
+      int pos = current_position_(builder);
+      if (!elseIfContinuation(builder, level + 1)) break;
+      if (!empty_element_parsed_guard_(builder, "ifBlock_1", pos)) break;
     }
     return true;
   }
 
   // elseContinuation?
-  private static boolean ifBlock_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ifBlock_2")) return false;
-    elseContinuation(b, l + 1);
+  private static boolean ifBlock_2(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "ifBlock_2")) return false;
+    elseContinuation(builder, level + 1);
     return true;
   }
 
   /* ********************************************************** */
   // '{' '/if' '}'
-  public static boolean ifBlockClosing(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ifBlockClosing")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, IF_BLOCK_CLOSING, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, END_IF, END_MUSTACHE);
-    p = r; // pin = 2
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean ifBlockClosing(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "ifBlockClosing")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, IF_BLOCK_CLOSING, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, END_IF, END_MUSTACHE);
+    pinned = result; // pin = 2
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // ifBlockOpeningTag scope
-  public static boolean ifBlockOpening(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ifBlockOpening")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ifBlockOpeningTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, IF_BLOCK_OPENING, r);
-    return r;
+  public static boolean ifBlockOpening(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "ifBlockOpening")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = ifBlockOpeningTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, IF_BLOCK_OPENING, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' '#if' expression '}'
-  public static boolean ifBlockOpeningTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ifBlockOpeningTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, IF_BLOCK_OPENING_TAG, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, IF);
-    p = r; // pin = 2
-    r = r && report_error_(b, expression(b, l + 1));
-    r = p && consumeToken(b, END_MUSTACHE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean ifBlockOpeningTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "ifBlockOpeningTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, IF_BLOCK_OPENING_TAG, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, IF);
+    pinned = result; // pin = 2
+    result = result && report_error_(builder, expression(builder, level + 1));
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // '{' expression '}'
-  public static boolean interpolation(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "interpolation")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, INTERPOLATION, "<interpolation>");
-    r = consumeToken(b, START_MUSTACHE);
-    r = r && expression(b, l + 1);
-    p = r; // pin = 2
-    r = r && consumeToken(b, END_MUSTACHE);
-    exit_section_(b, l, m, r, p, interpolation_recover_parser_);
-    return r || p;
+  public static boolean interpolation(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "interpolation")) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, INTERPOLATION, "<interpolation>");
+    result = consumeToken(builder, START_MUSTACHE);
+    result = result && expression(builder, level + 1);
+    pinned = result; // pin = 2
+    result = result && consumeToken(builder, END_MUSTACHE);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::interpolation_recover);
+    return result || pinned;
   }
 
   /* ********************************************************** */
   // &'}'
-  static boolean interpolation_recover(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "interpolation_recover")) return false;
-    if (!nextTokenIs(b, END_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _AND_);
-    r = consumeToken(b, END_MUSTACHE);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+  static boolean interpolation_recover(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "interpolation_recover")) return false;
+    if (!nextTokenIs(builder, END_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder, level, _AND_);
+    result = consumeToken(builder, END_MUSTACHE);
+    exit_section_(builder, level, marker, result, false, null);
+    return result;
   }
 
   /* ********************************************************** */
   // CODE_FRAGMENT
-  public static boolean parameter(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "parameter")) return false;
-    if (!nextTokenIs(b, "<parameter>", CODE_FRAGMENT)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, PARAMETER, "<parameter>");
-    r = consumeToken(b, CODE_FRAGMENT);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+  public static boolean parameter(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "parameter")) return false;
+    if (!nextTokenIs(builder, "<parameter>", CODE_FRAGMENT)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder, level, _NONE_, PARAMETER, "<parameter>");
+    result = consumeToken(builder, CODE_FRAGMENT);
+    exit_section_(builder, level, marker, result, false, null);
+    return result;
   }
 
   /* ********************************************************** */
   // (block|interpolation|HTML_FRAGMENT)*
-  public static boolean scope(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "scope")) return false;
-    Marker m = enter_section_(b, l, _NONE_, SCOPE, "<scope>");
+  public static boolean scope(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "scope")) return false;
+    Marker marker = enter_section_(builder, level, _NONE_, SCOPE, "<scope>");
     while (true) {
-      int c = current_position_(b);
-      if (!scope_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "scope", c)) break;
+      int pos = current_position_(builder);
+      if (!scope_0(builder, level + 1)) break;
+      if (!empty_element_parsed_guard_(builder, "scope", pos)) break;
     }
-    exit_section_(b, l, m, true, false, null);
+    exit_section_(builder, level, marker, true, false, null);
     return true;
   }
 
   // block|interpolation|HTML_FRAGMENT
-  private static boolean scope_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "scope_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = block(b, l + 1);
-    if (!r) r = interpolation(b, l + 1);
-    if (!r) r = consumeToken(b, HTML_FRAGMENT);
-    exit_section_(b, m, null, r);
-    return r;
+  private static boolean scope_0(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "scope_0")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = block(builder, level + 1);
+    if (!result) result = interpolation(builder, level + 1);
+    if (!result) result = consumeToken(builder, HTML_FRAGMENT);
+    exit_section_(builder, marker, null, result);
+    return result;
   }
 
   /* ********************************************************** */
   // scope
-  static boolean svelteComponent(PsiBuilder b, int l) {
-    return scope(b, l + 1);
+  static boolean svelteComponent(PsiBuilder builder, int level) {
+    return scope(builder, level + 1);
   }
 
   /* ********************************************************** */
   // thenContinuationTag scope
-  public static boolean thenContinuation(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "thenContinuation")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = thenContinuationTag(b, l + 1);
-    r = r && scope(b, l + 1);
-    exit_section_(b, m, THEN_CONTINUATION, r);
-    return r;
+  public static boolean thenContinuation(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "thenContinuation")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = thenContinuationTag(builder, level + 1);
+    result = result && scope(builder, level + 1);
+    exit_section_(builder, marker, THEN_CONTINUATION, result);
+    return result;
   }
 
   /* ********************************************************** */
   // '{' ':then' parameter '}'
-  public static boolean thenContinuationTag(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "thenContinuationTag")) return false;
-    if (!nextTokenIs(b, START_MUSTACHE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, THEN_CONTINUATION_TAG, null);
-    r = consumeTokens(b, 2, START_MUSTACHE, THEN);
-    p = r; // pin = 2
-    r = r && report_error_(b, parameter(b, l + 1));
-    r = p && consumeToken(b, END_MUSTACHE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  public static boolean thenContinuationTag(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "thenContinuationTag")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, THEN_CONTINUATION_TAG, null);
+    result = consumeTokens(builder, 2, START_MUSTACHE, THEN);
+    pinned = result; // pin = 2
+    result = result && report_error_(builder, parameter(builder, level + 1));
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
-  static final Parser interpolation_recover_parser_ = new Parser() {
-    public boolean parse(PsiBuilder b, int l) {
-      return interpolation_recover(b, l + 1);
-    }
-  };
 }
