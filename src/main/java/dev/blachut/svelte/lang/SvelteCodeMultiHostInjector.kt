@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang
 
 import com.intellij.lang.injection.MultiHostInjector
 import com.intellij.lang.injection.MultiHostRegistrar
-import com.intellij.lang.javascript.JavascriptLanguage
+import com.intellij.lang.javascript.JavaScriptSupportLoader
 import com.intellij.openapi.progress.ProgressIndicatorProvider
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -96,29 +96,23 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
         val key = openingTag.expressionList.getOrNull(1)
 
         if (items != null) {
-            stitchScript("if (${items.text}) { [...", items, "]") // nullish guard, cast Iterable to Array
+            stitchScript("if (${items.text}) { const __iterable = ", items)
         } else {
-            appendPrefix("if (undefined) { []") // in case of parse error
+            appendPrefix("if (undefined) { const __iterable = []") // in case of parse error
         }
-        if (item != null) {
-            stitchScript(".forEach((", item)
-        } else {
-            appendPrefix(".forEach((")
-        }
+        appendPrefix("; for (const __i = 0; __i < __iterable.length; __i++) {")
 
-        if (index != null) stitchScript(",", index)
-
-        appendPrefix(") => {")
-
+        if (item != null) stitchScript("const ", item, " = __iterable[__i];")
+        if (index != null) stitchScript("const ", index, " = __i;")
         if (key != null) stitchScript(expressionPrefix, key, expressionSuffix)
 
         visitScope(eachBlock.eachBlockOpening.scope)
 
-        appendPrefix("});") // arrow end, forEach end
+        appendPrefix("}") // for end
 
         val elseContinuation = eachBlock.elseContinuation
         if (elseContinuation != null) {
-            appendPrefix("} else {")
+            appendPrefix("} else {") // end if, start else
             visitScope(elseContinuation.scope)
         }
 
@@ -173,12 +167,8 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
         appendPrefix("});")
     }
 
-    override fun visitExpression(context: SvelteExpression) {
-        stitchScript(expressionPrefix, context, expressionSuffix)
-    }
-
-    override fun visitParameter(context: SvelteParameter) {
-        stitchScript("(", context, ") => null;")
+    override fun visitInterpolation(context: SvelteInterpolation) {
+        stitchScript(expressionPrefix, context.expression, expressionSuffix)
     }
 
     override fun visitElement(element: PsiElement) {
@@ -196,7 +186,7 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
      */
     private fun stitchScript(prefix: String, host: PsiLanguageInjectionHost, suffix: String? = null) {
         if (!started) {
-            registrar.startInjecting(JavascriptLanguage.INSTANCE, "js")
+            registrar.startInjecting(JavaScriptSupportLoader.ECMA_SCRIPT_6, "js")
             started = true
         }
         registrar.addPlace(prependDanglingPrefix(prefix), suffix, host, TextRange.from(0, host.textLength))
