@@ -30,6 +30,8 @@
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
         <lang.commenter language="Svelte" implementationClass="com.intellij.lang.xml.XmlCommenter"/>
+        <lang.foldingBuilder language="Svelte"
+                             implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTypedHandler" order="before xmlSlash"/>
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
