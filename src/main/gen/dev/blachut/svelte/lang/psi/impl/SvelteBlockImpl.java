@@ -11,14 +11,14 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteEachBlockClosingImpl extends ASTWrapperPsiElement implements SvelteEachBlockClosing {
+public abstract class SvelteBlockImpl extends ASTWrapperPsiElement implements SvelteBlock {
 
-  public SvelteEachBlockClosingImpl(@NotNull ASTNode node) {
+  public SvelteBlockImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SvelteVisitor visitor) {
-    visitor.visitEachBlockClosing(this);
+    visitor.visitBlock(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

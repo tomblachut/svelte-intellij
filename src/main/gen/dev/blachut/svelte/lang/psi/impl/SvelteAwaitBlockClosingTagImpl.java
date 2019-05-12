@@ -11,31 +11,19 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteScopeImpl extends ASTWrapperPsiElement implements SvelteScope {
+public class SvelteAwaitBlockClosingTagImpl extends ASTWrapperPsiElement implements SvelteAwaitBlockClosingTag {
 
-  public SvelteScopeImpl(@NotNull ASTNode node) {
+  public SvelteAwaitBlockClosingTagImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SvelteVisitor visitor) {
-    visitor.visitScope(this);
+    visitor.visitAwaitBlockClosingTag(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof SvelteVisitor) accept((SvelteVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<SvelteBlock> getBlockList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public List<SvelteInterpolation> getInterpolationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteInterpolation.class);
   }
 
 }

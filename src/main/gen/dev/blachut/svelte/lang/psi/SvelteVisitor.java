@@ -9,10 +9,10 @@ import com.intellij.psi.PsiLanguageInjectionHost;
 public class SvelteVisitor extends PsiElementVisitor {
 
   public void visitAwaitBlock(@NotNull SvelteAwaitBlock o) {
-    visitPsiElement(o);
+    visitBlock(o);
   }
 
-  public void visitAwaitBlockClosing(@NotNull SvelteAwaitBlockClosing o) {
+  public void visitAwaitBlockClosingTag(@NotNull SvelteAwaitBlockClosingTag o) {
     visitPsiElement(o);
   }
 
@@ -32,6 +32,10 @@ public class SvelteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBlock(@NotNull SvelteBlock o) {
+    visitPsiElement(o);
+  }
+
   public void visitCatchContinuation(@NotNull SvelteCatchContinuation o) {
     visitPsiElement(o);
   }
@@ -41,10 +45,10 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitEachBlock(@NotNull SvelteEachBlock o) {
-    visitPsiElement(o);
+    visitBlock(o);
   }
 
-  public void visitEachBlockClosing(@NotNull SvelteEachBlockClosing o) {
+  public void visitEachBlockClosingTag(@NotNull SvelteEachBlockClosingTag o) {
     visitPsiElement(o);
   }
 
@@ -77,10 +81,10 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitIfBlock(@NotNull SvelteIfBlock o) {
-    visitPsiElement(o);
+    visitBlock(o);
   }
 
-  public void visitIfBlockClosing(@NotNull SvelteIfBlockClosing o) {
+  public void visitIfBlockClosingTag(@NotNull SvelteIfBlockClosingTag o) {
     visitPsiElement(o);
   }
 

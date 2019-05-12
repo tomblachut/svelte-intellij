@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteScope extends PsiElement {
-
-  @NotNull
-  List<SvelteBlock> getBlockList();
-
-  @NotNull
-  List<SvelteInterpolation> getInterpolationList();
+public interface SvelteIfBlockClosingTag extends PsiElement {
 
 }

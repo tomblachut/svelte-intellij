@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteAwaitBlockImpl extends ASTWrapperPsiElement implements SvelteAwaitBlock {
+public class SvelteAwaitBlockImpl extends SvelteBlockImpl implements SvelteAwaitBlock {
 
   public SvelteAwaitBlockImpl(@NotNull ASTNode node) {
     super(node);
@@ -28,8 +27,8 @@ public class SvelteAwaitBlockImpl extends ASTWrapperPsiElement implements Svelte
 
   @Override
   @Nullable
-  public SvelteAwaitBlockClosing getAwaitBlockClosing() {
-    return findChildByClass(SvelteAwaitBlockClosing.class);
+  public SvelteAwaitBlockClosingTag getAwaitBlockClosingTag() {
+    return findChildByClass(SvelteAwaitBlockClosingTag.class);
   }
 
   @Override

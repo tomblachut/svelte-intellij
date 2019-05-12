@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteEachBlockImpl extends ASTWrapperPsiElement implements SvelteEachBlock {
+public class SvelteEachBlockImpl extends SvelteBlockImpl implements SvelteEachBlock {
 
   public SvelteEachBlockImpl(@NotNull ASTNode node) {
     super(node);
@@ -28,8 +27,8 @@ public class SvelteEachBlockImpl extends ASTWrapperPsiElement implements SvelteE
 
   @Override
   @Nullable
-  public SvelteEachBlockClosing getEachBlockClosing() {
-    return findChildByClass(SvelteEachBlockClosing.class);
+  public SvelteEachBlockClosingTag getEachBlockClosingTag() {
+    return findChildByClass(SvelteEachBlockClosingTag.class);
   }
 
   @Override
