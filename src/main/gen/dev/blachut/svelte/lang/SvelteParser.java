@@ -45,7 +45,21 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
-  // (awaitThenBlockOpening | awaitBlockOpening thenContinuation) (catchContinuation)? awaitBlockClosingTag
+  // awaitBlockOpening thenContinuation
+  static boolean awaitAndThen(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "awaitAndThen")) return false;
+    if (!nextTokenIs(builder, START_MUSTACHE)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_);
+    result = awaitBlockOpening(builder, level + 1);
+    pinned = result; // pin = 1
+    result = result && thenContinuation(builder, level + 1);
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
+  }
+
+  /* ********************************************************** */
+  // (awaitThenBlockOpening | awaitAndThen) (catchContinuation)? awaitBlockClosingTag
   public static boolean awaitBlock(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "awaitBlock")) return false;
     if (!nextTokenIs(builder, START_MUSTACHE)) return false;
@@ -59,25 +73,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     return result || pinned;
   }
 
-  // awaitThenBlockOpening | awaitBlockOpening thenContinuation
+  // awaitThenBlockOpening | awaitAndThen
   private static boolean awaitBlock_0(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "awaitBlock_0")) return false;
     boolean result;
-    Marker marker = enter_section_(builder);
     result = awaitThenBlockOpening(builder, level + 1);
-    if (!result) result = awaitBlock_0_1(builder, level + 1);
-    exit_section_(builder, marker, null, result);
-    return result;
-  }
-
-  // awaitBlockOpening thenContinuation
-  private static boolean awaitBlock_0_1(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "awaitBlock_0_1")) return false;
-    boolean result;
-    Marker marker = enter_section_(builder);
-    result = awaitBlockOpening(builder, level + 1);
-    result = result && thenContinuation(builder, level + 1);
-    exit_section_(builder, marker, null, result);
+    if (!result) result = awaitAndThen(builder, level + 1);
     return result;
   }
 

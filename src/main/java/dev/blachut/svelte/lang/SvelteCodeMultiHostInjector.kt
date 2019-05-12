@@ -122,21 +122,25 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
     override fun visitAwaitBlock(awaitBlock: SvelteAwaitBlock) {
         val promiseExpression: SvelteExpression?
         val thenParameter: SvelteParameter?
-        val thenScope: SvelteScope
+        val awaitScope: SvelteScope?
+        val thenScope: SvelteScope?
 
         val awaitThenBlockOpening = awaitBlock.awaitThenBlockOpening
         if (awaitThenBlockOpening != null) {
             promiseExpression = awaitThenBlockOpening.awaitThenBlockOpeningTag.expression
             thenParameter = awaitThenBlockOpening.awaitThenBlockOpeningTag.parameter
+            awaitScope = null
             thenScope = awaitThenBlockOpening.scope
         } else {
-            promiseExpression = awaitBlock.awaitBlockOpening!!.awaitBlockOpeningTag.expression
-            thenParameter = awaitBlock.thenContinuation!!.thenContinuationTag.parameter
-            thenScope = awaitBlock.thenContinuation!!.scope
+            val awaitBlockOpening = awaitBlock.awaitBlockOpening!!
 
-            // Await block scope visit should be lifted before call to then
-            visitScope(awaitBlock.awaitBlockOpening!!.scope)
+            promiseExpression = awaitBlockOpening.awaitBlockOpeningTag.expression
+            thenParameter = awaitBlock.thenContinuation?.thenContinuationTag?.parameter
+            awaitScope = awaitBlockOpening.scope
+            thenScope = awaitBlock.thenContinuation?.scope
         }
+
+        if (awaitScope != null) visitScope(awaitScope)
 
         if (promiseExpression != null) {
             stitchScript("new Promise(", promiseExpression, ")")
@@ -150,7 +154,7 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
             appendPrefix(".then(() => {")
         }
 
-        visitScope(thenScope)
+        if (thenScope != null) visitScope(thenScope)
 
         val catchContinuation = awaitBlock.catchContinuation
         if (catchContinuation != null) {
