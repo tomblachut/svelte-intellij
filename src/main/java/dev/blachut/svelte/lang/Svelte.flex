@@ -13,17 +13,6 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
   private char quote;
   private int leftBraceCount;
   private int leftParenCount;
-
-//  private Stack<Integer> stack = new Stack<>();
-//
-//  public void yypushState(int newState) {
-//    stack.push(yystate());
-//    yybegin(newState);
-//  }
-//
-//  public void yypopState() {
-//    yybegin(stack.pop());
-//  }
 %}
 
 //%debug
@@ -41,6 +30,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 WHITE_SPACE=\s+
 
+%state VERBATIM_COMMENT
 %state VERBATIM_HTML
 %state HTML_TAG
 %state TAG_STRING
@@ -50,6 +40,7 @@ WHITE_SPACE=\s+
 
 %%
 <YYINITIAL> {
+  "<!--"                  { yybegin(VERBATIM_COMMENT); return HTML_FRAGMENT; }
   "<script" | "<style"    { yybegin(VERBATIM_HTML); return HTML_FRAGMENT; }
   "<"                     { yybegin(HTML_TAG); return HTML_FRAGMENT; }
   "{" / \s*[#:/]          { yybegin(SVELTE_TAG); return START_MUSTACHE; }
@@ -86,6 +77,10 @@ WHITE_SPACE=\s+
   "}"                { if (leftBraceCount == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { leftBraceCount -= 1; return CODE_FRAGMENT; } }
 
   [^]                { return CODE_FRAGMENT; }
+}
+
+<VERBATIM_COMMENT> {
+  "-->"                       { yybegin(YYINITIAL); return HTML_FRAGMENT; }
 }
 
 <VERBATIM_HTML> {
