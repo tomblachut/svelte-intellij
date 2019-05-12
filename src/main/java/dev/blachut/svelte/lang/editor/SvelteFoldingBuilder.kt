@@ -29,7 +29,7 @@ class SvelteFoldingBuilder : FoldingBuilder {
             val close = when (open) {
                 is SvelteIfBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteIfBlockClosingTag::class.java)
                 is SvelteEachBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteEachBlockClosingTag::class.java)
-                is SvelteAwaitBlockClosingTag -> PsiTreeUtil.findChildOfType(block, SvelteAwaitBlockClosingTag::class.java)
+                is SvelteAwaitBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteAwaitBlockClosingTag::class.java)
                 is SvelteAwaitThenBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteAwaitBlockClosingTag::class.java)
                 else -> null
             }

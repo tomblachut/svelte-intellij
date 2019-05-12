@@ -59,7 +59,7 @@ class SvelteTypedHandler : TypedHandlerDelegate() {
         val matchingTag = when (open) {
             is SvelteIfBlockOpeningTag -> prefix + "if}"
             is SvelteEachBlockOpeningTag -> prefix + "else}"
-            is SvelteAwaitBlockClosingTag -> prefix + "await}"
+            is SvelteAwaitBlockOpeningTag -> prefix + "await}"
             is SvelteAwaitThenBlockOpeningTag -> prefix + "await}"
             else -> return
         }
