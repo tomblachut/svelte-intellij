@@ -47,9 +47,11 @@
   extends(".*ClosingTag")=closingTag
 }
 
-svelteComponent ::= scope
+svelteComponent ::= privateScope
 
-scope ::= (block|interpolation|HTML_FRAGMENT)*
+scope ::= privateScope
+
+private privateScope ::= (block|interpolation|HTML_FRAGMENT)*
 
 block ::= ifBlock | eachBlock | awaitBlock
 

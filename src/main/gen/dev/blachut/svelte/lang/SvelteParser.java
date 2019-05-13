@@ -497,21 +497,19 @@ public class SvelteParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // (block|interpolation|HTML_FRAGMENT)*
-  public static boolean scope(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "scope")) return false;
-    Marker marker = enter_section_(builder, level, _NONE_, SCOPE, "<scope>");
+  static boolean privateScope(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "privateScope")) return false;
     while (true) {
       int pos = current_position_(builder);
-      if (!scope_0(builder, level + 1)) break;
-      if (!empty_element_parsed_guard_(builder, "scope", pos)) break;
+      if (!privateScope_0(builder, level + 1)) break;
+      if (!empty_element_parsed_guard_(builder, "privateScope", pos)) break;
     }
-    exit_section_(builder, level, marker, true, false, null);
     return true;
   }
 
   // block|interpolation|HTML_FRAGMENT
-  private static boolean scope_0(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "scope_0")) return false;
+  private static boolean privateScope_0(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "privateScope_0")) return false;
     boolean result;
     Marker marker = enter_section_(builder);
     result = block(builder, level + 1);
@@ -522,9 +520,20 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // scope
+  // privateScope
+  public static boolean scope(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "scope")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder, level, _NONE_, SCOPE, "<scope>");
+    result = privateScope(builder, level + 1);
+    exit_section_(builder, level, marker, result, false, null);
+    return result;
+  }
+
+  /* ********************************************************** */
+  // privateScope
   static boolean svelteComponent(PsiBuilder builder, int level) {
-    return scope(builder, level + 1);
+    return privateScope(builder, level + 1);
   }
 
   /* ********************************************************** */
