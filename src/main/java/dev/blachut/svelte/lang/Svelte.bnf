@@ -10,7 +10,7 @@
 
   parserClass="dev.blachut.svelte.lang.SvelteParser"
 
-  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  extends="dev.blachut.svelte.lang.psi.SveltePsiElementImpl"
 
   psiClassPrefix="Svelte"
   psiImplClassSuffix="Impl"

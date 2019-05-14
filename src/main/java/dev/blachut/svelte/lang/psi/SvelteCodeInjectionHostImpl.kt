@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.psi
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.LiteralTextEscaper
@@ -8,7 +7,7 @@ import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.impl.source.tree.injected.InjectionBackgroundSuppressor
 
-open class SvelteCodeInjectionHostImpl(node: ASTNode) : ASTWrapperPsiElement(node), PsiLanguageInjectionHost, InjectionBackgroundSuppressor {
+open class SvelteCodeInjectionHostImpl(node: ASTNode) : SveltePsiElementImpl(node), PsiLanguageInjectionHost, InjectionBackgroundSuppressor {
     override fun updateText(text: String): PsiLanguageInjectionHost {
         val valueNode = node.firstChildNode
         assert(valueNode is LeafElement)
