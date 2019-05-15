@@ -6,18 +6,45 @@
     <description><![CDATA[
 <p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>
 
-<b>PLEASE NOTE THAT THIS IS WORK IN PROGRESS</b>
+<p>Work in progress, pretty usable already.</p>
 
-<p>Please report issues on GitHub</p>
-
-<h3>Features</h3>
+<h2>Features</h2>
 
 <ul>
     <li>Syntax highlighting</li>
-    <li>Coding assistance</li>
+    <li>Code formatting</li>
+    <li>Typing assistance</li>
+    <li>Partial completion suggestions</li>
     <li>Navigation from components to their definition</li>
 </ul>
     ]]></description>
+
+    <change-notes><![CDATA[
+<h3>0.7.0</h3>
+<ul>
+    <li>Support code formatting!</li>
+    <li>Emmet-style expansions for Svelte tags! Try typing if[TAB]</li>
+    <li>Auto indent when writing newline between Svelte tags</li>
+    <li>Automatically insert closing Svelte tags</li>
+    <li>Support folding regions (+/- icons in the gutter) for Svelte tags</li>
+    <li>Support Comment with Line/Block Comment actions</li>
+    <li>Highlight Svelte tag mustaches in the same color as keywords</li>
+    <li>Improve parser behavior for incomplete code</li>
+</ul>
+
+<h3>0.6.0</h3>
+<ul>
+    <li>Add syntax highlighting for JS inside blocks & expressions (bar attributes)</li>
+    <li>Add syntax highlighting for Svelte keywords</li>
+    <li>Improve parser recovery after errors</li>
+    <li>Additional minor improvements</li>
+</ul>
+
+<h3>0.5.0</h3>
+<ul>
+    <li>First public release</li>
+</ul>
+    ]]></change-notes>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>JavaScript</depends>
