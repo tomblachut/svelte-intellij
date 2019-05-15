@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="320" src="./svelte-intellij-header.png" alt="logo of vue-awesome repository">
+  <img width="320" src="./svelte-intellij-header.png" alt="logo of svelte-intellij repository">
 </p>
 
 # svelte-intellij
