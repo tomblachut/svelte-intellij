@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteAwaitBlockOpeningTagImpl extends ASTWrapperPsiElement implements SvelteAwaitBlockOpeningTag {
+public class SvelteAwaitBlockOpeningTagImpl extends SvelteOpeningTagImpl implements SvelteAwaitBlockOpeningTag {
 
   public SvelteAwaitBlockOpeningTagImpl(@NotNull ASTNode node) {
     super(node);

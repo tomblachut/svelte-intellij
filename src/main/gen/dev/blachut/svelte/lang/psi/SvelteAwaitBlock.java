@@ -5,10 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteAwaitBlock extends PsiElement {
+public interface SvelteAwaitBlock extends SvelteBlock {
 
   @Nullable
-  SvelteAwaitBlockClosing getAwaitBlockClosing();
+  SvelteAwaitBlockClosingTag getAwaitBlockClosingTag();
 
   @Nullable
   SvelteAwaitBlockOpening getAwaitBlockOpening();

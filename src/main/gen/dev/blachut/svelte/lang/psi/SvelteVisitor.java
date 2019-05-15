@@ -9,11 +9,11 @@ import com.intellij.psi.PsiLanguageInjectionHost;
 public class SvelteVisitor extends PsiElementVisitor {
 
   public void visitAwaitBlock(@NotNull SvelteAwaitBlock o) {
-    visitPsiElement(o);
+    visitBlock(o);
   }
 
-  public void visitAwaitBlockClosing(@NotNull SvelteAwaitBlockClosing o) {
-    visitPsiElement(o);
+  public void visitAwaitBlockClosingTag(@NotNull SvelteAwaitBlockClosingTag o) {
+    visitClosingTag(o);
   }
 
   public void visitAwaitBlockOpening(@NotNull SvelteAwaitBlockOpening o) {
@@ -21,7 +21,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitAwaitBlockOpeningTag(@NotNull SvelteAwaitBlockOpeningTag o) {
-    visitPsiElement(o);
+    visitOpeningTag(o);
   }
 
   public void visitAwaitThenBlockOpening(@NotNull SvelteAwaitThenBlockOpening o) {
@@ -29,6 +29,10 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitAwaitThenBlockOpeningTag(@NotNull SvelteAwaitThenBlockOpeningTag o) {
+    visitOpeningTag(o);
+  }
+
+  public void visitBlock(@NotNull SvelteBlock o) {
     visitPsiElement(o);
   }
 
@@ -37,15 +41,23 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitCatchContinuationTag(@NotNull SvelteCatchContinuationTag o) {
+    visitContinuationTag(o);
+  }
+
+  public void visitClosingTag(@NotNull SvelteClosingTag o) {
+    visitPsiElement(o);
+  }
+
+  public void visitContinuationTag(@NotNull SvelteContinuationTag o) {
     visitPsiElement(o);
   }
 
   public void visitEachBlock(@NotNull SvelteEachBlock o) {
-    visitPsiElement(o);
+    visitBlock(o);
   }
 
-  public void visitEachBlockClosing(@NotNull SvelteEachBlockClosing o) {
-    visitPsiElement(o);
+  public void visitEachBlockClosingTag(@NotNull SvelteEachBlockClosingTag o) {
+    visitClosingTag(o);
   }
 
   public void visitEachBlockOpening(@NotNull SvelteEachBlockOpening o) {
@@ -53,7 +65,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitEachBlockOpeningTag(@NotNull SvelteEachBlockOpeningTag o) {
-    visitPsiElement(o);
+    visitOpeningTag(o);
   }
 
   public void visitElseContinuation(@NotNull SvelteElseContinuation o) {
@@ -61,7 +73,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitElseContinuationTag(@NotNull SvelteElseContinuationTag o) {
-    visitPsiElement(o);
+    visitContinuationTag(o);
   }
 
   public void visitElseIfContinuation(@NotNull SvelteElseIfContinuation o) {
@@ -69,7 +81,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitElseIfContinuationTag(@NotNull SvelteElseIfContinuationTag o) {
-    visitPsiElement(o);
+    visitContinuationTag(o);
   }
 
   public void visitExpression(@NotNull SvelteExpression o) {
@@ -77,11 +89,11 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitIfBlock(@NotNull SvelteIfBlock o) {
-    visitPsiElement(o);
+    visitBlock(o);
   }
 
-  public void visitIfBlockClosing(@NotNull SvelteIfBlockClosing o) {
-    visitPsiElement(o);
+  public void visitIfBlockClosingTag(@NotNull SvelteIfBlockClosingTag o) {
+    visitClosingTag(o);
   }
 
   public void visitIfBlockOpening(@NotNull SvelteIfBlockOpening o) {
@@ -89,10 +101,14 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitIfBlockOpeningTag(@NotNull SvelteIfBlockOpeningTag o) {
-    visitPsiElement(o);
+    visitOpeningTag(o);
   }
 
   public void visitInterpolation(@NotNull SvelteInterpolation o) {
+    visitPsiElement(o);
+  }
+
+  public void visitOpeningTag(@NotNull SvelteOpeningTag o) {
     visitPsiElement(o);
   }
 
@@ -109,7 +125,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitThenContinuationTag(@NotNull SvelteThenContinuationTag o) {
-    visitPsiElement(o);
+    visitContinuationTag(o);
   }
 
   public void visitPsiLanguageInjectionHost(@NotNull PsiLanguageInjectionHost o) {

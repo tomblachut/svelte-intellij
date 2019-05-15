@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteIfBlock extends PsiElement {
+public interface SvelteIfBlock extends SvelteBlock {
 
   @Nullable
   SvelteElseContinuation getElseContinuation();
@@ -14,7 +14,7 @@ public interface SvelteIfBlock extends PsiElement {
   List<SvelteElseIfContinuation> getElseIfContinuationList();
 
   @Nullable
-  SvelteIfBlockClosing getIfBlockClosing();
+  SvelteIfBlockClosingTag getIfBlockClosingTag();
 
   @NotNull
   SvelteIfBlockOpening getIfBlockOpening();

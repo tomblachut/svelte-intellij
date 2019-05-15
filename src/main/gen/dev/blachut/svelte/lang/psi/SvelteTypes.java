@@ -9,15 +9,16 @@ import dev.blachut.svelte.lang.psi.impl.*;
 public interface SvelteTypes {
 
   IElementType AWAIT_BLOCK = new SvelteElementType("AWAIT_BLOCK");
-  IElementType AWAIT_BLOCK_CLOSING = new SvelteElementType("AWAIT_BLOCK_CLOSING");
+  IElementType AWAIT_BLOCK_CLOSING_TAG = new SvelteElementType("AWAIT_BLOCK_CLOSING_TAG");
   IElementType AWAIT_BLOCK_OPENING = new SvelteElementType("AWAIT_BLOCK_OPENING");
   IElementType AWAIT_BLOCK_OPENING_TAG = new SvelteElementType("AWAIT_BLOCK_OPENING_TAG");
   IElementType AWAIT_THEN_BLOCK_OPENING = new SvelteElementType("AWAIT_THEN_BLOCK_OPENING");
   IElementType AWAIT_THEN_BLOCK_OPENING_TAG = new SvelteElementType("AWAIT_THEN_BLOCK_OPENING_TAG");
+  IElementType BLOCK = new SvelteElementType("BLOCK");
   IElementType CATCH_CONTINUATION = new SvelteElementType("CATCH_CONTINUATION");
   IElementType CATCH_CONTINUATION_TAG = new SvelteElementType("CATCH_CONTINUATION_TAG");
   IElementType EACH_BLOCK = new SvelteElementType("EACH_BLOCK");
-  IElementType EACH_BLOCK_CLOSING = new SvelteElementType("EACH_BLOCK_CLOSING");
+  IElementType EACH_BLOCK_CLOSING_TAG = new SvelteElementType("EACH_BLOCK_CLOSING_TAG");
   IElementType EACH_BLOCK_OPENING = new SvelteElementType("EACH_BLOCK_OPENING");
   IElementType EACH_BLOCK_OPENING_TAG = new SvelteElementType("EACH_BLOCK_OPENING_TAG");
   IElementType ELSE_CONTINUATION = new SvelteElementType("ELSE_CONTINUATION");
@@ -26,7 +27,7 @@ public interface SvelteTypes {
   IElementType ELSE_IF_CONTINUATION_TAG = new SvelteElementType("ELSE_IF_CONTINUATION_TAG");
   IElementType EXPRESSION = new SvelteElementType("EXPRESSION");
   IElementType IF_BLOCK = new SvelteElementType("IF_BLOCK");
-  IElementType IF_BLOCK_CLOSING = new SvelteElementType("IF_BLOCK_CLOSING");
+  IElementType IF_BLOCK_CLOSING_TAG = new SvelteElementType("IF_BLOCK_CLOSING_TAG");
   IElementType IF_BLOCK_OPENING = new SvelteElementType("IF_BLOCK_OPENING");
   IElementType IF_BLOCK_OPENING_TAG = new SvelteElementType("IF_BLOCK_OPENING_TAG");
   IElementType INTERPOLATION = new SvelteElementType("INTERPOLATION");
@@ -61,8 +62,8 @@ public interface SvelteTypes {
       if (type == AWAIT_BLOCK) {
         return new SvelteAwaitBlockImpl(node);
       }
-      else if (type == AWAIT_BLOCK_CLOSING) {
-        return new SvelteAwaitBlockClosingImpl(node);
+      else if (type == AWAIT_BLOCK_CLOSING_TAG) {
+        return new SvelteAwaitBlockClosingTagImpl(node);
       }
       else if (type == AWAIT_BLOCK_OPENING) {
         return new SvelteAwaitBlockOpeningImpl(node);
@@ -85,8 +86,8 @@ public interface SvelteTypes {
       else if (type == EACH_BLOCK) {
         return new SvelteEachBlockImpl(node);
       }
-      else if (type == EACH_BLOCK_CLOSING) {
-        return new SvelteEachBlockClosingImpl(node);
+      else if (type == EACH_BLOCK_CLOSING_TAG) {
+        return new SvelteEachBlockClosingTagImpl(node);
       }
       else if (type == EACH_BLOCK_OPENING) {
         return new SvelteEachBlockOpeningImpl(node);
@@ -112,8 +113,8 @@ public interface SvelteTypes {
       else if (type == IF_BLOCK) {
         return new SvelteIfBlockImpl(node);
       }
-      else if (type == IF_BLOCK_CLOSING) {
-        return new SvelteIfBlockClosingImpl(node);
+      else if (type == IF_BLOCK_CLOSING_TAG) {
+        return new SvelteIfBlockClosingTagImpl(node);
       }
       else if (type == IF_BLOCK_OPENING) {
         return new SvelteIfBlockOpeningImpl(node);

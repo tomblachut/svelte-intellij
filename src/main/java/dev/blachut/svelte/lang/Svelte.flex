@@ -45,6 +45,7 @@ WHITE_SPACE=\s+
   "<"                     { yybegin(HTML_TAG); return HTML_FRAGMENT; }
   "{" / \s*[#:/]          { yybegin(SVELTE_TAG); return START_MUSTACHE; }
   "{"                     { yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
+  {WHITE_SPACE}           { return WHITE_SPACE; }
 }
 
 <SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {

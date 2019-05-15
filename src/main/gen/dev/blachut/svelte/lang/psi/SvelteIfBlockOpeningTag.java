@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteIfBlockOpeningTag extends PsiElement {
+public interface SvelteIfBlockOpeningTag extends SvelteOpeningTag {
 
   @Nullable
   SvelteExpression getExpression();

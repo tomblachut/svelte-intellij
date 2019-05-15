@@ -5,10 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteEachBlock extends PsiElement {
+public interface SvelteEachBlock extends SvelteBlock {
 
   @Nullable
-  SvelteEachBlockClosing getEachBlockClosing();
+  SvelteEachBlockClosingTag getEachBlockClosingTag();
 
   @NotNull
   SvelteEachBlockOpening getEachBlockOpening();

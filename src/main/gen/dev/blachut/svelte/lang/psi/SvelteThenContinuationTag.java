@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SvelteThenContinuationTag extends PsiElement {
+public interface SvelteThenContinuationTag extends SvelteContinuationTag {
 
   @Nullable
   SvelteParameter getParameter();

@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteEachBlockClosingImpl extends ASTWrapperPsiElement implements SvelteEachBlockClosing {
+public class SvelteEachBlockClosingTagImpl extends SvelteClosingTagImpl implements SvelteEachBlockClosingTag {
 
-  public SvelteEachBlockClosingImpl(@NotNull ASTNode node) {
+  public SvelteEachBlockClosingTagImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SvelteVisitor visitor) {
-    visitor.visitEachBlockClosing(this);
+    visitor.visitEachBlockClosingTag(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

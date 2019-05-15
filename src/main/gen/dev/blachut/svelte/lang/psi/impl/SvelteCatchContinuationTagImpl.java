@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.blachut.svelte.lang.psi.*;
 
-public class SvelteCatchContinuationTagImpl extends ASTWrapperPsiElement implements SvelteCatchContinuationTag {
+public class SvelteCatchContinuationTagImpl extends SvelteContinuationTagImpl implements SvelteCatchContinuationTag {
 
   public SvelteCatchContinuationTagImpl(@NotNull ASTNode node) {
     super(node);
