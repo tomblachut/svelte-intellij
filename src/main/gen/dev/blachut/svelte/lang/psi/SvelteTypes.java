@@ -45,7 +45,7 @@ public interface SvelteTypes {
   IElementType ELSE = new SvelteElementType("else");
   IElementType END_MUSTACHE = new SvelteElementType("}");
   IElementType END_PAREN = new SvelteElementType(")");
-  IElementType HTML_FRAGMENT = new SvelteElementType("markup");
+  IElementType HTML_FRAGMENT = new SvelteElementType("<markup>");
   IElementType IF = new SvelteElementType("if");
   IElementType START_CLOSING_MUSTACHE = new SvelteElementType("{/");
   IElementType START_INNER_MUSTACHE = new SvelteElementType("{:");

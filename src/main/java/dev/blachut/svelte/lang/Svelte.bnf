@@ -37,7 +37,7 @@
     THEN="then"
     CATCH="catch"
     ELSE="else"
-    HTML_FRAGMENT="markup"
+    HTML_FRAGMENT="<markup>"
   ]
 
   extends(".*Block")=block
@@ -65,7 +65,7 @@ block ::= ifBlock | eachBlock | awaitBlock
 ifBlock ::= ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosingTag {pin=1}
 ifBlockOpening ::= ifBlockOpeningTag scope
 ifBlockOpeningTag ::= '{#' 'if' expression '}'
-elseIfContinuation ::= elseIfContinuationTag scope
+elseIfContinuation ::= elseIfContinuationTag scope {name="else if block"}
 elseIfContinuationTag ::= '{:' 'else' 'if' expression '}'
 ifBlockClosingTag ::= '{/' 'if' '}'
 
@@ -80,13 +80,13 @@ awaitThenBlockOpening ::= awaitThenBlockOpeningTag scope
 awaitThenBlockOpeningTag ::= '{#' 'await' expression 'then' parameter '}'
 awaitBlockOpening ::= awaitBlockOpeningTag scope
 awaitBlockOpeningTag ::= '{#' 'await' expression '}'
-thenContinuation ::= thenContinuationTag scope
+thenContinuation ::= thenContinuationTag scope {name="then block"}
 thenContinuationTag ::= '{:' 'then' parameter '}'
-catchContinuation ::= catchContinuationTag scope
+catchContinuation ::= catchContinuationTag scope {name="catch block"}
 catchContinuationTag::= '{:' 'catch' parameter '}'
 awaitBlockClosingTag ::= '{/' 'await' '}'
 
-elseContinuation ::= elseContinuationTag scope
+elseContinuation ::= elseContinuationTag scope {name="else block"}
 elseContinuationTag ::= '{:' 'else' '}'
 
 fake openingTag ::= '{#' foo '}'

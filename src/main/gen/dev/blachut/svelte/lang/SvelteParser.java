@@ -188,12 +188,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // catchContinuationTag scope
   public static boolean catchContinuation(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "catchContinuation")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
+    if (!nextTokenIs(builder, "<catch block>", START_INNER_MUSTACHE)) return false;
     boolean result;
-    Marker marker = enter_section_(builder);
+    Marker marker = enter_section_(builder, level, _NONE_, CATCH_CONTINUATION, "<catch block>");
     result = catchContinuationTag(builder, level + 1);
     result = result && scope(builder, level + 1);
-    exit_section_(builder, marker, CATCH_CONTINUATION, result);
+    exit_section_(builder, level, marker, result, false, null);
     return result;
   }
 
@@ -320,12 +320,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // elseContinuationTag scope
   public static boolean elseContinuation(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "elseContinuation")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
+    if (!nextTokenIs(builder, "<else block>", START_INNER_MUSTACHE)) return false;
     boolean result;
-    Marker marker = enter_section_(builder);
+    Marker marker = enter_section_(builder, level, _NONE_, ELSE_CONTINUATION, "<else block>");
     result = elseContinuationTag(builder, level + 1);
     result = result && scope(builder, level + 1);
-    exit_section_(builder, marker, ELSE_CONTINUATION, result);
+    exit_section_(builder, level, marker, result, false, null);
     return result;
   }
 
@@ -346,12 +346,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // elseIfContinuationTag scope
   public static boolean elseIfContinuation(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "elseIfContinuation")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
+    if (!nextTokenIs(builder, "<else if block>", START_INNER_MUSTACHE)) return false;
     boolean result;
-    Marker marker = enter_section_(builder);
+    Marker marker = enter_section_(builder, level, _NONE_, ELSE_IF_CONTINUATION, "<else if block>");
     result = elseIfContinuationTag(builder, level + 1);
     result = result && scope(builder, level + 1);
-    exit_section_(builder, marker, ELSE_IF_CONTINUATION, result);
+    exit_section_(builder, level, marker, result, false, null);
     return result;
   }
 
@@ -540,12 +540,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // thenContinuationTag scope
   public static boolean thenContinuation(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "thenContinuation")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
+    if (!nextTokenIs(builder, "<then block>", START_INNER_MUSTACHE)) return false;
     boolean result;
-    Marker marker = enter_section_(builder);
+    Marker marker = enter_section_(builder, level, _NONE_, THEN_CONTINUATION, "<then block>");
     result = thenContinuationTag(builder, level + 1);
     result = result && scope(builder, level + 1);
-    exit_section_(builder, marker, THEN_CONTINUATION, result);
+    exit_section_(builder, level, marker, result, false, null);
     return result;
   }
 
