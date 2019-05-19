@@ -45,45 +45,50 @@
   extends(".*OpeningTag")=openingTag
   extends(".*ContinuationTag")=continuationTag
   extends(".*ClosingTag")=closingTag
+
+  pin("awaitThenBlockOpeningTag")=4
+  pin("elseIfContinuationTag")=3
+  pin(".*Tag")=2
+  pin("interpolation")=2
 }
 
+// First rule is always implicitly private
 svelteComponent ::= privateScope
-
 scope ::= privateScope
 
 private privateScope ::= (block|interpolation|HTML_FRAGMENT)*
+
+interpolation ::= '{' expression '}' {recoverWhile="interpolation_recover"}
+private interpolation_recover ::= &'}'
 
 block ::= ifBlock | eachBlock | awaitBlock
 
 ifBlock ::= ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosingTag {pin=1}
 ifBlockOpening ::= ifBlockOpeningTag scope
-ifBlockOpeningTag ::= '{' '#if' expression '}' {pin=2}
+ifBlockOpeningTag ::= '{' '#if' expression '}'
 elseIfContinuation ::= elseIfContinuationTag scope
-elseIfContinuationTag ::= '{' ':else' 'if' expression '}' {pin=3}
-ifBlockClosingTag ::= '{' '/if' '}' {pin=2}
+elseIfContinuationTag ::= '{' ':else' 'if' expression '}'
+ifBlockClosingTag ::= '{' '/if' '}'
 
 eachBlock ::= eachBlockOpening elseContinuation? eachBlockClosingTag {pin=1}
 eachBlockOpening ::= eachBlockOpeningTag scope
-eachBlockOpeningTag ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}' {pin=2}
-eachBlockClosingTag ::= '{' '/each' '}' {pin=2}
+eachBlockOpeningTag ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
+eachBlockClosingTag ::= '{' '/each' '}'
 
 awaitBlock ::= (awaitThenBlockOpening | awaitAndThen) (catchContinuation)? awaitBlockClosingTag {pin=1}
 private awaitAndThen ::= awaitBlockOpening thenContinuation {pin=1}
 awaitThenBlockOpening ::= awaitThenBlockOpeningTag scope
-awaitThenBlockOpeningTag ::= '{' '#await' expression 'then' parameter '}' {pin=4}
+awaitThenBlockOpeningTag ::= '{' '#await' expression 'then' parameter '}'
 awaitBlockOpening ::= awaitBlockOpeningTag scope
-awaitBlockOpeningTag ::= '{' '#await' expression '}' {pin=2}
+awaitBlockOpeningTag ::= '{' '#await' expression '}'
 thenContinuation ::= thenContinuationTag scope
-thenContinuationTag ::= '{' ':then' parameter '}' {pin=2}
+thenContinuationTag ::= '{' ':then' parameter '}'
 catchContinuation ::= catchContinuationTag scope
-catchContinuationTag::= '{' ':catch' parameter '}' {pin=2}
-awaitBlockClosingTag ::= '{' '/await' '}' {pin=2}
+catchContinuationTag::= '{' ':catch' parameter '}'
+awaitBlockClosingTag ::= '{' '/await' '}'
 
 elseContinuation ::= elseContinuationTag scope
-elseContinuationTag ::= '{' ':else' '}' {pin=2}
-
-interpolation ::= '{' expression '}' {pin=2; recoverWhile="interpolation_recover"}
-private interpolation_recover ::= &'}'
+elseContinuationTag ::= '{' ':else' '}'
 
 fake openingTag ::= '{' '#foo' '}'
 fake continuationTag ::= '{' ':foo' '}'
