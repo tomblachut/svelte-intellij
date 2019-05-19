@@ -48,7 +48,7 @@
   pin("awaitThenBlockOpeningTag")=4
   pin("elseIfContinuationTag")=3
   pin(".*Tag")=2
-  pin("interpolation")=2
+  pin("interpolation")=1
 }
 
 // First rule is always implicitly private

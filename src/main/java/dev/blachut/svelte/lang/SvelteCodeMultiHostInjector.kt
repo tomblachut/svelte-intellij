@@ -172,7 +172,8 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
     }
 
     override fun visitInterpolation(context: SvelteInterpolation) {
-        stitchScript(expressionPrefix, context.expression, expressionSuffix)
+        val expression = context.expression
+        if (expression != null) stitchScript(expressionPrefix, expression, expressionSuffix)
     }
 
     override fun visitElement(element: PsiElement) {

@@ -464,9 +464,9 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     boolean result, pinned;
     Marker marker = enter_section_(builder, level, _NONE_, INTERPOLATION, "<interpolation>");
     result = consumeToken(builder, START_MUSTACHE);
-    result = result && expression(builder, level + 1);
-    pinned = result; // pin = 2
-    result = result && consumeToken(builder, END_MUSTACHE);
+    pinned = result; // pin = 1
+    result = result && report_error_(builder, expression(builder, level + 1));
+    result = pinned && consumeToken(builder, END_MUSTACHE) && result;
     exit_section_(builder, level, marker, result, pinned, SvelteParser::interpolation_recover);
     return result || pinned;
   }
