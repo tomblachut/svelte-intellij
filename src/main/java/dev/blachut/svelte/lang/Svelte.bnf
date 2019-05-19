@@ -38,6 +38,8 @@
     CATCH="catch"
     ELSE="else"
     HTML_FRAGMENT="<markup>"
+    HTML_PREFIX="@html"
+    DEBUG_PREFIX="@debug"
   ]
 
   extends(".*Block")=block
@@ -60,7 +62,8 @@ private mustache_recover ::= !('{' | '{#' | "{:" | "{/" | HTML_FRAGMENT)
 
 private privateScope ::= (block|interpolation|HTML_FRAGMENT)*
 
-interpolation ::= '{' expression '}'
+interpolation ::= '{' expressionPrefix? expression '}'
+private expressionPrefix ::= '@html' | '@debug'
 
 block ::= ifBlock | eachBlock | awaitBlock
 

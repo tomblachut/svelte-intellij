@@ -375,6 +375,19 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '@html' | '@debug'
+  static boolean expressionPrefix(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "expressionPrefix")) return false;
+    if (!nextTokenIs(builder, "", DEBUG_PREFIX, HTML_PREFIX)) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = consumeToken(builder, HTML_PREFIX);
+    if (!result) result = consumeToken(builder, DEBUG_PREFIX);
+    exit_section_(builder, marker, null, result);
+    return result;
+  }
+
+  /* ********************************************************** */
   // ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosingTag
   public static boolean ifBlock(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "ifBlock")) return false;
@@ -448,17 +461,25 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{' expression '}'
+  // '{' expressionPrefix? expression '}'
   public static boolean interpolation(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "interpolation")) return false;
     boolean result, pinned;
     Marker marker = enter_section_(builder, level, _NONE_, INTERPOLATION, "<interpolation>");
     result = consumeToken(builder, START_MUSTACHE);
     pinned = result; // pin = 1
-    result = result && report_error_(builder, expression(builder, level + 1));
+    result = result && report_error_(builder, interpolation_1(builder, level + 1));
+    result = pinned && report_error_(builder, expression(builder, level + 1)) && result;
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
     exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
+  }
+
+  // expressionPrefix?
+  private static boolean interpolation_1(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "interpolation_1")) return false;
+    expressionPrefix(builder, level + 1);
+    return true;
   }
 
   /* ********************************************************** */

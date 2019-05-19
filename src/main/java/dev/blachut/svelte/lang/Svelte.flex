@@ -35,6 +35,7 @@ WHITE_SPACE=\s+
 %state VERBATIM_HTML
 %state HTML_TAG
 %state TAG_STRING
+%state SVELTE_INTERPOLATION_PRE
 %state SVELTE_INTERPOLATION
 %state SVELTE_TAG_PRE
 %state SVELTE_TAG
@@ -62,7 +63,6 @@ WHITE_SPACE=\s+
   [a-zA-Z0-9]+      { yybegin(SVELTE_TAG); return BAD_CHARACTER; }
   {WHITE_SPACE}     { return BAD_CHARACTER; }
 }
-
 <SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
   "if"              { return IF; }
   "then"            { return THEN; }
@@ -75,6 +75,12 @@ WHITE_SPACE=\s+
 <SVELTE_TAG_PAREN_AWARE> {
   "("                { leftParenCount += 1; if (leftParenCount == 1) { return START_PAREN; } else { return CODE_FRAGMENT; } }
   ")"                { leftParenCount -= 1; if (leftParenCount == 0) { return END_PAREN; } else { return CODE_FRAGMENT; } }
+}
+
+<SVELTE_INTERPOLATION> {
+  "@html"            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX; }
+  "@debug"           { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX; }
+  "@"[a-zA-Z0-9]+      { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER; }
 }
 
 <SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {

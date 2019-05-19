@@ -41,11 +41,13 @@ public interface SvelteTypes {
   IElementType CATCH = new SvelteElementType("catch");
   IElementType CODE_FRAGMENT = new SvelteElementType("CODE_FRAGMENT");
   IElementType COMMA = new SvelteElementType(",");
+  IElementType DEBUG_PREFIX = new SvelteElementType("@debug");
   IElementType EACH = new SvelteElementType("each");
   IElementType ELSE = new SvelteElementType("else");
   IElementType END_MUSTACHE = new SvelteElementType("}");
   IElementType END_PAREN = new SvelteElementType(")");
   IElementType HTML_FRAGMENT = new SvelteElementType("<markup>");
+  IElementType HTML_PREFIX = new SvelteElementType("@html");
   IElementType IF = new SvelteElementType("if");
   IElementType START_CLOSING_MUSTACHE = new SvelteElementType("{/");
   IElementType START_INNER_MUSTACHE = new SvelteElementType("{:");

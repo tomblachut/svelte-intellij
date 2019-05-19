@@ -24,6 +24,8 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
             SvelteTypes.START_CLOSING_MUSTACHE,
             SvelteTypes.START_MUSTACHE,
             SvelteTypes.END_MUSTACHE,
+            SvelteTypes.HTML_PREFIX,
+            SvelteTypes.DEBUG_PREFIX,
             SvelteTypes.COMMA,
             SvelteTypes.IF,
             SvelteTypes.AWAIT,
