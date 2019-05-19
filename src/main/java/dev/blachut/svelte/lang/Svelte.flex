@@ -5,6 +5,7 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 %%
@@ -35,6 +36,7 @@ WHITE_SPACE=\s+
 %state HTML_TAG
 %state TAG_STRING
 %state SVELTE_INTERPOLATION
+%state SVELTE_TAG_PRE
 %state SVELTE_TAG
 %state SVELTE_TAG_PAREN_AWARE
 
@@ -43,28 +45,30 @@ WHITE_SPACE=\s+
   "<!--"                  { yybegin(VERBATIM_COMMENT); return HTML_FRAGMENT; }
   "<script" | "<style"    { yybegin(VERBATIM_HTML); return HTML_FRAGMENT; }
   "<"                     { yybegin(HTML_TAG); return HTML_FRAGMENT; }
-  "{" / \s*[#:/]          { yybegin(SVELTE_TAG); return START_MUSTACHE; }
+  "{"\s*"#"               { yybegin(SVELTE_TAG_PRE); return START_OPENING_MUSTACHE; }
+  "{"\s*":"               { yybegin(SVELTE_TAG_PRE); return START_INNER_MUSTACHE; }
+  "{"\s*"/"               { yybegin(SVELTE_TAG_PRE); return START_CLOSING_MUSTACHE; }
   "{"                     { yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
   {WHITE_SPACE}           { return WHITE_SPACE; }
 }
 
-<SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
-  "#if"              { return IF; }
-  "if"               { return ELSE_IF; }
-  "/if"              { return END_IF; }
+<SVELTE_TAG_PRE> {
+  "if"              { yybegin(SVELTE_TAG); return IF; }
+  "each"            { yybegin(SVELTE_TAG); return EACH; }
+  "await"           { yybegin(SVELTE_TAG); return AWAIT; }
+  "then"            { yybegin(SVELTE_TAG); return THEN; }
+  "catch"           { yybegin(SVELTE_TAG); return CATCH; }
+  "else"            { yybegin(SVELTE_TAG); return ELSE; }
+  [a-zA-Z0-9]+      { yybegin(SVELTE_TAG); return BAD_CHARACTER; }
+  {WHITE_SPACE}     { return BAD_CHARACTER; }
+}
 
-  "#each"            { return EACH; }
+<SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
+  "if"              { return IF; }
+  "then"            { return THEN; }
   "as"               { yybegin(SVELTE_TAG_PAREN_AWARE); return AS; }
   ","                { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
-  "/each"            { return END_EACH; }
 
-  "#await"           { return AWAIT; }
-  "then"             { return AWAIT_THEN; }
-  ":then"            { return THEN; }
-  ":catch"           { return CATCH; }
-  "/await"           { return AWAIT_END; }
-
-  ":else"            { return ELSE; }
   {WHITE_SPACE}      { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
 }
 

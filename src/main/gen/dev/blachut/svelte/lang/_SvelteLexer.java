@@ -7,6 +7,7 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 
@@ -30,8 +31,9 @@ public class _SvelteLexer implements FlexLexer {
   public static final int HTML_TAG = 6;
   public static final int TAG_STRING = 8;
   public static final int SVELTE_INTERPOLATION = 10;
-  public static final int SVELTE_TAG = 12;
-  public static final int SVELTE_TAG_PAREN_AWARE = 14;
+  public static final int SVELTE_TAG_PRE = 12;
+  public static final int SVELTE_TAG = 14;
+  public static final int SVELTE_TAG_PAREN_AWARE = 16;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -40,7 +42,8 @@ public class _SvelteLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7, 7
+     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7,  7, 
+     8, 8
   };
 
   /** 
@@ -62,11 +65,11 @@ public class _SvelteLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 640 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\5\1\22\0\1\1\1\3\1\35\1\20\3\0\1\34\1\30\1\31\2\0\1\25\1\4\1\0\1\22"+
-    "\12\0\1\17\1\0\1\2\1\0\1\33\42\0\1\23\1\0\1\6\1\0\1\15\1\21\1\0\1\24\1\10"+
-    "\2\0\1\14\1\0\1\27\1\0\1\11\1\0\1\7\1\5\1\12\2\0\1\26\1\0\1\13\1\0\1\16\1"+
-    "\0\1\32\7\0\1\1\32\0\1\1\337\0\1\1\177\0\13\1\35\0\2\1\5\0\1\1\57\0\1\1\40"+
-    "\0");
+    "\11\0\5\1\22\0\1\1\1\3\1\36\1\17\3\0\1\35\1\31\1\32\2\0\1\30\1\4\1\0\1\21"+
+    "\12\27\1\20\1\0\1\2\1\0\1\34\2\0\32\27\6\0\1\23\1\27\1\6\1\27\1\15\1\22\1"+
+    "\27\1\24\1\10\2\27\1\14\1\27\1\26\1\27\1\11\1\27\1\7\1\5\1\12\2\27\1\25\1"+
+    "\27\1\13\1\27\1\16\1\0\1\33\7\0\1\1\32\0\1\1\337\0\1\1\177\0\13\1\35\0\2\1"+
+    "\5\0\1\1\57\0\1\1\40\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -74,15 +77,16 @@ public class _SvelteLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\10\0\1\1\1\2\1\3\1\4\2\1\1\5\1\6"+
-    "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\6\12"+
-    "\1\16\1\17\1\20\3\0\1\21\2\0\1\22\12\0"+
-    "\1\23\10\0\1\24\2\0\1\25\2\0\1\26\4\0"+
-    "\1\27\14\0\1\30\1\31\1\32\1\0\1\33\2\0"+
-    "\1\34\2\0\1\35\1\36\1\37\1\0";
+    "\11\0\1\1\1\2\1\3\1\4\2\1\1\5\1\6"+
+    "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\6\16"+
+    "\1\17\3\12\1\20\1\21\1\22\3\0\1\23\1\24"+
+    "\1\25\2\0\1\16\1\26\4\16\1\27\1\0\1\30"+
+    "\4\0\5\16\1\0\1\31\4\0\1\16\1\32\1\33"+
+    "\1\34\1\16\1\35\4\0\1\36\1\37\1\0\1\40"+
+    "\3\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[96];
+    int [] result = new int[86];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -107,21 +111,20 @@ public class _SvelteLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\36\0\74\0\132\0\170\0\226\0\264\0\322"+
-    "\0\360\0\u010e\0\u012c\0\u014a\0\u0168\0\u0186\0\360\0\360"+
-    "\0\360\0\360\0\360\0\360\0\360\0\360\0\u01a4\0\u01c2"+
-    "\0\u01e0\0\u01fe\0\u021c\0\u023a\0\u0258\0\360\0\360\0\360"+
-    "\0\u0276\0\u0294\0\u014a\0\360\0\u02b2\0\u02d0\0\360\0\u02ee"+
-    "\0\u030c\0\u032a\0\u0348\0\u0366\0\u0384\0\u03a2\0\u03c0\0\u03de"+
-    "\0\u03fc\0\360\0\u041a\0\u0438\0\u0456\0\u0474\0\u0492\0\u04b0"+
-    "\0\u04ce\0\u04ec\0\360\0\u050a\0\u0528\0\360\0\u0546\0\u0564"+
-    "\0\360\0\u0582\0\u05a0\0\u05be\0\u05dc\0\360\0\u05fa\0\u0618"+
-    "\0\u0636\0\u0654\0\u0672\0\u0690\0\u06ae\0\u06cc\0\u06ea\0\u0708"+
-    "\0\u0726\0\u0744\0\360\0\360\0\360\0\u0762\0\360\0\u0780"+
-    "\0\u079e\0\360\0\u07bc\0\u07da\0\360\0\360\0\360\0\u07f8";
+    "\0\0\0\37\0\76\0\135\0\174\0\233\0\272\0\331"+
+    "\0\370\0\u0117\0\u0136\0\u0155\0\u0174\0\u0193\0\u01b2\0\u0117"+
+    "\0\u0117\0\u0117\0\u0117\0\u0117\0\u0117\0\u0117\0\u0117\0\u01d1"+
+    "\0\u01f0\0\u020f\0\u022e\0\u024d\0\u026c\0\u028b\0\u02aa\0\u02c9"+
+    "\0\u02e8\0\u0307\0\u0117\0\u0117\0\u0117\0\u0326\0\u0345\0\u0174"+
+    "\0\u0117\0\u0117\0\u0117\0\u0364\0\u0383\0\u03a2\0\u01f0\0\u03c1"+
+    "\0\u03e0\0\u03ff\0\u041e\0\u0117\0\u043d\0\u0117\0\u045c\0\u047b"+
+    "\0\u049a\0\u04b9\0\u04d8\0\u04f7\0\u0516\0\u0535\0\u0554\0\u0573"+
+    "\0\u0117\0\u0592\0\u05b1\0\u05d0\0\u05ef\0\u060e\0\u01f0\0\u01f0"+
+    "\0\u01f0\0\u062d\0\u0117\0\u064c\0\u066b\0\u068a\0\u06a9\0\u01f0"+
+    "\0\u01f0\0\u06c8\0\u0117\0\u06e7\0\u0706\0\u0725";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[96];
+    int [] result = new int[86];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -144,34 +147,40 @@ public class _SvelteLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\11\1\12\1\13\13\11\1\14\23\11\1\15\33\11"+
-    "\1\16\66\11\1\17\1\20\1\21\34\11\1\22\1\23"+
-    "\16\24\1\25\13\24\1\26\4\24\1\27\6\24\1\30"+
-    "\1\24\1\31\3\24\1\25\1\32\1\33\1\24\1\34"+
-    "\1\35\1\24\1\36\4\24\1\26\4\24\1\27\6\24"+
-    "\1\30\1\24\1\31\3\24\1\25\1\32\1\33\1\24"+
-    "\1\34\1\35\1\24\1\36\2\24\1\37\1\40\1\26"+
-    "\3\24\37\0\1\12\37\0\1\41\1\0\1\42\31\0"+
-    "\1\43\15\0\2\44\1\0\1\44\17\0\1\45\53\0"+
-    "\1\46\14\0\1\27\55\0\1\47\40\0\1\50\17\0"+
-    "\1\51\3\0\1\52\2\0\1\53\30\0\1\54\4\0"+
-    "\1\55\5\0\1\56\22\0\1\57\4\0\1\60\5\0"+
-    "\1\61\17\0\1\62\34\0\1\63\37\0\1\64\3\0"+
-    "\1\65\56\0\1\17\7\0\1\66\45\0\1\67\43\0"+
-    "\1\70\36\0\1\71\25\0\1\72\42\0\1\73\37\0"+
-    "\1\74\40\0\1\75\30\0\1\76\37\0\1\77\40\0"+
-    "\1\100\13\0\1\101\40\0\1\102\41\0\1\103\30\0"+
-    "\1\104\3\0\1\105\52\0\1\106\20\0\1\107\40\0"+
-    "\1\110\25\0\1\111\36\0\1\112\52\0\1\113\20\0"+
-    "\1\114\52\0\1\115\22\0\1\116\41\0\1\117\30\0"+
-    "\1\120\41\0\1\121\30\0\1\122\56\0\1\123\23\0"+
-    "\1\124\44\0\1\125\21\0\1\126\51\0\1\127\21\0"+
-    "\1\130\36\0\1\131\41\0\1\132\30\0\1\133\41\0"+
-    "\1\134\45\0\1\135\23\0\1\136\35\0\1\137\35\0"+
-    "\1\132\34\0\1\140\41\0\1\45\32\0\1\45\23\0";
+    "\1\12\1\13\1\14\13\12\1\15\24\12\1\16\34\12"+
+    "\1\17\70\12\1\20\1\21\1\22\35\12\1\23\1\24"+
+    "\16\25\1\26\14\25\1\27\3\25\1\12\1\30\3\12"+
+    "\1\31\1\32\1\31\1\33\1\31\1\34\2\31\1\35"+
+    "\4\12\1\31\1\36\4\31\7\12\1\25\1\37\6\25"+
+    "\1\40\1\25\1\41\3\25\1\26\4\25\1\42\4\25"+
+    "\1\43\2\25\1\27\4\25\1\37\6\25\1\40\1\25"+
+    "\1\41\3\25\1\26\4\25\1\42\4\25\1\43\1\44"+
+    "\1\45\1\27\3\25\40\0\1\13\40\0\1\46\1\0"+
+    "\1\47\32\0\1\50\15\0\1\51\1\52\1\53\21\0"+
+    "\1\54\53\0\1\55\16\0\1\30\42\0\11\31\4\0"+
+    "\6\31\14\0\11\31\4\0\1\31\1\56\4\31\14\0"+
+    "\11\31\4\0\1\57\5\31\14\0\11\31\4\0\2\31"+
+    "\1\60\3\31\14\0\7\31\1\61\1\31\4\0\1\31"+
+    "\1\62\4\31\14\0\11\31\4\0\3\31\1\63\2\31"+
+    "\10\0\1\37\57\0\1\64\40\0\1\65\17\0\1\66"+
+    "\35\0\1\67\40\0\1\70\3\0\1\71\60\0\1\20"+
+    "\7\0\1\72\36\0\5\31\1\73\3\31\4\0\6\31"+
+    "\14\0\10\31\1\74\4\0\6\31\14\0\1\75\10\31"+
+    "\4\0\6\31\14\0\1\31\1\76\7\31\4\0\6\31"+
+    "\14\0\11\31\4\0\1\31\1\77\4\31\24\0\1\100"+
+    "\25\0\1\101\41\0\1\102\42\0\1\103\31\0\1\104"+
+    "\3\0\1\105\31\0\1\31\1\106\7\31\4\0\6\31"+
+    "\14\0\11\31\4\0\4\31\1\107\1\31\14\0\10\31"+
+    "\1\110\4\0\6\31\14\0\11\31\4\0\2\31\1\111"+
+    "\3\31\14\0\3\31\1\112\5\31\4\0\6\31\35\0"+
+    "\1\113\20\0\1\114\42\0\1\115\31\0\1\116\42\0"+
+    "\1\117\30\0\11\31\4\0\2\31\1\120\3\31\14\0"+
+    "\5\31\1\121\3\31\4\0\6\31\20\0\1\122\42\0"+
+    "\1\123\31\0\1\124\42\0\1\125\34\0\1\123\35\0"+
+    "\1\126\42\0\1\54\33\0\1\54\24\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[2070];
+    int [] result = new int[1860];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -209,13 +218,13 @@ public class _SvelteLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\10\0\1\11\5\1\10\11\7\1\3\11\3\0\1\11"+
-    "\2\0\1\11\12\0\1\11\10\0\1\11\2\0\1\11"+
-    "\2\0\1\11\4\0\1\11\14\0\3\11\1\0\1\11"+
-    "\2\0\1\11\2\0\3\11\1\0";
+    "\11\0\1\11\5\1\10\11\13\1\3\11\3\0\3\11"+
+    "\2\0\6\1\1\11\1\0\1\11\4\0\5\1\1\0"+
+    "\1\11\4\0\5\1\1\11\4\0\2\1\1\0\1\11"+
+    "\3\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[96];
+    int [] result = new int[86];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -539,160 +548,162 @@ public class _SvelteLexer implements FlexLexer {
             { return HTML_FRAGMENT;
             } 
             // fall through
-          case 32: break;
+          case 33: break;
           case 2: 
             { return WHITE_SPACE;
             } 
             // fall through
-          case 33: break;
+          case 34: break;
           case 3: 
             { yybegin(HTML_TAG); return HTML_FRAGMENT;
             } 
             // fall through
-          case 34: break;
+          case 35: break;
           case 4: 
             { yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE;
             } 
             // fall through
-          case 35: break;
+          case 36: break;
           case 5: 
             { yybegin(YYINITIAL); return HTML_FRAGMENT;
             } 
             // fall through
-          case 36: break;
+          case 37: break;
           case 6: 
             { yybegin(TAG_STRING); quote = '\''; return HTML_FRAGMENT;
             } 
             // fall through
-          case 37: break;
+          case 38: break;
           case 7: 
             { yybegin(TAG_STRING); quote = '"'; return HTML_FRAGMENT;
             } 
             // fall through
-          case 38: break;
+          case 39: break;
           case 8: 
             { if (quote == '\'') yybegin(HTML_TAG); return HTML_FRAGMENT;
             } 
             // fall through
-          case 39: break;
+          case 40: break;
           case 9: 
             { if (quote == '"') yybegin(HTML_TAG); return HTML_FRAGMENT;
             } 
             // fall through
-          case 40: break;
+          case 41: break;
           case 10: 
             { return CODE_FRAGMENT;
             } 
             // fall through
-          case 41: break;
+          case 42: break;
           case 11: 
             { leftBraceCount += 1; return CODE_FRAGMENT;
             } 
             // fall through
-          case 42: break;
+          case 43: break;
           case 12: 
             { if (leftBraceCount == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { leftBraceCount -= 1; return CODE_FRAGMENT; }
             } 
             // fall through
-          case 43: break;
-          case 13: 
-            { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; }
-            } 
-            // fall through
           case 44: break;
-          case 14: 
-            { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; }
+          case 13: 
+            { return BAD_CHARACTER;
             } 
             // fall through
           case 45: break;
-          case 15: 
-            { leftParenCount += 1; if (leftParenCount == 1) { return START_PAREN; } else { return CODE_FRAGMENT; }
+          case 14: 
+            { yybegin(SVELTE_TAG); return BAD_CHARACTER;
             } 
             // fall through
           case 46: break;
-          case 16: 
-            { leftParenCount -= 1; if (leftParenCount == 0) { return END_PAREN; } else { return CODE_FRAGMENT; }
+          case 15: 
+            { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; }
             } 
             // fall through
           case 47: break;
-          case 17: 
-            // lookahead expression with fixed base length
-            zzMarkedPos = Character.offsetByCodePoints
-                (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzStartRead, 1);
-            { yybegin(SVELTE_TAG); return START_MUSTACHE;
+          case 16: 
+            { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; }
             } 
             // fall through
           case 48: break;
-          case 18: 
-            { return ELSE_IF;
+          case 17: 
+            { leftParenCount += 1; if (leftParenCount == 1) { return START_PAREN; } else { return CODE_FRAGMENT; }
             } 
             // fall through
           case 49: break;
-          case 19: 
-            { yybegin(SVELTE_TAG_PAREN_AWARE); return AS;
+          case 18: 
+            { leftParenCount -= 1; if (leftParenCount == 0) { return END_PAREN; } else { return CODE_FRAGMENT; }
             } 
             // fall through
           case 50: break;
-          case 20: 
-            { return IF;
+          case 19: 
+            { yybegin(SVELTE_TAG_PRE); return START_OPENING_MUSTACHE;
             } 
             // fall through
           case 51: break;
-          case 21: 
-            { return END_IF;
+          case 20: 
+            { yybegin(SVELTE_TAG_PRE); return START_INNER_MUSTACHE;
             } 
             // fall through
           case 52: break;
-          case 22: 
-            { yybegin(VERBATIM_COMMENT); return HTML_FRAGMENT;
+          case 21: 
+            { yybegin(SVELTE_TAG_PRE); return START_CLOSING_MUSTACHE;
             } 
             // fall through
           case 53: break;
-          case 23: 
-            { return AWAIT_THEN;
+          case 22: 
+            { yybegin(SVELTE_TAG); return IF;
             } 
             // fall through
           case 54: break;
-          case 24: 
-            { return THEN;
+          case 23: 
+            { return IF;
             } 
             // fall through
           case 55: break;
-          case 25: 
-            { return ELSE;
+          case 24: 
+            { yybegin(SVELTE_TAG_PAREN_AWARE); return AS;
             } 
             // fall through
           case 56: break;
-          case 26: 
-            { return EACH;
+          case 25: 
+            { yybegin(VERBATIM_COMMENT); return HTML_FRAGMENT;
             } 
             // fall through
           case 57: break;
-          case 27: 
-            { return END_EACH;
+          case 26: 
+            { yybegin(SVELTE_TAG); return THEN;
             } 
             // fall through
           case 58: break;
-          case 28: 
-            { yybegin(VERBATIM_HTML); return HTML_FRAGMENT;
+          case 27: 
+            { yybegin(SVELTE_TAG); return ELSE;
             } 
             // fall through
           case 59: break;
-          case 29: 
-            { return CATCH;
+          case 28: 
+            { yybegin(SVELTE_TAG); return EACH;
             } 
             // fall through
           case 60: break;
-          case 30: 
-            { return AWAIT;
+          case 29: 
+            { return THEN;
             } 
             // fall through
           case 61: break;
-          case 31: 
-            { return AWAIT_END;
+          case 30: 
+            { yybegin(SVELTE_TAG); return CATCH;
             } 
             // fall through
           case 62: break;
+          case 31: 
+            { yybegin(SVELTE_TAG); return AWAIT;
+            } 
+            // fall through
+          case 63: break;
+          case 32: 
+            { yybegin(VERBATIM_HTML); return HTML_FRAGMENT;
+            } 
+            // fall through
+          case 64: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

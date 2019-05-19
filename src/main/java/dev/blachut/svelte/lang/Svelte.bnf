@@ -22,23 +22,22 @@
   tokenTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
 
   tokens = [
+    START_OPENING_MUSTACHE="{#"
+    START_INNER_MUSTACHE="{:"
+    START_CLOSING_MUSTACHE="{/"
     START_MUSTACHE="{"
     END_MUSTACHE="}"
-    IF="#if"
-    ELSE_IF="if"
-    END_IF="/if"
-    EACH="#each"
+    IF="if"
+    EACH="each"
     AS="as"
     COMMA=","
     START_PAREN="("
     END_PAREN=")"
-    END_EACH="/each"
-    AWAIT="#await"
-    AWAIT_THEN="then"
-    THEN=":then"
-    CATCH=":catch"
-    AWAIT_END="/await"
-    ELSE=":else"
+    AWAIT="await"
+    THEN="then"
+    CATCH="catch"
+    ELSE="else"
+    HTML_FRAGMENT="markup"
   ]
 
   extends(".*Block")=block
@@ -65,34 +64,34 @@ block ::= ifBlock | eachBlock | awaitBlock
 
 ifBlock ::= ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosingTag {pin=1}
 ifBlockOpening ::= ifBlockOpeningTag scope
-ifBlockOpeningTag ::= '{' '#if' expression '}'
+ifBlockOpeningTag ::= '{#' 'if' expression '}'
 elseIfContinuation ::= elseIfContinuationTag scope
-elseIfContinuationTag ::= '{' ':else' 'if' expression '}'
-ifBlockClosingTag ::= '{' '/if' '}'
+elseIfContinuationTag ::= '{:' 'else' 'if' expression '}'
+ifBlockClosingTag ::= '{/' 'if' '}'
 
 eachBlock ::= eachBlockOpening elseContinuation? eachBlockClosingTag {pin=1}
 eachBlockOpening ::= eachBlockOpeningTag scope
-eachBlockOpeningTag ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
-eachBlockClosingTag ::= '{' '/each' '}'
+eachBlockOpeningTag ::= '{#' 'each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
+eachBlockClosingTag ::= '{/' 'each' '}'
 
 awaitBlock ::= (awaitThenBlockOpening | awaitAndThen) (catchContinuation)? awaitBlockClosingTag {pin=1}
 private awaitAndThen ::= awaitBlockOpening thenContinuation {pin=1}
 awaitThenBlockOpening ::= awaitThenBlockOpeningTag scope
-awaitThenBlockOpeningTag ::= '{' '#await' expression 'then' parameter '}'
+awaitThenBlockOpeningTag ::= '{#' 'await' expression 'then' parameter '}'
 awaitBlockOpening ::= awaitBlockOpeningTag scope
-awaitBlockOpeningTag ::= '{' '#await' expression '}'
+awaitBlockOpeningTag ::= '{#' 'await' expression '}'
 thenContinuation ::= thenContinuationTag scope
-thenContinuationTag ::= '{' ':then' parameter '}'
+thenContinuationTag ::= '{:' 'then' parameter '}'
 catchContinuation ::= catchContinuationTag scope
-catchContinuationTag::= '{' ':catch' parameter '}'
-awaitBlockClosingTag ::= '{' '/await' '}'
+catchContinuationTag::= '{:' 'catch' parameter '}'
+awaitBlockClosingTag ::= '{/' 'await' '}'
 
 elseContinuation ::= elseContinuationTag scope
-elseContinuationTag ::= '{' ':else' '}'
+elseContinuationTag ::= '{:' 'else' '}'
 
-fake openingTag ::= '{' '#foo' '}'
-fake continuationTag ::= '{' ':foo' '}'
-fake closingTag ::= '{' '/foo' '}'
+fake openingTag ::= '{#' foo '}'
+fake continuationTag ::= '{:' foo '}'
+fake closingTag ::= '{/' foo '}'
 
 expression ::= CODE_FRAGMENT {
                                name="expression"
