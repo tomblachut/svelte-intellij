@@ -30,6 +30,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 %eof}
 
 WHITE_SPACE=\s+
+ID=[$_a-zA-Z0-9]+
 
 %state VERBATIM_COMMENT
 %state VERBATIM_HTML
@@ -54,22 +55,23 @@ WHITE_SPACE=\s+
 }
 
 <SVELTE_TAG_PRE> {
-  "if"              { yybegin(SVELTE_TAG); return IF; }
-  "each"            { yybegin(SVELTE_TAG); return EACH; }
-  "await"           { yybegin(SVELTE_TAG); return AWAIT; }
-  "then"            { yybegin(SVELTE_TAG); return THEN; }
-  "catch"           { yybegin(SVELTE_TAG); return CATCH; }
-  "else"            { yybegin(SVELTE_TAG); return ELSE; }
-  [a-zA-Z0-9]+      { yybegin(SVELTE_TAG); return BAD_CHARACTER; }
-  {WHITE_SPACE}     { return BAD_CHARACTER; }
+  "if"               { yybegin(SVELTE_TAG); return IF; }
+  "each"             { yybegin(SVELTE_TAG); return EACH; }
+  "await"            { yybegin(SVELTE_TAG); return AWAIT; }
+  "then"             { yybegin(SVELTE_TAG); return THEN; }
+  "catch"            { yybegin(SVELTE_TAG); return CATCH; }
+  "else"             { yybegin(SVELTE_TAG); return ELSE; }
+  {ID}               { yybegin(SVELTE_TAG); return BAD_CHARACTER; }
+  {WHITE_SPACE}      { return BAD_CHARACTER; }
 }
 <SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
-  "if"              { return IF; }
-  "then"            { return THEN; }
+  "if"               { return IF; }
+  "then"             { return THEN; }
   "as"               { yybegin(SVELTE_TAG_PAREN_AWARE); return AS; }
   ","                { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
 
   {WHITE_SPACE}      { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
+  ("if"|"then"|"as"){ID}           { return BAD_CHARACTER; }
 }
 
 <SVELTE_TAG_PAREN_AWARE> {
@@ -78,9 +80,9 @@ WHITE_SPACE=\s+
 }
 
 <SVELTE_INTERPOLATION> {
-  "@html"            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX; }
-  "@debug"           { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX; }
-  "@"[a-zA-Z0-9]+      { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER; }
+  "@html"            { return HTML_PREFIX; }
+  "@debug"           { return DEBUG_PREFIX; }
+  "@"{ID}            { return BAD_CHARACTER; }
 }
 
 <SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
