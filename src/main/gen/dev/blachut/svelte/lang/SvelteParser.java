@@ -103,12 +103,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{/' 'await' '}'
   public static boolean awaitBlockClosingTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "awaitBlockClosingTag")) return false;
-    if (!nextTokenIs(builder, START_CLOSING_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_BLOCK_CLOSING_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_BLOCK_CLOSING_TAG, "<await block closing tag>");
     result = consumeTokens(builder, 2, START_CLOSING_MUSTACHE, AWAIT, END_MUSTACHE);
     pinned = result; // pin = 2
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -129,14 +128,13 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{#' 'await' expression '}'
   public static boolean awaitBlockOpeningTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "awaitBlockOpeningTag")) return false;
-    if (!nextTokenIs(builder, START_OPENING_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_BLOCK_OPENING_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_BLOCK_OPENING_TAG, "<await block opening tag>");
     result = consumeTokens(builder, 2, START_OPENING_MUSTACHE, AWAIT);
     pinned = result; // pin = 2
     result = result && report_error_(builder, expression(builder, level + 1));
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -157,16 +155,15 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{#' 'await' expression 'then' parameter '}'
   public static boolean awaitThenBlockOpeningTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "awaitThenBlockOpeningTag")) return false;
-    if (!nextTokenIs(builder, START_OPENING_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_THEN_BLOCK_OPENING_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, AWAIT_THEN_BLOCK_OPENING_TAG, "<await then block opening tag>");
     result = consumeTokens(builder, 0, START_OPENING_MUSTACHE, AWAIT);
     result = result && expression(builder, level + 1);
     result = result && consumeToken(builder, THEN);
     pinned = result; // pin = 4
     result = result && report_error_(builder, parameter(builder, level + 1));
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -201,14 +198,13 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{:' 'catch' parameter '}'
   public static boolean catchContinuationTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "catchContinuationTag")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, CATCH_CONTINUATION_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, CATCH_CONTINUATION_TAG, "<catch continuation tag>");
     result = consumeTokens(builder, 2, START_INNER_MUSTACHE, CATCH);
     pinned = result; // pin = 2
     result = result && report_error_(builder, parameter(builder, level + 1));
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -238,12 +234,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{/' 'each' '}'
   public static boolean eachBlockClosingTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "eachBlockClosingTag")) return false;
-    if (!nextTokenIs(builder, START_CLOSING_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, EACH_BLOCK_CLOSING_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, EACH_BLOCK_CLOSING_TAG, "<each block closing tag>");
     result = consumeTokens(builder, 2, START_CLOSING_MUSTACHE, EACH, END_MUSTACHE);
     pinned = result; // pin = 2
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -264,9 +259,8 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{#' 'each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
   public static boolean eachBlockOpeningTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "eachBlockOpeningTag")) return false;
-    if (!nextTokenIs(builder, START_OPENING_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, EACH_BLOCK_OPENING_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, EACH_BLOCK_OPENING_TAG, "<each block opening tag>");
     result = consumeTokens(builder, 2, START_OPENING_MUSTACHE, EACH);
     pinned = result; // pin = 2
     result = result && report_error_(builder, expression(builder, level + 1));
@@ -275,7 +269,7 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     result = pinned && report_error_(builder, eachBlockOpeningTag_5(builder, level + 1)) && result;
     result = pinned && report_error_(builder, eachBlockOpeningTag_6(builder, level + 1)) && result;
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -333,12 +327,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{:' 'else' '}'
   public static boolean elseContinuationTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "elseContinuationTag")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, ELSE_CONTINUATION_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, ELSE_CONTINUATION_TAG, "<else continuation tag>");
     result = consumeTokens(builder, 2, START_INNER_MUSTACHE, ELSE, END_MUSTACHE);
     pinned = result; // pin = 2
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -359,14 +352,13 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{:' 'else' 'if' expression '}'
   public static boolean elseIfContinuationTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "elseIfContinuationTag")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, ELSE_IF_CONTINUATION_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, ELSE_IF_CONTINUATION_TAG, "<else if continuation tag>");
     result = consumeTokens(builder, 3, START_INNER_MUSTACHE, ELSE, IF);
     pinned = result; // pin = 3
     result = result && report_error_(builder, expression(builder, level + 1));
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -420,12 +412,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{/' 'if' '}'
   public static boolean ifBlockClosingTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "ifBlockClosingTag")) return false;
-    if (!nextTokenIs(builder, START_CLOSING_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, IF_BLOCK_CLOSING_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, IF_BLOCK_CLOSING_TAG, "<if block closing tag>");
     result = consumeTokens(builder, 2, START_CLOSING_MUSTACHE, IF, END_MUSTACHE);
     pinned = result; // pin = 2
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -446,14 +437,13 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{#' 'if' expression '}'
   public static boolean ifBlockOpeningTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "ifBlockOpeningTag")) return false;
-    if (!nextTokenIs(builder, START_OPENING_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, IF_BLOCK_OPENING_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, IF_BLOCK_OPENING_TAG, "<if block opening tag>");
     result = consumeTokens(builder, 2, START_OPENING_MUSTACHE, IF);
     pinned = result; // pin = 2
     result = result && report_error_(builder, expression(builder, level + 1));
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
@@ -467,19 +457,32 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     pinned = result; // pin = 1
     result = result && report_error_(builder, expression(builder, level + 1));
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, SvelteParser::interpolation_recover);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 
   /* ********************************************************** */
-  // &'}'
-  static boolean interpolation_recover(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "interpolation_recover")) return false;
-    if (!nextTokenIs(builder, END_MUSTACHE)) return false;
+  // !('{' | '{#' | "{:" | "{/" | HTML_FRAGMENT)
+  static boolean mustache_recover(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "mustache_recover")) return false;
     boolean result;
-    Marker marker = enter_section_(builder, level, _AND_);
-    result = consumeToken(builder, END_MUSTACHE);
+    Marker marker = enter_section_(builder, level, _NOT_);
+    result = !mustache_recover_0(builder, level + 1);
     exit_section_(builder, level, marker, result, false, null);
+    return result;
+  }
+
+  // '{' | '{#' | "{:" | "{/" | HTML_FRAGMENT
+  private static boolean mustache_recover_0(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "mustache_recover_0")) return false;
+    boolean result;
+    Marker marker = enter_section_(builder);
+    result = consumeToken(builder, START_MUSTACHE);
+    if (!result) result = consumeToken(builder, START_OPENING_MUSTACHE);
+    if (!result) result = consumeToken(builder, START_INNER_MUSTACHE);
+    if (!result) result = consumeToken(builder, START_CLOSING_MUSTACHE);
+    if (!result) result = consumeToken(builder, HTML_FRAGMENT);
+    exit_section_(builder, marker, null, result);
     return result;
   }
 
@@ -553,14 +556,13 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   // '{:' 'then' parameter '}'
   public static boolean thenContinuationTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "thenContinuationTag")) return false;
-    if (!nextTokenIs(builder, START_INNER_MUSTACHE)) return false;
     boolean result, pinned;
-    Marker marker = enter_section_(builder, level, _NONE_, THEN_CONTINUATION_TAG, null);
+    Marker marker = enter_section_(builder, level, _NONE_, THEN_CONTINUATION_TAG, "<then continuation tag>");
     result = consumeTokens(builder, 2, START_INNER_MUSTACHE, THEN);
     pinned = result; // pin = 2
     result = result && report_error_(builder, parameter(builder, level + 1));
     result = pinned && consumeToken(builder, END_MUSTACHE) && result;
-    exit_section_(builder, level, marker, result, pinned, null);
+    exit_section_(builder, level, marker, result, pinned, SvelteParser::mustache_recover);
     return result || pinned;
   }
 

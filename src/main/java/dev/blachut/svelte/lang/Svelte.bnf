@@ -49,16 +49,18 @@
   pin("elseIfContinuationTag")=3
   pin(".*Tag")=2
   pin("interpolation")=1
+  recoverWhile(".*Tag|interpolation")=mustache_recover
 }
 
 // First rule is always implicitly private
 svelteComponent ::= privateScope
 scope ::= privateScope
 
+private mustache_recover ::= !('{' | '{#' | "{:" | "{/" | HTML_FRAGMENT)
+
 private privateScope ::= (block|interpolation|HTML_FRAGMENT)*
 
-interpolation ::= '{' expression '}' {recoverWhile="interpolation_recover"}
-private interpolation_recover ::= &'}'
+interpolation ::= '{' expression '}'
 
 block ::= ifBlock | eachBlock | awaitBlock
 
