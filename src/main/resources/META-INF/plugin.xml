@@ -2,6 +2,7 @@
     <id>dev.blachut.svelte.lang</id>
     <name>Svelte</name>
     <vendor url="https://github.com/tomblachut">Tomasz Błachut</vendor>
+    <idea-version since-build="191.0"/>
 
     <description><![CDATA[
 <p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>

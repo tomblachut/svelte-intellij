@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id "org.jetbrains.kotlin.jvm" version "1.3.21"
-    id 'org.jetbrains.intellij' version '0.4.8'
+    id 'org.jetbrains.intellij' version '0.4.9'
 }
 
 apply plugin: "kotlin"
@@ -27,8 +27,8 @@ sourceSets {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version 'IU-191.6707.61'
-    plugins = ['JavaScriptLanguage', 'CSS', 'PsiViewer:191.4212']
+    version 'IU-LATEST-EAP-SNAPSHOT'
+    plugins = ['JavaScriptLanguage', 'CSS']
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
