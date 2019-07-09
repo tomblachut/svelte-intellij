@@ -28,7 +28,7 @@
     ELSE_IF="if"
     END_IF="/if"
     EACH="#each"
-    AS="as"
+    AS=" as "
     COMMA=","
     START_PAREN="("
     END_PAREN=")"
