@@ -5,10 +5,14 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
+import com.intellij.psi.search.FileTypeIndex
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
+import dev.blachut.svelte.lang.SvelteFileType
 import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.completion.SvelteInsertHandler
 import dev.blachut.svelte.lang.icons.SvelteIcons
 
 // Vue plugin uses 100, it's ok for now
@@ -81,9 +85,18 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
             val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.FILE)
             PrioritizedLookupElement.withPriority(lookupElement, highPriority)
         }
+
+        val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
+        val reachableComponents = svelteFiles.map {
+            val lookupElement = LookupElementBuilder.create(it, it.nameWithoutExtension)
+            .withIcon(SvelteIcons.FILE)
+            .withInsertHandler(SvelteInsertHandler.INSTANCE)
+            PrioritizedLookupElement.withPriority(lookupElement, highPriority)
+        }
+
         // TODO Link component documentation
         // TODO Include svelte internal components
-        // TODO Include not-imported reachable components and enable auto-import
+        elements.addAll(reachableComponents)
         elements.addAll(items)
     }
 }
