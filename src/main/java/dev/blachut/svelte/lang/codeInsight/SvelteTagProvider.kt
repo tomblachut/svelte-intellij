@@ -92,6 +92,8 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
             .withIcon(SvelteIcons.FILE)
             .withInsertHandler(SvelteInsertHandler.INSTANCE)
             PrioritizedLookupElement.withPriority(lookupElement, highPriority)
+        }.filter {
+            !importVisitor.components.contains(it.lookupString)
         }
 
         // TODO Link component documentation
