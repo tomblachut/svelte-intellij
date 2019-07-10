@@ -77,28 +77,32 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         val file = tag.containingFile
         val visitor = SvelteScriptVisitor()
         file.accept(visitor)
-        val jsElement = visitor.jsElement ?: return
+        val jsElement = visitor.jsElement
 
-        val importVisitor = ImportVisitor()
-        jsElement.accept(importVisitor)
-        val items = importVisitor.components.map {
-            val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.FILE)
-            PrioritizedLookupElement.withPriority(lookupElement, highPriority)
+        var importedComponents = mutableListOf<String>()
+        if (jsElement != null) {
+            val importVisitor = ImportVisitor()
+            jsElement.accept(importVisitor)
+            importedComponents = importVisitor.components
+            val items = importVisitor.components.map {
+                val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.FILE)
+                PrioritizedLookupElement.withPriority(lookupElement, highPriority)
+            }
+            elements.addAll(items)
         }
 
         val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
         val reachableComponents = svelteFiles.map {
             val lookupElement = LookupElementBuilder.create(it, it.nameWithoutExtension)
-            .withIcon(SvelteIcons.FILE)
-            .withInsertHandler(SvelteInsertHandler.INSTANCE)
+                    .withIcon(SvelteIcons.FILE)
+                    .withInsertHandler(SvelteInsertHandler.INSTANCE)
             PrioritizedLookupElement.withPriority(lookupElement, highPriority)
         }.filter {
-            !importVisitor.components.contains(it.lookupString)
+            !importedComponents.contains(it.lookupString)
         }
 
         // TODO Link component documentation
         // TODO Include svelte internal components
         elements.addAll(reachableComponents)
-        elements.addAll(items)
     }
 }
