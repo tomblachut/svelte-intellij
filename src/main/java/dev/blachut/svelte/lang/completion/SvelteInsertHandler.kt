@@ -10,10 +10,12 @@ import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.XmlElementFactory
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlTag
 import java.io.File
 
 class SvelteInsertHandler : InsertHandler<LookupElement> {
@@ -56,9 +58,21 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
         } else {
             val scriptBlock = XmlElementFactory.getInstance(context.project)
                     .createHTMLTagFromText("<script>\n$importCode\n</script>\n\n")
-            context.file.addBefore(scriptBlock, context.file.firstChild)
+            // check if there's an empty script tag and replace it
+            // an empty script tag does not contain JSEmbeddedContent
+            val scriptTag = this.findScriptTag(context.file)
+            if (scriptTag != null) {
+                scriptTag.replace(scriptBlock)
+            } else {
+                context.file.addBefore(scriptBlock, context.file.firstChild)
+            }
             CodeStyleManager.getInstance(context.project).reformat(scriptBlock)
         }
+    }
+
+    private fun findScriptTag(file: PsiFile): XmlTag? {
+        val tags = PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java)
+        return tags.find { it.name == "script" && PsiTreeUtil.findChildOfType(it, JSEmbeddedContent::class.java) == null}
     }
 
     companion object {
