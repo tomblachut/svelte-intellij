@@ -74,31 +74,12 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
             elements.addAll(svelteNamespacedTagLookupElements)
         }
 
-        val file = tag.containingFile
-        val visitor = SvelteScriptVisitor()
-        file.accept(visitor)
-        val jsElement = visitor.jsElement
-
-        var importedComponents = mutableListOf<String>()
-        if (jsElement != null) {
-            val importVisitor = ImportVisitor()
-            jsElement.accept(importVisitor)
-            importedComponents = importVisitor.components
-            val items = importVisitor.components.map {
-                val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.FILE)
-                PrioritizedLookupElement.withPriority(lookupElement, highPriority)
-            }
-            elements.addAll(items)
-        }
-
         val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
         val reachableComponents = svelteFiles.map {
             val lookupElement = LookupElementBuilder.create(it, it.nameWithoutExtension)
                     .withIcon(SvelteIcons.FILE)
                     .withInsertHandler(SvelteInsertHandler.INSTANCE)
             PrioritizedLookupElement.withPriority(lookupElement, highPriority)
-        }.filter {
-            !importedComponents.contains(it.lookupString)
         }
 
         // TODO Link component documentation

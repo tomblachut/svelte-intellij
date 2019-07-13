@@ -36,6 +36,8 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
 
         if (jsElement != null) {
             val existingImports = ES6ImportPsiUtil.getImportDeclarations(jsElement)
+            // check if component has already been imported
+            if (existingImports.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
             val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
             if (existingImports.size == 0) {
                 // findPlaceAndInsertES6Import is buggy when inserting the first import
