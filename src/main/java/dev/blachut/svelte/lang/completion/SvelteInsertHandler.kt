@@ -3,6 +3,8 @@ package dev.blachut.svelte.lang.completion
 import com.intellij.codeInsight.completion.InsertHandler
 import com.intellij.codeInsight.completion.InsertionContext
 import com.intellij.codeInsight.lookup.LookupElement
+import com.intellij.codeInsight.template.TemplateManager
+import com.intellij.codeInsight.template.impl.TextExpression
 import com.intellij.lang.ecmascript6.psi.impl.ES6CreateImportUtil
 import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil
 import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
@@ -21,7 +23,8 @@ import java.io.File
 class SvelteInsertHandler : InsertHandler<LookupElement> {
 
     override fun handleInsert(context: InsertionContext, item: LookupElement) {
-        val componentFile = item.`object` as VirtualFile
+        val obj = item.`object` as Map<*, *>
+        val componentFile = obj["file"] as VirtualFile
 
         val relativePath = FileUtil.getRelativePath(
                 context.file.virtualFile.parent.path,
@@ -30,6 +33,10 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
         )
 
         val componentName = item.lookupString
+
+        if (obj["props"] != null) {
+            replaceWithLiveTemplate(obj["props"] as List<String>, context, componentName)
+        }
 
         val comma = JSCodeStyleSettings.getSemicolon(context.file)
         val importCode = "import $componentName from \"./$relativePath\"$comma"
@@ -70,9 +77,28 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
         }
     }
 
+    private fun replaceWithLiveTemplate(props: List<String>, context: InsertionContext, componentName: String) {
+        if (props.isEmpty()) {
+            return
+        }
+        context.setAddCompletionChar(false)
+        val templateManager = TemplateManager.getInstance(context.project)
+        val joinedProps = props.mapIndexed { index, prop -> "$prop={\$PROP$index\$}" }.joinToString(" ").trim()
+        if (joinedProps.isEmpty()) {
+            return
+        }
+        val text = "$componentName $joinedProps>\$END\$</$componentName>"
+        val template = templateManager.createTemplate(componentName, "Svelte", text)
+        props.forEachIndexed { index, _ ->
+            template.addVariable("PROP$index", TextExpression(""), true)
+        }
+        context.document.deleteString(context.startOffset, context.tailOffset)
+        templateManager.startTemplate(context.editor, template)
+    }
+
     private fun findScriptTag(file: PsiFile): XmlTag? {
         val tags = PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java)
-        return tags.find { it.name == "script" && PsiTreeUtil.findChildOfType(it, JSEmbeddedContent::class.java) == null}
+        return tags.find { it.name == "script" && PsiTreeUtil.findChildOfType(it, JSEmbeddedContent::class.java) == null }
     }
 
     companion object {

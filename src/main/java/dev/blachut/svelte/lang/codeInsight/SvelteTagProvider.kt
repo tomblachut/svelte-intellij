@@ -3,6 +3,10 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.lang.html.HTMLLanguage
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiManager
 import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
 import com.intellij.psi.search.FileTypeIndex
@@ -76,14 +80,38 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
         val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
         val reachableComponents = svelteFiles.map {
-            val lookupElement = LookupElementBuilder.create(it, it.nameWithoutExtension)
+            val componentName = it.nameWithoutExtension
+            val componentProps = this.getComponentProps(it, tag.project)
+
+            val lookupObject = mapOf("file" to it, "props" to componentProps)
+            var lookupElement = LookupElementBuilder.create(lookupObject, componentName)
                     .withIcon(SvelteIcons.FILE)
                     .withInsertHandler(SvelteInsertHandler.INSTANCE)
+
+            if (componentProps != null) {
+                val joinedProps = componentProps.map { prop -> "$prop={...}" }.joinToString(" ").trim()
+                val typeText = "<$componentName $joinedProps>"
+                lookupElement = lookupElement.withTypeText(typeText, true)
+            }
             PrioritizedLookupElement.withPriority(lookupElement, highPriority)
         }
 
         // TODO Link component documentation
         // TODO Include svelte internal components
         elements.addAll(reachableComponents)
+    }
+
+    private fun getComponentProps(file: VirtualFile, project: Project): List<String?>? {
+        val viewProvider = PsiManager.getInstance(project).findViewProvider(file) ?: return null
+        val psiFile = viewProvider.getPsi(HTMLLanguage.INSTANCE) ?: return null
+
+        val visitor = SvelteScriptVisitor()
+        psiFile.accept(visitor)
+        val jsElement = visitor.jsElement ?: return null
+
+        val propsVisitor = PropsVisitor()
+        jsElement.accept(propsVisitor)
+
+        return propsVisitor.props
     }
 }
