@@ -45,7 +45,7 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
         // TODO Find global Svelte attributes besides slot and props
         if (StringUtil.isCapitalized(name)) {
             val fromClause = PsiTreeUtil.findChildOfType(declaration.parent, ES6FromClause::class.java)
-            val componentReference = fromClause?.resolveReferencedElements()?.first()
+            val componentReference = fromClause?.resolveReferencedElements()?.firstOrNull()
             if (componentReference != null && componentReference is SvelteFile) {
                 val props = ComponentPropsProvider().getComponentProps(
                         componentReference.viewProvider.virtualFile,
