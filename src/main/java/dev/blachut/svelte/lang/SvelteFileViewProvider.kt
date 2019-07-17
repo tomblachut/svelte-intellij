@@ -17,6 +17,9 @@ class SvelteFileViewProvider internal constructor(psiManager: PsiManager, virtua
     private val htmlLanguage = HTMLLanguage.INSTANCE
 
     override fun getBaseLanguage(): Language {
+        if (virtualFile.extension?.toLowerCase() == "html") {
+            return HTMLLanguage.INSTANCE
+        }
         return SvelteLanguage.INSTANCE
     }
 
@@ -33,6 +36,9 @@ class SvelteFileViewProvider internal constructor(psiManager: PsiManager, virtua
     }
 
     override fun createFile(lang: Language): PsiFile? {
+        if (virtualFile.extension?.toLowerCase() == "html") {
+            return LanguageParserDefinitions.INSTANCE.forLanguage(htmlLanguage).createFile(this)
+        }
         return when {
             lang === htmlLanguage -> {
                 val file = LanguageParserDefinitions.INSTANCE.forLanguage(lang).createFile(this) as PsiFileImpl
