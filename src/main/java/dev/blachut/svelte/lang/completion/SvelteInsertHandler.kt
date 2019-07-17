@@ -18,7 +18,6 @@ import com.intellij.psi.XmlElementFactory
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
-import java.io.File
 
 class SvelteInsertHandler : InsertHandler<LookupElement> {
 
@@ -29,7 +28,7 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
         val relativePath = FileUtil.getRelativePath(
                 context.file.virtualFile.parent.path,
                 componentFile.path,
-                File.separatorChar
+                '/'
         )
 
         val componentName = item.lookupString
