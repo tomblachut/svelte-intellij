@@ -11,6 +11,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 %{
   private char quote;
+  private int previousState;
   private int leftBraceCount;
   private int leftParenCount;
 %}
@@ -24,6 +25,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 %unicode
 
 %eof{
+  previousState = YYINITIAL;
   leftBraceCount = 0;
   leftParenCount = 0;
 %eof}
@@ -75,7 +77,7 @@ WHITE_SPACE=\s+
 
 <SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
   "{"                { leftBraceCount += 1; return CODE_FRAGMENT; }
-  "}"                { if (leftBraceCount == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { leftBraceCount -= 1; return CODE_FRAGMENT; } }
+  "}"                { if (leftBraceCount == 0) { yybegin(previousState); previousState = YYINITIAL; return END_MUSTACHE; } else { leftBraceCount -= 1; return CODE_FRAGMENT; } }
 
   [^]                { return CODE_FRAGMENT; }
 }
@@ -92,11 +94,13 @@ WHITE_SPACE=\s+
   "'"                         { yybegin(TAG_STRING); quote = '\''; return HTML_FRAGMENT; }
   "\""                        { yybegin(TAG_STRING); quote = '"'; return HTML_FRAGMENT; }
   ">"                         { yybegin(YYINITIAL); return HTML_FRAGMENT; }
+  "{"                         { previousState = yystate(); yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
 }
 
 <TAG_STRING> {
   "'"                         { if (quote == '\'') yybegin(HTML_TAG); return HTML_FRAGMENT; }
   "\""                        { if (quote == '"') yybegin(HTML_TAG); return HTML_FRAGMENT; }
+  "{"                         { previousState = yystate(); yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
 }
 
 [^]                           { return HTML_FRAGMENT; }
