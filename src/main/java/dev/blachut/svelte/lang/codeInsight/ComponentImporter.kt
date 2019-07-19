@@ -22,14 +22,7 @@ class ComponentImporter {
             return
         }
         val project = currentFile.project
-        val relativePath = FileUtil.getRelativePath(
-                currentFile.virtualFile.parent.path,
-                componentFile.path,
-                '/'
-        )
-        val comma = JSCodeStyleSettings.getSemicolon(currentFile)
-        val importCode = "import $componentName from \"./$relativePath\"$comma"
-
+        val importCode = getImportText(currentFile, componentFile, componentName)
         val jsElement = PsiTreeUtil.findChildOfType(currentFile, JSEmbeddedContent::class.java)
 
 
@@ -65,6 +58,16 @@ class ComponentImporter {
             }
             CodeStyleManager.getInstance(project).reformat(scriptBlock)
         }
+    }
+
+    fun getImportText(currentFile: PsiFile, componentFile: VirtualFile, componentName: String): String {
+        val relativePath = FileUtil.getRelativePath(
+                currentFile.virtualFile.parent.path,
+                componentFile.path,
+                '/'
+        )
+        val comma = JSCodeStyleSettings.getSemicolon(currentFile)
+        return "import $componentName from \"./$relativePath\"$comma"
     }
 
     private fun findScriptTag(file: PsiFile): XmlTag? {
