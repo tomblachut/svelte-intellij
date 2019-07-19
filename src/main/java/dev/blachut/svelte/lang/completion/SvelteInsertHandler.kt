@@ -11,30 +11,29 @@ import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil
 import com.intellij.openapi.util.io.FileUtil
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.XmlElementFactory
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
+import dev.blachut.svelte.lang.codeInsight.ComponentLookupObject
 
 class SvelteInsertHandler : InsertHandler<LookupElement> {
 
     override fun handleInsert(context: InsertionContext, item: LookupElement) {
-        val obj = item.`object` as Map<*, *>
-        val componentFile = obj["file"] as VirtualFile
+        val lookupObject = item.`object` as ComponentLookupObject
 
         val relativePath = FileUtil.getRelativePath(
                 context.file.virtualFile.parent.path,
-                componentFile.path,
+                lookupObject.file.path,
                 '/'
         )
 
         val componentName = item.lookupString
 
-        if (obj["props"] != null) {
-            replaceWithLiveTemplate(obj["props"] as List<String>, context, componentName)
+        if (lookupObject.props != null) {
+            replaceWithLiveTemplate(lookupObject.props, context, componentName)
         }
 
         val comma = JSCodeStyleSettings.getSemicolon(context.file)
@@ -76,7 +75,7 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
         }
     }
 
-    private fun replaceWithLiveTemplate(props: List<String>, context: InsertionContext, componentName: String) {
+    private fun replaceWithLiveTemplate(props: List<String?>, context: InsertionContext, componentName: String) {
         if (props.isEmpty()) {
             return
         }

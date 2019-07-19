@@ -79,7 +79,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
             val componentName = it.nameWithoutExtension
             val componentProps = ComponentPropsProvider().getComponentProps(it, tag.project)
 
-            val lookupObject = mapOf("file" to it, "props" to componentProps)
+            val lookupObject = ComponentLookupObject(it, componentProps)
             var lookupElement = LookupElementBuilder.create(lookupObject, componentName)
                     .withIcon(SvelteIcons.FILE)
                     .withInsertHandler(SvelteInsertHandler.INSTANCE)
