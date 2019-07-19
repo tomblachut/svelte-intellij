@@ -5,18 +5,7 @@ import com.intellij.codeInsight.completion.InsertionContext
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.TextExpression
-import com.intellij.lang.ecmascript6.psi.impl.ES6CreateImportUtil
-import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil
-import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
-import com.intellij.lang.javascript.psi.JSEmbeddedContent
-import com.intellij.lang.javascript.psi.impl.JSChangeUtil
-import com.intellij.openapi.util.io.FileUtil
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiParserFacade
-import com.intellij.psi.XmlElementFactory
-import com.intellij.psi.codeStyle.CodeStyleManager
-import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.xml.XmlTag
+import dev.blachut.svelte.lang.codeInsight.ComponentImporter
 import dev.blachut.svelte.lang.codeInsight.ComponentLookupObject
 
 class SvelteInsertHandler : InsertHandler<LookupElement> {
@@ -24,55 +13,13 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
     override fun handleInsert(context: InsertionContext, item: LookupElement) {
         val lookupObject = item.`object` as ComponentLookupObject
 
-        val relativePath = FileUtil.getRelativePath(
-                context.file.virtualFile.parent.path,
-                lookupObject.file.path,
-                '/'
-        )
-
         val componentName = item.lookupString
 
         if (lookupObject.props != null) {
             replaceWithLiveTemplate(lookupObject.props, context, componentName)
         }
 
-        val comma = JSCodeStyleSettings.getSemicolon(context.file)
-        val importCode = "import $componentName from \"./$relativePath\"$comma"
-
-        val jsElement = PsiTreeUtil.findChildOfType(context.file, JSEmbeddedContent::class.java)
-
-        if (jsElement != null) {
-            val existingImports = ES6ImportPsiUtil.getImportDeclarations(jsElement)
-            // check if component has already been imported
-            if (existingImports.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
-            val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
-            if (existingImports.size == 0) {
-                // findPlaceAndInsertES6Import is buggy when inserting the first import
-                val newLine = PsiParserFacade.SERVICE.getInstance(context.project).createWhiteSpaceFromText("\n")
-                jsElement.addBefore(newLine, jsElement.firstChild)
-                jsElement.addAfter(importStatement, jsElement.firstChild)
-            } else {
-                ES6CreateImportUtil.findPlaceAndInsertES6Import(
-                        jsElement,
-                        importStatement,
-                        componentName,
-                        context.editor
-                )
-            }
-            CodeStyleManager.getInstance(context.project).reformat(jsElement)
-        } else {
-            val scriptBlock = XmlElementFactory.getInstance(context.project)
-                    .createHTMLTagFromText("<script>\n$importCode\n</script>\n\n")
-            // check if there's an empty script tag and replace it
-            // an empty script tag does not contain JSEmbeddedContent
-            val scriptTag = this.findScriptTag(context.file)
-            if (scriptTag != null) {
-                scriptTag.replace(scriptBlock)
-            } else {
-                context.file.addBefore(scriptBlock, context.file.firstChild)
-            }
-            CodeStyleManager.getInstance(context.project).reformat(scriptBlock)
-        }
+        ComponentImporter().insertComponentImport(context.editor, context.file, lookupObject.file, componentName)
     }
 
     private fun replaceWithLiveTemplate(props: List<String?>, context: InsertionContext, componentName: String) {
@@ -92,11 +39,6 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
         }
         context.document.deleteString(context.startOffset, context.tailOffset)
         templateManager.startTemplate(context.editor, template)
-    }
-
-    private fun findScriptTag(file: PsiFile): XmlTag? {
-        val tags = PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java)
-        return tags.find { it.name == "script" && PsiTreeUtil.findChildOfType(it, JSEmbeddedContent::class.java) == null }
     }
 
     companion object {

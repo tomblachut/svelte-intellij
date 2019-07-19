@@ -68,6 +68,10 @@
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferenceSearch" order="first" />
+        <intentionAction>
+            <className>dev.blachut.svelte.lang.codeInsight.SvelteIntentionAction</className>
+            <category>Svelte Intentions</category>
+        </intentionAction>
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
     </extensions>
 
