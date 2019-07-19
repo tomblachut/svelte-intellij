@@ -72,6 +72,15 @@
             <className>dev.blachut.svelte.lang.codeInsight.SvelteIntentionAction</className>
             <category>Svelte Intentions</category>
         </intentionAction>
+        <localInspection language="Svelte"
+                         displayName="Unresolved Svelte component"
+                         shortName="SvelteUnresolvedComponent"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         groupName="Svelte"
+                         bundle="messages.XmlBundle"
+                         groupKey="html.inspections.group.name"
+                         implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
     </extensions>
 
