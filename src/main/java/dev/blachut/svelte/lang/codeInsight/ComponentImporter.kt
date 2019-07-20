@@ -65,9 +65,10 @@ class ComponentImporter {
                 currentFile.virtualFile.parent.path,
                 componentFile.path,
                 '/'
-        )
+        ) ?: ""
+        val prefix = if (relativePath.startsWith("../")) "" else "./"
         val comma = JSCodeStyleSettings.getSemicolon(currentFile)
-        return "import $componentName from \"./$relativePath\"$comma"
+        return "import $componentName from \"$prefix$relativePath\"$comma"
     }
 
     private fun findScriptTag(file: PsiFile): XmlTag? {
