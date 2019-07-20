@@ -67,21 +67,18 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
     }
 
     /**
-     * This method stitches together call to forEach Array method
+     * This method stitches together call to guarded for loop
      *
      * IN:
      * {#each items as item, index (key)}
      * Note that [as item] part is currently required
      *
-     * items: SvelteExpression
-     * item: SvelteParameter
-     * index: SvelteParameter?
-     * key: SvelteExpression?
-     *
      * OUT:
      *  if (items) {
-     *      [...items].forEach((item, index) => {
-     *          String(key);
+     *      const __iterable = items;
+     *      for (const __i = 0; __i < __iterable.length; __i++) {
+     *          const item = __iterable[__i];
+     *          const index = __i;
      *          <each body>
      *      });
      *  } else {
