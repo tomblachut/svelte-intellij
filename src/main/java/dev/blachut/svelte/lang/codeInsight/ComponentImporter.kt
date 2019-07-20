@@ -17,9 +17,9 @@ import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 
 object ComponentImporter {
-    fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentFile: VirtualFile, componentName: String) {
+    fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String) {
         val project = currentFile.project
-        val importCode = getImportText(currentFile, componentFile, componentName)
+        val importCode = getImportText(currentFile, componentVirtualFile, componentName)
 
         val scriptTag = findScriptTag(currentFile)
         // An empty script tag does not contain JSEmbeddedContent
@@ -58,10 +58,10 @@ object ComponentImporter {
         }
     }
 
-    fun getImportText(currentFile: PsiFile, componentFile: VirtualFile, componentName: String): String {
+    fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): String {
         val relativePath = FileUtil.getRelativePath(
             currentFile.virtualFile.parent.path,
-            componentFile.path,
+            componentVirtualFile.path,
             '/'
         ) ?: ""
         val prefix = if (relativePath.startsWith("../")) "" else "./"
