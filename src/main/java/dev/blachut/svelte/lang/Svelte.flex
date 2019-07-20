@@ -40,6 +40,7 @@ ID=[$_a-zA-Z0-9]+
 %state SVELTE_INTERPOLATION
 %state SVELTE_TAG_PRE
 %state SVELTE_TAG
+%state SVELTE_ELSE_TAG
 %state SVELTE_TAG_PAREN_AWARE
 
 %%
@@ -60,20 +61,26 @@ ID=[$_a-zA-Z0-9]+
   "await"            { yybegin(SVELTE_TAG); return AWAIT; }
   "then"             { yybegin(SVELTE_TAG); return THEN; }
   "catch"            { yybegin(SVELTE_TAG); return CATCH; }
-  "else"             { yybegin(SVELTE_TAG); return ELSE; }
+  "else"             { yybegin(SVELTE_ELSE_TAG); return ELSE; }
   {ID}               { yybegin(SVELTE_TAG); return BAD_CHARACTER; }
   {WHITE_SPACE}      { return BAD_CHARACTER; }
 }
+
+<SVELTE_ELSE_TAG> {
+  "if"               { yybegin(SVELTE_TAG); return IF; }
+  {ID}               { yybegin(SVELTE_TAG); return CODE_FRAGMENT; }
+  {WHITE_SPACE}      { return WHITE_SPACE; }
+}
+
 <SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
-  "if"               { return IF; }
   "then"             { return THEN; }
   "as"               { yybegin(SVELTE_TAG_PAREN_AWARE); return AS; }
   ","                { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
 
   {WHITE_SPACE}      { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
-  {ID}("if"|"then"|"as"){ID}           { return CODE_FRAGMENT; }
-  ("if"|"then"|"as"){ID}               { return CODE_FRAGMENT; }
-  {ID}("if"|"then"|"as")               { return CODE_FRAGMENT; }
+  {ID}("then"|"as"){ID}           { return CODE_FRAGMENT; }
+  ("then"|"as"){ID}               { return CODE_FRAGMENT; }
+  {ID}("then"|"as")               { return CODE_FRAGMENT; }
 }
 
 /*
@@ -90,7 +97,7 @@ ID=[$_a-zA-Z0-9]+
   "@"{ID}            { return BAD_CHARACTER; }
 }
 
-<SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
+<SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_ELSE_TAG, SVELTE_TAG_PAREN_AWARE> {
   "{"                { leftBraceCount += 1; return CODE_FRAGMENT; }
   "}"                { if (leftBraceCount == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { leftBraceCount -= 1; return CODE_FRAGMENT; } }
 
