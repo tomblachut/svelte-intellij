@@ -67,6 +67,16 @@
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
+        <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferenceSearch" order="first"/>
+        <localInspection language="Svelte"
+                         displayName="Unresolved Svelte component"
+                         shortName="SvelteUnresolvedComponent"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         groupName="Svelte"
+                         bundle="messages.XmlBundle"
+                         groupKey="html.inspections.group.name"
+                         implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
     </extensions>
 

@@ -5,10 +5,14 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
+import com.intellij.psi.search.FileTypeIndex
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
+import dev.blachut.svelte.lang.SvelteFileType
 import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.completion.SvelteInsertHandler
 import dev.blachut.svelte.lang.icons.SvelteIcons
 
 // Vue plugin uses 100, it's ok for now
@@ -63,27 +67,33 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
             elements.addAll(svelteBareTagLookupElements)
             // in svelte there are no custom components to scan so early return
             return
-        } else if (!namespacePrefix.isEmpty()) {
+        } else if (namespacePrefix.isNotEmpty()) {
             // early return for namespaces other than svelte
             return
         } else {
             elements.addAll(svelteNamespacedTagLookupElements)
         }
 
-        val file = tag.containingFile
-        val visitor = SvelteScriptVisitor()
-        file.accept(visitor)
-        val jsElement = visitor.jsElement ?: return
+        val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
+        val reachableComponents = svelteFiles.map {
+            val componentName = it.nameWithoutExtension
+            val componentProps = ComponentPropsProvider().getComponentProps(it, tag.project)
 
-        val importVisitor = ImportVisitor()
-        jsElement.accept(importVisitor)
-        val items = importVisitor.components.map {
-            val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.FILE)
+            val lookupObject = ComponentLookupObject(it, componentProps)
+            var lookupElement = LookupElementBuilder.create(lookupObject, componentName)
+                .withIcon(SvelteIcons.FILE)
+                .withInsertHandler(SvelteInsertHandler.INSTANCE)
+
+            if (componentProps != null) {
+                val joinedProps = componentProps.map { prop -> "$prop={...}" }.joinToString(" ").trim()
+                val typeText = "<$componentName $joinedProps>"
+                lookupElement = lookupElement.withTypeText(typeText, true)
+            }
             PrioritizedLookupElement.withPriority(lookupElement, highPriority)
         }
+
         // TODO Link component documentation
         // TODO Include svelte internal components
-        // TODO Include not-imported reachable components and enable auto-import
-        elements.addAll(items)
+        elements.addAll(reachableComponents)
     }
 }

@@ -9,6 +9,17 @@ apply plugin: "kotlin"
 group 'dev.blachut.svelte.lang'
 version '0.7.0'
 
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version 'IU-LATEST-EAP-SNAPSHOT'
+    plugins = ['JavaScriptLanguage', 'CSS', 'PsiViewer:192-SNAPSHOT']
+}
+
+patchPluginXml {
+    sinceBuild '191'
+    untilBuild '201'
+}
+
 sourceCompatibility = 1.8
 
 repositories {
@@ -23,12 +34,6 @@ sourceSets {
     main {
         java.srcDirs = ['src/main/java', 'src/main/gen']
     }
-}
-
-// See https://github.com/JetBrains/gradle-intellij-plugin/
-intellij {
-    version 'IU-191.6707.61'
-    plugins = ['JavaScriptLanguage', 'CSS', 'PsiViewer:191.4212']
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

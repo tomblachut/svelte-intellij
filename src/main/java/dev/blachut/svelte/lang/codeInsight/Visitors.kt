@@ -4,6 +4,7 @@ import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSElementVisitor
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
+import com.intellij.lang.javascript.psi.JSVarStatement
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.XmlElementVisitor
@@ -23,6 +24,24 @@ internal class ImportVisitor : JSElementVisitor() {
         if (StringUtil.isCapitalized(name)) {
             components.add(name)
             bindings.add(importedBinding)
+        }
+    }
+
+    override fun visitJSElement(node: JSElement?) = recursion(node)
+
+    private fun recursion(element: PsiElement?) {
+        element?.children?.forEach { it.accept(this) }
+    }
+}
+
+internal class PropsVisitor : JSElementVisitor() {
+    val props = mutableListOf<String?>()
+
+    override fun visitJSVarStatement(node: JSVarStatement?) {
+        val text = node?.text ?: return
+        if (text.trim().startsWith("export")) {
+            val declarations = node.declarations
+            props.addAll(declarations.map { it.name })
         }
     }
 
