@@ -71,9 +71,14 @@ ID=[$_a-zA-Z0-9]+
   ","                { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
 
   {WHITE_SPACE}      { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
-  ("if"|"then"|"as"){ID}           { return BAD_CHARACTER; }
+  {ID}("if"|"then"|"as"){ID}           { return CODE_FRAGMENT; }
+  ("if"|"then"|"as"){ID}               { return CODE_FRAGMENT; }
+  {ID}("if"|"then"|"as")               { return CODE_FRAGMENT; }
 }
 
+/*
+    Key expressions are wrapped in parens and can contain any number of paren pairs. Wrapping parens need to be distinguished.
+ */
 <SVELTE_TAG_PAREN_AWARE> {
   "("                { leftParenCount += 1; if (leftParenCount == 1) { return START_PAREN; } else { return CODE_FRAGMENT; } }
   ")"                { leftParenCount -= 1; if (leftParenCount == 0) { return END_PAREN; } else { return CODE_FRAGMENT; } }
