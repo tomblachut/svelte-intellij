@@ -21,12 +21,12 @@ class SvelteReferenceSearch : QueryExecutor<PsiReference, ReferencesSearch.Searc
                 val componentName = elementToSearch.name
                 if (componentName != null) {
                     queryParameters.optimizer.searchWord(
-                            componentName,
-                            LocalSearchScope(containingFile),
-                            UsageSearchContext.IN_CODE,
-                            true,
-                            elementToSearch,
-                            SingleTargetRequestResultProcessor(elementToSearch)
+                        componentName,
+                        LocalSearchScope(containingFile),
+                        UsageSearchContext.IN_CODE,
+                        true,
+                        elementToSearch,
+                        SingleTargetRequestResultProcessor(elementToSearch)
                     )
                 }
             }

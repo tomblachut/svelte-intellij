@@ -48,8 +48,8 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
             val componentReference = fromClause?.resolveReferencedElements()?.firstOrNull()
             if (componentReference != null && componentReference is SvelteFile) {
                 val props = ComponentPropsProvider().getComponentProps(
-                        componentReference.viewProvider.virtualFile,
-                        context.project
+                    componentReference.viewProvider.virtualFile,
+                    context.project
                 )
                 val propsDescriptors = props?.map { AnyXmlAttributeDescriptor(it) }
                 if (propsDescriptors != null) {

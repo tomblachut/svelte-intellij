@@ -44,6 +44,7 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                                         override fun getFamilyName(): String {
                                             return ComponentImporter.getImportText(tag.containingFile, it.virtualFile, componentName)
                                         }
+
                                         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                                             ComponentImporter.insertComponentImport(editor, tag.containingFile, it.virtualFile, componentName)
                                         }

@@ -81,8 +81,8 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
             val lookupObject = ComponentLookupObject(it, componentProps)
             var lookupElement = LookupElementBuilder.create(lookupObject, componentName)
-                    .withIcon(SvelteIcons.FILE)
-                    .withInsertHandler(SvelteInsertHandler.INSTANCE)
+                .withIcon(SvelteIcons.FILE)
+                .withInsertHandler(SvelteInsertHandler.INSTANCE)
 
             if (componentProps != null) {
                 val joinedProps = componentProps.map { prop -> "$prop={...}" }.joinToString(" ").trim()

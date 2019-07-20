@@ -40,16 +40,16 @@ object ComponentImporter {
                 jsElement.addAfter(importStatement, jsElement.firstChild)
             } else {
                 ES6CreateImportUtil.findPlaceAndInsertES6Import(
-                        jsElement,
-                        importStatement,
-                        componentName,
-                        editor
+                    jsElement,
+                    importStatement,
+                    componentName,
+                    editor
                 )
             }
             CodeStyleManager.getInstance(project).reformat(jsElement)
         } else {
             val scriptBlock = XmlElementFactory.getInstance(project)
-                    .createHTMLTagFromText("<script>\n$importCode\n</script>\n\n")
+                .createHTMLTagFromText("<script>\n$importCode\n</script>\n\n")
             // Check if there's an empty script tag and replace it
             if (scriptTag != null) {
                 scriptTag.replace(scriptBlock)
@@ -62,9 +62,9 @@ object ComponentImporter {
 
     fun getImportText(currentFile: PsiFile, componentFile: VirtualFile, componentName: String): String {
         val relativePath = FileUtil.getRelativePath(
-                currentFile.virtualFile.parent.path,
-                componentFile.path,
-                '/'
+            currentFile.virtualFile.parent.path,
+            componentFile.path,
+            '/'
         ) ?: ""
         val prefix = if (relativePath.startsWith("../")) "" else "./"
         val comma = JSCodeStyleSettings.getSemicolon(currentFile)
