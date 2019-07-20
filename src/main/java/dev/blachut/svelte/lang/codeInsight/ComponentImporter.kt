@@ -14,22 +14,24 @@ import com.intellij.psi.XmlElementFactory
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
+import com.intellij.xml.util.HtmlUtil
 
 class ComponentImporter {
-
     fun insertComponentImport(editor: Editor?, currentFile: PsiFile, componentFile: VirtualFile, componentName: String) {
-        if (editor == null) {
-            return
-        }
+        if (editor == null) return
+
         val project = currentFile.project
         val importCode = getImportText(currentFile, componentFile, componentName)
-        val jsElement = PsiTreeUtil.findChildOfType(currentFile, JSEmbeddedContent::class.java)
 
+        val scriptTag = findScriptTag(currentFile)
+        // An empty script tag does not contain JSEmbeddedContent
+        val jsElement = PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
 
         if (jsElement != null) {
             val existingImports = ES6ImportPsiUtil.getImportDeclarations(jsElement)
             // check if component has already been imported
             if (existingImports.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
+
             val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
             if (existingImports.size == 0) {
                 // findPlaceAndInsertES6Import is buggy when inserting the first import
@@ -48,9 +50,7 @@ class ComponentImporter {
         } else {
             val scriptBlock = XmlElementFactory.getInstance(project)
                     .createHTMLTagFromText("<script>\n$importCode\n</script>\n\n")
-            // check if there's an empty script tag and replace it
-            // an empty script tag does not contain JSEmbeddedContent
-            val scriptTag = this.findScriptTag(currentFile)
+            // Check if there's an empty script tag and replace it
             if (scriptTag != null) {
                 scriptTag.replace(scriptBlock)
             } else {
@@ -71,8 +71,6 @@ class ComponentImporter {
     }
 
     private fun findScriptTag(file: PsiFile): XmlTag? {
-        val tags = PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java)
-        return tags.find { it.name == "script" && PsiTreeUtil.findChildOfType(it, JSEmbeddedContent::class.java) == null }
+        return PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java).find { HtmlUtil.isScriptTag(it) }
     }
-
 }
