@@ -17,9 +17,7 @@ import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 
 object ComponentImporter {
-    fun insertComponentImport(editor: Editor?, currentFile: PsiFile, componentFile: VirtualFile, componentName: String) {
-        if (editor == null) return
-
+    fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentFile: VirtualFile, componentName: String) {
         val project = currentFile.project
         val importCode = getImportText(currentFile, componentFile, componentName)
 

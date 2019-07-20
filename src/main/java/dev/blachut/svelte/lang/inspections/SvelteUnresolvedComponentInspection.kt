@@ -24,36 +24,34 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
         inspectedTags.clear()
 
         return object : XmlElementVisitor() {
-
             override fun visitXmlToken(token: XmlToken?) {
-                if (token != null && token.parent is XmlTag) {
-                    val tag = token.parent as XmlTag
-                    if (inspectedTags.contains(tag)) {
-                        return
-                    }
-                    val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag)
-                    val componentName = tag.name
-                    if (StringUtil.isCapitalized(componentName)) {
-                        if (tag.descriptor?.declaration == null) {
-                            val fileName = "$componentName.svelte"
-                            // check if we have a corresponding svelte file
-                            val files = FilenameIndex.getFilesByName(tag.project, fileName, GlobalSearchScope.allScope(tag.project))
-                            if (files.isNotEmpty()) {
-                                val quickFixes: List<LocalQuickFix> = files.map {
-                                    object : LocalQuickFix {
-                                        override fun getFamilyName(): String {
-                                            return ComponentImporter.getImportText(tag.containingFile, it.virtualFile, componentName)
-                                        }
+                if (token == null || token.parent !is XmlTag) return
+                val tag = token.parent as XmlTag
+                if (inspectedTags.contains(tag)) return
 
-                                        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-                                            ComponentImporter.insertComponentImport(editor, tag.containingFile, it.virtualFile, componentName)
-                                        }
+                val componentName = tag.name
+                if (StringUtil.isCapitalized(componentName)) {
+                    if (tag.descriptor?.declaration == null) {
+                        val fileName = "$componentName.svelte"
+                        // check if we have a corresponding svelte file
+                        val files = FilenameIndex.getFilesByName(tag.project, fileName, GlobalSearchScope.allScope(tag.project))
+                        if (files.isNotEmpty()) {
+                            val quickFixes: List<LocalQuickFix> = files.map {
+                                object : LocalQuickFix {
+                                    override fun getFamilyName(): String {
+                                        return ComponentImporter.getImportText(tag.containingFile, it.virtualFile, componentName)
+                                    }
+
+                                    override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+                                        val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag)
+                                            ?: return
+                                        ComponentImporter.insertComponentImport(editor, tag.containingFile, it.virtualFile, componentName)
                                     }
                                 }
-
-                                holder.registerProblem(tag, displayName, *quickFixes.toTypedArray())
-                                inspectedTags.add(tag)
                             }
+
+                            holder.registerProblem(tag, displayName, *quickFixes.toTypedArray())
+                            inspectedTags.add(tag)
                         }
                     }
                 }
