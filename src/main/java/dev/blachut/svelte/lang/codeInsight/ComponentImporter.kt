@@ -16,7 +16,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 
-class ComponentImporter {
+object ComponentImporter {
     fun insertComponentImport(editor: Editor?, currentFile: PsiFile, componentFile: VirtualFile, componentName: String) {
         if (editor == null) return
 

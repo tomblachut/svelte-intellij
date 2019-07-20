@@ -19,7 +19,6 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
 
     // a way to avoid duplicate inspections on the same tag
     val inspectedTags: MutableList<XmlTag> = mutableListOf()
-    val componentImporter = ComponentImporter()
 
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         inspectedTags.clear()
@@ -43,10 +42,10 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                                 val quickFixes: List<LocalQuickFix> = files.map {
                                     object : LocalQuickFix {
                                         override fun getFamilyName(): String {
-                                            return componentImporter.getImportText(tag.containingFile, it.virtualFile, componentName)
+                                            return ComponentImporter.getImportText(tag.containingFile, it.virtualFile, componentName)
                                         }
                                         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-                                            componentImporter.insertComponentImport(editor, tag.containingFile, it.virtualFile, componentName)
+                                            ComponentImporter.insertComponentImport(editor, tag.containingFile, it.virtualFile, componentName)
                                         }
                                     }
                                 }

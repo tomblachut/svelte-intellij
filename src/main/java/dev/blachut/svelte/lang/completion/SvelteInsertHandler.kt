@@ -19,7 +19,7 @@ class SvelteInsertHandler : InsertHandler<LookupElement> {
             replaceWithLiveTemplate(lookupObject.props, context, componentName)
         }
 
-        ComponentImporter().insertComponentImport(context.editor, context.file, lookupObject.file, componentName)
+        ComponentImporter.insertComponentImport(context.editor, context.file, lookupObject.file, componentName)
     }
 
     private fun replaceWithLiveTemplate(props: List<String?>, context: InsertionContext, componentName: String) {
