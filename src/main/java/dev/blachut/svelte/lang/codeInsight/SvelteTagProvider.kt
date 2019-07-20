@@ -67,7 +67,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
             elements.addAll(svelteBareTagLookupElements)
             // in svelte there are no custom components to scan so early return
             return
-        } else if (!namespacePrefix.isEmpty()) {
+        } else if (namespacePrefix.isNotEmpty()) {
             // early return for namespaces other than svelte
             return
         } else {

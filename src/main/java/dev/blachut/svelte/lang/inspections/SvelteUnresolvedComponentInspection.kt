@@ -30,31 +30,31 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 if (inspectedTags.contains(tag)) return
 
                 val componentName = tag.name
-                if (StringUtil.isCapitalized(componentName)) {
-                    if (tag.descriptor?.declaration == null) {
-                        val fileName = "$componentName.svelte"
-                        // check if we have a corresponding svelte file
-                        val files = FilenameIndex.getFilesByName(tag.project, fileName, GlobalSearchScope.allScope(tag.project))
-                        if (files.isNotEmpty()) {
-                            val quickFixes: List<LocalQuickFix> = files.map {
-                                object : LocalQuickFix {
-                                    override fun getFamilyName(): String {
-                                        return ComponentImporter.getImportText(tag.containingFile, it.virtualFile, componentName)
-                                    }
+                if (!StringUtil.isCapitalized(componentName)) return // TODO Extract isComponentTag function
+                if (tag.descriptor?.declaration != null) return
 
-                                    override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-                                        val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag)
-                                            ?: return
-                                        ComponentImporter.insertComponentImport(editor, tag.containingFile, it.virtualFile, componentName)
-                                    }
-                                }
-                            }
+                val fileName = "$componentName.svelte"
+                // check if we have a corresponding svelte file
+                val files = FilenameIndex.getFilesByName(tag.project, fileName, GlobalSearchScope.allScope(tag.project))
+                if (files.isEmpty()) return
 
-                            holder.registerProblem(tag, displayName, *quickFixes.toTypedArray())
-                            inspectedTags.add(tag)
+                files.forEach {
+                    val quickFix = object : LocalQuickFix {
+                        override fun getFamilyName(): String {
+                            return ComponentImporter.getImportText(tag.containingFile, it.virtualFile, componentName)
+                        }
+
+                        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+                            val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag)
+                                ?: return
+                            ComponentImporter.insertComponentImport(editor, tag.containingFile, it.virtualFile, componentName)
                         }
                     }
+
+                    holder.registerProblem(tag, displayName, quickFix)
                 }
+
+                inspectedTags.add(tag)
             }
         }
     }
