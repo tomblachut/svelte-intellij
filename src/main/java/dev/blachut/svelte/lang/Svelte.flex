@@ -51,7 +51,7 @@ ID=[$_a-zA-Z0-9]+
   "{"\s*"#"               { yybegin(SVELTE_TAG_PRE); return START_OPENING_MUSTACHE; }
   "{"\s*":"               { yybegin(SVELTE_TAG_PRE); return START_INNER_MUSTACHE; }
   "{"\s*"/"               { yybegin(SVELTE_TAG_PRE); return START_CLOSING_MUSTACHE; }
-  "{"                     { yybegin(SVELTE_INTERPOLATION); return START_MUSTACHE; }
+  "{"                     { yybegin(SVELTE_INTERPOLATION_PRE); return START_MUSTACHE; }
   {WHITE_SPACE}           { return WHITE_SPACE; }
 }
 
@@ -91,10 +91,13 @@ ID=[$_a-zA-Z0-9]+
   ")"                { leftParenCount -= 1; if (leftParenCount == 0) { return END_PAREN; } else { return CODE_FRAGMENT; } }
 }
 
-<SVELTE_INTERPOLATION> {
-  "@html"            { return HTML_PREFIX; }
-  "@debug"           { return DEBUG_PREFIX; }
-  "@"{ID}            { return BAD_CHARACTER; }
+<SVELTE_INTERPOLATION_PRE> {
+  {WHITE_SPACE}      { return WHITE_SPACE; }
+  "@html"            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX; }
+  "@debug"           { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX; }
+  "@" | "@"{ID}      { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER; }
+  "{"                { yybegin(SVELTE_INTERPOLATION); leftBraceCount += 1; return CODE_FRAGMENT; }
+  [^]                { yybegin(SVELTE_INTERPOLATION); return CODE_FRAGMENT; }
 }
 
 <SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_ELSE_TAG, SVELTE_TAG_PAREN_AWARE> {
