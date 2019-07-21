@@ -1,0 +1,54 @@
+Svelte Component
+  Svelte: INTERPOLATION
+    PsiElement({)('{')
+    PsiElement(@html)('@html')
+    Svelte: EXPRESSION
+      PsiElement(CODE_FRAGMENT)(' 'hello<script>virus()</script>'')
+    PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: INTERPOLATION
+    PsiElement({)('{')
+    PsiWhiteSpace(' ')
+    PsiElement(@html)('@html')
+    Svelte: EXPRESSION
+      PsiElement(CODE_FRAGMENT)(' 'unescaped'')
+    PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: INTERPOLATION
+    PsiElement({)('{')
+    PsiElement(@debug)('@debug')
+    Svelte: EXPRESSION
+      PsiElement(CODE_FRAGMENT)(' x ')
+    PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: INTERPOLATION
+    PsiElement({)('{')
+    PsiWhiteSpace(' ')
+    PsiElement(@debug)('@debug')
+    Svelte: EXPRESSION
+      PsiElement(CODE_FRAGMENT)(' x')
+    PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: INTERPOLATION
+    PsiElement({)('{')
+    PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@'
+      <empty list>
+    PsiElement(BAD_CHARACTER)('@')
+    PsiElement(CODE_FRAGMENT)(' html 'unescaped'')
+    PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: INTERPOLATION
+    PsiElement({)('{')
+    PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@'
+      <empty list>
+    PsiElement(BAD_CHARACTER)('@')
+    PsiElement(CODE_FRAGMENT)(' debug x ')
+    PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: INTERPOLATION
+    PsiElement({)('{')
+    PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@unknown'
+      <empty list>
+    PsiElement(BAD_CHARACTER)('@unknown')
+    PsiElement(CODE_FRAGMENT)(' x')
+    PsiElement(})('}')

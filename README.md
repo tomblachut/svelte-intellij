@@ -10,7 +10,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Work
 
 ## Installation
 * Use official [Plugin Repository](https://plugins.jetbrains.com/plugin/12375-svelte)
-* Head over to [releases tab](https://github.com/tomblachut/svelte-intellij/releases), download `.jar` archive and [Install plugin from disk](https://www.jetbrains.com/help/webstorm/managing-plugins.html#install_plugin_from_disk)
+* Head over to [releases tab](https://github.com/tomblachut/svelte-intellij/releases), download `.zip` archive and [Install plugin from disk](https://www.jetbrains.com/help/webstorm/managing-plugins.html#install_plugin_from_disk)
 
 <h2>Features</h2>
 
@@ -40,6 +40,29 @@ This project is run by one person, because I want Svelte to succeed. Please, lea
 
 Contributions are very much welcome! 
 
-IntelliJ Platform runs on JVM, so this can seem like a huge limitation, but don't worry. Kotlin looks a lot like TypeScript. Bigger issue is scarce documentation for their API. I'll write a few words describing it some day.
+IntelliJ Platform runs on JVM, so this can seem like a huge limitation, but don't worry. Kotlin feels a lot like TypeScript. Bigger issue is scarce documentation for their API.
 
-If you don't know how to write IntelliJ plugins, please report what could be improved. IntelliJ has a huge feature set, I personally don't use everything it has to offer.
+Otherwise, please report what could be improved. IntelliJ has a huge feature set, I personally don't use everything it has to offer.
+
+<h2>Building and running the plugin</h2>
+
+You'll need IntelliJ IDEA. Community edition is free and works, you can also use Ultimate edition if you have one. 
+
+Clone the repository and run `./gradlew :runIde` (There are also other intermediate tasks). 
+
+IntelliJ Ultimate will download in a bit and you'll be prompted with license dialog - choose evaluation mode. After 30 days delete `build/idea-sandbox` and start again.
+
+Ready to share `.zip` archive can be found in `build/distributions`.
+
+<h2>Running tests</h2>
+
+Tests can be run with `./gradlew :test` command or even better or by using run action in IntelliJ IDEA. 
+
+<h2>Writing Tests</h2>
+
+Some of the tests in IntelliJ Platform (notably lexer and parser ones) are similar to Jest snapshots.
+
+You need to create a `.svelte` file in `scr/test/resources` directory and add function composed of the word `test` and file name to appropriate class.
+Then run the test. File with expected results will be created and you need to commit it. When updating test simply delete expected file and rerun test.
+
+Lexer tests use `.tokens.txt` extensions, while Parser tests use `.txt`.

@@ -27,9 +27,9 @@ public class SvelteInterpolationImpl extends SveltePsiElementImpl implements Sve
   }
 
   @Override
-  @NotNull
+  @Nullable
   public SvelteExpression getExpression() {
-    return findNotNullChildByClass(SvelteExpression.class);
+    return findChildByClass(SvelteExpression.class);
   }
 
 }

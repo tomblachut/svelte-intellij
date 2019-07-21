@@ -37,24 +37,24 @@ public interface SvelteTypes {
   IElementType THEN_CONTINUATION_TAG = new SvelteElementType("THEN_CONTINUATION_TAG");
 
   IElementType AS = new SvelteElementType("as");
-  IElementType AWAIT = new SvelteElementType("#await");
-  IElementType AWAIT_END = new SvelteElementType("/await");
-  IElementType AWAIT_THEN = new SvelteElementType("then");
-  IElementType CATCH = new SvelteElementType(":catch");
+  IElementType AWAIT = new SvelteElementType("await");
+  IElementType CATCH = new SvelteElementType("catch");
   IElementType CODE_FRAGMENT = new SvelteElementType("CODE_FRAGMENT");
   IElementType COMMA = new SvelteElementType(",");
-  IElementType EACH = new SvelteElementType("#each");
-  IElementType ELSE = new SvelteElementType(":else");
-  IElementType ELSE_IF = new SvelteElementType("if");
-  IElementType END_EACH = new SvelteElementType("/each");
-  IElementType END_IF = new SvelteElementType("/if");
+  IElementType DEBUG_PREFIX = new SvelteElementType("@debug");
+  IElementType EACH = new SvelteElementType("each");
+  IElementType ELSE = new SvelteElementType("else");
   IElementType END_MUSTACHE = new SvelteElementType("}");
   IElementType END_PAREN = new SvelteElementType(")");
-  IElementType HTML_FRAGMENT = new SvelteElementType("HTML_FRAGMENT");
-  IElementType IF = new SvelteElementType("#if");
+  IElementType HTML_FRAGMENT = new SvelteElementType("<markup>");
+  IElementType HTML_PREFIX = new SvelteElementType("@html");
+  IElementType IF = new SvelteElementType("if");
+  IElementType START_CLOSING_MUSTACHE = new SvelteElementType("{/");
+  IElementType START_INNER_MUSTACHE = new SvelteElementType("{:");
   IElementType START_MUSTACHE = new SvelteElementType("{");
+  IElementType START_OPENING_MUSTACHE = new SvelteElementType("{#");
   IElementType START_PAREN = new SvelteElementType("(");
-  IElementType THEN = new SvelteElementType(":then");
+  IElementType THEN = new SvelteElementType("then");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

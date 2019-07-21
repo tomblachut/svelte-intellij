@@ -19,20 +19,20 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
             SvelteTypes.START_PAREN,
             SvelteTypes.END_PAREN -> PARENS_KEYS
 
+            SvelteTypes.START_OPENING_MUSTACHE,
+            SvelteTypes.START_INNER_MUSTACHE,
+            SvelteTypes.START_CLOSING_MUSTACHE,
             SvelteTypes.START_MUSTACHE,
             SvelteTypes.END_MUSTACHE,
+            SvelteTypes.HTML_PREFIX,
+            SvelteTypes.DEBUG_PREFIX,
             SvelteTypes.COMMA,
             SvelteTypes.IF,
-            SvelteTypes.ELSE_IF,
-            SvelteTypes.END_IF,
             SvelteTypes.AWAIT,
             SvelteTypes.THEN,
-            SvelteTypes.AWAIT_THEN,
             SvelteTypes.CATCH,
-            SvelteTypes.AWAIT_END,
             SvelteTypes.EACH,
             SvelteTypes.AS,
-            SvelteTypes.END_EACH,
             SvelteTypes.ELSE -> KEY_KEYS
 
             else -> super.getTokenHighlights(tokenType)

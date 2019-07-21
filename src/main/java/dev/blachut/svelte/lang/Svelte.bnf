@@ -22,72 +22,81 @@
   tokenTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
 
   tokens = [
+    START_OPENING_MUSTACHE="{#"
+    START_INNER_MUSTACHE="{:"
+    START_CLOSING_MUSTACHE="{/"
     START_MUSTACHE="{"
     END_MUSTACHE="}"
-    IF="#if"
-    ELSE_IF="if"
-    END_IF="/if"
-    EACH="#each"
+    IF="if"
+    EACH="each"
     AS="as"
     COMMA=","
     START_PAREN="("
     END_PAREN=")"
-    END_EACH="/each"
-    AWAIT="#await"
-    AWAIT_THEN="then"
-    THEN=":then"
-    CATCH=":catch"
-    AWAIT_END="/await"
-    ELSE=":else"
+    AWAIT="await"
+    THEN="then"
+    CATCH="catch"
+    ELSE="else"
+    HTML_FRAGMENT="<markup>"
+    HTML_PREFIX="@html"
+    DEBUG_PREFIX="@debug"
   ]
 
   extends(".*Block")=block
   extends(".*OpeningTag")=openingTag
   extends(".*ContinuationTag")=continuationTag
   extends(".*ClosingTag")=closingTag
+
+  pin("awaitThenBlockOpeningTag")=4
+  pin("elseIfContinuationTag")=3
+  pin(".*Tag")=2
+  pin("interpolation")=1
+  recoverWhile(".*Tag|interpolation")=mustache_recover
 }
 
+// First rule is always implicitly private
 svelteComponent ::= privateScope
-
 scope ::= privateScope
 
+private mustache_recover ::= !('{' | '{#' | "{:" | "{/" | HTML_FRAGMENT)
+
 private privateScope ::= (block|interpolation|HTML_FRAGMENT)*
+
+interpolation ::= '{' expressionPrefix? expression '}'
+private expressionPrefix ::= '@html' | '@debug'
 
 block ::= ifBlock | eachBlock | awaitBlock
 
 ifBlock ::= ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosingTag {pin=1}
 ifBlockOpening ::= ifBlockOpeningTag scope
-ifBlockOpeningTag ::= '{' '#if' expression '}' {pin=2}
-elseIfContinuation ::= elseIfContinuationTag scope
-elseIfContinuationTag ::= '{' ':else' 'if' expression '}' {pin=3}
-ifBlockClosingTag ::= '{' '/if' '}' {pin=2}
+ifBlockOpeningTag ::= '{#' 'if' expression '}'
+elseIfContinuation ::= elseIfContinuationTag scope {name="else if block"}
+elseIfContinuationTag ::= '{:' 'else' 'if' expression '}'
+ifBlockClosingTag ::= '{/' 'if' '}'
 
 eachBlock ::= eachBlockOpening elseContinuation? eachBlockClosingTag {pin=1}
 eachBlockOpening ::= eachBlockOpeningTag scope
-eachBlockOpeningTag ::= '{' '#each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}' {pin=2}
-eachBlockClosingTag ::= '{' '/each' '}' {pin=2}
+eachBlockOpeningTag ::= '{#' 'each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
+eachBlockClosingTag ::= '{/' 'each' '}'
 
 awaitBlock ::= (awaitThenBlockOpening | awaitAndThen) (catchContinuation)? awaitBlockClosingTag {pin=1}
 private awaitAndThen ::= awaitBlockOpening thenContinuation {pin=1}
 awaitThenBlockOpening ::= awaitThenBlockOpeningTag scope
-awaitThenBlockOpeningTag ::= '{' '#await' expression 'then' parameter '}' {pin=4}
+awaitThenBlockOpeningTag ::= '{#' 'await' expression 'then' parameter '}'
 awaitBlockOpening ::= awaitBlockOpeningTag scope
-awaitBlockOpeningTag ::= '{' '#await' expression '}' {pin=2}
-thenContinuation ::= thenContinuationTag scope
-thenContinuationTag ::= '{' ':then' parameter '}' {pin=2}
-catchContinuation ::= catchContinuationTag scope
-catchContinuationTag::= '{' ':catch' parameter '}' {pin=2}
-awaitBlockClosingTag ::= '{' '/await' '}' {pin=2}
+awaitBlockOpeningTag ::= '{#' 'await' expression '}'
+thenContinuation ::= thenContinuationTag scope {name="then block"}
+thenContinuationTag ::= '{:' 'then' parameter '}'
+catchContinuation ::= catchContinuationTag scope {name="catch block"}
+catchContinuationTag::= '{:' 'catch' parameter '}'
+awaitBlockClosingTag ::= '{/' 'await' '}'
 
-elseContinuation ::= elseContinuationTag scope
-elseContinuationTag ::= '{' ':else' '}' {pin=2}
+elseContinuation ::= elseContinuationTag scope {name="else block"}
+elseContinuationTag ::= '{:' 'else' '}'
 
-interpolation ::= '{' expression '}' {pin=2; recoverWhile="interpolation_recover"}
-private interpolation_recover ::= &'}'
-
-fake openingTag ::= '{' '#foo' '}'
-fake continuationTag ::= '{' ':foo' '}'
-fake closingTag ::= '{' '/foo' '}'
+fake openingTag ::= '{#' foo '}'
+fake continuationTag ::= '{:' foo '}'
+fake closingTag ::= '{/' foo '}'
 
 expression ::= CODE_FRAGMENT {
                                name="expression"
