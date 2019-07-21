@@ -71,14 +71,13 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
      *
      * IN:
      * {#each items as item, index (key)}
-     * Note that [as item] part is currently required
      *
      * OUT:
      *  if (items) {
      *      const __iterable = items;
-     *      for (const __i = 0; __i < __iterable.length; __i++) {
-     *          const item = __iterable[__i];
-     *          const index = __i;
+     *      for (const index = 0; index < __iterable.length; index++) {
+     *          const item = __iterable[index];
+     *          String(key);
      *          <each body>
      *      });
      *  } else {
@@ -93,14 +92,23 @@ class SvelteCodeInjectionVisitor(private val registrar: MultiHostRegistrar) : Sv
         val key = openingTag.expressionList.getOrNull(1)
 
         if (items != null) {
-            stitchScript("if (${items.text}) { const __iterable = ", items)
+            // (x=>x)(...); Forces expression context
+            stitchScript("if (${items.text}) { const __iterable = (x=>x)(", items, ");")
         } else {
-            appendPrefix("if (undefined) { const __iterable = []") // in case of parse error
+            appendPrefix("if (undefined) { const __iterable = [];") // in case of parse error
         }
-        appendPrefix("; for (const __i = 0; __i < __iterable.length; __i++) {")
 
-        if (item != null) stitchScript("const ", item, " = __iterable[__i];")
-        if (index != null) stitchScript("const ", index, " = __i;")
+        val indexId = if (index != null) index.text else "__i"
+
+        if (index != null) {
+            stitchScript("for (const ", index, " = 0;")
+        } else {
+            appendPrefix("for (const $indexId = 0;")
+        }
+
+        appendPrefix("$indexId < __iterable.length; $indexId++) {")
+
+        if (item != null) stitchScript("const ", item, " = __iterable[$indexId];")
         if (key != null) stitchScript(expressionPrefix, key, expressionSuffix)
 
         visitScope(eachBlock.eachBlockOpening.scope)
