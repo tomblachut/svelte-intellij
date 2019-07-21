@@ -14,12 +14,24 @@
     <li>Syntax highlighting</li>
     <li>Code formatting</li>
     <li>Typing assistance</li>
-    <li>Partial completion suggestions</li>
+    <li>Completions of components and props</li>
+    <li>Auto import of components</li>
     <li>Navigation from components to their definition</li>
 </ul>
     ]]></description>
 
     <change-notes><![CDATA[
+<h3>0.8.0</h3>
+<ul>
+    <li>Add auto import for components!</li>
+    <li>Highlight not imported components</li>
+    <li>Mark unused component imports properly</li>
+    <li>Fix Svelte blocks breaking on identifiers containing the words if, as or then</li>
+    <li>Support @html & @debug expressions</li>
+    <li>Display better error messages for incomplete code</li>
+    <li>Extend supported IDE version range to 2019.2</li>
+</ul>
+
 <h3>0.7.0</h3>
 <ul>
     <li>Support code formatting!</li>

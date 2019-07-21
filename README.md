@@ -18,16 +18,16 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Work
     <li>Syntax highlighting</li>
     <li>Code formatting</li>
     <li>Typing assistance</li>
-    <li>Partial completion suggestions</li>
+    <li>Completions of components and props</li>
+    <li>Auto import of components</li>
     <li>Navigation from components to their definition</li>
 </ul>
 
 <h2>Known issues</h2>
 
 <ul>
-    <li>Component imports are marked as unused</li>
     <li>$ subscriptions aren't recognised properly</li>
-    <li>Props completion and validation isn't provided</li>
+    <li>JavaScript isn't highlighted inside attributes</li>
     <li>Directives are treated as plain attributes</li>
     <li>...</li>
 </ul>
@@ -52,7 +52,7 @@ Clone the repository and run `./gradlew :runIde` (There are also other intermedi
 
 IntelliJ Ultimate will download in a bit and you'll be prompted with license dialog - choose evaluation mode. After 30 days delete `build/idea-sandbox` and start again.
 
-Ready to share `.zip` archive can be found in `build/distributions`.
+Ready to share `.zip` archive can be found in `build/distributions` after running `./gradlew :buildPlugin`.
 
 <h2>Running tests</h2>
 
