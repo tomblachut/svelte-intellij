@@ -34,6 +34,9 @@ sourceSets {
     main {
         java.srcDirs = ['src/main/java', 'src/main/gen']
     }
+    test {
+        java.srcDirs = ['src/test/java']
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

@@ -1,0 +1,21 @@
+Svelte Component
+  Svelte: AWAIT_BLOCK
+    Svelte: AWAIT_THEN_BLOCK_OPENING
+      Svelte: AWAIT_THEN_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(await)('await')
+        PsiWhiteSpace(' ')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('then')
+        PsiWhiteSpace(' ')
+        PsiElement(then)('then')
+        PsiWhiteSpace(' ')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)('then')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: AWAIT_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(await)('await')
+      PsiElement(})('}')
