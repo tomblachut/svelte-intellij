@@ -78,6 +78,7 @@
                          groupKey="html.inspections.group.name"
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
+        <languageInjector implementation="dev.blachut.svelte.lang.SvelteLanguageInjector" />
     </extensions>
 
 </idea-plugin>
