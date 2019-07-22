@@ -1,9 +1,15 @@
 package dev.blachut.svelte.lang.editor
 
+import com.intellij.codeInsight.template.CustomTemplateCallback
 import com.intellij.codeInsight.template.HtmlTextContextType
+import com.intellij.codeInsight.template.emmet.EmmetParser
+import com.intellij.codeInsight.template.emmet.XmlEmmetParser
 import com.intellij.codeInsight.template.emmet.generators.XmlZenCodingGeneratorImpl
+import com.intellij.codeInsight.template.emmet.generators.ZenCodingGenerator
+import com.intellij.codeInsight.template.emmet.tokens.ZenCodingToken
 import com.intellij.codeInsight.template.impl.TemplateImpl
 import com.intellij.lang.Language
+import com.intellij.lang.html.HTMLLanguage
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.SvelteFileViewProvider
 import dev.blachut.svelte.lang.SvelteLanguage
@@ -22,6 +28,10 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
 
     override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {
         return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || HtmlTextContextType.isInContext(context))
+    }
+
+    override fun createParser(tokens: MutableList<ZenCodingToken>?, callback: CustomTemplateCallback, generator: ZenCodingGenerator?, surroundWithTemplate: Boolean): EmmetParser {
+        return XmlEmmetParser(tokens, SvelteZenCodingCustomTemplateCallback(callback), generator, surroundWithTemplate)
     }
 
     override fun createTemplateByKey(key: String, forceSingleTag: Boolean): TemplateImpl? {
@@ -56,3 +66,5 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
         return super.createTemplateByKey(key, forceSingleTag)
     }
 }
+
+class SvelteZenCodingCustomTemplateCallback(callback: CustomTemplateCallback) : CustomTemplateCallback(callback.editor, callback.file.viewProvider.getPsi(HTMLLanguage.INSTANCE))
