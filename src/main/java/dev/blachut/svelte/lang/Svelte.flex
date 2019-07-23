@@ -10,12 +10,6 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 %%
 
-%{
-  private char quote;
-  private int leftBraceCount;
-  private int leftParenCount;
-%}
-
 //%debug
 %public
 %class _SvelteLexer
@@ -24,9 +18,15 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 %type IElementType
 %unicode
 
+%{
+  private char quote;
+  private int braces;
+  private int parens;
+%}
+
 %eof{
-  leftBraceCount = 0;
-  leftParenCount = 0;
+  braces = 0;
+  parens = 0;
 %eof}
 
 WHITE_SPACE=\s+
@@ -75,9 +75,9 @@ ID=[$_a-zA-Z0-9]+
 <SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
   "then"             { return THEN; }
   "as"               { yybegin(SVELTE_TAG_PAREN_AWARE); return AS; }
-  ","                { if (leftBraceCount == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
+  ","                { if (braces == 0) { return COMMA; } else { return CODE_FRAGMENT; } }
 
-  {WHITE_SPACE}      { if (leftBraceCount == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
+  {WHITE_SPACE}      { if (braces == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
   {ID}("then"|"as"){ID}           { return CODE_FRAGMENT; }
   ("then"|"as"){ID}               { return CODE_FRAGMENT; }
   {ID}("then"|"as")               { return CODE_FRAGMENT; }
@@ -87,8 +87,8 @@ ID=[$_a-zA-Z0-9]+
     Key expressions are wrapped in parens and can contain any number of paren pairs. Wrapping parens need to be distinguished.
  */
 <SVELTE_TAG_PAREN_AWARE> {
-  "("                { leftParenCount += 1; if (leftParenCount == 1) { return START_PAREN; } else { return CODE_FRAGMENT; } }
-  ")"                { leftParenCount -= 1; if (leftParenCount == 0) { return END_PAREN; } else { return CODE_FRAGMENT; } }
+  "("                { parens += 1; if (parens == 1) { return START_PAREN; } else { return CODE_FRAGMENT; } }
+  ")"                { parens -= 1; if (parens == 0) { return END_PAREN; } else { return CODE_FRAGMENT; } }
 }
 
 <SVELTE_INTERPOLATION_PRE> {
@@ -96,13 +96,13 @@ ID=[$_a-zA-Z0-9]+
   "@html"            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX; }
   "@debug"           { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX; }
   "@" | "@"{ID}      { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER; }
-  "{"                { yybegin(SVELTE_INTERPOLATION); leftBraceCount += 1; return CODE_FRAGMENT; }
+  "{"                { yybegin(SVELTE_INTERPOLATION); braces += 1; return CODE_FRAGMENT; }
   [^]                { yybegin(SVELTE_INTERPOLATION); return CODE_FRAGMENT; }
 }
 
 <SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_ELSE_TAG, SVELTE_TAG_PAREN_AWARE> {
-  "{"                { leftBraceCount += 1; return CODE_FRAGMENT; }
-  "}"                { if (leftBraceCount == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { leftBraceCount -= 1; return CODE_FRAGMENT; } }
+  "{"                { braces += 1; return CODE_FRAGMENT; }
+  "}"                { if (braces == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { braces -= 1; return CODE_FRAGMENT; } }
 
   [^]                { return CODE_FRAGMENT; }
 }

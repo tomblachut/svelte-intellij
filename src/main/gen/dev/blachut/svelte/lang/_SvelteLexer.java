@@ -17,13 +17,19 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
  */
 public class _SvelteLexer implements FlexLexer {
 
-  /** This character denotes the end of file */
+  /**
+   * This character denotes the end of file
+   */
   public static final int YYEOF = -1;
 
-  /** initial size of the lookahead buffer */
+  /**
+   * initial size of the lookahead buffer
+   */
   private static final int ZZ_BUFFERSIZE = 16384;
 
-  /** lexical states */
+  /**
+   * lexical states
+   */
   public static final int YYINITIAL = 0;
   public static final int VERBATIM_COMMENT = 2;
   public static final int VERBATIM_HTML = 4;
@@ -33,27 +39,27 @@ public class _SvelteLexer implements FlexLexer {
   public static final int SVELTE_INTERPOLATION = 12;
   public static final int SVELTE_TAG_PRE = 14;
   public static final int SVELTE_TAG = 16;
-    public static final int SVELTE_ELSE_TAG = 18;
-    public static final int SVELTE_TAG_PAREN_AWARE = 20;
+  public static final int SVELTE_ELSE_TAG = 18;
+  public static final int SVELTE_TAG_PAREN_AWARE = 20;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
    * ZZ_LEXSTATE[l+1] is the state in the DFA for the lexical state l
-   *                  at the beginning of a line
+   * at the beginning of a line
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-      0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7,
-      8, 8, 9, 9, 10, 10
+    0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7,
+    8, 8, 9, 9, 10, 10
   };
 
-    /**
+  /**
    * Translates characters to character classes
    * Chosen bits are [7, 7, 7]
    * Total runtime size is 1928 bytes
    */
   public static int ZZ_CMAP(int ch) {
-    return ZZ_CMAP_A[(ZZ_CMAP_Y[ZZ_CMAP_Z[ch>>14]|((ch>>7)&0x7f)]<<7)|(ch&0x7f)];
+    return ZZ_CMAP_A[(ZZ_CMAP_Y[ZZ_CMAP_Z[ch >> 14] | ((ch >> 7) & 0x7f)] << 7) | (ch & 0x7f)];
   }
 
   /* The ZZ_CMAP_Z table has 68 entries */
@@ -66,35 +72,35 @@ public class _SvelteLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 640 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\5\1\22\0\1\1\1\4\1\44\1\20\1\2\2\0\1\43\1\31\1\32\2\0\1\30\1\5\1\0\1"+
-    "\22\12\2\1\21\1\0\1\3\1\0\1\42\1\0\1\33\32\2\4\0\1\2\1\0\1\24\1\36\1\7\1\35"+
-    "\1\16\1\23\1\40\1\25\1\11\2\2\1\15\1\34\1\27\1\2\1\12\1\2\1\10\1\6\1\13\1"+
-    "\37\1\2\1\26\1\2\1\14\1\2\1\17\1\0\1\41\7\0\1\1\32\0\1\1\337\0\1\1\177\0\13"+
-    "\1\35\0\2\1\5\0\1\1\57\0\1\1\40\0");
+    "\11\0\5\1\22\0\1\1\1\4\1\44\1\20\1\2\2\0\1\43\1\31\1\32\2\0\1\30\1\5\1\0\1" +
+      "\22\12\2\1\21\1\0\1\3\1\0\1\42\1\0\1\33\32\2\4\0\1\2\1\0\1\24\1\36\1\7\1\35" +
+      "\1\16\1\23\1\40\1\25\1\11\2\2\1\15\1\34\1\27\1\2\1\12\1\2\1\10\1\6\1\13\1" +
+      "\37\1\2\1\26\1\2\1\14\1\2\1\17\1\0\1\41\7\0\1\1\32\0\1\1\337\0\1\1\177\0\13" +
+      "\1\35\0\2\1\5\0\1\1\57\0\1\1\40\0");
 
-    /**
+  /**
    * Translates DFA states to action switch labels.
    */
-  private static final int [] ZZ_ACTION = zzUnpackAction();
+  private static final int[] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-      "\13\0\1\1\1\2\1\3\1\4\2\1\1\5\1\6" +
-          "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16" +
-          "\1\17\1\20\6\21\1\22\3\15\1\23\2\24\1\25" +
-          "\1\26\3\0\1\27\1\30\1\31\2\0\3\14\1\21" +
-          "\1\32\4\21\4\0\1\33\1\32\4\0\2\14\5\21" +
-          "\1\0\1\15\1\0\1\34\4\0\2\14\1\21\1\35" +
-          "\1\36\1\37\1\21\1\0\1\40\4\0\1\41\1\14" +
-          "\1\42\1\43\1\0\1\44\2\0\1\45\1\0";
+    "\13\0\1\1\1\2\1\3\1\4\2\1\1\5\1\6" +
+      "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16" +
+      "\1\17\1\20\6\21\1\22\3\15\1\23\2\24\1\25" +
+      "\1\26\3\0\1\27\1\30\1\31\2\0\3\14\1\21" +
+      "\1\32\4\21\4\0\1\33\1\32\4\0\2\14\5\21" +
+      "\1\0\1\15\1\0\1\34\4\0\2\14\1\21\1\35" +
+      "\1\36\1\37\1\21\1\0\1\40\4\0\1\41\1\14" +
+      "\1\42\1\43\1\0\1\44\2\0\1\45\1\0";
 
-  private static int [] zzUnpackAction() {
-      int[] result = new int[109];
+  private static int[] zzUnpackAction() {
+    int[] result = new int[109];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
   }
 
-  private static int zzUnpackAction(String packed, int offset, int [] result) {
+  private static int zzUnpackAction(String packed, int offset, int[] result) {
     int i = 0;       /* index in packed string  */
     int j = offset;  /* index in unpacked array */
     int l = packed.length();
@@ -107,35 +113,35 @@ public class _SvelteLexer implements FlexLexer {
   }
 
 
-    /**
+  /**
    * Translates a state to a row index in the transition table
    */
-  private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
+  private static final int[] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\45\0\112\0\157\0\224\0\271\0\336\0\u0103"+
-    "\0\u0128\0\u014d\0\u0172\0\u0197\0\u01bc\0\u01e1\0\u0206\0\u022b"+
-        "\0\u0250\0\u0197\0\u0197\0\u0197\0\u0197\0\u0197\0\u0197\0\u0197" +
-        "\0\u0275\0\u0197\0\u0197\0\u0197\0\u029a\0\u02bf\0\u02e4\0\u0309" +
-        "\0\u032e\0\u0353\0\u0378\0\u039d\0\u03c2\0\u03e7\0\u040c\0\u0197" +
-        "\0\u0431\0\u0456\0\u0197\0\u0197\0\u047b\0\u04a0\0\u0206\0\u0197" +
-        "\0\u0197\0\u0197\0\u04c5\0\u04ea\0\u050f\0\u0534\0\u0559\0\u057e" +
-        "\0\u02bf\0\u05a3\0\u05c8\0\u05ed\0\u0612\0\u03c2\0\u0637\0\u065c" +
-        "\0\u0681\0\u06a6\0\u0431\0\u06cb\0\u06f0\0\u0715\0\u073a\0\u075f" +
-        "\0\u0784\0\u07a9\0\u07ce\0\u07f3\0\u0818\0\u083d\0\u0862\0\u06a6" +
-        "\0\u0887\0\u0197\0\u08ac\0\u08d1\0\u08f6\0\u091b\0\u0940\0\u0965" +
-        "\0\u098a\0\u02bf\0\u02bf\0\u02bf\0\u09af\0\u09d4\0\u06a6\0\u09f9" +
-        "\0\u0a1e\0\u0a43\0\u0a68\0\u050f\0\u0a8d\0\u02bf\0\u02bf\0\u0ab2" +
-        "\0\u0197\0\u0ad7\0\u0afc\0\u050f\0\u0b21";
+    "\0\0\0\45\0\112\0\157\0\224\0\271\0\336\0\u0103" +
+      "\0\u0128\0\u014d\0\u0172\0\u0197\0\u01bc\0\u01e1\0\u0206\0\u022b" +
+      "\0\u0250\0\u0197\0\u0197\0\u0197\0\u0197\0\u0197\0\u0197\0\u0197" +
+      "\0\u0275\0\u0197\0\u0197\0\u0197\0\u029a\0\u02bf\0\u02e4\0\u0309" +
+      "\0\u032e\0\u0353\0\u0378\0\u039d\0\u03c2\0\u03e7\0\u040c\0\u0197" +
+      "\0\u0431\0\u0456\0\u0197\0\u0197\0\u047b\0\u04a0\0\u0206\0\u0197" +
+      "\0\u0197\0\u0197\0\u04c5\0\u04ea\0\u050f\0\u0534\0\u0559\0\u057e" +
+      "\0\u02bf\0\u05a3\0\u05c8\0\u05ed\0\u0612\0\u03c2\0\u0637\0\u065c" +
+      "\0\u0681\0\u06a6\0\u0431\0\u06cb\0\u06f0\0\u0715\0\u073a\0\u075f" +
+      "\0\u0784\0\u07a9\0\u07ce\0\u07f3\0\u0818\0\u083d\0\u0862\0\u06a6" +
+      "\0\u0887\0\u0197\0\u08ac\0\u08d1\0\u08f6\0\u091b\0\u0940\0\u0965" +
+      "\0\u098a\0\u02bf\0\u02bf\0\u02bf\0\u09af\0\u09d4\0\u06a6\0\u09f9" +
+      "\0\u0a1e\0\u0a43\0\u0a68\0\u050f\0\u0a8d\0\u02bf\0\u02bf\0\u0ab2" +
+      "\0\u0197\0\u0ad7\0\u0afc\0\u050f\0\u0b21";
 
-  private static int [] zzUnpackRowMap() {
-      int[] result = new int[109];
+  private static int[] zzUnpackRowMap() {
+    int[] result = new int[109];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
   }
 
-  private static int zzUnpackRowMap(String packed, int offset, int [] result) {
+  private static int zzUnpackRowMap(String packed, int offset, int[] result) {
     int i = 0;  /* index in packed string  */
     int j = offset;  /* index in unpacked array */
     int l = packed.length();
@@ -146,92 +152,92 @@ public class _SvelteLexer implements FlexLexer {
     return j;
   }
 
-    /**
+  /**
    * The transition table of the DFA
    */
-  private static final int [] ZZ_TRANS = zzUnpackTrans();
+  private static final int[] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-      "\1\14\1\15\1\14\1\16\13\14\1\17\32\14\1\20" +
-          "\42\14\1\21\103\14\1\22\1\23\1\24\43\14\1\25" +
-          "\1\26\1\27\1\15\15\27\1\30\13\27\1\31\11\27" +
-          "\17\32\1\33\21\32\1\34\3\32\1\14\1\35\1\36" +
-          "\3\14\1\36\1\37\1\36\1\40\1\36\1\41\2\36" +
-          "\1\42\4\14\1\36\1\43\3\36\4\14\5\36\4\14" +
-          "\1\32\1\44\1\45\3\32\5\45\1\46\3\45\1\33" +
-          "\3\32\1\45\1\47\3\45\1\50\3\32\5\45\1\34" +
-          "\4\32\1\15\1\51\3\32\3\51\1\52\5\51\1\33" +
-          "\3\32\5\51\4\32\5\51\1\34\4\32\1\44\1\45" +
-          "\3\32\5\45\1\46\3\45\1\33\3\32\1\45\1\47" +
-          "\3\45\1\50\1\53\1\54\1\32\5\45\1\34\3\32" +
-          "\46\0\1\15\47\0\1\55\1\0\1\56\37\0\1\57" +
-          "\16\0\1\60\1\61\1\62\27\0\1\63\61\0\1\64" +
-          "\24\0\1\65\3\0\11\65\4\0\2\65\1\66\2\65" +
-          "\4\0\1\65\1\67\3\65\5\0\1\35\45\0\1\36" +
-          "\3\0\11\36\4\0\5\36\4\0\5\36\6\0\1\36" +
-          "\3\0\11\36\4\0\1\36\1\70\3\36\4\0\5\36" +
-          "\6\0\1\36\3\0\11\36\4\0\1\71\4\36\4\0" +
-          "\5\36\6\0\1\36\3\0\11\36\4\0\2\36\1\72" +
-          "\2\36\4\0\5\36\6\0\1\36\3\0\7\36\1\73" +
-          "\1\36\4\0\1\36\1\74\3\36\4\0\5\36\6\0" +
-          "\1\36\3\0\11\36\4\0\3\36\1\75\1\36\4\0" +
-          "\5\36\5\0\1\44\45\0\1\76\3\0\5\76\1\77" +
-          "\3\76\4\0\1\76\1\100\3\76\4\0\5\76\6\0" +
-          "\1\76\3\0\5\76\1\77\3\76\4\0\1\76\1\100" +
-          "\1\101\2\76\4\0\5\76\6\0\1\76\3\0\1\102" +
-          "\4\76\1\77\3\76\4\0\1\76\1\100\3\76\4\0" +
-          "\5\76\6\0\1\51\3\0\11\51\4\0\5\51\4\0" +
-          "\5\51\6\0\1\51\3\0\11\51\4\0\1\103\4\51" +
-          "\4\0\5\51\11\0\1\104\46\0\1\105\3\0\1\106" +
-          "\73\0\1\22\10\0\1\107\40\0\1\65\3\0\11\65" +
-          "\4\0\5\65\4\0\5\65\6\0\1\65\3\0\5\65" +
-          "\1\110\3\65\4\0\5\65\4\0\5\65\6\0\1\65" +
-          "\3\0\10\65\1\111\4\0\5\65\4\0\5\65\6\0" +
-          "\1\36\3\0\5\36\1\112\3\36\4\0\5\36\4\0" +
-          "\5\36\6\0\1\36\3\0\10\36\1\113\4\0\5\36" +
-          "\4\0\5\36\6\0\1\36\3\0\1\114\10\36\4\0" +
-          "\5\36\4\0\5\36\6\0\1\36\3\0\1\36\1\115" +
-          "\7\36\4\0\5\36\4\0\5\36\6\0\1\36\3\0" +
-          "\11\36\4\0\1\36\1\116\3\36\4\0\5\36\6\0" +
-          "\1\76\3\0\5\76\1\77\3\76\4\0\1\76\1\100" +
-          "\1\117\2\76\4\0\5\76\6\0\1\76\3\0\1\120" +
-          "\4\76\1\77\3\76\4\0\1\76\1\100\3\76\4\0" +
-          "\5\76\6\0\1\76\3\0\5\76\1\77\2\76\1\121" +
-          "\4\0\1\76\1\100\3\76\4\0\5\76\6\0\1\120" +
-          "\3\0\11\120\4\0\5\120\4\0\5\120\11\0\1\122" +
-          "\47\0\1\123\50\0\1\124\37\0\1\125\3\0\1\126" +
-          "\33\0\1\65\3\0\11\65\4\0\5\65\4\0\1\127" +
-          "\4\65\6\0\1\65\3\0\11\65\4\0\5\65\4\0" +
-          "\2\65\1\130\2\65\6\0\1\36\3\0\1\36\1\131" +
-          "\7\36\4\0\5\36\4\0\5\36\6\0\1\36\3\0" +
-          "\11\36\4\0\4\36\1\132\4\0\5\36\6\0\1\36" +
-          "\3\0\10\36\1\133\4\0\5\36\4\0\5\36\6\0" +
-          "\1\36\3\0\11\36\4\0\2\36\1\134\2\36\4\0" +
-          "\5\36\6\0\1\36\3\0\3\36\1\135\5\36\4\0" +
-          "\5\36\4\0\5\36\6\0\1\76\3\0\5\76\1\77" +
-          "\2\76\1\136\4\0\1\76\1\100\3\76\4\0\5\76" +
-          "\6\0\1\76\3\0\5\76\1\77\3\76\4\0\1\76" +
-          "\1\100\2\76\1\137\4\0\5\76\15\0\1\140\50\0" +
-          "\1\141\37\0\1\142\50\0\1\143\32\0\1\65\3\0" +
-          "\7\65\1\144\1\65\4\0\5\65\4\0\5\65\6\0" +
-          "\1\65\3\0\11\65\4\0\5\65\4\0\3\65\1\145" +
-          "\1\65\6\0\1\36\3\0\11\36\4\0\2\36\1\146" +
-          "\2\36\4\0\5\36\6\0\1\36\3\0\5\36\1\147" +
-          "\3\36\4\0\5\36\4\0\5\36\6\0\1\76\3\0" +
-          "\5\76\1\77\3\76\4\0\1\76\1\100\2\76\1\120" +
-          "\4\0\5\76\16\0\1\150\50\0\1\151\37\0\1\152" +
-          "\50\0\1\153\31\0\1\65\3\0\11\65\4\0\5\65" +
-          "\4\0\4\65\1\154\17\0\1\151\43\0\1\155\50\0" +
-          "\1\63\41\0\1\63\31\0";
+    "\1\14\1\15\1\14\1\16\13\14\1\17\32\14\1\20" +
+      "\42\14\1\21\103\14\1\22\1\23\1\24\43\14\1\25" +
+      "\1\26\1\27\1\15\15\27\1\30\13\27\1\31\11\27" +
+      "\17\32\1\33\21\32\1\34\3\32\1\14\1\35\1\36" +
+      "\3\14\1\36\1\37\1\36\1\40\1\36\1\41\2\36" +
+      "\1\42\4\14\1\36\1\43\3\36\4\14\5\36\4\14" +
+      "\1\32\1\44\1\45\3\32\5\45\1\46\3\45\1\33" +
+      "\3\32\1\45\1\47\3\45\1\50\3\32\5\45\1\34" +
+      "\4\32\1\15\1\51\3\32\3\51\1\52\5\51\1\33" +
+      "\3\32\5\51\4\32\5\51\1\34\4\32\1\44\1\45" +
+      "\3\32\5\45\1\46\3\45\1\33\3\32\1\45\1\47" +
+      "\3\45\1\50\1\53\1\54\1\32\5\45\1\34\3\32" +
+      "\46\0\1\15\47\0\1\55\1\0\1\56\37\0\1\57" +
+      "\16\0\1\60\1\61\1\62\27\0\1\63\61\0\1\64" +
+      "\24\0\1\65\3\0\11\65\4\0\2\65\1\66\2\65" +
+      "\4\0\1\65\1\67\3\65\5\0\1\35\45\0\1\36" +
+      "\3\0\11\36\4\0\5\36\4\0\5\36\6\0\1\36" +
+      "\3\0\11\36\4\0\1\36\1\70\3\36\4\0\5\36" +
+      "\6\0\1\36\3\0\11\36\4\0\1\71\4\36\4\0" +
+      "\5\36\6\0\1\36\3\0\11\36\4\0\2\36\1\72" +
+      "\2\36\4\0\5\36\6\0\1\36\3\0\7\36\1\73" +
+      "\1\36\4\0\1\36\1\74\3\36\4\0\5\36\6\0" +
+      "\1\36\3\0\11\36\4\0\3\36\1\75\1\36\4\0" +
+      "\5\36\5\0\1\44\45\0\1\76\3\0\5\76\1\77" +
+      "\3\76\4\0\1\76\1\100\3\76\4\0\5\76\6\0" +
+      "\1\76\3\0\5\76\1\77\3\76\4\0\1\76\1\100" +
+      "\1\101\2\76\4\0\5\76\6\0\1\76\3\0\1\102" +
+      "\4\76\1\77\3\76\4\0\1\76\1\100\3\76\4\0" +
+      "\5\76\6\0\1\51\3\0\11\51\4\0\5\51\4\0" +
+      "\5\51\6\0\1\51\3\0\11\51\4\0\1\103\4\51" +
+      "\4\0\5\51\11\0\1\104\46\0\1\105\3\0\1\106" +
+      "\73\0\1\22\10\0\1\107\40\0\1\65\3\0\11\65" +
+      "\4\0\5\65\4\0\5\65\6\0\1\65\3\0\5\65" +
+      "\1\110\3\65\4\0\5\65\4\0\5\65\6\0\1\65" +
+      "\3\0\10\65\1\111\4\0\5\65\4\0\5\65\6\0" +
+      "\1\36\3\0\5\36\1\112\3\36\4\0\5\36\4\0" +
+      "\5\36\6\0\1\36\3\0\10\36\1\113\4\0\5\36" +
+      "\4\0\5\36\6\0\1\36\3\0\1\114\10\36\4\0" +
+      "\5\36\4\0\5\36\6\0\1\36\3\0\1\36\1\115" +
+      "\7\36\4\0\5\36\4\0\5\36\6\0\1\36\3\0" +
+      "\11\36\4\0\1\36\1\116\3\36\4\0\5\36\6\0" +
+      "\1\76\3\0\5\76\1\77\3\76\4\0\1\76\1\100" +
+      "\1\117\2\76\4\0\5\76\6\0\1\76\3\0\1\120" +
+      "\4\76\1\77\3\76\4\0\1\76\1\100\3\76\4\0" +
+      "\5\76\6\0\1\76\3\0\5\76\1\77\2\76\1\121" +
+      "\4\0\1\76\1\100\3\76\4\0\5\76\6\0\1\120" +
+      "\3\0\11\120\4\0\5\120\4\0\5\120\11\0\1\122" +
+      "\47\0\1\123\50\0\1\124\37\0\1\125\3\0\1\126" +
+      "\33\0\1\65\3\0\11\65\4\0\5\65\4\0\1\127" +
+      "\4\65\6\0\1\65\3\0\11\65\4\0\5\65\4\0" +
+      "\2\65\1\130\2\65\6\0\1\36\3\0\1\36\1\131" +
+      "\7\36\4\0\5\36\4\0\5\36\6\0\1\36\3\0" +
+      "\11\36\4\0\4\36\1\132\4\0\5\36\6\0\1\36" +
+      "\3\0\10\36\1\133\4\0\5\36\4\0\5\36\6\0" +
+      "\1\36\3\0\11\36\4\0\2\36\1\134\2\36\4\0" +
+      "\5\36\6\0\1\36\3\0\3\36\1\135\5\36\4\0" +
+      "\5\36\4\0\5\36\6\0\1\76\3\0\5\76\1\77" +
+      "\2\76\1\136\4\0\1\76\1\100\3\76\4\0\5\76" +
+      "\6\0\1\76\3\0\5\76\1\77\3\76\4\0\1\76" +
+      "\1\100\2\76\1\137\4\0\5\76\15\0\1\140\50\0" +
+      "\1\141\37\0\1\142\50\0\1\143\32\0\1\65\3\0" +
+      "\7\65\1\144\1\65\4\0\5\65\4\0\5\65\6\0" +
+      "\1\65\3\0\11\65\4\0\5\65\4\0\3\65\1\145" +
+      "\1\65\6\0\1\36\3\0\11\36\4\0\2\36\1\146" +
+      "\2\36\4\0\5\36\6\0\1\36\3\0\5\36\1\147" +
+      "\3\36\4\0\5\36\4\0\5\36\6\0\1\76\3\0" +
+      "\5\76\1\77\3\76\4\0\1\76\1\100\2\76\1\120" +
+      "\4\0\5\76\16\0\1\150\50\0\1\151\37\0\1\152" +
+      "\50\0\1\153\31\0\1\65\3\0\11\65\4\0\5\65" +
+      "\4\0\4\65\1\154\17\0\1\151\43\0\1\155\50\0" +
+      "\1\63\41\0\1\63\31\0";
 
-  private static int [] zzUnpackTrans() {
-      int[] result = new int[2886];
+  private static int[] zzUnpackTrans() {
+    int[] result = new int[2886];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
   }
 
-  private static int zzUnpackTrans(String packed, int offset, int [] result) {
+  private static int zzUnpackTrans(String packed, int offset, int[] result) {
     int i = 0;       /* index in packed string  */
     int j = offset;  /* index in unpacked array */
     int l = packed.length();
@@ -260,23 +266,23 @@ public class _SvelteLexer implements FlexLexer {
   /**
    * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>
    */
-  private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
+  private static final int[] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-      "\13\0\1\11\5\1\7\11\1\1\3\11\13\1\1\11" +
-          "\2\1\2\11\3\0\3\11\2\0\11\1\4\0\2\1" +
-          "\4\0\7\1\1\0\1\1\1\0\1\11\4\0\7\1" +
-          "\1\0\1\1\4\0\4\1\1\0\1\11\2\0\1\1" +
-          "\1\0";
+    "\13\0\1\11\5\1\7\11\1\1\3\11\13\1\1\11" +
+      "\2\1\2\11\3\0\3\11\2\0\11\1\4\0\2\1" +
+      "\4\0\7\1\1\0\1\1\1\0\1\11\4\0\7\1" +
+      "\1\0\1\1\4\0\4\1\1\0\1\11\2\0\1\1" +
+      "\1\0";
 
-  private static int [] zzUnpackAttribute() {
-      int[] result = new int[109];
+  private static int[] zzUnpackAttribute() {
+    int[] result = new int[109];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
   }
 
-  private static int zzUnpackAttribute(String packed, int offset, int [] result) {
+  private static int zzUnpackAttribute(String packed, int offset, int[] result) {
     int i = 0;       /* index in packed string  */
     int j = offset;  /* index in unpacked array */
     int l = packed.length();
@@ -288,30 +294,46 @@ public class _SvelteLexer implements FlexLexer {
     return j;
   }
 
-  /** the input device */
+  /**
+   * the input device
+   */
   private java.io.Reader zzReader;
 
-  /** the current state of the DFA */
+  /**
+   * the current state of the DFA
+   */
   private int zzState;
 
-  /** the current lexical state */
+  /**
+   * the current lexical state
+   */
   private int zzLexicalState = YYINITIAL;
 
-  /** this buffer contains the current text to be matched and is
-      the source of the yytext() string */
+  /**
+   * this buffer contains the current text to be matched and is
+   * the source of the yytext() string
+   */
   private CharSequence zzBuffer = "";
 
-  /** the textposition at the last accepting state */
+  /**
+   * the textposition at the last accepting state
+   */
   private int zzMarkedPos;
 
-  /** the current text position in the buffer */
+  /**
+   * the current text position in the buffer
+   */
   private int zzCurrentPos;
 
-  /** startRead marks the beginning of the yytext() string in the buffer */
+  /**
+   * startRead marks the beginning of the yytext() string in the buffer
+   */
   private int zzStartRead;
 
-  /** endRead marks the last character in the buffer, that has been read
-      from input */
+  /**
+   * endRead marks the last character in the buffer, that has been read
+   * from input
+   */
   private int zzEndRead;
 
   /**
@@ -319,35 +341,39 @@ public class _SvelteLexer implements FlexLexer {
    */
   private boolean zzAtBOL = true;
 
-  /** zzAtEOF == true <=> the scanner is at the EOF */
+  /**
+   * zzAtEOF == true <=> the scanner is at the EOF
+   */
   private boolean zzAtEOF;
 
-  /** denotes if the user-EOF-code has already been executed */
+  /**
+   * denotes if the user-EOF-code has already been executed
+   */
   private boolean zzEOFDone;
 
   /* user code: */
   private char quote;
-  private int leftBraceCount;
-  private int leftParenCount;
+  private int braces;
+  private int parens;
 
 
   /**
    * Creates a new scanner
    *
-   * @param   in  the java.io.Reader to read input from.
+   * @param in the java.io.Reader to read input from.
    */
   public _SvelteLexer(java.io.Reader in) {
     this.zzReader = in;
   }
 
 
-    /**
+  /**
    * Unpacks the compressed character translation table.
    *
-   * @param packed   the packed character translation table
-   * @return         the unpacked character translation table
+   * @param packed the packed character translation table
+   * @return the unpacked character translation table
    */
-  private static char [] zzUnpackCMap(String packed) {
+  private static char[] zzUnpackCMap(String packed) {
     int size = 0;
     for (int i = 0, length = packed.length(); i < length; i += 2) {
       size += packed.charAt(i);
@@ -356,7 +382,7 @@ public class _SvelteLexer implements FlexLexer {
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
     while (i < packed.length()) {
-      int  count = packed.charAt(i++);
+      int count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);
     }
@@ -374,7 +400,7 @@ public class _SvelteLexer implements FlexLexer {
   public void reset(CharSequence buffer, int start, int end, int initialState) {
     zzBuffer = buffer;
     zzCurrentPos = zzMarkedPos = zzStartRead = start;
-    zzAtEOF  = false;
+    zzAtEOF = false;
     zzAtBOL = true;
     zzEndRead = end;
     yybegin(initialState);
@@ -383,9 +409,8 @@ public class _SvelteLexer implements FlexLexer {
   /**
    * Refills the input buffer.
    *
-   * @return      <code>false</code>, iff there was new input.
-   *
-   * @exception   java.io.IOException  if any I/O-Error occurs
+   * @return <code>false</code>, iff there was new input.
+   * @throws java.io.IOException if any I/O-Error occurs
    */
   private boolean zzRefill() throws java.io.IOException {
     return true;
@@ -421,16 +446,15 @@ public class _SvelteLexer implements FlexLexer {
   /**
    * Returns the character at position <tt>pos</tt> from the
    * matched text.
-   *
+   * <p>
    * It is equivalent to yytext().charAt(pos), but faster
    *
    * @param pos the position of the character to fetch.
    *            A value from 0 to yylength()-1.
-   *
    * @return the character at position pos
    */
   public final char yycharat(int pos) {
-    return zzBuffer.charAt(zzStartRead+pos);
+    return zzBuffer.charAt(zzStartRead + pos);
   }
 
 
@@ -438,30 +462,29 @@ public class _SvelteLexer implements FlexLexer {
    * Returns the length of the matched text region.
    */
   public final int yylength() {
-    return zzMarkedPos-zzStartRead;
+    return zzMarkedPos - zzStartRead;
   }
 
 
   /**
    * Reports an error that occured while scanning.
-   *
+   * <p>
    * In a wellformed scanner (no or only correct usage of
    * yypushback(int) and a match-all fallback rule) this method
    * will only be called with things that "Can't Possibly Happen".
    * If this method is called, something is seriously wrong
    * (e.g. a JFlex bug producing a faulty scanner etc.).
-   *
+   * <p>
    * Usual syntax/scanner level error handling should be done
    * in error fallback rules.
    *
-   * @param   errorCode  the code of the errormessage to display
+   * @param errorCode the code of the errormessage to display
    */
   private void zzScanError(int errorCode) {
     String message;
     try {
       message = ZZ_ERROR_MSG[errorCode];
-    }
-    catch (ArrayIndexOutOfBoundsException e) {
+    } catch (ArrayIndexOutOfBoundsException e) {
       message = ZZ_ERROR_MSG[ZZ_UNKNOWN_ERROR];
     }
 
@@ -471,14 +494,14 @@ public class _SvelteLexer implements FlexLexer {
 
   /**
    * Pushes the specified amount of characters back into the input stream.
-   *
+   * <p>
    * They will be read again by then next call of the scanning method
    *
-   * @param number  the number of characters to be read again.
-   *                This number must not be greater than yylength()!
+   * @param number the number of characters to be read again.
+   *               This number must not be greater than yylength()!
    */
-  public void yypushback(int number)  {
-    if ( number > yylength() )
+  public void yypushback(int number) {
+    if (number > yylength())
       zzScanError(ZZ_PUSHBACK_2BIG);
 
     zzMarkedPos -= number;
@@ -492,8 +515,8 @@ public class _SvelteLexer implements FlexLexer {
   private void zzDoEOF() {
     if (!zzEOFDone) {
       zzEOFDone = true;
-      leftBraceCount = 0;
-  leftParenCount = 0;
+      braces = 0;
+      parens = 0;
 
     }
   }
@@ -503,8 +526,8 @@ public class _SvelteLexer implements FlexLexer {
    * Resumes scanning until the next regular expression is matched,
    * the end of input is encountered or an I/O-Error occurs.
    *
-   * @return      the next token
-   * @exception   java.io.IOException  if any I/O-Error occurs
+   * @return the next token
+   * @throws java.io.IOException if any I/O-Error occurs
    */
   public IElementType advance() throws java.io.IOException {
     int zzInput;
@@ -516,9 +539,9 @@ public class _SvelteLexer implements FlexLexer {
     int zzEndReadL = zzEndRead;
     CharSequence zzBufferL = zzBuffer;
 
-    int [] zzTransL = ZZ_TRANS;
-    int [] zzRowMapL = ZZ_ROWMAP;
-    int [] zzAttrL = ZZ_ATTRIBUTE;
+    int[] zzTransL = ZZ_TRANS;
+    int[] zzRowMapL = ZZ_ROWMAP;
+    int[] zzAttrL = ZZ_ATTRIBUTE;
 
     while (true) {
       zzMarkedPosL = zzMarkedPos;
@@ -531,50 +554,48 @@ public class _SvelteLexer implements FlexLexer {
 
       // set up zzAction for empty match case:
       int zzAttributes = zzAttrL[zzState];
-      if ( (zzAttributes & 1) == 1 ) {
+      if ((zzAttributes & 1) == 1) {
         zzAction = zzState;
       }
 
 
-      zzForAction: {
+      zzForAction:
+      {
         while (true) {
 
           if (zzCurrentPosL < zzEndReadL) {
             zzInput = Character.codePointAt(zzBufferL, zzCurrentPosL/*, zzEndReadL*/);
             zzCurrentPosL += Character.charCount(zzInput);
-          }
-          else if (zzAtEOF) {
+          } else if (zzAtEOF) {
             zzInput = YYEOF;
             break zzForAction;
-          }
-          else {
+          } else {
             // store back cached positions
-            zzCurrentPos  = zzCurrentPosL;
-            zzMarkedPos   = zzMarkedPosL;
+            zzCurrentPos = zzCurrentPosL;
+            zzMarkedPos = zzMarkedPosL;
             boolean eof = zzRefill();
             // get translated positions and possibly new buffer
-            zzCurrentPosL  = zzCurrentPos;
-            zzMarkedPosL   = zzMarkedPos;
-            zzBufferL      = zzBuffer;
-            zzEndReadL     = zzEndRead;
+            zzCurrentPosL = zzCurrentPos;
+            zzMarkedPosL = zzMarkedPos;
+            zzBufferL = zzBuffer;
+            zzEndReadL = zzEndRead;
             if (eof) {
               zzInput = YYEOF;
               break zzForAction;
-            }
-            else {
+            } else {
               zzInput = Character.codePointAt(zzBufferL, zzCurrentPosL/*, zzEndReadL*/);
               zzCurrentPosL += Character.charCount(zzInput);
             }
           }
-          int zzNext = zzTransL[ zzRowMapL[zzState] + ZZ_CMAP(zzInput) ];
+          int zzNext = zzTransL[zzRowMapL[zzState] + ZZ_CMAP(zzInput)];
           if (zzNext == -1) break zzForAction;
           zzState = zzNext;
 
           zzAttributes = zzAttrL[zzState];
-          if ( (zzAttributes & 1) == 1 ) {
+          if ((zzAttributes & 1) == 1) {
             zzAction = zzState;
             zzMarkedPosL = zzCurrentPosL;
-            if ( (zzAttributes & 8) == 8 ) break zzForAction;
+            if ((zzAttributes & 8) == 8) break zzForAction;
           }
 
         }
@@ -587,261 +608,287 @@ public class _SvelteLexer implements FlexLexer {
         zzAtEOF = true;
         zzDoEOF();
         return null;
-      }
-      else {
+      } else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
-            case 1:
-            { return HTML_FRAGMENT;
+          case 1: {
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 38:
+            break;
+          case 2: {
+            return WHITE_SPACE;
+          }
+          // fall through
+          case 39:
+            break;
+          case 3: {
+            yybegin(HTML_TAG);
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 40:
+            break;
+          case 4: {
+            yybegin(SVELTE_INTERPOLATION_PRE);
+            return START_MUSTACHE;
+          }
+          // fall through
+          case 41:
+            break;
+          case 5: {
+            yybegin(YYINITIAL);
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 42:
+            break;
+          case 6: {
+            yybegin(TAG_STRING);
+            quote = '\'';
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 43:
+            break;
+          case 7: {
+            yybegin(TAG_STRING);
+            quote = '"';
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 44:
+            break;
+          case 8: {
+            if (quote == '\'') yybegin(HTML_TAG);
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 45:
+            break;
+          case 9: {
+            if (quote == '"') yybegin(HTML_TAG);
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 46:
+            break;
+          case 10: {
+            yybegin(SVELTE_INTERPOLATION);
+            return CODE_FRAGMENT;
+          }
+          // fall through
+          case 47:
+            break;
+          case 11: {
+            yybegin(SVELTE_INTERPOLATION);
+            braces += 1;
+            return CODE_FRAGMENT;
+          }
+          // fall through
+          case 48:
+            break;
+          case 12: {
+            yybegin(SVELTE_INTERPOLATION);
+            return BAD_CHARACTER;
+          }
+          // fall through
+          case 49:
+            break;
+          case 13: {
+            return CODE_FRAGMENT;
+          }
+          // fall through
+          case 50:
+            break;
+          case 14: {
+            braces += 1;
+            return CODE_FRAGMENT;
+          }
+          // fall through
+          case 51:
+            break;
+          case 15: {
+            if (braces == 0) {
+              yybegin(YYINITIAL);
+              return END_MUSTACHE;
+            } else {
+              braces -= 1;
+              return CODE_FRAGMENT;
             }
-            // fall through
-            case 38:
-                break;
-            case 2:
-            { return WHITE_SPACE;
+          }
+          // fall through
+          case 52:
+            break;
+          case 16: {
+            return BAD_CHARACTER;
+          }
+          // fall through
+          case 53:
+            break;
+          case 17: {
+            yybegin(SVELTE_TAG);
+            return BAD_CHARACTER;
+          }
+          // fall through
+          case 54:
+            break;
+          case 18: {
+            if (braces == 0) {
+              return WHITE_SPACE;
+            } else {
+              return CODE_FRAGMENT;
             }
-            // fall through
-            case 39:
-                break;
-            case 3:
-            { yybegin(HTML_TAG); return HTML_FRAGMENT;
+          }
+          // fall through
+          case 55:
+            break;
+          case 19: {
+            if (braces == 0) {
+              return COMMA;
+            } else {
+              return CODE_FRAGMENT;
             }
-            // fall through
-            case 40:
-                break;
-            case 4: {
-                yybegin(SVELTE_INTERPOLATION_PRE);
-                return START_MUSTACHE;
+          }
+          // fall through
+          case 56:
+            break;
+          case 20: {
+            yybegin(SVELTE_TAG);
+            return CODE_FRAGMENT;
+          }
+          // fall through
+          case 57:
+            break;
+          case 21: {
+            parens += 1;
+            if (parens == 1) {
+              return START_PAREN;
+            } else {
+              return CODE_FRAGMENT;
             }
-            // fall through
-            case 41:
-                break;
-            case 5:
-            { yybegin(YYINITIAL); return HTML_FRAGMENT;
+          }
+          // fall through
+          case 58:
+            break;
+          case 22: {
+            parens -= 1;
+            if (parens == 0) {
+              return END_PAREN;
+            } else {
+              return CODE_FRAGMENT;
             }
-            // fall through
-            case 42:
-                break;
-            case 6:
-            { yybegin(TAG_STRING); quote = '\''; return HTML_FRAGMENT;
-            }
-            // fall through
-            case 43:
-                break;
-            case 7:
-            { yybegin(TAG_STRING); quote = '"'; return HTML_FRAGMENT;
-            }
-            // fall through
-            case 44:
-                break;
-            case 8:
-            { if (quote == '\'') yybegin(HTML_TAG); return HTML_FRAGMENT;
-            }
-            // fall through
-            case 45:
-                break;
-            case 9:
-            { if (quote == '"') yybegin(HTML_TAG); return HTML_FRAGMENT;
-            }
-            // fall through
-            case 46:
-                break;
-            case 10: {
-                yybegin(SVELTE_INTERPOLATION);
-                return CODE_FRAGMENT;
-            }
-            // fall through
-            case 47:
-                break;
-            case 11: {
-                yybegin(SVELTE_INTERPOLATION);
-                leftBraceCount += 1;
-                return CODE_FRAGMENT;
-            }
-            // fall through
-          case 48: break;
-            case 12: {
-                yybegin(SVELTE_INTERPOLATION);
-                return BAD_CHARACTER;
-            }
-            // fall through
-          case 49: break;
-            case 13: {
-                return CODE_FRAGMENT;
-            }
-            // fall through
-          case 50: break;
-            case 14: {
-                leftBraceCount += 1;
-                return CODE_FRAGMENT;
-            }
-            // fall through
-          case 51: break;
-            case 15: {
-                if (leftBraceCount == 0) {
-                    yybegin(YYINITIAL);
-                    return END_MUSTACHE;
-                } else {
-                    leftBraceCount -= 1;
-                    return CODE_FRAGMENT;
-                }
-            }
-            // fall through
-          case 52: break;
-            case 16: {
-                return BAD_CHARACTER;
-            }
-            // fall through
-          case 53: break;
-            case 17: {
-                yybegin(SVELTE_TAG);
-                return BAD_CHARACTER;
-            }
-            // fall through
-          case 54: break;
-            case 18: {
-                if (leftBraceCount == 0) {
-                    return WHITE_SPACE;
-                } else {
-                    return CODE_FRAGMENT;
-                }
-            }
-            // fall through
-          case 55: break;
-            case 19: {
-                if (leftBraceCount == 0) {
-                    return COMMA;
-                } else {
-                    return CODE_FRAGMENT;
-                }
-            }
-            // fall through
-          case 56: break;
-            case 20: {
-                yybegin(SVELTE_TAG);
-                return CODE_FRAGMENT;
-            }
-            // fall through
-          case 57: break;
-            case 21: {
-                leftParenCount += 1;
-                if (leftParenCount == 1) {
-                    return START_PAREN;
-                } else {
-                    return CODE_FRAGMENT;
-                }
-            }
-            // fall through
-          case 58: break;
-            case 22: {
-                leftParenCount -= 1;
-                if (leftParenCount == 0) {
-                    return END_PAREN;
-                } else {
-                    return CODE_FRAGMENT;
-                }
-            }
-            // fall through
-          case 59: break;
-            case 23: {
-                yybegin(SVELTE_TAG_PRE);
-                return START_OPENING_MUSTACHE;
-            }
-            // fall through
-          case 60: break;
-            case 24: {
-                yybegin(SVELTE_TAG_PRE);
-                return START_INNER_MUSTACHE;
-            }
-            // fall through
-          case 61: break;
-            case 25: {
-                yybegin(SVELTE_TAG_PRE);
-                return START_CLOSING_MUSTACHE;
-            }
-            // fall through
-          case 62: break;
-            case 26: {
-                yybegin(SVELTE_TAG);
-                return IF;
-            }
-            // fall through
-          case 63: break;
-            case 27: {
-                yybegin(SVELTE_TAG_PAREN_AWARE);
-                return AS;
-            }
-            // fall through
-          case 64: break;
-            case 28: {
-                yybegin(VERBATIM_COMMENT);
-                return HTML_FRAGMENT;
-            }
-            // fall through
-          case 65: break;
-            case 29: {
-                yybegin(SVELTE_TAG);
-                return THEN;
-            }
-            // fall through
-          case 66: break;
-            case 30: {
-                yybegin(SVELTE_ELSE_TAG);
-                return ELSE;
-            }
-            // fall through
-            case 67:
-                break;
-            case 31: {
-                yybegin(SVELTE_TAG);
-                return EACH;
-            }
-            // fall through
-            case 68:
-                break;
-            case 32: {
-                return THEN;
-            }
-            // fall through
-            case 69:
-                break;
-            case 33: {
-                yybegin(SVELTE_INTERPOLATION);
-                return HTML_PREFIX;
-            }
-            // fall through
-            case 70:
-                break;
-            case 34: {
-                yybegin(SVELTE_TAG);
-                return CATCH;
-            }
-            // fall through
-            case 71:
-                break;
-            case 35: {
-                yybegin(SVELTE_TAG);
-                return AWAIT;
-            }
-            // fall through
-            case 72:
-                break;
-            case 36: {
-                yybegin(VERBATIM_HTML);
-                return HTML_FRAGMENT;
-            }
-            // fall through
-            case 73:
-                break;
-            case 37: {
-                yybegin(SVELTE_INTERPOLATION);
-                return DEBUG_PREFIX;
-            }
-            // fall through
-            case 74:
-                break;
+          }
+          // fall through
+          case 59:
+            break;
+          case 23: {
+            yybegin(SVELTE_TAG_PRE);
+            return START_OPENING_MUSTACHE;
+          }
+          // fall through
+          case 60:
+            break;
+          case 24: {
+            yybegin(SVELTE_TAG_PRE);
+            return START_INNER_MUSTACHE;
+          }
+          // fall through
+          case 61:
+            break;
+          case 25: {
+            yybegin(SVELTE_TAG_PRE);
+            return START_CLOSING_MUSTACHE;
+          }
+          // fall through
+          case 62:
+            break;
+          case 26: {
+            yybegin(SVELTE_TAG);
+            return IF;
+          }
+          // fall through
+          case 63:
+            break;
+          case 27: {
+            yybegin(SVELTE_TAG_PAREN_AWARE);
+            return AS;
+          }
+          // fall through
+          case 64:
+            break;
+          case 28: {
+            yybegin(VERBATIM_COMMENT);
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 65:
+            break;
+          case 29: {
+            yybegin(SVELTE_TAG);
+            return THEN;
+          }
+          // fall through
+          case 66:
+            break;
+          case 30: {
+            yybegin(SVELTE_ELSE_TAG);
+            return ELSE;
+          }
+          // fall through
+          case 67:
+            break;
+          case 31: {
+            yybegin(SVELTE_TAG);
+            return EACH;
+          }
+          // fall through
+          case 68:
+            break;
+          case 32: {
+            return THEN;
+          }
+          // fall through
+          case 69:
+            break;
+          case 33: {
+            yybegin(SVELTE_INTERPOLATION);
+            return HTML_PREFIX;
+          }
+          // fall through
+          case 70:
+            break;
+          case 34: {
+            yybegin(SVELTE_TAG);
+            return CATCH;
+          }
+          // fall through
+          case 71:
+            break;
+          case 35: {
+            yybegin(SVELTE_TAG);
+            return AWAIT;
+          }
+          // fall through
+          case 72:
+            break;
+          case 36: {
+            yybegin(VERBATIM_HTML);
+            return HTML_FRAGMENT;
+          }
+          // fall through
+          case 73:
+            break;
+          case 37: {
+            yybegin(SVELTE_INTERPOLATION);
+            return DEBUG_PREFIX;
+          }
+          // fall through
+          case 74:
+            break;
           default:
             zzScanError(ZZ_NO_MATCH);
-          }
+        }
       }
     }
   }
