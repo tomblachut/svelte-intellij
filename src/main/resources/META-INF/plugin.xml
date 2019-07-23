@@ -61,8 +61,15 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>JavaScript</depends>
 
+    <actions>
+        <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewJavaScriptFile"/>
+        </action>
+    </actions>
+
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="dev.blachut.svelte.lang.SvelteFileTypeFactory"/>
+        <internalFileTemplate name="Svelte Component"/>
         <lang.fileViewProviderFactory language="Svelte"
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
         <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.SvelteParserDefinition"/>
