@@ -6,12 +6,15 @@ import com.intellij.lang.javascript.JavaScriptSupportLoader
 import com.intellij.openapi.progress.ProgressIndicatorProvider
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiLanguageInjectionHost
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlAttributeValue
 import dev.blachut.svelte.lang.psi.*
 
 class SvelteCodeMultiHostInjector : MultiHostInjector {
     override fun elementsToInjectIn(): MutableList<out Class<out PsiElement>> {
-        return mutableListOf(SvelteFile::class.java)
+        return mutableListOf(SvelteFile::class.java, XmlAttributeValue::class.java)
     }
 
     override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
@@ -23,6 +26,27 @@ class SvelteCodeMultiHostInjector : MultiHostInjector {
 //             For debug
 //             (registrar as InjectionRegistrarImpl).resultFiles[0].viewProvider.virtualFile
 //             println(registrar.toString())
+        }
+
+        if (context is XmlAttributeValue) {
+            injectInAttributeValue(registrar, context)
+        }
+    }
+
+    private fun injectInAttributeValue(registrar: MultiHostRegistrar, context: PsiElement) {
+        if (context !is PsiLanguageInjectionHost) {
+            return
+        }
+        val value = context.text
+        if (value.contains("{") && value.contains("}")) {
+            val file = PsiFileFactory.getInstance(context.project)
+                .createFileFromText("dummy.svelte", SvelteLanguage.INSTANCE, value, true, true)
+            val interpolations = PsiTreeUtil.findChildrenOfType(file, SvelteInterpolation::class.java)
+            interpolations.forEach {
+                registrar.startInjecting(SvelteLanguage.INSTANCE)
+                    .addPlace(null, null, context, it.textRange)
+                    .doneInjecting()
+            }
         }
     }
 }
