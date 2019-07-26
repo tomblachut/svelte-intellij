@@ -1,7 +1,5 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.find.FindManager
-import com.intellij.find.impl.FindManagerImpl
 import com.intellij.lang.ecmascript6.psi.ES6ExportSpecifier
 import com.intellij.lang.ecmascript6.psi.ES6FromClause
 import com.intellij.lang.ecmascript6.psi.impl.ES6CreateImportUtil
@@ -10,6 +8,7 @@ import com.intellij.lang.ecmascript6.psi.impl.JSImportPathBuilder
 import com.intellij.lang.ecmascript6.psi.impl.JSImportPathConfigurationImpl
 import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
 import com.intellij.lang.javascript.modules.JSModuleNameInfo
+import com.intellij.lang.javascript.modules.JSModuleNameInfoImpl
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil
@@ -18,29 +17,21 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.XmlElementFactory
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.SearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
-import com.intellij.usageView.UsageInfo
-import com.intellij.util.ArrayUtil
-import com.intellij.util.CommonProcessors
 import com.intellij.xml.util.HtmlUtil
 import com.jetbrains.rd.util.firstOrNull
 import dev.blachut.svelte.lang.psi.SvelteFile
-import java.util.*
 
 object ComponentImporter {
-    fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String) {
+    fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo?) {
         val project = currentFile.project
-
-        val moduleInfo = getModuleInfo(project, currentFile, componentVirtualFile, componentName)
 
         val importCode = getImportText(currentFile, componentVirtualFile, componentName, moduleInfo)
 
@@ -106,17 +97,22 @@ object ComponentImporter {
             return "import {$componentName} from \"${moduleInfo.moduleName}\"$comma"
         }
 
-        val relativePath = FileUtil.getRelativePath(
-            currentFile.virtualFile.parent.path,
-            componentVirtualFile.path,
-            '/'
-        ) ?: ""
+        val relativePath = getRelativePath(currentFile, componentVirtualFile)
         val prefix = if (relativePath.startsWith("../")) "" else "./"
 
         return "import $componentName from \"$prefix$relativePath\"$comma"
     }
 
-    fun getModuleInfo(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): JSModuleNameInfo? {
+    private fun getRelativePath(currentFile: PsiFile, componentVirtualFile: VirtualFile): String {
+        return FileUtil.getRelativePath(
+            currentFile.virtualFile.parent.path,
+            componentVirtualFile.path,
+            '/'
+        ) ?: ""
+    }
+
+    fun getModulesInfos(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): MutableList<JSModuleNameInfo> {
+        val infos = mutableListOf<JSModuleNameInfo>()
         val exports: Collection<JSElement> = StubIndex.getElements(ES6ExportedNamesIndex.KEY, componentName, project, GlobalSearchScope.allScope(project), JSElement::class.java)
         exports.forEach {
             if (it is ES6ExportSpecifier) {
@@ -129,27 +125,14 @@ object ComponentImporter {
                 component ?: return@forEach
                 val moduleVirtualFile = declaration.containingFile.virtualFile
                 val configuration = JSImportPathConfigurationImpl(currentFile, it, moduleVirtualFile, false)
-                return ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration))
+                infos.add(ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration)))
             }
         }
-        return null
+        infos.add(JSModuleNameInfoImpl(getRelativePath(currentFile, componentVirtualFile), componentVirtualFile, componentVirtualFile, currentFile, arrayOf("svelte"), true))
+        return infos
     }
 
     private fun findScriptTag(file: PsiFile): XmlTag? {
         return PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java).find { HtmlUtil.isScriptTag(it) }
-    }
-
-    fun findUsages(targetElement: PsiElement, scope: SearchScope?): Collection<UsageInfo> {
-        val project = targetElement.project
-        val handler = (FindManager.getInstance(project) as FindManagerImpl).findUsagesManager.getFindUsagesHandler(targetElement, false)
-
-        val processor = CommonProcessors.CollectProcessor(Collections.synchronizedList(ArrayList<UsageInfo>()))
-        val psiElements = ArrayUtil.mergeArrays(handler!!.primaryElements, handler.secondaryElements)
-        val options = handler.getFindUsagesOptions(null)
-        if (scope != null) options.searchScope = scope
-        for (psiElement in psiElements) {
-            handler.processElementUsages(psiElement, processor, options)
-        }
-        return processor.results
     }
 }

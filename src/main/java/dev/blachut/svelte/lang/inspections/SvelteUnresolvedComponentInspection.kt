@@ -29,20 +29,21 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 if (files.isEmpty()) return
 
                 files.forEach {
-                    val quickFix = object : LocalQuickFix {
-                        override fun getFamilyName(): String {
-                            val moduleInfo = ComponentImporter.getModuleInfo(tag.project, tag.containingFile, it, componentName)
-                            return ComponentImporter.getImportText(tag.containingFile, it, componentName, moduleInfo)
-                        }
+                    val modulesInfos = ComponentImporter.getModulesInfos(tag.project, tag.containingFile, it, componentName)
+                    modulesInfos.forEach { info ->
+                        val quickFix = object : LocalQuickFix {
+                            override fun getFamilyName(): String {
+                                return ComponentImporter.getImportText(tag.containingFile, it, componentName, info)
+                            }
 
-                        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-                            val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag)
-                                ?: return
-                            ComponentImporter.insertComponentImport(editor, tag.containingFile, it, componentName)
+                            override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+                                val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag)
+                                    ?: return
+                                ComponentImporter.insertComponentImport(editor, tag.containingFile, it, componentName, info)
+                            }
                         }
+                        holder.registerProblem(tag, displayName, quickFix)
                     }
-
-                    holder.registerProblem(tag, displayName, quickFix)
                 }
             }
         }
