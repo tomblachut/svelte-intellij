@@ -24,7 +24,7 @@ class SvelteReferenceSearch : QueryExecutor<PsiReference, ReferencesSearch.Searc
     override fun execute(queryParameters: ReferencesSearch.SearchParameters, consumer: Processor<in PsiReference>): Boolean {
         ReadAction.run<RuntimeException> {
             val elementToSearch = queryParameters.elementToSearch
-            val containingFile = elementToSearch.containingFile
+            val containingFile = elementToSearch.containingFile ?: return@run
             if (containingFile.virtualFile.fileType is SvelteFileType) {
                 if (elementToSearch is ES6ImportedBinding) {
                     val componentName = (elementToSearch as JSNamedElement).name

@@ -9,6 +9,7 @@ import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil
 import com.intellij.lang.ecmascript6.psi.impl.JSImportPathBuilder
 import com.intellij.lang.ecmascript6.psi.impl.JSImportPathConfigurationImpl
 import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
+import com.intellij.lang.javascript.modules.JSModuleNameInfo
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil
@@ -31,57 +32,79 @@ import com.intellij.usageView.UsageInfo
 import com.intellij.util.ArrayUtil
 import com.intellij.util.CommonProcessors
 import com.intellij.xml.util.HtmlUtil
+import com.jetbrains.rd.util.firstOrNull
 import dev.blachut.svelte.lang.psi.SvelteFile
 import java.util.*
 
 object ComponentImporter {
     fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String) {
         val project = currentFile.project
-        val importCode = getImportText(currentFile, componentVirtualFile, componentName)
 
-        val scriptTag = findScriptTag(currentFile)
-        // An empty script tag does not contain JSEmbeddedContent
-        val jsElement = PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
+        val moduleInfo = getModuleInfo(project, currentFile, componentVirtualFile, componentName)
 
-        if (jsElement != null) {
-            val existingImports = ES6ImportPsiUtil.getImportDeclarations(jsElement)
-            // check if component has already been imported
-            if (existingImports.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
+        val importCode = getImportText(currentFile, componentVirtualFile, componentName, moduleInfo)
 
-            val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
-            if (existingImports.size == 0) {
-                // findPlaceAndInsertES6Import is buggy when inserting the first import
-                val newLine = PsiParserFacade.SERVICE.getInstance(project).createWhiteSpaceFromText("\n")
-                jsElement.addBefore(newLine, jsElement.firstChild)
-                jsElement.addAfter(importStatement, jsElement.firstChild)
-            } else {
-                ES6CreateImportUtil.findPlaceAndInsertES6Import(
-                    jsElement,
-                    importStatement,
-                    componentName,
-                    editor
-                )
-            }
-            CodeStyleManager.getInstance(project).reformat(jsElement)
-        } else {
-            val scriptBlock = XmlElementFactory.getInstance(project)
-                .createHTMLTagFromText("<script>\n$importCode\n</script>\n\n")
-            // Check if there's an empty script tag and replace it
-            if (scriptTag != null) {
-                scriptTag.replace(scriptBlock)
-            } else {
-                currentFile.addBefore(scriptBlock, currentFile.firstChild)
-            }
-            CodeStyleManager.getInstance(project).reformat(scriptBlock)
+        val jsElement = findOrCreateEmbeddedContent(project, currentFile) ?: return
+
+        val existingBindings = ES6ImportPsiUtil.getImportDeclarations(jsElement)
+        // check if component has already been imported
+        if (existingBindings.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
+
+        val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
+        if (existingBindings.size == 0) {
+            // findPlaceAndInsertES6Import is buggy when inserting the first import
+            val newLine = PsiParserFacade.SERVICE.getInstance(project).createWhiteSpaceFromText("\n")
+            jsElement.addBefore(newLine, jsElement.firstChild)
+            jsElement.addAfter(importStatement, jsElement.firstChild)
+            return
         }
+
+        if (moduleInfo != null) {
+            val moduleName = moduleInfo.moduleName
+            val existingImports: ES6ImportPsiUtil.ES6ExistingImports = ES6ImportPsiUtil.getExistingImports(jsElement, moduleName)
+            val specifier = existingImports.specifiers.firstOrNull()?.value
+            val declaration = specifier?.declaration
+            if (declaration != null) {
+                val info = ES6ImportPsiUtil.CreateImportExportInfo(null, componentName, ES6ImportPsiUtil.ImportExportType.SPECIFIER)
+                ES6ImportPsiUtil.insertImportSpecifier(declaration, info)
+                return
+            }
+        }
+
+        ES6CreateImportUtil.findPlaceAndInsertES6Import(
+            jsElement,
+            importStatement,
+            componentName,
+            editor
+        )
+
+        CodeStyleManager.getInstance(project).reformat(jsElement)
     }
 
-    fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): String {
-        val project = currentFile.project
+    private fun findOrCreateEmbeddedContent(project: Project, currentFile: PsiFile): JSEmbeddedContent? {
+        var scriptTag = findScriptTag(currentFile)
+        val scriptBlock = XmlElementFactory.getInstance(project)
+            .createHTMLTagFromText("<script>\n</script>")
 
-        // if the component is exported by a module, import it from that module
-        val importText = getFromReExports(project, currentFile, componentVirtualFile, componentName)
-        if (importText != null) return importText
+        if (scriptTag == null) {
+            currentFile.addBefore(scriptBlock, currentFile.firstChild)
+            scriptTag = findScriptTag(currentFile) ?: return null
+        }
+
+        val jsElement = PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
+        if (jsElement == null) {
+            scriptTag.replace(scriptBlock)
+        }
+
+        return PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
+    }
+
+    fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo? = null): String {
+        val comma = JSCodeStyleSettings.getSemicolon(currentFile)
+
+        if (moduleInfo != null) {
+            return "import {$componentName} from \"${moduleInfo.moduleName}\"$comma"
+        }
 
         val relativePath = FileUtil.getRelativePath(
             currentFile.virtualFile.parent.path,
@@ -89,11 +112,11 @@ object ComponentImporter {
             '/'
         ) ?: ""
         val prefix = if (relativePath.startsWith("../")) "" else "./"
-        val comma = JSCodeStyleSettings.getSemicolon(currentFile)
+
         return "import $componentName from \"$prefix$relativePath\"$comma"
     }
 
-    private fun getFromReExports(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): String? {
+    fun getModuleInfo(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): JSModuleNameInfo? {
         val exports: Collection<JSElement> = StubIndex.getElements(ES6ExportedNamesIndex.KEY, componentName, project, GlobalSearchScope.allScope(project), JSElement::class.java)
         exports.forEach {
             if (it is ES6ExportSpecifier) {
@@ -106,9 +129,7 @@ object ComponentImporter {
                 component ?: return@forEach
                 val moduleVirtualFile = declaration.containingFile.virtualFile
                 val configuration = JSImportPathConfigurationImpl(currentFile, it, moduleVirtualFile, false)
-                val moduleNameInfo = ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration))
-                val moduleName = moduleNameInfo.moduleName
-                return "import {$componentName} from \"$moduleName\""
+                return ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration))
             }
         }
         return null

@@ -31,7 +31,8 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 files.forEach {
                     val quickFix = object : LocalQuickFix {
                         override fun getFamilyName(): String {
-                            return ComponentImporter.getImportText(tag.containingFile, it, componentName)
+                            val moduleInfo = ComponentImporter.getModuleInfo(tag.project, tag.containingFile, it, componentName)
+                            return ComponentImporter.getImportText(tag.containingFile, it, componentName, moduleInfo)
                         }
 
                         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
