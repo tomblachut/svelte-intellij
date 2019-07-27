@@ -77,7 +77,7 @@ ID=[$_a-zA-Z0-9]+
   "await"            { yybegin(SVELTE_TAG); return AWAIT; }
   "then"             { yybegin(SVELTE_TAG); return THEN; }
   "catch"            { yybegin(SVELTE_TAG); return CATCH; }
-  "else"             { yybegin(SVELTE_ELSE_TAG); return ELSE; }
+  "else"             { eatWsThenBegin(SVELTE_ELSE_TAG); return ELSE; }
   {ID}               { yybegin(SVELTE_TAG); return BAD_CHARACTER; }
   {WHITE_SPACE}      { return BAD_CHARACTER; }
 }
@@ -85,7 +85,6 @@ ID=[$_a-zA-Z0-9]+
 <SVELTE_ELSE_TAG> {
   "if"               { yybegin(SVELTE_TAG); return IF; }
   {ID}               { yybegin(SVELTE_TAG); return CODE_FRAGMENT; }
-  {WHITE_SPACE}      { return WHITE_SPACE; }
 }
 
 <SVELTE_TAG, SVELTE_TAG_PAREN_AWARE> {
@@ -107,19 +106,24 @@ ID=[$_a-zA-Z0-9]+
   ")"                { parens -= 1; if (parens == 0) { return END_PAREN; } else { return CODE_FRAGMENT; } }
 }
 
-<SVELTE_INTERPOLATION_PRE> {
-  {WHITE_SPACE}      { return WHITE_SPACE; }
-  "@html"            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX; }
-  "@debug"           { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX; }
-  "@" | "@"{ID}      { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER; }
-  "{"                { yybegin(SVELTE_INTERPOLATION); braces += 1; return CODE_FRAGMENT; }
-  [^]                { yybegin(SVELTE_INTERPOLATION); return CODE_FRAGMENT; }
-}
-
-<SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_ELSE_TAG, SVELTE_TAG_PAREN_AWARE> {
+<SVELTE_TAG, SVELTE_ELSE_TAG, SVELTE_TAG_PAREN_AWARE> {
   "{"                { braces += 1; return CODE_FRAGMENT; }
   "}"                { if (braces == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { braces -= 1; return CODE_FRAGMENT; } }
 
+  [^]                { return CODE_FRAGMENT; }
+}
+
+<SVELTE_INTERPOLATION_PRE> {
+  {WHITE_SPACE}/"@"  { return WHITE_SPACE; }
+  "@html"            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX; }
+  "@debug"           { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX; }
+  "@" | "@"{ID}      { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER; }
+  [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
+}
+
+<SVELTE_INTERPOLATION> {
+  "{"                { braces++; return CODE_FRAGMENT; }
+  "}"                { if (braces == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { braces--; return CODE_FRAGMENT; } }
   [^]                { return CODE_FRAGMENT; }
 }
 

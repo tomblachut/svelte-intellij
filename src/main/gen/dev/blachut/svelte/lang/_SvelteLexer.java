@@ -68,9 +68,9 @@ public class _SvelteLexer implements FlexLexer {
   /* The ZZ_CMAP_A table has 640 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
     "\11\0\5\1\22\0\1\1\1\4\1\44\1\20\1\2\2\0\1\43\1\31\1\32\2\0\1\30\1\5\1\0\1"+
-    "\22\12\2\1\21\1\0\1\3\1\0\1\42\1\0\1\33\32\2\4\0\1\2\1\0\1\24\1\36\1\7\1\35"+
-    "\1\16\1\23\1\40\1\25\1\11\2\2\1\15\1\34\1\27\1\2\1\12\1\2\1\10\1\6\1\13\1"+
-    "\37\1\2\1\26\1\2\1\14\1\2\1\17\1\0\1\41\7\0\1\1\32\0\1\1\337\0\1\1\177\0\13"+
+    "\22\12\2\1\21\1\0\1\3\1\0\1\42\1\0\1\34\32\2\4\0\1\2\1\0\1\24\1\37\1\7\1\36"+
+    "\1\16\1\23\1\41\1\25\1\11\2\2\1\15\1\35\1\27\1\2\1\12\1\2\1\10\1\6\1\13\1"+
+    "\40\1\2\1\26\1\2\1\14\1\2\1\17\1\0\1\33\7\0\1\1\32\0\1\1\337\0\1\1\177\0\13"+
     "\1\35\0\2\1\5\0\1\1\57\0\1\1\40\0");
 
   /**
@@ -80,16 +80,17 @@ public class _SvelteLexer implements FlexLexer {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\14\0\1\1\1\2\1\3\1\4\1\5\2\1\1\6"+
-    "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16"+
-    "\1\17\1\20\1\21\6\22\1\23\3\16\1\24\2\25"+
-    "\1\26\1\27\3\0\1\30\1\31\1\32\2\0\3\15"+
-    "\1\22\1\33\4\22\4\0\1\34\1\33\4\0\2\15"+
-    "\5\22\1\0\1\16\1\0\1\35\4\0\2\15\1\22"+
-    "\1\36\1\37\1\40\1\22\1\0\1\41\4\0\1\42"+
-    "\1\15\1\43\1\44\1\0\1\45\2\0\1\46\1\0";
+    "\1\7\1\10\1\11\1\12\2\13\1\14\1\15\1\16"+
+    "\1\17\1\20\6\21\1\22\2\15\1\23\1\15\1\24"+
+    "\1\25\2\26\1\27\1\30\3\0\1\31\1\32\1\33"+
+    "\3\0\1\34\3\14\1\21\1\35\4\21\4\0\1\36"+
+    "\1\35\4\0\2\14\5\21\1\0\1\15\1\0\1\37"+
+    "\4\0\2\14\1\21\1\40\1\41\1\42\1\21\1\0"+
+    "\1\43\4\0\1\44\1\14\1\45\1\46\1\0\1\47"+
+    "\2\0\1\50\1\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[111];
+    int [] result = new int[115];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -117,20 +118,21 @@ public class _SvelteLexer implements FlexLexer {
     "\0\0\0\45\0\112\0\157\0\224\0\271\0\336\0\u0103"+
     "\0\u0128\0\u014d\0\u0172\0\u0197\0\u01bc\0\u01e1\0\u0206\0\u01bc"+
     "\0\u022b\0\u0250\0\u0275\0\u01bc\0\u01bc\0\u01bc\0\u01bc\0\u01bc"+
-    "\0\u01bc\0\u01bc\0\u029a\0\u01bc\0\u01bc\0\u01bc\0\u02bf\0\u02e4"+
-    "\0\u0309\0\u032e\0\u0353\0\u0378\0\u039d\0\u03c2\0\u03e7\0\u040c"+
-    "\0\u0431\0\u01bc\0\u0456\0\u047b\0\u01bc\0\u01bc\0\u04a0\0\u04c5"+
-    "\0\u0206\0\u01bc\0\u01bc\0\u01bc\0\u04ea\0\u050f\0\u0534\0\u0559"+
-    "\0\u057e\0\u05a3\0\u02e4\0\u05c8\0\u05ed\0\u0612\0\u0637\0\u03e7"+
-    "\0\u065c\0\u0681\0\u06a6\0\u06cb\0\u0456\0\u06f0\0\u0715\0\u073a"+
-    "\0\u075f\0\u0784\0\u07a9\0\u07ce\0\u07f3\0\u0818\0\u083d\0\u0862"+
-    "\0\u0887\0\u06cb\0\u08ac\0\u01bc\0\u08d1\0\u08f6\0\u091b\0\u0940"+
-    "\0\u0965\0\u098a\0\u09af\0\u02e4\0\u02e4\0\u02e4\0\u09d4\0\u09f9"+
-    "\0\u06cb\0\u0a1e\0\u0a43\0\u0a68\0\u0a8d\0\u0534\0\u0ab2\0\u02e4"+
-    "\0\u02e4\0\u0ad7\0\u01bc\0\u0afc\0\u0b21\0\u0534\0\u0b46";
+    "\0\u01bc\0\u029a\0\u02bf\0\u01bc\0\u01bc\0\u01bc\0\u02e4\0\u0309"+
+    "\0\u032e\0\u0353\0\u0378\0\u039d\0\u03c2\0\u03e7\0\u040c\0\u0431"+
+    "\0\u01bc\0\u0456\0\u01bc\0\u01bc\0\u047b\0\u04a0\0\u01bc\0\u01bc"+
+    "\0\u04c5\0\u04ea\0\u0206\0\u01bc\0\u01bc\0\u01bc\0\u050f\0\u0534"+
+    "\0\u029a\0\u01bc\0\u0559\0\u057e\0\u05a3\0\u05c8\0\u0309\0\u05ed"+
+    "\0\u0612\0\u0637\0\u065c\0\u040c\0\u0681\0\u06a6\0\u06cb\0\u06f0"+
+    "\0\u047b\0\u0715\0\u073a\0\u075f\0\u0784\0\u07a9\0\u07ce\0\u07f3"+
+    "\0\u0818\0\u083d\0\u0862\0\u0887\0\u08ac\0\u06f0\0\u08d1\0\u01bc"+
+    "\0\u08f6\0\u091b\0\u0940\0\u0965\0\u098a\0\u09af\0\u09d4\0\u0309"+
+    "\0\u0309\0\u0309\0\u09f9\0\u0a1e\0\u06f0\0\u0a43\0\u0a68\0\u0a8d"+
+    "\0\u0ab2\0\u0559\0\u0ad7\0\u0309\0\u0309\0\u0afc\0\u01bc\0\u0b21"+
+    "\0\u0b46\0\u0559\0\u0b6b";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[111];
+    int [] result = new int[115];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -155,78 +157,79 @@ public class _SvelteLexer implements FlexLexer {
   private static final String ZZ_TRANS_PACKED_0 =
     "\3\15\1\16\13\15\1\17\25\15\1\20\1\21\43\20"+
     "\5\15\1\22\42\15\1\23\103\15\1\24\1\25\1\26"+
-    "\43\15\1\27\1\30\1\31\1\21\15\31\1\32\13\31"+
-    "\1\33\11\31\17\34\1\35\21\34\1\36\3\34\1\15"+
-    "\1\37\1\40\3\15\1\40\1\41\1\40\1\42\1\40"+
-    "\1\43\2\40\1\44\4\15\1\40\1\45\3\40\4\15"+
-    "\5\40\4\15\1\34\1\46\1\47\3\34\5\47\1\50"+
-    "\3\47\1\35\3\34\1\47\1\51\3\47\1\52\3\34"+
-    "\5\47\1\36\4\34\1\21\1\53\3\34\3\53\1\54"+
-    "\5\53\1\35\3\34\5\53\4\34\5\53\1\36\4\34"+
-    "\1\46\1\47\3\34\5\47\1\50\3\47\1\35\3\34"+
-    "\1\47\1\51\3\47\1\52\1\55\1\56\1\34\5\47"+
-    "\1\36\3\34\51\0\1\57\1\0\1\60\37\0\1\61"+
-    "\16\0\1\62\1\63\1\64\23\0\1\21\50\0\1\65"+
-    "\61\0\1\66\24\0\1\67\3\0\11\67\4\0\2\67"+
-    "\1\70\2\67\4\0\1\67\1\71\3\67\5\0\1\37"+
-    "\45\0\1\40\3\0\11\40\4\0\5\40\4\0\5\40"+
-    "\6\0\1\40\3\0\11\40\4\0\1\40\1\72\3\40"+
-    "\4\0\5\40\6\0\1\40\3\0\11\40\4\0\1\73"+
-    "\4\40\4\0\5\40\6\0\1\40\3\0\11\40\4\0"+
-    "\2\40\1\74\2\40\4\0\5\40\6\0\1\40\3\0"+
-    "\7\40\1\75\1\40\4\0\1\40\1\76\3\40\4\0"+
-    "\5\40\6\0\1\40\3\0\11\40\4\0\3\40\1\77"+
-    "\1\40\4\0\5\40\5\0\1\46\45\0\1\100\3\0"+
-    "\5\100\1\101\3\100\4\0\1\100\1\102\3\100\4\0"+
-    "\5\100\6\0\1\100\3\0\5\100\1\101\3\100\4\0"+
-    "\1\100\1\102\1\103\2\100\4\0\5\100\6\0\1\100"+
-    "\3\0\1\104\4\100\1\101\3\100\4\0\1\100\1\102"+
-    "\3\100\4\0\5\100\6\0\1\53\3\0\11\53\4\0"+
-    "\5\53\4\0\5\53\6\0\1\53\3\0\11\53\4\0"+
-    "\1\105\4\53\4\0\5\53\11\0\1\106\46\0\1\107"+
-    "\3\0\1\110\73\0\1\24\10\0\1\111\40\0\1\67"+
-    "\3\0\11\67\4\0\5\67\4\0\5\67\6\0\1\67"+
-    "\3\0\5\67\1\112\3\67\4\0\5\67\4\0\5\67"+
-    "\6\0\1\67\3\0\10\67\1\113\4\0\5\67\4\0"+
-    "\5\67\6\0\1\40\3\0\5\40\1\114\3\40\4\0"+
-    "\5\40\4\0\5\40\6\0\1\40\3\0\10\40\1\115"+
-    "\4\0\5\40\4\0\5\40\6\0\1\40\3\0\1\116"+
-    "\10\40\4\0\5\40\4\0\5\40\6\0\1\40\3\0"+
-    "\1\40\1\117\7\40\4\0\5\40\4\0\5\40\6\0"+
-    "\1\40\3\0\11\40\4\0\1\40\1\120\3\40\4\0"+
-    "\5\40\6\0\1\100\3\0\5\100\1\101\3\100\4\0"+
-    "\1\100\1\102\1\121\2\100\4\0\5\100\6\0\1\100"+
-    "\3\0\1\122\4\100\1\101\3\100\4\0\1\100\1\102"+
-    "\3\100\4\0\5\100\6\0\1\100\3\0\5\100\1\101"+
-    "\2\100\1\123\4\0\1\100\1\102\3\100\4\0\5\100"+
-    "\6\0\1\122\3\0\11\122\4\0\5\122\4\0\5\122"+
-    "\11\0\1\124\47\0\1\125\50\0\1\126\37\0\1\127"+
-    "\3\0\1\130\33\0\1\67\3\0\11\67\4\0\5\67"+
-    "\4\0\1\131\4\67\6\0\1\67\3\0\11\67\4\0"+
-    "\5\67\4\0\2\67\1\132\2\67\6\0\1\40\3\0"+
-    "\1\40\1\133\7\40\4\0\5\40\4\0\5\40\6\0"+
-    "\1\40\3\0\11\40\4\0\4\40\1\134\4\0\5\40"+
-    "\6\0\1\40\3\0\10\40\1\135\4\0\5\40\4\0"+
-    "\5\40\6\0\1\40\3\0\11\40\4\0\2\40\1\136"+
-    "\2\40\4\0\5\40\6\0\1\40\3\0\3\40\1\137"+
-    "\5\40\4\0\5\40\4\0\5\40\6\0\1\100\3\0"+
-    "\5\100\1\101\2\100\1\140\4\0\1\100\1\102\3\100"+
-    "\4\0\5\100\6\0\1\100\3\0\5\100\1\101\3\100"+
-    "\4\0\1\100\1\102\2\100\1\141\4\0\5\100\15\0"+
-    "\1\142\50\0\1\143\37\0\1\144\50\0\1\145\32\0"+
-    "\1\67\3\0\7\67\1\146\1\67\4\0\5\67\4\0"+
-    "\5\67\6\0\1\67\3\0\11\67\4\0\5\67\4\0"+
-    "\3\67\1\147\1\67\6\0\1\40\3\0\11\40\4\0"+
-    "\2\40\1\150\2\40\4\0\5\40\6\0\1\40\3\0"+
-    "\5\40\1\151\3\40\4\0\5\40\4\0\5\40\6\0"+
-    "\1\100\3\0\5\100\1\101\3\100\4\0\1\100\1\102"+
-    "\2\100\1\122\4\0\5\100\16\0\1\152\50\0\1\153"+
-    "\37\0\1\154\50\0\1\155\31\0\1\67\3\0\11\67"+
-    "\4\0\5\67\4\0\4\67\1\156\17\0\1\153\43\0"+
-    "\1\157\50\0\1\65\41\0\1\65\31\0";
+    "\43\15\1\27\1\30\1\31\1\32\32\31\1\33\10\31"+
+    "\17\34\1\35\13\34\1\36\11\34\1\15\1\37\1\40"+
+    "\3\15\1\40\1\41\1\40\1\42\1\40\1\43\2\40"+
+    "\1\44\4\15\1\40\1\45\3\40\5\15\5\40\3\15"+
+    "\1\34\1\46\1\47\3\34\5\47\1\50\3\47\1\51"+
+    "\3\34\1\47\1\52\3\47\1\53\2\34\1\54\1\34"+
+    "\5\47\5\34\1\55\3\34\3\55\1\56\5\55\1\51"+
+    "\3\34\5\55\3\34\1\54\1\34\5\55\4\34\1\46"+
+    "\1\47\3\34\5\47\1\50\3\47\1\51\3\34\1\47"+
+    "\1\52\3\47\1\53\1\57\1\60\1\54\1\34\5\47"+
+    "\3\34\51\0\1\61\1\0\1\62\37\0\1\63\16\0"+
+    "\1\64\1\65\1\66\23\0\1\21\50\0\1\67\61\0"+
+    "\1\70\23\0\1\71\32\0\1\72\12\0\1\73\3\0"+
+    "\11\73\4\0\2\73\1\74\2\73\5\0\1\73\1\75"+
+    "\3\73\4\0\1\37\45\0\1\40\3\0\11\40\4\0"+
+    "\5\40\5\0\5\40\5\0\1\40\3\0\11\40\4\0"+
+    "\1\40\1\76\3\40\5\0\5\40\5\0\1\40\3\0"+
+    "\11\40\4\0\1\77\4\40\5\0\5\40\5\0\1\40"+
+    "\3\0\11\40\4\0\2\40\1\100\2\40\5\0\5\40"+
+    "\5\0\1\40\3\0\7\40\1\101\1\40\4\0\1\40"+
+    "\1\102\3\40\5\0\5\40\5\0\1\40\3\0\11\40"+
+    "\4\0\3\40\1\103\1\40\5\0\5\40\4\0\1\46"+
+    "\45\0\1\104\3\0\5\104\1\105\3\104\4\0\1\104"+
+    "\1\106\3\104\5\0\5\104\5\0\1\104\3\0\5\104"+
+    "\1\105\3\104\4\0\1\104\1\106\1\107\2\104\5\0"+
+    "\5\104\5\0\1\104\3\0\1\110\4\104\1\105\3\104"+
+    "\4\0\1\104\1\106\3\104\5\0\5\104\5\0\1\55"+
+    "\3\0\11\55\4\0\5\55\5\0\5\55\5\0\1\55"+
+    "\3\0\11\55\4\0\1\111\4\55\5\0\5\55\10\0"+
+    "\1\112\46\0\1\113\3\0\1\114\73\0\1\24\10\0"+
+    "\1\115\40\0\1\73\3\0\11\73\4\0\5\73\5\0"+
+    "\5\73\5\0\1\73\3\0\5\73\1\116\3\73\4\0"+
+    "\5\73\5\0\5\73\5\0\1\73\3\0\10\73\1\117"+
+    "\4\0\5\73\5\0\5\73\5\0\1\40\3\0\5\40"+
+    "\1\120\3\40\4\0\5\40\5\0\5\40\5\0\1\40"+
+    "\3\0\10\40\1\121\4\0\5\40\5\0\5\40\5\0"+
+    "\1\40\3\0\1\122\10\40\4\0\5\40\5\0\5\40"+
+    "\5\0\1\40\3\0\1\40\1\123\7\40\4\0\5\40"+
+    "\5\0\5\40\5\0\1\40\3\0\11\40\4\0\1\40"+
+    "\1\124\3\40\5\0\5\40\5\0\1\104\3\0\5\104"+
+    "\1\105\3\104\4\0\1\104\1\106\1\125\2\104\5\0"+
+    "\5\104\5\0\1\104\3\0\1\126\4\104\1\105\3\104"+
+    "\4\0\1\104\1\106\3\104\5\0\5\104\5\0\1\104"+
+    "\3\0\5\104\1\105\2\104\1\127\4\0\1\104\1\106"+
+    "\3\104\5\0\5\104\5\0\1\126\3\0\11\126\4\0"+
+    "\5\126\5\0\5\126\10\0\1\130\47\0\1\131\50\0"+
+    "\1\132\37\0\1\133\3\0\1\134\33\0\1\73\3\0"+
+    "\11\73\4\0\5\73\5\0\1\135\4\73\5\0\1\73"+
+    "\3\0\11\73\4\0\5\73\5\0\2\73\1\136\2\73"+
+    "\5\0\1\40\3\0\1\40\1\137\7\40\4\0\5\40"+
+    "\5\0\5\40\5\0\1\40\3\0\11\40\4\0\4\40"+
+    "\1\140\5\0\5\40\5\0\1\40\3\0\10\40\1\141"+
+    "\4\0\5\40\5\0\5\40\5\0\1\40\3\0\11\40"+
+    "\4\0\2\40\1\142\2\40\5\0\5\40\5\0\1\40"+
+    "\3\0\3\40\1\143\5\40\4\0\5\40\5\0\5\40"+
+    "\5\0\1\104\3\0\5\104\1\105\2\104\1\144\4\0"+
+    "\1\104\1\106\3\104\5\0\5\104\5\0\1\104\3\0"+
+    "\5\104\1\105\3\104\4\0\1\104\1\106\2\104\1\145"+
+    "\5\0\5\104\14\0\1\146\50\0\1\147\37\0\1\150"+
+    "\50\0\1\151\32\0\1\73\3\0\7\73\1\152\1\73"+
+    "\4\0\5\73\5\0\5\73\5\0\1\73\3\0\11\73"+
+    "\4\0\5\73\5\0\3\73\1\153\1\73\5\0\1\40"+
+    "\3\0\11\40\4\0\2\40\1\154\2\40\5\0\5\40"+
+    "\5\0\1\40\3\0\5\40\1\155\3\40\4\0\5\40"+
+    "\5\0\5\40\5\0\1\104\3\0\5\104\1\105\3\104"+
+    "\4\0\1\104\1\106\2\104\1\126\5\0\5\104\15\0"+
+    "\1\156\50\0\1\157\37\0\1\160\50\0\1\161\31\0"+
+    "\1\73\3\0\11\73\4\0\5\73\5\0\4\73\1\162"+
+    "\16\0\1\157\43\0\1\163\50\0\1\67\41\0\1\67"+
+    "\31\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[2923];
+    int [] result = new int[2960];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -264,14 +267,14 @@ public class _SvelteLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\14\0\1\11\2\1\1\11\3\1\7\11\1\1\3\11"+
-    "\13\1\1\11\2\1\2\11\3\0\3\11\2\0\11\1"+
-    "\4\0\2\1\4\0\7\1\1\0\1\1\1\0\1\11"+
-    "\4\0\7\1\1\0\1\1\4\0\4\1\1\0\1\11"+
-    "\2\0\1\1\1\0";
+    "\14\0\1\11\2\1\1\11\3\1\6\11\2\1\3\11"+
+    "\12\1\1\11\1\1\2\11\2\1\2\11\3\0\3\11"+
+    "\3\0\1\11\11\1\4\0\2\1\4\0\7\1\1\0"+
+    "\1\1\1\0\1\11\4\0\7\1\1\0\1\1\4\0"+
+    "\4\1\1\0\1\11\2\0\1\1\1\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[111];
+    int [] result = new int[115];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -606,192 +609,205 @@ public class _SvelteLexer implements FlexLexer {
             { return HTML_FRAGMENT;
             }
             // fall through
-          case 39: break;
+          case 41: break;
           case 2:
             { yybegin(HTML_TAG); return HTML_FRAGMENT;
             }
             // fall through
-          case 40: break;
+          case 42: break;
           case 3:
             { yybegin(SVELTE_INTERPOLATION_PRE); return START_MUSTACHE;
             }
             // fall through
-          case 41: break;
+          case 43: break;
           case 4:
             { restoreState(); yypushback(1);
             }
             // fall through
-          case 42: break;
+          case 44: break;
           case 5:
             { return WHITE_SPACE;
             }
             // fall through
-          case 43: break;
+          case 45: break;
           case 6:
             { yybegin(YYINITIAL); return HTML_FRAGMENT;
             }
             // fall through
-          case 44: break;
+          case 46: break;
           case 7:
             { yybegin(TAG_STRING); quote = '\''; return HTML_FRAGMENT;
             }
             // fall through
-          case 45: break;
+          case 47: break;
           case 8:
             { yybegin(TAG_STRING); quote = '"'; return HTML_FRAGMENT;
             }
             // fall through
-          case 46: break;
+          case 48: break;
           case 9:
             { if (quote == '\'') yybegin(HTML_TAG); return HTML_FRAGMENT;
             }
             // fall through
-          case 47: break;
+          case 49: break;
           case 10:
             { if (quote == '"') yybegin(HTML_TAG); return HTML_FRAGMENT;
             }
             // fall through
-          case 48: break;
-          case 11:
-            { yybegin(SVELTE_INTERPOLATION); return CODE_FRAGMENT;
-            }
-            // fall through
-          case 49: break;
-          case 12:
-            { yybegin(SVELTE_INTERPOLATION); braces += 1; return CODE_FRAGMENT;
-            }
-            // fall through
           case 50: break;
-          case 13:
-            { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER;
+          case 11:
+            { yybegin(SVELTE_INTERPOLATION); yypushback(yylength());
             }
             // fall through
           case 51: break;
-          case 14:
-            { return CODE_FRAGMENT;
+          case 12:
+            { yybegin(SVELTE_INTERPOLATION); return BAD_CHARACTER;
             }
             // fall through
           case 52: break;
-          case 15:
-            { braces += 1; return CODE_FRAGMENT;
+          case 13:
+            { return CODE_FRAGMENT;
             }
             // fall through
           case 53: break;
-          case 16:
-            { if (braces == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { braces -= 1; return CODE_FRAGMENT; }
+          case 14:
+            { braces++; return CODE_FRAGMENT;
             }
             // fall through
           case 54: break;
-          case 17:
-            { return BAD_CHARACTER;
+          case 15:
+            { if (braces == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { braces--; return CODE_FRAGMENT; }
             }
             // fall through
           case 55: break;
-          case 18:
-            { yybegin(SVELTE_TAG); return BAD_CHARACTER;
+          case 16:
+            { return BAD_CHARACTER;
             }
             // fall through
           case 56: break;
-          case 19:
-            { if (braces == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; }
+          case 17:
+            { yybegin(SVELTE_TAG); return BAD_CHARACTER;
             }
             // fall through
           case 57: break;
+          case 18:
+            { if (braces == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; }
+            }
+            // fall through
+          case 58: break;
+          case 19:
+            { braces += 1; return CODE_FRAGMENT;
+            }
+            // fall through
+          case 59: break;
           case 20:
             { if (braces == 0) { return COMMA; } else { return CODE_FRAGMENT; }
             }
             // fall through
-          case 58: break;
-          case 21:
-            { yybegin(SVELTE_TAG); return CODE_FRAGMENT;
-            }
-            // fall through
-          case 59: break;
-          case 22:
-            { parens += 1; if (parens == 1) { return START_PAREN; } else { return CODE_FRAGMENT; }
-            }
-            // fall through
           case 60: break;
-          case 23:
-            { parens -= 1; if (parens == 0) { return END_PAREN; } else { return CODE_FRAGMENT; }
+          case 21:
+            { if (braces == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { braces -= 1; return CODE_FRAGMENT; }
             }
             // fall through
           case 61: break;
-          case 24:
-            { yybegin(SVELTE_TAG_PRE); return START_OPENING_MUSTACHE;
+          case 22:
+            { yybegin(SVELTE_TAG); return CODE_FRAGMENT;
             }
             // fall through
           case 62: break;
-          case 25:
-            { yybegin(SVELTE_TAG_PRE); return START_INNER_MUSTACHE;
+          case 23:
+            { parens += 1; if (parens == 1) { return START_PAREN; } else { return CODE_FRAGMENT; }
             }
             // fall through
           case 63: break;
-          case 26:
-            { yybegin(SVELTE_TAG_PRE); return START_CLOSING_MUSTACHE;
+          case 24:
+            { parens -= 1; if (parens == 0) { return END_PAREN; } else { return CODE_FRAGMENT; }
             }
             // fall through
           case 64: break;
-          case 27:
-            { yybegin(SVELTE_TAG); return IF;
+          case 25:
+            { yybegin(SVELTE_TAG_PRE); return START_OPENING_MUSTACHE;
             }
             // fall through
           case 65: break;
-          case 28:
-            { yybegin(SVELTE_TAG_PAREN_AWARE); return AS;
+          case 26:
+            { yybegin(SVELTE_TAG_PRE); return START_INNER_MUSTACHE;
             }
             // fall through
           case 66: break;
-          case 29:
-            { yybegin(VERBATIM_COMMENT); return HTML_FRAGMENT;
+          case 27:
+            { yybegin(SVELTE_TAG_PRE); return START_CLOSING_MUSTACHE;
             }
             // fall through
           case 67: break;
-          case 30:
-            { yybegin(SVELTE_TAG); return THEN;
+          case 28:
+            // lookahead expression with fixed lookahead length
+            zzMarkedPos = Character.offsetByCodePoints
+                (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzMarkedPos, -1);
+            { return WHITE_SPACE;
             }
             // fall through
           case 68: break;
-          case 31:
-            { yybegin(SVELTE_ELSE_TAG); return ELSE;
+          case 29:
+            { yybegin(SVELTE_TAG); return IF;
             }
             // fall through
           case 69: break;
-          case 32:
-            { yybegin(SVELTE_TAG); return EACH;
+          case 30:
+            { yybegin(SVELTE_TAG_PAREN_AWARE); return AS;
             }
             // fall through
           case 70: break;
-          case 33:
-            { return THEN;
+          case 31:
+            { yybegin(VERBATIM_COMMENT); return HTML_FRAGMENT;
             }
             // fall through
           case 71: break;
-          case 34:
-            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX;
+          case 32:
+            { yybegin(SVELTE_TAG); return THEN;
             }
             // fall through
           case 72: break;
-          case 35:
-            { yybegin(SVELTE_TAG); return CATCH;
+          case 33:
+            { eatWsThenBegin(SVELTE_ELSE_TAG); return ELSE;
             }
             // fall through
           case 73: break;
-          case 36:
-            { yybegin(SVELTE_TAG); return AWAIT;
+          case 34:
+            { yybegin(SVELTE_TAG); return EACH;
             }
             // fall through
           case 74: break;
-          case 37:
-            { yybegin(VERBATIM_HTML); return HTML_FRAGMENT;
+          case 35:
+            { return THEN;
             }
             // fall through
           case 75: break;
-          case 38:
-            { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX;
+          case 36:
+            { yybegin(SVELTE_INTERPOLATION); return HTML_PREFIX;
             }
             // fall through
           case 76: break;
+          case 37:
+            { yybegin(SVELTE_TAG); return CATCH;
+            }
+            // fall through
+          case 77: break;
+          case 38:
+            { yybegin(SVELTE_TAG); return AWAIT;
+            }
+            // fall through
+          case 78: break;
+          case 39:
+            { yybegin(VERBATIM_HTML); return HTML_FRAGMENT;
+            }
+            // fall through
+          case 79: break;
+          case 40:
+            { yybegin(SVELTE_INTERPOLATION); return DEBUG_PREFIX;
+            }
+            // fall through
+          case 80: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }
