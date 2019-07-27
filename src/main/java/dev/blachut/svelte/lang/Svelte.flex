@@ -22,6 +22,17 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
   private char quote;
   private int braces;
   private int parens;
+
+  private int stateAfterWs;
+
+  private void eatWsThenBegin(int nextState) {
+      stateAfterWs = nextState;
+      yybegin(ONLY_WHITESPACE);
+  }
+
+  private void restoreState() {
+      yybegin(stateAfterWs);
+  }
 %}
 
 %eof{
@@ -32,6 +43,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 WHITE_SPACE=\s+
 ID=[$_a-zA-Z0-9]+
 
+%xstate ONLY_WHITESPACE
 %state VERBATIM_COMMENT
 %state VERBATIM_HTML
 %state HTML_TAG
@@ -52,7 +64,11 @@ ID=[$_a-zA-Z0-9]+
   "{"\s*":"               { yybegin(SVELTE_TAG_PRE); return START_INNER_MUSTACHE; }
   "{"\s*"/"               { yybegin(SVELTE_TAG_PRE); return START_CLOSING_MUSTACHE; }
   "{"                     { yybegin(SVELTE_INTERPOLATION_PRE); return START_MUSTACHE; }
-  {WHITE_SPACE}           { return WHITE_SPACE; }
+}
+
+<ONLY_WHITESPACE> {
+  {WHITE_SPACE}      { return WHITE_SPACE; }
+  [^]                { restoreState(); yypushback(1); }
 }
 
 <SVELTE_TAG_PRE> {
@@ -102,7 +118,7 @@ ID=[$_a-zA-Z0-9]+
 
 <SVELTE_INTERPOLATION, SVELTE_TAG, SVELTE_ELSE_TAG, SVELTE_TAG_PAREN_AWARE> {
   "{"                { braces += 1; return CODE_FRAGMENT; }
-  "}"                { if (braces == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { braces -= 1; return CODE_FRAGMENT; } }
+  "}"                { if (braces == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { braces -= 1; return CODE_FRAGMENT; } }
 
   [^]                { return CODE_FRAGMENT; }
 }
