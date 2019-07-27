@@ -61,16 +61,16 @@ private class SvelteBlock(node: ASTNode,
      * SVELTE_BLOCKS
      * MARKUP_FRAGMENT
      * SVELTE_BLOCKS
-     * {#if condition}
+     * {/if}
      * ```
      *
      * Formatting seems easy. Simply apply an indent (represented here by `----`) to the SCOPE and call it a day:
      * ```
-     * {{#foo}}
+     * {#if condition}
      * ----SVELTE_BLOCKS
      * ----MARKUP_FRAGMENT
      * ----SVELTE_BLOCKS
-     * {{/foo}}
+     * {/if}
      * ```
      *
      * However, if we're contained in markup block, it's going to provide some indents of its own
@@ -78,11 +78,11 @@ private class SvelteBlock(node: ASTNode,
      *
      * ```
      * <div>
-     * ::::{{#foo}}
+     * ::::{#if condition}
      *     ----SVELTE_BLOCKS
      *     ::::----MARKUP_FRAGMENT
      *     ----SVELTE_BLOCKS
-     * ::::{{/foo}}
+     * ::::{/if}
      * </div>
      * ```
      * So to behave correctly in both situations, we indent SCOPE from the "outside" anytime we're not wrapped
