@@ -4,14 +4,11 @@ Svelte Component
       Svelte: AWAIT_THEN_BLOCK_OPENING_TAG
         PsiElement({#)('{#')
         PsiElement(await)('await')
-        PsiWhiteSpace(' ')
         Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)('then')
-        PsiWhiteSpace(' ')
+          PsiElement(CODE_FRAGMENT)(' then ')
         PsiElement(then)('then')
-        PsiWhiteSpace(' ')
         Svelte: PARAMETER
-          PsiElement(CODE_FRAGMENT)('then')
+          PsiElement(CODE_FRAGMENT)(' then')
         PsiElement(})('}')
       Svelte: SCOPE
         <empty list>

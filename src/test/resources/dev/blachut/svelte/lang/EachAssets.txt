@@ -4,18 +4,14 @@ Svelte Component
       Svelte: EACH_BLOCK_OPENING_TAG
         PsiElement({#)('{#')
         PsiElement(each)('each')
-        PsiWhiteSpace(' ')
         Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)('assets')
-        PsiWhiteSpace(' ')
+          PsiElement(CODE_FRAGMENT)(' assets ')
         PsiElement(as)('as')
-        PsiWhiteSpace(' ')
         Svelte: PARAMETER
-          PsiElement(CODE_FRAGMENT)('asset')
+          PsiElement(CODE_FRAGMENT)(' asset')
         PsiElement(,)(',')
-        PsiWhiteSpace(' ')
         Svelte: PARAMETER
-          PsiElement(CODE_FRAGMENT)('i')
+          PsiElement(CODE_FRAGMENT)(' i')
         PsiElement(})('}')
       Svelte: SCOPE
         <empty list>

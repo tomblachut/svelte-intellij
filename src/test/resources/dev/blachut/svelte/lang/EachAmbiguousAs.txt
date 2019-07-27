@@ -1,0 +1,448 @@
+Svelte Component
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as + as ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' ')
+        PsiElement(()('(')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('as')
+        PsiElement())(')')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as+as ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' ')
+        PsiElement(()('(')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('as')
+        PsiElement())(')')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as.')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' as ')
+        PsiElement(()('(')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('as')
+        PsiElement())(')')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' assets.')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' as as ')
+        PsiElement(()('(')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('as')
+        PsiElement())(')')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as.assets ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' as ')
+        PsiElement(()('(')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('as')
+        PsiElement())(')')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as. ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' as ')
+        PsiElement(()('(')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('as')
+        PsiElement())(')')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as + as ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' ')
+        PsiElement(()('(')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)('as')
+        PsiElement())(')')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as({x: as}) ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' as')
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' {} ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' as')
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' [] ')
+        PsiElement(as)('as')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' as')
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' 1 + as ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' 1 + as ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as + 1 ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as + "" ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' "" + as ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as + '' ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' '' + as ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as + `` ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' `` + as ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' as + `as` ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  Svelte: EACH_BLOCK
+    Svelte: EACH_BLOCK_OPENING
+      Svelte: EACH_BLOCK_OPENING_TAG
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
+        Svelte: EXPRESSION
+          PsiElement(CODE_FRAGMENT)(' `as` + as ')
+        PsiElement(as)('as')
+        PsiErrorElement:<parameter> expected, got ','
+          <empty list>
+        PsiElement(,)(',')
+        Svelte: PARAMETER
+          PsiElement(CODE_FRAGMENT)(' i')
+        PsiElement(})('}')
+      Svelte: SCOPE
+        <empty list>
+    Svelte: EACH_BLOCK_CLOSING_TAG
+      PsiElement({/)('{/')
+      PsiElement(each)('each')
+      PsiElement(})('}')

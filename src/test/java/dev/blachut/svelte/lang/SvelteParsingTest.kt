@@ -5,15 +5,17 @@ import com.intellij.testFramework.ParsingTestCase
 class SvelteParsingTest : ParsingTestCase("dev/blachut/svelte/lang", "svelte", SvelteParserDefinition()) {
     override fun getTestDataPath(): String = "src/test/resources"
 
-    fun testIfElseIf() = doTest(true)
-    fun testEachAssets() = doTest(true)
-    fun testExpression() = doTest(true)
-    fun testIncompleteExpression() = doTest(true)
-    fun testWhitespace() = doTest(true)
-    fun testNestedBlocks() = doTest(true)
+    fun testIfElseIf() = doTest()
+    fun testEachAssets() = doTest()
+    fun testExpression() = doTest()
+    fun testIncompleteExpression() = doTest()
+    fun testWhitespace() = doTest()
+    fun testNestedBlocks() = doTest()
 
-    // TODO Improve lexer and enable following tests
-//    fun testEachAsAs() = doTest(true)
-//    fun testAwaitThenThenThen() = doTest(true)
+    fun testEachAsAsAsAs() = doTest()
+    fun testAwaitThenThenThen() = doTest()
+    fun testEachAmbiguousAs() = doTest()
+
+    private fun doTest() = doTest(true)
 }
 
