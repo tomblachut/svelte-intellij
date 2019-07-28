@@ -15,5 +15,6 @@ class SvelteFormatterTest : FormatterTestCase() {
     fun testScriptContents() = doTest()
     fun testNestedBlocks() = doTest()
     fun testNestedBlocksFlat() = doTest()
+    fun testIndentedExpressions() = doTest()
 //    fun testOneLineBlock() = doTest() // TODO Fix formatter and enable test
 }
