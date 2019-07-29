@@ -100,4 +100,7 @@
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
     </extensions>
 
+    <extensions defaultExtensionNs="JavaScript">
+        <elementScopeProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTypeScriptResolveScopeProvider"/>
+    </extensions>
 </idea-plugin>
