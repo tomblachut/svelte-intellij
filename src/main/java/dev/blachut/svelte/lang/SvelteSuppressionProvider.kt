@@ -10,7 +10,7 @@ class SvelteSuppressionProvider : XmlSuppressionProvider() {
     override fun suppressForFile(element: PsiElement, inspectionId: String) = Unit
 
     override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
-        return inspectionId == "XmlUnboundNsPrefix"
+        return inspectionId == "XmlUnboundNsPrefix" || inspectionId == "BadExpressionStatementJS"
     }
 
     override fun isProviderAvailable(file: PsiFile): Boolean {
