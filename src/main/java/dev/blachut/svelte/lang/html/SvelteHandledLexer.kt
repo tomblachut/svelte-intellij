@@ -42,15 +42,14 @@ interface SvelteHandledLexer {
 
   fun styleViaLang(default: Language?): Language? = styleViaLang(default, getStyleType())
 
-  fun findScriptContentProviderVue(mimeType: String?, delegate: (String) -> HtmlScriptContentProvider?,
-                                   languageLevel: JSLanguageLevel): HtmlScriptContentProvider? {
-    val provider: HtmlScriptContentProvider?
-    if (mimeType != null) {
-      provider = delegate(mimeType) ?: scriptContentViaLang()
-    }
-    else {
-      provider = LanguageHtmlScriptContentProvider.getScriptContentProvider(languageLevel.dialect)
-    }
+  fun findScriptContentProviderSvelte(mimeType: String?, delegate: (String) -> HtmlScriptContentProvider?,
+                                      languageLevel: JSLanguageLevel): HtmlScriptContentProvider? {
+    val provider: HtmlScriptContentProvider? =
+      if (mimeType != null) {
+          delegate(mimeType) ?: scriptContentViaLang()
+      } else {
+          LanguageHtmlScriptContentProvider.getScriptContentProvider(languageLevel.dialect)
+      }
     provider ?: return null
     val moduleType = toModuleContentType(provider.scriptElementType)
     if (provider.scriptElementType == moduleType) return provider
