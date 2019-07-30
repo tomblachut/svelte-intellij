@@ -41,7 +41,7 @@ class SvelteCodeFragmentType(@NonNls debugName: String) : IElementType(debugName
 
         val parser = jsLanguageLevel.dialect.createParser(builder)
         parser.parseJS(this)
-        return builder.treeBuilt
+        return builder.treeBuilt.firstChildNode
     }
 
     private fun createLexer(project: Project?): Lexer {
