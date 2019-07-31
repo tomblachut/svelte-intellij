@@ -97,6 +97,7 @@
                          groupKey="html.inspections.group.name"
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
+        <psi.referenceContributor language="JavaScript" implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferenceContributor"/>
     </extensions>
 
 </idea-plugin>
