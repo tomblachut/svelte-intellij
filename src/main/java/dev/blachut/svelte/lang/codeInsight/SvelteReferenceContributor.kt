@@ -20,7 +20,8 @@ class SvelteReferenceContributor : PsiReferenceContributor() {
             override fun isAcceptable(element: Any, context: PsiElement?): Boolean {
                 if (element is JSReferenceExpression) {
                     // TODO: check if already declared
-                    return element.parent !is JSDefinitionExpression
+                    val labeledStatement = PsiTreeUtil.findFirstParent(element) { parent -> parent is JSLabeledStatement }
+                    return labeledStatement == null || !labeledStatement.text.startsWith("$:")
                 }
                 return false
             }
