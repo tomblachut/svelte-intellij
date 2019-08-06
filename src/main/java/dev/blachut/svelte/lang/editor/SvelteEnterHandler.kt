@@ -25,11 +25,11 @@ import dev.blachut.svelte.lang.psi.SvelteOpeningTag
 class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
     /**
      * if we are between open and close tags, we ensure the caret ends up in the "logical" place on Enter.
-     * i.e. "{{#foo}}<caret>{{/foo}}" becomes the following on Enter:
+     * i.e. "{#if x}<caret>{/if}" becomes the following on Enter:
      *
-     * {{#foo}}
+     * {#if x}
      * <caret>
-     * {{/foo}}
+     * {/if}
      *
      * (Note: <caret> may be indented depending on formatter settings.)
      */
@@ -48,9 +48,7 @@ class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
     }
 
     /**
-     * Checks to see if `Enter` has been typed while the caret is between an open and close tag pair.
-     *
-     * @return true if between open and close tags, false otherwise
+     * Checks to see if `Enter` has been typed while the caret is between an open and close tag pair
      */
     private fun isBetweenSvelteTags(editor: Editor, file: PsiFile, offset: Int): Boolean {
         if (offset == 0) return false

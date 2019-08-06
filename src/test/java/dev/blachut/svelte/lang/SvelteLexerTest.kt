@@ -21,9 +21,9 @@ class SvelteLexerTest : LexerTestCase() {
     fun testIncompleteExpression() = doTest()
     fun testWhitespace() = doTest()
 
-    // TODO Improve lexer and enable following tests
-//    fun testEachAsAs() = doTest(true)
-//    fun testAwaitThenThenThen() = doTest(true)
+    fun testEachAsAsAsAs() = doTest()
+    fun testAwaitThenThenThen() = doTest()
+    fun testEachAmbiguousAs() = doTest()
 
     private fun doTest() = doFileTest("svelte")
 }

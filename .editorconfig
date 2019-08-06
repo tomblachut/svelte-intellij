@@ -12,5 +12,5 @@ insert_final_newline = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.bnf]
+[{*.bnf, *.flex, _SvelteLexer.java}]
 indent_size = 2
