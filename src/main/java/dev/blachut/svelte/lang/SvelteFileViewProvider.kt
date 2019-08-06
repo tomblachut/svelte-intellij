@@ -10,10 +10,8 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.impl.source.PsiFileImpl
 import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider
 import dev.blachut.svelte.lang.psi.SvelteOuterTypes
-import gnu.trove.THashSet
-import java.util.*
 
-class SvelteFileViewProvider internal constructor(psiManager: PsiManager, virtualFile: VirtualFile, physical: Boolean) : MultiplePsiFilesPerDocumentFileViewProvider(psiManager, virtualFile, physical), TemplateLanguageFileViewProvider {
+class SvelteFileViewProvider(psiManager: PsiManager, virtualFile: VirtualFile, physical: Boolean) : MultiplePsiFilesPerDocumentFileViewProvider(psiManager, virtualFile, physical), TemplateLanguageFileViewProvider {
     private val htmlLanguage = HTMLLanguage.INSTANCE
 
     override fun getBaseLanguage(): Language {
@@ -25,7 +23,7 @@ class SvelteFileViewProvider internal constructor(psiManager: PsiManager, virtua
     }
 
     override fun getLanguages(): Set<Language> {
-        return THashSet(Arrays.asList(SvelteLanguage.INSTANCE, htmlLanguage))
+        return setOf(SvelteLanguage.INSTANCE, htmlLanguage)
     }
 
     override fun cloneInner(virtualFile: VirtualFile): MultiplePsiFilesPerDocumentFileViewProvider {
