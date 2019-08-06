@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="320" src="./svelte-intellij-header.png" alt="logo of svelte-intellij repository">
+  <img width="320" src="./media/header.png" alt="Header of svelte-intellij repository">
 </p>
 
 # svelte-intellij
@@ -34,7 +34,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Work
 
 <h2>Support</h2>
 
-This project is run by one person, because I want Svelte to succeed. Please, leave a star and spread the word.
+This project is run by one person. Please leave a star and spread the word.
 
 <h2>Contributing</h2>
 
@@ -42,11 +42,9 @@ Contributions are very much welcome!
 
 IntelliJ Platform runs on JVM, so this can seem like a huge limitation, but don't worry. Kotlin feels a lot like TypeScript. Bigger issue is scarce documentation for their API.
 
-Otherwise, please report what could be improved. IntelliJ has a huge feature set, I personally don't use everything it has to offer.
-
 <h2>Building and running the plugin</h2>
 
-You'll need IntelliJ IDEA. Community edition is free and works, you can also use Ultimate edition if you have one. 
+You'll need IntelliJ IDEA. Community edition is free and sufficient, you can also use Ultimate edition if you have one. 
 
 Clone the repository and run `./gradlew :runIde` (There are also other intermediate tasks). 
 
