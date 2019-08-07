@@ -12,7 +12,7 @@ class SvelteAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element is JSLabeledStatement && element.text.startsWith("$:") && element.containingFile.viewProvider is SvelteFileViewProvider) {
             val start = element.textOffset
-            val range = TextRange.from(start, start + 1)
+            val range = TextRange.from(start, 1)
             val annotation = holder.createInfoAnnotation(range, "Svelte Label")
             annotation.textAttributes = JSHighlighter.JS_KEYWORD
         }
