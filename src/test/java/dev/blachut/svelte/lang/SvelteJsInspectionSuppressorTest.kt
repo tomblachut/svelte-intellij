@@ -11,7 +11,7 @@ import org.junit.Test
 
 internal class SvelteJsInspectionSuppressorTest : LightPlatformCodeInsightFixture4TestCase() {
 
-    private val enabledInspections = Sets.newHashSet("UnnecessaryLabelJS", "JSUnusedAssignment")
+    private val enabledInspections = Sets.newHashSet("UnnecessaryLabelJS")
 
     @Before
     fun setup() {
@@ -28,22 +28,10 @@ internal class SvelteJsInspectionSuppressorTest : LightPlatformCodeInsightFixtur
         runInspections("<script>$: alert('ok');</script>")
     }
 
-    @Test
-    fun testSvelteLabelAssignmentWarningSuppression() {
-        // language=Svelte
-        runInspections("<script>let item; $: item = 1; item = 2</script>")
-    }
-
     @Test(expected = ComparisonFailure::class)
     fun testLabelInspectionOutsideSvelteLabel() {
         // language=Svelte
         runInspections("<script>label: alert('ok')</script>")
-    }
-
-    @Test(expected = ComparisonFailure::class)
-    fun testAssignmentInspectionOutsideSvelteLabel() {
-        // language=Svelte
-        runInspections("<script>let item; item = 1; item = 2</script>")
     }
 
     private fun runInspections(code: String) {
