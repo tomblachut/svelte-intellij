@@ -14,7 +14,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 
 object DeclarationFinder {
-    fun findDeclaration(element: JSReferenceExpressionImpl?): Boolean {
+    fun hasDeclaration(element: JSReferenceExpressionImpl?): Boolean {
         element ?: return false
         val cachedResults = ResolveCache.getInstance(element.project).resolveWithCaching(element, JSReferenceExpressionResolver(element, false), true, false)
         return cachedResults.find {
@@ -28,10 +28,7 @@ class SvelteReferenceContributor : PsiReferenceContributor() {
         val pattern = PlatformPatterns.psiElement(JSReferenceExpression::class.java).and(FilterPattern(object : ElementFilter {
             override fun isAcceptable(element: Any, context: PsiElement?): Boolean {
                 if (element is JSReferenceExpressionImpl) {
-                    if (DeclarationFinder.findDeclaration(element)) {
-                        return false
-                    }
-                    return PsiTreeUtil.findFirstParent(element) { parent -> parent is JSLabeledStatement } == null
+                    return !DeclarationFinder.hasDeclaration(element)
                 }
                 return false
             }
@@ -51,11 +48,12 @@ class SvelteReferenceContributor : PsiReferenceContributor() {
 class SvelteLabeledReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val embeddedContent = PsiTreeUtil.findFirstParent(element) { psiElement -> psiElement is JSEmbeddedContent }
+        val elementDefinition = PsiTreeUtil.findFirstParent(element) { psiElement -> psiElement is JSDefinitionExpression }
         val labeledStatements = PsiTreeUtil.findChildrenOfType(embeddedContent, JSLabeledStatement::class.java)
         labeledStatements.forEach {
             val definitions = PsiTreeUtil.findChildrenOfType(it, JSDefinitionExpression::class.java)
-            definitions.forEach { definition ->
-                if (definition.name == element.text && !DeclarationFinder.findDeclaration(PsiTreeUtil.findChildOfType(definition, JSReferenceExpressionImpl::class.java))) {
+            definitions.filter { definition -> definition != elementDefinition }.forEach { definition ->
+                if (definition.name == element.text && !DeclarationFinder.hasDeclaration(PsiTreeUtil.findChildOfType(definition, JSReferenceExpressionImpl::class.java))) {
                     return arrayOf(JSResolveResult(definition))
                 }
             }
