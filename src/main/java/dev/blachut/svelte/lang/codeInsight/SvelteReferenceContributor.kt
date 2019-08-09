@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.javascript.psi.*
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
-import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
@@ -45,8 +44,8 @@ class SvelteReferenceContributor : PsiReferenceContributor() {
     }
 }
 
-class SvelteLabeledReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
-    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
+class SvelteLabeledReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement>(element, textRange) {
+    override fun resolve(): PsiElement? {
         val embeddedContent = PsiTreeUtil.findFirstParent(element) { psiElement -> psiElement is JSEmbeddedContent }
         val elementDefinition = PsiTreeUtil.findFirstParent(element) { psiElement -> psiElement is JSDefinitionExpression }
         val labeledStatements = PsiTreeUtil.findChildrenOfType(embeddedContent, JSLabeledStatement::class.java)
@@ -54,15 +53,10 @@ class SvelteLabeledReference(element: PsiElement, textRange: TextRange) : PsiRef
             val definitions = PsiTreeUtil.findChildrenOfType(it, JSDefinitionExpression::class.java)
             definitions.filter { definition -> definition != elementDefinition }.forEach { definition ->
                 if (definition.name == element.text && !DeclarationFinder.hasDeclaration(PsiTreeUtil.findChildOfType(definition, JSReferenceExpressionImpl::class.java))) {
-                    return arrayOf(JSResolveResult(definition))
+                    return definition
                 }
             }
         }
-        return ResolveResult.EMPTY_ARRAY
-    }
-
-    override fun resolve(): PsiElement? {
-        val resolveResults = multiResolve(false)
-        return if (resolveResults.size == 1) resolveResults[0].element else null
+        return null
     }
 }
