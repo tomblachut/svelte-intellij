@@ -16,7 +16,7 @@ class SvelteAnnotator : Annotator {
                 holder.removeIf { it.textAttributes.externalName == "JS.LABEL" }
                 val start = element.textOffset
                 val range = TextRange.from(start, 2)
-                val annotation = holder.createInfoAnnotation(range, "Svelte Label")
+                val annotation = holder.createInfoAnnotation(range, null)
                 annotation.textAttributes = JSHighlighter.JS_KEYWORD
             }
         }
