@@ -73,6 +73,7 @@
         <lang.fileViewProviderFactory language="Svelte"
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
         <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.SvelteParserDefinition"/>
+        <lang.parserDefinition language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
         <lang.commenter language="Svelte" implementationClass="com.intellij.lang.xml.XmlCommenter"/>
@@ -98,5 +99,7 @@
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <multiHostInjector implementation="dev.blachut.svelte.lang.SvelteCodeMultiHostInjector"/>
     </extensions>
-
+    <extensions defaultExtensionNs="JavaScript">
+        <dialectSpecificHandlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
+    </extensions>
 </idea-plugin>
