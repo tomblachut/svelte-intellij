@@ -101,5 +101,6 @@
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <dialectSpecificHandlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
+        <analysisHandlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSAnalysisHandlersFactory"/>
     </extensions>
 </idea-plugin>
