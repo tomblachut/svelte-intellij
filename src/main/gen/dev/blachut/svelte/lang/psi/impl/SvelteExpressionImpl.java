@@ -1,17 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package dev.blachut.svelte.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import dev.blachut.svelte.lang.psi.SvelteCodeInjectionHostImpl;
-import dev.blachut.svelte.lang.psi.*;
+import dev.blachut.svelte.lang.psi.SvelteExpression;
+import dev.blachut.svelte.lang.psi.SveltePsiElementImpl;
+import dev.blachut.svelte.lang.psi.SvelteVisitor;
+import org.jetbrains.annotations.NotNull;
 
-public class SvelteExpressionImpl extends SvelteCodeInjectionHostImpl implements SvelteExpression {
+public class SvelteExpressionImpl extends SveltePsiElementImpl implements SvelteExpression {
 
   public SvelteExpressionImpl(@NotNull ASTNode node) {
     super(node);

@@ -1,16 +1,19 @@
 // This is a generated file. Not intended for manual editing.
 package dev.blachut.svelte.lang;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
-import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static dev.blachut.svelte.lang.psi.SvelteManualParsing.parseExpression;
+import static dev.blachut.svelte.lang.psi.SvelteManualParsing.parseParameter;
+import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class SvelteParser implements PsiParser, LightPsiParser {
@@ -363,13 +366,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CODE_FRAGMENT
+  // <<parseExpression>>
   public static boolean expression(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "expression")) return false;
-    if (!nextTokenIs(builder, "<expression>", CODE_FRAGMENT)) return false;
     boolean result;
     Marker marker = enter_section_(builder, level, _NONE_, EXPRESSION, "<expression>");
-    result = consumeToken(builder, CODE_FRAGMENT);
+    result = parseExpression(builder, level + 1);
     exit_section_(builder, level, marker, result, false, null);
     return result;
   }
@@ -508,13 +510,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CODE_FRAGMENT
+  // <<parseParameter>>
   public static boolean parameter(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "parameter")) return false;
-    if (!nextTokenIs(builder, "<parameter>", CODE_FRAGMENT)) return false;
     boolean result;
     Marker marker = enter_section_(builder, level, _NONE_, PARAMETER, "<parameter>");
-    result = consumeToken(builder, CODE_FRAGMENT);
+    result = parseParameter(builder, level + 1);
     exit_section_(builder, level, marker, result, false, null);
     return result;
   }

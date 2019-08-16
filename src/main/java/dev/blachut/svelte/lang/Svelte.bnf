@@ -2,11 +2,8 @@
   generate=[
     java="8"
     names="long"
-//    token-sets="yes"
 //    psi-classes-map="yes"
   ]
-
-//  generateTokenAccessors=true
 
   parserClass="dev.blachut.svelte.lang.SvelteParser"
 
@@ -16,6 +13,8 @@
   psiImplClassSuffix="Impl"
   psiPackage="dev.blachut.svelte.lang.psi"
   psiImplPackage="dev.blachut.svelte.lang.psi.impl"
+
+  parserImports=["static dev.blachut.svelte.lang.psi.SvelteManualParsing.*"]
 
   elementTypeHolderClass="dev.blachut.svelte.lang.psi.SvelteTypes"
   elementTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
@@ -37,9 +36,10 @@
     THEN="then"
     CATCH="catch"
     ELSE="else"
-    HTML_FRAGMENT="<markup>"
     HTML_PREFIX="@html"
     DEBUG_PREFIX="@debug"
+    HTML_FRAGMENT="<markup>"
+    CODE_FRAGMENT="<code>"
   ]
 
   extends(".*Block")=block
@@ -98,13 +98,5 @@ fake openingTag ::= '{#' foo '}'
 fake continuationTag ::= '{:' foo '}'
 fake closingTag ::= '{/' foo '}'
 
-expression ::= CODE_FRAGMENT {
-                               name="expression"
-                               extends="dev.blachut.svelte.lang.psi.SvelteCodeInjectionHostImpl"
-                               implements="com.intellij.psi.PsiLanguageInjectionHost"
-                             }
-parameter ::= CODE_FRAGMENT {
-                              name="parameter"
-                              extends="dev.blachut.svelte.lang.psi.SvelteCodeInjectionHostImpl"
-                              implements="com.intellij.psi.PsiLanguageInjectionHost"
-                            }
+expression ::= <<parseExpression>>
+parameter ::= <<parseParameter>>
