@@ -22,6 +22,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
   private int braces = 0;
   private int parens = 0;
   private int brackets = 0;
+  // as and then can work as Svelte keywords or JS identifiers depending on context
   private boolean rootKeywordsEnabled = false;
 
   private IElementType quotedToken;
