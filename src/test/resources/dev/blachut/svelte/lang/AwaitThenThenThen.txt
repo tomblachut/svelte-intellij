@@ -1,18 +1,18 @@
 Svelte Component
-  Svelte: AWAIT_BLOCK
-    Svelte: AWAIT_THEN_BLOCK_OPENING
-      Svelte: AWAIT_THEN_BLOCK_OPENING_TAG
+  SvelteAwaitBlock
+    SvelteAwaitThenBlockOpening
+      SvelteAwaitThenBlockOpeningTag
         PsiElement({#)('{#')
         PsiElement(await)('await')
-        Svelte: EXPRESSION
+        SvelteExpression
           PsiElement(CODE_FRAGMENT)(' then ')
         PsiElement(then)('then')
-        Svelte: PARAMETER
+        SvelteParameter
           PsiElement(CODE_FRAGMENT)(' then')
         PsiElement(})('}')
-      Svelte: SCOPE
+      SvelteScope
         <empty list>
-    Svelte: AWAIT_BLOCK_CLOSING_TAG
+    SvelteAwaitBlockClosingTag
       PsiElement({/)('{/')
       PsiElement(await)('await')
       PsiElement(})('}')

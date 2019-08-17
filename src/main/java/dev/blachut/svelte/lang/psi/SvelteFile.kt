@@ -7,7 +7,6 @@ import dev.blachut.svelte.lang.SvelteFileType
 import dev.blachut.svelte.lang.SvelteLanguage
 
 class SvelteFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, SvelteLanguage.INSTANCE) {
-
     override fun getFileType(): FileType {
         return SvelteFileType.INSTANCE
     }

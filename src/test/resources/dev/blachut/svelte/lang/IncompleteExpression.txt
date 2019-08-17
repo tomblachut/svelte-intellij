@@ -1,5 +1,5 @@
 Svelte Component
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiErrorElement:<expression>, '@debug' or '@html' expected
       <empty list>

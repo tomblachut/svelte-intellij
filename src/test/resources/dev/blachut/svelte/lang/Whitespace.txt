@@ -1,14 +1,14 @@
 Svelte Component
-  Svelte: IF_BLOCK
-    Svelte: IF_BLOCK_OPENING
-      Svelte: IF_BLOCK_OPENING_TAG
+  SvelteIfBlock
+    SvelteIfBlockOpening
+      SvelteIfBlockOpeningTag
         PsiElement({#)('{ #')
         PsiElement(if)('if')
-        Svelte: EXPRESSION
+        SvelteExpression
           PsiElement(CODE_FRAGMENT)(' a')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
-      Svelte: SCOPE
+      SvelteScope
         PsiElement(<markup>)('<p>First branch</p>\n')
     PsiErrorElement:'{/' expected, got '{:'
       <empty list>

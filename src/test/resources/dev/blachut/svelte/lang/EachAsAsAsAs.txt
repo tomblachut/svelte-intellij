@@ -1,22 +1,22 @@
 Svelte Component
-  Svelte: EACH_BLOCK
-    Svelte: EACH_BLOCK_OPENING
-      Svelte: EACH_BLOCK_OPENING_TAG
+  SvelteEachBlock
+    SvelteEachBlockOpening
+      SvelteEachBlockOpeningTag
         PsiElement({#)('{#')
         PsiElement(each)('each')
-        Svelte: EXPRESSION
+        SvelteExpression
           PsiElement(CODE_FRAGMENT)(' as ')
         PsiElement(as)('as')
-        Svelte: PARAMETER
+        SvelteParameter
           PsiElement(CODE_FRAGMENT)(' as ')
         PsiElement(()('(')
-        Svelte: EXPRESSION
+        SvelteExpression
           PsiElement(CODE_FRAGMENT)('as')
         PsiElement())(')')
         PsiElement(})('}')
-      Svelte: SCOPE
+      SvelteScope
         <empty list>
-    Svelte: EACH_BLOCK_CLOSING_TAG
+    SvelteEachBlockClosingTag
       PsiElement({/)('{/')
       PsiElement(each)('each')
       PsiElement(})('}')

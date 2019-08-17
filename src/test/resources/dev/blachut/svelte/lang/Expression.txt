@@ -1,35 +1,35 @@
 Svelte Component
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiElement(@html)('@html')
-    Svelte: EXPRESSION
+    SvelteExpression
       PsiElement(CODE_FRAGMENT)(' 'hello<script>virus()</script>'')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiWhiteSpace(' ')
     PsiElement(@html)('@html')
-    Svelte: EXPRESSION
+    SvelteExpression
       PsiElement(CODE_FRAGMENT)(' 'unescaped'')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiElement(@debug)('@debug')
-    Svelte: EXPRESSION
+    SvelteExpression
       PsiElement(CODE_FRAGMENT)(' x ')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiWhiteSpace(' ')
     PsiElement(@debug)('@debug')
-    Svelte: EXPRESSION
+    SvelteExpression
       PsiElement(CODE_FRAGMENT)(' x')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@'
       <empty list>
@@ -37,7 +37,7 @@ Svelte Component
     PsiElement(CODE_FRAGMENT)(' html 'unescaped'')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@'
       <empty list>
@@ -45,7 +45,7 @@ Svelte Component
     PsiElement(CODE_FRAGMENT)(' debug x ')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
-  Svelte: INTERPOLATION
+  SvelteInterpolation
     PsiElement({)('{')
     PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@unknown'
       <empty list>
