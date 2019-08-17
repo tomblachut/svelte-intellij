@@ -16,7 +16,6 @@ import dev.blachut.svelte.lang.psi.SvelteFile
 import dev.blachut.svelte.lang.psi.SvelteTypes
 
 class SvelteParserDefinition : ParserDefinition {
-
     override fun createLexer(project: Project): Lexer {
 //        val level = JSRootConfiguration.getInstance(project).languageLevel
 //        return SvelteLexer(if (level.isES6Compatible) level else JSLanguageLevel.ES6)

@@ -1,7 +1,6 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package dev.blachut.svelte.lang
 
-import com.intellij.lang.html.HTMLLanguage
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
@@ -77,7 +76,7 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
     }
 
     private fun resolveInScriptTag(svelteFile: PsiFile, incompleteCode: Boolean): Array<ResolveResult>? {
-        val scriptTag = findScriptTag(svelteFile.viewProvider.getPsi(HTMLLanguage.INSTANCE)) ?: return null
+        val scriptTag = findScriptTag(svelteFile.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE)) ?: return null
         val jsRoot = PsiTreeUtil.getChildOfType(scriptTag, JSEmbeddedContent::class.java) ?: return null
 
         val sink = ResolveResultSink(myRef, myReferencedName!!, false, incompleteCode)

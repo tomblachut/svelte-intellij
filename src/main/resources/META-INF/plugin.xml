@@ -74,6 +74,7 @@
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
         <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.SvelteParserDefinition"/>
         <lang.parserDefinition language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSParserDefinition"/>
+        <lang.parserDefinition language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteHTMLParserDefinition"/>
         <stubElementTypeHolder class="dev.blachut.svelte.lang.psi.SvelteJSElementTypes"/>
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
