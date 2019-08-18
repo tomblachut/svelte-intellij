@@ -76,7 +76,7 @@ ifBlockClosingTag ::= '{/' 'if' '}'
 
 eachBlock ::= eachBlockOpening elseContinuation? eachBlockClosingTag {pin=1}
 eachBlockOpening ::= eachBlockOpeningTag scope
-eachBlockOpeningTag ::= '{#' 'each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
+eachBlockOpeningTag ::= '{#' 'each' expression 'as' parameter (',' parameter)? keyExpression? '}'
 eachBlockClosingTag ::= '{/' 'each' '}'
 
 awaitBlock ::= (awaitThenBlockOpening | awaitAndThen) (catchContinuation)? awaitBlockClosingTag {pin=1}
@@ -98,5 +98,6 @@ fake openingTag ::= '{#' foo '}'
 fake continuationTag ::= '{:' foo '}'
 fake closingTag ::= '{/' foo '}'
 
+keyExpression ::= '(' <<parseExpression>> ')' { pin=1 }
 expression ::= <<parseExpression>>
 parameter ::= <<parseParameter>>

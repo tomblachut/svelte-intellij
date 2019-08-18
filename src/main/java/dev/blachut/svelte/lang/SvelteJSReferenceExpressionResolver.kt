@@ -18,23 +18,30 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
                                           ignorePerformanceLimits: Boolean) :
     JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
     override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-        return if (myUnqualifiedOrLocalResolve) {
-            resolveInComponent(expression, incompleteCode) ?: arrayOf()
-        } else {
-            super.resolve(expression, incompleteCode)
-        }
+        return resolveInComponent(expression, incompleteCode) ?: super.resolve(expression, incompleteCode)
     }
 
     private fun resolveInComponent(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult>? {
         if (expression.qualifier != null) return null
 
-        return resolveInSvelteBlocks() ?: resolveInScriptTag(expression.containingFile, incompleteCode)
+        return resolveInLocalBlock()
+            ?: resolveInSvelteBlocks()
+            ?: resolveInScriptTag(expression.containingFile, incompleteCode)
+    }
+
+    private fun resolveInLocalBlock(): Array<ResolveResult>? {
+        val keyExpression = PsiTreeUtil.getParentOfType(myRef, SvelteKeyExpression::class.java) ?: return null
+        val block = keyExpression.parent as SvelteEachBlockOpeningTag
+        block.parameterList.forEach { parameter ->
+            val result = resolveInSvelteParameter(parameter)
+            if (result != null) return result
+        }
+        return null
     }
 
     private fun resolveInSvelteBlocks(): Array<ResolveResult>? {
         var currentElement: PsiElement? = myRef
         while (currentElement != null) {
-            // TODO Support each block key expression
             val scope = PsiTreeUtil.getParentOfType(currentElement, SvelteScope::class.java)
             if (scope != null) {
                 val scopeResults = resolveInSvelteBlock(scope)

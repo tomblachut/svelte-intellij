@@ -107,6 +107,10 @@ public class SvelteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitKeyExpression(@NotNull SvelteKeyExpression o) {
+    visitPsiElement(o);
+  }
+
   public void visitOpeningTag(@NotNull SvelteOpeningTag o) {
     visitPsiElement(o);
   }

@@ -259,7 +259,7 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{#' 'each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
+  // '{#' 'each' expression 'as' parameter (',' parameter)? keyExpression? '}'
   public static boolean eachBlockOpeningTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "eachBlockOpeningTag")) return false;
     boolean result, pinned;
@@ -294,23 +294,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     return result;
   }
 
-  // ('(' expression ')')?
+  // keyExpression?
   private static boolean eachBlockOpeningTag_6(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "eachBlockOpeningTag_6")) return false;
-    eachBlockOpeningTag_6_0(builder, level + 1);
+    keyExpression(builder, level + 1);
     return true;
-  }
-
-  // '(' expression ')'
-  private static boolean eachBlockOpeningTag_6_0(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "eachBlockOpeningTag_6_0")) return false;
-    boolean result;
-    Marker marker = enter_section_(builder);
-    result = consumeToken(builder, START_PAREN);
-    result = result && expression(builder, level + 1);
-    result = result && consumeToken(builder, END_PAREN);
-    exit_section_(builder, marker, null, result);
-    return result;
   }
 
   /* ********************************************************** */
@@ -482,6 +470,21 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(builder, level, "interpolation_1")) return false;
     expressionPrefix(builder, level + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // '(' <<parseExpression>> ')'
+  public static boolean keyExpression(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "keyExpression")) return false;
+    if (!nextTokenIs(builder, START_PAREN)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, KEY_EXPRESSION, null);
+    result = consumeToken(builder, START_PAREN);
+    pinned = result; // pin = 1
+    result = result && report_error_(builder, parseExpression(builder, level + 1));
+    result = pinned && consumeToken(builder, END_PAREN) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
   }
 
   /* ********************************************************** */
