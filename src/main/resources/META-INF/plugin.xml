@@ -80,6 +80,7 @@
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
+        <elementScopeProvider implementation="dev.blachut.svelte.lang.SvelteJSElementResolveScopeProvider"/>
         <dialectSpecificHandlersFactory language="SvelteJS"
                                         implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
         <analysisHandlersFactory language="SvelteJS"
