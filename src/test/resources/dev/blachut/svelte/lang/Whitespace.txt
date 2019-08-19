@@ -1,41 +1,84 @@
 Svelte Component
-  SvelteIfBlock
-    SvelteIfBlockOpening
-      SvelteIfBlockOpeningTag
-        PsiElement({#)('{ #')
-        PsiElement(if)('if')
+  SvelteEachBlock
+    SvelteEachBlockOpening
+      SvelteEachBlockOpeningTag
+        PsiElement({#)('{#')
+        PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' a')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('assets')
+            PsiWhiteSpace(' ')
+        PsiElement(as)('as')
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('asset')
+            PsiWhiteSpace(' ')
+        PsiElement(,)(',')
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
+            PsiWhiteSpace(' ')
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('asset')
+              PsiElement(JS:DOT)('.')
+              PsiElement(JS:IDENTIFIER)('id')
+            PsiWhiteSpace(' ')
+          PsiElement())(')')
+        PsiWhiteSpace(' ')
         PsiElement(})('}')
-      PsiWhiteSpace('\n    ')
       SvelteScope
-        PsiElement(<markup>)('<p>First branch</p>\n')
-    PsiErrorElement:'{/' expected, got '{:'
-      <empty list>
-  PsiElement({:)('{:')
-  PsiElement(DUMMY_BLOCK)
-    PsiElement(BAD_CHARACTER)('elseif')
-    PsiElement(CODE_FRAGMENT)(' b')
-    PsiElement(})('}')
-    PsiWhiteSpace('\n    ')
-    PsiElement(<markup>)('<p>Second branch</p>\n')
-    PsiElement({:)('{ :')
-    PsiElement(else)('else')
-    PsiElement(})('}')
-    PsiWhiteSpace('\n    ')
-    PsiElement(<markup>)('<p>Third branch</p>\n')
-    PsiElement({/)('{ /')
-    PsiElement(if)('if')
-  PsiElement(DUMMY_BLOCK)
-    PsiElement(})('}')
-    PsiWhiteSpace('\n')
+        <empty list>
+    SvelteEachBlockClosingTag
+      PsiElement({/)('{ /')
+      PsiElement(each)('each')
+      PsiWhiteSpace(' ')
+      PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  PsiErrorElement:<markup> or '{' expected, got '{#'
     PsiElement({#)('{#')
+  PsiElement(DUMMY_BLOCK)
     PsiElement(BAD_CHARACTER)('eachassets')
-    PsiElement(CODE_FRAGMENT)(' as asset')
+    PsiElement(<code>)(' as asset')
     PsiElement(,)(',')
-    PsiElement(CODE_FRAGMENT)('i ')
+    PsiElement(<code>)('i')
+    PsiWhiteSpace(' ')
     PsiElement(})('}')
     PsiElement({/)('{/')
     PsiElement(BAD_CHARACTER)(' ')
     PsiElement(each)('each')
+    PsiElement(})('}')
+    PsiWhiteSpace('\n')
+    PsiElement({#)('{ #')
+  PsiElement(DUMMY_BLOCK)
+    PsiElement(if)('if')
+    PsiElement(<code>)(' a')
+    PsiElement(})('}')
+    PsiWhiteSpace('\n    ')
+    PsiElement(<markup>)('<p>First branch</p>\n')
+    PsiElement({:)('{:')
+    PsiElement(BAD_CHARACTER)('elseif')
+    PsiElement(<code>)(' b')
+    PsiElement(})('}')
+    PsiWhiteSpace('\n    ')
+    PsiElement(<markup>)('<p>Second branch</p>\n')
+    PsiElement({:)('{ :')
+  PsiElement(else)('else')
+  PsiWhiteSpace(' ')
+  PsiElement(})('}')
+  PsiWhiteSpace('\n    ')
+  PsiElement(<markup>)('<p>Third branch</p>\n')
+  PsiElement({/)('{ /')
+  PsiElement(if)('if')
+  PsiWhiteSpace(' ')
   PsiElement(})('}')

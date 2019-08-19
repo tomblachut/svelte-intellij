@@ -5,14 +5,30 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement())(')')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -27,14 +43,28 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as+as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiElement(JS:PLUS)('+')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement())(')')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -49,14 +79,27 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as.')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiElement(JS:DOT)('.')
+              PsiElement(JS:IDENTIFIER)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement())(')')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -71,14 +114,27 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' assets.')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('assets')
+              PsiElement(JS:DOT)('.')
+              PsiElement(JS:IDENTIFIER)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as as ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement())(')')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -93,14 +149,27 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as.assets ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiElement(JS:DOT)('.')
+              PsiElement(JS:IDENTIFIER)('assets')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement())(')')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -115,14 +184,28 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as. ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiElement(JS:DOT)('.')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:IDENTIFIER)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:DESTRUCTURING_ASSIGNMENT
+              PsiErrorElement:identifier expected
+                <empty list>
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement())(')')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -137,35 +220,36 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JS:CALL_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              JSArgumentList
+                PsiElement(JS:LPAR)('(')
+                JS:OBJECT_LITERAL
+                  PsiElement(JS:LBRACE)('{')
+                  JS:PROPERTY
+                    PsiElement(JS:IDENTIFIER)('x')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSReferenceExpression
+                      PsiElement(JS:AS_KEYWORD)('as')
+                  PsiElement(JS:RBRACE)('}')
+                PsiElement(JS:RPAR)(')')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as({x: as}) ')
-        PsiElement(as)('as')
-        SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -180,13 +264,24 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' {} ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JS:OBJECT_LITERAL
+              PsiElement(JS:LBRACE)('{')
+              PsiElement(JS:RBRACE)('}')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -201,13 +296,24 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' [] ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSArrayLiteralExpression
+              PsiElement(JS:LBRACKET)('[')
+              PsiElement(JS:RBRACKET)(']')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -222,13 +328,29 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' 1 + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JS:LITERAL_EXPRESSION
+                PsiElement(JS:NUMERIC_LITERAL)('1')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -243,13 +365,29 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' 1 + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JS:LITERAL_EXPRESSION
+                PsiElement(JS:NUMERIC_LITERAL)('1')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -264,13 +402,29 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as + 1 ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JS:LITERAL_EXPRESSION
+                PsiElement(JS:NUMERIC_LITERAL)('1')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -285,13 +439,29 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as + "" ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JS:LITERAL_EXPRESSION
+                PsiElement(JS:STRING_LITERAL)('""')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -306,13 +476,29 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' "" + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JS:LITERAL_EXPRESSION
+                PsiElement(JS:STRING_LITERAL)('""')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -327,13 +513,29 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as + '' ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JS:LITERAL_EXPRESSION
+                PsiElement(JS:STRING_LITERAL)('''')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -348,13 +550,29 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' '' + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JS:LITERAL_EXPRESSION
+                PsiElement(JS:STRING_LITERAL)('''')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -369,13 +587,30 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as + `` ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JS:STRING_TEMPLATE_EXPRESSION
+                PsiElement(JS:BACKQUOTE)('`')
+                PsiElement(JS:BACKQUOTE)('`')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -390,13 +625,30 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' `` + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JS:STRING_TEMPLATE_EXPRESSION
+                PsiElement(JS:BACKQUOTE)('`')
+                PsiElement(JS:BACKQUOTE)('`')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -411,13 +663,31 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as + `as` ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JS:STRING_TEMPLATE_EXPRESSION
+                PsiElement(JS:BACKQUOTE)('`')
+                PsiElement(JS:STRING_TEMPLATE_PART)('as')
+                PsiElement(JS:BACKQUOTE)('`')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>
@@ -432,13 +702,31 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' `as` + as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JS:STRING_TEMPLATE_EXPRESSION
+                PsiElement(JS:BACKQUOTE)('`')
+                PsiElement(JS:STRING_TEMPLATE_PART)('as')
+                PsiElement(JS:BACKQUOTE)('`')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        PsiErrorElement:<parameter> expected, got ','
-          <empty list>
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>

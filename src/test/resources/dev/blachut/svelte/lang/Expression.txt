@@ -3,7 +3,10 @@ Svelte Component
     PsiElement({)('{')
     PsiElement(@html)('@html')
     SvelteExpression
-      PsiElement(CODE_FRAGMENT)(' 'hello<script>virus()</script>'')
+      SvelteJS: EXPRESSION
+        PsiWhiteSpace(' ')
+        JS:LITERAL_EXPRESSION
+          PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
   SvelteInterpolation
@@ -11,14 +14,21 @@ Svelte Component
     PsiWhiteSpace(' ')
     PsiElement(@html)('@html')
     SvelteExpression
-      PsiElement(CODE_FRAGMENT)(' 'unescaped'')
+      SvelteJS: EXPRESSION
+        PsiWhiteSpace(' ')
+        JS:LITERAL_EXPRESSION
+          PsiElement(JS:STRING_LITERAL)(''unescaped'')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
   SvelteInterpolation
     PsiElement({)('{')
     PsiElement(@debug)('@debug')
     SvelteExpression
-      PsiElement(CODE_FRAGMENT)(' x ')
+      SvelteJS: EXPRESSION
+        PsiWhiteSpace(' ')
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('x')
+        PsiWhiteSpace(' ')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
   SvelteInterpolation
@@ -26,7 +36,10 @@ Svelte Component
     PsiWhiteSpace(' ')
     PsiElement(@debug)('@debug')
     SvelteExpression
-      PsiElement(CODE_FRAGMENT)(' x')
+      SvelteJS: EXPRESSION
+        PsiWhiteSpace(' ')
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('x')
     PsiElement(})('}')
   PsiWhiteSpace('\n')
   SvelteInterpolation

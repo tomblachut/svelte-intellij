@@ -5,13 +5,23 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' assets ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('assets')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' asset')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('asset')
         PsiElement(,)(',')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' i')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
       SvelteScope
         <empty list>

@@ -5,10 +5,17 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(await)('await')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' then ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('then')
+            PsiWhiteSpace(' ')
         PsiElement(then)('then')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' then')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('then')
         PsiElement(})('}')
       SvelteScope
         <empty list>

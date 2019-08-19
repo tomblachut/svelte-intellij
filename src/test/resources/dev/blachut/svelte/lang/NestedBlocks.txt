@@ -6,7 +6,10 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(if)('if')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' visible')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('visible')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
       SvelteScope
@@ -17,10 +20,17 @@ Svelte Component
               PsiElement({#)('{#')
               PsiElement(await)('await')
               SvelteExpression
-                PsiElement(CODE_FRAGMENT)(' promise ')
+                SvelteJS: EXPRESSION
+                  PsiWhiteSpace(' ')
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('promise')
+                  PsiWhiteSpace(' ')
               PsiElement(then)('then')
               SvelteParameter
-                PsiElement(CODE_FRAGMENT)(' x')
+                SvelteJS: PARAMETER
+                  PsiWhiteSpace(' ')
+                  JS:EMBEDDED_PARAMETER
+                    PsiElement(JS:IDENTIFIER)('x')
               PsiElement(})('}')
             PsiWhiteSpace('\n        ')
             SvelteScope
@@ -28,7 +38,9 @@ Svelte Component
               SvelteInterpolation
                 PsiElement({)('{')
                 SvelteExpression
-                  PsiElement(CODE_FRAGMENT)('x')
+                  SvelteJS: EXPRESSION
+                    JSReferenceExpression
+                      PsiElement(JS:IDENTIFIER)('x')
                 PsiElement(})('}')
               PsiElement(<markup>)('<p>\n    ')
           SvelteAwaitBlockClosingTag
@@ -47,7 +59,10 @@ Svelte Component
           PsiElement({)('{')
           PsiElement(@debug)('@debug')
           SvelteExpression
-            PsiElement(CODE_FRAGMENT)(' name')
+            SvelteJS: EXPRESSION
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('name')
           PsiElement(})('}')
         PsiWhiteSpace('\n    ')
         PsiElement(<markup>)('<p>Kappa</p>\n')
@@ -63,10 +78,17 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' assets ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('assets')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' a')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('a')
         PsiElement(})('}')
       PsiWhiteSpace('\n        ')
       SvelteScope
@@ -74,7 +96,9 @@ Svelte Component
         SvelteInterpolation
           PsiElement({)('{')
           SvelteExpression
-            PsiElement(CODE_FRAGMENT)('a')
+            SvelteJS: EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('a')
           PsiElement(})('}')
         PsiElement(<markup>)('</li>\n    ')
     SvelteEachBlockClosingTag

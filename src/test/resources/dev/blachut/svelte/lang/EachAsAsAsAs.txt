@@ -5,14 +5,24 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(each)('each')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' as ')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
         SvelteParameter
-          PsiElement(CODE_FRAGMENT)(' as ')
-        PsiElement(()('(')
-        SvelteExpression
-          PsiElement(CODE_FRAGMENT)('as')
-        PsiElement())(')')
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
+        SvelteKeyExpression
+          PsiElement(()('(')
+          SvelteJS: EXPRESSION
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement())(')')
         PsiElement(})('}')
       SvelteScope
         <empty list>

@@ -5,7 +5,10 @@ Svelte Component
         PsiElement({#)('{#')
         PsiElement(if)('if')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' iffy')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('iffy')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
       SvelteScope
@@ -17,7 +20,10 @@ Svelte Component
         PsiWhiteSpace(' ')
         PsiElement(if)('if')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' life')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('life')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
       SvelteScope
@@ -29,7 +35,10 @@ Svelte Component
         PsiWhiteSpace(' ')
         PsiElement(if)('if')
         SvelteExpression
-          PsiElement(CODE_FRAGMENT)(' gif')
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('gif')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
       SvelteScope
