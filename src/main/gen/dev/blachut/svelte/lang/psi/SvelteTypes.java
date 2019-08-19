@@ -1,9 +1,9 @@
 // This is a generated file. Not intended for manual editing.
 package dev.blachut.svelte.lang.psi;
 
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import dev.blachut.svelte.lang.psi.impl.*;
 
 public interface SvelteTypes {
@@ -31,6 +31,7 @@ public interface SvelteTypes {
   IElementType IF_BLOCK_OPENING = new SvelteElementType("IF_BLOCK_OPENING");
   IElementType IF_BLOCK_OPENING_TAG = new SvelteElementType("IF_BLOCK_OPENING_TAG");
   IElementType INTERPOLATION = new SvelteElementType("INTERPOLATION");
+  IElementType KEY_EXPRESSION = new SvelteElementType("KEY_EXPRESSION");
   IElementType PARAMETER = new SvelteElementType("PARAMETER");
   IElementType SCOPE = new SvelteElementType("SCOPE");
   IElementType THEN_CONTINUATION = new SvelteElementType("THEN_CONTINUATION");
@@ -39,7 +40,7 @@ public interface SvelteTypes {
   IElementType AS = new SvelteElementType("as");
   IElementType AWAIT = new SvelteElementType("await");
   IElementType CATCH = new SvelteElementType("catch");
-  IElementType CODE_FRAGMENT = new SvelteElementType("CODE_FRAGMENT");
+  IElementType CODE_FRAGMENT = new SvelteElementType("<code>");
   IElementType COMMA = new SvelteElementType(",");
   IElementType DEBUG_PREFIX = new SvelteElementType("@debug");
   IElementType EACH = new SvelteElementType("each");
@@ -124,6 +125,9 @@ public interface SvelteTypes {
       }
       else if (type == INTERPOLATION) {
         return new SvelteInterpolationImpl(node);
+      }
+      else if (type == KEY_EXPRESSION) {
+        return new SvelteKeyExpressionImpl(node);
       }
       else if (type == PARAMETER) {
         return new SvelteParameterImpl(node);

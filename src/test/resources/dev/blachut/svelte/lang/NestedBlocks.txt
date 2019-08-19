@@ -1,83 +1,107 @@
 Svelte Component
   PsiElement(<markup>)('<p>\n    Plain html\n</p>\n\n')
-  Svelte: IF_BLOCK
-    Svelte: IF_BLOCK_OPENING
-      Svelte: IF_BLOCK_OPENING_TAG
+  SvelteIfBlock
+    SvelteIfBlockOpening
+      SvelteIfBlockOpeningTag
         PsiElement({#)('{#')
         PsiElement(if)('if')
-        Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)(' visible')
+        SvelteExpression
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('visible')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
-      Svelte: SCOPE
+      SvelteScope
         PsiElement(<markup>)('<Box {name}/>\n    ')
-        Svelte: AWAIT_BLOCK
-          Svelte: AWAIT_THEN_BLOCK_OPENING
-            Svelte: AWAIT_THEN_BLOCK_OPENING_TAG
+        SvelteAwaitBlock
+          SvelteAwaitThenBlockOpening
+            SvelteAwaitThenBlockOpeningTag
               PsiElement({#)('{#')
               PsiElement(await)('await')
-              Svelte: EXPRESSION
-                PsiElement(CODE_FRAGMENT)(' promise ')
+              SvelteExpression
+                SvelteJS: EXPRESSION
+                  PsiWhiteSpace(' ')
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('promise')
+                  PsiWhiteSpace(' ')
               PsiElement(then)('then')
-              Svelte: PARAMETER
-                PsiElement(CODE_FRAGMENT)(' x')
+              SvelteParameter
+                SvelteJS: PARAMETER
+                  PsiWhiteSpace(' ')
+                  JS:EMBEDDED_PARAMETER
+                    PsiElement(JS:IDENTIFIER)('x')
               PsiElement(})('}')
             PsiWhiteSpace('\n        ')
-            Svelte: SCOPE
+            SvelteScope
               PsiElement(<markup>)('<p>')
-              Svelte: INTERPOLATION
+              SvelteInterpolation
                 PsiElement({)('{')
-                Svelte: EXPRESSION
-                  PsiElement(CODE_FRAGMENT)('x')
+                SvelteExpression
+                  SvelteJS: EXPRESSION
+                    JSReferenceExpression
+                      PsiElement(JS:IDENTIFIER)('x')
                 PsiElement(})('}')
               PsiElement(<markup>)('<p>\n    ')
-          Svelte: AWAIT_BLOCK_CLOSING_TAG
+          SvelteAwaitBlockClosingTag
             PsiElement({/)('{/')
             PsiElement(await)('await')
             PsiElement(})('}')
     PsiWhiteSpace('\n')
-    Svelte: ELSE_CONTINUATION
-      Svelte: ELSE_CONTINUATION_TAG
+    SvelteElseContinuation
+      SvelteElseContinuationTag
         PsiElement({:)('{:')
         PsiElement(else)('else')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
-      Svelte: SCOPE
-        Svelte: INTERPOLATION
+      SvelteScope
+        SvelteInterpolation
           PsiElement({)('{')
           PsiElement(@debug)('@debug')
-          Svelte: EXPRESSION
-            PsiElement(CODE_FRAGMENT)(' name')
+          SvelteExpression
+            SvelteJS: EXPRESSION
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('name')
           PsiElement(})('}')
         PsiWhiteSpace('\n    ')
         PsiElement(<markup>)('<p>Kappa</p>\n')
-    Svelte: IF_BLOCK_CLOSING_TAG
+    SvelteIfBlockClosingTag
       PsiElement({/)('{/')
       PsiElement(if)('if')
       PsiElement(})('}')
   PsiWhiteSpace('\n\n')
   PsiElement(<markup>)('<ul>\n    ')
-  Svelte: EACH_BLOCK
-    Svelte: EACH_BLOCK_OPENING
-      Svelte: EACH_BLOCK_OPENING_TAG
+  SvelteEachBlock
+    SvelteEachBlockOpening
+      SvelteEachBlockOpeningTag
         PsiElement({#)('{#')
         PsiElement(each)('each')
-        Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)(' assets ')
+        SvelteExpression
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('assets')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        Svelte: PARAMETER
-          PsiElement(CODE_FRAGMENT)(' a')
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('a')
         PsiElement(})('}')
       PsiWhiteSpace('\n        ')
-      Svelte: SCOPE
+      SvelteScope
         PsiElement(<markup>)('<li>')
-        Svelte: INTERPOLATION
+        SvelteInterpolation
           PsiElement({)('{')
-          Svelte: EXPRESSION
-            PsiElement(CODE_FRAGMENT)('a')
+          SvelteExpression
+            SvelteJS: EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('a')
           PsiElement(})('}')
         PsiElement(<markup>)('</li>\n    ')
-    Svelte: EACH_BLOCK_CLOSING_TAG
+    SvelteEachBlockClosingTag
       PsiElement({/)('{/')
       PsiElement(each)('each')
       PsiElement(})('}')

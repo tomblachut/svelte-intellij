@@ -1,14 +1,18 @@
 // This is a generated file. Not intended for manual editing.
 package dev.blachut.svelte.lang.psi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
 
 public interface SvelteEachBlockOpeningTag extends SvelteOpeningTag {
 
-  @NotNull
-  List<SvelteExpression> getExpressionList();
+  @Nullable
+  SvelteExpression getExpression();
+
+  @Nullable
+  SvelteKeyExpression getKeyExpression();
 
   @NotNull
   List<SvelteParameter> getParameterList();

@@ -3,6 +3,6 @@ package dev.blachut.svelte.lang.psi;
 
 import com.intellij.psi.PsiElement;
 
-public interface SvelteExpression extends PsiElement {
+public interface SvelteKeyExpression extends PsiElement {
 
 }

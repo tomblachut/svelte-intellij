@@ -1,10 +1,9 @@
 // This is a generated file. Not intended for manual editing.
 package dev.blachut.svelte.lang.psi;
 
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
 
 public class SvelteVisitor extends PsiElementVisitor {
 
@@ -85,7 +84,7 @@ public class SvelteVisitor extends PsiElementVisitor {
   }
 
   public void visitExpression(@NotNull SvelteExpression o) {
-    visitPsiLanguageInjectionHost(o);
+    visitPsiElement(o);
   }
 
   public void visitIfBlock(@NotNull SvelteIfBlock o) {
@@ -108,12 +107,16 @@ public class SvelteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitKeyExpression(@NotNull SvelteKeyExpression o) {
+    visitPsiElement(o);
+  }
+
   public void visitOpeningTag(@NotNull SvelteOpeningTag o) {
     visitPsiElement(o);
   }
 
   public void visitParameter(@NotNull SvelteParameter o) {
-    visitPsiLanguageInjectionHost(o);
+    visitPsiElement(o);
   }
 
   public void visitScope(@NotNull SvelteScope o) {
@@ -126,10 +129,6 @@ public class SvelteVisitor extends PsiElementVisitor {
 
   public void visitThenContinuationTag(@NotNull SvelteThenContinuationTag o) {
     visitContinuationTag(o);
-  }
-
-  public void visitPsiLanguageInjectionHost(@NotNull PsiLanguageInjectionHost o) {
-    visitElement(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

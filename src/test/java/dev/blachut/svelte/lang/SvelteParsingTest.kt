@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang
 
 import com.intellij.testFramework.ParsingTestCase
 
-class SvelteParsingTest : ParsingTestCase("dev/blachut/svelte/lang", "svelte", SvelteParserDefinition()) {
+class SvelteParsingTest : ParsingTestCase("dev/blachut/svelte/lang", "svelte", SvelteParserDefinition(), SvelteJSParserDefinition(), SvelteHTMLParserDefinition()) {
     override fun getTestDataPath(): String = "src/test/resources"
 
     fun testIfElseIf() = doTest()

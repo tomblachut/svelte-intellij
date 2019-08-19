@@ -5,3 +5,5 @@ import dev.blachut.svelte.lang.SvelteLanguage
 import org.jetbrains.annotations.NonNls
 
 class SvelteElementType(@NonNls debugName: String) : IElementType(debugName, SvelteLanguage.INSTANCE)
+
+

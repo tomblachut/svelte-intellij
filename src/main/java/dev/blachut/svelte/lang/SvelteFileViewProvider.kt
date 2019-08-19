@@ -2,7 +2,6 @@ package dev.blachut.svelte.lang
 
 import com.intellij.lang.Language
 import com.intellij.lang.LanguageParserDefinitions
-import com.intellij.lang.html.HTMLLanguage
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.MultiplePsiFilesPerDocumentFileViewProvider
 import com.intellij.psi.PsiFile
@@ -12,7 +11,7 @@ import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider
 import dev.blachut.svelte.lang.psi.SvelteOuterTypes
 
 class SvelteFileViewProvider(psiManager: PsiManager, virtualFile: VirtualFile, physical: Boolean) : MultiplePsiFilesPerDocumentFileViewProvider(psiManager, virtualFile, physical), TemplateLanguageFileViewProvider {
-    private val htmlLanguage = HTMLLanguage.INSTANCE
+    private val htmlLanguage = SvelteHTMLLanguage.INSTANCE
 
     override fun getBaseLanguage(): Language {
         return SvelteLanguage.INSTANCE

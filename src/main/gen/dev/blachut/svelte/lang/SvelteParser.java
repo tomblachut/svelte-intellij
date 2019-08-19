@@ -1,16 +1,19 @@
 // This is a generated file. Not intended for manual editing.
 package dev.blachut.svelte.lang;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
-import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static dev.blachut.svelte.lang.psi.SvelteManualParsing.parseExpression;
+import static dev.blachut.svelte.lang.psi.SvelteManualParsing.parseParameter;
+import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class SvelteParser implements PsiParser, LightPsiParser {
@@ -256,7 +259,7 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{#' 'each' expression 'as' parameter (',' parameter)? ('(' expression ')')? '}'
+  // '{#' 'each' expression 'as' parameter (',' parameter)? keyExpression? '}'
   public static boolean eachBlockOpeningTag(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "eachBlockOpeningTag")) return false;
     boolean result, pinned;
@@ -291,23 +294,11 @@ public class SvelteParser implements PsiParser, LightPsiParser {
     return result;
   }
 
-  // ('(' expression ')')?
+  // keyExpression?
   private static boolean eachBlockOpeningTag_6(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "eachBlockOpeningTag_6")) return false;
-    eachBlockOpeningTag_6_0(builder, level + 1);
+    keyExpression(builder, level + 1);
     return true;
-  }
-
-  // '(' expression ')'
-  private static boolean eachBlockOpeningTag_6_0(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "eachBlockOpeningTag_6_0")) return false;
-    boolean result;
-    Marker marker = enter_section_(builder);
-    result = consumeToken(builder, START_PAREN);
-    result = result && expression(builder, level + 1);
-    result = result && consumeToken(builder, END_PAREN);
-    exit_section_(builder, marker, null, result);
-    return result;
   }
 
   /* ********************************************************** */
@@ -363,13 +354,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CODE_FRAGMENT
+  // <<parseExpression>>
   public static boolean expression(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "expression")) return false;
-    if (!nextTokenIs(builder, "<expression>", CODE_FRAGMENT)) return false;
     boolean result;
     Marker marker = enter_section_(builder, level, _NONE_, EXPRESSION, "<expression>");
-    result = consumeToken(builder, CODE_FRAGMENT);
+    result = parseExpression(builder, level + 1);
     exit_section_(builder, level, marker, result, false, null);
     return result;
   }
@@ -483,6 +473,21 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '(' <<parseExpression>> ')'
+  public static boolean keyExpression(PsiBuilder builder, int level) {
+    if (!recursion_guard_(builder, level, "keyExpression")) return false;
+    if (!nextTokenIs(builder, START_PAREN)) return false;
+    boolean result, pinned;
+    Marker marker = enter_section_(builder, level, _NONE_, KEY_EXPRESSION, null);
+    result = consumeToken(builder, START_PAREN);
+    pinned = result; // pin = 1
+    result = result && report_error_(builder, parseExpression(builder, level + 1));
+    result = pinned && consumeToken(builder, END_PAREN) && result;
+    exit_section_(builder, level, marker, result, pinned, null);
+    return result || pinned;
+  }
+
+  /* ********************************************************** */
   // !('{' | '{#' | "{:" | "{/" | HTML_FRAGMENT)
   static boolean mustache_recover(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "mustache_recover")) return false;
@@ -508,13 +513,12 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CODE_FRAGMENT
+  // <<parseParameter>>
   public static boolean parameter(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "parameter")) return false;
-    if (!nextTokenIs(builder, "<parameter>", CODE_FRAGMENT)) return false;
     boolean result;
     Marker marker = enter_section_(builder, level, _NONE_, PARAMETER, "<parameter>");
-    result = consumeToken(builder, CODE_FRAGMENT);
+    result = parseParameter(builder, level + 1);
     exit_section_(builder, level, marker, result, false, null);
     return result;
   }

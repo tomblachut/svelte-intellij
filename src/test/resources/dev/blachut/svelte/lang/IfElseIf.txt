@@ -1,40 +1,49 @@
 Svelte Component
-  Svelte: IF_BLOCK
-    Svelte: IF_BLOCK_OPENING
-      Svelte: IF_BLOCK_OPENING_TAG
+  SvelteIfBlock
+    SvelteIfBlockOpening
+      SvelteIfBlockOpeningTag
         PsiElement({#)('{#')
         PsiElement(if)('if')
-        Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)(' iffy')
+        SvelteExpression
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('iffy')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
-      Svelte: SCOPE
+      SvelteScope
         PsiElement(<markup>)('<p>First branch</p>\n')
-    Svelte: ELSE_IF_CONTINUATION
-      Svelte: ELSE_IF_CONTINUATION_TAG
+    SvelteElseIfContinuation
+      SvelteElseIfContinuationTag
         PsiElement({:)('{:')
         PsiElement(else)('else')
         PsiWhiteSpace(' ')
         PsiElement(if)('if')
-        Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)(' life')
+        SvelteExpression
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('life')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
-      Svelte: SCOPE
+      SvelteScope
         PsiElement(<markup>)('<p>Second branch</p>\n')
-    Svelte: ELSE_IF_CONTINUATION
-      Svelte: ELSE_IF_CONTINUATION_TAG
+    SvelteElseIfContinuation
+      SvelteElseIfContinuationTag
         PsiElement({:)('{:')
         PsiElement(else)('else')
         PsiWhiteSpace(' ')
         PsiElement(if)('if')
-        Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)(' gif')
+        SvelteExpression
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('gif')
         PsiElement(})('}')
       PsiWhiteSpace('\n    ')
-      Svelte: SCOPE
+      SvelteScope
         PsiElement(<markup>)('<p>Third branch</p>\n')
-    Svelte: IF_BLOCK_CLOSING_TAG
+    SvelteIfBlockClosingTag
       PsiElement({/)('{/')
       PsiElement(if)('if')
       PsiElement(})('}')

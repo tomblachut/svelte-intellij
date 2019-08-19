@@ -3,19 +3,19 @@ package dev.blachut.svelte.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import dev.blachut.svelte.lang.psi.SvelteParameter;
+import dev.blachut.svelte.lang.psi.SvelteKeyExpression;
 import dev.blachut.svelte.lang.psi.SveltePsiElementImpl;
 import dev.blachut.svelte.lang.psi.SvelteVisitor;
 import org.jetbrains.annotations.NotNull;
 
-public class SvelteParameterImpl extends SveltePsiElementImpl implements SvelteParameter {
+public class SvelteKeyExpressionImpl extends SveltePsiElementImpl implements SvelteKeyExpression {
 
-  public SvelteParameterImpl(@NotNull ASTNode node) {
+  public SvelteKeyExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SvelteVisitor visitor) {
-    visitor.visitParameter(this);
+    visitor.visitKeyExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -1,21 +1,31 @@
 Svelte Component
-  Svelte: EACH_BLOCK
-    Svelte: EACH_BLOCK_OPENING
-      Svelte: EACH_BLOCK_OPENING_TAG
+  SvelteEachBlock
+    SvelteEachBlockOpening
+      SvelteEachBlockOpeningTag
         PsiElement({#)('{#')
         PsiElement(each)('each')
-        Svelte: EXPRESSION
-          PsiElement(CODE_FRAGMENT)(' assets ')
+        SvelteExpression
+          SvelteJS: EXPRESSION
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('assets')
+            PsiWhiteSpace(' ')
         PsiElement(as)('as')
-        Svelte: PARAMETER
-          PsiElement(CODE_FRAGMENT)(' asset')
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('asset')
         PsiElement(,)(',')
-        Svelte: PARAMETER
-          PsiElement(CODE_FRAGMENT)(' i')
+        SvelteParameter
+          SvelteJS: PARAMETER
+            PsiWhiteSpace(' ')
+            JS:EMBEDDED_PARAMETER
+              PsiElement(JS:IDENTIFIER)('i')
         PsiElement(})('}')
-      Svelte: SCOPE
+      SvelteScope
         <empty list>
-    Svelte: EACH_BLOCK_CLOSING_TAG
+    SvelteEachBlockClosingTag
       PsiElement({/)('{/')
       PsiElement(each)('each')
       PsiElement(})('}')

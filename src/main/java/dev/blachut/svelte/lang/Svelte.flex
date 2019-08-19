@@ -22,6 +22,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
   private int braces = 0;
   private int parens = 0;
   private int brackets = 0;
+  // as and then can work as Svelte keywords or JS identifiers depending on context
   private boolean rootKeywordsEnabled = false;
 
   private IElementType quotedToken;
@@ -133,9 +134,9 @@ TICKED_QUOTE="`"
   "{"                { enableRootKeywords(); braces++; return CODE_FRAGMENT; }
   // Following eatWsThenBegin is a hack around formatter bugs
   "}"                { if (braces == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { braces--; return CODE_FRAGMENT; } }
-  {ID}               { enableRootKeywords(); return CODE_FRAGMENT; }
-  {ID}"."            { enableRootKeywords(); return CODE_FRAGMENT; } // Fixes weird highlighting for incomplete JS
+  {WHITE_SPACE}/"}"  { if (braces == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
   {WHITE_SPACE}      { return CODE_FRAGMENT; }
+  {ID}               { enableRootKeywords(); return CODE_FRAGMENT; }
   [^]                { if (notNestedCode()) rootKeywordsEnabled = false; return CODE_FRAGMENT; }
 }
 

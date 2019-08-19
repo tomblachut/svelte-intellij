@@ -9,9 +9,9 @@ import com.intellij.codeInsight.template.emmet.generators.ZenCodingGenerator
 import com.intellij.codeInsight.template.emmet.tokens.ZenCodingToken
 import com.intellij.codeInsight.template.impl.TemplateImpl
 import com.intellij.lang.Language
-import com.intellij.lang.html.HTMLLanguage
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteLanguage
 
 class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
@@ -67,4 +67,4 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
     }
 }
 
-class SvelteZenCodingCustomTemplateCallback(callback: CustomTemplateCallback) : CustomTemplateCallback(callback.editor, callback.file.viewProvider.getPsi(HTMLLanguage.INSTANCE))
+class SvelteZenCodingCustomTemplateCallback(callback: CustomTemplateCallback) : CustomTemplateCallback(callback.editor, callback.file.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE))
