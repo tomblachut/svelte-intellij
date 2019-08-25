@@ -5,7 +5,7 @@ import com.intellij.psi.impl.source.tree.LazyParseablePsiElement
 import com.intellij.psi.tree.IElementType
 
 /**
- * Implementing JSEmbeddedContent is crucial for associating JavaScript extensions and code insight to work
+ * Implementing JSEmbeddedContent is crucial for detecting custom JS dialect and associating JavaScript extensions
  *
  * @see com.intellij.lang.javascript.DialectDetector.calculateJSLanguage
   */
