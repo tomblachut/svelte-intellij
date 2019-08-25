@@ -93,7 +93,7 @@ object ComponentImporter {
     fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo? = null): String {
         val comma = JSCodeStyleSettings.getSemicolon(currentFile)
 
-        if (moduleInfo != null) {
+        if (moduleInfo != null && moduleInfo.resolvedFile.extension != "svelte") {
             return "import {$componentName} from \"${moduleInfo.moduleName}\"$comma"
         }
 
