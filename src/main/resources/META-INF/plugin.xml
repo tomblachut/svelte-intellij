@@ -87,6 +87,7 @@
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
         <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGeneratorImpl"/>
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
+        <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferenceSearch" order="first"/>
