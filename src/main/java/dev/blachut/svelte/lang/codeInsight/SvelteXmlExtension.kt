@@ -7,10 +7,14 @@ import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteXmlExtension : HtmlXmlExtension() {
-    override fun isAvailable(file: PsiFile?): Boolean = file?.language is SvelteHTMLLanguage
+    override fun isAvailable(file: PsiFile): Boolean = file.language is SvelteHTMLLanguage
 
     override fun isSelfClosingTagAllowed(tag: XmlTag): Boolean {
-        return tag.descriptor is SvelteComponentTagDescriptor || super.isSelfClosingTagAllowed(tag)
+        return isSvelteComponentTag(tag.name) || super.isSelfClosingTagAllowed(tag)
+    }
+
+    override fun isCollapsibleTag(tag: XmlTag): Boolean {
+        return isSvelteComponentTag(tag.name) || super.isCollapsibleTag(tag)
     }
 
     override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name)
