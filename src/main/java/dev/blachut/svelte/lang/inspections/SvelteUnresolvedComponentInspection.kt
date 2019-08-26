@@ -19,6 +19,8 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
 
         return object : XmlElementVisitor() {
             override fun visitXmlTag(tag: XmlTag) {
+                if (!tag.isValid) return
+
                 val componentName = tag.name
                 if (!isSvelteComponentTag(componentName)) return
                 if (tag.descriptor?.declaration != null) return
