@@ -72,43 +72,19 @@ object ComponentImporter {
         CodeStyleManager.getInstance(project).reformat(jsElement)
     }
 
-    private fun findOrCreateEmbeddedContent(project: Project, currentFile: PsiFile): JSEmbeddedContent? {
-        var scriptTag = findScriptTag(currentFile)
-        val scriptBlock = XmlElementFactory.getInstance(project)
-            .createHTMLTagFromText("<script>\n</script>")
-
-        if (scriptTag == null) {
-            currentFile.addBefore(scriptBlock, currentFile.firstChild)
-            scriptTag = findScriptTag(currentFile) ?: return null
-        }
-
-        val jsElement = PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
-        if (jsElement == null) {
-            scriptTag.replace(scriptBlock)
-        }
-
-        return PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
-    }
-
-    fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo? = null): String {
-        val comma = JSCodeStyleSettings.getSemicolon(currentFile)
+    fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo?): String {
+        val semicolon = JSCodeStyleSettings.getSemicolon(currentFile)
+        val quote = JSCodeStyleSettings.getQuoteChar(currentFile)
 
         if (moduleInfo != null && moduleInfo.resolvedFile.extension != "svelte") {
-            return "import {$componentName} from \"${moduleInfo.moduleName}\"$comma"
+            return "import {$componentName} from $quote${moduleInfo.moduleName}$quote$semicolon"
         }
 
         val relativePath = getRelativePath(currentFile, componentVirtualFile)
         val prefix = if (relativePath.startsWith("../")) "" else "./"
+        val path = prefix + relativePath
 
-        return "import $componentName from \"$prefix$relativePath\"$comma"
-    }
-
-    private fun getRelativePath(currentFile: PsiFile, componentVirtualFile: VirtualFile): String {
-        return FileUtil.getRelativePath(
-            currentFile.virtualFile.parent.path,
-            componentVirtualFile.path,
-            '/'
-        ) ?: ""
+        return "import $componentName from $quote$path$quote$semicolon"
     }
 
     fun getModulesInfos(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): MutableList<JSModuleNameInfo> {
@@ -132,7 +108,33 @@ object ComponentImporter {
         return infos
     }
 
+    private fun getRelativePath(currentFile: PsiFile, componentVirtualFile: VirtualFile): String {
+        return FileUtil.getRelativePath(
+            currentFile.virtualFile.parent.path,
+            componentVirtualFile.path,
+            '/'
+        ) ?: ""
+    }
+
     private fun findScriptTag(file: PsiFile): XmlTag? {
         return PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java).find { HtmlUtil.isScriptTag(it) }
+    }
+
+    private fun findOrCreateEmbeddedContent(project: Project, currentFile: PsiFile): JSEmbeddedContent? {
+        var scriptTag = findScriptTag(currentFile)
+        val scriptBlock = XmlElementFactory.getInstance(project)
+            .createHTMLTagFromText("<script>\n</script>")
+
+        if (scriptTag == null) {
+            currentFile.addBefore(scriptBlock, currentFile.firstChild)
+            scriptTag = findScriptTag(currentFile) ?: return null
+        }
+
+        val jsElement = PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
+        if (jsElement == null) {
+            scriptTag.replace(scriptBlock)
+        }
+
+        return PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
     }
 }
