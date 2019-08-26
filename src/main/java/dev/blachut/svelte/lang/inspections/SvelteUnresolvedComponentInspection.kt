@@ -16,7 +16,6 @@ import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
-
         return object : XmlElementVisitor() {
             override fun visitXmlTag(tag: XmlTag) {
                 if (!tag.isValid) return

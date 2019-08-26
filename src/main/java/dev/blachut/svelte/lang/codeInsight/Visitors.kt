@@ -1,8 +1,8 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.ecmascript6.psi.ES6ImportExportDeclarationPart
 import com.intellij.lang.ecmascript6.psi.ES6ImportSpecifier
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
-import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.JSRecursiveWalkingElementVisitor
 import com.intellij.lang.javascript.psi.JSVarStatement
@@ -16,24 +16,21 @@ import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 
 internal class ImportVisitor : JSRecursiveWalkingElementVisitor() {
-    val components = mutableListOf<String>()
-    val bindings = mutableListOf<JSElement>()
+    val bindings = mutableListOf<ES6ImportExportDeclarationPart>()
 
     override fun visitES6ImportedBinding(importedBinding: ES6ImportedBinding) {
-        val name = importedBinding.name ?: return
-
-        if (StringUtil.isCapitalized(name)) {
-            components.add(name)
-            bindings.add(importedBinding)
-        }
+        process(importedBinding)
     }
 
-    override fun visitImportSpecifier(importSpecifier: ES6ImportSpecifier?) {
-        val name = importSpecifier?.name ?: return
+    override fun visitImportSpecifier(importSpecifier: ES6ImportSpecifier) {
+        process(importSpecifier)
+    }
+
+    private fun process(binding: ES6ImportExportDeclarationPart) {
+        val name = binding.name ?: return
 
         if (StringUtil.isCapitalized(name)) {
-            components.add(name)
-            bindings.add(importSpecifier)
+            bindings.add(binding)
         }
     }
 }

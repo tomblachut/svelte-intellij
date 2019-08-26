@@ -55,7 +55,6 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         jsElement.accept(importVisitor)
         val binding = importVisitor.bindings.find { it.name == tag.name } ?: return null
 
-        // TODO Support reexports
         // TODO Look into caching SvelteComponentTagDescriptor in CachedValuesManager
         return SvelteComponentTagDescriptor(tag.name, binding)
     }
