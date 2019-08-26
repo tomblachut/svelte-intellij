@@ -3,8 +3,8 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.ecmascript6.psi.ES6ImportSpecifier
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSElement
-import com.intellij.lang.javascript.psi.JSElementVisitor
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
+import com.intellij.lang.javascript.psi.JSRecursiveWalkingElementVisitor
 import com.intellij.lang.javascript.psi.JSVarStatement
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
@@ -15,7 +15,7 @@ import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 
-internal class ImportVisitor : JSElementVisitor() {
+internal class ImportVisitor : JSRecursiveWalkingElementVisitor() {
     val components = mutableListOf<String>()
     val bindings = mutableListOf<JSElement>()
 
@@ -36,15 +36,9 @@ internal class ImportVisitor : JSElementVisitor() {
             bindings.add(importSpecifier)
         }
     }
-
-    override fun visitJSElement(node: JSElement?) = recursion(node)
-
-    private fun recursion(element: PsiElement?) {
-        element?.children?.forEach { it.accept(this) }
-    }
 }
 
-internal class PropsVisitor : JSElementVisitor() {
+internal class PropsVisitor : JSRecursiveWalkingElementVisitor() {
     val props = mutableListOf<String?>()
 
     override fun visitJSVarStatement(node: JSVarStatement?) {
@@ -53,12 +47,6 @@ internal class PropsVisitor : JSElementVisitor() {
             val declarations = node.declarations
             props.addAll(declarations.map { it.name })
         }
-    }
-
-    override fun visitJSElement(node: JSElement?) = recursion(node)
-
-    private fun recursion(element: PsiElement?) {
-        element?.children?.forEach { it.accept(this) }
     }
 }
 
