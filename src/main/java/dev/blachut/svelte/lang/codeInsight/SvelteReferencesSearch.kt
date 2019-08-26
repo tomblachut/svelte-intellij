@@ -18,7 +18,7 @@ import com.intellij.psi.xml.XmlTag
 import com.intellij.util.Processor
 import dev.blachut.svelte.lang.SvelteFileType
 
-class SvelteReferenceSearch : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>(true) {
+class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>(true) {
     override fun processQuery(queryParameters: ReferencesSearch.SearchParameters, consumer: Processor<in PsiReference>) {
         val element = queryParameters.elementToSearch
         val containingFile = element.containingFile ?: return

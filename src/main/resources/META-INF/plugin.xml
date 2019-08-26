@@ -90,7 +90,7 @@
         <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
-        <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferenceSearch" order="first"/>
+        <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
         <localInspection language="Svelte"
                          displayName="Unresolved Svelte component"
                          shortName="SvelteUnresolvedComponent"
