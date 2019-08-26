@@ -74,26 +74,37 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
             elements.addAll(svelteNamespacedTagLookupElements)
         }
 
-        val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
-        val reachableComponents = svelteFiles.map {
-            val componentName = it.nameWithoutExtension
-            val componentProps = ComponentPropsProvider().getComponentProps(it, tag.project)
-
-            val lookupObject = ComponentLookupObject(it, componentProps)
-            var lookupElement = LookupElementBuilder.create(lookupObject, componentName)
-                .withIcon(SvelteIcons.FILE)
-                .withInsertHandler(SvelteInsertHandler.INSTANCE)
-
-            if (componentProps != null) {
-                val joinedProps = componentProps.map { prop -> "$prop={...}" }.joinToString(" ").trim()
-                val typeText = "<$componentName $joinedProps>"
-                lookupElement = lookupElement.withTypeText(typeText, true)
-            }
-            PrioritizedLookupElement.withPriority(lookupElement, highPriority)
-        }
-
         // TODO Link component documentation
         // TODO Include svelte internal components
-        elements.addAll(reachableComponents)
+        elements.addAll(getReachableComponents(tag))
+    }
+
+    private fun getReachableComponents(tag: HtmlTag): List<LookupElement> {
+        val lookupElements = mutableListOf<LookupElement>()
+        val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
+
+        svelteFiles.forEach {
+            val componentName = it.nameWithoutExtension
+            val props = ComponentPropsProvider().getComponentProps(it, tag.project)
+
+            val modulesInfos = ComponentImporter.getModulesInfos(tag.project, tag.containingFile.originalFile, it, componentName)
+
+            modulesInfos.forEach { info ->
+                val lookupObject = ComponentLookupObject(it, props, info)
+                var lookupElement = LookupElementBuilder.create(lookupObject, componentName)
+                    .withIcon(info.resolvedFile.fileType.icon)
+                    .withInsertHandler(SvelteInsertHandler.INSTANCE)
+
+                if (props != null) {
+                    val joinedProps = props.map { prop -> "$prop={...}" }.joinToString(" ").trim()
+                    val typeText = "<$componentName $joinedProps>"
+                    lookupElement = lookupElement.withTypeText(typeText, true)
+                }
+                lookupElements.add(PrioritizedLookupElement.withPriority(lookupElement, highPriority))
+            }
+
+
+        }
+        return lookupElements
     }
 }

@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.ecmascript6.psi.ES6ImportSpecifier
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSElementVisitor
@@ -16,7 +17,7 @@ import com.intellij.xml.util.HtmlUtil
 
 internal class ImportVisitor : JSElementVisitor() {
     val components = mutableListOf<String>()
-    val bindings = mutableListOf<ES6ImportedBinding>()
+    val bindings = mutableListOf<JSElement>()
 
     override fun visitES6ImportedBinding(importedBinding: ES6ImportedBinding) {
         val name = importedBinding.name ?: return
@@ -24,6 +25,15 @@ internal class ImportVisitor : JSElementVisitor() {
         if (StringUtil.isCapitalized(name)) {
             components.add(name)
             bindings.add(importedBinding)
+        }
+    }
+
+    override fun visitImportSpecifier(importSpecifier: ES6ImportSpecifier?) {
+        val name = importSpecifier?.name ?: return
+
+        if (StringUtil.isCapitalized(name)) {
+            components.add(name)
+            bindings.add(importSpecifier)
         }
     }
 
