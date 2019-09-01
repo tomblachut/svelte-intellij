@@ -21,7 +21,7 @@ import dev.blachut.svelte.lang.SvelteFileType
 class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>(true) {
     override fun processQuery(queryParameters: ReferencesSearch.SearchParameters, consumer: Processor<in PsiReference>) {
         val element = queryParameters.elementToSearch
-        val containingFile = element.containingFile ?: return
+        val containingFile = element.containingFile
         val componentName = (element as? JSElement)?.name ?: return
 
         if (containingFile.virtualFile.fileType is SvelteFileType) {
@@ -47,6 +47,8 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
         }
         if (element is ES6ExportSpecifierAlias && queryParameters.effectiveSearchScope is LocalSearchScope) {
             val scope = (queryParameters.effectiveSearchScope as LocalSearchScope).scope.firstOrNull() ?: return
+            if (scope.containingFile.virtualFile.fileType !is SvelteFileType) return
+
             queryParameters.optimizer.searchWord(
                 componentName,
                 LocalSearchScope(scope.containingFile),
@@ -58,17 +60,14 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
         }
     }
 
-
-    private class MyProcessor(private val target: PsiElement) : RequestResultProcessor(target) {
+    private class MyProcessor(private val target: ES6ImportExportSpecifierAlias) : RequestResultProcessor(target) {
         override fun processTextOccurrence(element: PsiElement, offsetInElement: Int, consumer: Processor<in PsiReference>): Boolean {
             if (!target.isValid) {
                 return false
             }
 
-            val alias = target as ES6ImportExportSpecifierAlias
-
             if (element is XmlTag) {
-                if (element.name == alias.name) {
+                if (element.name == target.name) {
                     val references = PsiReferenceService.getService().getReferences(element, PsiReferenceService.Hints(target, offsetInElement))
                     references.forEach { consumer.process(it) }
                 }
