@@ -4,7 +4,7 @@ import com.intellij.openapi.fileTypes.LanguageFileType
 import dev.blachut.svelte.lang.icons.SvelteIcons
 import javax.swing.Icon
 
-class SvelteFileType private constructor() : LanguageFileType(SvelteLanguage.INSTANCE) {
+class SvelteFileType : LanguageFileType(SvelteLanguage.INSTANCE) {
 
     override fun getName(): String {
         return "Svelte"

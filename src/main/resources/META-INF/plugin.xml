@@ -73,8 +73,10 @@
         <lang.fileViewProviderFactory language="Svelte"
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
         <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.SvelteParserDefinition"/>
-        <lang.parserDefinition language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSParserDefinition"/>
-        <lang.parserDefinition language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteHTMLParserDefinition"/>
+        <lang.parserDefinition language="SvelteJS"
+                               implementationClass="dev.blachut.svelte.lang.SvelteJSParserDefinition"/>
+        <lang.parserDefinition language="SvelteHTML"
+                               implementationClass="dev.blachut.svelte.lang.SvelteHTMLParserDefinition"/>
         <stubElementTypeHolder class="dev.blachut.svelte.lang.psi.SvelteJSElementTypes"/>
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
@@ -87,7 +89,7 @@
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
         <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGeneratorImpl"/>
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
-        <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension"/>
+        <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension" order="first"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
@@ -102,7 +104,9 @@
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
-        <dialectSpecificHandlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
-        <analysisHandlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSAnalysisHandlersFactory"/>
+        <dialectSpecificHandlersFactory language="SvelteJS"
+                                        implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
+        <analysisHandlersFactory language="SvelteJS"
+                                 implementationClass="dev.blachut.svelte.lang.SvelteJSAnalysisHandlersFactory"/>
     </extensions>
 </idea-plugin>
