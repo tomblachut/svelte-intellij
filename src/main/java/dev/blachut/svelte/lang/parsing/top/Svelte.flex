@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang;
+package dev.blachut.svelte.lang.parsing.top;
 
 import java.util.*;
 import com.intellij.lexer.FlexLexer;

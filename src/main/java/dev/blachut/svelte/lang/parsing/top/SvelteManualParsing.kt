@@ -1,7 +1,9 @@
-package dev.blachut.svelte.lang.psi
+package dev.blachut.svelte.lang.parsing.top
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.ILazyParseableElementType
+import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteTypes
 
 @Suppress("UNUSED_PARAMETER")
 object SvelteManualParsing {

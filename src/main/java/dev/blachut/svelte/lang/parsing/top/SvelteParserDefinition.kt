@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang
+package dev.blachut.svelte.lang.parsing.top
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.LanguageUtil
@@ -12,6 +12,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
+import dev.blachut.svelte.lang.SvelteLanguage
 import dev.blachut.svelte.lang.psi.SvelteFile
 import dev.blachut.svelte.lang.psi.SvelteTypes
 

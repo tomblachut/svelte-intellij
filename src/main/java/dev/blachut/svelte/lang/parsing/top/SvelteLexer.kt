@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang
+package dev.blachut.svelte.lang.parsing.top
 
 import com.intellij.lexer.FlexAdapter
 import com.intellij.lexer.MergingLexerAdapter

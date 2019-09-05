@@ -5,7 +5,7 @@
 //    psi-classes-map="yes"
   ]
 
-  parserClass="dev.blachut.svelte.lang.SvelteParser"
+  parserClass="dev.blachut.svelte.lang.parsing.top.SvelteParser"
 
   extends="dev.blachut.svelte.lang.psi.SveltePsiElementImpl"
 
@@ -14,7 +14,7 @@
   psiPackage="dev.blachut.svelte.lang.psi"
   psiImplPackage="dev.blachut.svelte.lang.psi.impl"
 
-  parserImports=["static dev.blachut.svelte.lang.psi.SvelteManualParsing.*"]
+  parserImports=["static dev.blachut.svelte.lang.parsing.top.SvelteManualParsing.*"]
 
   elementTypeHolderClass="dev.blachut.svelte.lang.psi.SvelteTypes"
   elementTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"

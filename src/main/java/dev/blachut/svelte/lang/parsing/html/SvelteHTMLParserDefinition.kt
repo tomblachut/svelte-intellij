@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang
+package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiParser
@@ -11,6 +11,8 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.html.HtmlFileImpl
 import com.intellij.psi.tree.IFileElementType
+import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteHTMLParserDefinition : HTMLParserDefinition() {
     override fun createLexer(project: Project): Lexer {
