@@ -4,10 +4,11 @@ import com.intellij.lexer.FlexAdapter
 import com.intellij.lexer.MergingLexerAdapter
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.xml.XmlTokenType
+import dev.blachut.svelte.lang.psi.SvelteTypes
 
 class BaseSvelteHtmlLexer : MergingLexerAdapter(FlexAdapter(_SvelteHtmlLexer()), TOKENS_TO_MERGE)
 
 val TOKENS_TO_MERGE = TokenSet.create(XmlTokenType.XML_COMMENT_CHARACTERS, XmlTokenType.XML_WHITE_SPACE, XmlTokenType.XML_REAL_WHITE_SPACE,
     XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN, XmlTokenType.XML_DATA_CHARACTERS,
-    XmlTokenType.XML_TAG_CHARACTERS, XmlTokenType.XML_NAME)
+    XmlTokenType.XML_TAG_CHARACTERS, XmlTokenType.XML_NAME, SvelteTypes.CODE_FRAGMENT)
 

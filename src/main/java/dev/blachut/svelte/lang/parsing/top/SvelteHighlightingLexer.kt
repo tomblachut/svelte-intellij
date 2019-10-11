@@ -9,7 +9,7 @@ import dev.blachut.svelte.lang.psi.SvelteTypes.HTML_FRAGMENT
 
 class SvelteHighlightingLexer(jsLanguageLevel: JSLanguageLevel) : LayeredLexer(SvelteLexer()) {
     init {
-        registerLayer(SvelteHtmlHighlightingLexer(), HTML_FRAGMENT)
+        registerLayer(SvelteHtmlHighlightingLexer(jsLanguageLevel), HTML_FRAGMENT)
         registerLayer(JavaScriptHighlightingLexer(jsLanguageLevel.dialect.optionHolder), CODE_FRAGMENT)
     }
 }

@@ -5,6 +5,7 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.*;
 import com.intellij.psi.xml.*;
+import dev.blachut.svelte.lang.psi.SvelteTypes;
 
 %%
 
@@ -137,7 +138,7 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <ATTRIBUTE_VALUE_BRACES> {
   "}" { yybegin(ATTRIBUTE_VALUE_AFTER_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-  [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  [^] { return SvelteTypes.CODE_FRAGMENT; }
 }
 
 <ATTRIBUTE_VALUE_DQ> {
