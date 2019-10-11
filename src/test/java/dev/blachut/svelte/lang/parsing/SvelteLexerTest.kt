@@ -1,10 +1,11 @@
-package dev.blachut.svelte.lang
+package dev.blachut.svelte.lang.parsing
 
 import com.intellij.lexer.Lexer
 import com.intellij.testFramework.LexerTestCase
+import dev.blachut.svelte.lang.parsing.top.SvelteLexer
 
 class SvelteLexerTest : LexerTestCase() {
-    override fun getDirPath(): String = "src/test/resources/dev/blachut/svelte/lang"
+    override fun getDirPath(): String = "src/test/resources/dev/blachut/svelte/lang/parsing"
     override fun getExpectedFileExtension(): String = ".tokens"
 
     override fun getPathToTestDataFile(extension: String?): String {

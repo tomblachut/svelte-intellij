@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang
+package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiParser
@@ -11,6 +11,7 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.html.HtmlFileImpl
 import com.intellij.psi.tree.IFileElementType
+import dev.blachut.svelte.lang.SvelteHTMLLanguage
 
 class SvelteHTMLParserDefinition : HTMLParserDefinition() {
     override fun createLexer(project: Project): Lexer {
@@ -20,15 +21,7 @@ class SvelteHTMLParserDefinition : HTMLParserDefinition() {
     override fun createParser(project: Project?): PsiParser {
         return object : HTMLParser() {
             override fun createHtmlParsing(builder: PsiBuilder): HtmlParsing {
-                return object : HtmlParsing(builder) {
-                    override fun isSingleTag(tagName: String, originalTagName: String): Boolean {
-                        // Inspired by Vue plugin. Svelte tags must be closed explicitly
-                        if (isSvelteComponentTag(originalTagName)) {
-                            return false
-                        }
-                        return super.isSingleTag(tagName, originalTagName)
-                    }
-                }
+                return SvelteHtmlParsing(builder)
             }
         }
     }

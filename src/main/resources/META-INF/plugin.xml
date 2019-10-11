@@ -55,11 +55,11 @@
         <internalFileTemplate name="Svelte Component"/>
         <lang.fileViewProviderFactory language="Svelte"
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
-        <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.SvelteParserDefinition"/>
+        <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.parsing.top.SvelteParserDefinition"/>
         <lang.parserDefinition language="SvelteJS"
-                               implementationClass="dev.blachut.svelte.lang.SvelteJSParserDefinition"/>
+                               implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition"/>
         <lang.parserDefinition language="SvelteHTML"
-                               implementationClass="dev.blachut.svelte.lang.SvelteHTMLParserDefinition"/>
+                               implementationClass="dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition"/>
         <stubElementTypeHolder class="dev.blachut.svelte.lang.psi.SvelteJSElementTypes"/>
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>

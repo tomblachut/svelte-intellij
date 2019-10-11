@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang
+package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.HtmlScriptContentProvider
 import com.intellij.lang.javascript.JSStubElementTypes
@@ -8,6 +8,9 @@ import com.intellij.lexer.HtmlLexer
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.tree.TokenSet
+import com.intellij.psi.xml.XmlTokenType
+import dev.blachut.svelte.lang.SvelteJSLanguage
 
 val SVELTE_JS_EMBEDDED_CONTENT_MODULE: IElementType = JSEmbeddedContentElementType(SvelteJSLanguage.INSTANCE, "MOD_SVELTE_JS_")
 
