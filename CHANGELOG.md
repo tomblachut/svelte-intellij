@@ -1,5 +1,11 @@
 # Changelog
 
+<h3>0.9.1</h3>
+<ul>
+    <li>Fix buggy auto-inserted each block closing tag</li>
+    <li>Correctly set minimum version compatibility to 2019.2</li>
+</ul>
+
 <h3>0.9.0</h3>
 <ul>
     <li>Connect template expressions to definitions inside script tag</li>

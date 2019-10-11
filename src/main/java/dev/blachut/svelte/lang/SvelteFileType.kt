@@ -23,6 +23,7 @@ class SvelteFileType : LanguageFileType(SvelteLanguage.INSTANCE) {
     }
 
     companion object {
+        @JvmField
         val INSTANCE = SvelteFileType()
     }
 }

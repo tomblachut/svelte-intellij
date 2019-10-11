@@ -7,16 +7,16 @@ plugins {
 apply plugin: "kotlin"
 
 group 'dev.blachut.svelte.lang'
-version '0.9.0'
+version '0.9.1'
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version 'IU-LATEST-EAP-SNAPSHOT'
-    plugins = ['JavaScriptLanguage', 'CSS', 'PsiViewer:192-SNAPSHOT']
+    plugins = ['JavaScriptLanguage', 'CSS', 'PsiViewer:193-SNAPSHOT']
 }
 
 patchPluginXml {
-    sinceBuild '191'
+    sinceBuild '192'
     untilBuild '201'
 }
 
