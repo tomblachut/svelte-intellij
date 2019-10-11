@@ -44,7 +44,8 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileTypeFactory implementation="dev.blachut.svelte.lang.SvelteFileTypeFactory"/>
+        <fileType name="Svelte" extensions="svelte" language="Svelte"
+                  implementationClass="dev.blachut.svelte.lang.SvelteFileType" fieldName="INSTANCE"/>
         <internalFileTemplate name="Svelte Component"/>
         <lang.fileViewProviderFactory language="Svelte"
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
