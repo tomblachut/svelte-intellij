@@ -21,6 +21,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+<h3>0.9.1</h3>
+<ul>
+    <li>Fix buggy auto-inserted each block closing tag</li>
+    <li>Disallow installing plugin in unsupported 2019.1 version</li>
+</ul>
+
 <h3>0.9.0</h3>
 <ul>
     <li>Connect template expressions to definitions inside script tag</li>
