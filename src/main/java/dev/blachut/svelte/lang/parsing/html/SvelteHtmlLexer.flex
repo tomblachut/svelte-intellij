@@ -12,8 +12,15 @@ import dev.blachut.svelte.lang.psi.SvelteTypes;
 %unicode
 
 %{
+  public int bracesNestingLevel;
+
   public _SvelteHtmlLexer() {
     this((java.io.Reader)null);
+  }
+
+  private void yybeginNestable(int state) {
+      bracesNestingLevel = 0;
+      yybegin(state);
   }
 %}
 
@@ -131,43 +138,43 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_START> "{" { yybegin(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_START> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_START> "\"" { yybegin(ATTRIBUTE_VALUE_DQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 <ATTRIBUTE_VALUE_START> "'" { yybegin(ATTRIBUTE_VALUE_SQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybegin(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
-
-<ATTRIBUTE_VALUE_BRACES> {
-  "}" { yybegin(ATTRIBUTE_VALUE_AFTER_BRACES); return SvelteTypes.END_MUSTACHE; }
-  [^] { return SvelteTypes.CODE_FRAGMENT; }
-}
 
 <ATTRIBUTE_VALUE_DQ> {
   "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybegin(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTypes.START_MUSTACHE; }
+  "{" { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
-}
-
-<ATTRIBUTE_VALUE_DQ_BRACES> {
-  "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "}" { yybegin(ATTRIBUTE_VALUE_DQ); return SvelteTypes.END_MUSTACHE; }
-  [^] { return SvelteTypes.CODE_FRAGMENT; }
 }
 
 <ATTRIBUTE_VALUE_SQ> {
   "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybegin(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTypes.START_MUSTACHE; }
+  "{" { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
-<ATTRIBUTE_VALUE_SQ_BRACES> {
-  "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "}" { yybegin(ATTRIBUTE_VALUE_SQ); return SvelteTypes.END_MUSTACHE; }
+<ATTRIBUTE_VALUE_DQ_BRACES> "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
+<ATTRIBUTE_VALUE_SQ_BRACES> "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
+
+<ATTRIBUTE_VALUE_BRACES, ATTRIBUTE_VALUE_DQ_BRACES, ATTRIBUTE_VALUE_SQ_BRACES> {
+  "}" {
+          if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTypes.CODE_FRAGMENT; }
+          else {
+              if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
+              if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
+              if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
+              return SvelteTypes.END_MUSTACHE;
+          }
+      }
+  "{" { bracesNestingLevel++; return SvelteTypes.CODE_FRAGMENT; }
   [^] { return SvelteTypes.CODE_FRAGMENT; }
 }
 
