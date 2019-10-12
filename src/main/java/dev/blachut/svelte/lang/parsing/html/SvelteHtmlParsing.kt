@@ -6,7 +6,6 @@ import com.intellij.lang.html.HtmlParsing
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.isSvelteComponentTag
-import dev.blachut.svelte.lang.psi.SvelteElementType
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTypes
 
@@ -38,6 +37,8 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                     error.error(XmlErrorMessages.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
+                } else if (tt === SvelteTypes.CODE_FRAGMENT) {
+                    markCode()
                 } else {
                     advance()
                 }
@@ -50,11 +51,9 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             }
         } else {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token
-            while (token() == XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || token() == SvelteTypes.CODE_FRAGMENT) {
-                if (token() == SvelteTypes.CODE_FRAGMENT) {
-                    val marker = builder.mark()
-                    advance()
-                    marker.collapse(SvelteJSLazyElementTypes.EXPRESSION)
+            while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || token() === SvelteTypes.CODE_FRAGMENT) {
+                if (token() === SvelteTypes.CODE_FRAGMENT) {
+                    markCode()
                 } else {
                     advance()
                 }
@@ -62,5 +61,11 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         }
 
         attValue.done(XmlElementType.XML_ATTRIBUTE_VALUE)
+    }
+
+    private fun markCode() {
+        val marker = builder.mark()
+        advance()
+        marker.collapse(SvelteJSLazyElementTypes.EXPRESSION)
     }
 }

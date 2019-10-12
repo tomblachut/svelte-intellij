@@ -35,7 +35,9 @@ import dev.blachut.svelte.lang.psi.SvelteTypes;
 %state ATTRIBUTE_VALUE_BRACES
 %state ATTRIBUTE_VALUE_AFTER_BRACES
 %state ATTRIBUTE_VALUE_DQ
+%state ATTRIBUTE_VALUE_DQ_BRACES
 %state ATTRIBUTE_VALUE_SQ
+%state ATTRIBUTE_VALUE_SQ_BRACES
 %state PROCESSING_INSTRUCTION
 %state TAG_CHARACTERS
 %state C_COMMENT_START
@@ -143,14 +145,28 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <ATTRIBUTE_VALUE_DQ> {
   "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
+  "{" { yybegin(ATTRIBUTE_VALUE_DQ_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
+<ATTRIBUTE_VALUE_DQ_BRACES> {
+  "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
+  "}" { yybegin(ATTRIBUTE_VALUE_DQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  [^] { return SvelteTypes.CODE_FRAGMENT; }
+}
+
 <ATTRIBUTE_VALUE_SQ> {
   "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
+  "{" { yybegin(ATTRIBUTE_VALUE_SQ_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
+}
+
+<ATTRIBUTE_VALUE_SQ_BRACES> {
+  "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
+  "}" { yybegin(ATTRIBUTE_VALUE_SQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  [^] { return SvelteTypes.CODE_FRAGMENT; }
 }
 
 "&lt;" |
