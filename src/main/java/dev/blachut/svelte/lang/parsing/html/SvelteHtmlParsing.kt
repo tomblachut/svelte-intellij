@@ -51,7 +51,10 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             }
         } else {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token
-            while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || token() === SvelteTypes.CODE_FRAGMENT) {
+            while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN
+                || token() === SvelteTypes.CODE_FRAGMENT
+                || token() === SvelteTypes.START_MUSTACHE
+                || token() === SvelteTypes.END_MUSTACHE) {
                 if (token() === SvelteTypes.CODE_FRAGMENT) {
                     markCode()
                 } else {

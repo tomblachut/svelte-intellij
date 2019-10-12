@@ -130,42 +130,44 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 <ATTRIBUTE_VALUE_START, ATTRIBUTE_VALUE_AFTER_BRACES> "/>" { yybegin(YYINITIAL); return XmlTokenType.XML_EMPTY_ELEMENT_END; }
 
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))*\{|\{ { yybegin(ATTRIBUTE_VALUE_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+<ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+<ATTRIBUTE_VALUE_START> "{" { yybegin(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_START> "\"" { yybegin(ATTRIBUTE_VALUE_DQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 <ATTRIBUTE_VALUE_START> "'" { yybegin(ATTRIBUTE_VALUE_SQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))*\{ { yybegin(ATTRIBUTE_VALUE_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+<ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybegin(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 
 <ATTRIBUTE_VALUE_BRACES> {
-  "}" { yybegin(ATTRIBUTE_VALUE_AFTER_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  "}" { yybegin(ATTRIBUTE_VALUE_AFTER_BRACES); return SvelteTypes.END_MUSTACHE; }
   [^] { return SvelteTypes.CODE_FRAGMENT; }
 }
 
 <ATTRIBUTE_VALUE_DQ> {
   "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybegin(ATTRIBUTE_VALUE_DQ_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  "{" { yybegin(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
 <ATTRIBUTE_VALUE_DQ_BRACES> {
   "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "}" { yybegin(ATTRIBUTE_VALUE_DQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  "}" { yybegin(ATTRIBUTE_VALUE_DQ); return SvelteTypes.END_MUSTACHE; }
   [^] { return SvelteTypes.CODE_FRAGMENT; }
 }
 
 <ATTRIBUTE_VALUE_SQ> {
   "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybegin(ATTRIBUTE_VALUE_SQ_BRACES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  "{" { yybegin(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
 <ATTRIBUTE_VALUE_SQ_BRACES> {
   "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "}" { yybegin(ATTRIBUTE_VALUE_SQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
+  "}" { yybegin(ATTRIBUTE_VALUE_SQ); return SvelteTypes.END_MUSTACHE; }
   [^] { return SvelteTypes.CODE_FRAGMENT; }
 }
 
