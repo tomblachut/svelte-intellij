@@ -37,8 +37,8 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                     error.error(XmlErrorMessages.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
-                } else if (tt === SvelteTypes.CODE_FRAGMENT) {
-                    markCode()
+                } else if (tt === SvelteTypes.START_MUSTACHE) {
+                    parseAttributeExpression()
                 } else {
                     advance()
                 }
@@ -51,12 +51,9 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             }
         } else {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token
-            while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN
-                || token() === SvelteTypes.CODE_FRAGMENT
-                || token() === SvelteTypes.START_MUSTACHE
-                || token() === SvelteTypes.END_MUSTACHE) {
-                if (token() === SvelteTypes.CODE_FRAGMENT) {
-                    markCode()
+            while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || token() === SvelteTypes.START_MUSTACHE) {
+                if (token() === SvelteTypes.START_MUSTACHE) {
+                    parseAttributeExpression()
                 } else {
                     advance()
                 }
@@ -64,6 +61,15 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         }
 
         attValue.done(XmlElementType.XML_ATTRIBUTE_VALUE)
+    }
+
+    private fun parseAttributeExpression() {
+        assert(token() === SvelteTypes.START_MUSTACHE)
+        val expressionMarker = mark()
+        advance()
+        markCode()
+        advance()
+        expressionMarker.done(SvelteJSElementTypes.ATTRIBUTE_EXPRESSION)
     }
 
     private fun markCode() {
