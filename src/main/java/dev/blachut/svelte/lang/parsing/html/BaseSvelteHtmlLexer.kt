@@ -11,7 +11,9 @@ class BaseSvelteHtmlLexer : MergingLexerAdapter(FlexAdapter(_SvelteHtmlLexer()),
         get() = (original as FlexAdapter).flex as _SvelteHtmlLexer
 }
 
-val TOKENS_TO_MERGE = TokenSet.create(XmlTokenType.XML_COMMENT_CHARACTERS, XmlTokenType.XML_WHITE_SPACE, XmlTokenType.XML_REAL_WHITE_SPACE,
+internal val TOKENS_TO_MERGE = TokenSet.create(
+    XmlTokenType.XML_COMMENT_CHARACTERS, XmlTokenType.XML_WHITE_SPACE, XmlTokenType.XML_REAL_WHITE_SPACE,
     XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN, XmlTokenType.XML_DATA_CHARACTERS,
-    XmlTokenType.XML_TAG_CHARACTERS, XmlTokenType.XML_NAME, SvelteTypes.CODE_FRAGMENT)
-
+    XmlTokenType.XML_TAG_CHARACTERS,
+    SvelteTypes.CODE_FRAGMENT
+)
