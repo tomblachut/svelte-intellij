@@ -38,19 +38,20 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         val att = mark()
 
         if (isRemappedStartMustache()) {
-            parseAttributeExpression()
+            parseAttributeExpression(false)
         } else {
+            val parseAsParameter = builder.tokenText!!.startsWith("let:", true)
             advance()
             if (token() === XmlTokenType.XML_EQ) {
                 advance()
-                parseAttributeValue()
+                parseAttributeValue(parseAsParameter)
             }
         }
 
         att.done(XmlElementType.XML_ATTRIBUTE)
     }
 
-    override fun parseAttributeValue() {
+    private fun parseAttributeValue(parseAsParameter: Boolean) {
         val attValue = mark()
         if (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER) {
             while (true) {
@@ -70,7 +71,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
                 } else if (isRemappedStartMustache()) {
-                    parseAttributeExpression()
+                    parseAttributeExpression(parseAsParameter)
                 } else {
                     advance()
                 }
@@ -85,7 +86,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token
             while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || isRemappedStartMustache()) {
                 if (isRemappedStartMustache()) {
-                    parseAttributeExpression()
+                    parseAttributeExpression(parseAsParameter)
                 } else {
                     advance()
                 }
@@ -99,20 +100,25 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         return token() === XmlTokenType.XML_NAME && builder.originalText[builder.currentOffset] == '{'
     }
 
-    private fun parseAttributeExpression() {
+    private fun parseAttributeExpression(parseAsParameter: Boolean) {
         val expressionMarker = mark()
         // Remap must happen AFTER placing marker
         builder.remapCurrentToken(SvelteTypes.START_MUSTACHE)
         advance() // {
-        advanceCode()
+        advanceCode(parseAsParameter)
         advance() // }
         expressionMarker.done(SvelteJSElementTypes.ATTRIBUTE_EXPRESSION)
     }
 
-    private fun advanceCode() {
+    private fun advanceCode(parseAsParameter: Boolean) {
         val marker = builder.mark()
         // Guard against empty expressions
         if (token() === SvelteTypes.CODE_FRAGMENT) advance()
-        marker.collapse(SvelteJSLazyElementTypes.EXPRESSION)
+
+        val elementType = when {
+            parseAsParameter -> SvelteJSLazyElementTypes.PARAMETER
+            else -> SvelteJSLazyElementTypes.EXPRESSION
+        }
+        marker.collapse(elementType)
     }
 }
