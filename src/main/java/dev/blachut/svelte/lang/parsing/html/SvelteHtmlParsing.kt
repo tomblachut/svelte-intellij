@@ -103,15 +103,16 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         val expressionMarker = mark()
         // Remap must happen AFTER placing marker
         builder.remapCurrentToken(SvelteTypes.START_MUSTACHE)
-        advance()
-        markCode()
-        advance()
+        advance() // {
+        advanceCode()
+        advance() // }
         expressionMarker.done(SvelteJSElementTypes.ATTRIBUTE_EXPRESSION)
     }
 
-    private fun markCode() {
+    private fun advanceCode() {
         val marker = builder.mark()
-        advance()
+        // Guard against empty expressions
+        if (token() === SvelteTypes.CODE_FRAGMENT) advance()
         marker.collapse(SvelteJSLazyElementTypes.EXPRESSION)
     }
 }
