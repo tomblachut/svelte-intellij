@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.codeInsight.daemon.XmlErrorMessages
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.html.HtmlParsing
+import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
@@ -93,6 +94,14 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                     parseAttributeExpression(elementType)
                 } else {
                     advance()
+                }
+
+                // Guard against adjacent shorthand or spread attributes ambiguity
+                // token() is called because it skips whitespaces, unlike bare advance()
+                token()
+                val lastRawToken = builder.rawLookup(-1)
+                if (lastRawToken === TokenType.WHITE_SPACE) {
+                    break
                 }
             }
         }
