@@ -1,5 +1,12 @@
 # Changelog
 
+<h3>0.10.0</h3>
+<ul>
+    <li>Support attribute value expressions</li>
+    <li>Support shorthand attribute expressions</li>
+    <li>Support spread attributes</li>
+</ul>
+
 <h3>0.9.1</h3>
 <ul>
     <li>Fix buggy auto-inserted each block closing tag</li>
