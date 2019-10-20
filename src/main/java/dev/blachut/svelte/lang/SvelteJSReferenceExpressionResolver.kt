@@ -26,7 +26,7 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
 
         return resolveInLocalBlock()
             ?: resolveInSvelteBlocks()
-            ?: resolveInScriptTag(expression.containingFile, incompleteCode)
+            ?: resolveInScriptTag(incompleteCode)
     }
 
     private fun resolveInLocalBlock(): Array<ResolveResult>? {
@@ -41,6 +41,12 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
 
     private fun resolveInSvelteBlocks(): Array<ResolveResult>? {
         var currentElement: PsiElement? = myRef
+
+        if (currentElement != null && myContainingFile.language == SvelteHTMLLanguage.INSTANCE) {
+            // Jump between PSI trees
+            currentElement = myContainingFile.viewProvider.findElementAt(currentElement.textOffset, SvelteLanguage.INSTANCE)
+        }
+
         while (currentElement != null) {
             val scope = PsiTreeUtil.getParentOfType(currentElement, SvelteScope::class.java)
             if (scope != null) {
@@ -49,6 +55,7 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
             }
             currentElement = scope
         }
+
         return null
     }
 
@@ -82,8 +89,8 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
         return null
     }
 
-    private fun resolveInScriptTag(svelteFile: PsiFile, incompleteCode: Boolean): Array<ResolveResult>? {
-        val scriptTag = findScriptTag(svelteFile.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE)) ?: return null
+    private fun resolveInScriptTag(incompleteCode: Boolean): Array<ResolveResult>? {
+        val scriptTag = findScriptTag(myContainingFile.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE)) ?: return null
         val jsRoot = PsiTreeUtil.getChildOfType(scriptTag, JSEmbeddedContent::class.java) ?: return null
 
         val sink = ResolveResultSink(myRef, myReferencedName!!, false, incompleteCode)
