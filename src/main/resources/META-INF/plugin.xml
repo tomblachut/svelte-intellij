@@ -21,23 +21,15 @@
     ]]></description>
 
     <change-notes><![CDATA[
-<h3>0.9.1</h3>
+<h3>0.10.0</h3>
 <ul>
-    <li>Fix buggy auto-inserted each block closing tag</li>
-    <li>Disallow installing plugin in unsupported 2019.1 version</li>
+    <li>Support attribute value expressions</li>
+    <li>Support shorthand attribute expressions</li>
+    <li>Support spread attributes</li>
 </ul>
 
-<h3>0.9.0</h3>
-<ul>
-    <li>Connect template expressions to definitions inside script tag</li>
-    <li>Support complex JS expressions in Svelte tags</li>
-    <li>Recognize more component imports</li>
-    <li>Properly parse Svelte components with lowercase name matching HTML single tags</li>
-    <li>Add Svelte Component to New file menu</li>
-    <li>Improve stability</li>
-</ul>
-
- <a href="https://github.com/tomblachut/svelte-intellij/blob/master/CHANGELOG.md">Full changelog...</a>
+<br>
+<a href="https://github.com/tomblachut/svelte-intellij/blob/master/CHANGELOG.md">Full changelog...</a>
     ]]></change-notes>
 
     <depends>com.intellij.modules.lang</depends>
