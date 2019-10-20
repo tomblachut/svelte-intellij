@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.codeInsight.daemon.XmlErrorMessages
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.html.HtmlParsing
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.isSvelteComponentTag
@@ -38,20 +39,23 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         val att = mark()
 
         if (isRemappedStartMustache()) {
-            parseAttributeExpression(false)
+            parseAttributeExpression(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
         } else {
-            val parseAsParameter = builder.tokenText!!.startsWith("let:", true)
+            val elementType = when (builder.tokenText!!.startsWith("let:", true)) {
+                true -> SvelteJSLazyElementTypes.PARAMETER
+                false -> SvelteJSLazyElementTypes.EXPRESSION
+            }
             advance()
             if (token() === XmlTokenType.XML_EQ) {
                 advance()
-                parseAttributeValue(parseAsParameter)
+                parseAttributeValue(elementType)
             }
         }
 
         att.done(XmlElementType.XML_ATTRIBUTE)
     }
 
-    private fun parseAttributeValue(parseAsParameter: Boolean) {
+    private fun parseAttributeValue(elementType: IElementType) {
         val attValue = mark()
         if (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER) {
             while (true) {
@@ -71,7 +75,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
                 } else if (isRemappedStartMustache()) {
-                    parseAttributeExpression(parseAsParameter)
+                    parseAttributeExpression(elementType)
                 } else {
                     advance()
                 }
@@ -86,7 +90,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token
             while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || isRemappedStartMustache()) {
                 if (isRemappedStartMustache()) {
-                    parseAttributeExpression(parseAsParameter)
+                    parseAttributeExpression(elementType)
                 } else {
                     advance()
                 }
@@ -100,25 +104,20 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         return token() === XmlTokenType.XML_NAME && builder.originalText[builder.currentOffset] == '{'
     }
 
-    private fun parseAttributeExpression(parseAsParameter: Boolean) {
+    private fun parseAttributeExpression(elementType: IElementType) {
         val expressionMarker = mark()
         // Remap must happen AFTER placing marker
         builder.remapCurrentToken(SvelteTypes.START_MUSTACHE)
         advance() // {
-        advanceCode(parseAsParameter)
+        advanceCode(elementType)
         advance() // }
         expressionMarker.done(SvelteJSElementTypes.ATTRIBUTE_EXPRESSION)
     }
 
-    private fun advanceCode(parseAsParameter: Boolean) {
+    private fun advanceCode(elementType: IElementType) {
         val marker = builder.mark()
         // Guard against empty expressions
         if (token() === SvelteTypes.CODE_FRAGMENT) advance()
-
-        val elementType = when {
-            parseAsParameter -> SvelteJSLazyElementTypes.PARAMETER
-            else -> SvelteJSLazyElementTypes.EXPRESSION
-        }
         marker.collapse(elementType)
     }
 }
