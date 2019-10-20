@@ -26,8 +26,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Work
 <h2>Known issues</h2>
 
 <ul>
-    <li>$ subscriptions aren't recognised properly</li>
-    <li>JavaScript isn't highlighted inside attributes</li>
+    <li>$ subscriptions and labels aren't recognised properly</li>
     <li>Directives are treated as plain attributes</li>
     <li>...</li>
 </ul>
