@@ -61,6 +61,7 @@
         <lang.parserDefinition language="SvelteHTML"
                                implementationClass="dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition"/>
         <stubElementTypeHolder class="dev.blachut.svelte.lang.psi.SvelteJSElementTypes"/>
+        <lang.braceMatcher language="Svelte" implementationClass="dev.blachut.svelte.lang.editor.SvelteBraceMatcher"/>
         <lang.syntaxHighlighterFactory language="Svelte"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
         <lang.commenter language="Svelte" implementationClass="com.intellij.lang.xml.XmlCommenter"/>

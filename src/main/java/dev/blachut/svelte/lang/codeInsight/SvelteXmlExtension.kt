@@ -18,4 +18,15 @@ class SvelteXmlExtension : HtmlXmlExtension() {
     }
 
     override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name)
+
+    override fun getAttributeValuePresentation(tag: XmlTag?, attributeName: String, defaultAttributeQuote: String): AttributeValuePresentation {
+        if (attributeName == "slot") {
+            return super.getAttributeValuePresentation(tag, attributeName, defaultAttributeQuote)
+        }
+
+        return object : AttributeValuePresentation {
+            override fun getPrefix(): String = "{"
+            override fun getPostfix(): String = "}"
+        }
+    }
 }
