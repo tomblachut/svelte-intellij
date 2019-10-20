@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.parsing.top
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.lang.LanguageUtil
 import com.intellij.lang.ParserDefinition
@@ -10,10 +11,12 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.TokenType
+import com.intellij.psi.impl.source.html.HtmlEmbeddedContentImpl
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.SvelteLanguage
 import dev.blachut.svelte.lang.psi.SvelteFile
+import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTypes
 
 class SvelteParserDefinition : ParserDefinition {
@@ -54,6 +57,10 @@ class SvelteParserDefinition : ParserDefinition {
     }
 
     override fun createElement(node: ASTNode): PsiElement {
+        if (node.elementType === SvelteJSElementTypes.ATTRIBUTE_EXPRESSION) {
+            return ASTWrapperPsiElement(node)
+        }
+
         return SvelteTypes.Factory.createElement(node)
     }
 

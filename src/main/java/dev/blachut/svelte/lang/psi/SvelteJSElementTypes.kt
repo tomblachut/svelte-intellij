@@ -10,5 +10,7 @@ object SvelteJSElementTypes {
             return SvelteJSParameter(node)
         }
     }
+
+    val ATTRIBUTE_EXPRESSION = SvelteElementType("ATTRIBUTE_EXPRESSION")
 }
 

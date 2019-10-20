@@ -4,17 +4,24 @@ import com.intellij.lang.HtmlScriptContentProvider
 import com.intellij.lang.javascript.JSStubElementTypes
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
-import com.intellij.lexer.HtmlLexer
-import com.intellij.lexer.Lexer
+import com.intellij.lexer.*
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.tree.TokenSet
-import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 
-val SVELTE_JS_EMBEDDED_CONTENT_MODULE: IElementType = JSEmbeddedContentElementType(SvelteJSLanguage.INSTANCE, "MOD_SVELTE_JS_")
+class SvelteHtmlLexer : HtmlLexer(BaseSvelteHtmlLexer(), false) {
+    override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
+        val baseState = initialState and 0xffff
+        val nestingLevel = initialState shr 16
+        (delegate as BaseSvelteHtmlLexer).flexLexer.bracesNestingLevel = nestingLevel
+        super.start(buffer, startOffset, endOffset, baseState)
+    }
 
-class SvelteHtmlLexer : HtmlLexer() {
+    override fun getState(): Int {
+        val nestingLevel = (delegate as BaseSvelteHtmlLexer).flexLexer.bracesNestingLevel
+        return (nestingLevel shl 16) or (super.getState() and 0xffff)
+    }
+
     override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
         return object : HtmlScriptContentProvider {
             override fun getScriptElementType(): IElementType = JSStubElementTypes.ES6_EMBEDDED_CONTENT_MODULE
@@ -25,4 +32,10 @@ class SvelteHtmlLexer : HtmlLexer() {
             }
         }
     }
+
+    override fun isHtmlTagState(state: Int): Boolean {
+        return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
+    }
 }
+
+val SVELTE_JS_EMBEDDED_CONTENT_MODULE: IElementType = JSEmbeddedContentElementType(SvelteJSLanguage.INSTANCE, "MOD_SVELTE_JS_")
