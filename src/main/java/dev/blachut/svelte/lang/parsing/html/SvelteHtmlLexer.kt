@@ -11,6 +11,7 @@ import dev.blachut.svelte.lang.SvelteJSLanguage
 
 class SvelteHtmlLexer : HtmlLexer(BaseSvelteHtmlLexer(), false) {
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
+        // TODO Verify if those masks don't clash with ones used in BaseHtmlLexer.initState
         val baseState = initialState and 0xffff
         val nestingLevel = initialState shr 16
         (delegate as BaseSvelteHtmlLexer).flexLexer.bracesNestingLevel = nestingLevel

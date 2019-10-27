@@ -11,6 +11,7 @@ class SvelteHtmlHighlightingLexer(jsLanguageLevel: JSLanguageLevel) : LayeredLex
     }
 }
 
+// TODO Merge with SvelteHtmlHighlightingLexer by handling code fragments internally
 private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(BaseSvelteHtmlLexer(), false, null) {
     override fun isHtmlTagState(state: Int): Boolean {
         return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
