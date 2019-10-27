@@ -2,12 +2,21 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.lang.ecmascript6.validation.ES6AnalysisHandlersFactory
+import com.intellij.lang.javascript.index.JSSymbolUtil
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.validation.JSReferenceChecker
 import com.intellij.lang.javascript.validation.JSReferenceInspectionProblemReporter
 import com.intellij.lang.javascript.validation.TypedJSReferenceChecker
 
 class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
     override fun getReferenceChecker(reporter: JSReferenceInspectionProblemReporter): JSReferenceChecker {
-        return TypedJSReferenceChecker(reporter)
+        return object : TypedJSReferenceChecker(reporter) {
+            override fun checkRefExpression(node: JSReferenceExpression) {
+                val isPropsReference = JSSymbolUtil.isAccurateReferenceExpressionName(node, "\$\$props")
+                if (!isPropsReference) {
+                    super.checkRefExpression(node)
+                }
+            }
+        }
     }
 }
