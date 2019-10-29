@@ -14,7 +14,8 @@ import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 
 abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
-    abstract fun parseJS(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>)
+    protected abstract val noTokensErrorMessage: String
+    protected val excessTokensErrorMessage = "unexpected token"
 
     override fun createNode(text: CharSequence?): ASTNode? {
         text ?: return null
@@ -27,15 +28,24 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
         val parser = createJavaScriptParser(builder)
 
         val rootMarker = builder.mark()
-        parseJS(builder, parser)
+
+        if (builder.eof()) {
+            builder.error(noTokensErrorMessage)
+        } else {
+            parseTokens(builder, parser)
+            ensureEof(builder)
+        }
+
         rootMarker.done(this)
 
         return builder.treeBuilt.firstChildNode
     }
 
-    protected fun ensureEof(builder: PsiBuilder, errorMessage: String) {
+    protected abstract fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>)
+
+    private fun ensureEof(builder: PsiBuilder) {
         if (!builder.eof()) {
-            builder.error(errorMessage)
+            builder.error(excessTokensErrorMessage)
             while (!builder.eof()) {
                 builder.advanceLexer()
             }
