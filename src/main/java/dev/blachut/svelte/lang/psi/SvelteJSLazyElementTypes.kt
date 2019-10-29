@@ -7,22 +7,26 @@ import com.intellij.lang.javascript.parsing.JavaScriptParser
 
 object SvelteJSLazyElementTypes {
     val PARAMETER = object : SvelteJSLazyElementType("PARAMETER") {
-        override fun parseJS(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+        override val noTokensErrorMessage = "parameter expected"
+
+        override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
-            ensureEof(builder, "parameter expected")
         }
     }
 
     // TODO Break into elements that allow and disallow comma expressions
     val EXPRESSION = object : SvelteJSLazyElementType("EXPRESSION") {
-        override fun parseJS(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+        override val noTokensErrorMessage = "expression expected"
+
+        override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             parser.expressionParser.parseExpression()
-            ensureEof(builder, "expression expected")
         }
     }
 
     val SPREAD_OR_SHORTHAND = object : SvelteJSLazyElementType("SPREAD_OR_SHORTHAND") {
-        override fun parseJS(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+        override val noTokensErrorMessage = "shorthand attribute or spread expression expected"
+
+        override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             if (builder.tokenType === JSTokenTypes.DOT_DOT_DOT) {
                 val marker = builder.mark()
                 builder.advanceLexer()
@@ -31,7 +35,6 @@ object SvelteJSLazyElementTypes {
             } else {
                 parser.expressionParser.parseAssignmentExpression(false)
             }
-            ensureEof(builder, "expression expected")
         }
     }
 }
