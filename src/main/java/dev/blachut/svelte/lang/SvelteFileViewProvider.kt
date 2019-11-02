@@ -8,7 +8,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.impl.source.PsiFileImpl
 import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider
-import dev.blachut.svelte.lang.psi.SvelteOuterTypes
+import dev.blachut.svelte.lang.psi.SvelteTemplateElementTypes
 
 class SvelteFileViewProvider(psiManager: PsiManager, virtualFile: VirtualFile, physical: Boolean) : MultiplePsiFilesPerDocumentFileViewProvider(psiManager, virtualFile, physical), TemplateLanguageFileViewProvider {
     private val htmlLanguage = SvelteHTMLLanguage.INSTANCE
@@ -33,7 +33,7 @@ class SvelteFileViewProvider(psiManager: PsiManager, virtualFile: VirtualFile, p
         return when {
             lang === htmlLanguage -> {
                 val file = LanguageParserDefinitions.INSTANCE.forLanguage(lang).createFile(this) as PsiFileImpl
-                file.contentElementType = SvelteOuterTypes.SVELTE_HTML_TEMPLATE_DATA
+                file.contentElementType = SvelteTemplateElementTypes.SVELTE_HTML_TEMPLATE_DATA
                 file
             }
             lang === SvelteLanguage.INSTANCE -> LanguageParserDefinitions.INSTANCE.forLanguage(lang).createFile(this)

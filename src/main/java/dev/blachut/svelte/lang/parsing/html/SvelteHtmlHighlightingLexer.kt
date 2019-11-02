@@ -14,7 +14,7 @@ class SvelteHtmlHighlightingLexer(jsLanguageLevel: JSLanguageLevel) : LayeredLex
 }
 
 // TODO Merge with SvelteHtmlHighlightingLexer by handling code fragments internally
-private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(BaseSvelteHtmlLexer(), false, null) {
+private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(InnerSvelteHtmlLexer(), false, null) {
     override fun findScriptContentProvider(mimeType: String?) = SvelteJSScriptContentProvider
 
     override fun isHtmlTagState(state: Int): Boolean {
