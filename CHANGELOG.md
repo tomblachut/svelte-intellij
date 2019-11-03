@@ -1,5 +1,16 @@
 # Changelog
 
+<h3>0.11.0</h3>
+<ul>
+    <li>Stop annotating directives as unknown attributes</li>
+    <li>Enable CSS references and completions</li>
+    <li>Recognize $$props variable</li>
+    <li>Highlight unresolved references inside script tag the same as inside template expressions</li>
+    <li>Limit IDE finding references to variables defined in e.g. config files</li>
+    <li>Fix IDE error occurring for empty shorthand attribute</li>
+    <li>Minor fixes & stability improvements</li>
+</ul>
+
 <h3>0.10.0</h3>
 <ul>
     <li>Support attribute value expressions</li>
