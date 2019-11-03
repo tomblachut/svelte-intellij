@@ -2,11 +2,11 @@ package dev.blachut.svelte.lang;
 
 import com.intellij.lang.DependentLanguage;
 import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.ecmascript6.parsing.ES6Parser;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JSLanguageDialect;
 import com.intellij.lang.javascript.JavaScriptSupportLoader;
 import com.intellij.lang.javascript.parsing.JavaScriptParser;
+import dev.blachut.svelte.lang.parsing.js.SvelteJSParser;
 import org.jetbrains.annotations.NotNull;
 
 public class SvelteJSLanguage extends JSLanguageDialect implements DependentLanguage {
@@ -23,6 +23,6 @@ public class SvelteJSLanguage extends JSLanguageDialect implements DependentLang
 
     @Override
     public JavaScriptParser<?, ?, ?, ?> createParser(@NotNull PsiBuilder builder) {
-        return new ES6Parser(builder);
+        return new SvelteJSParser(builder);
     }
 }

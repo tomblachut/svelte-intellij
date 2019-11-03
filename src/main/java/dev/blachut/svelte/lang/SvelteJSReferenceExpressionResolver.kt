@@ -91,13 +91,16 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
 
     private fun resolveInScriptTag(incompleteCode: Boolean): Array<ResolveResult>? {
         val scriptTag = findScriptTag(myContainingFile.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE)) ?: return null
-        val jsRoot = PsiTreeUtil.getChildOfType(scriptTag, JSEmbeddedContent::class.java) ?: return null
+        // JSEmbeddedContent is nested twice, see SvelteJSScriptContentProvider
+        val jsRoot = PsiTreeUtil.getChildOfType(scriptTag, JSEmbeddedContent::class.java)?.firstChild ?: return null
+        // Treat template expressions as if they are after last statement inside script tag
+        val lastStatement = jsRoot.lastChild ?: return null
 
         val sink = ResolveResultSink(myRef, myReferencedName!!, false, incompleteCode)
         val localProcessor = createLocalResolveProcessor(sink)
         localProcessor.isToProcessHierarchy = true
 
-        JSReferenceExpressionImpl.doProcessLocalDeclarations(jsRoot, this.myQualifier, localProcessor, false, false, null as Boolean?)
+        JSReferenceExpressionImpl.doProcessLocalDeclarations(lastStatement, this.myQualifier, localProcessor, false, false, null)
         val jsElement = localProcessor.result
         if (jsElement != null) {
             return localProcessor.resultsAsResolveResults

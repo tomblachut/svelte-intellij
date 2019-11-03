@@ -53,5 +53,5 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
     }
 
     private fun createJavaScriptParser(builder: PsiBuilder) = ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>,
-        ES6FunctionParser<*>, JSPsiTypeParser<JavaScriptParser<*, *, *, *>>>(builder)
+        ES6FunctionParser<*>, JSPsiTypeParser<*>>(builder)
 }
