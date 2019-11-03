@@ -66,6 +66,7 @@
         <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGeneratorImpl"/>
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
         <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension" order="first"/>
+        <xml.fileNSInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteNSInfoProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
