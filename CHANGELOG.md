@@ -1,5 +1,10 @@
 # Changelog
 
+<h3>0.11.1</h3>
+<ul>
+    <li>Fix regression about not working import suggestions</li>
+</ul>
+
 <h3>0.11.0</h3>
 <ul>
     <li>Stop annotating directives as unknown attributes</li>
