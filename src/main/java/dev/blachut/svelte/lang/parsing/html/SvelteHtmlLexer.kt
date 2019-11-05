@@ -22,9 +22,10 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
                 this@SvelteHtmlLexer.seenStylesheetType = value
             }
 
-        override val seenStyle: Boolean get() = this@SvelteHtmlLexer.seenStyle
-        override val styleType: String? get() = this@SvelteHtmlLexer.styleType
-        override val inTagState: Boolean get() = (state and HtmlHighlightingLexer.BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
+        override val seenStyle: Boolean = this@SvelteHtmlLexer.seenStyle
+        override val styleType: String? = this@SvelteHtmlLexer.styleType
+        override val inTagState: Boolean =
+            (state and HtmlHighlightingLexer.BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
 
         override fun registerHandler(elementType: IElementType, value: TokenHandler) {
             this@SvelteHtmlLexer.registerHandler(elementType, value)
