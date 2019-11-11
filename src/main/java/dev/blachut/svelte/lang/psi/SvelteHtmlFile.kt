@@ -12,18 +12,39 @@ import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
 
 class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE) {
-    override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
-        // Script tag is not an ancestor of Svelte expressions so we need to redirect processing here
-        val scriptTag = PsiTreeUtil.findChildrenOfType(document, XmlTag::class.java).find { HtmlUtil.isScriptTag(it) }
-            ?: return true
-        if (PsiTreeUtil.isAncestor(scriptTag, place, false)) {
-            // place is inside script tag, so declarations were already processed before walking up here
-            return true
-        }
+    private val instanceScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == null } as XmlTag?
+    private val moduleScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == "module" } as XmlTag?
 
-        // JSEmbeddedContent is nested twice, see SvelteJSScriptContentProvider
-        val jsRoot = PsiTreeUtil.getChildOfType(scriptTag, JSEmbeddedContent::class.java)?.firstChild
-            ?: return true
-        return jsRoot.processDeclarations(processor, state, lastParent, place)
+    override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
+        document ?: return true
+
+        val parentScript = findAncestorScript(place)
+        if (parentScript != null && parentScript.getAttributeValue("context") == "module") {
+            // place is inside module script, nothing more to process
+            return true
+        } else if (parentScript != null) {
+            // place is inside instance script, process module script if available
+            return processScriptDeclarations(processor, state, lastParent, place, moduleScript)
+        } else {
+            // place is inside template expression, process instance and then module script if available
+            return processScriptDeclarations(processor, state, lastParent, place, instanceScript)
+                && processScriptDeclarations(processor, state, lastParent, place, moduleScript)
+        }
     }
+
+    private fun processScriptDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement, script: PsiElement?): Boolean {
+        return getJsEmbeddedContent(script)?.processDeclarations(processor, state, lastParent, place) ?: true
+    }
+}
+
+private fun findAncestorScript(place: PsiElement): XmlTag? {
+    val parentScript = PsiTreeUtil.findFirstContext(place, false) {
+        it is XmlTag && HtmlUtil.isScriptTag(it)
+    }
+    return parentScript as XmlTag?
+}
+
+private fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
+    // JSEmbeddedContent is nested twice, see SvelteJSScriptContentProvider
+    return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)?.firstChild as JSEmbeddedContent?
 }
