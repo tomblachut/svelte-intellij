@@ -1,10 +1,8 @@
 package dev.blachut.svelte.lang.inspections
 
-import com.intellij.codeInspection.LocalInspectionTool
-import com.intellij.codeInspection.LocalQuickFix
-import com.intellij.codeInspection.ProblemDescriptor
-import com.intellij.codeInspection.ProblemsHolder
+import com.intellij.codeInspection.*
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.XmlElementVisitor
 import com.intellij.psi.search.FilenameIndex
@@ -24,13 +22,18 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 if (!isSvelteComponentTag(componentName)) return
                 if (tag.descriptor?.declaration != null) return
 
-                val project = tag.project
-                val file = tag.containingFile
+                val range = TextRange(1, tag.name.length + 1)
 
+                val project = tag.project
                 val fileName = "$componentName.svelte"
                 // check if we have a corresponding svelte file
                 val files = FilenameIndex.getVirtualFilesByName(project, fileName, GlobalSearchScope.allScope(project))
-                if (files.isEmpty()) return
+                if (files.isEmpty()) {
+                    holder.registerProblem(tag, displayName, ProblemHighlightType.ERROR, range)
+                    return
+                }
+
+                val file = tag.containingFile
 
                 files.forEach { virtualFile ->
                     val modulesInfos = ComponentImporter.getModulesInfos(project, file, virtualFile, componentName)
@@ -45,7 +48,7 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                                 ComponentImporter.insertComponentImport(editor, file, virtualFile, componentName, info)
                             }
                         }
-                        holder.registerProblem(tag, displayName, quickFix)
+                        holder.registerProblem(tag, displayName, ProblemHighlightType.ERROR, range, quickFix)
                     }
                 }
             }
