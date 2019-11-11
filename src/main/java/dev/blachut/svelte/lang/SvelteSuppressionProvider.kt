@@ -14,7 +14,7 @@ class SvelteSuppressionProvider : DefaultXmlSuppressionProvider() {
         if (inspectionId == "HtmlUnknownAttribute") {
             val attribute = element.parent
             if (attribute is XmlAttribute) {
-                if (directives.contains(attribute.namespacePrefix)) {
+                if (directives.contains(attribute.namespacePrefix) || suppressedAttributes.contains(attribute.name)) {
                     return true
                 }
             }
@@ -28,4 +28,5 @@ class SvelteSuppressionProvider : DefaultXmlSuppressionProvider() {
     }
 
     private val directives = listOf("on", "bind", "class", "use", "transition", "in", "out", "animate", "let")
+    private val suppressedAttributes = listOf("context")
 }
