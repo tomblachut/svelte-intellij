@@ -4,7 +4,6 @@ import com.intellij.lang.Language
 import com.intellij.lang.javascript.JavaScriptHighlightingLexer
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lexer.HtmlHighlightingLexer
-import com.intellij.lexer.HtmlLexer
 import com.intellij.lexer.LayeredLexer
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
@@ -18,9 +17,7 @@ class SvelteHtmlHighlightingLexer(jsLanguageLevel: JSLanguageLevel) : LayeredLex
 
 // TODO Merge with SvelteHtmlHighlightingLexer by handling code fragments internally
 private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(InnerSvelteHtmlLexer(), false, null) {
-
     private val helper = SvelteHtmlLexerHelper(object : SvelteHtmlLexerHandle {
-
         override var seenTag: Boolean
             get() = this@BaseSvelteHtmlHighlightingLexer.seenTag
             set(value) {
@@ -33,9 +30,9 @@ private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(Inner
                 this@BaseSvelteHtmlHighlightingLexer.seenStylesheetType = value
             }
 
-        override val seenStyle: Boolean = this@BaseSvelteHtmlHighlightingLexer.seenStyle
-        override val styleType: String? = this@BaseSvelteHtmlHighlightingLexer.styleType
-        override val inTagState: Boolean = (state and BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
+        override val seenStyle: Boolean get() = this@BaseSvelteHtmlHighlightingLexer.seenStyle
+        override val styleType: String? get() = this@BaseSvelteHtmlHighlightingLexer.styleType
+        override val inTagState: Boolean get() = (state and BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
 
         override fun registerHandler(elementType: IElementType, value: TokenHandler) {
             this@BaseSvelteHtmlHighlightingLexer.registerHandler(elementType, value)
@@ -49,5 +46,5 @@ private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(Inner
     }
 
     override fun getStyleLanguage(): Language? =
-        helper.styleViaLang(HtmlLexer.ourDefaultStyleLanguage) ?: super.getStyleLanguage()
+        helper.styleViaLang(ourDefaultStyleLanguage) ?: super.getStyleLanguage()
 }

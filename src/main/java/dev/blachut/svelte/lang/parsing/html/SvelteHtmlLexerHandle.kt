@@ -5,7 +5,6 @@ import com.intellij.psi.tree.IElementType
 
 // Adapted from org.jetbrains.vuejs.lang.html.lexer.VueLexerHandle
 interface SvelteHtmlLexerHandle {
-
     fun registerHandler(elementType: IElementType, value: BaseHtmlLexer.TokenHandler)
 
     var seenTag: Boolean
