@@ -10,7 +10,7 @@ class SvelteNSInfoProvider : XmlFileNSInfoProvider {
     }
 
     override fun overrideNamespaceFromDocType(file: XmlFile): Boolean {
-        return file.virtualFile.fileType === SvelteFileType.INSTANCE
+        return file.virtualFile?.fileType === SvelteFileType.INSTANCE
 //        return file.fileType === SvelteFileType.INSTANCE
     }
 }
