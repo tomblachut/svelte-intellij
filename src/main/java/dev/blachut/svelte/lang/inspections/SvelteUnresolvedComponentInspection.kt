@@ -1,15 +1,14 @@
 package dev.blachut.svelte.lang.inspections
 
-import com.intellij.codeInspection.*
-import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil
+import com.intellij.codeInspection.LocalInspectionTool
+import com.intellij.codeInspection.ProblemHighlightType
+import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.XmlElementVisitor
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.util.PsiEditorUtil
 import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.codeInsight.SvelteComponentImporter
 import dev.blachut.svelte.lang.isSvelteComponentTag
@@ -36,30 +35,13 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 }
 
                 val currentFile = tag.containingFile
+                val currentVirtualFile = currentFile.virtualFile
+                val quote = JSCodeStyleSettings.getQuote(currentFile)
 
-                componentFiles.forEach { virtualFile ->
-                    val modulesInfos = SvelteComponentImporter.getModulesInfos(project, currentFile, virtualFile, componentName)
+                componentFiles.forEach { componentVirtualFile ->
+                    val modulesInfos = SvelteComponentImporter.getModulesInfos(project, currentFile, componentVirtualFile, componentName)
                     modulesInfos.forEach { info ->
-                        // TODO Reuse ImportES6ModuleFix or LocalQuickFixOnPsiElement
-                        val quickFix = object : LocalQuickFix {
-                            override fun getName(): String {
-                                val quoteString = JSCodeStyleSettings.getQuote(currentFile)
-                                val wholeImportWrapQuote = ES6ImportPsiUtil.invertQuote(quoteString)
-                                val importText = SvelteComponentImporter.getImportText(currentFile, virtualFile, componentName, info)
-
-                                return "Insert $wholeImportWrapQuote$importText$wholeImportWrapQuote"
-                            }
-
-                            override fun getFamilyName(): String {
-                                return "Insert import statement"
-                            }
-
-                            override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-                                val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag) ?: return
-                                SvelteComponentImporter.insertComponentImport(editor, currentFile, virtualFile, componentName, info)
-                            }
-                        }
-
+                        val quickFix = SvelteImportComponentFix(tag, quote, componentName, info, currentVirtualFile, componentVirtualFile)
                         holder.registerProblem(tag, displayName, ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, range, quickFix)
                     }
                 }
@@ -67,3 +49,4 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
         }
     }
 }
+

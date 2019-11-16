@@ -44,7 +44,8 @@ object SvelteComponentImporter {
         if (existingBindings.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
 
         val semicolon = JSCodeStyleSettings.getSemicolon(currentFile)
-        val importCode = getImportText(currentFile, componentVirtualFile, componentName, moduleInfo) + semicolon
+        val quote = JSCodeStyleSettings.getQuote(currentFile)
+        val importCode = getImportText(currentFile.virtualFile, componentVirtualFile, componentName, quote, moduleInfo) + semicolon
         val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
         if (existingBindings.size == 0) {
             // findPlaceAndInsertES6Import is buggy when inserting the first import
@@ -76,14 +77,12 @@ object SvelteComponentImporter {
         CodeStyleManager.getInstance(project).reformat(jsElement)
     }
 
-    fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo?): String {
-        val quote = JSCodeStyleSettings.getQuoteChar(currentFile)
-
+    fun getImportText(currentFile: VirtualFile, componentFile: VirtualFile, componentName: String, quote: String, moduleInfo: JSModuleNameInfo?): String {
         if (moduleInfo != null && moduleInfo.resolvedFile.extension != "svelte") {
             return "import {$componentName} from $quote${moduleInfo.moduleName}$quote"
         }
 
-        val relativePath = getRelativePath(currentFile, componentVirtualFile)
+        val relativePath = getRelativePath(currentFile, componentFile)
         val prefix = if (relativePath.startsWith("../")) "" else "./"
         val path = prefix + relativePath
 
@@ -107,16 +106,12 @@ object SvelteComponentImporter {
                 infos.add(ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration)))
             }
         }
-        infos.add(JSModuleNameInfoImpl(getRelativePath(currentFile, componentVirtualFile), componentVirtualFile, componentVirtualFile, currentFile, arrayOf("svelte"), true))
+        infos.add(JSModuleNameInfoImpl(getRelativePath(currentFile.virtualFile, componentVirtualFile), componentVirtualFile, componentVirtualFile, currentFile, arrayOf("svelte"), true))
         return infos
     }
 
-    private fun getRelativePath(currentFile: PsiFile, componentVirtualFile: VirtualFile): String {
-        return FileUtil.getRelativePath(
-            currentFile.virtualFile.parent.path,
-            componentVirtualFile.path,
-            '/'
-        ) ?: ""
+    private fun getRelativePath(currentFile: VirtualFile, componentFile: VirtualFile): String {
+        return FileUtil.getRelativePath(currentFile.parent.path, componentFile.path, '/') ?: ""
     }
 
     private fun findOrCreateEmbeddedContent(project: Project, currentFile: SvelteHtmlFile): JSEmbeddedContent? {
