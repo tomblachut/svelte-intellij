@@ -1,12 +1,8 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.ecmascript6.psi.ES6ImportExportDeclarationPart
-import com.intellij.lang.ecmascript6.psi.ES6ImportSpecifier
-import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.JSRecursiveWalkingElementVisitor
 import com.intellij.lang.javascript.psi.JSVarStatement
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.XmlElementVisitor
 import com.intellij.psi.util.PsiTreeUtil
@@ -14,26 +10,6 @@ import com.intellij.psi.xml.XmlDocument
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
-
-internal class ImportVisitor : JSRecursiveWalkingElementVisitor() {
-    val bindings = mutableListOf<ES6ImportExportDeclarationPart>()
-
-    override fun visitES6ImportedBinding(importedBinding: ES6ImportedBinding) {
-        process(importedBinding)
-    }
-
-    override fun visitImportSpecifier(importSpecifier: ES6ImportSpecifier) {
-        process(importSpecifier)
-    }
-
-    private fun process(binding: ES6ImportExportDeclarationPart) {
-        val name = binding.name ?: return
-
-        if (StringUtil.isCapitalized(name)) {
-            bindings.add(binding)
-        }
-    }
-}
 
 internal class PropsVisitor : JSRecursiveWalkingElementVisitor() {
     val props = mutableListOf<String?>()
