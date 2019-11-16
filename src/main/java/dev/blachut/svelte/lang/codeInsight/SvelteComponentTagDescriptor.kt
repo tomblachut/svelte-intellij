@@ -1,10 +1,9 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.ecmascript6.psi.ES6FromClause
+import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.xml.XmlDescriptorUtil
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlAttributeDescriptor
@@ -39,22 +38,26 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
             return XmlAttributeDescriptor.EMPTY
         }
 
-        var attributeDescriptors = knownAttributeDescriptors
+        val declaration = declaration
+        // TODO lift namespace check from descriptor (?)
+        if (declaration is ES6ImportedBinding && !declaration.isNamespaceImport) {
+            // com.intellij.javascript.JSFileReference.IMPLICIT_EXTENSIONS doesn't include .svelte
+            // probably because of that following call returns null
+            // val componentReference = declaration.findReferencedElements().firstOrNull()
+            val componentReference = declaration.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
 
-        val fromClause = PsiTreeUtil.findChildOfType(declaration.parent, ES6FromClause::class.java)
-        val componentReference = fromClause?.resolveReferencedElements()?.firstOrNull()
-        if (componentReference != null && componentReference is SvelteFile) {
-            val props = SveltePropsProvider.getComponentProps(
-                componentReference.viewProvider.virtualFile,
-                context.project
-            )
-            val propsDescriptors = props?.map { AnyXmlAttributeDescriptor(it) }
-            if (propsDescriptors != null) {
-                attributeDescriptors += propsDescriptors
+            if (componentReference != null && componentReference is SvelteFile) {
+                val props = SveltePropsProvider.getComponentProps(
+                    componentReference.viewProvider.virtualFile,
+                    context.project
+                )
+                if (props != null) {
+                    return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }
+                }
             }
         }
 
-        return attributeDescriptors
+        return knownAttributeDescriptors
     }
 
     override fun getAttributeDescriptor(attribute: XmlAttribute): XmlAttributeDescriptor? {
