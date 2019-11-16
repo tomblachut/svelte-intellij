@@ -20,6 +20,12 @@ class SvelteSuppressionProvider : DefaultXmlSuppressionProvider() {
             }
         }
 
+        if (inspectionId == "HtmlUnknownTag") {
+            if (isSvelteComponentTag(element.text)) {
+                return true
+            }
+        }
+
         return super.isSuppressedFor(element, inspectionId)
     }
 
