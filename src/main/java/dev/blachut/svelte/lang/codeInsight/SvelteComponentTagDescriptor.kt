@@ -43,14 +43,11 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
         if (declaration is ES6ImportedBinding && !declaration.isNamespaceImport) {
             // com.intellij.javascript.JSFileReference.IMPLICIT_EXTENSIONS doesn't include .svelte
             // probably because of that following call returns null
-            // val componentReference = declaration.findReferencedElements().firstOrNull()
-            val componentReference = declaration.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
+            // val componentFile = declaration.findReferencedElements().firstOrNull()
+            val componentFile = declaration.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
 
-            if (componentReference != null && componentReference is SvelteFile) {
-                val props = SveltePropsProvider.getComponentProps(
-                    componentReference.viewProvider.virtualFile,
-                    context.project
-                )
+            if (componentFile != null && componentFile is SvelteFile) {
+                val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
                 if (props != null) {
                     return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }
                 }
