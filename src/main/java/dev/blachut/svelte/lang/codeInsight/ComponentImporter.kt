@@ -17,6 +17,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.XmlElementFactory
@@ -25,7 +26,6 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
-import com.intellij.xml.util.HtmlUtil
 import com.jetbrains.rd.util.firstOrNull
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.psi.SvelteFile
@@ -119,15 +119,12 @@ object ComponentImporter {
         ) ?: ""
     }
 
-    private fun findScriptTag(file: PsiFile): XmlTag? {
-        return PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java).find { HtmlUtil.isScriptTag(it) }
-    }
-
     private fun findOrCreateEmbeddedContent(project: Project, currentFile: SvelteHtmlFile): JSEmbeddedContent? {
         var instanceScript = currentFile.instanceScript
 
         if (instanceScript == null) {
-            val emptyInstanceScript = XmlElementFactory.getInstance(project).createTagFromText("<script>\n</script>", SvelteHTMLLanguage.INSTANCE)
+            val elementFactory = XmlElementFactory.getInstance(project)
+            val emptyInstanceScript = elementFactory.createTagFromText("<script>\n</script>", SvelteHTMLLanguage.INSTANCE)
             val moduleScript = currentFile.moduleScript
             val document = currentFile.document!!
 
@@ -141,8 +138,11 @@ object ComponentImporter {
         val jsElement = getJsEmbeddedContent(instanceScript)
         if (jsElement != null) return jsElement
 
-        val emptyInstanceScript = XmlElementFactory.getInstance(project).createTagFromText("<script>\n</script>", SvelteHTMLLanguage.INSTANCE)
-        instanceScript = instanceScript.replace(emptyInstanceScript) as XmlTag
+        // instanceScript is empty, we need to insert something in order to parse JsEmbeddedContent
+        val document = PsiDocumentManager.getInstance(project).getDocument(currentFile) ?: return null
+        document.insertString(instanceScript.value.textRange.startOffset, "\n")
+        PsiDocumentManager.getInstance(project).commitDocument(document)
+
         return getJsEmbeddedContent(instanceScript)
     }
 }
