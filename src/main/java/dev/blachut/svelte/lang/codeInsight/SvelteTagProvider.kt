@@ -84,7 +84,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
             if (!isSvelteComponentTag(componentName)) return@forEach
 
-            val modulesInfos = ComponentImporter.getModulesInfos(tag.project, tag.containingFile.originalFile, virtualFile, componentName)
+            val modulesInfos = SvelteComponentImporter.getModulesInfos(tag.project, tag.containingFile.originalFile, virtualFile, componentName)
             val typeText = " (${virtualFile.name})"
 
             for (info in modulesInfos) {

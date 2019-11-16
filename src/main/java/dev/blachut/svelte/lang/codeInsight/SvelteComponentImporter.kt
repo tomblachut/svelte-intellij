@@ -32,7 +32,7 @@ import dev.blachut.svelte.lang.psi.SvelteFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
-object ComponentImporter {
+object SvelteComponentImporter {
     fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo?) {
         if (currentFile !is SvelteHtmlFile) return
 

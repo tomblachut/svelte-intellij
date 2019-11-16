@@ -9,7 +9,7 @@ import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiEditorUtil
 import com.intellij.psi.xml.XmlTag
-import dev.blachut.svelte.lang.codeInsight.ComponentImporter
+import dev.blachut.svelte.lang.codeInsight.SvelteComponentImporter
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
@@ -36,16 +36,16 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 val file = tag.containingFile
 
                 files.forEach { virtualFile ->
-                    val modulesInfos = ComponentImporter.getModulesInfos(project, file, virtualFile, componentName)
+                    val modulesInfos = SvelteComponentImporter.getModulesInfos(project, file, virtualFile, componentName)
                     modulesInfos.forEach { info ->
                         val quickFix = object : LocalQuickFix {
                             override fun getFamilyName(): String {
-                                return ComponentImporter.getImportText(file, virtualFile, componentName, info)
+                                return SvelteComponentImporter.getImportText(file, virtualFile, componentName, info)
                             }
 
                             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                                 val editor = PsiEditorUtil.Service.getInstance().findEditorByPsiElement(tag) ?: return
-                                ComponentImporter.insertComponentImport(editor, file, virtualFile, componentName, info)
+                                SvelteComponentImporter.insertComponentImport(editor, file, virtualFile, componentName, info)
                             }
                         }
                         holder.registerProblem(tag, displayName, ProblemHighlightType.ERROR, range, quickFix)

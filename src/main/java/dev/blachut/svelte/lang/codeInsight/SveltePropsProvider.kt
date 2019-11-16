@@ -5,7 +5,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 
-class ComponentPropsProvider {
+object SveltePropsProvider {
     fun getComponentProps(file: VirtualFile, project: Project): List<String?>? {
         val viewProvider = PsiManager.getInstance(project).findViewProvider(file) ?: return null
         val psiFile = viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE) ?: return null
