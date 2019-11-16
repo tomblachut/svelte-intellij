@@ -12,8 +12,8 @@ import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
 
 class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE) {
-    private val instanceScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == null } as XmlTag?
-    private val moduleScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == "module" } as XmlTag?
+    val instanceScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == null } as XmlTag?
+    val moduleScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == "module" } as XmlTag?
 
     override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
         document ?: return true
@@ -44,7 +44,8 @@ private fun findAncestorScript(place: PsiElement): XmlTag? {
     return parentScript as XmlTag?
 }
 
-private fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
+// TODO Move to utils?
+fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
     // JSEmbeddedContent is nested twice, see SvelteJSScriptContentProvider
     return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)?.firstChild as JSEmbeddedContent?
 }

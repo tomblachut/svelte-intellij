@@ -27,20 +27,23 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 import com.jetbrains.rd.util.firstOrNull
+import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.psi.SvelteFile
+import dev.blachut.svelte.lang.psi.SvelteHtmlFile
+import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 object ComponentImporter {
     fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo?) {
+        if (currentFile !is SvelteHtmlFile) return
+
         val project = currentFile.project
 
-        val importCode = getImportText(currentFile, componentVirtualFile, componentName, moduleInfo)
-
         val jsElement = findOrCreateEmbeddedContent(project, currentFile) ?: return
-
         val existingBindings = ES6ImportPsiUtil.getImportDeclarations(jsElement)
         // check if component has already been imported
         if (existingBindings.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
 
+        val importCode = getImportText(currentFile, componentVirtualFile, componentName, moduleInfo)
         val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
         if (existingBindings.size == 0) {
             // findPlaceAndInsertES6Import is buggy when inserting the first import
@@ -120,21 +123,26 @@ object ComponentImporter {
         return PsiTreeUtil.findChildrenOfType(file, XmlTag::class.java).find { HtmlUtil.isScriptTag(it) }
     }
 
-    private fun findOrCreateEmbeddedContent(project: Project, currentFile: PsiFile): JSEmbeddedContent? {
-        var scriptTag = findScriptTag(currentFile)
-        val scriptBlock = XmlElementFactory.getInstance(project)
-            .createHTMLTagFromText("<script>\n</script>")
+    private fun findOrCreateEmbeddedContent(project: Project, currentFile: SvelteHtmlFile): JSEmbeddedContent? {
+        var instanceScript = currentFile.instanceScript
 
-        if (scriptTag == null) {
-            currentFile.addBefore(scriptBlock, currentFile.firstChild)
-            scriptTag = findScriptTag(currentFile) ?: return null
+        if (instanceScript == null) {
+            val emptyInstanceScript = XmlElementFactory.getInstance(project).createTagFromText("<script>\n</script>", SvelteHTMLLanguage.INSTANCE)
+            val moduleScript = currentFile.moduleScript
+            val document = currentFile.document!!
+
+            instanceScript = if (moduleScript != null) {
+                document.addAfter(emptyInstanceScript, moduleScript) as XmlTag
+            } else {
+                document.addBefore(emptyInstanceScript, document.firstChild) as XmlTag
+            }
         }
 
-        val jsElement = PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
-        if (jsElement == null) {
-            scriptTag.replace(scriptBlock)
-        }
+        val jsElement = getJsEmbeddedContent(instanceScript)
+        if (jsElement != null) return jsElement
 
-        return PsiTreeUtil.findChildOfType(scriptTag, JSEmbeddedContent::class.java)
+        val emptyInstanceScript = XmlElementFactory.getInstance(project).createTagFromText("<script>\n</script>", SvelteHTMLLanguage.INSTANCE)
+        instanceScript = instanceScript.replace(emptyInstanceScript) as XmlTag
+        return getJsEmbeddedContent(instanceScript)
     }
 }

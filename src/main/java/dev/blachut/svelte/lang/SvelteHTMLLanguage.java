@@ -15,6 +15,6 @@ public class SvelteHTMLLanguage extends HTMLLanguage implements DependentLanguag
     @Nullable
     @Override
     public LanguageFileType getAssociatedFileType() {
-        return null;
+        return SvelteHtmlFileType.INSTANCE;
     }
 }
