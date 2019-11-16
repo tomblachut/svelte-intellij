@@ -40,6 +40,7 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 componentFiles.forEach { virtualFile ->
                     val modulesInfos = SvelteComponentImporter.getModulesInfos(project, currentFile, virtualFile, componentName)
                     modulesInfos.forEach { info ->
+                        // TODO Reuse ImportES6ModuleFix or LocalQuickFixOnPsiElement
                         val quickFix = object : LocalQuickFix {
                             override fun getName(): String {
                                 val quoteString = JSCodeStyleSettings.getQuote(currentFile)
@@ -58,6 +59,7 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                                 SvelteComponentImporter.insertComponentImport(editor, currentFile, virtualFile, componentName, info)
                             }
                         }
+
                         holder.registerProblem(tag, displayName, ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, range, quickFix)
                     }
                 }

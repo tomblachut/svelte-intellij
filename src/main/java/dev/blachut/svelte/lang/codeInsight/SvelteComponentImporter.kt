@@ -43,7 +43,8 @@ object SvelteComponentImporter {
         // check if component has already been imported
         if (existingBindings.any { it.importedBindings.any { binding -> binding.name == componentName } }) return
 
-        val importCode = getImportText(currentFile, componentVirtualFile, componentName, moduleInfo)
+        val semicolon = JSCodeStyleSettings.getSemicolon(currentFile)
+        val importCode = getImportText(currentFile, componentVirtualFile, componentName, moduleInfo) + semicolon
         val importStatement = JSChangeUtil.createStatementFromTextWithContext(importCode, jsElement)!!.psi
         if (existingBindings.size == 0) {
             // findPlaceAndInsertES6Import is buggy when inserting the first import
@@ -76,18 +77,17 @@ object SvelteComponentImporter {
     }
 
     fun getImportText(currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo?): String {
-        val semicolon = JSCodeStyleSettings.getSemicolon(currentFile)
         val quote = JSCodeStyleSettings.getQuoteChar(currentFile)
 
         if (moduleInfo != null && moduleInfo.resolvedFile.extension != "svelte") {
-            return "import {$componentName} from $quote${moduleInfo.moduleName}$quote$semicolon"
+            return "import {$componentName} from $quote${moduleInfo.moduleName}$quote"
         }
 
         val relativePath = getRelativePath(currentFile, componentVirtualFile)
         val prefix = if (relativePath.startsWith("../")) "" else "./"
         val path = prefix + relativePath
 
-        return "import $componentName from $quote$path$quote$semicolon"
+        return "import $componentName from $quote$path$quote"
     }
 
     fun getModulesInfos(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): MutableList<JSModuleNameInfo> {
