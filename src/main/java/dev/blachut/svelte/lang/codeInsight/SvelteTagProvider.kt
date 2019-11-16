@@ -72,36 +72,32 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         }
 
         // TODO Link component documentation
-        // TODO Include svelte internal components
         elements.addAll(getReachableComponents(tag))
     }
 
     private fun getReachableComponents(tag: HtmlTag): List<LookupElement> {
         val lookupElements = mutableListOf<LookupElement>()
-        val svelteFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
+        val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
 
-        svelteFiles.forEach {
-            val componentName = it.nameWithoutExtension
-            val props = ComponentPropsProvider().getComponentProps(it, tag.project)
+        svelteVirtualFiles.forEach { virtualFile ->
+            val componentName = virtualFile.nameWithoutExtension
 
-            val modulesInfos = ComponentImporter.getModulesInfos(tag.project, tag.containingFile.originalFile, it, componentName)
+            val modulesInfos = ComponentImporter.getModulesInfos(tag.project, tag.containingFile.originalFile, virtualFile, componentName)
+            val typeText = " (${virtualFile.name})"
 
-            modulesInfos.forEach { info ->
-                val lookupObject = ComponentLookupObject(it, props, info)
-                var lookupElement = LookupElementBuilder.create(lookupObject, componentName)
+            for (info in modulesInfos) {
+                val lookupObject = ComponentLookupObject(virtualFile, info)
+                val lookupElement = LookupElementBuilder.create(lookupObject, componentName)
                     .withIcon(info.resolvedFile.fileType.icon)
-                    .withInsertHandler(SvelteInsertHandler.INSTANCE)
+                    .withTailText(typeText, true)
+                    .withInsertHandler(SvelteInsertHandler)
+                    .let { PrioritizedLookupElement.withPriority(it, highPriority) }
 
-                if (props != null) {
-                    val joinedProps = props.map { prop -> "$prop={...}" }.joinToString(" ").trim()
-                    val typeText = "<$componentName $joinedProps>"
-                    lookupElement = lookupElement.withTypeText(typeText, true)
-                }
-                lookupElements.add(PrioritizedLookupElement.withPriority(lookupElement, highPriority))
+                lookupElements.add(lookupElement)
             }
-
-
         }
+
+        // TODO Include imported & re-exported components
         return lookupElements
     }
 }
