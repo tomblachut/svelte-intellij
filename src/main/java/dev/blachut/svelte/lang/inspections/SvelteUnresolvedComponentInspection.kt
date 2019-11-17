@@ -10,7 +10,7 @@ import com.intellij.psi.XmlElementVisitor
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.xml.XmlTag
-import dev.blachut.svelte.lang.codeInsight.SvelteComponentImporter
+import dev.blachut.svelte.lang.codeInsight.SvelteModuleUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
@@ -39,8 +39,8 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 val quote = JSCodeStyleSettings.getQuote(currentFile)
 
                 componentFiles.forEach { componentVirtualFile ->
-                    val modulesInfos = SvelteComponentImporter.getModulesInfos(project, currentFile, componentVirtualFile, componentName)
-                    modulesInfos.forEach { info ->
+                    val moduleInfos = SvelteModuleUtil.getModuleInfos(project, currentFile, componentVirtualFile, componentName)
+                    moduleInfos.forEach { info ->
                         val quickFix = SvelteImportComponentFix(tag, quote, componentName, info, currentVirtualFile, componentVirtualFile)
                         holder.registerProblem(tag, displayName, ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, range, quickFix)
                     }

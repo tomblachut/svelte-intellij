@@ -1,38 +1,39 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.ecmascript6.psi.ES6ExportSpecifier
-import com.intellij.lang.ecmascript6.psi.ES6FromClause
 import com.intellij.lang.ecmascript6.psi.impl.ES6CreateImportUtil
 import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil
-import com.intellij.lang.ecmascript6.psi.impl.JSImportPathBuilder
-import com.intellij.lang.ecmascript6.psi.impl.JSImportPathConfigurationImpl
 import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
 import com.intellij.lang.javascript.modules.JSModuleNameInfo
-import com.intellij.lang.javascript.modules.JSModuleNameInfoImpl
-import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil
-import com.intellij.lang.javascript.psi.stubs.ES6ExportedNamesIndex
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.XmlElementFactory
 import com.intellij.psi.codeStyle.CodeStyleManager
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.stubs.StubIndex
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.jetbrains.rd.util.firstOrNull
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.psi.SvelteFile
+import dev.blachut.svelte.lang.getRelativePath
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
-object SvelteComponentImporter {
+object SvelteImportUtil {
+    fun getImportText(currentFile: VirtualFile, componentFile: VirtualFile, componentName: String, quote: String, moduleInfo: JSModuleNameInfo?): String {
+        if (moduleInfo != null && moduleInfo.resolvedFile.extension != "svelte") {
+            return "import {$componentName} from $quote${moduleInfo.moduleName}$quote"
+        }
+
+        val relativePath = getRelativePath(currentFile, componentFile)
+        val prefix = if (relativePath.startsWith("../")) "" else "./"
+        val path = prefix + relativePath
+
+        return "import $componentName from $quote$path$quote"
+    }
+
     fun insertComponentImport(editor: Editor, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String, moduleInfo: JSModuleNameInfo?) {
         if (currentFile !is SvelteHtmlFile) return
 
@@ -75,43 +76,6 @@ object SvelteComponentImporter {
         )
 
         CodeStyleManager.getInstance(project).reformat(jsElement)
-    }
-
-    fun getImportText(currentFile: VirtualFile, componentFile: VirtualFile, componentName: String, quote: String, moduleInfo: JSModuleNameInfo?): String {
-        if (moduleInfo != null && moduleInfo.resolvedFile.extension != "svelte") {
-            return "import {$componentName} from $quote${moduleInfo.moduleName}$quote"
-        }
-
-        val relativePath = getRelativePath(currentFile, componentFile)
-        val prefix = if (relativePath.startsWith("../")) "" else "./"
-        val path = prefix + relativePath
-
-        return "import $componentName from $quote$path$quote"
-    }
-
-    fun getModulesInfos(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): MutableList<JSModuleNameInfo> {
-        val infos = mutableListOf<JSModuleNameInfo>()
-        val exports: Collection<JSElement> = StubIndex.getElements(ES6ExportedNamesIndex.KEY, componentName, project, GlobalSearchScope.allScope(project), JSElement::class.java)
-        exports.forEach {
-            if (it is ES6ExportSpecifier) {
-                val declaration = it.declaration ?: return@forEach
-                val from: ES6FromClause = PsiTreeUtil.findChildOfType(declaration, ES6FromClause::class.java)
-                    ?: return@forEach
-                val component = from.resolveReferencedElements().find { referencedFile ->
-                    referencedFile is SvelteFile && referencedFile.viewProvider.virtualFile == componentVirtualFile
-                }
-                component ?: return@forEach
-                val moduleVirtualFile = declaration.containingFile.virtualFile
-                val configuration = JSImportPathConfigurationImpl(currentFile, it, moduleVirtualFile, false)
-                infos.add(ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration)))
-            }
-        }
-        infos.add(JSModuleNameInfoImpl(getRelativePath(currentFile.virtualFile, componentVirtualFile), componentVirtualFile, componentVirtualFile, currentFile, arrayOf("svelte"), true))
-        return infos
-    }
-
-    private fun getRelativePath(currentFile: VirtualFile, componentFile: VirtualFile): String {
-        return FileUtil.getRelativePath(currentFile.parent.path, componentFile.path, '/') ?: ""
     }
 
     private fun findOrCreateEmbeddedContent(project: Project, currentFile: SvelteHtmlFile): JSEmbeddedContent? {

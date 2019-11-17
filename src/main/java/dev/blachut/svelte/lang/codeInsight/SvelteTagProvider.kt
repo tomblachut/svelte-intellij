@@ -84,10 +84,10 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
             if (!isSvelteComponentTag(componentName)) return@forEach
 
-            val modulesInfos = SvelteComponentImporter.getModulesInfos(tag.project, tag.containingFile.originalFile, virtualFile, componentName)
+            val moduleInfos = SvelteModuleUtil.getModuleInfos(tag.project, tag.containingFile.originalFile, virtualFile, componentName)
             val typeText = " (${virtualFile.name})"
 
-            for (info in modulesInfos) {
+            for (info in moduleInfos) {
                 val lookupObject = ComponentLookupObject(virtualFile, info)
                 val lookupElement = LookupElementBuilder.create(lookupObject, componentName)
                     .withIcon(info.resolvedFile.fileType.icon)
