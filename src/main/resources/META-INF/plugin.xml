@@ -92,6 +92,7 @@
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
+        <quoteHandler fileType="Svelte HTML" className="com.intellij.codeInsight.editorActions.HtmlQuoteHandler"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <dialectSpecificHandlersFactory language="SvelteJS"
