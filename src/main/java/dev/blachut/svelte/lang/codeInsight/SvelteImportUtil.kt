@@ -17,9 +17,9 @@ import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.xml.XmlTag
 import com.jetbrains.rd.util.firstOrNull
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.getJsEmbeddedContent
 import dev.blachut.svelte.lang.getRelativePath
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
-import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 object SvelteImportUtil {
     fun getImportText(currentFile: VirtualFile, componentFile: VirtualFile, componentName: String, quote: String, moduleInfo: JSModuleNameInfo?): String {

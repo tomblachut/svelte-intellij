@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.psi
 
-import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
@@ -9,6 +8,7 @@ import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
+import dev.blachut.svelte.lang.getJsEmbeddedContent
 import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
 
 class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE) {
@@ -45,10 +45,4 @@ private fun findAncestorScript(place: PsiElement): XmlTag? {
         it is XmlTag && HtmlUtil.isScriptTag(it)
     }
     return parentScript as XmlTag?
-}
-
-// TODO Move to utils?
-fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
-    // JSEmbeddedContent is nested twice, see SvelteJSScriptContentProvider
-    return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)?.firstChild as JSEmbeddedContent?
 }

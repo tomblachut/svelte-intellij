@@ -2,8 +2,8 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.psi.FileViewProvider
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.getJsEmbeddedContent
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
-import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 object SveltePropsProvider {
     fun getComponentProps(viewProvider: FileViewProvider): List<String>? {
