@@ -32,7 +32,7 @@ class SvelteSuppressionProvider : DefaultXmlSuppressionProvider() {
     override fun isProviderAvailable(file: PsiFile): Boolean {
         return file.viewProvider is SvelteFileViewProvider
     }
-
-    private val directives = listOf("on", "bind", "class", "use", "transition", "in", "out", "animate", "let")
-    private val suppressedAttributes = listOf("context")
 }
+
+val directives = listOf("on", "bind", "class", "use", "transition", "in", "out", "animate", "let")
+private val suppressedAttributes = listOf("context")

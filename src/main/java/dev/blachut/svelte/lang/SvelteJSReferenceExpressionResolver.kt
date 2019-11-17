@@ -2,6 +2,7 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.lang.javascript.index.JSSymbolUtil
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
@@ -15,17 +16,16 @@ import dev.blachut.svelte.lang.psi.*
 class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpressionImpl,
                                           ignorePerformanceLimits: Boolean) :
     JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
-    override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-        val propsReferenceName = "\$\$props"
-
+    override fun adjustReferencedName(expression: JSReferenceExpression): String? {
         val name = expression.referenceName
         if (name != null && expression.qualifier == null && name.length > 1 && name[0] == '$' && name[1] != '$') {
-            val element = JSImplicitElementImpl.Builder(name, expression)
-                .forbidAstAccess()
-                .setProperties(JSImplicitElement.Property.Constant)
-                .toImplicitElement()
-            return arrayOf(JSResolveResult(element))
+            return name.substring(1)
         }
+        return name
+    }
+
+    override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
+        val propsReferenceName = "\$\$props"
 
         if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, propsReferenceName)) {
             val element = JSImplicitElementImpl.Builder(propsReferenceName, expression)
