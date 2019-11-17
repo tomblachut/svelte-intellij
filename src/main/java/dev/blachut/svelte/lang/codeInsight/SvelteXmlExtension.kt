@@ -9,15 +9,24 @@ import dev.blachut.svelte.lang.isSvelteComponentTag
 class SvelteXmlExtension : HtmlXmlExtension() {
     override fun isAvailable(file: PsiFile): Boolean = file.language is SvelteHTMLLanguage
 
+    /**
+     * Whether writing self closing `<tag/>` is correct
+     */
     override fun isSelfClosingTagAllowed(tag: XmlTag): Boolean {
-        return isSvelteComponentTag(tag.name) || super.isSelfClosingTagAllowed(tag)
+        return isSvelteComponentTag(tag.name) || tag.name == "slot" || super.isSelfClosingTagAllowed(tag)
     }
 
+    /**
+     * Whether should warn when writing `<tag></tag>` with empty body, with quick fix that replaces it with `<tag/>`
+     */
     override fun isCollapsibleTag(tag: XmlTag): Boolean {
-        return isSvelteComponentTag(tag.name) || super.isCollapsibleTag(tag)
+        return isSvelteComponentTag(tag.name) || tag.name == "slot" || super.isCollapsibleTag(tag)
     }
 
-    override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name)
+    /**
+     * Whether tag follows stricter rules of XML. Single tags are e.g. <p> & <li>, they don't require closing tag
+     */
+    override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name) || tag.name == "slot"
 
     override fun getAttributeValuePresentation(tag: XmlTag?, attributeName: String, defaultAttributeQuote: String): AttributeValuePresentation {
         if (attributeName == "slot") {
