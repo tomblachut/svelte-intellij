@@ -4,6 +4,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.HtmlXmlExtension
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.directives
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteXmlExtension : HtmlXmlExtension() {
@@ -33,9 +34,16 @@ class SvelteXmlExtension : HtmlXmlExtension() {
             return super.getAttributeValuePresentation(tag, attributeName, defaultAttributeQuote)
         }
 
-        return object : AttributeValuePresentation {
-            override fun getPrefix(): String = "{"
-            override fun getPostfix(): String = "}"
+        val prefix = if (attributeName.contains(':')) attributeName.split(":").firstOrNull() else null
+        if (prefix != null && directives.contains(prefix)) {
+            return object : AttributeValuePresentation {
+                override fun getPrefix(): String = "{"
+                override fun getPostfix(): String = "}"
+            }
         }
+
+        // non-directive attribute
+        // TODO Return empty presentation after auto matching {} and ""
+        return super.getAttributeValuePresentation(tag, attributeName, defaultAttributeQuote)
     }
 }
