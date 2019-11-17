@@ -85,8 +85,6 @@
                          enabledByDefault="true"
                          level="ERROR"
                          groupName="Svelte"
-                         bundle="messages.XmlBundle"
-                         groupKey="html.inspections.group.name"
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>

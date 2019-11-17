@@ -4,17 +4,20 @@ import com.intellij.openapi.fileTypes.LanguageFileType
 import dev.blachut.svelte.lang.icons.SvelteIcons
 import javax.swing.Icon
 
-class SvelteFileType : LanguageFileType(SvelteLanguage.INSTANCE) {
+/**
+ * Required by XmlElementFactory used to create empty script tags
+ */
+class SvelteHtmlFileType : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
     override fun getName(): String {
-        return "Svelte"
+        return "Svelte HTML"
     }
 
     override fun getDescription(): String {
-        return "Svelte Component"
+        return "Svelte HTML"
     }
 
     override fun getDefaultExtension(): String {
-        return "svelte"
+        return "sveltehtml"
     }
 
     override fun getIcon(): Icon? {
@@ -23,6 +26,6 @@ class SvelteFileType : LanguageFileType(SvelteLanguage.INSTANCE) {
 
     companion object {
         @JvmField
-        val INSTANCE = SvelteFileType()
+        val INSTANCE = SvelteHtmlFileType()
     }
 }

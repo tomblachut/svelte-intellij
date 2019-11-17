@@ -1,11 +1,9 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.ecmascript6.psi.ES6FromClause
+import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSElement
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.xml.XmlDescriptorUtil
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlAttributeDescriptor
@@ -40,24 +38,23 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
             return XmlAttributeDescriptor.EMPTY
         }
 
-        var attributeDescriptors = knownAttributeDescriptors
+        val declaration = declaration
+        // TODO lift namespace check from descriptor (?)
+        if (declaration is ES6ImportedBinding && !declaration.isNamespaceImport) {
+            // com.intellij.javascript.JSFileReference.IMPLICIT_EXTENSIONS doesn't include .svelte
+            // probably because of that following call returns null
+            // val componentFile = declaration.findReferencedElements().firstOrNull()
+            val componentFile = declaration.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
 
-        // TODO Find global Svelte attributes besides slot and props
-        if (StringUtil.isCapitalized(name)) {
-            val fromClause = PsiTreeUtil.findChildOfType(declaration.parent, ES6FromClause::class.java)
-            val componentReference = fromClause?.resolveReferencedElements()?.firstOrNull()
-            if (componentReference != null && componentReference is SvelteFile) {
-                val props = ComponentPropsProvider().getComponentProps(
-                    componentReference.viewProvider.virtualFile,
-                    context.project
-                )
-                val propsDescriptors = props?.map { AnyXmlAttributeDescriptor(it) }
-                if (propsDescriptors != null) {
-                    attributeDescriptors += propsDescriptors
+            if (componentFile != null && componentFile is SvelteFile) {
+                val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
+                if (props != null) {
+                    return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }
                 }
             }
         }
-        return attributeDescriptors
+
+        return knownAttributeDescriptors
     }
 
     override fun getAttributeDescriptor(attribute: XmlAttribute): XmlAttributeDescriptor? {
@@ -65,16 +62,13 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
     }
 
     override fun getAttributeDescriptor(@NonNls attributeName: String, context: XmlTag?): XmlAttributeDescriptor? {
-        val descriptor = attributeDescriptorCache[attributeName]
+        var descriptor = attributeDescriptorCache[attributeName]
         if (descriptor == null) {
-            val d = AnyXmlAttributeDescriptor(attributeName)
-            attributeDescriptorCache[attributeName] = d
-            return d
+            descriptor = AnyXmlAttributeDescriptor(attributeName)
+            attributeDescriptorCache[descriptor.name] = descriptor
         }
 
         return descriptor
-
-//        return ContainerUtil.find(getAttributesDescriptors(context)) { descriptor1 -> attributeName == descriptor1.name }
     }
 
     override fun getContentType(): Int = XmlElementDescriptor.CONTENT_TYPE_ANY
@@ -101,7 +95,7 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
         private val attributeDescriptorCache = HashMap<String, XmlAttributeDescriptor>()
 
         init {
-            attributeDescriptorCache["slot"] = slotDescriptor
+            attributeDescriptorCache[slotDescriptor.name] = slotDescriptor
         }
     }
 }
