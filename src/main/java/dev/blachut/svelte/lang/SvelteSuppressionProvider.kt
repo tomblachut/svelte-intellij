@@ -21,7 +21,7 @@ class SvelteSuppressionProvider : DefaultXmlSuppressionProvider() {
         }
 
         if (inspectionId == "HtmlUnknownTag") {
-            if (isSvelteComponentTag(element.text)) {
+            if (isSvelteComponentTag(element.text) || element.text == "slot") {
                 return true
             }
         }
