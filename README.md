@@ -4,7 +4,7 @@
 
 # svelte-intellij
 
-Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Works in JetBrains products that support JavaScript.
+Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Works in JetBrains products that support JavaScript starting with version 2019.2.
 
 <p>Work in progress, pretty usable already.</p>
 
@@ -26,7 +26,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice. Work
 <h2>Known issues</h2>
 
 <ul>
-    <li>$ subscriptions and labels aren't recognised properly</li>
+    <li>$ labels aren't recognised properly</li>
     <li>Directives are treated as plain attributes</li>
     <li>...</li>
 </ul>

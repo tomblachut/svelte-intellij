@@ -1,5 +1,19 @@
 # Changelog
 
+<h3>0.12.0</h3>
+<ul>
+    <li>Support for different CSS dialects via lang attribute</li>
+    <li>Initial support for $-prefixed store references</li>
+    <li>Enable completion of JS declarations from script tags</li>
+    <li>Initial support for module context scripts (inside Svelte files only)</li>
+    <li>More robust logic of resolving component declarations</li>
+    <li>Unresolved components are highlighted the same as other identifiers</li>
+    <li>Remove buggy prop insertion while completing tag name</li>
+    <li>Stop inserting mustaches after typing = for attributes</li>
+    <li>Enable quote matching</li>
+    <li>Bug fixes & stability improvements</li>
+</ul>
+
 <h3>0.11.1</h3>
 <ul>
     <li>Fix regression about not working import suggestions</li>
