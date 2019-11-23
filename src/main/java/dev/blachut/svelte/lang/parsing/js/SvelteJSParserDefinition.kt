@@ -14,7 +14,7 @@ class SvelteJSParserDefinition : ECMA6ParserDefinition() {
 
     override fun createParser(project: Project?): PsiParser {
         return PsiParser { root, builder ->
-            SvelteJSParser(builder).parseJS(root)
+            SvelteJSLanguage.INSTANCE.createParser(builder).parseJS(root)
             builder.treeBuilt
         }
     }
