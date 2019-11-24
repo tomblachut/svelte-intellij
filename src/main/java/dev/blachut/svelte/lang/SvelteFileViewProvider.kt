@@ -10,7 +10,7 @@ import com.intellij.psi.impl.source.PsiFileImpl
 import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider
 import dev.blachut.svelte.lang.psi.SvelteTemplateElementTypes
 
-class SvelteFileViewProvider(psiManager: PsiManager, virtualFile: VirtualFile, physical: Boolean) : MultiplePsiFilesPerDocumentFileViewProvider(psiManager, virtualFile, physical), TemplateLanguageFileViewProvider {
+class SvelteFileViewProvider(virtualFile: VirtualFile, psiManager: PsiManager, eventSystemEnabled: Boolean) : MultiplePsiFilesPerDocumentFileViewProvider(psiManager, virtualFile, eventSystemEnabled), TemplateLanguageFileViewProvider {
     private val htmlLanguage = SvelteHTMLLanguage.INSTANCE
 
     override fun getBaseLanguage(): Language {
@@ -26,7 +26,7 @@ class SvelteFileViewProvider(psiManager: PsiManager, virtualFile: VirtualFile, p
     }
 
     override fun cloneInner(virtualFile: VirtualFile): MultiplePsiFilesPerDocumentFileViewProvider {
-        return SvelteFileViewProvider(manager, virtualFile, false)
+        return SvelteFileViewProvider(virtualFile, manager, false)
     }
 
     override fun createFile(lang: Language): PsiFile? {

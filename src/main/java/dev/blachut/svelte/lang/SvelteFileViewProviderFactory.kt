@@ -8,7 +8,7 @@ import com.intellij.psi.PsiManager
 
 
 class SvelteFileViewProviderFactory : FileViewProviderFactory {
-    override fun createFileViewProvider(virtualFile: VirtualFile, language: Language, psiManager: PsiManager, physical: Boolean): FileViewProvider {
-        return SvelteFileViewProvider(psiManager, virtualFile, physical)
+    override fun createFileViewProvider(file: VirtualFile, language: Language?, manager: PsiManager, eventSystemEnabled: Boolean): FileViewProvider {
+        return SvelteFileViewProvider(file, manager, eventSystemEnabled)
     }
 }
