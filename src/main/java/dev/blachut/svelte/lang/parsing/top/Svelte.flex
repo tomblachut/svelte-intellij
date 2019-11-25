@@ -19,7 +19,7 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 %unicode
 
 %{
-  private int braces = 0;
+  private int bracesNestingLevel = 0;
   private int parens = 0;
   private int brackets = 0;
   // as and then can work as Svelte keywords or JS identifiers depending on context
@@ -54,12 +54,12 @@ import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
   }
 
   private boolean notNestedCode() {
-      return (braces + parens + brackets) == 0;
+      return (bracesNestingLevel + parens + brackets) == 0;
   }
 
   private void resetCounters() {
       rootKeywordsEnabled = false;
-      braces = 0;
+      bracesNestingLevel = 0;
       parens = 0;
       brackets = 0;
   }
@@ -131,10 +131,10 @@ TICKED_QUOTE="`"
   ","                { if (notNestedCode()) { return COMMA; } else { return CODE_FRAGMENT; } }
   "["                { enableRootKeywords(); brackets++; return CODE_FRAGMENT; }
   "]"                { brackets--; return CODE_FRAGMENT; }
-  "{"                { enableRootKeywords(); braces++; return CODE_FRAGMENT; }
+  "{"                { enableRootKeywords(); bracesNestingLevel++; return CODE_FRAGMENT; }
   // Following eatWsThenBegin is a hack around formatter bugs
-  "}"                { if (braces == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { braces--; return CODE_FRAGMENT; } }
-  {WHITE_SPACE}/"}"  { if (braces == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
+  "}"                { if (bracesNestingLevel == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { bracesNestingLevel--; return CODE_FRAGMENT; } }
+  {WHITE_SPACE}/"}"  { if (bracesNestingLevel == 0) { return WHITE_SPACE; } else { return CODE_FRAGMENT; } }
   {WHITE_SPACE}      { return CODE_FRAGMENT; }
   {ID}               { enableRootKeywords(); return CODE_FRAGMENT; }
   [^]                { if (notNestedCode()) rootKeywordsEnabled = false; return CODE_FRAGMENT; }
@@ -149,8 +149,8 @@ TICKED_QUOTE="`"
 }
 
 <SVELTE_INTERPOLATION> {
-  "{"                { braces++; return CODE_FRAGMENT; }
-  "}"                { if (braces == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { braces--; return CODE_FRAGMENT; } }
+  "{"                { bracesNestingLevel++; return CODE_FRAGMENT; }
+  "}"                { if (bracesNestingLevel == 0) { eatWsThenBegin(YYINITIAL); return END_MUSTACHE; } else { bracesNestingLevel--; return CODE_FRAGMENT; } }
   [^]                { return CODE_FRAGMENT; }
 }
 

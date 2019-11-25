@@ -11,13 +11,10 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.TokenType
-import com.intellij.psi.impl.source.html.HtmlEmbeddedContentImpl
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.SvelteLanguage
-import dev.blachut.svelte.lang.psi.SvelteFile
-import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
-import dev.blachut.svelte.lang.psi.SvelteTypes
+import dev.blachut.svelte.lang.psi.*
 
 class SvelteParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
@@ -59,6 +56,10 @@ class SvelteParserDefinition : ParserDefinition {
     override fun createElement(node: ASTNode): PsiElement {
         if (node.elementType === SvelteJSElementTypes.ATTRIBUTE_EXPRESSION) {
             return ASTWrapperPsiElement(node)
+        } else if (node.elementType === SvelteBlockLazyElementTypes.IF_END
+            || node.elementType === SvelteBlockLazyElementTypes.EACH_END
+            || node.elementType === SvelteBlockLazyElementTypes.AWAIT_END) {
+            return SveltePsiElementImpl(node)
         }
 
         return SvelteTypes.Factory.createElement(node)

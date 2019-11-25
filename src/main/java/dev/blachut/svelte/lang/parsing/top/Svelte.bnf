@@ -40,6 +40,17 @@
     DEBUG_PREFIX="@debug"
     HTML_FRAGMENT="<markup>"
     CODE_FRAGMENT="<code>"
+    LAZY_IF="LAZY_IF"
+    LAZY_ELSE="LAZY_ELSE"
+    LAZY_EACH="LAZY_EACH"
+    LAZY_AWAIT="LAZY_AWAIT"
+    LAZY_THEN="LAZY_THEN"
+    LAZY_CATCH="LAZY_CATCH"
+    TEMP_PREFIX="TEMP_PREFIX"
+    HASH="HASH"
+    COLON="COLON"
+    SLASH="SLASH"
+    AT="AT"
   ]
 
   extends(".*Block")=block
