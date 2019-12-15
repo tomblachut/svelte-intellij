@@ -7,9 +7,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
-import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteLanguage
-import dev.blachut.svelte.lang.psi.*
 
 /**
  * Handler for custom plugin actions on chars typed by the user.  See [SvelteEnterHandler] for custom actions
@@ -46,28 +44,6 @@ class SvelteTypedHandler : TypedHandlerDelegate() {
     }
 
     private fun finishClosingTag(offset: Int, editor: Editor, provider: FileViewProvider, justAfterOpeningTag: Boolean) {
-        val elementAtCaret = provider.findElementAt(offset - 1, SvelteLanguage.INSTANCE) ?: return
-        val block = PsiTreeUtil.getParentOfType(elementAtCaret, SvelteBlock::class.java) ?: return
 
-        val open = PsiTreeUtil.findChildOfType(block, SvelteOpeningTag::class.java)
-        val close = PsiTreeUtil.findChildOfType(block, SvelteClosingTag::class.java)
-
-        if (open == null || close != null) return
-
-        val prefix = if (justAfterOpeningTag) "{/" else ""
-
-        val matchingTag = when (open) {
-            is SvelteIfBlockOpeningTag -> prefix + "if}"
-            is SvelteEachBlockOpeningTag -> prefix + "each}"
-            is SvelteAwaitBlockOpeningTag -> prefix + "await}"
-            is SvelteAwaitThenBlockOpeningTag -> prefix + "await}"
-            else -> return
-        }
-
-        editor.document.insertString(offset, matchingTag)
-        if (!justAfterOpeningTag) {
-            editor.caretModel.moveToOffset(offset + matchingTag.length)
-        }
-        // TODO Verify if it's bulletproof, check offset if throws like Handlebars of something
     }
 }

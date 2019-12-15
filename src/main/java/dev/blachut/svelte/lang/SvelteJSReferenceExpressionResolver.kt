@@ -8,10 +8,7 @@ import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.lang.javascript.psi.stubs.JSImplicitElement
 import com.intellij.lang.javascript.psi.stubs.impl.JSImplicitElementImpl
-import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveResult
-import com.intellij.psi.util.PsiTreeUtil
-import dev.blachut.svelte.lang.psi.*
 
 class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpressionImpl,
                                           ignorePerformanceLimits: Boolean) :
@@ -43,66 +40,12 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
     private fun resolveInComponent(expression: JSReferenceExpressionImpl): Array<ResolveResult>? {
         if (expression.qualifier != null) return null
 
-        return resolveInLocalBlock() ?: resolveInSvelteBlocks()
+        return resolveInLocalBlock()
     }
 
     private fun resolveInLocalBlock(): Array<ResolveResult>? {
-        val keyExpression = PsiTreeUtil.getParentOfType(myRef, SvelteKeyExpression::class.java) ?: return null
-        val block = keyExpression.parent as SvelteEachBlockOpeningTag
-        block.parameterList.forEach { parameter ->
-            val result = resolveInSvelteParameter(parameter)
-            if (result != null) return result
-        }
         return null
     }
 
-    private fun resolveInSvelteBlocks(): Array<ResolveResult>? {
-        var currentElement: PsiElement? = myRef
 
-        if (currentElement != null && myContainingFile.language == SvelteHTMLLanguage.INSTANCE) {
-            // Jump between PSI trees
-            currentElement = myContainingFile.viewProvider.findElementAt(currentElement.textOffset, SvelteLanguage.INSTANCE)
-        }
-
-        while (currentElement != null) {
-            val scope = PsiTreeUtil.getParentOfType(currentElement, SvelteScope::class.java)
-            if (scope != null) {
-                val scopeResults = resolveInSvelteBlock(scope)
-                if (scopeResults != null) return scopeResults
-            }
-            currentElement = scope
-        }
-
-        return null
-    }
-
-    private fun resolveInSvelteBlock(scope: SvelteScope): Array<ResolveResult>? {
-        when (val block = scope.parent) {
-            is SvelteEachBlockOpening -> {
-                block.eachBlockOpeningTag.parameterList.forEach { parameter ->
-                    val result = resolveInSvelteParameter(parameter)
-                    if (result != null) return result
-                }
-            }
-            is SvelteAwaitThenBlockOpening -> {
-                val parameter = block.awaitThenBlockOpeningTag.parameter ?: return null
-                return resolveInSvelteParameter(parameter)
-            }
-            is SvelteThenContinuation -> {
-                val parameter = block.thenContinuationTag.parameter ?: return null
-                return resolveInSvelteParameter(parameter)
-            }
-            is SvelteCatchContinuation -> {
-                val parameter = block.catchContinuationTag.parameter ?: return null
-                return resolveInSvelteParameter(parameter)
-            }
-        }
-        return null
-    }
-
-    private fun resolveInSvelteParameter(parameter: SvelteParameter): Array<ResolveResult>? {
-        val variables = PsiTreeUtil.findChildrenOfType(parameter, SvelteJSParameter::class.java)
-        variables.forEach { if (it.name == myReferencedName) return arrayOf(JSResolveResult(it)) }
-        return null
-    }
 }

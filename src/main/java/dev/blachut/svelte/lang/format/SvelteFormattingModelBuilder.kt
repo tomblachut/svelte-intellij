@@ -15,10 +15,9 @@ import com.intellij.psi.formatter.xml.SyntheticBlock
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.xml.XmlTag
-import dev.blachut.svelte.lang.psi.SvelteTypes
 import dev.blachut.svelte.lang.psi.SvelteTypes.HTML_FRAGMENT
 
-val blocks = TokenSet.create(SvelteTypes.IF_BLOCK, SvelteTypes.EACH_BLOCK, SvelteTypes.AWAIT_BLOCK)
+val blocks = TokenSet.create()
 
 /**
  * I don't really understand how it works.
@@ -96,31 +95,7 @@ private class SvelteBlock(node: ASTNode,
             return Indent.getNoneIndent()
         }
 
-        if (myNode.elementType == SvelteTypes.SCOPE) {
-            // If SCOPE is not contained in a foreign block, indent
-            val foreignBlockParent = getForeignBlockParent(false) ?: return Indent.getNormalIndent()
 
-            // otherwise, only indent if our foreign parent isn't indenting us
-            if (foreignBlockParent.node is XmlTag) {
-                val xmlTag = foreignBlockParent.node as XmlTag?
-                if (!myHtmlPolicy.indentChildrenOf(xmlTag)) {
-                    return Indent.getNormalIndent()
-                }
-            }
-
-            return Indent.getNoneIndent()
-        }
-
-        if (myNode.treeParent != null && myNode.treeParent.elementType == SvelteTypes.SCOPE) {
-            // direct descendant of a SCOPE:
-            //      if its Block parent (i.e. not Svelte AST Tree parent) is a SvelteBlock
-            //      which has NOT been indented, then have the element provide the indent itself
-            val parent = parent
-            @Suppress("RecursivePropertyAccessor")
-            if (parent is SvelteBlock && parent.indent === Indent.getNoneIndent()) {
-                return Indent.getNormalIndent()
-            }
-        }
 
         // any element that is the direct descendant of a foreign block gets an indent
         // (unless that foreign element has been configured to not indent its children)

@@ -5,10 +5,7 @@ import com.intellij.lang.folding.FoldingBuilder
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.DumbAware
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
-import dev.blachut.svelte.lang.psi.*
 import java.util.*
 
 class SvelteFoldingBuilder : FoldingBuilder, DumbAware {
@@ -21,28 +18,6 @@ class SvelteFoldingBuilder : FoldingBuilder, DumbAware {
     private fun appendDescriptors(block: PsiElement, descriptors: MutableList<FoldingDescriptor>, document: Document) {
         if (isSingleLine(block, document)) {
             return
-        }
-
-        if (block is SvelteBlock) {
-            val open = PsiTreeUtil.findChildOfType(block, SvelteOpeningTag::class.java)
-
-            val close = when (open) {
-                is SvelteIfBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteIfBlockClosingTag::class.java)
-                is SvelteEachBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteEachBlockClosingTag::class.java)
-                is SvelteAwaitBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteAwaitBlockClosingTag::class.java)
-                is SvelteAwaitThenBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteAwaitBlockClosingTag::class.java)
-                else -> null
-            }
-
-            if (open != null && close != null) {
-                // Following offsets ensure that we fold opening and closing tag together exactly like HTML does
-                // E.g. {#if condition ...}
-                val foldingRangeStartOffset = open.textRange.endOffset - 1
-                val foldingRangeEndOffset = close.textRange.endOffset - 1
-                val range = TextRange(foldingRangeStartOffset, foldingRangeEndOffset)
-
-                descriptors.add(FoldingDescriptor(block, range))
-            }
         }
 
         var child: PsiElement? = block.firstChild
