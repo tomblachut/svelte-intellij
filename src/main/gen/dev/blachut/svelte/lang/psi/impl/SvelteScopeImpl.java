@@ -26,16 +26,4 @@ public class SvelteScopeImpl extends SveltePsiElementImpl implements SvelteScope
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public List<SvelteBlock> getBlockList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public List<SvelteInterpolation> getInterpolationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SvelteInterpolation.class);
-  }
-
 }

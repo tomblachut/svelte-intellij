@@ -52,63 +52,11 @@
     SLASH="SLASH"
     AT="AT"
   ]
-
-  extends(".*Block")=block
-  extends(".*OpeningTag")=openingTag
-  extends(".*ContinuationTag")=continuationTag
-  extends(".*ClosingTag")=closingTag
-
-  pin("awaitThenBlockOpeningTag")=4
-  pin("elseIfContinuationTag")=3
-  pin(".*Tag")=2
-  pin("interpolation")=1
-  recoverWhile(".*Tag|interpolation")=mustache_recover
 }
 
 // First rule is always implicitly private
 svelteComponent ::= privateScope
 scope ::= privateScope
 
-private mustache_recover ::= !('{' | '{#' | "{:" | "{/" | HTML_FRAGMENT)
+private privateScope ::= (<<parseLazy>>|HTML_FRAGMENT)*
 
-private privateScope ::= (block|interpolation|HTML_FRAGMENT)*
-
-interpolation ::= '{' expressionPrefix? expression '}'
-private expressionPrefix ::= '@html' | '@debug'
-
-block ::= ifBlock | eachBlock | awaitBlock
-
-ifBlock ::= ifBlockOpening elseIfContinuation* elseContinuation? ifBlockClosingTag {pin=1}
-ifBlockOpening ::= ifBlockOpeningTag scope
-ifBlockOpeningTag ::= '{#' 'if' expression '}'
-elseIfContinuation ::= elseIfContinuationTag scope {name="else if block"}
-elseIfContinuationTag ::= '{:' 'else' 'if' expression '}'
-ifBlockClosingTag ::= '{/' 'if' '}'
-
-eachBlock ::= eachBlockOpening elseContinuation? eachBlockClosingTag {pin=1}
-eachBlockOpening ::= eachBlockOpeningTag scope
-eachBlockOpeningTag ::= '{#' 'each' expression 'as' parameter (',' parameter)? keyExpression? '}'
-eachBlockClosingTag ::= '{/' 'each' '}'
-
-awaitBlock ::= (awaitThenBlockOpening | awaitAndThen) (catchContinuation)? awaitBlockClosingTag {pin=1}
-private awaitAndThen ::= awaitBlockOpening thenContinuation {pin=1}
-awaitThenBlockOpening ::= awaitThenBlockOpeningTag scope
-awaitThenBlockOpeningTag ::= '{#' 'await' expression 'then' parameter '}'
-awaitBlockOpening ::= awaitBlockOpeningTag scope
-awaitBlockOpeningTag ::= '{#' 'await' expression '}'
-thenContinuation ::= thenContinuationTag scope {name="then block"}
-thenContinuationTag ::= '{:' 'then' parameter '}'
-catchContinuation ::= catchContinuationTag scope {name="catch block"}
-catchContinuationTag::= '{:' 'catch' parameter '}'
-awaitBlockClosingTag ::= '{/' 'await' '}'
-
-elseContinuation ::= elseContinuationTag scope {name="else block"}
-elseContinuationTag ::= '{:' 'else' '}'
-
-fake openingTag ::= '{#' foo '}'
-fake continuationTag ::= '{:' foo '}'
-fake closingTag ::= '{/' foo '}'
-
-keyExpression ::= '(' <<parseExpression>> ')' { pin=1 }
-expression ::= <<parseExpression>>
-parameter ::= <<parseParameter>>

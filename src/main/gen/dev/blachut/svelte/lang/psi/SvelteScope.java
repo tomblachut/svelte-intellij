@@ -7,10 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface SvelteScope extends PsiElement {
 
-  @NotNull
-  List<SvelteBlock> getBlockList();
-
-  @NotNull
-  List<SvelteInterpolation> getInterpolationList();
-
 }
