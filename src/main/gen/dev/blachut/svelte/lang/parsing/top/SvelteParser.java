@@ -10,7 +10,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.LightPsiParser;
-import static dev.blachut.svelte.lang.parsing.top.SvelteManualParsing.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class SvelteParser implements PsiParser, LightPsiParser {
@@ -37,36 +36,20 @@ public class SvelteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (<<parseLazy>>|HTML_FRAGMENT)*
+  // HTML_FRAGMENT
   static boolean privateScope(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "privateScope")) return false;
-    while (true) {
-      int pos = current_position_(builder);
-      if (!privateScope_0(builder, level + 1)) break;
-      if (!empty_element_parsed_guard_(builder, "privateScope", pos)) break;
-    }
-    return true;
-  }
-
-  // <<parseLazy>>|HTML_FRAGMENT
-  private static boolean privateScope_0(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "privateScope_0")) return false;
-    boolean result;
-    Marker marker = enter_section_(builder);
-    result = parseLazy(builder, level + 1);
-    if (!result) result = consumeToken(builder, HTML_FRAGMENT);
-    exit_section_(builder, marker, null, result);
-    return result;
+    return consumeToken(builder, HTML_FRAGMENT);
   }
 
   /* ********************************************************** */
   // privateScope
   public static boolean scope(PsiBuilder builder, int level) {
     if (!recursion_guard_(builder, level, "scope")) return false;
+    if (!nextTokenIs(builder, HTML_FRAGMENT)) return false;
     boolean result;
-    Marker marker = enter_section_(builder, level, _NONE_, SCOPE, "<scope>");
+    Marker marker = enter_section_(builder);
     result = privateScope(builder, level + 1);
-    exit_section_(builder, level, marker, result, false, null);
+    exit_section_(builder, marker, SCOPE, result);
     return result;
   }
 

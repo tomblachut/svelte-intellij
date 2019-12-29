@@ -6,6 +6,8 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.*;
 import com.intellij.psi.xml.*;
 import dev.blachut.svelte.lang.psi.SvelteTypes;
+import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
 
 %%
 
@@ -49,11 +51,15 @@ import dev.blachut.svelte.lang.psi.SvelteTypes;
 %state TAG_CHARACTERS
 %state C_COMMENT_START
 %state C_COMMENT_END
+%state SVELTE_INTERPOLATION_START
+%state SVELTE_INTERPOLATION_KEYWORD
+%state SVELTE_INTERPOLATION
 /* IMPORTANT! number of states should not exceed 16. See JspHighlightingLexer. */
 
 ALPHA=[:letter:]
 DIGIT=[0-9]
 WHITE_SPACE_CHARS=[ \n\r\t\f\u2028\u2029\u0085]+
+WHITE_SPACE=\s+
 
 TAG_NAME=({ALPHA}|"_"|":")({ALPHA}|{DIGIT}|"_"|":"|"."|"-")*
 /* see http://www.w3.org/TR/html5/syntax.html#syntax-attribute-name */
@@ -114,6 +120,35 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <YYINITIAL> \\\$ {
   return XmlTokenType.XML_DATA_CHARACTERS;
+}
+
+<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return START_MUSTACHE_TEMP; }
+
+<SVELTE_INTERPOLATION_START> {
+  {WHITE_SPACE}      { return TEMP_PREFIX; }
+  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return HASH; }
+  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return COLON; }
+  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SLASH; }
+  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return AT; }
+  [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
+}
+
+<SVELTE_INTERPOLATION_KEYWORD> {
+  // TODO Disallow whitespace
+  // {WHITE_SPACE}      { return BAD_CHARACTER; }
+  "if"               { yybegin(SVELTE_INTERPOLATION); return LAZY_IF; }
+  "else"             { yybegin(SVELTE_INTERPOLATION); return LAZY_ELSE; }
+  "each"             { yybegin(SVELTE_INTERPOLATION); return LAZY_EACH; }
+  "await"            { yybegin(SVELTE_INTERPOLATION); return LAZY_AWAIT; }
+  "then"             { yybegin(SVELTE_INTERPOLATION); return LAZY_THEN; }
+  "catch"            { yybegin(SVELTE_INTERPOLATION); return LAZY_CATCH; }
+  [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
+}
+
+<SVELTE_INTERPOLATION> {
+  "{"                { bracesNestingLevel++; return CODE_FRAGMENT; }
+  "}"                { if (bracesNestingLevel == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { bracesNestingLevel--; return CODE_FRAGMENT; } }
+  [^]                { return CODE_FRAGMENT; }
 }
 
 <START_TAG_NAME, END_TAG_NAME> {TAG_NAME} { yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
@@ -184,6 +219,6 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 "&#"[xX]({DIGIT}|[a-fA-F])+";" { return XmlTokenType.XML_CHAR_ENTITY_REF; }
 "&"{TAG_NAME}";" { return XmlTokenType.XML_ENTITY_REF_TOKEN; }
 
-<YYINITIAL> ([^<&\$# \n\r\t\f]|(\\\$)|(\\#))* { return XmlTokenType.XML_DATA_CHARACTERS; }
+<YYINITIAL> ([^<{&\$# \n\r\t\f]|(\\\$)|(\\#))* { return XmlTokenType.XML_DATA_CHARACTERS; }
 <YYINITIAL> [^] { return XmlTokenType.XML_DATA_CHARACTERS; }
 [^] { return XmlTokenType.XML_BAD_CHARACTER; }

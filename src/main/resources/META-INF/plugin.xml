@@ -78,8 +78,7 @@
         <lang.commenter language="Svelte" implementationClass="com.intellij.lang.xml.XmlCommenter"/>
         <lang.foldingBuilder language="Svelte"
                              implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
-        <lang.formatter language="Svelte"
-                        implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>
+<!--        <lang.formatter language="Svelte" implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>-->
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTypedHandler" order="before xmlSlash"/>
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
         <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGeneratorImpl"/>

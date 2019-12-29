@@ -14,8 +14,6 @@
   psiPackage="dev.blachut.svelte.lang.psi"
   psiImplPackage="dev.blachut.svelte.lang.psi.impl"
 
-  parserImports=["static dev.blachut.svelte.lang.parsing.top.SvelteManualParsing.*"]
-
   elementTypeHolderClass="dev.blachut.svelte.lang.psi.SvelteTypes"
   elementTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
   tokenTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
@@ -25,6 +23,7 @@
     START_INNER_MUSTACHE="{:"
     START_CLOSING_MUSTACHE="{/"
     START_MUSTACHE="{"
+    START_MUSTACHE_TEMP="START_MUSTACHE_TEMP"
     END_MUSTACHE="}"
     IF="if"
     EACH="each"
@@ -58,5 +57,5 @@
 svelteComponent ::= privateScope
 scope ::= privateScope
 
-private privateScope ::= (<<parseLazy>>|HTML_FRAGMENT)*
+private privateScope ::= HTML_FRAGMENT
 

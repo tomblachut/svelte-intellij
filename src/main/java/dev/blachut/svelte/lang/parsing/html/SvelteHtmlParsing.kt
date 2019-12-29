@@ -7,7 +7,9 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
+import com.intellij.util.containers.Stack
 import dev.blachut.svelte.lang.isSvelteComponentTag
+import dev.blachut.svelte.lang.parsing.top.SvelteManualParsing
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTypes
@@ -33,6 +35,30 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             return false
         }
         return super.isSingleTag(tagName, originalTagName)
+    }
+
+    override fun hasCustomTagContent(): Boolean {
+        return token() === SvelteTypes.START_MUSTACHE_TEMP
+    }
+
+    override fun parseCustomTagContent(xmlText: PsiBuilder.Marker?): PsiBuilder.Marker? {
+        terminateText(xmlText)
+        parseSvelteTag()
+        return null
+    }
+
+    override fun hasCustomTopLevelContent(): Boolean {
+        return hasCustomTagContent()
+    }
+
+    override fun parseCustomTopLevelContent(error: PsiBuilder.Marker?): PsiBuilder.Marker? {
+        flushError(error)
+        parseSvelteTag()
+        return null
+    }
+
+    private fun parseSvelteTag() {
+        SvelteManualParsing.parseLazyBlock(builder)
     }
 
     override fun parseAttribute() {

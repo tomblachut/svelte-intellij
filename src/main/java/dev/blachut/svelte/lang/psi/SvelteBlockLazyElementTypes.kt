@@ -105,6 +105,7 @@ object SvelteBlockLazyElementTypes {
             assert(builder.tokenType === JSTokenTypes.IDENTIFIER) // THEN
             builder.advanceLexer()
 
+            // TODO Check weird RBRACE placement
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
         }
     }

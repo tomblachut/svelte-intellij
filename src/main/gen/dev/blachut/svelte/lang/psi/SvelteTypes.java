@@ -36,6 +36,7 @@ public interface SvelteTypes {
   IElementType START_CLOSING_MUSTACHE = new SvelteElementType("{/");
   IElementType START_INNER_MUSTACHE = new SvelteElementType("{:");
   IElementType START_MUSTACHE = new SvelteElementType("{");
+  IElementType START_MUSTACHE_TEMP = new SvelteElementType("START_MUSTACHE_TEMP");
   IElementType START_OPENING_MUSTACHE = new SvelteElementType("{#");
   IElementType START_PAREN = new SvelteElementType("(");
   IElementType TEMP_PREFIX = new SvelteElementType("TEMP_PREFIX");
