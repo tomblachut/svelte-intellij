@@ -5,54 +5,40 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.util.containers.Stack
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
-import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTypes
 
 class SvelteParsing(val builder: PsiBuilder) {
-    private val svelteTagTokens = Stack<IElementType>()
-    private val svelteTagMarkers = Stack<PsiBuilder.Marker>()
+    private val incompleteBlocks = Stack<IncompleteBlock>()
 
     fun isSvelteTagStart(token: IElementType): Boolean {
         return token === SvelteTypes.START_MUSTACHE_TEMP
     }
 
     fun parseSvelteTag() {
-        val tempMarker = builder.mark()
-        val resultToken = SvelteManualParsing.parseLazyBlock(builder)
+        val (resultToken, resultMarker) = SvelteManualParsing.parseLazyBlock(builder)
 
         if (startTokens.contains(resultToken)) {
-            svelteTagMarkers.push(tempMarker)
-            svelteTagTokens.push(resultToken)
+            val startMarker = resultMarker.precede()
+            val incompleteBlock = IncompleteBlock.create(resultToken, startMarker)
+            incompleteBlocks.push(incompleteBlock)
         } else if (endTokens.contains(resultToken)) {
-            if (!svelteTagTokens.empty() && isMatchingEndTag(svelteTagTokens.peek(), resultToken)) {
-                tempMarker.drop()
-                svelteTagTokens.pop()
-                val startMarker = svelteTagMarkers.pop()
-                startMarker.done(SvelteJSElementTypes.ATTRIBUTE_EXPRESSION)
+            if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingEndTag(resultToken)) {
+                val incompleteBlock = incompleteBlocks.pop()
+                incompleteBlock.handleEndTag()
             } else {
-                tempMarker.precede().errorBefore("unexpected end token", tempMarker)
-                tempMarker.drop()
+                resultMarker.precede().errorBefore("unexpected end token", resultMarker)
             }
-        } else {
-            tempMarker.drop()
         }
     }
 
     fun reportMissingEndSvelteTags() {
-        while (!svelteTagTokens.empty()) {
-            svelteTagTokens.pop()
-            val marker = svelteTagMarkers.pop()
-//            marker.done(ATTRIBUTE_EXPRESSION)
-            marker.drop()
+        while (!incompleteBlocks.empty()) {
+            val incompleteBlock = incompleteBlocks.pop()
+//            incompleteBlock.startMarker.done(ATTRIBUTE_EXPRESSION)
+            incompleteBlock.startMarker.drop()
 
             builder.error("not closed tag")
         }
-    }
-
-    private fun isMatchingEndTag(startTag: IElementType, endTag: IElementType): Boolean {
-        return (startTag === SvelteBlockLazyElementTypes.IF_START && endTag === SvelteBlockLazyElementTypes.IF_END)
-            || (startTag === SvelteBlockLazyElementTypes.EACH_START && endTag === SvelteBlockLazyElementTypes.EACH_END)
-            || (startTag === SvelteBlockLazyElementTypes.AWAIT_START && endTag === SvelteBlockLazyElementTypes.AWAIT_END)
     }
 }
 

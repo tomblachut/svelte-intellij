@@ -7,7 +7,7 @@ import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTypes
 
 object SvelteManualParsing {
-    fun parseLazyBlock(builder: PsiBuilder): IElementType {
+    fun parseLazyBlock(builder: PsiBuilder): Pair<IElementType, PsiBuilder.Marker> {
         val marker = builder.mark()
         builder.advanceLexer()
 
@@ -47,7 +47,7 @@ object SvelteManualParsing {
         return finishBlock(builder, marker, SvelteBlockLazyElementTypes.EXPR)
     }
 
-    private fun finishBlock(builder: PsiBuilder, marker: PsiBuilder.Marker, endToken: IElementType): IElementType {
+    private fun finishBlock(builder: PsiBuilder, marker: PsiBuilder.Marker, endToken: IElementType): Pair<IElementType, PsiBuilder.Marker> {
         while (!builder.eof() && builder.tokenType !== SvelteTypes.END_MUSTACHE) {
             builder.advanceLexer()
         }
@@ -60,6 +60,6 @@ object SvelteManualParsing {
             marker.done(endToken)
         }
 
-        return endToken
+        return Pair(endToken, marker)
     }
 }
