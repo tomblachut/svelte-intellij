@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.parsing.top
+package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType

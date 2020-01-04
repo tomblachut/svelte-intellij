@@ -7,9 +7,7 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
-import com.intellij.util.containers.Stack
 import dev.blachut.svelte.lang.isSvelteComponentTag
-import dev.blachut.svelte.lang.parsing.top.SvelteManualParsing
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTypes
@@ -29,6 +27,8 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         }
     }
 
+    private val svelteParsing = SvelteParsing(builder)
+
     override fun isSingleTag(tagName: String, originalTagName: String): Boolean {
         // Inspired by Vue plugin. Svelte tags must be closed explicitly
         if (isSvelteComponentTag(originalTagName)) {
@@ -37,13 +37,18 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         return super.isSingleTag(tagName, originalTagName)
     }
 
+    override fun parseTag() {
+        super.parseTag()
+        svelteParsing.reportMissingEndSvelteTags()
+    }
+
     override fun hasCustomTagContent(): Boolean {
-        return token() === SvelteTypes.START_MUSTACHE_TEMP
+        return svelteParsing.isSvelteTagStart(token())
     }
 
     override fun parseCustomTagContent(xmlText: PsiBuilder.Marker?): PsiBuilder.Marker? {
         terminateText(xmlText)
-        parseSvelteTag()
+        svelteParsing.parseSvelteTag()
         return null
     }
 
@@ -53,12 +58,15 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
     override fun parseCustomTopLevelContent(error: PsiBuilder.Marker?): PsiBuilder.Marker? {
         flushError(error)
-        parseSvelteTag()
-        return null
-    }
+        svelteParsing.parseSvelteTag()
 
-    private fun parseSvelteTag() {
-        SvelteManualParsing.parseLazyBlock(builder)
+        if (builder.tokenType == null || builder.tokenType === XmlTokenType.XML_REAL_WHITE_SPACE && builder.lookAhead(1) == null) {
+            // noop when at eof, ensures error is placed at the last character
+            builder.advanceLexer()
+            svelteParsing.reportMissingEndSvelteTags()
+        }
+
+        return null
     }
 
     override fun parseAttribute() {
