@@ -3,10 +3,8 @@ package dev.blachut.svelte.lang.parsing.html;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.*;
 import com.intellij.psi.xml.*;
 import dev.blachut.svelte.lang.psi.SvelteTypes;
-import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 
 %%
@@ -122,33 +120,33 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   return XmlTokenType.XML_DATA_CHARACTERS;
 }
 
-<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return START_MUSTACHE_TEMP; }
+<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTypes.START_MUSTACHE_TEMP; }
 
 <SVELTE_INTERPOLATION_START> {
-  {WHITE_SPACE}      { return TEMP_PREFIX; }
-  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return HASH; }
-  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return COLON; }
-  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SLASH; }
-  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return AT; }
+  {WHITE_SPACE}      { return SvelteTypes.TEMP_PREFIX; }
+  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.HASH; }
+  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.COLON; }
+  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.SLASH; }
+  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.AT; }
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 
 <SVELTE_INTERPOLATION_KEYWORD> {
   // TODO Disallow whitespace
   // {WHITE_SPACE}      { return BAD_CHARACTER; }
-  "if"               { yybegin(SVELTE_INTERPOLATION); return LAZY_IF; }
-  "else"             { yybegin(SVELTE_INTERPOLATION); return LAZY_ELSE; }
-  "each"             { yybegin(SVELTE_INTERPOLATION); return LAZY_EACH; }
-  "await"            { yybegin(SVELTE_INTERPOLATION); return LAZY_AWAIT; }
-  "then"             { yybegin(SVELTE_INTERPOLATION); return LAZY_THEN; }
-  "catch"            { yybegin(SVELTE_INTERPOLATION); return LAZY_CATCH; }
+  "if"               { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_IF; }
+  "else"             { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_ELSE; }
+  "each"             { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_EACH; }
+  "await"            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_AWAIT; }
+  "then"             { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_THEN; }
+  "catch"            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_CATCH; }
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 
 <SVELTE_INTERPOLATION> {
-  "{"                { bracesNestingLevel++; return CODE_FRAGMENT; }
-  "}"                { if (bracesNestingLevel == 0) { yybegin(YYINITIAL); return END_MUSTACHE; } else { bracesNestingLevel--; return CODE_FRAGMENT; } }
-  [^]                { return CODE_FRAGMENT; }
+  "{"                { bracesNestingLevel++; return SvelteTypes.CODE_FRAGMENT; }
+  "}"                { if (bracesNestingLevel == 0) { yybegin(YYINITIAL); return SvelteTypes.END_MUSTACHE; } else { bracesNestingLevel--; return SvelteTypes.CODE_FRAGMENT; } }
+  [^]                { return SvelteTypes.CODE_FRAGMENT; }
 }
 
 <START_TAG_NAME, END_TAG_NAME> {TAG_NAME} { yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
