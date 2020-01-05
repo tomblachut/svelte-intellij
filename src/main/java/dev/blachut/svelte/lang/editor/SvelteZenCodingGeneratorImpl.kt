@@ -4,15 +4,24 @@ import com.intellij.codeInsight.template.CustomTemplateCallback
 import com.intellij.codeInsight.template.HtmlTextContextType
 import com.intellij.codeInsight.template.emmet.EmmetParser
 import com.intellij.codeInsight.template.emmet.XmlEmmetParser
+import com.intellij.codeInsight.template.emmet.ZenCodingTemplate
 import com.intellij.codeInsight.template.emmet.generators.XmlZenCodingGeneratorImpl
 import com.intellij.codeInsight.template.emmet.generators.ZenCodingGenerator
 import com.intellij.codeInsight.template.emmet.tokens.ZenCodingToken
 import com.intellij.codeInsight.template.impl.TemplateImpl
+import com.intellij.diagnostic.AttachmentFactory
 import com.intellij.lang.Language
+import com.intellij.lang.javascript.JSTokenTypes
+import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.SvelteFileViewProvider
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteLanguage
+import dev.blachut.svelte.lang.parsing.html.psi.SvelteFragment
+import kotlin.math.min
 
 class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
     private val simpleKeys = setOf("if", "await")
@@ -27,7 +36,7 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
     }
 
     override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {
-        return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || HtmlTextContextType.isInContext(context))
+        return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || isInTextContext(context))
     }
 
     override fun createParser(tokens: MutableList<ZenCodingToken>?, callback: CustomTemplateCallback, generator: ZenCodingGenerator?, surroundWithTemplate: Boolean): EmmetParser {
@@ -64,6 +73,42 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
         }
 
         return super.createTemplateByKey(key, forceSingleTag)
+    }
+
+    // Adds JSTokenTypes.RBRACE to boundary tokens from XmlZenCodingGenerator
+    override fun computeTemplateKey(callback: CustomTemplateCallback): String? {
+        val editor = callback.editor
+        val currentOffset = editor.caretModel.offset
+        var startOffset = min(editor.document.getLineStartOffset(editor.document.getLineNumber(currentOffset)), currentOffset)
+        val documentText = editor.document.charsSequence
+        var prevVisibleLeaf: PsiElement? = callback.context
+        while (prevVisibleLeaf != null) {
+            val textRange = prevVisibleLeaf.textRange
+            val endOffset = textRange.endOffset
+            if (endOffset <= currentOffset) {
+                if (endOffset <= startOffset) {
+                    break
+                }
+                val prevType = prevVisibleLeaf.node.elementType
+                if (prevType === XmlTokenType.XML_TAG_END || prevType === XmlTokenType.XML_EMPTY_ELEMENT_END || prevType === JSTokenTypes.RBRACE) {
+                    startOffset = endOffset
+                    break
+                }
+            }
+            prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(prevVisibleLeaf)
+        }
+        if (startOffset < 0 || currentOffset > documentText.length || currentOffset < startOffset) {
+            Logger.getInstance(javaClass)
+                .error("Error while calculating emmet abbreviation. Offset: $currentOffset; Start: $startOffset",
+                    AttachmentFactory.createAttachment(editor.document))
+            return null
+        }
+        val key = computeKey(documentText.subSequence(startOffset, currentOffset))
+        return if (!StringUtil.isEmpty(key) && ZenCodingTemplate.checkTemplateKey(key!!, callback, this)) key else null
+    }
+
+    private fun isInTextContext(context: PsiElement): Boolean {
+        return HtmlTextContextType.isInContext(context) || context.parent is SvelteFragment
     }
 }
 
