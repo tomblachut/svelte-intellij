@@ -18,13 +18,19 @@ class SvelteParsing(val builder: PsiBuilder) {
         val (resultToken, resultMarker) = SvelteManualParsing.parseLazyBlock(builder)
 
         if (startTokens.contains(resultToken)) {
-            val startMarker = resultMarker.precede()
-            val incompleteBlock = IncompleteBlock.create(resultToken, startMarker)
+            val incompleteBlock = IncompleteBlock.create(resultToken, resultMarker)
             incompleteBlocks.push(incompleteBlock)
+        } else if (innerTokens.contains(resultToken)) {
+            if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingInnerTag(resultToken)) {
+                val incompleteBlock = incompleteBlocks.peek()
+                incompleteBlock.handleInnerTag(resultToken, resultMarker)
+            } else {
+                resultMarker.precede().errorBefore("unexpected inner tag", resultMarker)
+            }
         } else if (endTokens.contains(resultToken)) {
             if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingEndTag(resultToken)) {
                 val incompleteBlock = incompleteBlocks.pop()
-                incompleteBlock.handleEndTag()
+                incompleteBlock.handleEndTag(resultMarker)
             } else {
                 resultMarker.precede().errorBefore("unexpected end token", resultMarker)
             }
@@ -34,13 +40,11 @@ class SvelteParsing(val builder: PsiBuilder) {
     fun reportMissingEndSvelteTags() {
         while (!incompleteBlocks.empty()) {
             val incompleteBlock = incompleteBlocks.pop()
-//            incompleteBlock.startMarker.done(ATTRIBUTE_EXPRESSION)
-            incompleteBlock.startMarker.drop()
-
-            builder.error("not closed tag")
+            incompleteBlock.handleMissingEndTag(builder.mark())
         }
     }
 }
 
 val startTokens = TokenSet.create(SvelteBlockLazyElementTypes.IF_START, SvelteBlockLazyElementTypes.EACH_START, SvelteBlockLazyElementTypes.AWAIT_START)
+val innerTokens = TokenSet.create(SvelteBlockLazyElementTypes.ELSE_CLAUSE, SvelteBlockLazyElementTypes.THEN_CLAUSE, SvelteBlockLazyElementTypes.CATCH_CLAUSE)
 val endTokens = TokenSet.create(SvelteBlockLazyElementTypes.IF_END, SvelteBlockLazyElementTypes.EACH_END, SvelteBlockLazyElementTypes.AWAIT_END)
