@@ -11,18 +11,18 @@ sealed class IncompleteBlock {
     abstract fun isMatchingInnerTag(token: IElementType): Boolean
     abstract fun isMatchingEndTag(token: IElementType): Boolean
 
-    abstract fun handleInnerTag(token: IElementType, resultMarker: Marker)
+    abstract fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker)
     abstract fun handleEndTag(resultMarker: Marker)
     abstract fun handleMissingEndTag(errorMarker: Marker)
 
     companion object {
-        fun create(token: IElementType, resultMarker: Marker): IncompleteBlock {
+        fun create(token: IElementType, resultMarker: Marker, fragmentMarker: Marker): IncompleteBlock {
             val innerMarker = resultMarker.precede()
             val outerMarker = innerMarker.precede()
             return when (token) {
-                SvelteBlockLazyElementTypes.IF_START -> IncompleteIfBlock(outerMarker, innerMarker)
-                SvelteBlockLazyElementTypes.EACH_START -> IncompleteEachBlock(outerMarker, innerMarker)
-                SvelteBlockLazyElementTypes.AWAIT_START -> IncompleteAwaitBlock(outerMarker, innerMarker)
+                SvelteBlockLazyElementTypes.IF_START -> IncompleteIfBlock(outerMarker, innerMarker, fragmentMarker)
+                SvelteBlockLazyElementTypes.EACH_START -> IncompleteEachBlock(outerMarker, innerMarker, fragmentMarker)
+                SvelteBlockLazyElementTypes.AWAIT_START -> IncompleteAwaitBlock(outerMarker, innerMarker, fragmentMarker)
                 else -> throw IllegalArgumentException("Expected start tag token")
             }
         }
@@ -31,25 +31,30 @@ sealed class IncompleteBlock {
 
 data class IncompleteIfBlock(
     override val outerMarker: Marker,
-    var innerMarker: Marker
+    var innerMarker: Marker,
+    var fragmentMarker: Marker
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.IF_TRUE_BLOCK
 
     override fun isMatchingInnerTag(token: IElementType) = token === SvelteBlockLazyElementTypes.ELSE_CLAUSE
     override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.IF_END
 
-    override fun handleInnerTag(token: IElementType, resultMarker: Marker) {
+    override fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         lastInnerElement = SvelteElementTypes.IF_ELSE_BLOCK
         innerMarker = resultMarker.precede()
+        fragmentMarker = nextFragmentMarker
     }
 
     override fun handleEndTag(resultMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         outerMarker.done(SvelteElementTypes.IF_BLOCK)
     }
 
     override fun handleMissingEndTag(errorMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, errorMarker)
         innerMarker.doneBefore(lastInnerElement, errorMarker)
         errorMarker.error("missing {/if} tag")
         outerMarker.done(SvelteElementTypes.IF_BLOCK)
@@ -58,25 +63,30 @@ data class IncompleteIfBlock(
 
 data class IncompleteEachBlock(
     override val outerMarker: Marker,
-    var innerMarker: Marker
+    var innerMarker: Marker,
+    var fragmentMarker: Marker
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.EACH_LOOP_BLOCK
 
     override fun isMatchingInnerTag(token: IElementType) = token === SvelteBlockLazyElementTypes.ELSE_CLAUSE
     override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.EACH_END
 
-    override fun handleInnerTag(token: IElementType, resultMarker: Marker) {
+    override fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         lastInnerElement = SvelteElementTypes.EACH_ELSE_BLOCK
         innerMarker = resultMarker.precede()
+        fragmentMarker = nextFragmentMarker
     }
 
     override fun handleEndTag(resultMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         outerMarker.done(SvelteElementTypes.EACH_BLOCK)
     }
 
     override fun handleMissingEndTag(errorMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, errorMarker)
         innerMarker.doneBefore(lastInnerElement, errorMarker)
         errorMarker.error("missing {/each} tag")
         outerMarker.done(SvelteElementTypes.IF_BLOCK)
@@ -85,7 +95,8 @@ data class IncompleteEachBlock(
 
 data class IncompleteAwaitBlock(
     override val outerMarker: Marker,
-    var innerMarker: Marker
+    var innerMarker: Marker,
+    var fragmentMarker: Marker
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.AWAIT_MAIN_BLOCK
 
@@ -94,7 +105,8 @@ data class IncompleteAwaitBlock(
 
     override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.AWAIT_END
 
-    override fun handleInnerTag(token: IElementType, resultMarker: Marker) {
+    override fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         lastInnerElement = when (token) {
             SvelteBlockLazyElementTypes.THEN_CLAUSE -> SvelteElementTypes.AWAIT_THEN_BLOCK
@@ -102,14 +114,17 @@ data class IncompleteAwaitBlock(
             else -> throw IllegalArgumentException("Expected await block inner clause")
         }
         innerMarker = resultMarker.precede()
+        fragmentMarker = nextFragmentMarker
     }
 
     override fun handleEndTag(resultMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         outerMarker.done(SvelteElementTypes.AWAIT_BLOCK)
     }
 
     override fun handleMissingEndTag(errorMarker: Marker) {
+        fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, errorMarker)
         innerMarker.doneBefore(lastInnerElement, errorMarker)
         errorMarker.error("missing {/await} tag")
         outerMarker.done(SvelteElementTypes.AWAIT_BLOCK)

@@ -19,6 +19,8 @@ object SvelteElementTypes {
     val AWAIT_THEN_BLOCK: IElementType = SvelteElementType("AWAIT_THEN_BLOCK")
     val AWAIT_CATCH_BLOCK: IElementType = SvelteElementType("AWAIT_CATCH_BLOCK")
 
+    val FRAGMENT = SvelteElementType("FRAGMENT")
+
 //    val INTERPOLATION: IElementType = SvelteElementType("INTERPOLATION")
 //    val EXPRESSION: IElementType = SvelteElementType("EXPRESSION")
 //    val KEY_EXPRESSION: IElementType = SvelteElementType("KEY_EXPRESSION")
@@ -38,6 +40,8 @@ object SvelteElementTypes {
             AWAIT_MAIN_BLOCK -> SvelteAwaitMainBlock(node)
             AWAIT_THEN_BLOCK -> SvelteAwaitThenBlock(node)
             AWAIT_CATCH_BLOCK -> SvelteAwaitCatchBlock(node)
+
+            FRAGMENT -> SvelteFragment(node)
 
             else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")
         }

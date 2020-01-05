@@ -18,12 +18,12 @@ class SvelteParsing(val builder: PsiBuilder) {
         val (resultToken, resultMarker) = SvelteManualParsing.parseLazyBlock(builder)
 
         if (startTokens.contains(resultToken)) {
-            val incompleteBlock = IncompleteBlock.create(resultToken, resultMarker)
+            val incompleteBlock = IncompleteBlock.create(resultToken, resultMarker, builder.mark())
             incompleteBlocks.push(incompleteBlock)
         } else if (innerTokens.contains(resultToken)) {
             if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingInnerTag(resultToken)) {
                 val incompleteBlock = incompleteBlocks.peek()
-                incompleteBlock.handleInnerTag(resultToken, resultMarker)
+                incompleteBlock.handleInnerTag(resultToken, resultMarker, builder.mark())
             } else {
                 resultMarker.precede().errorBefore("unexpected inner tag", resultMarker)
             }
