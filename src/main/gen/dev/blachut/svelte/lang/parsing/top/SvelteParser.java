@@ -43,18 +43,6 @@ public class SvelteParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // privateScope
-  public static boolean scope(PsiBuilder builder, int level) {
-    if (!recursion_guard_(builder, level, "scope")) return false;
-    if (!nextTokenIs(builder, HTML_FRAGMENT)) return false;
-    boolean result;
-    Marker marker = enter_section_(builder);
-    result = privateScope(builder, level + 1);
-    exit_section_(builder, marker, SCOPE, result);
-    return result;
-  }
-
-  /* ********************************************************** */
-  // privateScope
   static boolean svelteComponent(PsiBuilder builder, int level) {
     return privateScope(builder, level + 1);
   }

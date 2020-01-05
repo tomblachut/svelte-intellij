@@ -63,11 +63,7 @@ class SvelteParserDefinition : ParserDefinition {
             return SveltePsiElementImpl(node)
         }
 
-        return try {
-            SvelteElementTypes.createElement(node)
-        } catch (e: Exception) {
-            SvelteTypes.Factory.createElement(node)
-        }
+        return SvelteElementTypes.createElement(node)
     }
 
     companion object {

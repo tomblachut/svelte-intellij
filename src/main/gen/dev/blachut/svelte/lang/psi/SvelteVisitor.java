@@ -7,10 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public class SvelteVisitor extends PsiElementVisitor {
 
-  public void visitScope(@NotNull SvelteScope o) {
-    visitPsiElement(o);
-  }
-
   public void visitPsiElement(@NotNull PsiElement o) {
     visitElement(o);
   }

@@ -11,8 +11,7 @@ class SvelteBraceMatcher : PairedBraceMatcher {
     override fun getPairs(): Array<BracePair> {
         return arrayOf(
             BracePair(SvelteTypes.START_MUSTACHE, SvelteTypes.END_MUSTACHE, true),
-            BracePair(JSTokenTypes.LBRACE, JSTokenTypes.RBRACE, true),
-            BracePair(SvelteTypes.START_PAREN, SvelteTypes.END_PAREN, false)
+            BracePair(JSTokenTypes.LBRACE, JSTokenTypes.RBRACE, true)
         )
     }
 

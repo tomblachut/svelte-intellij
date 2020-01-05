@@ -19,24 +19,9 @@
   tokenTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
 
   tokens = [
-    START_OPENING_MUSTACHE="{#"
-    START_INNER_MUSTACHE="{:"
-    START_CLOSING_MUSTACHE="{/"
     START_MUSTACHE="{"
     START_MUSTACHE_TEMP="START_MUSTACHE_TEMP"
     END_MUSTACHE="}"
-    IF="if"
-    EACH="each"
-    AS="as"
-    COMMA=","
-    START_PAREN="("
-    END_PAREN=")"
-    AWAIT="await"
-    THEN="then"
-    CATCH="catch"
-    ELSE="else"
-    HTML_PREFIX="@html"
-    DEBUG_PREFIX="@debug"
     HTML_FRAGMENT="<markup>"
     CODE_FRAGMENT="<code>"
     LAZY_IF="LAZY_IF"
@@ -53,9 +38,7 @@
   ]
 }
 
-// First rule is always implicitly private
 svelteComponent ::= privateScope
-scope ::= privateScope
 
 private privateScope ::= HTML_FRAGMENT
 
