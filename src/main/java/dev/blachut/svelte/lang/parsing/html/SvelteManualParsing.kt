@@ -1,6 +1,8 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
+import com.intellij.lang.javascript.JSTokenTypes
+import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
@@ -9,9 +11,11 @@ import dev.blachut.svelte.lang.psi.SvelteTypes
 object SvelteManualParsing {
     fun parseLazyBlock(builder: PsiBuilder): Pair<IElementType, PsiBuilder.Marker> {
         val marker = builder.mark()
+        builder.remapCurrentToken(JSTokenTypes.LBRACE)
         builder.advanceLexer()
 
         if (builder.tokenType == SvelteTypes.TEMP_PREFIX) {
+            builder.remapCurrentToken(TokenType.WHITE_SPACE)
             builder.advanceLexer()
         }
 
@@ -34,11 +38,21 @@ object SvelteManualParsing {
             }
             if (token != null) return finishBlock(builder, marker, token)
         } else if (builder.tokenType == SvelteTypes.SLASH) {
+            builder.remapCurrentToken(JSTokenTypes.DIV)
             builder.advanceLexer()
             val token = when (builder.tokenType) {
-                SvelteTypes.LAZY_IF -> SvelteBlockLazyElementTypes.IF_END
-                SvelteTypes.LAZY_EACH -> SvelteBlockLazyElementTypes.EACH_END
-                SvelteTypes.LAZY_AWAIT -> SvelteBlockLazyElementTypes.AWAIT_END
+                SvelteTypes.LAZY_IF -> {
+                    builder.remapCurrentToken(JSTokenTypes.IF_KEYWORD)
+                    SvelteBlockLazyElementTypes.IF_END
+                }
+                SvelteTypes.LAZY_EACH -> {
+                    builder.remapCurrentToken(JSTokenTypes.IDENTIFIER)
+                    SvelteBlockLazyElementTypes.EACH_END
+                }
+                SvelteTypes.LAZY_AWAIT -> {
+                    builder.remapCurrentToken(JSTokenTypes.AWAIT_KEYWORD)
+                    SvelteBlockLazyElementTypes.AWAIT_END
+                }
                 else -> null
             }
             if (token != null) return finishBlock(builder, marker, token)
@@ -51,8 +65,12 @@ object SvelteManualParsing {
         while (!builder.eof() && builder.tokenType !== SvelteTypes.END_MUSTACHE) {
             builder.advanceLexer()
         }
-        // TODO add error for missing }
-        builder.advanceLexer() // noop when at eof
+        if (builder.tokenType === SvelteTypes.END_MUSTACHE) {
+            builder.remapCurrentToken(JSTokenTypes.RBRACE)
+            builder.advanceLexer()
+        } else {
+            builder.error("missing }")
+        }
 
         if (endToken is ILazyParseableElementType) {
             marker.collapse(endToken)
