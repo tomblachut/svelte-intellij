@@ -14,28 +14,11 @@
   psiPackage="dev.blachut.svelte.lang.psi"
   psiImplPackage="dev.blachut.svelte.lang.psi.impl"
 
-  elementTypeHolderClass="dev.blachut.svelte.lang.psi.SvelteTypes"
+  elementTypeHolderClass="dev.blachut.svelte.lang.psi.OldGeneratedSvelteTypes"
   elementTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
   tokenTypeClass="dev.blachut.svelte.lang.psi.SvelteElementType"
 
-  tokens = [
-    START_MUSTACHE="{"
-    START_MUSTACHE_TEMP="START_MUSTACHE_TEMP"
-    END_MUSTACHE="}"
-    HTML_FRAGMENT="<markup>"
-    CODE_FRAGMENT="<code>"
-    LAZY_IF="LAZY_IF"
-    LAZY_ELSE="LAZY_ELSE"
-    LAZY_EACH="LAZY_EACH"
-    LAZY_AWAIT="LAZY_AWAIT"
-    LAZY_THEN="LAZY_THEN"
-    LAZY_CATCH="LAZY_CATCH"
-    TEMP_PREFIX="TEMP_PREFIX"
-    HASH="HASH"
-    COLON="COLON"
-    SLASH="SLASH"
-    AT="AT"
-  ]
+  tokens = []
 }
 
 svelteComponent ::= privateScope
