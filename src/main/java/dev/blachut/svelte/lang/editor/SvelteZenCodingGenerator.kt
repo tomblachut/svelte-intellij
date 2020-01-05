@@ -1,12 +1,8 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.codeInsight.template.CustomTemplateCallback
-import com.intellij.codeInsight.template.emmet.EmmetParser
-import com.intellij.codeInsight.template.emmet.XmlEmmetParser
 import com.intellij.codeInsight.template.emmet.ZenCodingTemplate
 import com.intellij.codeInsight.template.emmet.generators.XmlZenCodingGeneratorImpl
-import com.intellij.codeInsight.template.emmet.generators.ZenCodingGenerator
-import com.intellij.codeInsight.template.emmet.tokens.ZenCodingToken
 import com.intellij.codeInsight.template.impl.TemplateImpl
 import com.intellij.diagnostic.AttachmentFactory
 import com.intellij.lang.Language
@@ -32,12 +28,12 @@ class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
         return SvelteHtmlContextType.isMyLanguage(language)
     }
 
-    override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {
-        return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || SvelteHtmlTextContextType.isInContext(context))
+    override fun isMyContext(callback: CustomTemplateCallback, wrapping: Boolean): Boolean {
+        return callback.file.language === SvelteHTMLLanguage.INSTANCE && isMyContext(callback.context, wrapping)
     }
 
-    override fun createParser(tokens: MutableList<ZenCodingToken>?, callback: CustomTemplateCallback, generator: ZenCodingGenerator?, surroundWithTemplate: Boolean): EmmetParser {
-        return XmlEmmetParser(tokens, SvelteTemplateCallback(callback), generator, surroundWithTemplate)
+    override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {
+        return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || SvelteHtmlTextContextType.isInContext(context))
     }
 
     override fun createTemplateByKey(key: String, forceSingleTag: Boolean): TemplateImpl? {
@@ -103,7 +99,4 @@ class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
         val key = computeKey(documentText.subSequence(startOffset, currentOffset))
         return if (!StringUtil.isEmpty(key) && ZenCodingTemplate.checkTemplateKey(key!!, callback, this)) key else null
     }
-
-    private class SvelteTemplateCallback(callback: CustomTemplateCallback)
-        : CustomTemplateCallback(callback.editor, callback.file.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE))
 }
