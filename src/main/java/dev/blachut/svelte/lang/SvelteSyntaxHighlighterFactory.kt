@@ -9,10 +9,11 @@ import com.intellij.openapi.vfs.VirtualFile
 
 class SvelteSyntaxHighlighterFactory : SyntaxHighlighterFactory() {
     override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter {
-        val level = if (project == null)
+        val level = if (project == null) {
             JSLanguageLevel.ES6
-        else
+        } else {
             JSRootConfiguration.getInstance(project).languageLevel
+        }
 
         return SvelteSyntaxHighlighter(level)
     }

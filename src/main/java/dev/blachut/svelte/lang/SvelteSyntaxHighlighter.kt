@@ -17,7 +17,9 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
-            SvelteTypes.START_MUSTACHE, SvelteTypes.END_MUSTACHE -> KEY_KEYS
+            SvelteTypes.START_MUSTACHE,
+            SvelteTypes.START_MUSTACHE_TEMP,
+            SvelteTypes.END_MUSTACHE -> KEY_KEYS
             else -> super.getTokenHighlights(tokenType)
         }
     }
