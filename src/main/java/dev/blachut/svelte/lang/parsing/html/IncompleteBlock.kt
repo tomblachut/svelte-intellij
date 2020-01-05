@@ -3,16 +3,14 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
-import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
+import dev.blachut.svelte.lang.psi.SvelteElementTypes
 
 sealed class IncompleteBlock {
     abstract val startMarker: PsiBuilder.Marker
 
     abstract fun isMatchingEndTag(token: IElementType): Boolean
 
-    fun handleEndTag() {
-        startMarker.done(SvelteJSElementTypes.ATTRIBUTE_EXPRESSION)
-    }
+    abstract fun handleEndTag()
 
     companion object {
         fun create(token: IElementType, startMarker: PsiBuilder.Marker): IncompleteBlock {
@@ -28,12 +26,24 @@ sealed class IncompleteBlock {
 
 data class IncompleteIfBlock(override val startMarker: PsiBuilder.Marker) : IncompleteBlock() {
     override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.IF_END
+
+    override fun handleEndTag() {
+        startMarker.done(SvelteElementTypes.IF_BLOCK)
+    }
 }
 
 data class IncompleteEachBlock(override val startMarker: PsiBuilder.Marker) : IncompleteBlock() {
     override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.EACH_END
+
+    override fun handleEndTag() {
+        startMarker.done(SvelteElementTypes.EACH_BLOCK)
+    }
 }
 
 data class IncompleteAwaitBlock(override val startMarker: PsiBuilder.Marker) : IncompleteBlock() {
     override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.AWAIT_END
+
+    override fun handleEndTag() {
+        startMarker.done(SvelteElementTypes.AWAIT_BLOCK)
+    }
 }

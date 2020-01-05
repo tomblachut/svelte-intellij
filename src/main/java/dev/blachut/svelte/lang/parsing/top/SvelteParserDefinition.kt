@@ -59,10 +59,15 @@ class SvelteParserDefinition : ParserDefinition {
         } else if (node.elementType === SvelteBlockLazyElementTypes.IF_END
             || node.elementType === SvelteBlockLazyElementTypes.EACH_END
             || node.elementType === SvelteBlockLazyElementTypes.AWAIT_END) {
+            // TODO Create dedicated PsiElements for end tags
             return SveltePsiElementImpl(node)
         }
 
-        return SvelteTypes.Factory.createElement(node)
+        return try {
+            SvelteElementTypes.createElement(node)
+        } catch (e: Exception) {
+            SvelteTypes.Factory.createElement(node)
+        }
     }
 
     companion object {
