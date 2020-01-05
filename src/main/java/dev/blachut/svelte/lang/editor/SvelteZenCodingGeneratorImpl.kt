@@ -1,7 +1,6 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.codeInsight.template.CustomTemplateCallback
-import com.intellij.codeInsight.template.HtmlTextContextType
 import com.intellij.codeInsight.template.emmet.EmmetParser
 import com.intellij.codeInsight.template.emmet.XmlEmmetParser
 import com.intellij.codeInsight.template.emmet.ZenCodingTemplate
@@ -19,8 +18,6 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.SvelteFileViewProvider
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.SvelteLanguage
-import dev.blachut.svelte.lang.parsing.html.psi.SvelteFragment
 import kotlin.math.min
 
 class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
@@ -31,12 +28,12 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
     private val infixUnaryTemplate = { key: String -> "{:$key \$EXPRESSION\$}\$END\$" }
     private val elseTemplate = "{:else}\$END\$"
 
-    override fun isMyLanguage(language: Language?): Boolean {
-        return language === SvelteLanguage.INSTANCE || super.isMyLanguage(language)
+    override fun isMyLanguage(language: Language): Boolean {
+        return SvelteHtmlContextType.isMyLanguage(language)
     }
 
     override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {
-        return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || isInTextContext(context))
+        return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || SvelteHtmlTextContextType.isInContext(context))
     }
 
     override fun createParser(tokens: MutableList<ZenCodingToken>?, callback: CustomTemplateCallback, generator: ZenCodingGenerator?, surroundWithTemplate: Boolean): EmmetParser {
@@ -105,10 +102,6 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
         }
         val key = computeKey(documentText.subSequence(startOffset, currentOffset))
         return if (!StringUtil.isEmpty(key) && ZenCodingTemplate.checkTemplateKey(key!!, callback, this)) key else null
-    }
-
-    private fun isInTextContext(context: PsiElement): Boolean {
-        return HtmlTextContextType.isInContext(context) || context.parent is SvelteFragment
     }
 }
 
