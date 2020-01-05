@@ -5,13 +5,13 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.util.containers.Stack
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
-import dev.blachut.svelte.lang.psi.SvelteTypes
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteParsing(val builder: PsiBuilder) {
     private val incompleteBlocks = Stack<IncompleteBlock>()
 
     fun isSvelteTagStart(token: IElementType): Boolean {
-        return token === SvelteTypes.START_MUSTACHE_TEMP
+        return token === SvelteTokenTypes.START_MUSTACHE_TEMP
     }
 
     fun parseSvelteTag() {

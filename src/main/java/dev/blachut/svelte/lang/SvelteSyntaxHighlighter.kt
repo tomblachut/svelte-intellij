@@ -8,7 +8,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.parsing.top.SvelteHighlightingLexer
-import dev.blachut.svelte.lang.psi.SvelteTypes
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLevel) : HtmlFileHighlighter() {
     override fun getHighlightingLexer(): Lexer {
@@ -17,9 +17,9 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
-            SvelteTypes.START_MUSTACHE,
-            SvelteTypes.START_MUSTACHE_TEMP,
-            SvelteTypes.END_MUSTACHE -> KEY_KEYS
+            SvelteTokenTypes.START_MUSTACHE,
+            SvelteTokenTypes.START_MUSTACHE_TEMP,
+            SvelteTokenTypes.END_MUSTACHE -> KEY_KEYS
             else -> super.getTokenHighlights(tokenType)
         }
     }

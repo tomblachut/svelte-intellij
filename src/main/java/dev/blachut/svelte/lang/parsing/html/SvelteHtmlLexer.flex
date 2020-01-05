@@ -1,11 +1,9 @@
 /* It's an automatically generated code. Do not modify it. */
 package dev.blachut.svelte.lang.parsing.html;
 
-import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.*;
-import dev.blachut.svelte.lang.psi.SvelteTypes;
-import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes;
 
 %%
 
@@ -120,33 +118,33 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   return XmlTokenType.XML_DATA_CHARACTERS;
 }
 
-<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTypes.START_MUSTACHE_TEMP; }
+<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE_TEMP; }
 
 <SVELTE_INTERPOLATION_START> {
-  {WHITE_SPACE}      { return SvelteTypes.TEMP_PREFIX; }
-  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.HASH; }
-  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.COLON; }
-  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.SLASH; }
-  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.AT; }
+  {WHITE_SPACE}      { return SvelteTokenTypes.TEMP_PREFIX; }
+  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.HASH; }
+  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.COLON; }
+  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.SLASH; }
+  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.AT; }
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 
 <SVELTE_INTERPOLATION_KEYWORD> {
   // TODO Disallow whitespace
   // {WHITE_SPACE}      { return BAD_CHARACTER; }
-  "if"               { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_IF; }
-  "else"             { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_ELSE; }
-  "each"             { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_EACH; }
-  "await"            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_AWAIT; }
-  "then"             { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_THEN; }
-  "catch"            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_CATCH; }
+  "if"               { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_IF; }
+  "else"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_ELSE; }
+  "each"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_EACH; }
+  "await"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_AWAIT; }
+  "then"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_THEN; }
+  "catch"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_CATCH; }
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 
 <SVELTE_INTERPOLATION> {
-  "{"                { bracesNestingLevel++; return SvelteTypes.CODE_FRAGMENT; }
-  "}"                { if (bracesNestingLevel == 0) { yybegin(YYINITIAL); return SvelteTypes.END_MUSTACHE; } else { bracesNestingLevel--; return SvelteTypes.CODE_FRAGMENT; } }
-  [^]                { return SvelteTypes.CODE_FRAGMENT; }
+  "{"                { bracesNestingLevel++; return SvelteTokenTypes.CODE_FRAGMENT; }
+  "}"                { if (bracesNestingLevel == 0) { yybegin(YYINITIAL); return SvelteTokenTypes.END_MUSTACHE; } else { bracesNestingLevel--; return SvelteTokenTypes.CODE_FRAGMENT; } }
+  [^]                { return SvelteTokenTypes.CODE_FRAGMENT; }
 }
 
 <START_TAG_NAME, END_TAG_NAME> {TAG_NAME} { yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
@@ -155,7 +153,7 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS> "/>" { yybegin(YYINITIAL); return XmlTokenType.XML_EMPTY_ELEMENT_END; }
 <BEFORE_TAG_ATTRIBUTES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 <TAG_ATTRIBUTES> {ATTRIBUTE_NAME} { return XmlTokenType.XML_NAME; }
-<TAG_ATTRIBUTES> "{" { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<TAG_ATTRIBUTES> "{" { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <TAG_ATTRIBUTES> "=" { yybegin(ATTRIBUTE_VALUE_START); return XmlTokenType.XML_EQ; }
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, START_TAG_NAME, END_TAG_NAME> [^] { yybegin(YYINITIAL); yypushback(1); break; }
 
@@ -166,25 +164,25 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_START> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_START> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_START> "\"" { yybegin(ATTRIBUTE_VALUE_DQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 <ATTRIBUTE_VALUE_START> "'" { yybegin(ATTRIBUTE_VALUE_SQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 
 <ATTRIBUTE_VALUE_DQ> {
   "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTypes.START_MUSTACHE; }
+  "{" { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
 <ATTRIBUTE_VALUE_SQ> {
   "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTypes.START_MUSTACHE; }
+  "{" { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
@@ -194,17 +192,17 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <ATTRIBUTE_BRACES, ATTRIBUTE_VALUE_BRACES, ATTRIBUTE_VALUE_DQ_BRACES, ATTRIBUTE_VALUE_SQ_BRACES> {
   "}" {
-          if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTypes.CODE_FRAGMENT; }
-          else {
-              if (yystate() == ATTRIBUTE_BRACES) yybegin(TAG_ATTRIBUTES);
-              if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
-              if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
-              if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
-              return SvelteTypes.END_MUSTACHE;
-          }
-      }
-  "{" { bracesNestingLevel++; return SvelteTypes.CODE_FRAGMENT; }
-  [^] { return SvelteTypes.CODE_FRAGMENT; }
+            if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTokenTypes.CODE_FRAGMENT; }
+            else {
+                if (yystate() == ATTRIBUTE_BRACES) yybegin(TAG_ATTRIBUTES);
+                if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
+                if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
+                if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
+                return SvelteTokenTypes.END_MUSTACHE;
+            }
+        }
+  "{" { bracesNestingLevel++; return SvelteTokenTypes.CODE_FRAGMENT; }
+  [^] { return SvelteTokenTypes.CODE_FRAGMENT; }
 }
 
 "&lt;" |

@@ -15,7 +15,7 @@ import com.intellij.psi.formatter.xml.SyntheticBlock
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.xml.XmlTag
-import dev.blachut.svelte.lang.psi.SvelteTypes.HTML_FRAGMENT
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes.HTML_FRAGMENT
 
 val blocks = TokenSet.create()
 

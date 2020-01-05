@@ -5,12 +5,12 @@ import com.intellij.lang.PairedBraceMatcher
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
-import dev.blachut.svelte.lang.psi.SvelteTypes
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteBraceMatcher : PairedBraceMatcher {
     override fun getPairs(): Array<BracePair> {
         return arrayOf(
-            BracePair(SvelteTypes.START_MUSTACHE, SvelteTypes.END_MUSTACHE, true),
+            BracePair(SvelteTokenTypes.START_MUSTACHE, SvelteTokenTypes.END_MUSTACHE, true),
             BracePair(JSTokenTypes.LBRACE, JSTokenTypes.RBRACE, true)
         )
     }

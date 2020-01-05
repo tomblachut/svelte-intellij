@@ -10,7 +10,7 @@ import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
-import dev.blachut.svelte.lang.psi.SvelteTypes
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 /**
  * Due to the design of HtmlParsing, SvelteHtmlParsing remaps SvelteTypes.START_MUSTACHE to XmlTokenType.XML_NAME
@@ -23,7 +23,7 @@ import dev.blachut.svelte.lang.psi.SvelteTypes
 class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     init {
         builder.setTokenTypeRemapper { source, _, _, _ ->
-            return@setTokenTypeRemapper if (source === SvelteTypes.START_MUSTACHE) XmlTokenType.XML_NAME else source
+            return@setTokenTypeRemapper if (source === SvelteTokenTypes.START_MUSTACHE) XmlTokenType.XML_NAME else source
         }
     }
 
@@ -150,7 +150,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     private fun parseAttributeExpression(elementType: IElementType) {
         val expressionMarker = mark()
         // Remap must happen AFTER placing marker
-        builder.remapCurrentToken(SvelteTypes.START_MUSTACHE)
+        builder.remapCurrentToken(SvelteTokenTypes.START_MUSTACHE)
         advance() // {
         advanceCode(elementType)
         advance() // }
@@ -160,7 +160,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     private fun advanceCode(elementType: IElementType) {
         val marker = builder.mark()
         // Guard against empty expressions
-        if (token() === SvelteTypes.CODE_FRAGMENT) advance()
+        if (token() === SvelteTokenTypes.CODE_FRAGMENT) advance()
         marker.collapse(elementType)
     }
 }

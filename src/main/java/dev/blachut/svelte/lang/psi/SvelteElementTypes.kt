@@ -2,29 +2,23 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
-import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.parsing.html.psi.*
 
 object SvelteElementTypes {
-    val IF_BLOCK: IElementType = SvelteElementType("IF_BLOCK")
-    val IF_TRUE_BLOCK: IElementType = SvelteElementType("IF_TRUE_BLOCK")
-    val IF_ELSE_BLOCK: IElementType = SvelteElementType("IF_ELSE_BLOCK")
+    val IF_BLOCK = SvelteElementType("IF_BLOCK")
+    val IF_TRUE_BLOCK = SvelteElementType("IF_TRUE_BLOCK")
+    val IF_ELSE_BLOCK = SvelteElementType("IF_ELSE_BLOCK")
 
-    val EACH_BLOCK: IElementType = SvelteElementType("EACH_BLOCK")
-    val EACH_LOOP_BLOCK: IElementType = SvelteElementType("EACH_LOOP_BLOCK")
-    val EACH_ELSE_BLOCK: IElementType = SvelteElementType("EACH_ELSE_BLOCK")
+    val EACH_BLOCK = SvelteElementType("EACH_BLOCK")
+    val EACH_LOOP_BLOCK = SvelteElementType("EACH_LOOP_BLOCK")
+    val EACH_ELSE_BLOCK = SvelteElementType("EACH_ELSE_BLOCK")
 
-    val AWAIT_BLOCK: IElementType = SvelteElementType("AWAIT_BLOCK")
-    val AWAIT_MAIN_BLOCK: IElementType = SvelteElementType("AWAIT_PENDING_BLOCK")
-    val AWAIT_THEN_BLOCK: IElementType = SvelteElementType("AWAIT_THEN_BLOCK")
-    val AWAIT_CATCH_BLOCK: IElementType = SvelteElementType("AWAIT_CATCH_BLOCK")
+    val AWAIT_BLOCK = SvelteElementType("AWAIT_BLOCK")
+    val AWAIT_MAIN_BLOCK = SvelteElementType("AWAIT_PENDING_BLOCK")
+    val AWAIT_THEN_BLOCK = SvelteElementType("AWAIT_THEN_BLOCK")
+    val AWAIT_CATCH_BLOCK = SvelteElementType("AWAIT_CATCH_BLOCK")
 
     val FRAGMENT = SvelteElementType("FRAGMENT")
-
-//    val INTERPOLATION: IElementType = SvelteElementType("INTERPOLATION")
-//    val EXPRESSION: IElementType = SvelteElementType("EXPRESSION")
-//    val KEY_EXPRESSION: IElementType = SvelteElementType("KEY_EXPRESSION")
-//    val PARAMETER: IElementType = SvelteElementType("PARAMETER")
 
     fun createElement(node: ASTNode): PsiElement {
         return when (node.elementType) {

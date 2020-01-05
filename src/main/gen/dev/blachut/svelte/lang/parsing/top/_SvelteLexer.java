@@ -6,9 +6,7 @@ import java.util.*;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
-import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static dev.blachut.svelte.lang.psi.SvelteTypes.*;
+import static dev.blachut.svelte.lang.psi.SvelteTokenTypes.*;
 
 
 /**

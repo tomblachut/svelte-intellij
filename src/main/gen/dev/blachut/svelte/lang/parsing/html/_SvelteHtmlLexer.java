@@ -6,8 +6,7 @@ package dev.blachut.svelte.lang.parsing.html;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.*;
-import dev.blachut.svelte.lang.psi.SvelteTypes;
-import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes;
 
 
 /**
@@ -749,7 +748,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 64: break;
           case 4:
-            { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTypes.START_MUSTACHE_TEMP;
+            { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE_TEMP;
             }
             // fall through
           case 65: break;
@@ -823,7 +822,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 77: break;
           case 17:
-            { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTypes.START_MUSTACHE;
+            { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTokenTypes.START_MUSTACHE;
             }
             // fall through
           case 78: break;
@@ -833,23 +832,23 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 79: break;
           case 19:
-            { return SvelteTypes.CODE_FRAGMENT;
+            { return SvelteTokenTypes.CODE_FRAGMENT;
             }
             // fall through
           case 80: break;
           case 20:
-            { bracesNestingLevel++; return SvelteTypes.CODE_FRAGMENT;
+            { bracesNestingLevel++; return SvelteTokenTypes.CODE_FRAGMENT;
             }
             // fall through
           case 81: break;
           case 21:
-            { if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTypes.CODE_FRAGMENT; }
+            { if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTokenTypes.CODE_FRAGMENT; }
           else {
               if (yystate() == ATTRIBUTE_BRACES) yybegin(TAG_ATTRIBUTES);
               if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
               if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
               if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
-              return SvelteTypes.END_MUSTACHE;
+              return SvelteTokenTypes.END_MUSTACHE;
           }
             }
             // fall through
@@ -860,7 +859,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 83: break;
           case 23:
-            { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE;
+            { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE;
             }
             // fall through
           case 84: break;
@@ -880,7 +879,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 87: break;
           case 27:
-            { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTypes.START_MUSTACHE;
+            { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTokenTypes.START_MUSTACHE;
             }
             // fall through
           case 88: break;
@@ -890,7 +889,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 89: break;
           case 29:
-            { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTypes.START_MUSTACHE;
+            { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTokenTypes.START_MUSTACHE;
             }
             // fall through
           case 90: break;
@@ -920,32 +919,32 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 95: break;
           case 35:
-            { return SvelteTypes.TEMP_PREFIX;
+            { return SvelteTokenTypes.TEMP_PREFIX;
             }
             // fall through
           case 96: break;
           case 36:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.COLON;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.COLON;
             }
             // fall through
           case 97: break;
           case 37:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.SLASH;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.SLASH;
             }
             // fall through
           case 98: break;
           case 38:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.HASH;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.HASH;
             }
             // fall through
           case 99: break;
           case 39:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTypes.AT;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.AT;
             }
             // fall through
           case 100: break;
           case 40:
-            { if (bracesNestingLevel == 0) { yybegin(YYINITIAL); return SvelteTypes.END_MUSTACHE; } else { bracesNestingLevel--; return SvelteTypes.CODE_FRAGMENT; }
+            { if (bracesNestingLevel == 0) { yybegin(YYINITIAL); return SvelteTokenTypes.END_MUSTACHE; } else { bracesNestingLevel--; return SvelteTokenTypes.CODE_FRAGMENT; }
             }
             // fall through
           case 101: break;
@@ -983,7 +982,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 107: break;
           case 47:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_IF;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_IF;
             }
             // fall through
           case 108: break;
@@ -1023,27 +1022,27 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 115: break;
           case 55:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_THEN;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_THEN;
             }
             // fall through
           case 116: break;
           case 56:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_ELSE;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_ELSE;
             }
             // fall through
           case 117: break;
           case 57:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_EACH;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_EACH;
             }
             // fall through
           case 118: break;
           case 58:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_CATCH;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_CATCH;
             }
             // fall through
           case 119: break;
           case 59:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTypes.LAZY_AWAIT;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_AWAIT;
             }
             // fall through
           case 120: break;
