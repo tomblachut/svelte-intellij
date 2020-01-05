@@ -20,7 +20,7 @@ import dev.blachut.svelte.lang.SvelteFileViewProvider
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import kotlin.math.min
 
-class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
+class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
     private val simpleKeys = setOf("if", "await")
     private val simpleTemplate = { key: String -> "{#$key \$EXPRESSION\$}\$END\${/$key}" }
     private val eachTemplate = "{#each \$EXPRESSION\$ as \$PARAMS\$}\$END\${/each}"
@@ -37,7 +37,7 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
     }
 
     override fun createParser(tokens: MutableList<ZenCodingToken>?, callback: CustomTemplateCallback, generator: ZenCodingGenerator?, surroundWithTemplate: Boolean): EmmetParser {
-        return XmlEmmetParser(tokens, SvelteZenCodingCustomTemplateCallback(callback), generator, surroundWithTemplate)
+        return XmlEmmetParser(tokens, SvelteTemplateCallback(callback), generator, surroundWithTemplate)
     }
 
     override fun createTemplateByKey(key: String, forceSingleTag: Boolean): TemplateImpl? {
@@ -103,6 +103,7 @@ class SvelteZenCodingGeneratorImpl : XmlZenCodingGeneratorImpl() {
         val key = computeKey(documentText.subSequence(startOffset, currentOffset))
         return if (!StringUtil.isEmpty(key) && ZenCodingTemplate.checkTemplateKey(key!!, callback, this)) key else null
     }
-}
 
-class SvelteZenCodingCustomTemplateCallback(callback: CustomTemplateCallback) : CustomTemplateCallback(callback.editor, callback.file.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE))
+    private class SvelteTemplateCallback(callback: CustomTemplateCallback)
+        : CustomTemplateCallback(callback.editor, callback.file.viewProvider.getPsi(SvelteHTMLLanguage.INSTANCE))
+}
