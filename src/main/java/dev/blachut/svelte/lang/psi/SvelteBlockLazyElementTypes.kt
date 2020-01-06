@@ -9,10 +9,8 @@ object SvelteBlockLazyElementTypes {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            assert(builder.tokenType === JSTokenTypes.SHARP)
-            builder.advanceLexer()
-            assert(builder.tokenType === JSTokenTypes.IF_KEYWORD)
-            builder.advanceLexer()
+            builder.advanceLexer() // JSTokenTypes.SHARP
+            builder.advanceLexer() // JSTokenTypes.IF_KEYWORD
 
             parser.expressionParser.parseExpression()
         }
@@ -22,10 +20,8 @@ object SvelteBlockLazyElementTypes {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            assert(builder.tokenType === JSTokenTypes.COLON)
-            builder.advanceLexer()
-            assert(builder.tokenType === JSTokenTypes.ELSE_KEYWORD)
-            builder.advanceLexer()
+            builder.advanceLexer() // JSTokenTypes.COLON
+            builder.advanceLexer() // JSTokenTypes.ELSE_KEYWORD
 
             if (builder.tokenType === JSTokenTypes.IF_KEYWORD) {
                 builder.advanceLexer()
@@ -42,10 +38,8 @@ object SvelteBlockLazyElementTypes {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            assert(builder.tokenType === JSTokenTypes.SHARP)
-            builder.advanceLexer()
-            assert(builder.tokenType === JSTokenTypes.IDENTIFIER) // EACH
-            builder.advanceLexer()
+            builder.advanceLexer() // JSTokenTypes.SHARP
+            builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake EACH
 
             parser.expressionParser.parseExpression()
 
@@ -81,10 +75,8 @@ object SvelteBlockLazyElementTypes {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            assert(builder.tokenType === JSTokenTypes.SHARP)
-            builder.advanceLexer()
-            assert(builder.tokenType === JSTokenTypes.AWAIT_KEYWORD)
-            builder.advanceLexer()
+            builder.advanceLexer() // JSTokenTypes.SHARP
+            builder.advanceLexer() // JSTokenTypes.AWAIT_KEYWORD
 
             parser.expressionParser.parseExpression()
 
@@ -100,10 +92,8 @@ object SvelteBlockLazyElementTypes {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            assert(builder.tokenType === JSTokenTypes.COLON)
-            builder.advanceLexer()
-            assert(builder.tokenType === JSTokenTypes.IDENTIFIER) // THEN
-            builder.advanceLexer()
+            builder.advanceLexer() // JSTokenTypes.COLON
+            builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake THEN
 
             // TODO Check weird RBRACE placement
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
@@ -114,10 +104,8 @@ object SvelteBlockLazyElementTypes {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            assert(builder.tokenType === JSTokenTypes.COLON)
-            builder.advanceLexer()
-            assert(builder.tokenType === JSTokenTypes.IDENTIFIER) // THEN
-            builder.advanceLexer()
+            builder.advanceLexer() // JSTokenTypes.COLON
+            builder.advanceLexer() // JSTokenTypes.CATCH_KEYWORD
 
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
         }
