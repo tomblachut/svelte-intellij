@@ -14,7 +14,7 @@ abstract class SvelteBlockLazyElementType(debugName: String) : ILazyParseableEle
 
     override fun createNode(text: CharSequence?): ASTNode? {
         text ?: return null
-        return SvelteJSLazyPsiElement(this, text)
+        return SvelteInitialTag(this, text)
     }
 
     override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
