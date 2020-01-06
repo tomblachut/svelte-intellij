@@ -7,9 +7,15 @@ import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler
+import com.intellij.openapi.editor.ex.EditorEx
 import com.intellij.openapi.util.Ref
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
-import dev.blachut.svelte.lang.psi.SvelteFile
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.elementType
+import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.parsing.html.initTokens
+import dev.blachut.svelte.lang.parsing.html.tailTokens
 
 /**
  * Handler for custom plugin actions when `Enter` is typed by the user
@@ -18,7 +24,7 @@ import dev.blachut.svelte.lang.psi.SvelteFile
  */
 class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
     /**
-     * if we are between open and close tags, we ensure the caret ends up in the "logical" place on Enter.
+     * if we are between start and end tags, we ensure the caret ends up in the "logical" place on Enter.
      * i.e. "{#if x}<caret>{/if}" becomes the following on Enter:
      *
      * {#if x}
@@ -27,14 +33,15 @@ class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
      *
      * (Note: <caret> may be indented depending on formatter settings.)
      */
-    override fun preprocessEnter(file: PsiFile,
-                                 editor: Editor,
-                                 caretOffset: Ref<Int>,
-                                 caretAdvance: Ref<Int>,
-                                 dataContext: DataContext,
-                                 originalHandler: EditorActionHandler?): EnterHandlerDelegate.Result {
-
-        if (file is SvelteFile && isBetweenSvelteTags(editor, file, caretOffset.get())) {
+    override fun preprocessEnter(
+        file: PsiFile,
+        editor: Editor,
+        caretOffset: Ref<Int>,
+        caretAdvance: Ref<Int>,
+        dataContext: DataContext,
+        originalHandler: EditorActionHandler?
+    ): EnterHandlerDelegate.Result {
+        if (file.viewProvider is SvelteFileViewProvider && isBetweenSvelteTags(editor, file, caretOffset.get())) {
             originalHandler!!.execute(editor, editor.caretModel.currentCaret, dataContext)
             return EnterHandlerDelegate.Result.Default
         }
@@ -42,9 +49,32 @@ class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
     }
 
     /**
-     * Checks to see if `Enter` has been typed while the caret is between an open and close tag pair
+     * Checks to see if `Enter` has been typed while the caret is between an start and end tag pair
      */
     private fun isBetweenSvelteTags(editor: Editor, file: PsiFile, offset: Int): Boolean {
-        return false
+        if (offset == 0) return false
+        val chars = editor.document.charsSequence
+        if (chars[offset - 1] != '}') return false
+
+        val highlighter = (editor as EditorEx).highlighter
+        val iterator = highlighter.createIterator(offset - 1)
+        PsiDocumentManager.getInstance(file.project).commitDocument(editor.document)
+
+        val prevElement = file.findElementAt(iterator.start)
+        PsiTreeUtil.findFirstParent(prevElement, true) { initTokens.contains(it.elementType) }
+            ?: return false
+
+        iterator.advance()
+        if (iterator.atEnd()) {
+            // no more tokens, so certainly no next tag
+            return false
+        }
+
+
+        val nextElement = file.findElementAt(iterator.start)
+
+        val tailTag = PsiTreeUtil.findFirstParent(nextElement, true) { tailTokens.contains(it.elementType) }
+        // We're between matching tags if required tag is found
+        return tailTag != null
     }
 }
