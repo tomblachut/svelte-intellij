@@ -48,3 +48,4 @@ class SvelteParsing(val builder: PsiBuilder) {
 val startTokens = TokenSet.create(SvelteBlockLazyElementTypes.IF_START, SvelteBlockLazyElementTypes.EACH_START, SvelteBlockLazyElementTypes.AWAIT_START)
 val innerTokens = TokenSet.create(SvelteBlockLazyElementTypes.ELSE_CLAUSE, SvelteBlockLazyElementTypes.THEN_CLAUSE, SvelteBlockLazyElementTypes.CATCH_CLAUSE)
 val endTokens = TokenSet.create(SvelteBlockLazyElementTypes.IF_END, SvelteBlockLazyElementTypes.EACH_END, SvelteBlockLazyElementTypes.AWAIT_END)
+val tailTokens = TokenSet.orSet(innerTokens, endTokens)
