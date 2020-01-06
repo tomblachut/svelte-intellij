@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.parsing.top
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.lang.LanguageUtil
 import com.intellij.lang.ParserDefinition
@@ -14,7 +13,8 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.SvelteLanguage
-import dev.blachut.svelte.lang.psi.*
+import dev.blachut.svelte.lang.psi.SvelteElementTypes
+import dev.blachut.svelte.lang.psi.SvelteFile
 
 class SvelteParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
@@ -54,15 +54,6 @@ class SvelteParserDefinition : ParserDefinition {
     }
 
     override fun createElement(node: ASTNode): PsiElement {
-        if (node.elementType === SvelteJSElementTypes.ATTRIBUTE_EXPRESSION) {
-            return ASTWrapperPsiElement(node)
-        } else if (node.elementType === SvelteBlockLazyElementTypes.IF_END
-            || node.elementType === SvelteBlockLazyElementTypes.EACH_END
-            || node.elementType === SvelteBlockLazyElementTypes.AWAIT_END) {
-            // TODO Create dedicated PsiElements for end tags
-            return SveltePsiElementImpl(node)
-        }
-
         return SvelteElementTypes.createElement(node)
     }
 

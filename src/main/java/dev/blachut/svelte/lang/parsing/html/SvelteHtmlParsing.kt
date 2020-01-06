@@ -8,7 +8,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.isSvelteComponentTag
-import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
+import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
@@ -154,7 +154,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         advance() // {
         advanceCode(elementType)
         advance() // }
-        expressionMarker.done(SvelteJSElementTypes.ATTRIBUTE_EXPRESSION)
+        expressionMarker.done(SvelteElementTypes.ATTRIBUTE_EXPRESSION)
     }
 
     private fun advanceCode(elementType: IElementType) {

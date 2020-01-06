@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.psi
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.parsing.html.psi.*
@@ -20,6 +21,8 @@ object SvelteElementTypes {
 
     val FRAGMENT = SvelteElementType("FRAGMENT")
 
+    val ATTRIBUTE_EXPRESSION = SvelteElementType("ATTRIBUTE_EXPRESSION")
+
     fun createElement(node: ASTNode): PsiElement {
         return when (node.elementType) {
             IF_BLOCK -> SvelteIfBlock(node)
@@ -36,6 +39,12 @@ object SvelteElementTypes {
             AWAIT_CATCH_BLOCK -> SvelteAwaitCatchBlock(node)
 
             FRAGMENT -> SvelteFragment(node)
+
+            ATTRIBUTE_EXPRESSION -> ASTWrapperPsiElement(node)
+
+            SvelteBlockLazyElementTypes.IF_END,
+            SvelteBlockLazyElementTypes.EACH_END,
+            SvelteBlockLazyElementTypes.AWAIT_END -> SvelteEndTag(node)
 
             else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")
         }
