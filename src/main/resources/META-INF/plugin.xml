@@ -106,7 +106,7 @@
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
         <quoteHandler fileType="Svelte HTML" className="com.intellij.codeInsight.editorActions.HtmlQuoteHandler"/>
-        <extendWordSelectionHandler implementation="dev.blachut.svelte.lang.editor.SveltePrimaryBlockSelectioner"/>
+        <extendWordSelectionHandler implementation="dev.blachut.svelte.lang.editor.SveltePrimaryBranchSelectioner"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <dialectSpecificHandlersFactory language="SvelteJS"

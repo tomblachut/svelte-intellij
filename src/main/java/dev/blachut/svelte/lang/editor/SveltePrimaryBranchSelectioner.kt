@@ -2,11 +2,11 @@ package dev.blachut.svelte.lang.editor
 
 import com.intellij.codeInsight.editorActions.ExtendWordSelectionHandlerBase
 import com.intellij.psi.PsiElement
-import dev.blachut.svelte.lang.parsing.html.psi.SveltePrimaryBlock
+import dev.blachut.svelte.lang.parsing.html.psi.SveltePrimaryBranch
 
-class SveltePrimaryBlockSelectioner : ExtendWordSelectionHandlerBase() {
+class SveltePrimaryBranchSelectioner : ExtendWordSelectionHandlerBase() {
     override fun canSelect(e: PsiElement): Boolean {
-        return e is SveltePrimaryBlock
+        return e is SveltePrimaryBranch
     }
 
     override fun getMinimalTextRangeLength(element: PsiElement, text: CharSequence, cursorOffset: Int): Int {

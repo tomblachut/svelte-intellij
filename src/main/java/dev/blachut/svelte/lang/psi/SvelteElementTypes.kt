@@ -26,17 +26,17 @@ object SvelteElementTypes {
     fun createElement(node: ASTNode): PsiElement {
         return when (node.elementType) {
             IF_BLOCK -> SvelteIfBlock(node)
-            IF_TRUE_BLOCK -> SvelteIfTrueBlock(node)
-            IF_ELSE_BLOCK -> SvelteIfElseBlock(node)
+            IF_TRUE_BLOCK -> SvelteIfPrimaryBranch(node)
+            IF_ELSE_BLOCK -> SvelteIfElseBranch(node)
 
             EACH_BLOCK -> SvelteEachBlock(node)
-            EACH_LOOP_BLOCK -> SvelteEachLoopBlock(node)
-            EACH_ELSE_BLOCK -> SvelteEachElseBlock(node)
+            EACH_LOOP_BLOCK -> SvelteEachPrimaryBranch(node)
+            EACH_ELSE_BLOCK -> SvelteEachElseBranch(node)
 
             AWAIT_BLOCK -> SvelteAwaitBlock(node)
-            AWAIT_MAIN_BLOCK -> SvelteAwaitMainBlock(node)
-            AWAIT_THEN_BLOCK -> SvelteAwaitThenBlock(node)
-            AWAIT_CATCH_BLOCK -> SvelteAwaitCatchBlock(node)
+            AWAIT_MAIN_BLOCK -> SvelteAwaitPrimaryBranch(node)
+            AWAIT_THEN_BLOCK -> SvelteAwaitThenBranch(node)
+            AWAIT_CATCH_BLOCK -> SvelteAwaitCatchBranch(node)
 
             FRAGMENT -> SvelteFragment(node)
 
