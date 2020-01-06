@@ -1,11 +1,11 @@
 package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
+import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.psi.impl.source.tree.LazyParseablePsiElement
 import com.intellij.psi.tree.IElementType
 
-interface SvelteTag : PsiElement {
+interface SvelteTag : JSElement {
     val type: IElementType
 }
 
