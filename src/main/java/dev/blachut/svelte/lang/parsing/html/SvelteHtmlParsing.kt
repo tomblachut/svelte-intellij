@@ -8,6 +8,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.isSvelteComponentTag
+import dev.blachut.svelte.lang.psi.SVELTE_HTML_TAG
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
@@ -28,6 +29,10 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     }
 
     private val svelteParsing = SvelteParsing(builder)
+
+    override fun getHtmlTagElementType(): IElementType {
+        return SVELTE_HTML_TAG
+    }
 
     override fun isSingleTag(tagName: String, originalTagName: String): Boolean {
         // Inspired by Vue plugin. Svelte tags must be closed explicitly
