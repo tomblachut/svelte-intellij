@@ -6,6 +6,7 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 object SvelteManualParsing {
@@ -58,7 +59,7 @@ object SvelteManualParsing {
             if (token != null) return finishBlock(builder, marker, token)
         }
 
-        return finishBlock(builder, marker, SvelteBlockLazyElementTypes.EXPR)
+        return finishBlock(builder, marker, SvelteJSLazyElementTypes.EXPRESSION)
     }
 
     private fun finishBlock(builder: PsiBuilder, marker: PsiBuilder.Marker, endToken: IElementType): Pair<IElementType, PsiBuilder.Marker> {

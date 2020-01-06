@@ -122,12 +122,4 @@ object SvelteBlockLazyElementTypes {
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
         }
     }
-
-    val EXPR = object : SvelteBlockLazyElementType("EXPR") {
-        override val noTokensErrorMessage = "expression expected"
-
-        override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            parser.expressionParser.parseExpression()
-        }
-    }
 }
