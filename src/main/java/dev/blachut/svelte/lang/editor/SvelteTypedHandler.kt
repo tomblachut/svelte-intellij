@@ -8,8 +8,7 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.SvelteLanguage
+import dev.blachut.svelte.lang.SvelteFileViewProvider
 import dev.blachut.svelte.lang.parsing.html.psi.SvelteBlock
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
 
@@ -23,7 +22,7 @@ class SvelteTypedHandler : TypedHandlerDelegate() {
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
         val provider = file.viewProvider
 
-        if (provider.baseLanguage != SvelteLanguage.INSTANCE) {
+        if (provider !is SvelteFileViewProvider) {
             return Result.CONTINUE
         }
 
@@ -47,7 +46,7 @@ class SvelteTypedHandler : TypedHandlerDelegate() {
     }
 
     private fun finishEndTag(offset: Int, editor: Editor, provider: FileViewProvider, justAfterStartTag: Boolean) {
-        val elementAtCaret = provider.findElementAt(offset - 1, SvelteHTMLLanguage.INSTANCE) ?: return
+        val elementAtCaret = provider.findElementAt(offset - 1) ?: return
         val block = PsiTreeUtil.getParentOfType(elementAtCaret, SvelteBlock::class.java) ?: return
 
         if (block.endTag != null) return

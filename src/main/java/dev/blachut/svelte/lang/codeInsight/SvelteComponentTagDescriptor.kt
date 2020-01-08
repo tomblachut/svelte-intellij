@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.xml.XmlDescriptorUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
@@ -11,7 +12,7 @@ import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlElementsGroup
 import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
-import dev.blachut.svelte.lang.psi.SvelteFile
+import dev.blachut.svelte.lang.SvelteFileViewProvider
 import org.jetbrains.annotations.NonNls
 import java.util.*
 
@@ -46,7 +47,7 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
             // val componentFile = declaration.findReferencedElements().firstOrNull()
             val componentFile = declaration.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
 
-            if (componentFile != null && componentFile is SvelteFile) {
+            if (componentFile != null && componentFile is PsiFile && componentFile.viewProvider is SvelteFileViewProvider) {
                 val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
                 if (props != null) {
                     return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }

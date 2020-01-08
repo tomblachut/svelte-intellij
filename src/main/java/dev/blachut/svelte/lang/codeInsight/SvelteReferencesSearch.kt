@@ -16,7 +16,7 @@ import com.intellij.psi.search.UsageSearchContext
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.Processor
-import dev.blachut.svelte.lang.SvelteFileType
+import dev.blachut.svelte.lang.SvelteFileViewProvider
 
 class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>(true) {
     override fun processQuery(queryParameters: ReferencesSearch.SearchParameters, consumer: Processor<in PsiReference>) {
@@ -24,7 +24,7 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
         val containingFile = element.containingFile
         val componentName = (element as? JSElement)?.name ?: return
 
-        if (containingFile.virtualFile.fileType is SvelteFileType) {
+        if (containingFile.viewProvider is SvelteFileViewProvider) {
             if (element is ES6ImportedBinding) {
                 queryParameters.optimizer.searchWord(
                     componentName,
@@ -47,7 +47,7 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
         }
         if (element is ES6ExportSpecifierAlias && queryParameters.effectiveSearchScope is LocalSearchScope) {
             val scope = (queryParameters.effectiveSearchScope as LocalSearchScope).scope.firstOrNull() ?: return
-            if (scope.containingFile.virtualFile.fileType !is SvelteFileType) return
+            if (scope.containingFile.viewProvider !is SvelteFileViewProvider) return
 
             queryParameters.optimizer.searchWord(
                 componentName,

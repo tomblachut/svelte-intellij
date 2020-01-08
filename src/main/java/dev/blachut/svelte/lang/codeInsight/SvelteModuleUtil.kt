@@ -15,8 +15,8 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
+import dev.blachut.svelte.lang.SvelteFileViewProvider
 import dev.blachut.svelte.lang.getRelativePath
-import dev.blachut.svelte.lang.psi.SvelteFile
 
 object SvelteModuleUtil {
     fun getModuleInfos(project: Project, currentFile: PsiFile, componentVirtualFile: VirtualFile, componentName: String): MutableList<JSModuleNameInfo> {
@@ -28,7 +28,9 @@ object SvelteModuleUtil {
                 val from: ES6FromClause = PsiTreeUtil.findChildOfType(declaration, ES6FromClause::class.java)
                     ?: return@forEach
                 val component = from.resolveReferencedElements().find { referencedFile ->
-                    referencedFile is SvelteFile && referencedFile.viewProvider.virtualFile == componentVirtualFile
+                    referencedFile is PsiFile
+                        && referencedFile.viewProvider is SvelteFileViewProvider
+                        && referencedFile.virtualFile == componentVirtualFile
                 }
                 component ?: return@forEach
                 val moduleVirtualFile = declaration.containingFile.virtualFile
