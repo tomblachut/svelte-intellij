@@ -3,9 +3,8 @@ package dev.blachut.svelte.lang.parsing
 import com.intellij.testFramework.ParsingTestCase
 import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
-import dev.blachut.svelte.lang.parsing.top.SvelteParserDefinition
 
-class SvelteParsingTest : ParsingTestCase("dev/blachut/svelte/lang/parsing", "svelte", SvelteParserDefinition(), SvelteJSParserDefinition(), SvelteHTMLParserDefinition()) {
+class SvelteParsingTest : ParsingTestCase("dev/blachut/svelte/lang/parsing", "svelte", SvelteJSParserDefinition(), SvelteHTMLParserDefinition()) {
     override fun getTestDataPath(): String = "src/test/resources"
 
     fun testIfElseIf() = doTest()

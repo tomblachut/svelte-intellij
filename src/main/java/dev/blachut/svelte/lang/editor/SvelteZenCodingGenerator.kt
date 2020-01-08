@@ -13,7 +13,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.SvelteFileViewProvider
-import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import kotlin.math.min
 
 class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
@@ -26,10 +25,6 @@ class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
 
     override fun isMyLanguage(language: Language): Boolean {
         return SvelteHtmlContextType.isMyLanguage(language)
-    }
-
-    override fun isMyContext(callback: CustomTemplateCallback, wrapping: Boolean): Boolean {
-        return callback.file.language === SvelteHTMLLanguage.INSTANCE && isMyContext(callback.context, wrapping)
     }
 
     override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {

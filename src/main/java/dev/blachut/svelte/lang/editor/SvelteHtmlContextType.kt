@@ -8,9 +8,8 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiUtilCore
-import dev.blachut.svelte.lang.SvelteFileType
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.SvelteLanguage
+import dev.blachut.svelte.lang.SvelteHtmlFileType
 
 class SvelteHtmlContextType : TemplateContextType("SVELTE_HTML", "Svelte HTML", HtmlContextType::class.java) {
     override fun isInContext(file: PsiFile, offset: Int): Boolean {
@@ -18,12 +17,12 @@ class SvelteHtmlContextType : TemplateContextType("SVELTE_HTML", "Svelte HTML", 
     }
 
     override fun createHighlighter(): SyntaxHighlighter? {
-        return SyntaxHighlighterFactory.getSyntaxHighlighter(SvelteFileType.INSTANCE, null, null)
+        return SyntaxHighlighterFactory.getSyntaxHighlighter(SvelteHtmlFileType.INSTANCE, null, null)
     }
 
     companion object {
         fun isMyLanguage(language: Language): Boolean {
-            return language.isKindOf(SvelteHTMLLanguage.INSTANCE) || language.isKindOf(SvelteLanguage.INSTANCE)
+            return language.isKindOf(SvelteHTMLLanguage.INSTANCE)
         }
     }
 }

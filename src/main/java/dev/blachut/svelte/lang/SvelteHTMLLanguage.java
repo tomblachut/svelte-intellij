@@ -1,11 +1,10 @@
 package dev.blachut.svelte.lang;
 
-import com.intellij.lang.DependentLanguage;
 import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.Nullable;
 
-public class SvelteHTMLLanguage extends HTMLLanguage implements DependentLanguage {
+public class SvelteHTMLLanguage extends HTMLLanguage {
     public static final SvelteHTMLLanguage INSTANCE = new SvelteHTMLLanguage();
 
     private SvelteHTMLLanguage() {

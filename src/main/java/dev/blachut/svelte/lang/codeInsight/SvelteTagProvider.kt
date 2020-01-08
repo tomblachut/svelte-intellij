@@ -11,8 +11,8 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
-import dev.blachut.svelte.lang.SvelteFileType
 import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.SvelteHtmlFileType
 import dev.blachut.svelte.lang.completion.SvelteInsertHandler
 import dev.blachut.svelte.lang.icons.SvelteIcons
 import dev.blachut.svelte.lang.isSvelteComponentTag
@@ -77,7 +77,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
     private fun getReachableComponents(tag: HtmlTag): List<LookupElement> {
         val lookupElements = mutableListOf<LookupElement>()
-        val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
+        val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
 
         svelteVirtualFiles.forEach { virtualFile ->
             val componentName = virtualFile.nameWithoutExtension
