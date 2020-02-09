@@ -1,17 +1,20 @@
 package dev.blachut.svelte.lang.psi
 
+import com.intellij.javaee.ExternalResourceManagerEx
 import com.intellij.lang.javascript.psi.JSParameter
 import com.intellij.lang.javascript.psi.JSVariable
 import com.intellij.lang.javascript.psi.util.JSDestructuringVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.html.HtmlTag
+import com.intellij.psi.impl.source.xml.XmlDocumentImpl
 import com.intellij.psi.impl.source.xml.XmlTagImpl
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.IXmlTagElementType
 import com.intellij.psi.xml.XmlTag
+import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.util.XmlUtil
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 
@@ -72,5 +75,15 @@ class SvelteHtmlTag : XmlTagImpl(SVELTE_HTML_TAG), HtmlTag {
             XmlUtil.HTML_URI
         } else xmlNamespace
         // ex.: mathML and SVG namespaces can be used inside html file
+    }
+
+    override fun getNSDescriptor(namespace: String?, strict: Boolean): XmlNSDescriptor? {
+        return if (XmlUtil.HTML_URI == namespace) getDefaultNSDescriptor(this) else super.getNSDescriptor(namespace, strict)
+    }
+
+    private fun getDefaultNSDescriptor(context: PsiElement): XmlNSDescriptor? {
+        val doctype = ExternalResourceManagerEx.getInstanceEx().getDefaultHtmlDoctype(context.project)
+        val xmlFile = XmlUtil.findNamespace(context.containingFile, doctype)
+        return if (xmlFile != null) XmlDocumentImpl.getCachedHtmlNsDescriptor(xmlFile) else null
     }
 }
