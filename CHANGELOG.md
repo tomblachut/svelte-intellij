@@ -1,5 +1,11 @@
 # Changelog
 
+<h3>0.12.1</h3>
+<ul>
+    <li>Extend supported IDE version range to 2020.x</li>
+    <li>Support basic interpolations inside style attributes</li>
+</ul>
+
 <h3>0.12.0</h3>
 <ul>
     <li>Support for different CSS dialects via lang attribute</li>
