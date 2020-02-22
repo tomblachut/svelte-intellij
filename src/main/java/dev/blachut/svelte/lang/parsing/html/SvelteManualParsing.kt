@@ -59,7 +59,7 @@ object SvelteManualParsing {
             if (token != null) return finishBlock(builder, marker, token)
         }
 
-        return finishBlock(builder, marker, SvelteJSLazyElementTypes.EXPRESSION)
+        return finishBlock(builder, marker, SvelteJSLazyElementTypes.CONTENT_EXPRESSION)
     }
 
     private fun finishBlock(builder: PsiBuilder, marker: PsiBuilder.Marker, endToken: IElementType): Pair<IElementType, PsiBuilder.Marker> {
