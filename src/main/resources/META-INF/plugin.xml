@@ -77,6 +77,7 @@
                            implementationClass="dev.blachut.svelte.lang.editor.SvelteBraceMatcher"/>
         <lang.syntaxHighlighterFactory language="SvelteHTML"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
+        <highlightingPassFactory implementation="dev.blachut.svelte.lang.SvelteJSSemanticKeywordHighlighterFactory"/>
         <!--        <lang.commenter language="SvelteHTML" implementationClass="com.intellij.lang.xml.XmlCommenter"/>-->
         <lang.foldingBuilder language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
         <lang.foldingBuilder language="SvelteHTML" implementationClass="com.intellij.lang.xml.XmlFoldingBuilder"/>
