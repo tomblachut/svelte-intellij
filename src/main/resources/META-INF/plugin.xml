@@ -77,9 +77,9 @@
                            implementationClass="dev.blachut.svelte.lang.editor.SvelteBraceMatcher"/>
         <lang.syntaxHighlighterFactory language="SvelteHTML"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
-<!--        <lang.commenter language="SvelteHTML" implementationClass="com.intellij.lang.xml.XmlCommenter"/>-->
-        <lang.foldingBuilder language="SvelteHTML"
-                             implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
+        <!--        <lang.commenter language="SvelteHTML" implementationClass="com.intellij.lang.xml.XmlCommenter"/>-->
+        <lang.foldingBuilder language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
+        <lang.foldingBuilder language="SvelteHTML" implementationClass="com.intellij.lang.xml.XmlFoldingBuilder"/>
         <!--        <lang.formatter language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>-->
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTypedHandler" order="before xmlSlash"/>
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
