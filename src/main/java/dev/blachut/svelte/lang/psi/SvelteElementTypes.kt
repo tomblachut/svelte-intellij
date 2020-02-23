@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
-import dev.blachut.svelte.lang.parsing.html.psi.*
+import dev.blachut.svelte.lang.psi.blocks.*
 
 object SvelteElementTypes {
     val IF_BLOCK = SvelteElementType("IF_BLOCK")

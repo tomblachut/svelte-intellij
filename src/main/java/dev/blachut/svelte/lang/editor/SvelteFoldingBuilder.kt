@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import dev.blachut.svelte.lang.parsing.html.psi.SvelteBlock
+import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 import java.util.*
 
 class SvelteFoldingBuilder : FoldingBuilder, DumbAware {

@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.parsing.html.psi
+package dev.blachut.svelte.lang.psi.blocks
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement

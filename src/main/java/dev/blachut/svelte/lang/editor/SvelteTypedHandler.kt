@@ -9,8 +9,8 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteFileViewProvider
-import dev.blachut.svelte.lang.parsing.html.psi.SvelteBlock
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
+import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 /**
  * Handler for custom plugin actions on chars typed by the user.

@@ -6,7 +6,7 @@ import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.SearchScope
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
-import dev.blachut.svelte.lang.parsing.html.psi.SvelteBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteBranch
 
 class SvelteJSParameter(node: ASTNode) : JSParameterImpl(node) {
     override fun getUseScope(): SearchScope {

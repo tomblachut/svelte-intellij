@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.parsing.html.psi
+package dev.blachut.svelte.lang.psi.blocks
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
@@ -6,7 +6,7 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.PsiScopeProcessor
 
 
-class SvelteEachPrimaryBranch(node: ASTNode) : SveltePrimaryBranch(node) {
+class SvelteAwaitCatchBranch(node: ASTNode) : SvelteAuxiliaryBranch(node) {
     override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
         return processParameterDeclarations(processor, state, lastParent, place)
     }
