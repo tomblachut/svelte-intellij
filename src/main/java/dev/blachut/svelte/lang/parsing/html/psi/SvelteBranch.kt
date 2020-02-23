@@ -8,10 +8,10 @@ import com.intellij.lang.javascript.psi.util.JSDestructuringVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.PsiScopeProcessor
-import dev.blachut.svelte.lang.psi.SveltePsiElementImpl
+import dev.blachut.svelte.lang.psi.SveltePsiElement
 import dev.blachut.svelte.lang.psi.SvelteTag
 
-sealed class SvelteBranch(node: ASTNode) : SveltePsiElementImpl(node), JSElement {
+sealed class SvelteBranch(node: ASTNode) : SveltePsiElement(node), JSElement {
     val tag: SvelteTag get() = firstChild as SvelteTag
 
     @Suppress("UNUSED_PARAMETER")

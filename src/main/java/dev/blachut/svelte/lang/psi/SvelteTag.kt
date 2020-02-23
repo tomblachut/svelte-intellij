@@ -18,7 +18,7 @@ class SvelteInitialTag(type: IElementType, text: CharSequence) : LazyParseablePs
     }
 }
 
-class SvelteEndTag(node: ASTNode) : SveltePsiElementImpl(node), SvelteTag {
+class SvelteEndTag(node: ASTNode) : SveltePsiElement(node), SvelteTag {
     override val type: IElementType get() = node.elementType
 
     override fun toString(): String {

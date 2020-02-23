@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.psi
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.parsing.html.psi.*
@@ -40,7 +39,7 @@ object SvelteElementTypes {
 
             FRAGMENT -> SvelteFragment(node)
 
-            ATTRIBUTE_EXPRESSION -> ASTWrapperPsiElement(node)
+            ATTRIBUTE_EXPRESSION -> SveltePsiElement(node)
 
             SvelteBlockLazyElementTypes.IF_END,
             SvelteBlockLazyElementTypes.EACH_END,
