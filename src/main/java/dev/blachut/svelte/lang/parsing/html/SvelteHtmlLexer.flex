@@ -4,6 +4,7 @@ package dev.blachut.svelte.lang.parsing.html;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.*;
+import com.intellij.psi.TokenType;
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes;
 
 %%
@@ -147,7 +148,7 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 <YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE_TEMP; }
 
 <SVELTE_INTERPOLATION_START> {
-  {WHITE_SPACE}      { return SvelteTokenTypes.TEMP_PREFIX; }
+  {WHITE_SPACE}      { return TokenType.WHITE_SPACE; }
   "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.HASH; }
   ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.COLON; }
   "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.SLASH; }
@@ -156,8 +157,7 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 }
 
 <SVELTE_INTERPOLATION_KEYWORD> {
-  // TODO Disallow whitespace
-  // {WHITE_SPACE}      { return BAD_CHARACTER; }
+  {WHITE_SPACE}      { return TokenType.WHITE_SPACE; }
   "if"               { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_IF; }
   "else"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_ELSE; }
   "each"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_EACH; }

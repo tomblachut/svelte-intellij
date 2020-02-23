@@ -14,8 +14,6 @@ object SvelteTokenTypes {
     val END_MUSTACHE = SvelteElementType("END_MUSTACHE")
 
     @JvmField
-    val TEMP_PREFIX = SvelteElementType("TEMP_PREFIX")
-    @JvmField
     val LAZY_IF = SvelteElementType("LAZY_IF")
     @JvmField
     val LAZY_ELSE = SvelteElementType("LAZY_ELSE")

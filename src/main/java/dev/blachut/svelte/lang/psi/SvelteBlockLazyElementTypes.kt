@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.psi
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
+import dev.blachut.svelte.lang.parsing.html.SvelteManualParsing
 
 object SvelteBlockLazyElementTypes {
     val IF_START = object : SvelteBlockLazyElementType("IF_START") {
@@ -10,6 +11,7 @@ object SvelteBlockLazyElementTypes {
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             builder.advanceLexer() // JSTokenTypes.SHARP
+            SvelteManualParsing.parseNotAllowedWhitespace(builder, "#")
             builder.advanceLexer() // JSTokenTypes.IF_KEYWORD
 
             parser.expressionParser.parseExpression()
@@ -21,6 +23,7 @@ object SvelteBlockLazyElementTypes {
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             builder.advanceLexer() // JSTokenTypes.COLON
+            SvelteManualParsing.parseNotAllowedWhitespace(builder, ":")
             builder.advanceLexer() // JSTokenTypes.ELSE_KEYWORD
 
             if (builder.tokenType === JSTokenTypes.IF_KEYWORD) {
@@ -39,6 +42,7 @@ object SvelteBlockLazyElementTypes {
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             builder.advanceLexer() // JSTokenTypes.SHARP
+            SvelteManualParsing.parseNotAllowedWhitespace(builder, "#")
             builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake EACH
 
             parser.expressionParser.parseExpression()
@@ -76,6 +80,7 @@ object SvelteBlockLazyElementTypes {
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             builder.advanceLexer() // JSTokenTypes.SHARP
+            SvelteManualParsing.parseNotAllowedWhitespace(builder, "#")
             builder.advanceLexer() // JSTokenTypes.AWAIT_KEYWORD
 
             parser.expressionParser.parseExpression()
@@ -93,6 +98,7 @@ object SvelteBlockLazyElementTypes {
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             builder.advanceLexer() // JSTokenTypes.COLON
+            SvelteManualParsing.parseNotAllowedWhitespace(builder, ":")
             builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake THEN
 
             // TODO Check weird RBRACE placement
@@ -105,6 +111,7 @@ object SvelteBlockLazyElementTypes {
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             builder.advanceLexer() // JSTokenTypes.COLON
+            SvelteManualParsing.parseNotAllowedWhitespace(builder, ":")
             builder.advanceLexer() // JSTokenTypes.CATCH_KEYWORD
 
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
