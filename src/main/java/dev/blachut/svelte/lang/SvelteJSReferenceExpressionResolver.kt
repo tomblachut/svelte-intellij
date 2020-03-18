@@ -25,14 +25,16 @@ class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpres
     }
 
     override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-        val propsReferenceName = "\$\$props"
+        val propsReferenceNames = arrayOf("\$\$props", "\$\$restProps")
 
-        if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, propsReferenceName)) {
-            val element = JSImplicitElementImpl.Builder(propsReferenceName, expression)
-                .forbidAstAccess()
-                .setProperties(JSImplicitElement.Property.Constant)
-                .toImplicitElement()
-            return arrayOf(JSResolveResult(element))
+        propsReferenceNames.forEach {
+            if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, it)) {
+                val element = JSImplicitElementImpl.Builder(it, expression)
+                    .forbidAstAccess()
+                    .setProperties(JSImplicitElement.Property.Constant)
+                    .toImplicitElement()
+                return arrayOf(JSResolveResult(element))
+            }
         }
 
         return resolveInComponent(expression) ?: super.resolve(expression, incompleteCode)
