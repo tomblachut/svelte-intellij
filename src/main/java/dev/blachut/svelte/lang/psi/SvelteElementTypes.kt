@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
+import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.psi.blocks.*
 
 object SvelteElementTypes {
@@ -21,6 +22,8 @@ object SvelteElementTypes {
     val FRAGMENT = SvelteElementType("FRAGMENT")
 
     val ATTRIBUTE_EXPRESSION = SvelteElementType("ATTRIBUTE_EXPRESSION")
+
+    val BRANCHES = TokenSet.create(IF_TRUE_BLOCK, IF_ELSE_BLOCK, EACH_LOOP_BLOCK, EACH_ELSE_BLOCK, AWAIT_MAIN_BLOCK, AWAIT_THEN_BLOCK, AWAIT_CATCH_BLOCK)
 
     fun createElement(node: ASTNode): PsiElement {
         return when (node.elementType) {
