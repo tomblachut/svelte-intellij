@@ -17,8 +17,8 @@ import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.xml.XmlTag
 import com.jetbrains.rd.util.firstOrNull
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.getJsEmbeddedContent
 import dev.blachut.svelte.lang.getRelativePath
+import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 
 object SvelteImportUtil {
@@ -94,7 +94,7 @@ object SvelteImportUtil {
             }
         }
 
-        val jsElement = getJsEmbeddedContent(instanceScript)
+        val jsElement = SvelteJSScriptContentProvider.getJsEmbeddedContent(instanceScript)
         if (jsElement != null) return jsElement
 
         // instanceScript is empty, we need to insert something in order to parse JsEmbeddedContent
@@ -102,6 +102,6 @@ object SvelteImportUtil {
         document.insertString(instanceScript.value.textRange.startOffset, "\n")
         PsiDocumentManager.getInstance(project).commitDocument(document)
 
-        return getJsEmbeddedContent(instanceScript)
+        return SvelteJSScriptContentProvider.getJsEmbeddedContent(instanceScript)
     }
 }

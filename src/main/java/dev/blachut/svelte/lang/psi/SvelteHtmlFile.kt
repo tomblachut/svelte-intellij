@@ -8,8 +8,8 @@ import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
-import dev.blachut.svelte.lang.getJsEmbeddedContent
 import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
+import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
 
 class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE) {
     val moduleScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == "module" } as XmlTag?
@@ -36,7 +36,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
     }
 
     private fun processScriptDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement, script: PsiElement?): Boolean {
-        return getJsEmbeddedContent(script)?.processDeclarations(processor, state, lastParent, place) ?: true
+        return SvelteJSScriptContentProvider.getJsEmbeddedContent(script)?.processDeclarations(processor, state, lastParent, place) ?: true
     }
 }
 

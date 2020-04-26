@@ -4,12 +4,14 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.HtmlScriptContentProvider
 import com.intellij.lang.PsiBuilderFactory
 import com.intellij.lang.javascript.JSElementTypes
+import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lexer.DummyLexer
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.ILazyParseableElementType
+import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSLazyPsiElement
 
@@ -18,6 +20,11 @@ object SvelteJSScriptContentProvider : HtmlScriptContentProvider {
 
     override fun getHighlightingLexer(): Lexer? {
         return SyntaxHighlighterFactory.getSyntaxHighlighter(SvelteJSLanguage.INSTANCE, null, null).highlightingLexer
+    }
+
+    fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
+        // JSEmbeddedContent is nested twice, see SvelteJSScriptContentProvider
+        return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)?.firstChild as JSEmbeddedContent?
     }
 }
 
