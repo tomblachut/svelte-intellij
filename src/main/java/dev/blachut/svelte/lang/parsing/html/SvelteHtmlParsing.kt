@@ -6,6 +6,7 @@ import com.intellij.lang.html.HtmlParsing
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
+import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
@@ -25,7 +26,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         }
     }
 
-    private val svelteParsing = SvelteParsing(builder)
+    private val svelteParsing = SvelteParsing(builder, ::flushHtmlTags)
 
     override fun getHtmlTagElementType(): IElementType {
         return SVELTE_HTML_TAG
@@ -41,7 +42,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
     override fun parseTag() {
         super.parseTag()
-        svelteParsing.reportMissingEndSvelteTags()
+        svelteParsing.flushSvelteTags()
     }
 
     override fun hasCustomTagContent(): Boolean {
@@ -50,7 +51,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
     override fun parseCustomTagContent(xmlText: PsiBuilder.Marker?): PsiBuilder.Marker? {
         terminateText(xmlText)
-        svelteParsing.parseSvelteTag()
+        svelteParsing.parseSvelteTag(tagLevel())
         return null
     }
 
@@ -60,15 +61,27 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
     override fun parseCustomTopLevelContent(error: PsiBuilder.Marker?): PsiBuilder.Marker? {
         flushError(error)
-        svelteParsing.parseSvelteTag()
+        svelteParsing.parseSvelteTag(tagLevel())
 
         if (builder.tokenType == null || builder.tokenType === XmlTokenType.XML_REAL_WHITE_SPACE && builder.lookAhead(1) == null) {
             // noop when at eof, ensures error is placed at the last character
             builder.advanceLexer()
-            svelteParsing.reportMissingEndSvelteTags()
+            svelteParsing.flushSvelteTags()
         }
 
         return null
+    }
+
+    private fun flushHtmlTags(beforeMarker: PsiBuilder.Marker, targetTagLevel: Int) {
+        while (tagLevel() > targetTagLevel) {
+            val tagName = peekTagName()
+            if (!HtmlUtil.isOptionalEndForHtmlTagL(tagName) && "html" != tagName && "body" != tagName) {
+                val errorMarker = beforeMarker.precede()
+                errorMarker.errorBefore(XmlErrorMessages.message("named.element.is.not.closed", tagName), beforeMarker)
+            }
+            val tag = closeTag()
+            tag.doneBefore(htmlTagElementType, beforeMarker)
+        }
     }
 
     override fun parseAttribute() {

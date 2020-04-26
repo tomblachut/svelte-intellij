@@ -6,7 +6,7 @@ import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 
 sealed class IncompleteBlock {
-    abstract val outerMarker: Marker
+    abstract val tagLevel: Int
 
     abstract fun isMatchingInnerTag(token: IElementType): Boolean
     abstract fun isMatchingEndTag(token: IElementType): Boolean
@@ -16,13 +16,13 @@ sealed class IncompleteBlock {
     abstract fun handleMissingEndTag(errorMarker: Marker)
 
     companion object {
-        fun create(token: IElementType, resultMarker: Marker, fragmentMarker: Marker): IncompleteBlock {
+        fun create(tagLevel: Int, token: IElementType, resultMarker: Marker, fragmentMarker: Marker): IncompleteBlock {
             val innerMarker = resultMarker.precede()
             val outerMarker = innerMarker.precede()
             return when (token) {
-                SvelteBlockLazyElementTypes.IF_START -> IncompleteIfBlock(outerMarker, innerMarker, fragmentMarker)
-                SvelteBlockLazyElementTypes.EACH_START -> IncompleteEachBlock(outerMarker, innerMarker, fragmentMarker)
-                SvelteBlockLazyElementTypes.AWAIT_START -> IncompleteAwaitBlock(outerMarker, innerMarker, fragmentMarker)
+                SvelteBlockLazyElementTypes.IF_START -> IncompleteIfBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
+                SvelteBlockLazyElementTypes.EACH_START -> IncompleteEachBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
+                SvelteBlockLazyElementTypes.AWAIT_START -> IncompleteAwaitBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
                 else -> throw IllegalArgumentException("Expected start tag token")
             }
         }
@@ -30,9 +30,10 @@ sealed class IncompleteBlock {
 }
 
 data class IncompleteIfBlock(
-    override val outerMarker: Marker,
-    var innerMarker: Marker,
-    var fragmentMarker: Marker
+    override val tagLevel: Int,
+    private val outerMarker: Marker,
+    private var innerMarker: Marker,
+    private var fragmentMarker: Marker
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.IF_TRUE_BLOCK
 
@@ -62,9 +63,10 @@ data class IncompleteIfBlock(
 }
 
 data class IncompleteEachBlock(
-    override val outerMarker: Marker,
-    var innerMarker: Marker,
-    var fragmentMarker: Marker
+    override val tagLevel: Int,
+    private val outerMarker: Marker,
+    private var innerMarker: Marker,
+    private var fragmentMarker: Marker
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.EACH_LOOP_BLOCK
 
@@ -94,9 +96,10 @@ data class IncompleteEachBlock(
 }
 
 data class IncompleteAwaitBlock(
-    override val outerMarker: Marker,
-    var innerMarker: Marker,
-    var fragmentMarker: Marker
+    override val tagLevel: Int,
+    private val outerMarker: Marker,
+    private var innerMarker: Marker,
+    private var fragmentMarker: Marker
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.AWAIT_MAIN_BLOCK
 

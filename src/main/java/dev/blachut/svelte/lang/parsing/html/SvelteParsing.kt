@@ -7,22 +7,27 @@ import com.intellij.util.containers.Stack
 import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
-class SvelteParsing(val builder: PsiBuilder) {
+class SvelteParsing(
+    private val builder: PsiBuilder,
+    private val flushHtmlTags: (beforeMarker: PsiBuilder.Marker, targetTagLevel: Int) -> Unit
+) {
     private val incompleteBlocks = Stack<IncompleteBlock>()
 
     fun isSvelteTagStart(token: IElementType): Boolean {
         return token === SvelteTokenTypes.START_MUSTACHE_TEMP
     }
 
-    fun parseSvelteTag() {
+    fun parseSvelteTag(currentTagLevel: Int) {
         val (resultToken, resultMarker) = SvelteManualParsing.parseLazyBlock(builder)
 
         if (startTokens.contains(resultToken)) {
-            val incompleteBlock = IncompleteBlock.create(resultToken, resultMarker, builder.mark())
+            val incompleteBlock = IncompleteBlock.create(currentTagLevel, resultToken, resultMarker, builder.mark())
             incompleteBlocks.push(incompleteBlock)
         } else if (innerTokens.contains(resultToken)) {
             if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingInnerTag(resultToken)) {
                 val incompleteBlock = incompleteBlocks.peek()
+
+                flushHtmlTags(resultMarker, incompleteBlock.tagLevel)
                 incompleteBlock.handleInnerTag(resultToken, resultMarker, builder.mark())
             } else {
                 resultMarker.precede().errorBefore("unexpected inner tag", resultMarker)
@@ -30,6 +35,8 @@ class SvelteParsing(val builder: PsiBuilder) {
         } else if (endTokens.contains(resultToken)) {
             if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingEndTag(resultToken)) {
                 val incompleteBlock = incompleteBlocks.pop()
+
+                flushHtmlTags(resultMarker, incompleteBlock.tagLevel)
                 incompleteBlock.handleEndTag(resultMarker)
             } else {
                 resultMarker.precede().errorBefore("unexpected end token", resultMarker)
@@ -37,7 +44,7 @@ class SvelteParsing(val builder: PsiBuilder) {
         }
     }
 
-    fun reportMissingEndSvelteTags() {
+    fun flushSvelteTags() {
         while (!incompleteBlocks.empty()) {
             val incompleteBlock = incompleteBlocks.pop()
             incompleteBlock.handleMissingEndTag(builder.mark())
