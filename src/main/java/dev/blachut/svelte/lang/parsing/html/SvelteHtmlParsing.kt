@@ -8,10 +8,7 @@ import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
-import dev.blachut.svelte.lang.psi.SVELTE_HTML_TAG
-import dev.blachut.svelte.lang.psi.SvelteElementTypes
-import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
-import dev.blachut.svelte.lang.psi.SvelteTokenTypes
+import dev.blachut.svelte.lang.psi.*
 
 /**
  * Due to the design of HtmlParsing, SvelteHtmlParsing remaps SvelteTypes.START_MUSTACHE to XmlTokenType.XML_NAME
@@ -92,7 +89,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             }
         }
 
-        att.done(XmlElementType.XML_ATTRIBUTE)
+        att.done(SVELTE_HTML_ATTRIBUTE)
     }
 
     private fun parseAttributeValue(elementType: IElementType) {
