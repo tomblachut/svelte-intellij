@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.ide.highlighter.HtmlFileHighlighter
+import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
@@ -17,10 +18,10 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
-            SvelteTokenTypes.HASH,
-            SvelteTokenTypes.COLON,
-            SvelteTokenTypes.SLASH,
-            SvelteTokenTypes.AT,
+            JSTokenTypes.SHARP,
+            JSTokenTypes.COLON,
+            JSTokenTypes.DIV,
+            JSTokenTypes.AT,
             SvelteTokenTypes.LAZY_IF,
             SvelteTokenTypes.LAZY_ELSE,
             SvelteTokenTypes.LAZY_EACH,

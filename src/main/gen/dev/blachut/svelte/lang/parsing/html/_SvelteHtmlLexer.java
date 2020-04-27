@@ -3,6 +3,7 @@
 /* It's an automatically generated code. Do not modify it. */
 package dev.blachut.svelte.lang.parsing.html;
 
+import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
@@ -974,22 +975,22 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 101: break;
           case 39:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.COLON;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.COLON;
             }
             // fall through
           case 102: break;
           case 40:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.SLASH;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.DIV;
             }
             // fall through
           case 103: break;
           case 41:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.HASH;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.SHARP;
             }
             // fall through
           case 104: break;
           case 42:
-            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.AT;
+            { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.AT;
             }
             // fall through
           case 105: break;

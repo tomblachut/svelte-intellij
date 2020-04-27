@@ -18,7 +18,7 @@ class SvelteParsing(
     }
 
     fun parseSvelteTag(currentTagLevel: Int) {
-        val (resultToken, resultMarker) = SvelteManualParsing.parseLazyBlock(builder)
+        val (resultToken, resultMarker) = SvelteTagParsing.parseLazyBlock(builder)
 
         if (startTokens.contains(resultToken)) {
             val incompleteBlock = IncompleteBlock.create(currentTagLevel, resultToken, resultMarker, builder.mark())

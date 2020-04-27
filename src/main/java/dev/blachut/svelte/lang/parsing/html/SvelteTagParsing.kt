@@ -9,7 +9,7 @@ import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
-object SvelteManualParsing {
+object SvelteTagParsing {
     fun parseNotAllowedWhitespace(builder: PsiBuilder, precedingSymbol: String) {
         if (builder.isTokenAfterWhiteSpace()) {
             builder.error("whitespace is not allowed after $precedingSymbol")
@@ -21,7 +21,7 @@ object SvelteManualParsing {
         builder.remapCurrentToken(JSTokenTypes.LBRACE)
         builder.advanceLexer()
 
-        if (builder.tokenType == SvelteTokenTypes.HASH) {
+        if (builder.tokenType == JSTokenTypes.SHARP) {
             builder.advanceLexer()
             val token = when (builder.tokenType) {
                 SvelteTokenTypes.LAZY_IF -> SvelteBlockLazyElementTypes.IF_START
@@ -30,7 +30,7 @@ object SvelteManualParsing {
                 else -> null
             }
             if (token != null) return finishBlock(builder, marker, token)
-        } else if (builder.tokenType == SvelteTokenTypes.COLON) {
+        } else if (builder.tokenType == JSTokenTypes.COLON) {
             builder.advanceLexer()
             val token = when (builder.tokenType) {
                 SvelteTokenTypes.LAZY_ELSE -> SvelteBlockLazyElementTypes.ELSE_CLAUSE
@@ -39,8 +39,7 @@ object SvelteManualParsing {
                 else -> null
             }
             if (token != null) return finishBlock(builder, marker, token)
-        } else if (builder.tokenType == SvelteTokenTypes.SLASH) {
-            builder.remapCurrentToken(JSTokenTypes.DIV)
+        } else if (builder.tokenType == JSTokenTypes.DIV) {
             builder.advanceLexer()
             parseNotAllowedWhitespace(builder, "/")
 

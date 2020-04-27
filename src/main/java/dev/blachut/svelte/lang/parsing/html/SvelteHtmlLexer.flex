@@ -6,6 +6,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.*;
 import com.intellij.psi.TokenType;
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes;
+import com.intellij.lang.javascript.JSTokenTypes;
 
 %%
 
@@ -149,10 +150,10 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <SVELTE_INTERPOLATION_START> {
   {WHITE_SPACE}      { return TokenType.WHITE_SPACE; }
-  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.HASH; }
-  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.COLON; }
-  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.SLASH; }
-  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return SvelteTokenTypes.AT; }
+  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.SHARP; }
+  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.COLON; }
+  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.DIV; }
+  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.AT; }
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 
