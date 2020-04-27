@@ -9,7 +9,7 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteFileViewProvider
-import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 /**
@@ -54,9 +54,9 @@ class SvelteTypedHandler : TypedHandlerDelegate() {
         val prefix = if (justAfterStartTag) "{/" else ""
 
         val matchingTag = when (block.startTag.type) {
-            SvelteBlockLazyElementTypes.IF_START -> prefix + "if}"
-            SvelteBlockLazyElementTypes.EACH_START -> prefix + "each}"
-            SvelteBlockLazyElementTypes.AWAIT_START -> prefix + "await}"
+            SvelteTagElementTypes.IF_START -> prefix + "if}"
+            SvelteTagElementTypes.EACH_START -> prefix + "each}"
+            SvelteTagElementTypes.AWAIT_START -> prefix + "await}"
             else -> return
         }
 

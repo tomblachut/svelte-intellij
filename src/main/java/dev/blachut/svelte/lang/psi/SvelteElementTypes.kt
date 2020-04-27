@@ -45,9 +45,9 @@ object SvelteElementTypes {
 
             ATTRIBUTE_EXPRESSION -> SveltePsiElement(node)
 
-            SvelteBlockLazyElementTypes.IF_END,
-            SvelteBlockLazyElementTypes.EACH_END,
-            SvelteBlockLazyElementTypes.AWAIT_END -> SvelteEndTag(node)
+            SvelteTagElementTypes.IF_END,
+            SvelteTagElementTypes.EACH_END,
+            SvelteTagElementTypes.AWAIT_END -> SvelteEndTag(node)
 
             else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")
         }

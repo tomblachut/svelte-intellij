@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 
-abstract class SvelteBlockLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
+abstract class SvelteJSBlockLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
     protected abstract val noTokensErrorMessage: String
     protected val excessTokensErrorMessage = "unexpected token"
 

@@ -2,9 +2,8 @@ package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.tree.TokenSet
 import com.intellij.util.containers.Stack
-import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteParsing(
@@ -20,10 +19,10 @@ class SvelteParsing(
     fun parseSvelteTag(currentTagLevel: Int) {
         val (resultToken, resultMarker) = SvelteTagParsing.parseLazyBlock(builder)
 
-        if (startTokens.contains(resultToken)) {
+        if (SvelteTagElementTypes.START_TAGS.contains(resultToken)) {
             val incompleteBlock = IncompleteBlock.create(currentTagLevel, resultToken, resultMarker, builder.mark())
             incompleteBlocks.push(incompleteBlock)
-        } else if (innerTokens.contains(resultToken)) {
+        } else if (SvelteTagElementTypes.INNER_TAGS.contains(resultToken)) {
             if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingInnerTag(resultToken)) {
                 val incompleteBlock = incompleteBlocks.peek()
 
@@ -32,7 +31,7 @@ class SvelteParsing(
             } else {
                 resultMarker.precede().errorBefore("unexpected inner tag", resultMarker)
             }
-        } else if (endTokens.contains(resultToken)) {
+        } else if (SvelteTagElementTypes.END_TAGS.contains(resultToken)) {
             if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingEndTag(resultToken)) {
                 val incompleteBlock = incompleteBlocks.pop()
 
@@ -51,9 +50,3 @@ class SvelteParsing(
         }
     }
 }
-
-val startTokens = TokenSet.create(SvelteBlockLazyElementTypes.IF_START, SvelteBlockLazyElementTypes.EACH_START, SvelteBlockLazyElementTypes.AWAIT_START)
-val innerTokens = TokenSet.create(SvelteBlockLazyElementTypes.ELSE_CLAUSE, SvelteBlockLazyElementTypes.THEN_CLAUSE, SvelteBlockLazyElementTypes.CATCH_CLAUSE)
-val endTokens = TokenSet.create(SvelteBlockLazyElementTypes.IF_END, SvelteBlockLazyElementTypes.EACH_END, SvelteBlockLazyElementTypes.AWAIT_END)
-val initTokens = TokenSet.orSet(startTokens, innerTokens)
-val tailTokens = TokenSet.orSet(innerTokens, endTokens)

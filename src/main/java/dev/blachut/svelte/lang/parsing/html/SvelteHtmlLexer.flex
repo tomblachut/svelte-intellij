@@ -159,12 +159,12 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <SVELTE_INTERPOLATION_KEYWORD> {
   {WHITE_SPACE}      { return TokenType.WHITE_SPACE; }
-  "if"               { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_IF; }
-  "else"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_ELSE; }
-  "each"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_EACH; }
-  "await"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_AWAIT; }
-  "then"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_THEN; }
-  "catch"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_CATCH; }
+  "if"               { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.IF_KEYWORD; }
+  "else"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.ELSE_KEYWORD; }
+  "each"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.EACH_KEYWORD; }
+  "await"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.AWAIT_KEYWORD; }
+  "then"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.THEN_KEYWORD; }
+  "catch"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.CATCH_KEYWORD; }
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 

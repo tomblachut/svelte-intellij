@@ -1,26 +1,45 @@
 package dev.blachut.svelte.lang.psi
 
+import com.intellij.lang.javascript.JSKeywordElementType
+import com.intellij.lang.javascript.JSTokenTypes
+import com.intellij.psi.tree.IElementType
+import com.intellij.psi.tree.TokenSet
+
 object SvelteTokenTypes {
     @JvmField
     val CODE_FRAGMENT = SvelteElementType("CODE_FRAGMENT")
 
+
     @JvmField
     val START_MUSTACHE = SvelteElementType("START_MUSTACHE")
+
     @JvmField
     val START_MUSTACHE_TEMP = SvelteElementType("START_MUSTACHE_TEMP")
+
     @JvmField
     val END_MUSTACHE = SvelteElementType("END_MUSTACHE")
 
+
     @JvmField
-    val LAZY_IF = SvelteElementType("LAZY_IF")
+    val IF_KEYWORD: IElementType = JSTokenTypes.IF_KEYWORD
+
     @JvmField
-    val LAZY_ELSE = SvelteElementType("LAZY_ELSE")
+    val ELSE_KEYWORD: IElementType = JSTokenTypes.ELSE_KEYWORD
+
     @JvmField
-    val LAZY_EACH = SvelteElementType("LAZY_EACH")
+    val EACH_KEYWORD: IElementType = JSTokenTypes.EACH_KEYWORD // Each is not tokenized properly in Svelte contexts
+
     @JvmField
-    val LAZY_AWAIT = SvelteElementType("LAZY_AWAIT")
+    val AS_KEYWORD: IElementType = JSTokenTypes.AS_KEYWORD
+
     @JvmField
-    val LAZY_THEN = SvelteElementType("LAZY_THEN")
+    val AWAIT_KEYWORD: IElementType = JSTokenTypes.AWAIT_KEYWORD
+
     @JvmField
-    val LAZY_CATCH = SvelteElementType("LAZY_CATCH")
+    val THEN_KEYWORD = JSKeywordElementType("then")
+
+    @JvmField
+    val CATCH_KEYWORD: IElementType = JSTokenTypes.CATCH_KEYWORD
+
+    val KEYWORDS = TokenSet.create(IF_KEYWORD, ELSE_KEYWORD, EACH_KEYWORD, AS_KEYWORD, AWAIT_KEYWORD, THEN_KEYWORD, CATCH_KEYWORD)
 }

@@ -1028,7 +1028,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 111: break;
           case 49:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_IF;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.IF_KEYWORD;
             }
             // fall through
           case 112: break;
@@ -1068,27 +1068,27 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 119: break;
           case 57:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_THEN;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.THEN_KEYWORD;
             }
             // fall through
           case 120: break;
           case 58:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_ELSE;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.ELSE_KEYWORD;
             }
             // fall through
           case 121: break;
           case 59:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_EACH;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.EACH_KEYWORD;
             }
             // fall through
           case 122: break;
           case 60:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_CATCH;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.CATCH_KEYWORD;
             }
             // fall through
           case 123: break;
           case 61:
-            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.LAZY_AWAIT;
+            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.AWAIT_KEYWORD;
             }
             // fall through
           case 124: break;

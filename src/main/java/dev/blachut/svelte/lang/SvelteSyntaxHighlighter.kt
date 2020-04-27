@@ -22,23 +22,19 @@ internal class SvelteSyntaxHighlighter(private val jsLanguageLevel: JSLanguageLe
             JSTokenTypes.COLON,
             JSTokenTypes.DIV,
             JSTokenTypes.AT,
-            SvelteTokenTypes.LAZY_IF,
-            SvelteTokenTypes.LAZY_ELSE,
-            SvelteTokenTypes.LAZY_EACH,
-            SvelteTokenTypes.LAZY_AWAIT,
-            SvelteTokenTypes.LAZY_THEN,
-            SvelteTokenTypes.LAZY_CATCH,
+
+            SvelteTokenTypes.EACH_KEYWORD,
+            SvelteTokenTypes.THEN_KEYWORD,
 
             SvelteTokenTypes.START_MUSTACHE,
             SvelteTokenTypes.START_MUSTACHE_TEMP,
-            SvelteTokenTypes.END_MUSTACHE -> KEY_KEYS
+            SvelteTokenTypes.END_MUSTACHE -> KEYS
             else -> super.getTokenHighlights(tokenType)
         }
     }
 
     companion object {
-        //        private val MUSTACHES = createTextAttributesKey("SVELTE_MUSTACHES", DefaultLanguageHighlighterColors.BRACES)
         private val KEY = createTextAttributesKey("SVELTE_KEY", DefaultLanguageHighlighterColors.KEYWORD)
-        private val KEY_KEYS = arrayOf(KEY)
+        private val KEYS = arrayOf(KEY)
     }
 }

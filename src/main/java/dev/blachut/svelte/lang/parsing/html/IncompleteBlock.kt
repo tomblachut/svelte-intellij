@@ -2,8 +2,8 @@ package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder.Marker
 import com.intellij.psi.tree.IElementType
-import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 
 sealed class IncompleteBlock {
     abstract val tagLevel: Int
@@ -20,9 +20,9 @@ sealed class IncompleteBlock {
             val innerMarker = resultMarker.precede()
             val outerMarker = innerMarker.precede()
             return when (token) {
-                SvelteBlockLazyElementTypes.IF_START -> IncompleteIfBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
-                SvelteBlockLazyElementTypes.EACH_START -> IncompleteEachBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
-                SvelteBlockLazyElementTypes.AWAIT_START -> IncompleteAwaitBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
+                SvelteTagElementTypes.IF_START -> IncompleteIfBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
+                SvelteTagElementTypes.EACH_START -> IncompleteEachBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
+                SvelteTagElementTypes.AWAIT_START -> IncompleteAwaitBlock(tagLevel, outerMarker, innerMarker, fragmentMarker)
                 else -> throw IllegalArgumentException("Expected start tag token")
             }
         }
@@ -37,8 +37,8 @@ data class IncompleteIfBlock(
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.IF_TRUE_BRANCH
 
-    override fun isMatchingInnerTag(token: IElementType) = token === SvelteBlockLazyElementTypes.ELSE_CLAUSE
-    override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.IF_END
+    override fun isMatchingInnerTag(token: IElementType) = token === SvelteTagElementTypes.ELSE_CLAUSE
+    override fun isMatchingEndTag(token: IElementType) = token === SvelteTagElementTypes.IF_END
 
     override fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker) {
         fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
@@ -70,8 +70,8 @@ data class IncompleteEachBlock(
 ) : IncompleteBlock() {
     private var lastInnerElement = SvelteElementTypes.EACH_LOOP_BRANCH
 
-    override fun isMatchingInnerTag(token: IElementType) = token === SvelteBlockLazyElementTypes.ELSE_CLAUSE
-    override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.EACH_END
+    override fun isMatchingInnerTag(token: IElementType) = token === SvelteTagElementTypes.ELSE_CLAUSE
+    override fun isMatchingEndTag(token: IElementType) = token === SvelteTagElementTypes.EACH_END
 
     override fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker) {
         fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
@@ -104,16 +104,16 @@ data class IncompleteAwaitBlock(
     private var lastInnerElement = SvelteElementTypes.AWAIT_MAIN_BRANCH
 
     override fun isMatchingInnerTag(token: IElementType) =
-        token === SvelteBlockLazyElementTypes.THEN_CLAUSE || token === SvelteBlockLazyElementTypes.CATCH_CLAUSE
+        token === SvelteTagElementTypes.THEN_CLAUSE || token === SvelteTagElementTypes.CATCH_CLAUSE
 
-    override fun isMatchingEndTag(token: IElementType) = token === SvelteBlockLazyElementTypes.AWAIT_END
+    override fun isMatchingEndTag(token: IElementType) = token === SvelteTagElementTypes.AWAIT_END
 
     override fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker) {
         fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         lastInnerElement = when (token) {
-            SvelteBlockLazyElementTypes.THEN_CLAUSE -> SvelteElementTypes.AWAIT_THEN_BRANCH
-            SvelteBlockLazyElementTypes.CATCH_CLAUSE -> SvelteElementTypes.AWAIT_CATCH_BRANCH
+            SvelteTagElementTypes.THEN_CLAUSE -> SvelteElementTypes.AWAIT_THEN_BRANCH
+            SvelteTagElementTypes.CATCH_CLAUSE -> SvelteElementTypes.AWAIT_CATCH_BRANCH
             else -> throw IllegalArgumentException("Expected await block inner clause")
         }
         innerMarker = resultMarker.precede()

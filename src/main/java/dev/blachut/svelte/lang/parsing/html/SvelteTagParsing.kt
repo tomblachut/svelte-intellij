@@ -5,8 +5,8 @@ import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
-import dev.blachut.svelte.lang.psi.SvelteBlockLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 object SvelteTagParsing {
@@ -24,18 +24,18 @@ object SvelteTagParsing {
         if (builder.tokenType == JSTokenTypes.SHARP) {
             builder.advanceLexer()
             val token = when (builder.tokenType) {
-                SvelteTokenTypes.LAZY_IF -> SvelteBlockLazyElementTypes.IF_START
-                SvelteTokenTypes.LAZY_EACH -> SvelteBlockLazyElementTypes.EACH_START
-                SvelteTokenTypes.LAZY_AWAIT -> SvelteBlockLazyElementTypes.AWAIT_START
+                SvelteTokenTypes.IF_KEYWORD -> SvelteTagElementTypes.IF_START
+                SvelteTokenTypes.EACH_KEYWORD -> SvelteTagElementTypes.EACH_START
+                SvelteTokenTypes.AWAIT_KEYWORD -> SvelteTagElementTypes.AWAIT_START
                 else -> null
             }
             if (token != null) return finishBlock(builder, marker, token)
         } else if (builder.tokenType == JSTokenTypes.COLON) {
             builder.advanceLexer()
             val token = when (builder.tokenType) {
-                SvelteTokenTypes.LAZY_ELSE -> SvelteBlockLazyElementTypes.ELSE_CLAUSE
-                SvelteTokenTypes.LAZY_THEN -> SvelteBlockLazyElementTypes.THEN_CLAUSE
-                SvelteTokenTypes.LAZY_CATCH -> SvelteBlockLazyElementTypes.CATCH_CLAUSE
+                SvelteTokenTypes.ELSE_KEYWORD -> SvelteTagElementTypes.ELSE_CLAUSE
+                SvelteTokenTypes.THEN_KEYWORD -> SvelteTagElementTypes.THEN_CLAUSE
+                SvelteTokenTypes.CATCH_KEYWORD -> SvelteTagElementTypes.CATCH_CLAUSE
                 else -> null
             }
             if (token != null) return finishBlock(builder, marker, token)
@@ -44,18 +44,9 @@ object SvelteTagParsing {
             parseNotAllowedWhitespace(builder, "/")
 
             val token = when (builder.tokenType) {
-                SvelteTokenTypes.LAZY_IF -> {
-                    builder.remapCurrentToken(JSTokenTypes.IF_KEYWORD)
-                    SvelteBlockLazyElementTypes.IF_END
-                }
-                SvelteTokenTypes.LAZY_EACH -> {
-                    builder.remapCurrentToken(JSTokenTypes.IDENTIFIER)
-                    SvelteBlockLazyElementTypes.EACH_END
-                }
-                SvelteTokenTypes.LAZY_AWAIT -> {
-                    builder.remapCurrentToken(JSTokenTypes.AWAIT_KEYWORD)
-                    SvelteBlockLazyElementTypes.AWAIT_END
-                }
+                SvelteTokenTypes.IF_KEYWORD -> SvelteTagElementTypes.IF_END
+                SvelteTokenTypes.EACH_KEYWORD -> SvelteTagElementTypes.EACH_END
+                SvelteTokenTypes.AWAIT_KEYWORD -> SvelteTagElementTypes.AWAIT_END
                 else -> null
             }
             if (token != null) return finishBlock(builder, marker, token)

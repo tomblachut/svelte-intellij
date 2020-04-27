@@ -14,8 +14,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import dev.blachut.svelte.lang.SvelteFileViewProvider
-import dev.blachut.svelte.lang.parsing.html.initTokens
-import dev.blachut.svelte.lang.parsing.html.tailTokens
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 
 /**
  * Handler for custom plugin actions when `Enter` is typed by the user
@@ -61,7 +60,7 @@ class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
         PsiDocumentManager.getInstance(file.project).commitDocument(editor.document)
 
         val prevElement = file.findElementAt(iterator.start)
-        PsiTreeUtil.findFirstParent(prevElement, true) { initTokens.contains(it.elementType) }
+        PsiTreeUtil.findFirstParent(prevElement, true) { SvelteTagElementTypes.INITIAL_TAGS.contains(it.elementType) }
             ?: return false
 
         iterator.advance()
@@ -73,7 +72,7 @@ class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
 
         val nextElement = file.findElementAt(iterator.start)
 
-        val tailTag = PsiTreeUtil.findFirstParent(nextElement, true) { tailTokens.contains(it.elementType) }
+        val tailTag = PsiTreeUtil.findFirstParent(nextElement, true) { SvelteTagElementTypes.TAIL_TAGS.contains(it.elementType) }
         // We're between matching tags if required tag is found
         return tailTag != null
     }
