@@ -42,7 +42,6 @@ class SvelteHTMLParserDefinition : HTMLParserDefinition() {
             SvelteElementTypes.createElement(node)
         } catch (e: Exception) {
             super.createElement(node)
-
         }
     }
 
