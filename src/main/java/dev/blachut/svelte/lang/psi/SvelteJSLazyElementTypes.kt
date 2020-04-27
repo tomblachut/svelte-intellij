@@ -7,7 +7,7 @@ import com.intellij.lang.javascript.parsing.JavaScriptParser
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 
 object SvelteJSLazyElementTypes {
-    val ATTRIBUTE_PARAMETER = object : SvelteJSLazyElementType("PARAMETER") {
+    val ATTRIBUTE_PARAMETER = object : SvelteJSLazyElementType("ATTRIBUTE_PARAMETER") {
         override val noTokensErrorMessage = "parameter expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
@@ -16,7 +16,7 @@ object SvelteJSLazyElementTypes {
         }
     }
 
-    val ATTRIBUTE_EXPRESSION = object : SvelteJSLazyElementType("EXPRESSION") {
+    val ATTRIBUTE_EXPRESSION = object : SvelteJSLazyElementType("ATTRIBUTE_EXPRESSION") {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
@@ -25,7 +25,10 @@ object SvelteJSLazyElementTypes {
         }
     }
 
-    val CONTENT_EXPRESSION = object : SvelteJSLazyElementType("EXPRESSION") {
+    /**
+     * Text, html and debug expressions
+     */
+    val CONTENT_EXPRESSION = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
         override val noTokensErrorMessage = "expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
