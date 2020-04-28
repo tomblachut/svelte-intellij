@@ -16,7 +16,7 @@ object SvelteTagParsing {
         }
     }
 
-    fun parseLazyBlock(builder: PsiBuilder): Pair<IElementType, PsiBuilder.Marker> {
+    fun parseTag(builder: PsiBuilder): Pair<IElementType, PsiBuilder.Marker> {
         val marker = builder.mark()
         builder.remapCurrentToken(JSTokenTypes.LBRACE)
         builder.advanceLexer()
@@ -29,7 +29,7 @@ object SvelteTagParsing {
                 SvelteTokenTypes.AWAIT_KEYWORD -> SvelteTagElementTypes.AWAIT_START
                 else -> null
             }
-            if (token != null) return finishBlock(builder, marker, token)
+            if (token != null) return finishTag(builder, marker, token)
         } else if (builder.tokenType == JSTokenTypes.COLON) {
             builder.advanceLexer()
             val token = when (builder.tokenType) {
@@ -38,7 +38,7 @@ object SvelteTagParsing {
                 SvelteTokenTypes.CATCH_KEYWORD -> SvelteTagElementTypes.CATCH_CLAUSE
                 else -> null
             }
-            if (token != null) return finishBlock(builder, marker, token)
+            if (token != null) return finishTag(builder, marker, token)
         } else if (builder.tokenType == JSTokenTypes.DIV) {
             builder.advanceLexer()
             parseNotAllowedWhitespace(builder, "/")
@@ -49,13 +49,13 @@ object SvelteTagParsing {
                 SvelteTokenTypes.AWAIT_KEYWORD -> SvelteTagElementTypes.AWAIT_END
                 else -> null
             }
-            if (token != null) return finishBlock(builder, marker, token)
+            if (token != null) return finishTag(builder, marker, token)
         }
 
-        return finishBlock(builder, marker, SvelteJSLazyElementTypes.CONTENT_EXPRESSION)
+        return finishTag(builder, marker, SvelteJSLazyElementTypes.CONTENT_EXPRESSION)
     }
 
-    private fun finishBlock(builder: PsiBuilder, marker: PsiBuilder.Marker, endToken: IElementType): Pair<IElementType, PsiBuilder.Marker> {
+    private fun finishTag(builder: PsiBuilder, marker: PsiBuilder.Marker, endToken: IElementType): Pair<IElementType, PsiBuilder.Marker> {
         while (!builder.eof() && builder.tokenType !== SvelteTokenTypes.END_MUSTACHE) {
             builder.advanceLexer()
         }
