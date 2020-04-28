@@ -783,7 +783,7 @@ public class _SvelteHtmlLexer implements FlexLexer {
             // fall through
           case 66: break;
           case 4:
-            { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE_TEMP;
+            { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE;
             }
             // fall through
           case 67: break;

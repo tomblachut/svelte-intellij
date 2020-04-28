@@ -14,9 +14,6 @@ object SvelteTokenTypes {
     val START_MUSTACHE = SvelteElementType("START_MUSTACHE")
 
     @JvmField
-    val START_MUSTACHE_TEMP = SvelteElementType("START_MUSTACHE_TEMP")
-
-    @JvmField
     val END_MUSTACHE = SvelteElementType("END_MUSTACHE")
 
 

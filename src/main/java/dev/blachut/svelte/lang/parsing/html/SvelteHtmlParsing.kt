@@ -12,12 +12,12 @@ import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
 
 /**
- * Due to the design of HtmlParsing, SvelteHtmlParsing remaps SvelteTypes.START_MUSTACHE to XmlTokenType.XML_NAME
+ * Due to the design of HtmlParsing, SvelteHtmlParsing remaps SvelteTokenTypes.START_MUSTACHE to XmlTokenType.XML_NAME
  * so that code enters overridable parseAttribute() path.
  * This is a lossy process, but required to make {shorthand} attributes work without copying whole HtmlParsing file.
- * Remapping also ensures that lexer and other token-based components do not care about HtmlParsing limitation.
+ * Remapping also ensures that lexer and other token-based components do not care about HtmlParsing limitations.
  *
- * After checking if XmlTokenType.XML_NAME is in fact '{' token is remapped back to SvelteTypes.START_MUSTACHE.
+ * After checking if XmlTokenType.XML_NAME is in fact '{' token is remapped back to SvelteTokenTypes.START_MUSTACHE.
  */
 class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     init {
@@ -46,7 +46,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     }
 
     override fun hasCustomTagContent(): Boolean {
-        return svelteParsing.isSvelteTagStart(token())
+        return isRemappedStartMustache()
     }
 
     override fun parseCustomTagContent(xmlText: PsiBuilder.Marker?): PsiBuilder.Marker? {

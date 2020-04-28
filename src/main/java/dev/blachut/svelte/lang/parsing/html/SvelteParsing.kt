@@ -1,20 +1,14 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
-import com.intellij.psi.tree.IElementType
 import com.intellij.util.containers.Stack
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
-import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteParsing(
     private val builder: PsiBuilder,
     private val flushHtmlTags: (beforeMarker: PsiBuilder.Marker, targetTagLevel: Int) -> Unit
 ) {
     private val incompleteBlocks = Stack<IncompleteBlock>()
-
-    fun isSvelteTagStart(token: IElementType): Boolean {
-        return token === SvelteTokenTypes.START_MUSTACHE_TEMP
-    }
 
     fun parseSvelteTag(currentTagLevel: Int) {
         val (resultToken, resultMarker) = SvelteTagParsing.parseTag(builder)
