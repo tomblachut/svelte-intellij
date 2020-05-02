@@ -4,16 +4,19 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.HtmlScriptContentProvider
 import com.intellij.lang.PsiBuilderFactory
 import com.intellij.lang.javascript.JSElementTypes
+import com.intellij.lang.javascript.psi.JSElementVisitor
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
+import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
 import com.intellij.lexer.DummyLexer
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.impl.source.tree.LazyParseablePsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.ILazyParseableElementType
 import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteJSLanguage
-import dev.blachut.svelte.lang.psi.SvelteJSLazyPsiElement
 
 object SvelteJSScriptContentProvider : HtmlScriptContentProvider {
     override fun getScriptElementType(): IElementType = EMBEDDED_CONTENT_WRAPPER
@@ -23,7 +26,6 @@ object SvelteJSScriptContentProvider : HtmlScriptContentProvider {
     }
 
     fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
-        // JSEmbeddedContent is nested twice, see SvelteJSScriptContentProvider
         return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)?.firstChild as JSEmbeddedContent?
     }
 }
@@ -63,6 +65,22 @@ private val EMBEDDED_CONTENT_WRAPPER = object : ILazyParseableElementType("EMBED
 
     override fun createNode(text: CharSequence?): ASTNode? {
         text ?: return null
-        return SvelteJSLazyPsiElement(this, text)
+        return SvelteJSScriptWrapperPsiElement(this, text)
+    }
+}
+
+/**
+ * @see com.intellij.lang.javascript.psi.impl.JSEmbeddedContentImpl
+ */
+class SvelteJSScriptWrapperPsiElement(type: IElementType, text: CharSequence) : LazyParseablePsiElement(type, text), JSTagEmbeddedContent {
+    override fun accept(visitor: PsiElementVisitor) {
+        when (visitor) {
+            is JSElementVisitor -> visitor.visitJSEmbeddedContent(this)
+            else -> super.accept(visitor)
+        }
+    }
+
+    override fun toString(): String {
+        return "SvelteJS: $elementType"
     }
 }
