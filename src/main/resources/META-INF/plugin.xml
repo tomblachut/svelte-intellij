@@ -81,7 +81,7 @@
         <lang.foldingBuilder language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
         <lang.foldingBuilder language="SvelteHTML" implementationClass="com.intellij.lang.xml.XmlFoldingBuilder"/>
         <lang.formatter language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>
-        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTypedHandler" order="before xmlSlash"/>
+        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTagEndTypedHandler" order="before xmlSlash"/>
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
         <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlContextType"/>
         <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlTextContextType"/>

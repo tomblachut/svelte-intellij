@@ -13,12 +13,9 @@ import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 /**
- * Handler for custom plugin actions on chars typed by the user.
- * See [SvelteEnterHandler] for custom actions on Enter.
- *
- * Based on Handlebars plugin
+ * Inserts end tag when applicable
  */
-class SvelteTypedHandler : TypedHandlerDelegate() {
+class SvelteTagEndTypedHandler : TypedHandlerDelegate() {
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
         val provider = file.viewProvider
 
