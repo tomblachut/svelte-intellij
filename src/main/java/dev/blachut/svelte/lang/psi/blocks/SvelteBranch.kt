@@ -12,7 +12,8 @@ import dev.blachut.svelte.lang.psi.SveltePsiElement
 import dev.blachut.svelte.lang.psi.SvelteTag
 
 sealed class SvelteBranch(node: ASTNode) : SveltePsiElement(node), JSElement {
-    val tag: SvelteTag get() = firstChild as SvelteTag
+    val tag get() = firstChild as SvelteTag
+    val fragment get() = lastChild as SvelteFragment
 
     @Suppress("UNUSED_PARAMETER")
     protected fun processParameterDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
