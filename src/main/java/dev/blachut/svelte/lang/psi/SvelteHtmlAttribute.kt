@@ -37,4 +37,8 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SVELTE_HTML_ATTRIBUTE) {
             jsNode.text
         }
     }
+
+    override fun toString(): String {
+        return "SvelteHtmlAttribute: $name"
+    }
 }

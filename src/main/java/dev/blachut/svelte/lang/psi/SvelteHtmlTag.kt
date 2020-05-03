@@ -55,7 +55,7 @@ class SvelteHtmlTag : XmlTagImpl(SVELTE_HTML_TAG), HtmlTag {
     }
 
     override fun toString(): String {
-        return "SvelteHtmlTag:$name"
+        return "SvelteHtmlTag: $name"
     }
 
     override fun getParentTag(): XmlTag? {

@@ -9,6 +9,9 @@ import com.intellij.lang.javascript.parsing.JavaScriptParser;
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParser;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Always nested inside {@link SvelteHTMLLanguage}
+ */
 public class SvelteJSLanguage extends JSLanguageDialect implements DependentLanguage {
     public static final SvelteJSLanguage INSTANCE = new SvelteJSLanguage();
 

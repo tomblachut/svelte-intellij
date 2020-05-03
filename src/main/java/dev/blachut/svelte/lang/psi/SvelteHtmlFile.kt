@@ -38,6 +38,10 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
     private fun processScriptDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement, script: PsiElement?): Boolean {
         return SvelteJSScriptContentProvider.getJsEmbeddedContent(script)?.processDeclarations(processor, state, lastParent, place) ?: true
     }
+
+    override fun toString(): String {
+         return "SvelteHtmlFile: $name"
+    }
 }
 
 private fun findAncestorScript(place: PsiElement): XmlTag? {
