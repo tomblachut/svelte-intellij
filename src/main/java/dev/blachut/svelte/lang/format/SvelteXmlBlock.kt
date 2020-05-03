@@ -12,6 +12,7 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap
 import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteEndTag
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 class SvelteXmlBlock(
@@ -107,7 +108,8 @@ open class SvelteXmlTagBlock(
         while (child != null) {
             if (!AbstractXmlBlock.containsWhiteSpacesOnly(child) && child.textLength > 0) {
                 if (child.elementType === JSTokenTypes.LBRACE) {
-                    val wrap = Wrap.createWrap(WrapType.ALWAYS, true)
+                    val startTag = SvelteTagElementTypes.START_TAGS.contains(tag.elementType)
+                    val wrap = if (startTag) Wrap.createWrap(WrapType.ALWAYS, true) else null
                     localResults.add(createSimpleChild(child, null, wrap, null))
                 } else if (child.elementType === JSTokenTypes.RBRACE) {
                     localResults.add(createSimpleChild(child, Indent.getNoneIndent(), null, null))

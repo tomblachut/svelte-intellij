@@ -8,7 +8,6 @@ class SvelteFormatterTest : FormatterTestCase() {
     override fun getFileExtension(): String = "svelte"
 
     override fun getTestName(lowercaseFirstLetter: Boolean): String {
-        // Yay OOP! Lol who has thought this can be readable
         return super.getTestName(false)
     }
 
@@ -17,5 +16,5 @@ class SvelteFormatterTest : FormatterTestCase() {
     fun testNestedBlocks() = doTest()
     fun testNestedBlocksFlat() = doTest()
     fun testIndentedExpressions() = doTest()
-//    fun testOneLineBlock() = doTest() // TODO Fix formatter and enable test
+    fun testOneLineBlock() = doTest()
 }

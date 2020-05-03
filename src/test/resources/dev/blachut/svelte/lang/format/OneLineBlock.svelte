@@ -1,5 +1,15 @@
-{#if x}<div>Test</div>{/if}
+{#if true}text{/if}
+{#if true}{expression}{/if}
+{#if true}{expression}{multiple}{/if}
+{#if true}prefix{expression}suffix{/if}
+{#if true}<input type="text">{/if}
+{#if true}<div>nested</div>{/if}
 
 <div>
-    {1} <div></div> {2}
+{#if true}text{/if}
+{#if true}{expression}{/if}
+{#if true}{expression}{multiple}{/if}
+{#if true}prefix{expression}suffix{/if}
+{#if true}<input type="text">{/if}
+{#if true}<div>nested</div>{/if}
 </div>
