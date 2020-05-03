@@ -53,6 +53,7 @@
 
     <depends>com.intellij.modules.lang</depends>
     <depends>JavaScript</depends>
+    <depends>com.intellij.css</depends>
 
     <actions>
         <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction">
