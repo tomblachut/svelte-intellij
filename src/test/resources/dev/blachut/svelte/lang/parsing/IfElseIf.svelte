@@ -1,7 +1,9 @@
 {#if iffy}
-    <p>First branch</p>
+    First
 {:else if life}
-    <p>Second branch</p>
+    Second
 {:else if gif}
-    <p>Third branch</p>
+    Third
+{:else}
+    Fourth
 {/if}
