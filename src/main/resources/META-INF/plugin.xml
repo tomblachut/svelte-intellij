@@ -81,6 +81,8 @@
         <lang.foldingBuilder language="SvelteHTML"
                              implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
         <lang.formatter language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>
+        <extendWordSelectionHandler implementation="dev.blachut.svelte.lang.editor.SveltePrimaryBranchSelectioner"/>
+        <multiLangCommenter implementation="dev.blachut.svelte.lang.editor.SvelteCommentProvider"/>
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTagEndTypedHandler" order="before xmlSlash"/>
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteBraceTypedHandler"/>
         <backspaceHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteBraceBackspaceHandler"/>
@@ -108,8 +110,6 @@
         <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
-        <quoteHandler fileType="Svelte HTML" className="com.intellij.codeInsight.editorActions.HtmlQuoteHandler"/>
-        <extendWordSelectionHandler implementation="dev.blachut.svelte.lang.editor.SveltePrimaryBranchSelectioner"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <dialectSpecificHandlersFactory language="SvelteJS"
