@@ -63,7 +63,6 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Svelte" extensions="svelte" language="Svelte"
                   implementationClass="dev.blachut.svelte.lang.SvelteFileType" fieldName="INSTANCE"/>
-        <internalFileTemplate name="Svelte Component"/>
         <lang.fileViewProviderFactory language="Svelte"
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
         <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.parsing.top.SvelteParserDefinition"/>
