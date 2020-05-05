@@ -1,84 +1,99 @@
-Svelte Component
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
+SvelteHtmlFile: Whitespace.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('eachassets')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiErrorElement:as expected
+            <empty list>
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:IDENTIFIER)('asset')
+          PsiElement(JS:COMMA)(',')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:IDENTIFIER)('i')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:LPAR)('(')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
             JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('assets')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
               PsiElement(JS:IDENTIFIER)('asset')
-            PsiWhiteSpace(' ')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-            PsiWhiteSpace(' ')
-        SvelteKeyExpression
-          PsiElement(()('(')
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              JSReferenceExpression
-                PsiElement(JS:IDENTIFIER)('asset')
-              PsiElement(JS:DOT)('.')
-              PsiElement(JS:IDENTIFIER)('id')
-            PsiWhiteSpace(' ')
-          PsiElement())(')')
+            PsiElement(JS:DOT)('.')
+            PsiElement(JS:IDENTIFIER)('id')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:RPAR)(')')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiErrorElement:whitespace is not allowed after /
+          <empty list>
         PsiWhiteSpace(' ')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{ /')
-      PsiElement(each)('each')
-      PsiWhiteSpace(' ')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  PsiErrorElement:<markup> or '{' expected, got '{#'
-    PsiElement({#)('{#')
-  PsiElement(DUMMY_BLOCK)
-    PsiElement(BAD_CHARACTER)('eachassets')
-    PsiElement(<code>)(' as asset')
-    PsiElement(,)(',')
-    PsiElement(<code>)('i')
-    PsiWhiteSpace(' ')
-    PsiElement(})('}')
-    PsiElement({/)('{/')
-    PsiElement(BAD_CHARACTER)(' ')
-    PsiElement(each)('each')
-    PsiElement(})('}')
-    PsiWhiteSpace('\n')
-    PsiElement({#)('{ #')
-  PsiElement(DUMMY_BLOCK)
-    PsiElement(if)('if')
-    PsiElement(<code>)(' a')
-    PsiElement(})('}')
-    PsiWhiteSpace('\n    ')
-    PsiElement(<markup>)('<p>First branch</p>\n')
-    PsiElement({:)('{:')
-    PsiElement(BAD_CHARACTER)('elseif')
-    PsiElement(<code>)(' b')
-    PsiElement(})('}')
-    PsiWhiteSpace('\n    ')
-    PsiElement(<markup>)('<p>Second branch</p>\n')
-    PsiElement({:)('{ :')
-  PsiElement(else)('else')
-  PsiWhiteSpace(' ')
-  PsiElement(})('}')
-  PsiWhiteSpace('\n    ')
-  PsiElement(<markup>)('<p>Third branch</p>\n')
-  PsiElement({/)('{ /')
-  PsiElement(if)('if')
-  PsiWhiteSpace(' ')
-  PsiElement(})('}')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(CODE_FRAGMENT)(' ')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n\n')
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('a')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          XmlToken:XML_DATA_CHARACTERS('First')
+          PsiWhiteSpace('\n')
+      SvelteIfElseBranch
+        SvelteInitialTag(ELSE_CLAUSE)
+          PsiElement(JS:LBRACE)('{')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:COLON)(':')
+          PsiElement(JS:IDENTIFIER)('elseif')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:IDENTIFIER)('b')
+          PsiErrorElement:unexpected token
+            <empty list>
+          PsiWhiteSpace(' ')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          XmlToken:XML_DATA_CHARACTERS('Second')
+          PsiWhiteSpace('\n')
+      SvelteIfElseBranch
+        SvelteInitialTag(ELSE_CLAUSE)
+          PsiElement(JS:LBRACE)('{')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:COLON)(':')
+          PsiErrorElement:whitespace is not allowed after :
+            <empty list>
+          PsiWhiteSpace(' ')
+          PsiElement(JS:ELSE_KEYWORD)('else')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          XmlToken:XML_DATA_CHARACTERS('Third')
+          PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiWhiteSpace(' ')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(CODE_FRAGMENT)(' ')
+        PsiElement(JS:RBRACE)('}')

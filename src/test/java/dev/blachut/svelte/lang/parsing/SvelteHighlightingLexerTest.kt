@@ -16,16 +16,16 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
         return SvelteHtmlHighlightingLexer()
     }
 
+    fun testAwaitThenThenThen() = doTest()
+    fun testEachAsAsAsAs() = doTest()
+    fun testEachAssets() = doTest()
+
+    fun testExpression() = doTest()
+
     fun testIf() = doTest()
     fun testIfElseIf() = doTest()
-    fun testEachAssets() = doTest()
-    fun testExpression() = doTest()
-    fun testWhitespace() = doTest()
 
-    fun testEachAsAsAsAs() = doTest()
-    fun testAwaitThenThenThen() = doTest()
-//    fun testEachAmbiguousAs() = doTest()
-//    fun testEachAmbiguousAsErrors() = doTest()
+    fun testWhitespace() = doTest()
 
     private fun doTest() = doFileTest("svelte")
 }

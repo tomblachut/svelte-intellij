@@ -6,6 +6,10 @@ import com.intellij.lang.javascript.types.JSParameterElementType
 object SvelteJSElementTypes {
     val PARAMETER = object : JSParameterElementType("EMBEDDED_PARAMETER") {
         override fun construct(node: ASTNode) = SvelteJSParameter(node)
+
+        override fun toString(): String {
+            return "Svelte" + super.toString()
+        }
     }
 }
 

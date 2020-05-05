@@ -1,31 +1,30 @@
-Svelte Component
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('assets')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('asset')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
+SvelteHtmlFile: EachAssets.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('assets')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:IDENTIFIER)('asset')
+          PsiElement(JS:COMMA)(',')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:IDENTIFIER)('i')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')

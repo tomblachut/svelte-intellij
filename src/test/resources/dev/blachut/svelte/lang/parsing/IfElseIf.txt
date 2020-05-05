@@ -1,49 +1,63 @@
-Svelte Component
-  SvelteIfBlock
-    SvelteIfBlockOpening
-      SvelteIfBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(if)('if')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('iffy')
-        PsiElement(})('}')
-      PsiWhiteSpace('\n    ')
-      SvelteScope
-        PsiElement(<markup>)('<p>First branch</p>\n')
-    SvelteElseIfContinuation
-      SvelteElseIfContinuationTag
-        PsiElement({:)('{:')
-        PsiElement(else)('else')
-        PsiWhiteSpace(' ')
-        PsiElement(if)('if')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('life')
-        PsiElement(})('}')
-      PsiWhiteSpace('\n    ')
-      SvelteScope
-        PsiElement(<markup>)('<p>Second branch</p>\n')
-    SvelteElseIfContinuation
-      SvelteElseIfContinuationTag
-        PsiElement({:)('{:')
-        PsiElement(else)('else')
-        PsiWhiteSpace(' ')
-        PsiElement(if)('if')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('gif')
-        PsiElement(})('}')
-      PsiWhiteSpace('\n    ')
-      SvelteScope
-        PsiElement(<markup>)('<p>Third branch</p>\n')
-    SvelteIfBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(if)('if')
-      PsiElement(})('}')
+SvelteHtmlFile: IfElseIf.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('iffy')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          XmlToken:XML_DATA_CHARACTERS('First')
+          PsiWhiteSpace('\n')
+      SvelteIfElseBranch
+        SvelteInitialTag(ELSE_CLAUSE)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:COLON)(':')
+          PsiElement(JS:ELSE_KEYWORD)('else')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('life')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          XmlToken:XML_DATA_CHARACTERS('Second')
+          PsiWhiteSpace('\n')
+      SvelteIfElseBranch
+        SvelteInitialTag(ELSE_CLAUSE)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:COLON)(':')
+          PsiElement(JS:ELSE_KEYWORD)('else')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('gif')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          XmlToken:XML_DATA_CHARACTERS('Third')
+          PsiWhiteSpace('\n')
+      SvelteIfElseBranch
+        SvelteInitialTag(ELSE_CLAUSE)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:COLON)(':')
+          PsiElement(JS:ELSE_KEYWORD)('else')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          XmlToken:XML_DATA_CHARACTERS('Fourth')
+          PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')

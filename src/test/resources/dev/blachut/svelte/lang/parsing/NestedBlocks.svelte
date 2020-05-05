@@ -1,11 +1,8 @@
-<p>
-    Plain html
-</p>
+<p>Text</p>
 
 {#if visible}
-    <Box {name}/>
     {#await promise then x}
-        <p>{x}<p>
+        <p>{@html x}<p>
     {/await}
 {:else}
     {@debug name}
@@ -13,9 +10,7 @@
 {/if}
 
 <ul>
-    {#each assets as a}
-        <li>{a}</li>
-    {/each}
+    {#each assets as a}{a}{/each}
 </ul>
 
 

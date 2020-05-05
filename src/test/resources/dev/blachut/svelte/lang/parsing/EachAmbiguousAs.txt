@@ -1,736 +1,348 @@
-Svelte Component
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        SvelteKeyExpression
-          PsiElement(()('(')
-          SvelteJS: EXPRESSION
+SvelteHtmlFile: EachAmbiguousAs.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
             JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-          PsiElement())(')')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiElement(JS:PLUS)('+')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        SvelteKeyExpression
-          PsiElement(()('(')
-          SvelteJS: EXPRESSION
+            PsiElement(JS:PLUS)('+')
             JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-          PsiElement())(')')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiElement(JS:DOT)('.')
-              PsiElement(JS:IDENTIFIER)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        SvelteKeyExpression
-          PsiElement(()('(')
-          SvelteJS: EXPRESSION
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
             JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-          PsiElement())(')')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
+            PsiElement(JS:DOT)('.')
+            PsiElement(JS:IDENTIFIER)('as')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
             JSReferenceExpression
-              JSReferenceExpression
-                PsiElement(JS:IDENTIFIER)('assets')
-              PsiElement(JS:DOT)('.')
-              PsiElement(JS:IDENTIFIER)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        SvelteKeyExpression
-          PsiElement(()('(')
-          SvelteJS: EXPRESSION
-            JSReferenceExpression
-              PsiElement(JS:AS_KEYWORD)('as')
-          PsiElement())(')')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiElement(JS:DOT)('.')
               PsiElement(JS:IDENTIFIER)('assets')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        SvelteKeyExpression
-          PsiElement(()('(')
-          SvelteJS: EXPRESSION
+            PsiElement(JS:DOT)('.')
+            PsiElement(JS:IDENTIFIER)('as')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
             JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-          PsiElement())(')')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiElement(JS:DOT)('.')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:IDENTIFIER)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:DESTRUCTURING_ASSIGNMENT
-              PsiErrorElement:identifier expected
-                <empty list>
-        SvelteKeyExpression
-          PsiElement(()('(')
-          SvelteJS: EXPRESSION
+            PsiElement(JS:DOT)('.')
+            PsiElement(JS:IDENTIFIER)('assets')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
             JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-          PsiElement())(')')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
+            PsiElement(JS:DOT)('.')
             PsiWhiteSpace(' ')
-            JS:CALL_EXPRESSION
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              JSArgumentList
-                PsiElement(JS:LPAR)('(')
-                JS:OBJECT_LITERAL
-                  PsiElement(JS:LBRACE)('{')
-                  JS:PROPERTY
-                    PsiElement(JS:IDENTIFIER)('x')
-                    PsiElement(JS:COLON)(':')
-                    PsiWhiteSpace(' ')
-                    JSReferenceExpression
-                      PsiElement(JS:AS_KEYWORD)('as')
-                  PsiElement(JS:RBRACE)('}')
-                PsiElement(JS:RPAR)(')')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+            PsiElement(JS:IDENTIFIER)('as')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JS:CALL_EXPRESSION
+            JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
+            JSArgumentList
+              PsiElement(JS:LPAR)('(')
+              JS:OBJECT_LITERAL
+                PsiElement(JS:LBRACE)('{')
+                JS:PROPERTY
+                  PsiElement(JS:IDENTIFIER)('x')
+                  PsiElement(JS:COLON)(':')
+                  PsiWhiteSpace(' ')
+                  JSReferenceExpression
+                    PsiElement(JS:AS_KEYWORD)('as')
+                PsiElement(JS:RBRACE)('}')
+              PsiElement(JS:RPAR)(')')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JS:LITERAL_EXPRESSION
+              PsiElement(JS:NUMERIC_LITERAL)('1')
             PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
+            PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JS:OBJECT_LITERAL
-              PsiElement(JS:LBRACE)('{')
-              PsiElement(JS:RBRACE)('}')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+            JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSArrayLiteralExpression
-              PsiElement(JS:LBRACKET)('[')
-              PsiElement(JS:RBRACKET)(']')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
             PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
+            PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JS:LITERAL_EXPRESSION
-                PsiElement(JS:NUMERIC_LITERAL)('1')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+            JS:LITERAL_EXPRESSION
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
             PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
+            PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JS:LITERAL_EXPRESSION
-                PsiElement(JS:NUMERIC_LITERAL)('1')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
+            JS:LITERAL_EXPRESSION
+              PsiElement(JS:STRING_LITERAL)('""')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JS:LITERAL_EXPRESSION
+              PsiElement(JS:STRING_LITERAL)('''')
             PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
+            PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+            JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JS:LITERAL_EXPRESSION
-                PsiElement(JS:NUMERIC_LITERAL)('1')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
             PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
+            PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JS:LITERAL_EXPRESSION
-                PsiElement(JS:STRING_LITERAL)('""')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+            JS:STRING_TEMPLATE_EXPRESSION
+              PsiElement(JS:BACKQUOTE)('`')
+              PsiElement(JS:BACKQUOTE)('`')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
             PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
+            PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JS:LITERAL_EXPRESSION
-                PsiElement(JS:STRING_LITERAL)('""')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JS:LITERAL_EXPRESSION
-                PsiElement(JS:STRING_LITERAL)('''')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JS:LITERAL_EXPRESSION
-                PsiElement(JS:STRING_LITERAL)('''')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JS:STRING_TEMPLATE_EXPRESSION
-                PsiElement(JS:BACKQUOTE)('`')
-                PsiElement(JS:BACKQUOTE)('`')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JS:STRING_TEMPLATE_EXPRESSION
-                PsiElement(JS:BACKQUOTE)('`')
-                PsiElement(JS:BACKQUOTE)('`')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JS:STRING_TEMPLATE_EXPRESSION
-                PsiElement(JS:BACKQUOTE)('`')
-                PsiElement(JS:STRING_TEMPLATE_PART)('as')
-                PsiElement(JS:BACKQUOTE)('`')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSBinaryExpression
-              JS:STRING_TEMPLATE_EXPRESSION
-                PsiElement(JS:BACKQUOTE)('`')
-                PsiElement(JS:STRING_TEMPLATE_PART)('as')
-                PsiElement(JS:BACKQUOTE)('`')
-              PsiWhiteSpace(' ')
-              PsiElement(JS:PLUS)('+')
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:AS_KEYWORD)('as')
-            PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:AS_KEYWORD)('as')
-        PsiElement(,)(',')
-        SvelteParameter
-          SvelteJS: PARAMETER
-            PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
-              PsiElement(JS:IDENTIFIER)('i')
-        PsiElement(})('}')
-      SvelteScope
-        <empty list>
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
+            JS:STRING_TEMPLATE_EXPRESSION
+              PsiElement(JS:BACKQUOTE)('`')
+              PsiElement(JS:STRING_TEMPLATE_PART)('as')
+              PsiElement(JS:BACKQUOTE)('`')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')

@@ -1,67 +1,77 @@
-Svelte Component
-  SvelteInterpolation
-    PsiElement({)('{')
-    PsiElement(@html)('@html')
-    SvelteExpression
-      SvelteJS: EXPRESSION
-        PsiWhiteSpace(' ')
-        JS:LITERAL_EXPRESSION
-          PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
-    PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteInterpolation
-    PsiElement({)('{')
-    PsiWhiteSpace(' ')
-    PsiElement(@html)('@html')
-    SvelteExpression
-      SvelteJS: EXPRESSION
-        PsiWhiteSpace(' ')
-        JS:LITERAL_EXPRESSION
-          PsiElement(JS:STRING_LITERAL)(''unescaped'')
-    PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteInterpolation
-    PsiElement({)('{')
-    PsiElement(@debug)('@debug')
-    SvelteExpression
-      SvelteJS: EXPRESSION
-        PsiWhiteSpace(' ')
-        JSReferenceExpression
-          PsiElement(JS:IDENTIFIER)('x')
-        PsiWhiteSpace(' ')
-    PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteInterpolation
-    PsiElement({)('{')
-    PsiWhiteSpace(' ')
-    PsiElement(@debug)('@debug')
-    SvelteExpression
-      SvelteJS: EXPRESSION
-        PsiWhiteSpace(' ')
-        JSReferenceExpression
-          PsiElement(JS:IDENTIFIER)('x')
-    PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteInterpolation
-    PsiElement({)('{')
-    PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@'
+SvelteHtmlFile: Expression.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
       <empty list>
-    PsiElement(BAD_CHARACTER)('@')
-    PsiElement(CODE_FRAGMENT)(' html 'unescaped'')
-    PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteInterpolation
-    PsiElement({)('{')
-    PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@'
-      <empty list>
-    PsiElement(BAD_CHARACTER)('@')
-    PsiElement(CODE_FRAGMENT)(' debug x ')
-    PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  SvelteInterpolation
-    PsiElement({)('{')
-    PsiErrorElement:<expression>, '@debug' or '@html' expected, got '@unknown'
-      <empty list>
-    PsiElement(BAD_CHARACTER)('@unknown')
-    PsiElement(CODE_FRAGMENT)(' x')
-    PsiElement(})('}')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:IDENTIFIER)('html')
+      PsiWhiteSpace(' ')
+      JS:LITERAL_EXPRESSION
+        PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:IDENTIFIER)('html')
+      PsiWhiteSpace(' ')
+      JS:LITERAL_EXPRESSION
+        PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiErrorElement:whitespace is not allowed after @
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiElement(JS:IDENTIFIER)('html')
+      PsiWhiteSpace(' ')
+      JS:LITERAL_EXPRESSION
+        PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:IDENTIFIER)('debug')
+      PsiWhiteSpace(' ')
+      JSReferenceExpression
+        PsiElement(JS:IDENTIFIER)('x')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:IDENTIFIER)('debug')
+      PsiWhiteSpace(' ')
+      JSReferenceExpression
+        PsiElement(JS:IDENTIFIER)('x')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiErrorElement:whitespace is not allowed after @
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiElement(JS:IDENTIFIER)('debug')
+      PsiWhiteSpace(' ')
+      JSReferenceExpression
+        PsiElement(JS:IDENTIFIER)('x')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiErrorElement:expected html or debug
+        PsiElement(JS:IDENTIFIER)('unknown')
+      PsiWhiteSpace(' ')
+      JSReferenceExpression
+        PsiElement(JS:IDENTIFIER)('x')
+      PsiElement(JS:RBRACE)('}')

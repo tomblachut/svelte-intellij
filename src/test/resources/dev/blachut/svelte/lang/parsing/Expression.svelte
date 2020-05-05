@@ -1,7 +1,7 @@
 {@html 'hello<script>virus()</script>'}
-{ @html 'unescaped'}
-{@debug x }
-{ @debug x}
-{@ html 'unescaped'}
-{@ debug x }
+{ @html 'hello<script>virus()</script>' }
+{@ html 'hello<script>virus()</script>'}
+{@debug x}
+{ @debug x }
+{@ debug x}
 {@unknown x}

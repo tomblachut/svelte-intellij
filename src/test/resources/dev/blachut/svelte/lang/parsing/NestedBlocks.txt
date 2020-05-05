@@ -1,109 +1,137 @@
-Svelte Component
-  PsiElement(<markup>)('<p>\n    Plain html\n</p>\n\n')
-  SvelteIfBlock
-    SvelteIfBlockOpening
-      SvelteIfBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(if)('if')
-        SvelteExpression
-          SvelteJS: EXPRESSION
-            PsiWhiteSpace(' ')
-            JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('visible')
-        PsiElement(})('}')
-      PsiWhiteSpace('\n    ')
-      SvelteScope
-        PsiElement(<markup>)('<Box {name}/>\n    ')
-        SvelteAwaitBlock
-          SvelteAwaitThenBlockOpening
-            SvelteAwaitThenBlockOpeningTag
-              PsiElement({#)('{#')
-              PsiElement(await)('await')
-              SvelteExpression
-                SvelteJS: EXPRESSION
-                  PsiWhiteSpace(' ')
-                  JSReferenceExpression
-                    PsiElement(JS:IDENTIFIER)('promise')
-                  PsiWhiteSpace(' ')
-              PsiElement(then)('then')
-              SvelteParameter
-                SvelteJS: PARAMETER
-                  PsiWhiteSpace(' ')
-                  JS:EMBEDDED_PARAMETER
-                    PsiElement(JS:IDENTIFIER)('x')
-              PsiElement(})('}')
-            PsiWhiteSpace('\n        ')
-            SvelteScope
-              PsiElement(<markup>)('<p>')
-              SvelteInterpolation
-                PsiElement({)('{')
-                SvelteExpression
-                  SvelteJS: EXPRESSION
+SvelteHtmlFile: NestedBlocks.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: p
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('p')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('Text')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('p')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('visible')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          SvelteAwaitBlock
+            SvelteAwaitPrimaryBranch
+              SvelteInitialTag(AWAIT_START)
+                PsiElement(JS:LBRACE)('{')
+                PsiElement(JS:SHARP)('#')
+                PsiElement(JS:AWAIT_KEYWORD)('await')
+                PsiWhiteSpace(' ')
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('promise')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:THEN_KEYWORD)('then')
+                PsiWhiteSpace(' ')
+                SvelteJS:EMBEDDED_PARAMETER
+                  PsiElement(JS:IDENTIFIER)('x')
+                PsiElement(JS:RBRACE)('}')
+              SvelteFragment
+                PsiWhiteSpace('\n        ')
+                SvelteHtmlTag: p
+                  XmlToken:XML_START_TAG_START('<')
+                  XmlToken:XML_NAME('p')
+                  XmlToken:XML_TAG_END('>')
+                  SvelteJS: CONTENT_EXPRESSION
+                    PsiElement(JS:LBRACE)('{')
+                    PsiElement(JS:AT)('@')
+                    PsiElement(JS:IDENTIFIER)('html')
+                    PsiWhiteSpace(' ')
                     JSReferenceExpression
                       PsiElement(JS:IDENTIFIER)('x')
-                PsiElement(})('}')
-              PsiElement(<markup>)('<p>\n    ')
-          SvelteAwaitBlockClosingTag
-            PsiElement({/)('{/')
-            PsiElement(await)('await')
-            PsiElement(})('}')
-    PsiWhiteSpace('\n')
-    SvelteElseContinuation
-      SvelteElseContinuationTag
-        PsiElement({:)('{:')
-        PsiElement(else)('else')
-        PsiElement(})('}')
-      PsiWhiteSpace('\n    ')
-      SvelteScope
-        SvelteInterpolation
-          PsiElement({)('{')
-          PsiElement(@debug)('@debug')
-          SvelteExpression
-            SvelteJS: EXPRESSION
-              PsiWhiteSpace(' ')
-              JSReferenceExpression
-                PsiElement(JS:IDENTIFIER)('name')
-          PsiElement(})('}')
+                    PsiElement(JS:RBRACE)('}')
+                SvelteHtmlTag: p
+                  XmlToken:XML_START_TAG_START('<')
+                  XmlToken:XML_NAME('p')
+                  XmlToken:XML_TAG_END('>')
+                  XmlText
+                    PsiWhiteSpace('\n    ')
+            SvelteEndTag(AWAIT_END)
+              PsiElement(JS:LBRACE)('{')
+              PsiElement(JS:DIV)('/')
+              PsiElement(JS:AWAIT_KEYWORD)('await')
+              PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n')
+      SvelteIfElseBranch
+        SvelteInitialTag(ELSE_CLAUSE)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:COLON)(':')
+          PsiElement(JS:ELSE_KEYWORD)('else')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:IDENTIFIER)('debug')
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('name')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteHtmlTag: p
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              XmlToken:XML_DATA_CHARACTERS('Kappa')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+          PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n\n')
+    SvelteHtmlTag: ul
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('ul')
+      XmlToken:XML_TAG_END('>')
+      XmlText
         PsiWhiteSpace('\n    ')
-        PsiElement(<markup>)('<p>Kappa</p>\n')
-    SvelteIfBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(if)('if')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n\n')
-  PsiElement(<markup>)('<ul>\n    ')
-  SvelteEachBlock
-    SvelteEachBlockOpening
-      SvelteEachBlockOpeningTag
-        PsiElement({#)('{#')
-        PsiElement(each)('each')
-        SvelteExpression
-          SvelteJS: EXPRESSION
+      SvelteEachBlock
+        SvelteEachPrimaryBranch
+          SvelteInitialTag(EACH_START)
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:SHARP)('#')
+            PsiElement(JS:EACH_KEYWORD)('each')
             PsiWhiteSpace(' ')
             JSReferenceExpression
               PsiElement(JS:IDENTIFIER)('assets')
             PsiWhiteSpace(' ')
-        PsiElement(as)('as')
-        SvelteParameter
-          SvelteJS: PARAMETER
+            PsiElement(JS:AS_KEYWORD)('as')
             PsiWhiteSpace(' ')
-            JS:EMBEDDED_PARAMETER
+            SvelteJS:EMBEDDED_PARAMETER
               PsiElement(JS:IDENTIFIER)('a')
-        PsiElement(})('}')
-      PsiWhiteSpace('\n        ')
-      SvelteScope
-        PsiElement(<markup>)('<li>')
-        SvelteInterpolation
-          PsiElement({)('{')
-          SvelteExpression
-            SvelteJS: EXPRESSION
+            PsiElement(JS:RBRACE)('}')
+          SvelteFragment
+            SvelteJS: CONTENT_EXPRESSION
+              PsiElement(JS:LBRACE)('{')
               JSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('a')
-          PsiElement(})('}')
-        PsiElement(<markup>)('</li>\n    ')
-    SvelteEachBlockClosingTag
-      PsiElement({/)('{/')
-      PsiElement(each)('each')
-      PsiElement(})('}')
-  PsiWhiteSpace('\n')
-  PsiElement(<markup>)('</ul>')
+              PsiElement(JS:RBRACE)('}')
+        SvelteEndTag(EACH_END)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:DIV)('/')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiElement(JS:RBRACE)('}')
+      XmlText
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('ul')
+      XmlToken:XML_TAG_END('>')
