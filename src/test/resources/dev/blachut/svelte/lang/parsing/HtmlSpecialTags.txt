@@ -1,0 +1,66 @@
+SvelteHtmlFile: HtmlSpecialTags.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: p
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('p')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n    ')
+        XmlToken:XML_DATA_CHARACTERS('sentence')
+        PsiWhiteSpace('\n    ')
+      SvelteIfBlock
+        SvelteIfPrimaryBranch
+          SvelteInitialTag(IF_START)
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:SHARP)('#')
+            PsiElement(JS:IF_KEYWORD)('if')
+            PsiWhiteSpace(' ')
+            JS:LITERAL_EXPRESSION
+              PsiElement(JS:TRUE_KEYWORD)('true')
+            PsiElement(JS:RBRACE)('}')
+          SvelteFragment
+            XmlText
+              PsiWhiteSpace('\n        ')
+            SvelteHtmlTag: input
+              XmlToken:XML_START_TAG_START('<')
+              XmlToken:XML_NAME('input')
+              XmlToken:XML_TAG_END('>')
+            XmlText
+              PsiWhiteSpace('\n        ')
+              XmlToken:XML_DATA_CHARACTERS('text')
+              PsiWhiteSpace('\n        ')
+            SvelteEachBlock
+              SvelteEachPrimaryBranch
+                SvelteInitialTag(EACH_START)
+                  PsiElement(JS:LBRACE)('{')
+                  PsiElement(JS:SHARP)('#')
+                  PsiElement(JS:EACH_KEYWORD)('each')
+                  PsiWhiteSpace(' ')
+                  JS:ARRAY_LITERAL
+                    PsiElement(JS:LBRACKET)('[')
+                    PsiElement(JS:RBRACKET)(']')
+                  PsiWhiteSpace(' ')
+                  PsiElement(JS:AS_KEYWORD)('as')
+                  PsiWhiteSpace(' ')
+                  SvelteJS:EMBEDDED_PARAMETER
+                    PsiElement(JS:IDENTIFIER)('item')
+                  PsiElement(JS:RBRACE)('}')
+                SvelteFragment
+                  SvelteHtmlTag: span
+                    XmlToken:XML_START_TAG_START('<')
+                    XmlToken:XML_NAME('span')
+                    XmlToken:XML_EMPTY_ELEMENT_END('/>')
+              SvelteEndTag(EACH_END)
+                PsiElement(JS:LBRACE)('{')
+                PsiElement(JS:DIV)('/')
+                PsiElement(JS:EACH_KEYWORD)('each')
+                PsiElement(JS:RBRACE)('}')
+            XmlText
+              PsiWhiteSpace('\n    ')
+        SvelteEndTag(IF_END)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:DIV)('/')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiElement(JS:RBRACE)('}')

@@ -27,6 +27,8 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
 
     fun testWhitespace() = doTest()
 
+//    fun testRestart() = checkCorrectRestartOnEveryToken("""<img alt={{foo: {}}}>""")
+
     private fun doTest() = doFileTest("svelte")
 }
 
