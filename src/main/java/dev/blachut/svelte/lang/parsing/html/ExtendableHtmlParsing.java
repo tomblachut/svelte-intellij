@@ -68,6 +68,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 parseTag();
                 myTagMarkersStack.clear();
                 myTagNamesStack.clear();
+                myOriginalTagNamesStack.clear();
             } else if (tt == XmlTokenType.XML_COMMENT_START) {
                 error = flushError(error);
                 parseComment();
@@ -167,20 +168,17 @@ public class ExtendableHtmlParsing extends HtmlParsing {
 
                 String tagName = StringUtil.toLowerCase(originalTagName);
                 while (childTerminatesParentInStack(tagName)) {
-                    IElementType tagElementType = getHtmlTagElementType();
                     PsiBuilder.Marker top = closeTag();
-                    top.doneBefore(tagElementType, tag);
+                    top.doneBefore(getHtmlTagElementType(), tag);
                 }
 
-                myTagMarkersStack.push(tag);
-                myTagNamesStack.push(tagName);
-                myOriginalTagNamesStack.push(originalTagName);
+                pushTag(tag, tagName, originalTagName);
 
                 parseHeader(tagName);
 
                 if (token() == XmlTokenType.XML_EMPTY_ELEMENT_END) {
                     advance();
-                    doneTag(tag);
+                    doneTag();
                     continue;
                 }
 
@@ -188,7 +186,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                     advance();
                 } else {
                     error(XmlErrorMessages.message("tag.start.is.not.closed"));
-                    doneTag(tag);
+                    doneTag();
                     continue;
                 }
 
@@ -206,13 +204,13 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                                 if (token() == XmlTokenType.XML_TAG_END) {
                                     advance();
                                 }
-                                doneTag(tag);
+                                doneTag();
                                 continue;
                             }
                         }
                     }
                     footer.rollbackTo();
-                    doneTag(tag);
+                    doneTag();
                 }
             } else if (tt == XmlTokenType.XML_PI_START) {
                 xmlText = terminateText(xmlText);
@@ -244,13 +242,13 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                     final String parentTagName = !myTagNamesStack.isEmpty() ? myTagNamesStack.peek() : "";
                     if (!parentTagName.equals(endName) && !endName.endsWith(COMPLETION_NAME)) {
                         final boolean isOptionalTagEnd = HtmlUtil.isOptionalEndForHtmlTagL(parentTagName);
-                        final boolean hasChancesToMatch = HtmlUtil.isOptionalEndForHtmlTagL(endName) ? childTerminatesParentInStack(endName) : myTagNamesStack.contains(endName);
+                        final boolean hasChancesToMatch = HtmlUtil.isOptionalEndForHtmlTagL(endName) ? childTerminatesParentInStack(endName) : isTagNameFurtherInStack(endName);
                         if (hasChancesToMatch) {
                             footer.rollbackTo();
                             if (!isOptionalTagEnd) {
                                 error(XmlErrorMessages.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
                             }
-                            doneTag(myTagMarkersStack.peek());
+                            doneTag();
                         } else {
                             advance();
                             if (token() == XmlTokenType.XML_TAG_END) advance();
@@ -276,7 +274,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 } else {
                     error(XmlErrorMessages.message("xml.parsing.closing.tag.is.not.done"));
                 }
-                if (hasTags()) doneTag(myTagMarkersStack.peek());
+                if (hasTags()) doneTag();
             } else if ((token() == XmlTokenType.XML_REAL_WHITE_SPACE || token() == XmlTokenType.XML_DATA_CHARACTERS) && !hasTags()) {
                 xmlText = terminateText(xmlText);
                 advance();
@@ -293,7 +291,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
             if (!HtmlUtil.isOptionalEndForHtmlTagL(tagName) && !"html".equals(tagName) && !"body".equals(tagName)) {
                 error(XmlErrorMessages.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
             }
-            doneTag(myTagMarkersStack.peek());
+            doneTag();
         }
     }
 
@@ -303,6 +301,12 @@ public class ExtendableHtmlParsing extends HtmlParsing {
 
     protected boolean hasTags() {
         return !myTagNamesStack.isEmpty();
+    }
+
+    protected void pushTag(PsiBuilder.Marker tagMarker, String tagName, String originalTagName) {
+        myTagMarkersStack.push(tagMarker);
+        myTagNamesStack.push(tagName);
+        myOriginalTagNamesStack.push(originalTagName);
     }
 
     protected PsiBuilder.Marker closeTag() {
@@ -323,18 +327,31 @@ public class ExtendableHtmlParsing extends HtmlParsing {
         return myTagNamesStack.size();
     }
 
-    private void doneTag(PsiBuilder.Marker tag) {
+    protected boolean isTagNameFurtherInStack(@NotNull String endName) {
+        return myTagNamesStack.contains(endName);
+    }
+
+    private void doneTag() {
+        PsiBuilder.Marker tag = myTagMarkersStack.peek();
         tag.done(getHtmlTagElementType());
         final String tagName = myTagNamesStack.peek();
         closeTag();
 
+        terminateAutoClosingParentTag(tag, tagName);
+    }
+
+    /**
+     * Handles things like {@code <p>parentTag<p>tag} which result in 2 sibling paragraphs
+     */
+    protected void terminateAutoClosingParentTag(@NotNull PsiBuilder.Marker tag, @NotNull String tagName) {
         final String parentTagName = hasTags() ? myTagNamesStack.peek() : "";
         boolean isInlineTagContainer = HtmlUtil.isInlineTagContainerL(parentTagName);
         boolean isOptionalTagEnd = HtmlUtil.isOptionalEndForHtmlTagL(parentTagName);
-        if (isInlineTagContainer && HtmlUtil.isHtmlBlockTagL(tagName) && isOptionalTagEnd && !HtmlUtil.isPossiblyInlineTag(tagName)) {
-            IElementType tagElementType = getHtmlTagElementType();
+        boolean isValidParent = isInlineTagContainer && isOptionalTagEnd;
+
+        if (isValidParent && HtmlUtil.isHtmlBlockTagL(tagName) && !HtmlUtil.isPossiblyInlineTag(tagName)) {
             PsiBuilder.Marker top = closeTag();
-            top.doneBefore(tagElementType, tag);
+            top.doneBefore(getHtmlTagElementType(), tag);
         }
     }
 
@@ -367,33 +384,45 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     private boolean childTerminatesParentInStack(final String childName) {
-        boolean isCell = TD_TAG.equals(childName) || TH_TAG.equals(childName);
-        boolean isRow = TR_TAG.equals(childName);
-        boolean isStructure = isStructure(childName);
-
         for (int i = myTagNamesStack.size() - 1; i >= 0; i--) {
             String parentName = myTagNamesStack.get(i);
-            final boolean isParentTable = TABLE_TAG.equals(parentName);
-            final boolean isParentStructure = isStructure(parentName);
-            if (isCell && (TR_TAG.equals(parentName) || isParentStructure || isParentTable) ||
-                isRow && (isParentStructure || isParentTable) ||
-                isStructure && isParentTable) {
-                return false;
-            }
 
-            if ("li".equals(childName) && ("ul".equals(parentName) || "ol".equals(parentName))) {
-                return false;
-            }
-
-            if ("dl".equals(parentName) && ("dd".equals(childName) || "dt".equals(childName))) {
-                return false;
-            }
-
-            if (HtmlUtil.canTerminate(childName, parentName)) {
-                return true;
+            Boolean result = childTerminatesParent(childName, parentName, i + 1);
+            if (result != null) {
+                return result;
             }
         }
         return false;
+    }
+
+    @Nullable
+    protected Boolean childTerminatesParent(final String childName, final String parentName, int tagLevel) {
+        final boolean isCell = TD_TAG.equals(childName) || TH_TAG.equals(childName);
+        final boolean isRow = TR_TAG.equals(childName);
+        final boolean isStructure = isStructure(childName);
+
+        final boolean isParentTable = TABLE_TAG.equals(parentName);
+        final boolean isParentStructure = isStructure(parentName);
+
+        if (isCell && (TR_TAG.equals(parentName) || isParentStructure || isParentTable) ||
+            isRow && (isParentStructure || isParentTable) ||
+            isStructure && isParentTable) {
+            return false;
+        }
+
+        if ("li".equals(childName) && ("ul".equals(parentName) || "ol".equals(parentName))) {
+            return false;
+        }
+
+        if ("dl".equals(parentName) && ("dd".equals(childName) || "dt".equals(childName))) {
+            return false;
+        }
+
+        if (HtmlUtil.canTerminate(childName, parentName)) {
+            return true;
+        }
+
+        return null;
     }
 
     private static boolean isStructure(String childName) {
