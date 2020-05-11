@@ -2,7 +2,7 @@
 
 {#if visible}
     {#await promise then x}
-        <p>{@html x}<p>
+        <p>{@html x}</p>
     {/await}
 {:else}
     {@debug name}

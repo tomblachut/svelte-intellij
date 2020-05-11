@@ -8,6 +8,8 @@ class SvelteParsing(
     private val builder: PsiBuilder,
     private val flushHtmlTags: (beforeMarker: PsiBuilder.Marker, targetTagLevel: Int) -> Unit
 ) {
+    val blockLevel get() = if (incompleteBlocks.empty()) 0 else incompleteBlocks.peek().tagLevel
+
     private val incompleteBlocks = Stack<IncompleteBlock>()
 
     fun parseSvelteTag(currentTagLevel: Int) {

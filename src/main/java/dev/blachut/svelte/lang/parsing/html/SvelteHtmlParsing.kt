@@ -74,6 +74,18 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         return null
     }
 
+    override fun childTerminatesParent(childName: String?, parentName: String?, tagLevel: Int): Boolean? {
+        if (tagLevel <= svelteParsing.blockLevel) return false
+
+        return super.childTerminatesParent(childName, parentName, tagLevel)
+    }
+
+    override fun terminateAutoClosingParentTag(tag: PsiBuilder.Marker, tagName: String) {
+        if (tagLevel() <= svelteParsing.blockLevel) return
+
+        super.terminateAutoClosingParentTag(tag, tagName)
+    }
+
     private fun flushHtmlTags(beforeMarker: PsiBuilder.Marker, targetTagLevel: Int) {
         while (tagLevel() > targetTagLevel) {
             val tagName = peekTagName()

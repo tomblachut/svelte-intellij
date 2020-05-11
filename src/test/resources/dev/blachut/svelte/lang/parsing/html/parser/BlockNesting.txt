@@ -53,12 +53,10 @@ SvelteHtmlFile: BlockNesting.svelte
                     JSReferenceExpression
                       PsiElement(JS:IDENTIFIER)('x')
                     PsiElement(JS:RBRACE)('}')
-                SvelteHtmlTag: p
-                  XmlToken:XML_START_TAG_START('<')
+                  XmlToken:XML_END_TAG_START('</')
                   XmlToken:XML_NAME('p')
                   XmlToken:XML_TAG_END('>')
-                  XmlText
-                    PsiWhiteSpace('\n    ')
+                PsiWhiteSpace('\n    ')
             SvelteEndTag(AWAIT_END)
               PsiElement(JS:LBRACE)('{')
               PsiElement(JS:DIV)('/')
