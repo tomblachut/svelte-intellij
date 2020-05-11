@@ -1,0 +1,27 @@
+SvelteHtmlFile: BlockAwaitCatch.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteAwaitBlock
+      SvelteAwaitPrimaryBranch
+        SvelteInitialTag(AWAIT_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:AWAIT_KEYWORD)('await')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('promise')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:CATCH_KEYWORD)('catch')
+          PsiErrorElement:unexpected token
+            <empty list>
+          PsiWhiteSpace(' ')
+          PsiElement(JS:IDENTIFIER)('error')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(AWAIT_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:AWAIT_KEYWORD)('await')
+        PsiElement(JS:RBRACE)('}')

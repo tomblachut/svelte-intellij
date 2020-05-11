@@ -1,0 +1,65 @@
+SvelteHtmlFile: Let.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: Await
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('Await')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('local')
+            PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: let:value
+        XmlToken:XML_NAME('let:value')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_PARAMETER
+              SvelteJS:EMBEDDED_PARAMETER
+                PsiElement(JS:IDENTIFIER)('local')
+            PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      SvelteJS: CONTENT_EXPRESSION
+        PsiElement(JS:LBRACE)('{')
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('local')
+        PsiElement(JS:RBRACE)('}')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('Await')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: Await
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('Await')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('local')
+            PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: let:local}
+        XmlToken:XML_NAME('let:local}')
+      XmlToken:XML_TAG_END('>')
+      SvelteJS: CONTENT_EXPRESSION
+        PsiElement(JS:LBRACE)('{')
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('local')
+        PsiElement(JS:RBRACE)('}')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('Await')
+      XmlToken:XML_TAG_END('>')
