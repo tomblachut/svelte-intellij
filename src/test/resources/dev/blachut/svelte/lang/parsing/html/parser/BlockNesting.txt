@@ -1,4 +1,4 @@
-SvelteHtmlFile: NestedBlocks.svelte
+SvelteHtmlFile: BlockNesting.svelte
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>

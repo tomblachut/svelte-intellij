@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.parsing
+package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.LanguageASTFactory
 import com.intellij.lang.css.CSSLanguage
@@ -10,12 +10,10 @@ import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
 import com.intellij.testFramework.ParsingTestCase
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlASTFactory
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
 
-class SvelteParsingTest : ParsingTestCase(
-    "dev/blachut/svelte/lang/parsing",
+class SvelteHtmlParserTest : ParsingTestCase(
+    "dev/blachut/svelte/lang/parsing/html/parser",
     "svelte",
     SvelteHTMLParserDefinition(),
     SvelteJSParserDefinition(),
@@ -34,19 +32,16 @@ class SvelteParsingTest : ParsingTestCase(
         registerExtensionPoint(EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java)
     }
 
-    fun testAwaitThenThenThen() = doTest()
-    fun testEachAmbiguousAs() = doTest()
-    fun testEachAsAsAsAs() = doTest()
-    fun testEachAssets() = doTest()
+    fun testBlockAwaitThenThenThen() = doTest()
+    fun testBlockEachAmbiguousAs() = doTest()
+    fun testBlockEachAsAsAsAs() = doTest()
+    fun testBlockEachAssets() = doTest()
+    fun testBlockIfElseIf() = doTest()
+    fun testBlockNesting() = doTest()
+    fun testBlockWhitespace() = doTest()
 
     fun testExpression() = doTest()
     fun testExpressionIncomplete() = doTest()
-
-    fun testIf() = doTest()
-    fun testIfElseIf() = doTest()
-
-    fun testNestedBlocks() = doTest()
-    fun testWhitespace() = doTest()
 
     fun testHtmlMissingEndTags() = doTest()
     fun testHtmlSpecialTags() = doTest()

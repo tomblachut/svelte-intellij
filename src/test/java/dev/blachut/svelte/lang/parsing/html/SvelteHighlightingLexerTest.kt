@@ -1,11 +1,10 @@
-package dev.blachut.svelte.lang.parsing
+package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lexer.Lexer
 import com.intellij.testFramework.LexerTestCase
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlHighlightingLexer
 
 class SvelteHighlightingLexerTest : LexerTestCase() {
-    override fun getDirPath(): String = "src/test/resources/dev/blachut/svelte/lang/parsing"
+    override fun getDirPath(): String = "src/test/resources/dev/blachut/svelte/lang/parsing/html/lexer"
     override fun getExpectedFileExtension(): String = ".tokens"
 
     override fun getPathToTestDataFile(extension: String?): String {
@@ -16,16 +15,13 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
         return SvelteHtmlHighlightingLexer()
     }
 
-    fun testAwaitThenThenThen() = doTest()
-    fun testEachAsAsAsAs() = doTest()
-    fun testEachAssets() = doTest()
+    fun testBlockAwaitThenThenThen() = doTest()
+    fun testBlockEachAsAsAsAs() = doTest()
+    fun testBlockEachAssets() = doTest()
+    fun testBlockIfElseIf() = doTest()
+    fun testBlockWhitespace() = doTest()
 
     fun testExpression() = doTest()
-
-    fun testIf() = doTest()
-    fun testIfElseIf() = doTest()
-
-    fun testWhitespace() = doTest()
 
 //    fun testRestart() = checkCorrectRestartOnEveryToken("""<img alt={{foo: {}}}>""")
 

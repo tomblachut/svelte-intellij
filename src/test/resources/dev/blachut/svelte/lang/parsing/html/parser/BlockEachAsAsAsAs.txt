@@ -1,4 +1,4 @@
-SvelteHtmlFile: EachAsAsAsAs.svelte
+SvelteHtmlFile: BlockEachAsAsAsAs.svelte
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>

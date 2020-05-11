@@ -1,4 +1,4 @@
-SvelteHtmlFile: Whitespace.svelte
+SvelteHtmlFile: BlockWhitespace.svelte
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>
