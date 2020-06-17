@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.Language
+import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.javascript.JavaScriptHighlightingLexer
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lexer.HtmlHighlightingLexer
@@ -46,5 +47,5 @@ private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(Inner
     }
 
     override fun getStyleLanguage(): Language? =
-        helper.styleViaLang(ourDefaultStyleLanguage) ?: super.getStyleLanguage()
+        helper.styleViaLang(CSSLanguage.INSTANCE) ?: super.getStyleLanguage()
 }

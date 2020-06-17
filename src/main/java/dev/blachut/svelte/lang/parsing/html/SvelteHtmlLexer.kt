@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.Language
+import com.intellij.lang.css.CSSLanguage
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlLexer
 import com.intellij.psi.tree.IElementType
@@ -46,7 +47,7 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
     override fun findScriptContentProvider(mimeType: String?) = SvelteJSScriptContentProvider
 
     override fun getStyleLanguage(): Language? =
-        helper.styleViaLang(ourDefaultStyleLanguage) ?: super.getStyleLanguage()
+        helper.styleViaLang(CSSLanguage.INSTANCE) ?: super.getStyleLanguage()
 
     override fun isHtmlTagState(state: Int): Boolean {
         return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME

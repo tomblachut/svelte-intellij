@@ -1,6 +1,6 @@
 package dev.blachut.svelte.lang.parsing.html
 
-import com.intellij.codeInsight.daemon.XmlErrorMessages
+import com.intellij.codeInsight.daemon.XmlErrorBundle
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.html.HtmlParsing
 import com.intellij.psi.TokenType
@@ -72,7 +72,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                 if (tt === XmlTokenType.XML_BAD_CHARACTER) {
                     val error = mark()
                     advance()
-                    error.error(XmlErrorMessages.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
+                    error.error(XmlErrorBundle.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
                 } else if (isRemappedStartMustache()) {
@@ -85,7 +85,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
             if (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER) {
                 advance()
             } else {
-                error(XmlErrorMessages.message("xml.parsing.unclosed.attribute.value"))
+                error(XmlErrorBundle.message("xml.parsing.unclosed.attribute.value"))
             }
         } else {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token
