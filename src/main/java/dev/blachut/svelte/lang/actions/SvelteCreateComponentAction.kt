@@ -15,7 +15,7 @@ class SvelteCreateComponentAction : CreateFileFromTemplateAction(NAME, DESCRIPTI
         private const val DESCRIPTION = "Creates Svelte component file"
     }
 
-    override fun buildDialog(project: Project?, directory: PsiDirectory?, builder: CreateFileFromTemplateDialog.Builder) {
+    override fun buildDialog(project: Project, directory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder) {
         builder
             .setTitle("New $NAME")
             .addKind(NAME, SvelteIcons.FILE, TEMPLATE_NAME)
