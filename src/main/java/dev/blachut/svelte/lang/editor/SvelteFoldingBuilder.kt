@@ -4,14 +4,14 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilder
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.editor.Document
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.psi.*
 import java.util.*
 
-// TODO class SvelteFoldingBuilder : FoldingBuilder, DumbAware {
-class SvelteFoldingBuilder : FoldingBuilder {
+class SvelteFoldingBuilder : FoldingBuilder, DumbAware {
     override fun buildFoldRegions(node: ASTNode, document: Document): Array<FoldingDescriptor> {
         val descriptors = ArrayList<FoldingDescriptor>()
         appendDescriptors(node.psi, descriptors, document)
