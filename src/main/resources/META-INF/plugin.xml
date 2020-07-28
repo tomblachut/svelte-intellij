@@ -21,6 +21,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+<h3>0.12.2</h3>
+<ul>
+    <li>Fix compatibility with 2020.2 versions</li>
+    <li>Recognize $$restProps</li>
+</ul>
+
 <h3>0.12.1</h3>
 <ul>
     <li>Extend supported IDE version range to 2020.x</li>
@@ -47,6 +53,7 @@
 
     <depends>com.intellij.modules.lang</depends>
     <depends>JavaScript</depends>
+    <depends>com.intellij.css</depends>
 
     <actions>
         <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction">
@@ -57,7 +64,6 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Svelte" extensions="svelte" language="Svelte"
                   implementationClass="dev.blachut.svelte.lang.SvelteFileType" fieldName="INSTANCE"/>
-        <internalFileTemplate name="Svelte Component"/>
         <lang.fileViewProviderFactory language="Svelte"
                                       implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
         <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.parsing.top.SvelteParserDefinition"/>

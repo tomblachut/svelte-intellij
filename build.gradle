@@ -1,18 +1,18 @@
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version "1.3.21"
-    id 'org.jetbrains.intellij' version '0.4.8'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'org.jetbrains.intellij' version '0.4.21'
 }
 
 apply plugin: "kotlin"
 
 group 'dev.blachut.svelte.lang'
-version '0.12.1'
+version '0.12.2'
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version 'IU-LATEST-EAP-SNAPSHOT'
-    plugins = ['JavaScriptLanguage', 'CSS', 'platform-images', 'PsiViewer:201.3803.71-EAP-SNAPSHOT.1']
+    plugins = ['JavaScriptLanguage', 'CSS', 'PsiViewer:202-SNAPSHOT.3']
 }
 
 patchPluginXml {
