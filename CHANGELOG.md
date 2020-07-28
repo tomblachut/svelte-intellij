@@ -1,5 +1,11 @@
 # Changelog
 
+<h3>0.12.2</h3>
+<ul>
+    <li>Fix compatibility with 2020.2 versions</li>
+    <li>Recognize $$restProps</li>
+</ul>
+
 <h3>0.12.1</h3>
 <ul>
     <li>Extend supported IDE version range to 2020.x</li>

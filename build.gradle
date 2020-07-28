@@ -7,7 +7,7 @@ plugins {
 apply plugin: "kotlin"
 
 group 'dev.blachut.svelte.lang'
-version '0.12.1'
+version '0.12.2'
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
