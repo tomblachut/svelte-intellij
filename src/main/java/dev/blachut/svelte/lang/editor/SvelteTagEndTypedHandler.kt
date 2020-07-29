@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
@@ -15,7 +15,7 @@ import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
  */
 class SvelteTagEndTypedHandler : TypedHandlerDelegate() {
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
-        if (file.viewProvider !is SvelteFileViewProvider) {
+        if (!isSvelteContext(file)) {
             return Result.CONTINUE
         }
 

@@ -9,9 +9,9 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiFile
 import com.intellij.psi.templateLanguages.MultipleLangCommentProvider
 import com.intellij.psi.util.PsiTreeUtil
-import dev.blachut.svelte.lang.SvelteFileViewProvider
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
+import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.psi.SvelteInitialTag
 import dev.blachut.svelte.lang.psi.SvelteJSLazyPsiElement
 
@@ -20,7 +20,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSLazyPsiElement
  */
 class SvelteCommentProvider : MultipleLangCommentProvider {
     override fun canProcess(file: PsiFile, viewProvider: FileViewProvider): Boolean {
-        return file.viewProvider is SvelteFileViewProvider
+        return isSvelteContext(file)
     }
 
     override fun getLineCommenter(file: PsiFile, editor: Editor, lineStartLanguage: Language?, lineEndLanguage: Language?): Commenter? {

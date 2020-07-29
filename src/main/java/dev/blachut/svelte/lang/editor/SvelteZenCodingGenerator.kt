@@ -12,7 +12,7 @@ import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTokenType
-import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.isSvelteContext
 import kotlin.math.min
 
 class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
@@ -28,7 +28,7 @@ class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
     }
 
     override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {
-        return context.containingFile.viewProvider is SvelteFileViewProvider && (wrapping || SvelteHtmlTextContextType.isInContext(context))
+        return isSvelteContext(context) && (wrapping || SvelteHtmlTextContextType.isInContext(context))
     }
 
     override fun createTemplateByKey(key: String, forceSingleTag: Boolean): TemplateImpl? {

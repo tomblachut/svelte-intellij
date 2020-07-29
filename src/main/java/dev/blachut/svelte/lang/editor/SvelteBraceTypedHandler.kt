@@ -16,7 +16,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
-import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.psi.SvelteInitialTag
 import dev.blachut.svelte.lang.psi.SvelteJSLazyPsiElement
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
@@ -31,7 +31,7 @@ class SvelteBraceTypedHandler : TypedHandlerDelegate() {
             return Result.CONTINUE
         }
 
-        if (file.viewProvider !is SvelteFileViewProvider) {
+        if (!isSvelteContext(file)) {
             return Result.CONTINUE
         }
 

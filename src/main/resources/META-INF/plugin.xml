@@ -64,8 +64,6 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Svelte" extensions="svelte" language="SvelteHTML"
                   implementationClass="dev.blachut.svelte.lang.SvelteHtmlFileType" fieldName="INSTANCE"/>
-        <lang.fileViewProviderFactory language="SvelteHTML"
-                                      implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
         <lang.parserDefinition language="SvelteJS"
                                implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition"/>
         <lang.parserDefinition language="SvelteHTML"

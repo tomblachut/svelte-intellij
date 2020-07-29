@@ -12,7 +12,7 @@ import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlElementsGroup
 import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
-import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.isSvelteContext
 import org.jetbrains.annotations.NonNls
 import java.util.*
 
@@ -47,7 +47,7 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
             // val componentFile = declaration.findReferencedElements().firstOrNull()
             val componentFile = declaration.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
 
-            if (componentFile != null && componentFile is PsiFile && componentFile.viewProvider is SvelteFileViewProvider) {
+            if (componentFile != null && componentFile is PsiFile && isSvelteContext(componentFile)) {
                 val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
                 if (props != null) {
                     return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }

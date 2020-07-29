@@ -6,7 +6,7 @@ import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
-import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 /**
@@ -18,7 +18,7 @@ class SvelteBraceBackspaceHandler : BackspaceHandlerDelegate() {
             val nextOffset = editor.caretModel.offset
             if (nextOffset >= editor.document.textLength) return
 
-            if (file.viewProvider !is SvelteFileViewProvider) return
+            if (!isSvelteContext(file)) return
 
             val element = file.findElementAt(nextOffset - 1) ?: return
 

@@ -11,7 +11,7 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
-import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 
 /**
@@ -38,7 +38,7 @@ class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
         dataContext: DataContext,
         originalHandler: EditorActionHandler?
     ): EnterHandlerDelegate.Result {
-        if (file.viewProvider is SvelteFileViewProvider && isBetweenSvelteTags(editor, file, caretOffset.get())) {
+        if (isSvelteContext(file) && isBetweenSvelteTags(editor, file, caretOffset.get())) {
             originalHandler!!.execute(editor, editor.caretModel.currentCaret, dataContext)
             return EnterHandlerDelegate.Result.Default
         }
