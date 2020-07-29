@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang.editor
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class SvelteEditorTest : BasePlatformTestCase() {
-
     override fun getTestDataPath(): String = "src/test/resources"
     override fun getBasePath(): String = "dev/blachut/svelte/lang/editor"
 
@@ -15,7 +14,8 @@ class SvelteEditorTest : BasePlatformTestCase() {
                 {#if test}
                     <caret>
                 {/if}
-                """.trimIndent())
+                """.trimIndent()
+        )
     }
 
     fun testEnterBetweenHtmlTags() {
@@ -26,7 +26,8 @@ class SvelteEditorTest : BasePlatformTestCase() {
                 <div>
                     <caret>
                 </div>
-                """.trimIndent())
+                """.trimIndent()
+        )
     }
 
     fun testCompleteSvelteTag() {
@@ -41,7 +42,19 @@ class SvelteEditorTest : BasePlatformTestCase() {
         myFixture.checkResult("{#if test}hello{/if}<caret>")
     }
 
+    fun testCompleteSvelteTag3() {
+        myFixture.configureByText("Foo.svelte", """{#if true}{<caret>}""")
+        myFixture.type("/")
+        myFixture.checkResult("""{#if true}{/if}<caret>""")
+    }
+
+    fun testCompleteSvelteTagAcrossClauses() {
+        myFixture.configureByText("Foo.svelte", """{#if true}{:else}{<caret>}""")
+        myFixture.type("/")
+        myFixture.checkResult("""{#if true}{:else}{/if}<caret>""")
+    }
+
     fun testFoldingSvelteTag() {
-        myFixture.testFoldingWithCollapseStatus(testDataPath + "/" + basePath + "/" +getTestName(false) + ".svelte")
+        myFixture.testFoldingWithCollapseStatus(testDataPath + "/" + basePath + "/" + getTestName(false) + ".svelte")
     }
 }
