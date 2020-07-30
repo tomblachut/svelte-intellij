@@ -5,7 +5,6 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
-import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
@@ -42,11 +41,6 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         return super.isSingleTag(tagName, originalTagName)
     }
 
-    override fun parseTag() {
-        super.parseTag()
-        svelteParsing.flushSvelteTags()
-    }
-
     override fun hasCustomTagContent(): Boolean {
         return isRemappedStartMustache()
     }
@@ -64,14 +58,13 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     override fun parseCustomTopLevelContent(error: PsiBuilder.Marker?): PsiBuilder.Marker? {
         flushError(error)
         svelteParsing.parseSvelteTag(tagLevel())
-
-        if (builder.tokenType == null || builder.tokenType === XmlTokenType.XML_REAL_WHITE_SPACE && builder.lookAhead(1) == null) {
-            // noop when at eof, ensures error is placed at the last character
-            builder.advanceLexer()
-            svelteParsing.flushSvelteTags()
-        }
-
         return null
+    }
+
+    override fun flushOpenTags() {
+        super.flushOpenTags()
+
+        svelteParsing.flushSvelteTags()
     }
 
     override fun childTerminatesParent(childName: String?, parentName: String?, tagLevel: Int): Boolean? {
@@ -89,7 +82,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     private fun flushHtmlTags(beforeMarker: PsiBuilder.Marker, targetTagLevel: Int) {
         while (tagLevel() > targetTagLevel) {
             val tagName = peekTagName()
-            if (!HtmlUtil.isOptionalEndForHtmlTagL(tagName) && "html" != tagName && "body" != tagName) {
+            if (isEndTagRequired(tagName)) {
                 val errorMarker = beforeMarker.precede()
                 errorMarker.errorBefore(XmlErrorMessages.message("named.element.is.not.closed", tagName), beforeMarker)
             }
