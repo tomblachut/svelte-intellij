@@ -11,23 +11,10 @@ import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
 
 /**
- * Due to the design of HtmlParsing, SvelteHtmlParsing remaps SvelteTokenTypes.START_MUSTACHE to XmlTokenType.XML_NAME
- * so that code enters overridable parseAttribute() path.
- * This is a lossy process, but required to make {shorthand} attributes work without copying whole HtmlParsing file.
- * Remapping also ensures that lexer and other token-based components do not care about HtmlParsing limitations.
- *
- * After checking if XmlTokenType.XML_NAME is in fact '{' token is remapped back to SvelteTokenTypes.START_MUSTACHE.
- *
  * TODO Replace XmlErrorMessages after dropping support for 2019.3
  */
 @Suppress("UnstableApiUsage", "DEPRECATION")
 class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
-    init {
-        builder.setTokenTypeRemapper { source, _, _, _ ->
-            return@setTokenTypeRemapper if (source === SvelteTokenTypes.START_MUSTACHE) XmlTokenType.XML_NAME else source
-        }
-    }
-
     private val blockLevel get() = if (openedBlocks.empty()) 0 else openedBlocks.peek().tagLevel
 
     private val openedBlocks = Stack<OpenedBlock>()
@@ -75,7 +62,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     }
 
     override fun hasCustomTagContent(): Boolean {
-        return isRemappedStartMustache()
+        return token() === SvelteTokenTypes.START_MUSTACHE
     }
 
     override fun parseCustomTagContent(xmlText: PsiBuilder.Marker?): PsiBuilder.Marker? {
@@ -138,22 +125,28 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         }
     }
 
+    override fun hasCustomHeaderContent(): Boolean {
+        return token() === SvelteTokenTypes.START_MUSTACHE
+    }
+
+    override fun parseCustomHeaderContent() {
+        val att = mark()
+        parseAttributeExpression(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
+        att.done(SVELTE_HTML_ATTRIBUTE)
+    }
+
     override fun parseAttribute() {
         assert(token() === XmlTokenType.XML_NAME)
         val att = mark()
 
-        if (isRemappedStartMustache()) {
-            parseAttributeExpression(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
-        } else {
-            val elementType = when (builder.tokenText!!.startsWith("let:", true)) {
-                true -> SvelteJSLazyElementTypes.ATTRIBUTE_PARAMETER
-                false -> SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION
-            }
+        val elementType = when (builder.tokenText!!.startsWith("let:", true)) {
+            true -> SvelteJSLazyElementTypes.ATTRIBUTE_PARAMETER
+            false -> SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION
+        }
+        advance()
+        if (token() === XmlTokenType.XML_EQ) {
             advance()
-            if (token() === XmlTokenType.XML_EQ) {
-                advance()
-                parseAttributeValue(elementType)
-            }
+            parseAttributeValue(elementType)
         }
 
         att.done(SVELTE_HTML_ATTRIBUTE)
@@ -179,7 +172,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
                     error.error(XmlErrorMessages.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
-                } else if (isRemappedStartMustache()) {
+                } else if (tt === SvelteTokenTypes.START_MUSTACHE) {
                     parseAttributeExpression(elementType)
                 } else {
                     advance()
@@ -193,8 +186,8 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
             }
         } else {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token
-            while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || isRemappedStartMustache()) {
-                if (isRemappedStartMustache()) {
+            while (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN || token() === SvelteTokenTypes.START_MUSTACHE) {
+                if (token() === SvelteTokenTypes.START_MUSTACHE) {
                     parseAttributeExpression(elementType)
                 } else {
                     advance()
@@ -210,25 +203,17 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         attValue.done(XmlElementType.XML_ATTRIBUTE_VALUE)
     }
 
-    private fun isRemappedStartMustache(): Boolean {
-        return token() === XmlTokenType.XML_NAME && builder.originalText[builder.currentOffset] == '{'
-    }
-
     private fun parseAttributeExpression(elementType: IElementType) {
         val expressionMarker = mark()
-        // Remap must happen AFTER placing marker
-        builder.remapCurrentToken(SvelteTokenTypes.START_MUSTACHE)
         advance() // {
-        advanceCode(elementType)
-        advance() // }
-        expressionMarker.done(SvelteElementTypes.ATTRIBUTE_EXPRESSION)
-    }
 
-    private fun advanceCode(elementType: IElementType) {
         val marker = builder.mark()
         // Guard against empty expressions
         if (token() === SvelteTokenTypes.CODE_FRAGMENT) advance()
         marker.collapse(elementType)
+
+        advance() // }
+        expressionMarker.done(SvelteElementTypes.ATTRIBUTE_EXPRESSION)
     }
 
     companion object {

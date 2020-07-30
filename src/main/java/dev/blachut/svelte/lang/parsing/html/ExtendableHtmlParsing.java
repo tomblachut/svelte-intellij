@@ -136,6 +136,13 @@ public class ExtendableHtmlParsing extends HtmlParsing {
         return xmlText;
     }
 
+    protected boolean hasCustomHeaderContent() {
+        return false;
+    }
+
+    protected void parseCustomHeaderContent() {
+    }
+
     @Nullable
     protected static PsiBuilder.Marker flushError(PsiBuilder.Marker error) {
         if (error != null) {
@@ -381,6 +388,8 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                     parseAttribute();
                 } else if (tt == XmlTokenType.XML_CHAR_ENTITY_REF || tt == XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference();
+                } else if (hasCustomHeaderContent()) {
+                    parseCustomHeaderContent();
                 } else {
                     break;
                 }
