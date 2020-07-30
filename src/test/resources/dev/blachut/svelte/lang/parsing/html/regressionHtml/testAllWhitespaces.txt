@@ -1,4 +1,4 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       PsiElement(XML_PROCESSING_INSTRUCTION)
@@ -6,27 +6,27 @@ HtmlFile:test.html
         XmlToken:XML_PI_TARGET('xml version="1.0" encoding="UTF-8" standalone="yes"')
         XmlToken:XML_PI_END('?>')
       PsiWhiteSpace('\n')
-    HtmlTag:Root
+    SvelteHtmlTag: Root
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('Root')
       XmlToken:XML_TAG_END('>')
-      HtmlTag:page
+      SvelteHtmlTag: page
         XmlToken:XML_START_TAG_START('<')
         XmlToken:XML_NAME('page')
         XmlToken:XML_TAG_END('>')
-        HtmlTag:content
+        SvelteHtmlTag: content
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('content')
           XmlToken:XML_TAG_END('>')
-          HtmlTag:locatieblok
+          SvelteHtmlTag: locatieblok
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('locatieblok')
             XmlToken:XML_TAG_END('>')
-            HtmlTag:locatie
+            SvelteHtmlTag: locatie
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('locatie')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -41,11 +41,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace(' ')
-            HtmlTag:straat
+            SvelteHtmlTag: straat
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('straat')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -60,11 +60,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace(' ')
-            HtmlTag:postcode
+            SvelteHtmlTag: postcode
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('postcode')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -79,11 +79,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace(' ')
-            HtmlTag:plaats
+            SvelteHtmlTag: plaats
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('plaats')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -98,11 +98,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('  ')
-            HtmlTag:telomschrijving
+            SvelteHtmlTag: telomschrijving
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('telomschrijving')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -117,11 +117,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace(' ')
-            HtmlTag:telefoon
+            SvelteHtmlTag: telefoon
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('telefoon')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -136,11 +136,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('  ')
-            HtmlTag:internet
+            SvelteHtmlTag: internet
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('internet')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -156,15 +156,15 @@ HtmlFile:test.html
             XmlToken:XML_END_TAG_START('</')
             XmlToken:XML_NAME('locatieblok')
             XmlToken:XML_TAG_END('>')
-          HtmlTag:naamblok
+          SvelteHtmlTag: naamblok
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('naamblok')
             XmlToken:XML_TAG_END('>')
-            HtmlTag:aanhefnaam
+            SvelteHtmlTag: aanhefnaam
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('aanhefnaam')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -183,11 +183,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace(' ')
-            HtmlTag:functie
+            SvelteHtmlTag: functie
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('functie')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -202,11 +202,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace(' ')
-            HtmlTag:mobielomschr
+            SvelteHtmlTag: mobielomschr
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('mobielomschr')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -221,11 +221,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\t')
-            HtmlTag:mobiel
+            SvelteHtmlTag: mobiel
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('mobiel')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -240,11 +240,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace(' ')
-            HtmlTag:emailomschr
+            SvelteHtmlTag: emailomschr
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('emailomschr')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -259,11 +259,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\t')
-            HtmlTag:email
+            SvelteHtmlTag: email
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('email')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: label
                 XmlToken:XML_NAME('label')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)

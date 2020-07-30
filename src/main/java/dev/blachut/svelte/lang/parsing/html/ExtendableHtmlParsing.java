@@ -8,6 +8,7 @@ package dev.blachut.svelte.lang.parsing.html;
 import com.intellij.codeInsight.completion.CompletionUtilCore;
 import com.intellij.codeInsight.daemon.XmlErrorMessages;
 import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.html.HtmlParsing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.tree.ICustomParsingType;
 import com.intellij.psi.tree.IElementType;
@@ -28,7 +29,7 @@ import java.util.Objects;
  * TODO Replace XmlErrorMessages after dropping support for 2019.3
  */
 @SuppressWarnings({"UnstableApiUsage", "deprecation"})
-public class ExtendableHtmlParsing {
+public class ExtendableHtmlParsing extends HtmlParsing {
     @NonNls
     private static final String TR_TAG = "tr";
     @NonNls
@@ -46,6 +47,7 @@ public class ExtendableHtmlParsing {
     private static final String COMPLETION_NAME = StringUtil.toLowerCase(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED);
 
     public ExtendableHtmlParsing(final PsiBuilder builder) {
+        super(builder);
         myBuilder = builder;
     }
 
@@ -406,14 +408,6 @@ public class ExtendableHtmlParsing {
         return xmlText;
     }
 
-    protected final PsiBuilder getBuilder() {
-        return myBuilder;
-    }
-
-    protected final PsiBuilder.Marker mark() {
-        return myBuilder.mark();
-    }
-
     @Nullable
     protected static PsiBuilder.Marker terminateText(@Nullable PsiBuilder.Marker xmlText) {
         if (xmlText != null) {
@@ -580,18 +574,6 @@ public class ExtendableHtmlParsing {
         }
 
         pi.done(XmlElementType.XML_PROCESSING_INSTRUCTION);
-    }
-
-    protected final IElementType token() {
-        return myBuilder.getTokenType();
-    }
-
-    protected final boolean eof() {
-        return myBuilder.eof();
-    }
-
-    protected final void advance() {
-        myBuilder.advanceLexer();
     }
 
     protected void error(@NotNull String message) {

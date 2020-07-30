@@ -1,4 +1,4 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       PsiElement(XML_DOCTYPE)
@@ -48,13 +48,13 @@ HtmlFile:test.html
     PsiWhiteSpace(' ')
     XmlToken:XML_DATA_CHARACTERS('#IMPLIED>]>')
     PsiWhiteSpace('\n')
-    HtmlTag:a
+    SvelteHtmlTag: a
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('a')
       XmlToken:XML_TAG_END('>')
       XmlText
         PsiWhiteSpace(' ')
-      HtmlTag:b
+      SvelteHtmlTag: b
         XmlToken:XML_START_TAG_START('<')
         XmlToken:XML_NAME('b')
         XmlToken:XML_TAG_END('>')

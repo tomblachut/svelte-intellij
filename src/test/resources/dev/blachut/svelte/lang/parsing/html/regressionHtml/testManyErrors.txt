@@ -1,20 +1,20 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>
-    HtmlTag:html
+    SvelteHtmlTag: html
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('html')
       XmlToken:XML_TAG_END('>')
       XmlText
         PsiWhiteSpace('\n')
-      HtmlTag:HEAD
+      SvelteHtmlTag: HEAD
         XmlToken:XML_START_TAG_START('<')
         XmlToken:XML_NAME('HEAD')
         XmlToken:XML_TAG_END('>')
         XmlText
           PsiWhiteSpace('\n\t')
-        HtmlTag:TITLE
+        SvelteHtmlTag: TITLE
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('TITLE')
           XmlToken:XML_TAG_END('>')
@@ -32,11 +32,11 @@ HtmlFile:test.html
         XmlToken:XML_TAG_END('>')
       XmlText
         PsiWhiteSpace('\n\n')
-      HtmlTag:BODY
+      SvelteHtmlTag: BODY
         XmlToken:XML_START_TAG_START('<')
         XmlToken:XML_NAME('BODY')
         PsiWhiteSpace(' ')
-        PsiElement(XML_ATTRIBUTE)
+        SvelteHtmlAttribute: bgcolor
           XmlToken:XML_NAME('bgcolor')
           XmlToken:XML_EQ('=')
           PsiElement(XML_ATTRIBUTE_VALUE)
@@ -46,11 +46,11 @@ HtmlFile:test.html
         XmlToken:XML_TAG_END('>')
         XmlText
           PsiWhiteSpace('\n\n')
-        HtmlTag:TABLE
+        SvelteHtmlTag: TABLE
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('TABLE')
           PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
+          SvelteHtmlAttribute: BORDER
             XmlToken:XML_NAME('BORDER')
             XmlToken:XML_EQ('=')
             PsiElement(XML_ATTRIBUTE_VALUE)
@@ -58,7 +58,7 @@ HtmlFile:test.html
               XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('0')
               XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
           PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
+          SvelteHtmlAttribute: WIDTH
             XmlToken:XML_NAME('WIDTH')
             XmlToken:XML_EQ('=')
             PsiElement(XML_ATTRIBUTE_VALUE)
@@ -66,7 +66,7 @@ HtmlFile:test.html
               XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('100%')
               XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
           PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
+          SvelteHtmlAttribute: summary
             XmlToken:XML_NAME('summary')
             XmlToken:XML_EQ('=')
             PsiElement(XML_ATTRIBUTE_VALUE)
@@ -76,23 +76,23 @@ HtmlFile:test.html
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:TR
+          SvelteHtmlTag: TR
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('TR')
             XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-            HtmlTag:TD
+            SvelteHtmlTag: TD
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('TD')
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n   ')
-              HtmlTag:IMG
+              SvelteHtmlTag: IMG
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('IMG')
                 PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
+                SvelteHtmlAttribute: SRC
                   XmlToken:XML_NAME('SRC')
                   XmlToken:XML_EQ('=')
                   PsiElement(XML_ATTRIBUTE_VALUE)
@@ -100,7 +100,7 @@ HtmlFile:test.html
                     XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('../images/javalogo52x88.gif')
                     XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
                 PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
+                SvelteHtmlAttribute: ALT
                   XmlToken:XML_NAME('ALT')
                   XmlToken:XML_EQ('=')
                   PsiElement(XML_ATTRIBUTE_VALUE)
@@ -108,44 +108,46 @@ HtmlFile:test.html
                     XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('Java')
                     XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
                 PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
+                SvelteHtmlAttribute: BORDER
                   XmlToken:XML_NAME('BORDER')
                   XmlToken:XML_EQ('=')
                   PsiElement(XML_ATTRIBUTE_VALUE)
                     XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('0')
                 PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
+                SvelteHtmlAttribute: WIDTH
                   XmlToken:XML_NAME('WIDTH')
                   XmlToken:XML_EQ('=')
                   PsiElement(XML_ATTRIBUTE_VALUE)
                     XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('52')
                 PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
+                SvelteHtmlAttribute: HEIGHT
                   XmlToken:XML_NAME('HEIGHT')
                   XmlToken:XML_EQ('=')
                   PsiElement(XML_ATTRIBUTE_VALUE)
                     XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('88')
                 XmlToken:XML_TAG_END('>')
-              XmlText
-                PsiWhiteSpace('\n')
+                XmlText
+                  PsiWhiteSpace('\n')
+                PsiErrorElement:Element IMG is not closed
+                  <empty list>
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('TD')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n\n')
-            HtmlTag:TD
+            SvelteHtmlTag: TD
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('TD')
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n')
-              HtmlTag:center
+              SvelteHtmlTag: center
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('center')
                 XmlToken:XML_TAG_END('>')
                 XmlText
                   PsiWhiteSpace('\n           ')
-                HtmlTag:h1
+                SvelteHtmlTag: h1
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('h1')
                   XmlToken:XML_TAG_END('>')
@@ -168,17 +170,17 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n\n')
-            HtmlTag:TD
+            SvelteHtmlTag: TD
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('TD')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: ALIGN
                 XmlToken:XML_NAME('ALIGN')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
                   XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('RIGHT')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: VALIGN
                 XmlToken:XML_NAME('VALIGN')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -186,11 +188,11 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n')
-              HtmlTag:font
+              SvelteHtmlTag: font
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('font')
                 PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
+                SvelteHtmlAttribute: size
                   XmlToken:XML_NAME('size')
                   XmlToken:XML_EQ('=')
                   PsiElement(XML_ATTRIBUTE_VALUE)
@@ -198,11 +200,11 @@ HtmlFile:test.html
                     XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('-1')
                     XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
                 XmlToken:XML_TAG_END('>')
-                HtmlTag:a
+                SvelteHtmlTag: a
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('a')
                   PsiWhiteSpace(' ')
-                  PsiElement(XML_ATTRIBUTE)
+                  SvelteHtmlAttribute: href
                     XmlToken:XML_NAME('href')
                     XmlToken:XML_EQ('=')
                     PsiElement(XML_ATTRIBUTE_VALUE)
@@ -348,13 +350,13 @@ HtmlFile:test.html
           PsiWhiteSpace(' ')
           XmlToken:XML_DATA_CHARACTERS('ignored.')
           PsiWhiteSpace('\n')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:b
+          SvelteHtmlTag: b
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
@@ -363,13 +365,13 @@ HtmlFile:test.html
             XmlToken:XML_END_TAG_START('</')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
-          HtmlTag:br
+          SvelteHtmlTag: br
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('br')
             XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:blockquote
+          SvelteHtmlTag: blockquote
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('blockquote')
             XmlToken:XML_TAG_END('>')
@@ -377,7 +379,7 @@ HtmlFile:test.html
               PsiWhiteSpace('\n')
               XmlToken:XML_DATA_CHARACTERS('The')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -472,7 +474,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('Sun.')
               PsiWhiteSpace('\n')
-            HtmlTag:pre
+            SvelteHtmlTag: pre
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('pre')
               XmlToken:XML_TAG_END('>')
@@ -482,7 +484,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('object')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('width="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -495,7 +497,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('height="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -515,7 +517,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('name="code"')
                 PsiWhiteSpace(' ')
                 XmlToken:XML_DATA_CHARACTERS('value="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -534,7 +536,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('name="object"')
                 PsiWhiteSpace(' ')
                 XmlToken:XML_DATA_CHARACTERS('value="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -553,7 +555,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('name="codebase"')
                 PsiWhiteSpace(' ')
                 XmlToken:XML_DATA_CHARACTERS('value="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -568,7 +570,7 @@ HtmlFile:test.html
                 PsiWhiteSpace('\n   ')
                 XmlToken:XML_DATA_CHARACTERS('...')
                 PsiWhiteSpace('\n  ')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -588,7 +590,7 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-            HtmlTag:b
+            SvelteHtmlTag: b
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
@@ -597,17 +599,17 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:ul
+            SvelteHtmlTag: ul
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('ul')
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n')
-              HtmlTag:li
+              SvelteHtmlTag: li
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('li')
                 XmlToken:XML_TAG_END('>')
@@ -649,7 +651,7 @@ HtmlFile:test.html
                   XmlToken:XML_DATA_CHARACTERS('the')
                   PsiWhiteSpace(' ')
                   XmlToken:XML_DATA_CHARACTERS('value:')
-                HtmlTag:br
+                SvelteHtmlTag: br
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('br')
                   XmlToken:XML_TAG_END('>')
@@ -657,7 +659,7 @@ HtmlFile:test.html
                   PsiWhiteSpace('\n    ')
                   XmlToken:XML_CHAR_ENTITY_REF('&nbsp;')
                   XmlToken:XML_CHAR_ENTITY_REF('&nbsp;')
-                HtmlTag:code
+                SvelteHtmlTag: code
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('code')
                   XmlToken:XML_TAG_END('>')
@@ -670,13 +672,13 @@ HtmlFile:test.html
                   XmlToken:XML_TAG_END('>')
                 XmlText
                   PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -735,7 +737,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('network')
               PsiWhiteSpace(' ')
-            HtmlTag:b
+            SvelteHtmlTag: b
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
@@ -755,13 +757,13 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('value')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('like:')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -776,13 +778,13 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -791,7 +793,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('optional')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -830,20 +832,20 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('class.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
             XmlText
               XmlToken:XML_DATA_CHARACTERS('Either')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -856,7 +858,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('or')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -875,20 +877,20 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('both.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
             XmlText
               XmlToken:XML_DATA_CHARACTERS('The')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -934,7 +936,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('plugin')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('properly.')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
@@ -957,13 +959,13 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('something')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('like:')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -982,20 +984,20 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
               XmlToken:XML_DATA_CHARACTERS('or')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1014,11 +1016,11 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
@@ -1038,7 +1040,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1060,13 +1062,13 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('something')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('like:')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1085,20 +1087,20 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
               XmlToken:XML_DATA_CHARACTERS('or')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1119,13 +1121,13 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -1150,20 +1152,20 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('applet.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
             XmlText
               XmlToken:XML_DATA_CHARACTERS('The')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1186,7 +1188,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1252,7 +1254,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('applet.')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
@@ -1266,11 +1268,11 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('see')
               PsiWhiteSpace('\n    ')
-            HtmlTag:a
+            SvelteHtmlTag: a
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('a')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
+              SvelteHtmlAttribute: href
                 XmlToken:XML_NAME('href')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
@@ -1291,13 +1293,13 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -1312,7 +1314,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1324,7 +1326,7 @@ HtmlFile:test.html
             XmlText
               XmlToken:XML_DATA_CHARACTERS(',')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1336,7 +1338,7 @@ HtmlFile:test.html
             XmlText
               XmlToken:XML_DATA_CHARACTERS(',')
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1350,7 +1352,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('or')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1421,7 +1423,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1506,13 +1508,13 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:b
+          SvelteHtmlTag: b
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
@@ -1521,13 +1523,13 @@ HtmlFile:test.html
             XmlToken:XML_END_TAG_START('</')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
-          HtmlTag:br
+          SvelteHtmlTag: br
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('br')
             XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:blockquote
+          SvelteHtmlTag: blockquote
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('blockquote')
             XmlToken:XML_TAG_END('>')
@@ -1535,7 +1537,7 @@ HtmlFile:test.html
               PsiWhiteSpace('\n')
               XmlToken:XML_DATA_CHARACTERS('The')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1632,7 +1634,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('Sun.')
               PsiWhiteSpace('\n')
-            HtmlTag:pre
+            SvelteHtmlTag: pre
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('pre')
               XmlToken:XML_TAG_END('>')
@@ -1642,7 +1644,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('embed')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('code="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -1655,7 +1657,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('object="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -1668,7 +1670,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('codebase="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -1681,7 +1683,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('width="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -1694,7 +1696,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('height="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -1719,7 +1721,7 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-            HtmlTag:b
+            SvelteHtmlTag: b
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
@@ -1728,26 +1730,26 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-            HtmlTag:ul
+            SvelteHtmlTag: ul
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('ul')
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n')
-              HtmlTag:li
+              SvelteHtmlTag: li
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('li')
                 XmlToken:XML_TAG_END('>')
                 XmlText
                   XmlToken:XML_DATA_CHARACTERS('The')
                   PsiWhiteSpace(' ')
-                HtmlTag:code
+                SvelteHtmlTag: code
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('code')
                   XmlToken:XML_TAG_END('>')
@@ -1760,7 +1762,7 @@ HtmlFile:test.html
                   PsiWhiteSpace(' ')
                   XmlToken:XML_DATA_CHARACTERS('and')
                   PsiWhiteSpace(' ')
-                HtmlTag:code
+                SvelteHtmlTag: code
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('code')
                   XmlToken:XML_TAG_END('>')
@@ -1818,7 +1820,7 @@ HtmlFile:test.html
                   XmlToken:XML_DATA_CHARACTERS('the')
                   PsiWhiteSpace(' ')
                   XmlToken:XML_DATA_CHARACTERS('applet.')
-                HtmlTag:br
+                SvelteHtmlTag: br
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('br')
                   XmlToken:XML_TAG_END('>')
@@ -1834,11 +1836,11 @@ HtmlFile:test.html
                   PsiWhiteSpace(' ')
                   XmlToken:XML_DATA_CHARACTERS('the')
                   PsiWhiteSpace('\n    ')
-                HtmlTag:a
+                SvelteHtmlTag: a
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('a')
                   PsiWhiteSpace(' ')
-                  PsiElement(XML_ATTRIBUTE)
+                  SvelteHtmlAttribute: href
                     XmlToken:XML_NAME('href')
                     XmlToken:XML_EQ('=')
                     PsiElement(XML_ATTRIBUTE_VALUE)
@@ -1859,13 +1861,13 @@ HtmlFile:test.html
                   XmlToken:XML_TAG_END('>')
                 XmlText
                   PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -1874,7 +1876,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1897,7 +1899,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('an')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1948,7 +1950,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('a')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -1961,13 +1963,13 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('tag.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -1998,7 +2000,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2013,13 +2015,13 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('tag.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -2046,7 +2048,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('an')
               PsiWhiteSpace(' \n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2061,20 +2063,20 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('tag.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
             XmlText
               XmlToken:XML_DATA_CHARACTERS('Either')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2087,7 +2089,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('or')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2106,13 +2108,13 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('both.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -2121,7 +2123,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('optional')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2158,20 +2160,20 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('class.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
             XmlText
               XmlToken:XML_DATA_CHARACTERS('The')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2215,7 +2217,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('plugin')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('properly.')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
@@ -2238,13 +2240,13 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('something')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('like:')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2260,20 +2262,20 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
               XmlToken:XML_DATA_CHARACTERS('or')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2289,11 +2291,11 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
@@ -2313,7 +2315,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2335,13 +2337,13 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('something')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('like:')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2357,20 +2359,20 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
               XmlToken:XML_DATA_CHARACTERS('or')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2388,13 +2390,13 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -2457,7 +2459,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('network')
               PsiWhiteSpace(' ')
-            HtmlTag:b
+            SvelteHtmlTag: b
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
@@ -2477,13 +2479,13 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('value')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('like:')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2510,13 +2512,13 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:b
+          SvelteHtmlTag: b
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
@@ -2525,13 +2527,13 @@ HtmlFile:test.html
             XmlToken:XML_END_TAG_START('</')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
-          HtmlTag:br
+          SvelteHtmlTag: br
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('br')
             XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:blockquote
+          SvelteHtmlTag: blockquote
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('blockquote')
             XmlToken:XML_TAG_END('>')
@@ -2539,7 +2541,7 @@ HtmlFile:test.html
               PsiWhiteSpace('\n')
               XmlToken:XML_DATA_CHARACTERS('The')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2588,7 +2590,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace('\n')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2659,7 +2661,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('the')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2702,7 +2704,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('applet.')
               PsiWhiteSpace('\n')
-            HtmlTag:pre
+            SvelteHtmlTag: pre
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('pre')
               XmlToken:XML_TAG_END('>')
@@ -2712,7 +2714,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('applet')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('code="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2725,7 +2727,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('object="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2738,7 +2740,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('codebase="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2751,7 +2753,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('width="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2764,7 +2766,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace('\n  ')
                 XmlToken:XML_DATA_CHARACTERS('height="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2782,7 +2784,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('param')
                 PsiWhiteSpace(' ')
                 XmlToken:XML_DATA_CHARACTERS('name="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2795,7 +2797,7 @@ HtmlFile:test.html
                 XmlToken:XML_DATA_CHARACTERS('"')
                 PsiWhiteSpace(' ')
                 XmlToken:XML_DATA_CHARACTERS('value="')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2810,7 +2812,7 @@ HtmlFile:test.html
                 PsiWhiteSpace('\n   ')
                 XmlToken:XML_DATA_CHARACTERS('...')
                 PsiWhiteSpace('\n  ')
-              HtmlTag:i
+              SvelteHtmlTag: i
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('i')
                 XmlToken:XML_TAG_END('>')
@@ -2830,7 +2832,7 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-            HtmlTag:b
+            SvelteHtmlTag: b
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
@@ -2839,26 +2841,26 @@ HtmlFile:test.html
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('b')
               XmlToken:XML_TAG_END('>')
-            HtmlTag:br
+            SvelteHtmlTag: br
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('br')
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-            HtmlTag:ul
+            SvelteHtmlTag: ul
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('ul')
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n')
-              HtmlTag:li
+              SvelteHtmlTag: li
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('li')
                 XmlToken:XML_TAG_END('>')
                 XmlText
                   XmlToken:XML_DATA_CHARACTERS('Either')
                   PsiWhiteSpace(' ')
-                HtmlTag:code
+                SvelteHtmlTag: code
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('code')
                   XmlToken:XML_TAG_END('>')
@@ -2871,7 +2873,7 @@ HtmlFile:test.html
                   PsiWhiteSpace(' ')
                   XmlToken:XML_DATA_CHARACTERS('or')
                   PsiWhiteSpace(' ')
-                HtmlTag:code
+                SvelteHtmlTag: code
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('code')
                   XmlToken:XML_TAG_END('>')
@@ -2890,13 +2892,13 @@ HtmlFile:test.html
                   PsiWhiteSpace(' ')
                   XmlToken:XML_DATA_CHARACTERS('both.')
                   PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -2905,7 +2907,7 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('optional')
               PsiWhiteSpace(' ')
-            HtmlTag:code
+            SvelteHtmlTag: code
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('code')
               XmlToken:XML_TAG_END('>')
@@ -2942,13 +2944,13 @@ HtmlFile:test.html
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('class.')
               PsiWhiteSpace('\n\t ')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:li
+          SvelteHtmlTag: li
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('li')
             XmlToken:XML_TAG_END('>')
@@ -2981,13 +2983,13 @@ HtmlFile:test.html
               XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-        HtmlTag:p
+        SvelteHtmlTag: p
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('p')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-          HtmlTag:b
+          SvelteHtmlTag: b
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
@@ -2996,13 +2998,13 @@ HtmlFile:test.html
             XmlToken:XML_END_TAG_START('</')
             XmlToken:XML_NAME('b')
             XmlToken:XML_TAG_END('>')
-          HtmlTag:br
+          SvelteHtmlTag: br
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('br')
             XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-        HtmlTag:blockquote
+        SvelteHtmlTag: blockquote
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('blockquote')
           XmlToken:XML_TAG_END('>')
@@ -3010,7 +3012,7 @@ HtmlFile:test.html
             PsiWhiteSpace('\n')
             XmlToken:XML_DATA_CHARACTERS('The')
             PsiWhiteSpace(' ')
-          HtmlTag:code
+          SvelteHtmlTag: code
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('code')
             XmlToken:XML_TAG_END('>')
@@ -3033,7 +3035,7 @@ HtmlFile:test.html
             PsiWhiteSpace(' ')
             XmlToken:XML_DATA_CHARACTERS('for')
             PsiWhiteSpace(' \n')
-          HtmlTag:code
+          SvelteHtmlTag: code
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('code')
             XmlToken:XML_TAG_END('>')
@@ -3080,7 +3082,7 @@ HtmlFile:test.html
             PsiWhiteSpace(' ')
             XmlToken:XML_DATA_CHARACTERS('supported.')
             PsiWhiteSpace('\n')
-          HtmlTag:pre
+          SvelteHtmlTag: pre
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('pre')
             XmlToken:XML_TAG_END('>')
@@ -3090,7 +3092,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('app')
               PsiWhiteSpace('\n  ')
               XmlToken:XML_DATA_CHARACTERS('class="')
-            HtmlTag:i
+            SvelteHtmlTag: i
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('i')
               XmlToken:XML_TAG_END('>')
@@ -3103,7 +3105,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('"')
               PsiWhiteSpace(' ')
               XmlToken:XML_DATA_CHARACTERS('(')
-            HtmlTag:i
+            SvelteHtmlTag: i
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('i')
               XmlToken:XML_TAG_END('>')
@@ -3121,7 +3123,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('suffix)')
               PsiWhiteSpace('\n  ')
               XmlToken:XML_DATA_CHARACTERS('src="')
-            HtmlTag:i
+            SvelteHtmlTag: i
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('i')
               XmlToken:XML_TAG_END('>')
@@ -3134,7 +3136,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('"')
               PsiWhiteSpace('\n  ')
               XmlToken:XML_DATA_CHARACTERS('width="')
-            HtmlTag:i
+            SvelteHtmlTag: i
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('i')
               XmlToken:XML_TAG_END('>')
@@ -3147,7 +3149,7 @@ HtmlFile:test.html
               XmlToken:XML_DATA_CHARACTERS('"')
               PsiWhiteSpace('\n  ')
               XmlToken:XML_DATA_CHARACTERS('height="')
-            HtmlTag:i
+            SvelteHtmlTag: i
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('i')
               XmlToken:XML_TAG_END('>')
@@ -3204,7 +3206,7 @@ HtmlFile:test.html
           XmlToken:XML_DATA_CHARACTERS('supports')
           PsiWhiteSpace(' ')
           XmlToken:XML_DATA_CHARACTERS('and')
-        HtmlTag:br
+        SvelteHtmlTag: br
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('br')
           XmlToken:XML_TAG_END('>')
@@ -3222,11 +3224,11 @@ HtmlFile:test.html
           PsiWhiteSpace(' ')
           XmlToken:XML_DATA_CHARACTERS('the')
           PsiWhiteSpace(' \n')
-        HtmlTag:a
+        SvelteHtmlTag: a
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('a')
           PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
+          SvelteHtmlAttribute: href
             XmlToken:XML_NAME('href')
             XmlToken:XML_EQ('=')
             PsiElement(XML_ATTRIBUTE_VALUE)
@@ -3248,220 +3250,221 @@ HtmlFile:test.html
         XmlText
           XmlToken:XML_DATA_CHARACTERS('.')
           PsiWhiteSpace('\n')
-        HtmlTag:P
+        SvelteHtmlTag: P
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('P')
           XmlToken:XML_TAG_END('>')
           XmlText
             PsiWhiteSpace('\n')
-        HtmlTag:HR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('HR')
-          PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
-            XmlToken:XML_NAME('SIZE')
-            XmlToken:XML_EQ('=')
-            PsiElement(XML_ATTRIBUTE_VALUE)
-              XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('3')
-          PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
-            XmlToken:XML_NAME('NOSHADE')
-          XmlToken:XML_TAG_END('>')
-        XmlText
-          PsiWhiteSpace('\n')
-        HtmlTag:TABLE
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('TABLE')
-          PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
-            XmlToken:XML_NAME('BORDER')
-            XmlToken:XML_EQ('=')
-            PsiElement(XML_ATTRIBUTE_VALUE)
-              XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-              XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('0')
-              XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-          PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
-            XmlToken:XML_NAME('WIDTH')
-            XmlToken:XML_EQ('=')
-            PsiElement(XML_ATTRIBUTE_VALUE)
-              XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-              XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('100%')
-              XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-          PsiWhiteSpace(' ')
-          PsiElement(XML_ATTRIBUTE)
-            XmlToken:XML_NAME('summary')
-            XmlToken:XML_EQ('=')
-            PsiElement(XML_ATTRIBUTE_VALUE)
-              XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-              XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('layout')
-              XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-          XmlToken:XML_TAG_END('>')
-          XmlText
-            PsiWhiteSpace('\n')
-          HtmlTag:TR
+          SvelteHtmlTag: HR
             XmlToken:XML_START_TAG_START('<')
-            XmlToken:XML_NAME('TR')
+            XmlToken:XML_NAME('HR')
             PsiWhiteSpace(' ')
-            PsiElement(XML_ATTRIBUTE)
-              XmlToken:XML_NAME('VALIGN')
+            SvelteHtmlAttribute: SIZE
+              XmlToken:XML_NAME('SIZE')
               XmlToken:XML_EQ('=')
               PsiElement(XML_ATTRIBUTE_VALUE)
-                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('TOP')
+                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('3')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: NOSHADE
+              XmlToken:XML_NAME('NOSHADE')
             XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n')
-            HtmlTag:TD
+            SvelteHtmlTag: TABLE
               XmlToken:XML_START_TAG_START('<')
-              XmlToken:XML_NAME('TD')
-              XmlToken:XML_TAG_END('>')
-              XmlText
-                PsiWhiteSpace('\n')
-              HtmlTag:P
-                XmlToken:XML_START_TAG_START('<')
-                XmlToken:XML_NAME('P')
-                XmlToken:XML_TAG_END('>')
-                HtmlTag:FONT
-                  XmlToken:XML_START_TAG_START('<')
-                  XmlToken:XML_NAME('FONT')
-                  PsiWhiteSpace(' ')
-                  PsiElement(XML_ATTRIBUTE)
-                    XmlToken:XML_NAME('SIZE')
-                    XmlToken:XML_EQ('=')
-                    PsiElement(XML_ATTRIBUTE_VALUE)
-                      XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-                      XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('-2')
-                      XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-                  XmlToken:XML_TAG_END('>')
-                  XmlText
-                    PsiWhiteSpace('\n  ')
-                  HtmlTag:A
-                    XmlToken:XML_START_TAG_START('<')
-                    XmlToken:XML_NAME('A')
-                    PsiWhiteSpace(' ')
-                    PsiElement(XML_ATTRIBUTE)
-                      XmlToken:XML_NAME('HREF')
-                      XmlToken:XML_EQ('=')
-                      PsiElement(XML_ATTRIBUTE_VALUE)
-                        XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-                        XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('../relnotes/SMICopyright.html')
-                        XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-                    XmlToken:XML_TAG_END('>')
-                    XmlText
-                      XmlToken:XML_DATA_CHARACTERS('Copyright')
-                    XmlToken:XML_END_TAG_START('</')
-                    XmlToken:XML_NAME('A')
-                    XmlToken:XML_TAG_END('>')
-                  XmlText
-                    PsiWhiteSpace(' ')
-                    XmlToken:XML_CHAR_ENTITY_REF('&#169;')
-                    PsiWhiteSpace(' ')
-                    XmlToken:XML_DATA_CHARACTERS('2001')
-                    PsiWhiteSpace('\n  ')
-                  HtmlTag:A
-                    XmlToken:XML_START_TAG_START('<')
-                    XmlToken:XML_NAME('A')
-                    PsiWhiteSpace(' ')
-                    PsiElement(XML_ATTRIBUTE)
-                      XmlToken:XML_NAME('HREF')
-                      XmlToken:XML_EQ('=')
-                      PsiElement(XML_ATTRIBUTE_VALUE)
-                        XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-                        XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('http://www.sun.com')
-                        XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-                    XmlToken:XML_TAG_END('>')
-                    XmlText
-                      XmlToken:XML_DATA_CHARACTERS('Sun')
-                      PsiWhiteSpace(' ')
-                      XmlToken:XML_DATA_CHARACTERS('Microsystems,')
-                      PsiWhiteSpace(' ')
-                      XmlToken:XML_DATA_CHARACTERS('Inc.')
-                    XmlToken:XML_END_TAG_START('</')
-                    XmlToken:XML_NAME('A')
-                    XmlToken:XML_TAG_END('>')
-                  XmlText
-                    PsiWhiteSpace('\n  ')
-                    XmlToken:XML_DATA_CHARACTERS('All')
-                    PsiWhiteSpace(' ')
-                    XmlToken:XML_DATA_CHARACTERS('Rights')
-                    PsiWhiteSpace(' ')
-                    XmlToken:XML_DATA_CHARACTERS('Reserved.')
-                  XmlToken:XML_END_TAG_START('</')
-                  XmlToken:XML_NAME('FONT')
-                  XmlToken:XML_TAG_END('>')
-                XmlToken:XML_END_TAG_START('</')
-                XmlToken:XML_NAME('P')
-                XmlToken:XML_TAG_END('>')
-              XmlText
-                PsiWhiteSpace('\n')
-              XmlToken:XML_END_TAG_START('</')
-              XmlToken:XML_NAME('TD')
-              XmlToken:XML_TAG_END('>')
-            XmlText
-              PsiWhiteSpace('\n')
-            HtmlTag:TD
-              XmlToken:XML_START_TAG_START('<')
-              XmlToken:XML_NAME('TD')
+              XmlToken:XML_NAME('TABLE')
               PsiWhiteSpace(' ')
-              PsiElement(XML_ATTRIBUTE)
-                XmlToken:XML_NAME('ALIGN')
+              SvelteHtmlAttribute: BORDER
+                XmlToken:XML_NAME('BORDER')
                 XmlToken:XML_EQ('=')
                 PsiElement(XML_ATTRIBUTE_VALUE)
-                  XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('RIGHT')
+                  XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                  XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('0')
+                  XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+              PsiWhiteSpace(' ')
+              SvelteHtmlAttribute: WIDTH
+                XmlToken:XML_NAME('WIDTH')
+                XmlToken:XML_EQ('=')
+                PsiElement(XML_ATTRIBUTE_VALUE)
+                  XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                  XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('100%')
+                  XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+              PsiWhiteSpace(' ')
+              SvelteHtmlAttribute: summary
+                XmlToken:XML_NAME('summary')
+                XmlToken:XML_EQ('=')
+                PsiElement(XML_ATTRIBUTE_VALUE)
+                  XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                  XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('layout')
+                  XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+              XmlToken:XML_TAG_END('>')
+              XmlText
+                PsiWhiteSpace('\n')
+              SvelteHtmlTag: TR
+                XmlToken:XML_START_TAG_START('<')
+                XmlToken:XML_NAME('TR')
+                PsiWhiteSpace(' ')
+                SvelteHtmlAttribute: VALIGN
+                  XmlToken:XML_NAME('VALIGN')
+                  XmlToken:XML_EQ('=')
+                  PsiElement(XML_ATTRIBUTE_VALUE)
+                    XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('TOP')
+                XmlToken:XML_TAG_END('>')
+                XmlText
+                  PsiWhiteSpace('\n')
+                SvelteHtmlTag: TD
+                  XmlToken:XML_START_TAG_START('<')
+                  XmlToken:XML_NAME('TD')
+                  XmlToken:XML_TAG_END('>')
+                  XmlText
+                    PsiWhiteSpace('\n')
+        SvelteHtmlTag: P
+          XmlToken:XML_START_TAG_START('<')
+          XmlToken:XML_NAME('P')
+          XmlToken:XML_TAG_END('>')
+          SvelteHtmlTag: FONT
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('FONT')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: SIZE
+              XmlToken:XML_NAME('SIZE')
+              XmlToken:XML_EQ('=')
+              PsiElement(XML_ATTRIBUTE_VALUE)
+                XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('-2')
+                XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              PsiWhiteSpace('\n  ')
+            SvelteHtmlTag: A
+              XmlToken:XML_START_TAG_START('<')
+              XmlToken:XML_NAME('A')
+              PsiWhiteSpace(' ')
+              SvelteHtmlAttribute: HREF
+                XmlToken:XML_NAME('HREF')
+                XmlToken:XML_EQ('=')
+                PsiElement(XML_ATTRIBUTE_VALUE)
+                  XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                  XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('../relnotes/SMICopyright.html')
+                  XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+              XmlToken:XML_TAG_END('>')
+              XmlText
+                XmlToken:XML_DATA_CHARACTERS('Copyright')
+              XmlToken:XML_END_TAG_START('</')
+              XmlToken:XML_NAME('A')
+              XmlToken:XML_TAG_END('>')
+            XmlText
+              PsiWhiteSpace(' ')
+              XmlToken:XML_CHAR_ENTITY_REF('&#169;')
+              PsiWhiteSpace(' ')
+              XmlToken:XML_DATA_CHARACTERS('2001')
+              PsiWhiteSpace('\n  ')
+            SvelteHtmlTag: A
+              XmlToken:XML_START_TAG_START('<')
+              XmlToken:XML_NAME('A')
+              PsiWhiteSpace(' ')
+              SvelteHtmlAttribute: HREF
+                XmlToken:XML_NAME('HREF')
+                XmlToken:XML_EQ('=')
+                PsiElement(XML_ATTRIBUTE_VALUE)
+                  XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                  XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('http://www.sun.com')
+                  XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+              XmlToken:XML_TAG_END('>')
+              XmlText
+                XmlToken:XML_DATA_CHARACTERS('Sun')
+                PsiWhiteSpace(' ')
+                XmlToken:XML_DATA_CHARACTERS('Microsystems,')
+                PsiWhiteSpace(' ')
+                XmlToken:XML_DATA_CHARACTERS('Inc.')
+              XmlToken:XML_END_TAG_START('</')
+              XmlToken:XML_NAME('A')
+              XmlToken:XML_TAG_END('>')
+            XmlText
+              PsiWhiteSpace('\n  ')
+              XmlToken:XML_DATA_CHARACTERS('All')
+              PsiWhiteSpace(' ')
+              XmlToken:XML_DATA_CHARACTERS('Rights')
+              PsiWhiteSpace(' ')
+              XmlToken:XML_DATA_CHARACTERS('Reserved.')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('FONT')
+            XmlToken:XML_TAG_END('>')
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('P')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n')
+        PsiErrorElement:Closing tag matches nothing
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('TD')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n')
+        SvelteHtmlTag: TD
+          XmlToken:XML_START_TAG_START('<')
+          XmlToken:XML_NAME('TD')
+          PsiWhiteSpace(' ')
+          SvelteHtmlAttribute: ALIGN
+            XmlToken:XML_NAME('ALIGN')
+            XmlToken:XML_EQ('=')
+            PsiElement(XML_ATTRIBUTE_VALUE)
+              XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('RIGHT')
+          XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: IMG
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('IMG')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: SRC
+              XmlToken:XML_NAME('SRC')
+              XmlToken:XML_EQ('=')
+              PsiElement(XML_ATTRIBUTE_VALUE)
+                XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('../images/sunlogo64x30.gif')
+                XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: ALT
+              XmlToken:XML_NAME('ALT')
+              XmlToken:XML_EQ('=')
+              PsiElement(XML_ATTRIBUTE_VALUE)
+                XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('Sun')
+                XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: BORDER
+              XmlToken:XML_NAME('BORDER')
+              XmlToken:XML_EQ('=')
+              PsiElement(XML_ATTRIBUTE_VALUE)
+                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('0')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: WIDTH
+              XmlToken:XML_NAME('WIDTH')
+              XmlToken:XML_EQ('=')
+              PsiElement(XML_ATTRIBUTE_VALUE)
+                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('64')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: HEIGHT
+              XmlToken:XML_NAME('HEIGHT')
+              XmlToken:XML_EQ('=')
+              PsiElement(XML_ATTRIBUTE_VALUE)
+                XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('30')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              PsiWhiteSpace('\n  ')
+            SvelteHtmlTag: BR
+              XmlToken:XML_START_TAG_START('<')
+              XmlToken:XML_NAME('BR')
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n  ')
-              HtmlTag:IMG
-                XmlToken:XML_START_TAG_START('<')
-                XmlToken:XML_NAME('IMG')
-                PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
-                  XmlToken:XML_NAME('SRC')
-                  XmlToken:XML_EQ('=')
-                  PsiElement(XML_ATTRIBUTE_VALUE)
-                    XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-                    XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('../images/sunlogo64x30.gif')
-                    XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-                PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
-                  XmlToken:XML_NAME('ALT')
-                  XmlToken:XML_EQ('=')
-                  PsiElement(XML_ATTRIBUTE_VALUE)
-                    XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
-                    XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('Sun')
-                    XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
-                PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
-                  XmlToken:XML_NAME('BORDER')
-                  XmlToken:XML_EQ('=')
-                  PsiElement(XML_ATTRIBUTE_VALUE)
-                    XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('0')
-                PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
-                  XmlToken:XML_NAME('WIDTH')
-                  XmlToken:XML_EQ('=')
-                  PsiElement(XML_ATTRIBUTE_VALUE)
-                    XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('64')
-                PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
-                  XmlToken:XML_NAME('HEIGHT')
-                  XmlToken:XML_EQ('=')
-                  PsiElement(XML_ATTRIBUTE_VALUE)
-                    XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('30')
-                XmlToken:XML_TAG_END('>')
-              XmlText
-                PsiWhiteSpace('\n  ')
-              HtmlTag:BR
-                XmlToken:XML_START_TAG_START('<')
-                XmlToken:XML_NAME('BR')
-                XmlToken:XML_TAG_END('>')
-              XmlText
-                PsiWhiteSpace('\n  ')
-              HtmlTag:FONT
+              SvelteHtmlTag: FONT
                 XmlToken:XML_START_TAG_START('<')
                 XmlToken:XML_NAME('FONT')
                 PsiWhiteSpace(' ')
-                PsiElement(XML_ATTRIBUTE)
+                SvelteHtmlAttribute: SIZE
                   XmlToken:XML_NAME('SIZE')
                   XmlToken:XML_EQ('=')
                   PsiElement(XML_ATTRIBUTE_VALUE)
@@ -3471,7 +3474,7 @@ HtmlFile:test.html
                 XmlToken:XML_TAG_END('>')
                 XmlText
                   PsiWhiteSpace('\n  ')
-                HtmlTag:i
+                SvelteHtmlTag: i
                   XmlToken:XML_START_TAG_START('<')
                   XmlToken:XML_NAME('i')
                   XmlToken:XML_TAG_END('>')
@@ -3489,55 +3492,61 @@ HtmlFile:test.html
                 XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n')
-              XmlToken:XML_END_TAG_START('</')
-              XmlToken:XML_NAME('TD')
-              XmlToken:XML_TAG_END('>')
-            XmlText
-              PsiWhiteSpace('\n')
-            XmlToken:XML_END_TAG_START('</')
-            XmlToken:XML_NAME('TR')
-            XmlToken:XML_TAG_END('>')
-          XmlText
-            PsiWhiteSpace('\n')
+              PsiErrorElement:Element BR is not closed
+                <empty list>
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('TD')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n')
+        PsiErrorElement:Closing tag matches nothing
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('TR')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n')
+        PsiErrorElement:Closing tag matches nothing
           XmlToken:XML_END_TAG_START('</')
           XmlToken:XML_NAME('TABLE')
           XmlToken:XML_TAG_END('>')
         XmlText
           PsiWhiteSpace('\n')
-        HtmlTag:BR
+        SvelteHtmlTag: BR
           XmlToken:XML_START_TAG_START('<')
           XmlToken:XML_NAME('BR')
           XmlToken:XML_TAG_END('>')
-        HtmlTag:BR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('BR')
-          XmlToken:XML_TAG_END('>')
-        HtmlTag:BR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('BR')
-          XmlToken:XML_TAG_END('>')
-        HtmlTag:BR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('BR')
-          XmlToken:XML_TAG_END('>')
-        HtmlTag:BR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('BR')
-          XmlToken:XML_TAG_END('>')
-        HtmlTag:BR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('BR')
-          XmlToken:XML_TAG_END('>')
-        HtmlTag:BR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('BR')
-          XmlToken:XML_TAG_END('>')
-        HtmlTag:BR
-          XmlToken:XML_START_TAG_START('<')
-          XmlToken:XML_NAME('BR')
-          XmlToken:XML_TAG_END('>')
-        XmlText
-          PsiWhiteSpace('\n\n')
+          SvelteHtmlTag: BR
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('BR')
+            XmlToken:XML_TAG_END('>')
+            SvelteHtmlTag: BR
+              XmlToken:XML_START_TAG_START('<')
+              XmlToken:XML_NAME('BR')
+              XmlToken:XML_TAG_END('>')
+              SvelteHtmlTag: BR
+                XmlToken:XML_START_TAG_START('<')
+                XmlToken:XML_NAME('BR')
+                XmlToken:XML_TAG_END('>')
+                SvelteHtmlTag: BR
+                  XmlToken:XML_START_TAG_START('<')
+                  XmlToken:XML_NAME('BR')
+                  XmlToken:XML_TAG_END('>')
+                  SvelteHtmlTag: BR
+                    XmlToken:XML_START_TAG_START('<')
+                    XmlToken:XML_NAME('BR')
+                    XmlToken:XML_TAG_END('>')
+                    SvelteHtmlTag: BR
+                      XmlToken:XML_START_TAG_START('<')
+                      XmlToken:XML_NAME('BR')
+                      XmlToken:XML_TAG_END('>')
+                      SvelteHtmlTag: BR
+                        XmlToken:XML_START_TAG_START('<')
+                        XmlToken:XML_NAME('BR')
+                        XmlToken:XML_TAG_END('>')
+                        XmlText
+                          PsiWhiteSpace('\n\n')
+                        PsiErrorElement:Element BR is not closed
+                          <empty list>
         XmlToken:XML_END_TAG_START('</')
         XmlToken:XML_NAME('body')
         XmlToken:XML_TAG_END('>')

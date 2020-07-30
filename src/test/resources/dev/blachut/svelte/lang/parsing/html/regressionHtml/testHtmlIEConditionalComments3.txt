@@ -1,4 +1,4 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_COMMENT)
       XmlToken:XML_COMMENT_START('<!--')
@@ -9,11 +9,11 @@ HtmlFile:test.html
     PsiWhiteSpace('\n')
     PsiElement(XML_PROLOG)
       <empty list>
-    HtmlTag:link
+    SvelteHtmlTag: link
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('link')
       PsiWhiteSpace(' ')
-      PsiElement(XML_ATTRIBUTE)
+      SvelteHtmlAttribute: href
         XmlToken:XML_NAME('href')
         XmlToken:XML_EQ('=')
         PsiElement(XML_ATTRIBUTE_VALUE)
@@ -21,7 +21,7 @@ HtmlFile:test.html
           XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('non-ie.css')
           XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
       PsiWhiteSpace(' ')
-      PsiElement(XML_ATTRIBUTE)
+      SvelteHtmlAttribute: rel
         XmlToken:XML_NAME('rel')
         XmlToken:XML_EQ('=')
         PsiElement(XML_ATTRIBUTE_VALUE)

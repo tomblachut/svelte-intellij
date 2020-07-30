@@ -1,12 +1,12 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>
-    HtmlTag:a
+    SvelteHtmlTag: a
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('a')
       PsiWhiteSpace(' ')
-      PsiElement(XML_ATTRIBUTE)
+      SvelteHtmlAttribute: blah
         XmlToken:XML_NAME('blah')
         XmlToken:XML_EQ('=')
         PsiElement(XML_ATTRIBUTE_VALUE)

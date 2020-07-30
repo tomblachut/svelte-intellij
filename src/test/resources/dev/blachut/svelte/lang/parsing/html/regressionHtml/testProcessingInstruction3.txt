@@ -1,4 +1,4 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       PsiElement(XML_PROCESSING_INSTRUCTION)
@@ -29,7 +29,7 @@ HtmlFile:test.html
         PsiWhiteSpace(' ')
         XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('"document.dtd"')
         XmlToken:XML_DOCTYPE_END('>')
-    HtmlTag:api
+    SvelteHtmlTag: api
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('api')
       XmlToken:XML_TAG_END('>')

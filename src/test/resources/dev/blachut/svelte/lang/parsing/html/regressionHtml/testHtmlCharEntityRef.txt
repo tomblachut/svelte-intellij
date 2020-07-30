@@ -1,15 +1,15 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>
     XmlToken:XML_CHAR_ENTITY_REF('&#xAAff;')
     XmlToken:XML_CHAR_ENTITY_REF('&#XaaFF;')
     XmlToken:XML_DATA_CHARACTERS('&#x&#X')
-    HtmlTag:tag
+    SvelteHtmlTag: tag
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('tag')
       PsiWhiteSpace(' ')
-      PsiElement(XML_ATTRIBUTE)
+      SvelteHtmlAttribute: attr
         XmlToken:XML_NAME('attr')
         XmlToken:XML_EQ('=')
         PsiElement(XML_ATTRIBUTE_VALUE)

@@ -1,4 +1,4 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiWhiteSpace(' ')
     PsiElement(XML_PROLOG)

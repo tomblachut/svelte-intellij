@@ -1,12 +1,12 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>
-    HtmlTag:project
+    SvelteHtmlTag: project
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('project')
       PsiWhiteSpace(' ')
-      PsiElement(XML_ATTRIBUTE)
+      SvelteHtmlAttribute: name
         XmlToken:XML_NAME('name')
         XmlToken:XML_EQ('=')
         PsiElement(XML_ATTRIBUTE_VALUE)
@@ -21,11 +21,11 @@ HtmlFile:test.html
           XmlToken:XML_COMMENT_CHARACTERS(' set global properties for this build ')
           XmlToken:XML_COMMENT_END('-->')
         PsiWhiteSpace('\n')
-      HtmlTag:property
+      SvelteHtmlTag: property
         XmlToken:XML_START_TAG_START('<')
         XmlToken:XML_NAME('property')
         PsiWhiteSpace(' ')
-        PsiElement(XML_ATTRIBUTE)
+        SvelteHtmlAttribute: value
           XmlToken:XML_NAME('value')
           XmlToken:XML_EQ('=')
           PsiElement(XML_ATTRIBUTE_VALUE)
