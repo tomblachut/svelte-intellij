@@ -5,6 +5,7 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
+import com.intellij.util.containers.Stack
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
@@ -27,7 +28,37 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         }
     }
 
-    private val svelteParsing = SvelteParsing(builder, ::flushHtmlTags)
+    private val blockLevel get() = if (incompleteBlocks.empty()) 0 else incompleteBlocks.peek().tagLevel
+
+    private val incompleteBlocks = Stack<IncompleteBlock>()
+
+    private fun parseSvelteTag() {
+        val (resultToken, resultMarker) = SvelteTagParsing.parseTag(builder)
+
+        if (SvelteTagElementTypes.START_TAGS.contains(resultToken)) {
+            val currentTagLevel = tagLevel()
+            val incompleteBlock = IncompleteBlock.create(currentTagLevel, resultToken, resultMarker, builder.mark())
+            incompleteBlocks.push(incompleteBlock)
+        } else if (SvelteTagElementTypes.INNER_TAGS.contains(resultToken)) {
+            if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingInnerTag(resultToken)) {
+                val incompleteBlock = incompleteBlocks.peek()
+
+                flushHtmlTags(resultMarker, incompleteBlock.tagLevel)
+                incompleteBlock.handleInnerTag(resultToken, resultMarker, builder.mark())
+            } else {
+                resultMarker.precede().errorBefore("unexpected inner tag", resultMarker)
+            }
+        } else if (SvelteTagElementTypes.END_TAGS.contains(resultToken)) {
+            if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingEndTag(resultToken)) {
+                val incompleteBlock = incompleteBlocks.pop()
+
+                flushHtmlTags(resultMarker, incompleteBlock.tagLevel)
+                incompleteBlock.handleEndTag(resultMarker)
+            } else {
+                resultMarker.precede().errorBefore("unexpected end token", resultMarker)
+            }
+        }
+    }
 
     override fun getHtmlTagElementType(): IElementType {
         return SVELTE_HTML_TAG
@@ -47,7 +78,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
 
     override fun parseCustomTagContent(xmlText: PsiBuilder.Marker?): PsiBuilder.Marker? {
         terminateText(xmlText)
-        svelteParsing.parseSvelteTag(tagLevel())
+        parseSvelteTag()
         return null
     }
 
@@ -57,24 +88,27 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
 
     override fun parseCustomTopLevelContent(error: PsiBuilder.Marker?): PsiBuilder.Marker? {
         flushError(error)
-        svelteParsing.parseSvelteTag(tagLevel())
+        parseSvelteTag()
         return null
     }
 
     override fun flushOpenTags() {
         super.flushOpenTags()
 
-        svelteParsing.flushSvelteTags()
+        while (!incompleteBlocks.empty()) {
+            val incompleteBlock = incompleteBlocks.pop()
+            incompleteBlock.handleMissingEndTag(builder.mark())
+        }
     }
 
     override fun childTerminatesParent(childName: String?, parentName: String?, tagLevel: Int): Boolean? {
-        if (tagLevel <= svelteParsing.blockLevel) return false
+        if (tagLevel <= blockLevel) return false
 
         return super.childTerminatesParent(childName, parentName, tagLevel)
     }
 
     override fun terminateAutoClosingParentTag(tag: PsiBuilder.Marker, tagName: String) {
-        if (tagLevel() <= svelteParsing.blockLevel) return
+        if (tagLevel() <= blockLevel) return
 
         super.terminateAutoClosingParentTag(tag, tagName)
     }
@@ -121,7 +155,8 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
                     || tt === XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER
                     || tt === XmlTokenType.XML_END_TAG_START
                     || tt === XmlTokenType.XML_EMPTY_ELEMENT_END
-                    || tt === XmlTokenType.XML_START_TAG_START) {
+                    || tt === XmlTokenType.XML_START_TAG_START
+                ) {
                     break
                 }
 
