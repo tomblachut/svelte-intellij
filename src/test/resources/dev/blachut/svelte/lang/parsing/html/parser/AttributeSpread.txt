@@ -1,0 +1,78 @@
+SvelteHtmlFile: AttributeSpread.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: <spread>
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: SPREAD_OR_SHORTHAND
+            JS:SPREAD_EXPRESSION
+              PsiElement(JS:DOT_DOT_DOT)('...')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('props')
+          PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: <spread>
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: SPREAD_OR_SHORTHAND
+            JS:SPREAD_EXPRESSION
+              PsiElement(JS:DOT_DOT_DOT)('...')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('props')
+          PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: hidden
+        XmlToken:XML_NAME('hidden')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: <spread>
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: SPREAD_OR_SHORTHAND
+            JS:SPREAD_EXPRESSION
+              PsiElement(JS:DOT_DOT_DOT)('...')
+              JS:OBJECT_LITERAL
+                PsiElement(JS:LBRACE)('{')
+                JS:ES6_PROPERTY
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('technically')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                JS:PROPERTY
+                  PsiElement(JS:IDENTIFIER)('possible')
+                  PsiElement(JS:COLON)(':')
+                  PsiWhiteSpace(' ')
+                  JS:LITERAL_EXPRESSION
+                    PsiElement(JS:TRUE_KEYWORD)('true')
+                PsiElement(JS:RBRACE)('}')
+          PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')

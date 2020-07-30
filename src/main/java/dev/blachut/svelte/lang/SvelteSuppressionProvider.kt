@@ -30,7 +30,7 @@ class SvelteSuppressionProvider : DefaultXmlSuppressionProvider() {
     }
 
     override fun isProviderAvailable(file: PsiFile): Boolean {
-        return file.viewProvider is SvelteFileViewProvider
+        return isSvelteContext(file)
     }
 }
 

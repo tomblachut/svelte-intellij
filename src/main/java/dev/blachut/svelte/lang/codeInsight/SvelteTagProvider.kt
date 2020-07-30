@@ -4,18 +4,17 @@ import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.javascript.psi.JSElement
-import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
-import dev.blachut.svelte.lang.SvelteFileType
-import dev.blachut.svelte.lang.SvelteFileViewProvider
+import dev.blachut.svelte.lang.SvelteHtmlFileType
 import dev.blachut.svelte.lang.completion.SvelteInsertHandler
 import dev.blachut.svelte.lang.icons.SvelteIcons
 import dev.blachut.svelte.lang.isSvelteComponentTag
+import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
 // Vue plugin uses 100, it's ok for now
 const val highPriority = 100.0
@@ -46,7 +45,7 @@ val svelteBareTagLookupElements = svelteTagNames.map {
  */
 class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
     override fun getDescriptor(tag: XmlTag?): XmlElementDescriptor? {
-        if (tag == null || tag.containingFile.viewProvider !is SvelteFileViewProvider) return null
+        if (tag == null || tag !is SvelteHtmlTag) return null
         if (!isSvelteComponentTag(tag.name)) return null
 
         val result = SvelteTagReference(tag).resolve()
@@ -58,7 +57,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
     }
 
     override fun addTagNameVariants(elements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {
-        if (tag !is HtmlTag || tag.containingFile.viewProvider !is SvelteFileViewProvider) return
+        if (tag !is SvelteHtmlTag) return
 
         if (svelteNamespace == namespacePrefix) {
             elements.addAll(svelteBareTagLookupElements)
@@ -75,9 +74,9 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         elements.addAll(getReachableComponents(tag))
     }
 
-    private fun getReachableComponents(tag: HtmlTag): List<LookupElement> {
+    private fun getReachableComponents(tag: SvelteHtmlTag): List<LookupElement> {
         val lookupElements = mutableListOf<LookupElement>()
-        val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
+        val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
 
         svelteVirtualFiles.forEach { virtualFile ->
             val componentName = virtualFile.nameWithoutExtension

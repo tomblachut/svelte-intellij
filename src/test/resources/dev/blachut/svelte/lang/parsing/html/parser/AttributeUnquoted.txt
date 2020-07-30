@@ -1,0 +1,178 @@
+SvelteHtmlFile: AttributeUnquoted.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSBinaryExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('title')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:PLUS)('+')
+                PsiWhiteSpace(' ')
+                JS:LITERAL_EXPRESSION
+                  PsiElement(JS:STRING_LITERAL)(''.'')
+            PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSBinaryExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('title')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:PLUS)('+')
+                PsiWhiteSpace(' ')
+                JS:LITERAL_EXPRESSION
+                  PsiElement(JS:STRING_LITERAL)(''.'')
+            PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: hidden
+        XmlToken:XML_NAME('hidden')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JS:OBJECT_LITERAL
+                PsiElement(JS:LBRACE)('{')
+                JS:ES6_PROPERTY
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('option')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                JS:PROPERTY
+                  PsiElement(JS:IDENTIFIER)('bag')
+                  PsiElement(JS:COLON)(':')
+                  PsiWhiteSpace(' ')
+                  JS:LITERAL_EXPRESSION
+                    PsiElement(JS:TRUE_KEYWORD)('true')
+                PsiElement(JS:RBRACE)('}')
+            PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('prefix')
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('title')
+            PsiElement(END_MUSTACHE)('}')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('infix')
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('second')
+            PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('prefix')
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSBinaryExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('title')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:PLUS)('+')
+                PsiWhiteSpace(' ')
+                JS:LITERAL_EXPRESSION
+                  PsiElement(JS:STRING_LITERAL)(''.'')
+            PsiElement(END_MUSTACHE)('}')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('suffix')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: hidden
+        XmlToken:XML_NAME('hidden')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: hidden
+        XmlToken:XML_NAME('hidden')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('title')
+            PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('reversed')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')

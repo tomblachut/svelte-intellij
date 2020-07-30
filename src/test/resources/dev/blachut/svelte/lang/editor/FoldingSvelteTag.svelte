@@ -1,3 +1,3 @@
-{#if test<fold text='...' expand='true'>}
+{#if test<fold text='...' expand='true'>}<fold text='...' expand='true'>
     {test}
-{/if</fold>}
+</fold>{/if</fold>}

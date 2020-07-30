@@ -62,27 +62,32 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileType name="Svelte" extensions="svelte" language="Svelte"
-                  implementationClass="dev.blachut.svelte.lang.SvelteFileType" fieldName="INSTANCE"/>
-        <lang.fileViewProviderFactory language="Svelte"
-                                      implementationClass="dev.blachut.svelte.lang.SvelteFileViewProviderFactory"/>
-        <lang.parserDefinition language="Svelte" implementationClass="dev.blachut.svelte.lang.parsing.top.SvelteParserDefinition"/>
+        <fileType name="Svelte" extensions="svelte" language="SvelteHTML"
+                  implementationClass="dev.blachut.svelte.lang.SvelteHtmlFileType" fieldName="INSTANCE"/>
         <lang.parserDefinition language="SvelteJS"
                                implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition"/>
         <lang.parserDefinition language="SvelteHTML"
                                implementationClass="dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition"/>
+        <lang.ast.factory language="SvelteHTML"
+                          implementationClass="dev.blachut.svelte.lang.parsing.html.SvelteHtmlASTFactory"/>
         <stubElementTypeHolder class="dev.blachut.svelte.lang.psi.SvelteJSElementTypes"/>
-        <lang.braceMatcher language="Svelte" implementationClass="dev.blachut.svelte.lang.editor.SvelteBraceMatcher"/>
-        <lang.syntaxHighlighterFactory language="Svelte"
+        <lang.braceMatcher language="SvelteHTML"
+                           implementationClass="dev.blachut.svelte.lang.editor.SvelteBraceMatcher"/>
+        <lang.syntaxHighlighterFactory language="SvelteHTML"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
-        <lang.commenter language="Svelte" implementationClass="com.intellij.lang.xml.XmlCommenter"/>
-        <lang.foldingBuilder language="Svelte"
+        <highlightingPassFactory implementation="dev.blachut.svelte.lang.SvelteJSSemanticKeywordHighlighterFactory"/>
+        <lang.foldingBuilder language="SvelteHTML"
                              implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
-        <lang.formatter language="Svelte"
-                        implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>
-        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTypedHandler" order="before xmlSlash"/>
+        <lang.formatter language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>
+        <extendWordSelectionHandler implementation="dev.blachut.svelte.lang.editor.SveltePrimaryBranchSelectioner"/>
+        <multiLangCommenter implementation="dev.blachut.svelte.lang.editor.SvelteCommentProvider"/>
+        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTagEndTypedHandler" order="before xmlSlash"/>
+        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteBraceTypedHandler"/>
+        <backspaceHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteBraceBackspaceHandler"/>
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
-        <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGeneratorImpl"/>
+        <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlContextType"/>
+        <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlTextContextType"/>
+        <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGenerator"/>
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteSuppressionProvider"/>
         <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension" order="first"/>
         <xml.fileNSInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteNSInfoProvider"/>
@@ -93,7 +98,7 @@
                                 implementationClass="dev.blachut.svelte.lang.completion.SvelteCompletionContributor"
                                 id="SvelteCompletionContributor"
                                 order="before JSPatternBasedCompletionContributor, before JSCompletionContributor, before xmlNonFirst, before cssClassOrIdReferenceCompletionContributor"/>
-        <localInspection language="Svelte"
+        <localInspection language="SvelteHTML"
                          displayName="Unresolved Svelte component"
                          shortName="SvelteUnresolvedComponent"
                          enabledByDefault="true"
@@ -103,7 +108,6 @@
         <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
-        <quoteHandler fileType="Svelte HTML" className="com.intellij.codeInsight.editorActions.HtmlQuoteHandler"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <dialectSpecificHandlersFactory language="SvelteJS"

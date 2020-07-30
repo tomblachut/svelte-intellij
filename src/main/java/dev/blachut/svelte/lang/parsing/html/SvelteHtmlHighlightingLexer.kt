@@ -8,11 +8,11 @@ import com.intellij.lexer.LayeredLexer
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
-import dev.blachut.svelte.lang.psi.SvelteTypes
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
-class SvelteHtmlHighlightingLexer(jsLanguageLevel: JSLanguageLevel) : LayeredLexer(BaseSvelteHtmlHighlightingLexer()) {
+class SvelteHtmlHighlightingLexer : LayeredLexer(BaseSvelteHtmlHighlightingLexer()) {
     init {
-        registerLayer(JavaScriptHighlightingLexer(jsLanguageLevel.dialect.optionHolder), SvelteTypes.CODE_FRAGMENT)
+        registerLayer(JavaScriptHighlightingLexer(JSLanguageLevel.ES6.dialect.optionHolder), SvelteTokenTypes.CODE_FRAGMENT)
     }
 }
 

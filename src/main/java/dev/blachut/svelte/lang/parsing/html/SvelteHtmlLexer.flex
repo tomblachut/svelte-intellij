@@ -3,16 +3,23 @@ package dev.blachut.svelte.lang.parsing.html;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.*;
 import com.intellij.psi.xml.*;
-import dev.blachut.svelte.lang.psi.SvelteTypes;
+import com.intellij.psi.TokenType;
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes;
+import com.intellij.lang.javascript.JSTokenTypes;
 
 %%
 
 %unicode
 
 %{
-  public int bracesNestingLevel;
+  private static int NO_QUOTE = 0;
+  private static int SINGLE_QUOTE = 1;
+  private static int DOUBLE_QUOTE = 2;
+  private static int BACKQUOTE = 3;
+
+  public int bracesNestingLevel = 0;
+  public int quoteMode = NO_QUOTE;
 
   public _SvelteHtmlLexer() {
     this((java.io.Reader)null);
@@ -20,9 +27,23 @@ import dev.blachut.svelte.lang.psi.SvelteTypes;
 
   private void yybeginNestable(int state) {
       bracesNestingLevel = 0;
+      quoteMode = NO_QUOTE;
       yybegin(state);
   }
+
+  private void toggleQuoteMode(int mode) {
+    if (quoteMode == NO_QUOTE) {
+      quoteMode = mode;
+    } else if (quoteMode == mode) {
+      quoteMode = NO_QUOTE;
+    }
+  }
 %}
+
+%eof{
+  bracesNestingLevel = 0;
+  quoteMode = NO_QUOTE;
+%eof}
 
 %class _SvelteHtmlLexer
 %public
@@ -49,11 +70,20 @@ import dev.blachut.svelte.lang.psi.SvelteTypes;
 %state TAG_CHARACTERS
 %state C_COMMENT_START
 %state C_COMMENT_END
+%state SVELTE_INTERPOLATION_START
+%state SVELTE_INTERPOLATION_KEYWORD
+%state SVELTE_INTERPOLATION
 /* IMPORTANT! number of states should not exceed 16. See JspHighlightingLexer. */
 
 ALPHA=[:letter:]
 DIGIT=[0-9]
 WHITE_SPACE_CHARS=[ \n\r\t\f\u2028\u2029\u0085]+
+WHITE_SPACE=\s+
+
+SINGLE_QUOTE="'"
+DOUBLE_QUOTE="\""
+BACKQUOTE="`"
+ESCAPED_QUOTES=\\'|\\\"|\\`
 
 TAG_NAME=({ALPHA}|"_"|":")({ALPHA}|{DIGIT}|"_"|":"|"."|"-")*
 /* see http://www.w3.org/TR/html5/syntax.html#syntax-attribute-name */
@@ -116,13 +146,35 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   return XmlTokenType.XML_DATA_CHARACTERS;
 }
 
+<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE; }
+
+<SVELTE_INTERPOLATION_START> {
+  {WHITE_SPACE}      { return TokenType.WHITE_SPACE; }
+  "#"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.SHARP; }
+  ":"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.COLON; }
+  "/"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.DIV; }
+  "@"                { yybegin(SVELTE_INTERPOLATION_KEYWORD); return JSTokenTypes.AT; }
+  [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
+}
+
+<SVELTE_INTERPOLATION_KEYWORD> {
+  {WHITE_SPACE}      { return TokenType.WHITE_SPACE; }
+  "if"               { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.IF_KEYWORD; }
+  "else"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.ELSE_KEYWORD; }
+  "each"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.EACH_KEYWORD; }
+  "await"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.AWAIT_KEYWORD; }
+  "then"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.THEN_KEYWORD; }
+  "catch"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.CATCH_KEYWORD; }
+  [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
+}
+
 <START_TAG_NAME, END_TAG_NAME> {TAG_NAME} { yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
 
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS> ">" { yybegin(YYINITIAL); return XmlTokenType.XML_TAG_END; }
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS> "/>" { yybegin(YYINITIAL); return XmlTokenType.XML_EMPTY_ELEMENT_END; }
 <BEFORE_TAG_ATTRIBUTES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 <TAG_ATTRIBUTES> {ATTRIBUTE_NAME} { return XmlTokenType.XML_NAME; }
-<TAG_ATTRIBUTES> "{" { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<TAG_ATTRIBUTES> "{" { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <TAG_ATTRIBUTES> "=" { yybegin(ATTRIBUTE_VALUE_START); return XmlTokenType.XML_EQ; }
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, START_TAG_NAME, END_TAG_NAME> [^] { yybegin(YYINITIAL); yypushback(1); break; }
 
@@ -133,25 +185,25 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_START> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_START> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_START> "\"" { yybegin(ATTRIBUTE_VALUE_DQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 <ATTRIBUTE_VALUE_START> "'" { yybegin(ATTRIBUTE_VALUE_SQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 
 <ATTRIBUTE_VALUE_DQ> {
   "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTypes.START_MUSTACHE; }
+  "{" { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
 <ATTRIBUTE_VALUE_SQ> {
   "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTypes.START_MUSTACHE; }
+  "{" { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
@@ -159,19 +211,24 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 <ATTRIBUTE_VALUE_DQ_BRACES> "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
 <ATTRIBUTE_VALUE_SQ_BRACES> "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
 
-<ATTRIBUTE_BRACES, ATTRIBUTE_VALUE_BRACES, ATTRIBUTE_VALUE_DQ_BRACES, ATTRIBUTE_VALUE_SQ_BRACES> {
-  "}" {
-          if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTypes.CODE_FRAGMENT; }
-          else {
-              if (yystate() == ATTRIBUTE_BRACES) yybegin(TAG_ATTRIBUTES);
-              if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
-              if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
-              if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
-              return SvelteTypes.END_MUSTACHE;
-          }
-      }
-  "{" { bracesNestingLevel++; return SvelteTypes.CODE_FRAGMENT; }
-  [^] { return SvelteTypes.CODE_FRAGMENT; }
+<SVELTE_INTERPOLATION, ATTRIBUTE_BRACES, ATTRIBUTE_VALUE_BRACES, ATTRIBUTE_VALUE_DQ_BRACES, ATTRIBUTE_VALUE_SQ_BRACES> {
+  {ESCAPED_QUOTES}   { return SvelteTokenTypes.CODE_FRAGMENT; }
+  {SINGLE_QUOTE}     { toggleQuoteMode(SINGLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
+  {DOUBLE_QUOTE}     { toggleQuoteMode(DOUBLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
+  {BACKQUOTE}        { toggleQuoteMode(BACKQUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
+  "{"                { if (quoteMode == NO_QUOTE) { bracesNestingLevel++; } return SvelteTokenTypes.CODE_FRAGMENT; }
+  "}"                {
+          if (quoteMode != NO_QUOTE) { return SvelteTokenTypes.CODE_FRAGMENT; }
+          if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTokenTypes.CODE_FRAGMENT; }
+
+          if (yystate() == SVELTE_INTERPOLATION) yybegin(YYINITIAL);
+          if (yystate() == ATTRIBUTE_BRACES) yybegin(TAG_ATTRIBUTES);
+          if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
+          if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
+          if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
+          return SvelteTokenTypes.END_MUSTACHE;
+                     }
+  [^]                { return SvelteTokenTypes.CODE_FRAGMENT; }
 }
 
 "&lt;" |
@@ -184,6 +241,6 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 "&#"[xX]({DIGIT}|[a-fA-F])+";" { return XmlTokenType.XML_CHAR_ENTITY_REF; }
 "&"{TAG_NAME}";" { return XmlTokenType.XML_ENTITY_REF_TOKEN; }
 
-<YYINITIAL> ([^<&\$# \n\r\t\f]|(\\\$)|(\\#))* { return XmlTokenType.XML_DATA_CHARACTERS; }
+<YYINITIAL> ([^<{&\$# \n\r\t\f]|(\\\$)|(\\#))* { return XmlTokenType.XML_DATA_CHARACTERS; }
 <YYINITIAL> [^] { return XmlTokenType.XML_DATA_CHARACTERS; }
 [^] { return XmlTokenType.XML_BAD_CHARACTER; }

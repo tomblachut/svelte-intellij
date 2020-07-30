@@ -1,0 +1,26 @@
+SvelteHtmlFile: BlockAwaitThenThenThen.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteAwaitBlock
+      SvelteAwaitPrimaryBranch
+        SvelteInitialTag(AWAIT_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:AWAIT_KEYWORD)('await')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('then')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:THEN_KEYWORD)('then')
+          PsiWhiteSpace(' ')
+          SvelteJS:EMBEDDED_PARAMETER
+            PsiElement(JS:IDENTIFIER)('then')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(AWAIT_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:AWAIT_KEYWORD)('await')
+        PsiElement(JS:RBRACE)('}')

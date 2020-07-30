@@ -1,63 +1,61 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.lang.ASTNode
-import com.intellij.lang.folding.FoldingBuilder
 import com.intellij.lang.folding.FoldingDescriptor
+import com.intellij.lang.xml.XmlFoldingBuilder
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
-import dev.blachut.svelte.lang.psi.*
-import java.util.*
+import com.intellij.psi.xml.XmlElement
+import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
+import dev.blachut.svelte.lang.psi.blocks.SvelteBranch
 
-class SvelteFoldingBuilder : FoldingBuilder, DumbAware {
-    override fun buildFoldRegions(node: ASTNode, document: Document): Array<FoldingDescriptor> {
-        val descriptors = ArrayList<FoldingDescriptor>()
-        appendDescriptors(node.psi, descriptors, document)
-        return descriptors.toTypedArray()
+class SvelteFoldingBuilder : XmlFoldingBuilder(), DumbAware {
+    override fun doAddForChildren(tag: XmlElement, descriptors: MutableList<FoldingDescriptor>, document: Document) {
+        for (child in tag.children) {
+            if (child is SvelteBlock) {
+                appendBlockDescriptors(child, descriptors, document)
+            }
+        }
+
+        super.doAddForChildren(tag, descriptors, document)
     }
 
-    private fun appendDescriptors(block: PsiElement, descriptors: MutableList<FoldingDescriptor>, document: Document) {
+    private fun appendBlockDescriptors(block: SvelteBlock, descriptors: MutableList<FoldingDescriptor>, document: Document) {
         if (isSingleLine(block, document)) {
             return
         }
 
-        if (block is SvelteBlock) {
-            val open = PsiTreeUtil.findChildOfType(block, SvelteOpeningTag::class.java)
+        val endTag = block.endTag
 
-            val close = when (open) {
-                is SvelteIfBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteIfBlockClosingTag::class.java)
-                is SvelteEachBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteEachBlockClosingTag::class.java)
-                is SvelteAwaitBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteAwaitBlockClosingTag::class.java)
-                is SvelteAwaitThenBlockOpeningTag -> PsiTreeUtil.findChildOfType(block, SvelteAwaitBlockClosingTag::class.java)
-                else -> null
-            }
+        if (endTag != null) {
+            // Following offsets ensure that we fold start and end tag together exactly like HTML does
+            // E.g. {#if condition...}
+            val foldingRangeStartOffset = block.startTag.textRange.endOffset - 1
+            val foldingRangeEndOffset = endTag.textRange.endOffset - 1
+            val range = TextRange(foldingRangeStartOffset, foldingRangeEndOffset)
 
-            if (open != null && close != null) {
-                // Following offsets ensure that we fold opening and closing tag together exactly like HTML does
-                // E.g. {#if condition ...}
-                val foldingRangeStartOffset = open.textRange.endOffset - 1
-                val foldingRangeEndOffset = close.textRange.endOffset - 1
+            descriptors.add(FoldingDescriptor(block, range))
+        }
+
+        for (child in block.children) {
+            if (child is SvelteBranch) {
+                val fragment = child.fragment
+                val foldingRangeStartOffset = fragment.textRange.startOffset
+                val foldingRangeEndOffset = fragment.textRange.endOffset
                 val range = TextRange(foldingRangeStartOffset, foldingRangeEndOffset)
 
                 descriptors.add(FoldingDescriptor(block, range))
+
+                doAddForChildren(fragment, descriptors, document)
             }
         }
-
-        var child: PsiElement? = block.firstChild
-        while (child != null) {
-            appendDescriptors(child, descriptors, document)
-            child = child.nextSibling
-        }
     }
 
-    override fun getPlaceholderText(node: ASTNode): String? {
-        return "..."
-    }
-
-    override fun isCollapsedByDefault(node: ASTNode): Boolean {
-        return false
+    override fun getLanguagePlaceholderText(node: ASTNode, range: TextRange): String {
+        if (node.psi is SvelteBlock) return "..."
+        return super.getLanguagePlaceholderText(node, range)
     }
 
     private fun isSingleLine(element: PsiElement, document: Document): Boolean {
