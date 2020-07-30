@@ -66,9 +66,6 @@ public class ExtendableHtmlParsing extends HtmlParsing {
             if (tt == XmlTokenType.XML_START_TAG_START) {
                 error = flushError(error);
                 parseTag();
-                myTagMarkersStack.clear();
-                myTagNamesStack.clear();
-                myOriginalTagNamesStack.clear();
             } else if (tt == XmlTokenType.XML_COMMENT_START) {
                 error = flushError(error);
                 parseComment();
@@ -100,11 +97,27 @@ public class ExtendableHtmlParsing extends HtmlParsing {
             }
         }
 
+        flushOpenTags();
+
         if (error != null) {
             error.error(XmlErrorMessages.message("top.level.element.is.not.completed"));
         }
 
         document.done(XmlElementType.HTML_DOCUMENT);
+    }
+
+    protected void flushOpenTags() {
+        while (hasTags()) {
+            final String tagName = myTagNamesStack.peek();
+            if (isEndTagRequired(tagName)) {
+                error(XmlErrorMessages.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
+            }
+            doneTag();
+        }
+    }
+
+    protected boolean isEndTagRequired(@NotNull String tagName) {
+        return !HtmlUtil.isOptionalEndForHtmlTagL(tagName) && !"html".equals(tagName) && !"body".equals(tagName);
     }
 
     protected boolean hasCustomTopLevelContent() {
@@ -286,13 +299,6 @@ public class ExtendableHtmlParsing extends HtmlParsing {
             }
         }
         terminateText(xmlText);
-        while (hasTags()) {
-            final String tagName = myTagNamesStack.peek();
-            if (!HtmlUtil.isOptionalEndForHtmlTagL(tagName) && !"html".equals(tagName) && !"body".equals(tagName)) {
-                error(XmlErrorMessages.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
-            }
-            doneTag();
-        }
     }
 
     protected boolean isSingleTag(@NotNull String tagName, @NotNull String originalTagName) {
