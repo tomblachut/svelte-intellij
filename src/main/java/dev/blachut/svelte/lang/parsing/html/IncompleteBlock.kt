@@ -7,6 +7,7 @@ import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 
 sealed class IncompleteBlock {
     abstract val tagLevel: Int
+    abstract val outerMarker: Marker
 
     abstract fun isMatchingInnerTag(token: IElementType): Boolean
     abstract fun isMatchingEndTag(token: IElementType): Boolean
@@ -31,7 +32,7 @@ sealed class IncompleteBlock {
 
 data class IncompleteIfBlock(
     override val tagLevel: Int,
-    private val outerMarker: Marker,
+    override val outerMarker: Marker,
     private var innerMarker: Marker,
     private var fragmentMarker: Marker
 ) : IncompleteBlock() {
@@ -64,7 +65,7 @@ data class IncompleteIfBlock(
 
 data class IncompleteEachBlock(
     override val tagLevel: Int,
-    private val outerMarker: Marker,
+    override val outerMarker: Marker,
     private var innerMarker: Marker,
     private var fragmentMarker: Marker
 ) : IncompleteBlock() {
@@ -97,7 +98,7 @@ data class IncompleteEachBlock(
 
 data class IncompleteAwaitBlock(
     override val tagLevel: Int,
-    private val outerMarker: Marker,
+    override val outerMarker: Marker,
     private var innerMarker: Marker,
     private var fragmentMarker: Marker
 ) : IncompleteBlock() {

@@ -36,8 +36,9 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         val (resultToken, resultMarker) = SvelteTagParsing.parseTag(builder)
 
         if (SvelteTagElementTypes.START_TAGS.contains(resultToken)) {
-            val currentTagLevel = tagLevel()
-            val incompleteBlock = IncompleteBlock.create(currentTagLevel, resultToken, resultMarker, builder.mark())
+            val blockTagLevel = tagLevel() + 1
+            val incompleteBlock = IncompleteBlock.create(blockTagLevel, resultToken, resultMarker, builder.mark())
+            pushTag(incompleteBlock.outerMarker, SYNTHETIC_TAG, SYNTHETIC_TAG)
             incompleteBlocks.push(incompleteBlock)
         } else if (SvelteTagElementTypes.INNER_TAGS.contains(resultToken)) {
             if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingInnerTag(resultToken)) {
@@ -53,6 +54,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
                 val incompleteBlock = incompleteBlocks.pop()
 
                 flushHtmlTags(resultMarker, incompleteBlock.tagLevel)
+                closeTag() // SYNTHETIC_TAG
                 incompleteBlock.handleEndTag(resultMarker)
             } else {
                 resultMarker.precede().errorBefore("unexpected end token", resultMarker)
@@ -93,12 +95,23 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     }
 
     override fun flushOpenTags() {
-        super.flushOpenTags()
-
         while (!incompleteBlocks.empty()) {
             val incompleteBlock = incompleteBlocks.pop()
-            incompleteBlock.handleMissingEndTag(builder.mark())
+            val marker = builder.mark()
+            flushHtmlTags(marker, incompleteBlock.tagLevel)
+            closeTag() // SYNTHETIC_TAG
+            incompleteBlock.handleMissingEndTag(marker)
         }
+
+        super.flushOpenTags()
+    }
+
+    override fun isTagNameFurtherInStack(endName: String): Boolean {
+        if (hasTags() && peekTagName() == SYNTHETIC_TAG) {
+            return false
+        }
+
+        return super.isTagNameFurtherInStack(endName)
     }
 
     override fun childTerminatesParent(childName: String?, parentName: String?, tagLevel: Int): Boolean? {
@@ -216,5 +229,10 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         // Guard against empty expressions
         if (token() === SvelteTokenTypes.CODE_FRAGMENT) advance()
         marker.collapse(elementType)
+    }
+
+    companion object {
+        // starts with ! so it is impossible to create such name in Svelte file
+        private const val SYNTHETIC_TAG = "!svelte-synthetic-tag"
     }
 }

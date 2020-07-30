@@ -37,7 +37,8 @@ SvelteHtmlFile: HtmlAutoClosingTagsInsideBlock.svelte
             XmlToken:XML_END_TAG_START('</')
             XmlToken:XML_NAME('div')
             XmlToken:XML_TAG_END('>')
-          PsiWhiteSpace('\n')
+          XmlText
+            PsiWhiteSpace('\n')
       SvelteEndTag(IF_END)
         PsiElement(JS:LBRACE)('{')
         PsiElement(JS:DIV)('/')
