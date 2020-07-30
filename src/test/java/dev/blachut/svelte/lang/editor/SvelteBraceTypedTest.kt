@@ -75,8 +75,8 @@ class SvelteBraceTypedTest : BasePlatformTestCase() {
         myFixture.type("\b")
         myFixture.checkResult("""<div test=<caret>>""")
     }
-}
 
-private fun CodeInsightTestFixture.initTest(text: String) {
-    this.configureByText("Foo.svelte", text)
+    private fun CodeInsightTestFixture.initTest(text: String) {
+        this.configureByText("Foo.svelte", text)
+    }
 }

@@ -12,8 +12,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.isSvelteContext
-import dev.blachut.svelte.lang.psi.SvelteInitialTag
-import dev.blachut.svelte.lang.psi.SvelteJSLazyPsiElement
+import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptWrapperPsiElement
 
 /**
  * Overrides default behavior for Svelte tags and expressions
@@ -26,9 +25,10 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
     override fun getLineCommenter(file: PsiFile, editor: Editor, lineStartLanguage: Language?, lineEndLanguage: Language?): Commenter? {
         if (lineStartLanguage?.isKindOf(JavascriptLanguage.INSTANCE) == true) {
             val offset = editor.caretModel.offset
-            val wrapper = PsiTreeUtil.getContextOfType(file.findElementAt(offset), SvelteJSLazyPsiElement::class.java, SvelteInitialTag::class.java)
+            val wrapper =
+                PsiTreeUtil.getContextOfType(file.findElementAt(offset), SvelteJSScriptWrapperPsiElement::class.java)
 
-            val language = if (wrapper == null) {
+            val language = if (wrapper != null) {
                 // inside script tag
                 SvelteJSLanguage.INSTANCE
             } else {
