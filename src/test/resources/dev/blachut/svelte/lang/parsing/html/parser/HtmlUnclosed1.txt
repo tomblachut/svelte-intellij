@@ -14,5 +14,5 @@ SvelteHtmlFile: HtmlUnclosed1.svelte
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
           <empty list>
-      PsiErrorElement:missing {/if} tag
+      PsiErrorElement:{if} is not closed
         <empty list>

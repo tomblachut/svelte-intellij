@@ -28,36 +28,36 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         }
     }
 
-    private val blockLevel get() = if (incompleteBlocks.empty()) 0 else incompleteBlocks.peek().tagLevel
+    private val blockLevel get() = if (openedBlocks.empty()) 0 else openedBlocks.peek().tagLevel
 
-    private val incompleteBlocks = Stack<IncompleteBlock>()
+    private val openedBlocks = Stack<OpenedBlock>()
 
     private fun parseSvelteTag() {
-        val (resultToken, resultMarker) = SvelteTagParsing.parseTag(builder)
+        val (tagToken, tagMarker) = SvelteTagParsing.parseTag(builder)
 
-        if (SvelteTagElementTypes.START_TAGS.contains(resultToken)) {
+        if (SvelteTagElementTypes.START_TAGS.contains(tagToken)) {
             val blockTagLevel = tagLevel() + 1
-            val incompleteBlock = IncompleteBlock.create(blockTagLevel, resultToken, resultMarker, builder.mark())
-            pushTag(incompleteBlock.outerMarker, SYNTHETIC_TAG, SYNTHETIC_TAG)
-            incompleteBlocks.push(incompleteBlock)
-        } else if (SvelteTagElementTypes.INNER_TAGS.contains(resultToken)) {
-            if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingInnerTag(resultToken)) {
-                val incompleteBlock = incompleteBlocks.peek()
+            val openedBlock = SvelteBlockParsing.startBlock(blockTagLevel, tagToken, tagMarker, builder.mark())
+            pushTag(openedBlock.outerMarker, SYNTHETIC_TAG, SYNTHETIC_TAG)
+            openedBlocks.push(openedBlock)
+        } else if (SvelteTagElementTypes.INNER_TAGS.contains(tagToken)) {
+            if (!openedBlocks.empty() && openedBlocks.peek().isMatchingInnerTag(tagToken)) {
+                val openedBlock = openedBlocks.peek()
 
-                flushHtmlTags(resultMarker, incompleteBlock.tagLevel)
-                incompleteBlock.handleInnerTag(resultToken, resultMarker, builder.mark())
+                flushHtmlTags(tagMarker, openedBlock.tagLevel)
+                openedBlock.handleInnerTag(tagToken, tagMarker, builder.mark())
             } else {
-                resultMarker.precede().errorBefore("unexpected inner tag", resultMarker)
+                tagMarker.precede().errorBefore("Unexpected inner tag", tagMarker)
             }
-        } else if (SvelteTagElementTypes.END_TAGS.contains(resultToken)) {
-            if (!incompleteBlocks.empty() && incompleteBlocks.peek().isMatchingEndTag(resultToken)) {
-                val incompleteBlock = incompleteBlocks.pop()
+        } else if (SvelteTagElementTypes.END_TAGS.contains(tagToken)) {
+            if (!openedBlocks.empty() && openedBlocks.peek().isMatchingEndTag(tagToken)) {
+                val openedBlock = openedBlocks.pop()
 
-                flushHtmlTags(resultMarker, incompleteBlock.tagLevel)
+                flushHtmlTags(tagMarker, openedBlock.tagLevel)
                 closeTag() // SYNTHETIC_TAG
-                incompleteBlock.handleEndTag(resultMarker)
+                openedBlock.handleEndTag(tagMarker)
             } else {
-                resultMarker.precede().errorBefore("unexpected end token", resultMarker)
+                tagMarker.precede().errorBefore("Unexpected end tag", tagMarker)
             }
         }
     }
@@ -95,12 +95,12 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     }
 
     override fun flushOpenTags() {
-        while (!incompleteBlocks.empty()) {
-            val incompleteBlock = incompleteBlocks.pop()
+        while (!openedBlocks.empty()) {
+            val openedBlock = openedBlocks.pop()
             val marker = builder.mark()
-            flushHtmlTags(marker, incompleteBlock.tagLevel)
+            flushHtmlTags(marker, openedBlock.tagLevel)
             closeTag() // SYNTHETIC_TAG
-            incompleteBlock.handleMissingEndTag(marker)
+            openedBlock.handleMissingEndTag(marker)
         }
 
         super.flushOpenTags()
