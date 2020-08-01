@@ -30,6 +30,18 @@ class SvelteJSSemanticKeywordHighlighter(private val myFile: PsiFile, document: 
             highlights.add(myHolder[i])
         }
 
-        UpdateHighlightersUtil.setHighlightersToEditor(myProject, myDocument, 0, myFile.textLength, highlights, colorsScheme, id)
+        // TODO After dropping 2020.1: unwrap conditional
+        @Suppress("SENSELESS_COMPARISON")
+        if (myDocument != null) {
+            UpdateHighlightersUtil.setHighlightersToEditor(
+                myProject,
+                myDocument,
+                0,
+                myFile.textLength,
+                highlights,
+                colorsScheme,
+                id
+            )
+        }
     }
 }
