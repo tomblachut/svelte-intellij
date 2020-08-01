@@ -1,6 +1,6 @@
 package dev.blachut.svelte.lang.parsing.html
 
-import com.intellij.codeInsight.daemon.XmlErrorMessages
+import com.intellij.codeInsight.daemon.XmlErrorBundle
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
@@ -10,10 +10,6 @@ import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
 
-/**
- * TODO Replace XmlErrorMessages after dropping support for 2019.3
- */
-@Suppress("UnstableApiUsage", "DEPRECATION")
 class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     private val blockLevel get() = if (openedBlocks.empty()) 0 else openedBlocks.peek().tagLevel
 
@@ -118,7 +114,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
             val tagName = peekTagName()
             if (isEndTagRequired(tagName)) {
                 val errorMarker = beforeMarker.precede()
-                errorMarker.errorBefore(XmlErrorMessages.message("named.element.is.not.closed", tagName), beforeMarker)
+                errorMarker.errorBefore(XmlErrorBundle.message("named.element.is.not.closed", tagName), beforeMarker)
             }
             val tag = closeTag()
             tag.doneBefore(htmlTagElementType, beforeMarker)
@@ -169,7 +165,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
                 if (tt === XmlTokenType.XML_BAD_CHARACTER) {
                     val error = mark()
                     advance()
-                    error.error(XmlErrorMessages.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
+                    error.error(XmlErrorBundle.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
                 } else if (tt === SvelteTokenTypes.START_MUSTACHE) {
@@ -182,7 +178,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
             if (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER) {
                 advance()
             } else {
-                error(XmlErrorMessages.message("xml.parsing.unclosed.attribute.value"))
+                error(XmlErrorBundle.message("xml.parsing.unclosed.attribute.value"))
             }
         } else {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token

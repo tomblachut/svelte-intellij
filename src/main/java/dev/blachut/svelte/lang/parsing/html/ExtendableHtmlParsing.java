@@ -6,7 +6,7 @@
 package dev.blachut.svelte.lang.parsing.html;
 
 import com.intellij.codeInsight.completion.CompletionUtilCore;
-import com.intellij.codeInsight.daemon.XmlErrorMessages;
+import com.intellij.codeInsight.daemon.XmlErrorBundle;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.html.HtmlParsing;
 import com.intellij.openapi.util.text.StringUtil;
@@ -25,10 +25,7 @@ import java.util.Objects;
 
 /**
  * Created because HtmlParsing is not extendable enough to support Svelte overrides
- * <p>
- * TODO Replace XmlErrorMessages after dropping support for 2019.3
  */
-@SuppressWarnings({"UnstableApiUsage", "deprecation"})
 public class ExtendableHtmlParsing extends HtmlParsing {
     @NonNls
     private static final String TR_TAG = "tr";
@@ -88,7 +85,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                     }
                 }
 
-                tagEndError.error(XmlErrorMessages.message("xml.parsing.closing.tag.matches.nothing"));
+                tagEndError.error(XmlErrorBundle.message("xml.parsing.closing.tag.matches.nothing"));
             } else if (hasCustomTopLevelContent()) {
                 error = parseCustomTopLevelContent(error);
             } else {
@@ -100,7 +97,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
         flushOpenTags();
 
         if (error != null) {
-            error.error(XmlErrorMessages.message("top.level.element.is.not.completed"));
+            error.error(XmlErrorBundle.message("top.level.element.is.not.completed"));
         }
 
         document.done(XmlElementType.HTML_DOCUMENT);
@@ -110,7 +107,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
         while (hasTags()) {
             final String tagName = myTagNamesStack.peek();
             if (isEndTagRequired(tagName)) {
-                error(XmlErrorMessages.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
+                error(XmlErrorBundle.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
             }
             doneTag();
         }
@@ -146,7 +143,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     @Nullable
     protected static PsiBuilder.Marker flushError(PsiBuilder.Marker error) {
         if (error != null) {
-            error.error(XmlErrorMessages.message("xml.parsing.unexpected.tokens"));
+            error.error(XmlErrorBundle.message("xml.parsing.unexpected.tokens"));
         }
         return null;
     }
@@ -158,7 +155,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
 
         while (token() != XmlTokenType.XML_DOCTYPE_END && !eof()) advance();
         if (eof()) {
-            error(XmlErrorMessages.message("xml.parsing.unexpected.end.of.file"));
+            error(XmlErrorBundle.message("xml.parsing.unexpected.end.of.file"));
         } else {
             advance();
         }
@@ -179,7 +176,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 // Start tag header
                 advance();
                 if (token() != XmlTokenType.XML_NAME) {
-                    error(XmlErrorMessages.message("xml.parsing.tag.name.expected"));
+                    error(XmlErrorBundle.message("xml.parsing.tag.name.expected"));
                     originalTagName = "";
                 } else {
                     originalTagName = Objects.requireNonNull(myBuilder.getTokenText());
@@ -205,7 +202,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 if (token() == XmlTokenType.XML_TAG_END) {
                     advance();
                 } else {
-                    error(XmlErrorMessages.message("tag.start.is.not.closed"));
+                    error(XmlErrorBundle.message("tag.start.is.not.closed"));
                     doneTag();
                     continue;
                 }
@@ -248,7 +245,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 xmlText = startText(xmlText);
                 final PsiBuilder.Marker error = mark();
                 advance();
-                error.error(XmlErrorMessages.message("unescaped.ampersand.or.nonterminated.character.entity.reference"));
+                error.error(XmlErrorBundle.message("unescaped.ampersand.or.nonterminated.character.entity.reference"));
             } else if (tt instanceof ICustomParsingType || tt instanceof ILazyParseableElementType) {
                 xmlText = terminateText(xmlText);
                 advance();
@@ -266,13 +263,13 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                         if (hasChancesToMatch) {
                             footer.rollbackTo();
                             if (!isOptionalTagEnd) {
-                                error(XmlErrorMessages.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
+                                error(XmlErrorBundle.message("named.element.is.not.closed", myOriginalTagNamesStack.peek()));
                             }
                             doneTag();
                         } else {
                             advance();
                             if (token() == XmlTokenType.XML_TAG_END) advance();
-                            footer.error(XmlErrorMessages.message("xml.parsing.closing.tag.matches.nothing"));
+                            footer.error(XmlErrorBundle.message("xml.parsing.closing.tag.matches.nothing"));
                         }
                         continue;
                     }
@@ -280,11 +277,11 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                     advance();
 
                     while (token() != XmlTokenType.XML_TAG_END && token() != XmlTokenType.XML_START_TAG_START && token() != XmlTokenType.XML_END_TAG_START && !eof()) {
-                        error(XmlErrorMessages.message("xml.parsing.unexpected.token"));
+                        error(XmlErrorBundle.message("xml.parsing.unexpected.token"));
                         advance();
                     }
                 } else {
-                    // error(XmlErrorMessages.message("xml.parsing.closing.tag.name.missing"));
+                    // error(XmlErrorBundle.message("xml.parsing.closing.tag.name.missing"));
                     error("Closing tag name missing");
                 }
                 footer.drop();
@@ -292,7 +289,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 if (token() == XmlTokenType.XML_TAG_END) {
                     advance();
                 } else {
-                    error(XmlErrorMessages.message("xml.parsing.closing.tag.is.not.done"));
+                    error(XmlErrorBundle.message("xml.parsing.closing.tag.is.not.done"));
                 }
                 if (hasTags()) doneTag();
             } else if ((token() == XmlTokenType.XML_REAL_WHITE_SPACE || token() == XmlTokenType.XML_DATA_CHARACTERS) && !hasTags()) {
@@ -493,7 +490,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
             if (tt == XmlTokenType.XML_BAD_CHARACTER) {
                 final PsiBuilder.Marker error = mark();
                 advance();
-                error.error(XmlErrorMessages.message("xml.parsing.bad.character"));
+                error.error(XmlErrorBundle.message("xml.parsing.bad.character"));
                 continue;
             }
             if (tt == XmlTokenType.XML_COMMENT_END) {
@@ -541,7 +538,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 if (tt == XmlTokenType.XML_BAD_CHARACTER) {
                     final PsiBuilder.Marker error = mark();
                     advance();
-                    error.error(XmlErrorMessages.message("unescaped.ampersand.or.nonterminated.character.entity.reference"));
+                    error.error(XmlErrorBundle.message("unescaped.ampersand.or.nonterminated.character.entity.reference"));
                 } else if (tt == XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference();
                 } else {
@@ -552,7 +549,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
             if (token() == XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER) {
                 advance();
             } else {
-                error(XmlErrorMessages.message("xml.parsing.unclosed.attribute.value"));
+                error(XmlErrorBundle.message("xml.parsing.unclosed.attribute.value"));
             }
         } else {
             if (token() != XmlTokenType.XML_TAG_END && token() != XmlTokenType.XML_EMPTY_ELEMENT_END) {
@@ -606,7 +603,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
             if (token() == XmlTokenType.XML_EQ) {
                 advance();
             } else {
-                error(XmlErrorMessages.message("expected.attribute.eq.sign"));
+                error(XmlErrorBundle.message("expected.attribute.eq.sign"));
             }
             parseAttributeValue();
         }
@@ -614,7 +611,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
         if (token() == XmlTokenType.XML_PI_END) {
             advance();
         } else {
-            error(XmlErrorMessages.message("xml.parsing.unterminated.processing.instruction"));
+            error(XmlErrorBundle.message("xml.parsing.unterminated.processing.instruction"));
         }
 
         pi.done(XmlElementType.XML_PROCESSING_INSTRUCTION);
