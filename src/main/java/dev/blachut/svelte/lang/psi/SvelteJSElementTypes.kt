@@ -12,4 +12,3 @@ object SvelteJSElementTypes {
         }
     }
 }
-

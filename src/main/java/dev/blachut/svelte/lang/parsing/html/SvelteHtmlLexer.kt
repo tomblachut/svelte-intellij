@@ -1,9 +1,9 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.Language
+import com.intellij.lang.css.CSSLanguage
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlLexer
-import com.intellij.lang.css.CSSLanguage
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
 

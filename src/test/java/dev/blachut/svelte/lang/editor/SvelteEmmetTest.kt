@@ -96,4 +96,3 @@ class SvelteEmmetTest : BasePlatformTestCase() {
         myFixture.checkResult(after)
     }
 }
-

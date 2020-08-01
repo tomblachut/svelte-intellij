@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.codeInsight
 
-
 import com.intellij.lang.ecmascript6.psi.ES6ExportSpecifierAlias
 import com.intellij.lang.ecmascript6.psi.ES6ImportExportSpecifierAlias
 import com.intellij.lang.ecmascript6.psi.ES6ImportSpecifierAlias

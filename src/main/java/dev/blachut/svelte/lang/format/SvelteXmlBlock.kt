@@ -133,7 +133,7 @@ open class SvelteXmlTagBlock(
         var child = fragment.firstChildNode
         while (child != null) {
             if (!AbstractXmlBlock.containsWhiteSpacesOnly(child) && child.textLength > 0) {
-                val wrap = chooseWrap(child, null,  null, textWrap)
+                val wrap = chooseWrap(child, null, null, textWrap)
 
                 child = processChild(localResults, child, wrap, null, Indent.getNormalIndent())
             }

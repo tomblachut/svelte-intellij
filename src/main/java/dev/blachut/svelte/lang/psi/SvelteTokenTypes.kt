@@ -9,13 +9,11 @@ object SvelteTokenTypes {
     @JvmField
     val CODE_FRAGMENT = SvelteElementType("CODE_FRAGMENT")
 
-
     @JvmField
     val START_MUSTACHE = SvelteElementType("START_MUSTACHE")
 
     @JvmField
     val END_MUSTACHE = SvelteElementType("END_MUSTACHE")
-
 
     @JvmField
     val IF_KEYWORD: IElementType = JSTokenTypes.IF_KEYWORD

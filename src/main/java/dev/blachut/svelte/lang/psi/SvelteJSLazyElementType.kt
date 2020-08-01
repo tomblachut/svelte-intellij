@@ -16,7 +16,7 @@ import dev.blachut.svelte.lang.SvelteJSLanguage
 abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
     protected abstract val noTokensErrorMessage: String
     protected val excessTokensErrorMessage = "unexpected token"
-    
+
     fun createJavaScriptParser(builder: PsiBuilder) = ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>,
         ES6FunctionParser<*>, JSPsiTypeParser<*>>(builder)
 

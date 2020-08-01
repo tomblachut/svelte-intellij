@@ -32,5 +32,4 @@ class SvelteJSSemanticKeywordHighlighter(private val myFile: PsiFile, document: 
 
         UpdateHighlightersUtil.setHighlightersToEditor(myProject, myDocument, 0, myFile.textLength, highlights, colorsScheme, id)
     }
-
 }

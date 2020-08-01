@@ -1,11 +1,11 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.Language
+import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.javascript.JavaScriptHighlightingLexer
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.LayeredLexer
-import com.intellij.lang.css.CSSLanguage
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes

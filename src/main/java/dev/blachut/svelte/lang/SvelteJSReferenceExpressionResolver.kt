@@ -10,8 +10,10 @@ import com.intellij.lang.javascript.psi.stubs.JSImplicitElement
 import com.intellij.lang.javascript.psi.stubs.impl.JSImplicitElementImpl
 import com.intellij.psi.ResolveResult
 
-class SvelteJSReferenceExpressionResolver(referenceExpression: JSReferenceExpressionImpl,
-                                          ignorePerformanceLimits: Boolean) :
+class SvelteJSReferenceExpressionResolver(
+    referenceExpression: JSReferenceExpressionImpl,
+    ignorePerformanceLimits: Boolean
+) :
     JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
     override fun adjustReferencedName(expression: JSReferenceExpression): String? {
         val name = expression.referenceName

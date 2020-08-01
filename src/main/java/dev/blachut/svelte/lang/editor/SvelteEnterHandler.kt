@@ -67,7 +67,6 @@ class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
             return false
         }
 
-
         val nextElement = file.findElementAt(iterator.start)
 
         val tailTag = PsiTreeUtil.findFirstParent(nextElement, true) { SvelteTagElementTypes.TAIL_TAGS.contains(it.elementType) }

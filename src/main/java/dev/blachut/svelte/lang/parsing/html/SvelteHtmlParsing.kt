@@ -157,11 +157,11 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         if (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER) {
             while (true) {
                 val tt = token()
-                if (tt == null
-                    || tt === XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER
-                    || tt === XmlTokenType.XML_END_TAG_START
-                    || tt === XmlTokenType.XML_EMPTY_ELEMENT_END
-                    || tt === XmlTokenType.XML_START_TAG_START
+                if (tt == null ||
+                    tt === XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER ||
+                    tt === XmlTokenType.XML_END_TAG_START ||
+                    tt === XmlTokenType.XML_EMPTY_ELEMENT_END ||
+                    tt === XmlTokenType.XML_START_TAG_START
                 ) {
                     break
                 }

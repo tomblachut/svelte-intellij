@@ -18,6 +18,6 @@ class SvelteTagReference(val tag: XmlTag) : PsiPolyVariantReferenceBase<XmlTag>(
             processor.resultsAsResolveResults
         }
 
-        return JSResolveUtil.resolve(tag.containingFile, this, resolver, incompleteCode);
+        return JSResolveUtil.resolve(tag.containingFile, this, resolver, incompleteCode)
     }
 }

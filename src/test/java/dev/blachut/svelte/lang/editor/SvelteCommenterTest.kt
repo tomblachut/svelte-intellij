@@ -48,5 +48,3 @@ class SvelteCommenterTest : BasePlatformTestCase() {
         this.configureByText("Foo.svelte", text)
     }
 }
-
-

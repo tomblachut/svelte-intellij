@@ -45,7 +45,6 @@ class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
             return template
         }
 
-
         if (key in infixUnaryKeys) {
             val correctedKey = if (key == "elseif") "else if" else key
             val template = TemplateImpl("", infixUnaryTemplate(correctedKey), "")

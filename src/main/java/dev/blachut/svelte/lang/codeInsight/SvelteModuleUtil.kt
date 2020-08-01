@@ -28,9 +28,9 @@ object SvelteModuleUtil {
                 val from: ES6FromClause = PsiTreeUtil.findChildOfType(declaration, ES6FromClause::class.java)
                     ?: return@forEach
                 val component = from.resolveReferencedElements().find { referencedFile ->
-                    referencedFile is PsiFile
-                        && isSvelteContext(referencedFile)
-                        && referencedFile.virtualFile == componentVirtualFile
+                    referencedFile is PsiFile &&
+                        isSvelteContext(referencedFile) &&
+                        referencedFile.virtualFile == componentVirtualFile
                 }
                 component ?: return@forEach
                 val moduleVirtualFile = declaration.containingFile.virtualFile

@@ -69,7 +69,6 @@ object SvelteTagElementTypes {
                     builder.error(") expected")
                 }
             }
-
         }
     }
 

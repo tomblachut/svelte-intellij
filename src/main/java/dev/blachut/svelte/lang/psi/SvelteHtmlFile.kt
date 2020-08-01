@@ -30,8 +30,8 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
             return processScriptDeclarations(processor, state, lastParent, place, moduleScript)
         } else {
             // place is inside template expression, process instance and then module script if available
-            return processScriptDeclarations(processor, state, lastParent, place, instanceScript)
-                && processScriptDeclarations(processor, state, lastParent, place, moduleScript)
+            return processScriptDeclarations(processor, state, lastParent, place, instanceScript) &&
+                processScriptDeclarations(processor, state, lastParent, place, moduleScript)
         }
     }
 

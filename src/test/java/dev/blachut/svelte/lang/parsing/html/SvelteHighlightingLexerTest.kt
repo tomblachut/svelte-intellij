@@ -27,4 +27,3 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
 
     private fun doTest() = doFileTest("svelte")
 }
-

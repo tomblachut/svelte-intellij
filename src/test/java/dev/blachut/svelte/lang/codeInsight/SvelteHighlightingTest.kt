@@ -71,7 +71,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         l.add(TypeScriptValidateGenericTypesInspection())
         l.add(TypeScriptRedundantGenericTypeInspection())
 
-        //CF inspections
+        // CF inspections
         l.add(JSSuspiciousTypeGuardInspection())
         l.add(JSObjectNullOrUndefinedInspection())
         l.add(SvelteUnresolvedComponentInspection())
@@ -98,8 +98,9 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
                     import Foo from "./Foo.svelte";
                 </script>
                 <Foo />
-                """.trimIndent())
-        myFixture.testHighlighting() //no errors after import
+                """.trimIndent()
+        )
+        myFixture.testHighlighting() // no errors after import
     }
 
     fun testComponentAttribute() {

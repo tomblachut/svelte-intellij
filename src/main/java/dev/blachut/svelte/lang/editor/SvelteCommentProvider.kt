@@ -22,7 +22,12 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
         return isSvelteContext(file)
     }
 
-    override fun getLineCommenter(file: PsiFile, editor: Editor, lineStartLanguage: Language?, lineEndLanguage: Language?): Commenter? {
+    override fun getLineCommenter(
+        file: PsiFile,
+        editor: Editor,
+        lineStartLanguage: Language?,
+        lineEndLanguage: Language?
+    ): Commenter? {
         if (lineStartLanguage?.isKindOf(JavascriptLanguage.INSTANCE) == true) {
             val offset = editor.caretModel.offset
             val wrapper =
@@ -42,9 +47,9 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
         // Copied from CommentByBlockCommentHandler.getCommenter
         val fileLanguage = file.language
         val lang = if (
-            lineStartLanguage == null
-            || LanguageCommenters.INSTANCE.forLanguage(lineStartLanguage) == null
-            || fileLanguage.baseLanguage === lineStartLanguage // file language is a more specific dialect of the line language
+            lineStartLanguage == null ||
+            LanguageCommenters.INSTANCE.forLanguage(lineStartLanguage) == null ||
+            fileLanguage.baseLanguage === lineStartLanguage // file language is a more specific dialect of the line language
         ) fileLanguage else lineStartLanguage
 
         return LanguageCommenters.INSTANCE.forLanguage(lang)
