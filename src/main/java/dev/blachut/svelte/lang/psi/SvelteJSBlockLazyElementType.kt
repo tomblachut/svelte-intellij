@@ -8,7 +8,8 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 
-abstract class SvelteJSBlockLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
+abstract class SvelteJSBlockLazyElementType(debugName: String) :
+    ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
     protected abstract val noTokensErrorMessage: String
     protected val excessTokensErrorMessage = "unexpected token"
 
@@ -19,8 +20,8 @@ abstract class SvelteJSBlockLazyElementType(debugName: String) : ILazyParseableE
 
     override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
         val project = psi.project
-        val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, null, SvelteJSLanguage.INSTANCE, chameleon.chars)
-        val parser = createJavaScriptParser(builder)
+        val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, null, language, chameleon.chars)
+        val parser = SvelteJSLanguage.INSTANCE.createParser(builder)
 
         val rootMarker = builder.mark()
 
@@ -49,6 +50,4 @@ abstract class SvelteJSBlockLazyElementType(debugName: String) : ILazyParseableE
             }
         }
     }
-
-    private fun createJavaScriptParser(builder: PsiBuilder) = SvelteJSLanguage.INSTANCE.createParser(builder)
 }

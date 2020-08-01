@@ -22,7 +22,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
         document ?: return true
 
         val parentScript = findAncestorScript(place)
-        if (parentScript != null && parentScript.getAttributeValue("context") == "module") {
+        if (parentScript != null && isModuleScript(parentScript)) {
             // place is inside module script, nothing more to process
             return true
         } else if (parentScript != null) {
@@ -35,12 +35,23 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
         }
     }
 
-    private fun processScriptDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement, script: PsiElement?): Boolean {
-        return SvelteJSScriptContentProvider.getJsEmbeddedContent(script)?.processDeclarations(processor, state, lastParent, place) ?: true
+    private fun processScriptDeclarations(
+        processor: PsiScopeProcessor,
+        state: ResolveState,
+        lastParent: PsiElement?,
+        place: PsiElement,
+        script: PsiElement?
+    ): Boolean {
+        return SvelteJSScriptContentProvider.getJsEmbeddedContent(script)
+            ?.processDeclarations(processor, state, lastParent, place) ?: true
     }
 
     override fun toString(): String {
-         return "SvelteHtmlFile: $name"
+        return "SvelteHtmlFile: $name"
+    }
+
+    private fun isModuleScript(tag: XmlTag): Boolean {
+        return HtmlUtil.isScriptTag(tag) && tag.getAttributeValue("context") == "module"
     }
 }
 

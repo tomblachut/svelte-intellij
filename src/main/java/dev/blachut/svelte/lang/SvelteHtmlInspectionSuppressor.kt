@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.xml.XmlAttribute
 
-class SvelteSuppressionProvider : DefaultXmlSuppressionProvider() {
+class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
     override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
         if (inspectionId == "XmlUnboundNsPrefix") {
             return true
