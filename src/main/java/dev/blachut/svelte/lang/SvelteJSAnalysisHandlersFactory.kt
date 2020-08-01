@@ -2,6 +2,7 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
+import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.lang.ecmascript6.validation.ES6AnalysisHandlersFactory
 import com.intellij.lang.javascript.DialectOptionHolder
 import com.intellij.lang.javascript.validation.JSKeywordHighlighterVisitor
@@ -14,7 +15,14 @@ class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
         return TypedJSReferenceChecker(reporter)
     }
 
-    override fun createKeywordHighlighterVisitor(holder: HighlightInfoHolder, dialectOptionHolder: DialectOptionHolder): JSKeywordHighlighterVisitor {
+    override fun createKeywordHighlighterVisitor(
+        holder: HighlightInfoHolder,
+        dialectOptionHolder: DialectOptionHolder
+    ): JSKeywordHighlighterVisitor {
         return SvelteKeywordHighlighterVisitor(holder)
+    }
+
+    override fun getInspectionSuppressor(): InspectionSuppressor {
+        return SvelteJSInspectionSuppressor
     }
 }
