@@ -2,37 +2,48 @@
   <img width="320" src="./media/header.png" alt="Svelte IDE plugin. WebStorm, IntelliJ IDEA, more.">
 </p>
 
-<p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>
+![Build](https://github.com/tomblachut/intellij-template/workflows/Build/badge.svg)
+[![Version](https://img.shields.io/jetbrains/plugin/v/12375-svelte.svg)](https://plugins.jetbrains.com/plugin/12375-svelte)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/12375-svelte.svg)](https://plugins.jetbrains.com/plugin/12375-svelte)
 
-<p>Work in progress, pretty usable already.</p>
+<!-- Plugin description -->
+Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
 
-<h2>Features</h2>
+Work in progress, pretty usable already.
 
-<ul>
-    <li>Syntax highlighting</li>
-    <li>Code formatting</li>
-    <li>Typing assistance</li>
-    <li>Completions of components and props</li>
-    <li>Auto import of components</li>
-    <li>Navigation from components to their definition</li>
-</ul>
+## Features
 
-<h2>Known issues</h2>
+* Syntax highlighting
+* Code formatting
+* Typing assistance
+* Completions of components and props
+* Auto import of components
+* Navigation from components to their definition
+<!-- Plugin description end -->
 
-<ul>
-    <li>$ labels aren't recognised properly</li>
-    <li>Directives are treated as plain attributes</li>
-    <li>No TypeScript</li>
-    <li>...</li>
-</ul>
+## Known issues
+
+* $ labels aren't recognised properly
+* Directives treated as plain attributes
+* No TypeScript
+* ...
 
 ## Installation
-* Use official [Plugin Repository](https://plugins.jetbrains.com/plugin/12375-svelte)
-* Head over to [releases tab](https://github.com/tomblachut/svelte-intellij/releases), download `.zip` archive and [Install plugin from disk](https://www.jetbrains.com/help/webstorm/managing-plugins.html#install_plugin_from_disk)
+
+- Using IDE built-in plugin system:
+  
+  <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Svelte"</kbd> >
+  <kbd>Install Plugin</kbd>
+  
+- Manually:
+
+  Download the [latest release](https://github.com/tomblachut/svelte-intellij/releases/latest) and install it manually using
+  <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 ## Compatible IDEs
 
 Works in JavaScript-enabled JetBrains IDEs starting from the version 2020.1.
+
 Information about older releases is available in [version history](https://plugins.jetbrains.com/plugin/12375-svelte/versions).
 
 ## Maintenance & support
