@@ -32,7 +32,7 @@
 
 ## Compatible IDEs
 
-Works in JavaScript-enabled JetBrains IDEs starting from the version 2019.2.
+Works in JavaScript-enabled JetBrains IDEs starting from the version 2020.1.
 Information about older releases is available in [version history](https://plugins.jetbrains.com/plugin/12375-svelte/versions).
 
 ## Maintenance & support
