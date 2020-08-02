@@ -1,6 +1,7 @@
 import org.jetbrains.changelog.closure
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.intellij.tasks.RunIdeTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -30,13 +31,21 @@ val platformDownloadSources: String by project
 group = pluginGroup
 version = pluginVersion
 
+val intellijPlugins = arrayOf("JavaScriptLanguage", "CSS")
+
+// https://plugins.jetbrains.com/plugin/227-psiviewer/versions
+val psiViewerPlugin = when (platformVersion) {
+    "2020.1" -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
+    "2020.2" -> "PsiViewer:202-SNAPSHOT.3"
+    else -> null
+}
+
+val resolvedPlugins = if (psiViewerPlugin != null) intellijPlugins + psiViewerPlugin else intellijPlugins
+
 // Configure project's dependencies
 repositories {
     mavenCentral()
     jcenter()
-}
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
 }
 
 sourceSets.main {
@@ -52,7 +61,7 @@ intellij {
     updateSinceUntilBuild = true
 
 //  https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
-    setPlugins("JavaScriptLanguage", "CSS", "PsiViewer:202-SNAPSHOT.3")
+    setPlugins(*resolvedPlugins)
 }
 
 ktlint {
@@ -104,5 +113,12 @@ tasks {
         dependsOn("patchChangelog")
         token(System.getenv("PUBLISH_TOKEN"))
         channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
+    }
+
+    withType<RunIdeTask> {
+        // Disable auto plugin reloading. See `com.intellij.ide.plugins.DynamicPluginVfsListener`
+        // jvmArgs("-Didea.auto.reload.plugins=false")
+        // uncomment if `unexpected exception ProcessCanceledException` prevents you from debugging a running IDE
+        // jvmArgs("-Didea.ProcessCanceledException=disabled")
     }
 }
