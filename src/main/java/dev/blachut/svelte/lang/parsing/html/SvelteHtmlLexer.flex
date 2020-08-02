@@ -1,4 +1,3 @@
-/* It's an automatically generated code. Do not modify it. */
 package dev.blachut.svelte.lang.parsing.html;
 
 import com.intellij.lexer.FlexLexer;

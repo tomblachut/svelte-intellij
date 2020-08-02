@@ -1,3 +1,5 @@
+src/main/gen
+
 # IDEs and editors
 /.idea
 .idea/*
@@ -8,13 +10,8 @@
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
 out
 .gradle
 build
+
+.DS_Store

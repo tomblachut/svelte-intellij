@@ -1,5 +1,6 @@
 import org.jetbrains.changelog.closure
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.grammarkit.tasks.GenerateLexer
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -7,6 +8,8 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.72"
     // https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "0.4.21"
+    // https://github.com/JetBrains/gradle-grammar-kit-plugin
+    id("org.jetbrains.grammarkit") version "2020.2.1"
     // https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "0.4.0"
     // https://github.com/JLLeitschuh/ktlint-gradle
@@ -56,6 +59,13 @@ ktlint {
     disabledRules.set(setOf("no-wildcard-imports", "import-ordering"))
 }
 
+val generateLexer = task<GenerateLexer>("generateLexer") {
+    source = "src/main/java/dev/blachut/svelte/lang/parsing/html/SvelteHtmlLexer.flex"
+    targetDir = "src/main/gen/dev/blachut/svelte/lang/parsing/html"
+    targetClass = "_SvelteHtmlLexer"
+    purgeOldFiles = true
+}
+
 tasks {
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
@@ -66,6 +76,10 @@ tasks {
         getByName<KotlinCompile>(it) {
             kotlinOptions.jvmTarget = "1.8"
         }
+    }
+
+    withType<KotlinCompile> {
+        dependsOn(generateLexer)
     }
 
     patchPluginXml {
