@@ -3,54 +3,6 @@
     <name>Svelte</name>
     <vendor url="https://github.com/tomblachut">Tomasz Błachut</vendor>
 
-    <description><![CDATA[
-<p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>
-
-<p>Work in progress, pretty usable already.</p>
-
-<h2>Features</h2>
-
-<ul>
-    <li>Syntax highlighting</li>
-    <li>Code formatting</li>
-    <li>Typing assistance</li>
-    <li>Completions of components and props</li>
-    <li>Auto import of components</li>
-    <li>Navigation from components to their definition</li>
-</ul>
-    ]]></description>
-
-    <change-notes><![CDATA[
-<h3>0.12.2</h3>
-<ul>
-    <li>Fix compatibility with 2020.2 versions</li>
-    <li>Recognize $$restProps</li>
-</ul>
-
-<h3>0.12.1</h3>
-<ul>
-    <li>Extend supported IDE version range to 2020.x</li>
-    <li>Support basic interpolations inside style attributes</li>
-</ul>
-
-<h3>0.12.0</h3>
-<ul>
-    <li>Support for different CSS dialects via lang attribute</li>
-    <li>Initial support for $-prefixed store references</li>
-    <li>Enable completion of JS declarations from script tags</li>
-    <li>Initial support for module context scripts (inside Svelte files only)</li>
-    <li>More robust logic of resolving component declarations</li>
-    <li>Unresolved components are highlighted the same as other identifiers</li>
-    <li>Remove buggy prop insertion while completing tag name</li>
-    <li>Stop inserting mustaches after typing = for attributes</li>
-    <li>Enable quote matching</li>
-    <li>Bug fixes & stability improvements</li>
-</ul>
-
-<br>
-<a href="https://github.com/tomblachut/svelte-intellij/blob/master/CHANGELOG.md">Full changelog...</a>
-    ]]></change-notes>
-
     <depends>com.intellij.modules.lang</depends>
     <depends>JavaScript</depends>
     <depends>com.intellij.css</depends>
