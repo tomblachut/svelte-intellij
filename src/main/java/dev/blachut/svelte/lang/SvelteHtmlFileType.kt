@@ -10,7 +10,7 @@ class SvelteHtmlFileType : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
     }
 
     override fun getDescription(): String {
-        return "Svelte Component"
+        return "Svelte"
     }
 
     override fun getDefaultExtension(): String {
