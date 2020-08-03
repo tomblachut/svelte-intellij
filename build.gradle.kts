@@ -48,6 +48,10 @@ repositories {
     jcenter()
 }
 
+dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+}
+
 sourceSets.main {
     java.srcDirs("src/main/java", "src/main/gen")
 }
