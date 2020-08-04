@@ -10,14 +10,16 @@ import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 
-object SvelteJSScriptContentProvider : HtmlScriptContentProvider {
+class SvelteJSScriptContentProvider : HtmlScriptContentProvider {
     override fun getScriptElementType(): IElementType = SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE
 
     override fun getHighlightingLexer(): Lexer? {
         return SyntaxHighlighterFactory.getSyntaxHighlighter(SvelteJSLanguage.INSTANCE, null, null).highlightingLexer
     }
 
-    fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
-        return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
+    companion object {
+        fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
+            return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
+        }
     }
 }
