@@ -4,6 +4,7 @@ import com.intellij.lang.Commenter
 import com.intellij.lang.Language
 import com.intellij.lang.LanguageCommenters
 import com.intellij.lang.javascript.JavascriptLanguage
+import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiFile
@@ -12,7 +13,6 @@ import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.isSvelteContext
-import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptWrapperPsiElement
 
 /**
  * Overrides default behavior for Svelte tags and expressions
@@ -30,8 +30,7 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
     ): Commenter? {
         if (lineStartLanguage?.isKindOf(JavascriptLanguage.INSTANCE) == true) {
             val offset = editor.caretModel.offset
-            val wrapper =
-                PsiTreeUtil.getContextOfType(file.findElementAt(offset), SvelteJSScriptWrapperPsiElement::class.java)
+            val wrapper = PsiTreeUtil.getContextOfType(file.findElementAt(offset), JSTagEmbeddedContent::class.java)
 
             val language = if (wrapper != null) {
                 // inside script tag
