@@ -19,6 +19,7 @@ import com.intellij.lang.javascript.JSTokenTypes;
 
   public int bracesNestingLevel = 0;
   public int quoteMode = NO_QUOTE;
+  public int rawTag = 0;
 
   public _SvelteHtmlLexer() {
     this((java.io.Reader)null);
@@ -72,6 +73,7 @@ import com.intellij.lang.javascript.JSTokenTypes;
 %state SVELTE_INTERPOLATION_START
 %state SVELTE_INTERPOLATION_KEYWORD
 %state SVELTE_INTERPOLATION
+%state RAW_CONTENT
 /* IMPORTANT! number of states should not exceed 16. See JspHighlightingLexer. */
 
 ALPHA=[:letter:]
@@ -84,6 +86,7 @@ DOUBLE_QUOTE="\""
 BACKQUOTE="`"
 ESCAPED_QUOTES=\\'|\\\"|\\`
 
+RAW_TAG_NAME=("script" | "style")
 TAG_NAME=({ALPHA}|"_"|":")({ALPHA}|{DIGIT}|"_"|":"|"."|"-")*
 /* see http://www.w3.org/TR/html5/syntax.html#syntax-attribute-name */
 ATTRIBUTE_NAME=[^ \n\r\t\f\"\'<>/={]([^ \n\r\t\f\"\'<>/=])*
@@ -107,10 +110,11 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 <DOC_TYPE> {DTD_REF} { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 <DOC_TYPE> ">" { yybegin(YYINITIAL); return XmlTokenType.XML_DOCTYPE_END; }
 <YYINITIAL> {WHITE_SPACE_CHARS} { return XmlTokenType.XML_REAL_WHITE_SPACE; }
-<DOC_TYPE,TAG_ATTRIBUTES,ATTRIBUTE_VALUE_START,PROCESSING_INSTRUCTION, START_TAG_NAME, END_TAG_NAME, TAG_CHARACTERS> {WHITE_SPACE_CHARS} { return XmlTokenType.XML_WHITE_SPACE; }
+<DOC_TYPE,TAG_ATTRIBUTES,ATTRIBUTE_VALUE_START,PROCESSING_INSTRUCTION, START_TAG_NAME, END_TAG_NAME, TAG_CHARACTERS, RAW_CONTENT> {WHITE_SPACE_CHARS} { return XmlTokenType.XML_WHITE_SPACE; }
 <YYINITIAL> "<" {TAG_NAME} { yybegin(START_TAG_NAME); yypushback(yylength()); }
 <START_TAG_NAME, TAG_CHARACTERS> "<" { return XmlTokenType.XML_START_TAG_START; }
 
+<RAW_CONTENT> "</" {RAW_TAG_NAME} { yybegin(END_TAG_NAME); yypushback(yylength()); }
 <YYINITIAL> "</" {TAG_NAME} { yybegin(END_TAG_NAME); yypushback(yylength()); }
 <YYINITIAL, END_TAG_NAME> "</" { return XmlTokenType.XML_END_TAG_START; }
 
@@ -167,10 +171,15 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 
-<START_TAG_NAME, END_TAG_NAME> {TAG_NAME} { yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
+<START_TAG_NAME> {RAW_TAG_NAME} { rawTag = 1; yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
+<START_TAG_NAME, END_TAG_NAME> {TAG_NAME} { rawTag = 0; yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
 
-<BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS> ">" { yybegin(YYINITIAL); return XmlTokenType.XML_TAG_END; }
-<BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS> "/>" { yybegin(YYINITIAL); return XmlTokenType.XML_EMPTY_ELEMENT_END; }
+<BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS, ATTRIBUTE_VALUE_START, ATTRIBUTE_VALUE_AFTER_BRACES> ">" {
+  yybegin(rawTag == 1 ? RAW_CONTENT : YYINITIAL); return XmlTokenType.XML_TAG_END;
+}
+<BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS, ATTRIBUTE_VALUE_START, ATTRIBUTE_VALUE_AFTER_BRACES> "/>" {
+  rawTag = 0; yybegin(YYINITIAL); return XmlTokenType.XML_EMPTY_ELEMENT_END;
+}
 <BEFORE_TAG_ATTRIBUTES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 <TAG_ATTRIBUTES> {ATTRIBUTE_NAME} { return XmlTokenType.XML_NAME; }
 <TAG_ATTRIBUTES> "{" { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
@@ -178,9 +187,6 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, START_TAG_NAME, END_TAG_NAME> [^] { yybegin(YYINITIAL); yypushback(1); break; }
 
 <TAG_CHARACTERS> [^] { return XmlTokenType.XML_TAG_CHARACTERS; }
-
-<ATTRIBUTE_VALUE_START, ATTRIBUTE_VALUE_AFTER_BRACES> ">" { yybegin(YYINITIAL); return XmlTokenType.XML_TAG_END; }
-<ATTRIBUTE_VALUE_START, ATTRIBUTE_VALUE_AFTER_BRACES> "/>" { yybegin(YYINITIAL); return XmlTokenType.XML_EMPTY_ELEMENT_END; }
 
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
@@ -241,5 +247,5 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 "&"{TAG_NAME}";" { return XmlTokenType.XML_ENTITY_REF_TOKEN; }
 
 <YYINITIAL> ([^<{&\$# \n\r\t\f]|(\\\$)|(\\#))* { return XmlTokenType.XML_DATA_CHARACTERS; }
-<YYINITIAL> [^] { return XmlTokenType.XML_DATA_CHARACTERS; }
+<YYINITIAL, RAW_CONTENT> [^] { return XmlTokenType.XML_DATA_CHARACTERS; }
 [^] { return XmlTokenType.XML_BAD_CHARACTER; }
