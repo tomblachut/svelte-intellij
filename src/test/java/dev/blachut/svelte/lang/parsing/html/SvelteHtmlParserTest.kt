@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.LanguageASTFactory
+import com.intellij.lang.LanguageHtmlScriptContentProvider
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.css.CSSParserDefinition
 import com.intellij.lang.javascript.JavascriptParserDefinition
@@ -11,7 +12,9 @@ import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
 import com.intellij.testFramework.ParsingTestCase
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
+import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
 
 class SvelteHtmlParserTest : ParsingTestCase(
     "dev/blachut/svelte/lang/parsing/html/parser",
@@ -29,6 +32,11 @@ class SvelteHtmlParserTest : ParsingTestCase(
         addExplicitExtension(LanguageASTFactory.INSTANCE, SvelteHTMLLanguage.INSTANCE, SvelteHtmlASTFactory())
         addExplicitExtension(LanguageASTFactory.INSTANCE, XMLLanguage.INSTANCE, XmlASTFactory())
         addExplicitExtension(LanguageASTFactory.INSTANCE, CSSLanguage.INSTANCE, CssTreeElementFactory())
+        addExplicitExtension(
+            LanguageHtmlScriptContentProvider.INSTANCE,
+            SvelteJSLanguage.INSTANCE,
+            SvelteJSScriptContentProvider()
+        )
 
         registerExtensionPoint(StartTagEndTokenProvider.EP_NAME, StartTagEndTokenProvider::class.java)
         registerExtensionPoint(EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java)
@@ -68,9 +76,6 @@ class SvelteHtmlParserTest : ParsingTestCase(
     fun testHtmlUnclosed3() = doTest()
 
     fun testLet() = doTest()
-
-    fun testQuoteBalanceScriptComment() = doTest()
-    fun testQuoteBalanceUnclosedStringLiteral() = doTest()
 
     private fun doTest() = doTest(true)
 }
