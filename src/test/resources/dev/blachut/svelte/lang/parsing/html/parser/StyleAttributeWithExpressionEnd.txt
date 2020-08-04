@@ -1,0 +1,58 @@
+SvelteHtmlFile: StyleAttributeWithExpressionEnd.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+      JSEmbeddedContent:MOD_SVELTE_JS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n    ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:CONST_KEYWORD)('const')
+          PsiWhiteSpace(' ')
+          JSVariable
+            PsiElement(JS:IDENTIFIER)('svelteColor')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:STRING_LITERAL)(''#ff3e00'')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: style
+        XmlToken:XML_NAME('style')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          PsiElement(CSS_DECLARATION_BLOCK)
+            PsiElement(CSS_DECLARATION)
+              PsiElement(CSS_IDENT)('color')
+              PsiElement(CSS_COLON)(':')
+              PsiElement(CSS_TERM_LIST)
+                PsiErrorElement:a term expected
+                  <empty list>
+            PsiWhiteSpace(' ')
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('svelteColor')
+            PsiElement(END_MUSTACHE)('}')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('test')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')

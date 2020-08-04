@@ -106,6 +106,8 @@ class SvelteHtmlParserTest : ParsingTestCase(
 
     fun testStyleTagDefault() = doTest()
     fun testStyleTagScss() = doTest()
+    fun testStyleAttribute() = doTest()
+    fun testStyleAttributeWithExpressionEnd() = doTest()
 
     private fun doTest() = doTest(true)
 }
