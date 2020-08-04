@@ -14,7 +14,7 @@ SvelteHtmlFile: BlockEachAsAsAsAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
           PsiElement(JS:LPAR)('(')

@@ -14,7 +14,7 @@ SvelteHtmlFile: BlockAwaitThenThenThen.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:THEN_KEYWORD)('then')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:IDENTIFIER)('then')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment

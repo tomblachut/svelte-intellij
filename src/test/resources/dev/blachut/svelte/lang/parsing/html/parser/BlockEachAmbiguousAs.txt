@@ -18,7 +18,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -44,7 +44,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -70,7 +70,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -96,7 +96,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -123,7 +123,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -141,14 +141,14 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
-          JS:CALL_EXPRESSION
+          JSCallExpression
             JSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             JSArgumentList
               PsiElement(JS:LPAR)('(')
-              JS:OBJECT_LITERAL
+              JSObjectLiteralExpression
                 PsiElement(JS:LBRACE)('{')
-                JS:PROPERTY
+                JSProperty
                   PsiElement(JS:IDENTIFIER)('x')
                   PsiElement(JS:COLON)(':')
                   PsiWhiteSpace(' ')
@@ -159,7 +159,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -178,7 +178,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSBinaryExpression
-            JS:LITERAL_EXPRESSION
+            JSLiteralExpression
               PsiElement(JS:NUMERIC_LITERAL)('1')
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
@@ -188,7 +188,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -212,12 +212,12 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JS:LITERAL_EXPRESSION
+            JSLiteralExpression
               PsiElement(JS:NUMERIC_LITERAL)('1')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -241,12 +241,12 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JS:LITERAL_EXPRESSION
+            JSLiteralExpression
               PsiElement(JS:STRING_LITERAL)('""')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -265,7 +265,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSBinaryExpression
-            JS:LITERAL_EXPRESSION
+            JSLiteralExpression
               PsiElement(JS:STRING_LITERAL)('''')
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
@@ -275,7 +275,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -299,13 +299,13 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JS:STRING_TEMPLATE_EXPRESSION
+            JSStringTemplateExpression
               PsiElement(JS:BACKQUOTE)('`')
               PsiElement(JS:BACKQUOTE)('`')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -329,14 +329,14 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JS:STRING_TEMPLATE_EXPRESSION
+            JSStringTemplateExpression
               PsiElement(JS:BACKQUOTE)('`')
               PsiElement(JS:STRING_TEMPLATE_PART)('as')
               PsiElement(JS:BACKQUOTE)('`')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment

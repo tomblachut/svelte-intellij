@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.lang.LanguageASTFactory
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.css.CSSParserDefinition
+import com.intellij.lang.javascript.JavascriptParserDefinition
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.lang.xml.XmlASTFactory
 import com.intellij.lexer.EmbeddedTokenTypesProvider
@@ -17,6 +18,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
     "svelte",
     SvelteHTMLParserDefinition(),
     SvelteJSParserDefinition(),
+    JavascriptParserDefinition(),
     CSSParserDefinition()
 ) {
     override fun getTestDataPath(): String = "src/test/resources"
@@ -24,8 +26,8 @@ class SvelteHtmlParserTest : ParsingTestCase(
     override fun setUp() {
         super.setUp()
 
-        addExplicitExtension(LanguageASTFactory.INSTANCE, XMLLanguage.INSTANCE, XmlASTFactory())
         addExplicitExtension(LanguageASTFactory.INSTANCE, SvelteHTMLLanguage.INSTANCE, SvelteHtmlASTFactory())
+        addExplicitExtension(LanguageASTFactory.INSTANCE, XMLLanguage.INSTANCE, XmlASTFactory())
         addExplicitExtension(LanguageASTFactory.INSTANCE, CSSLanguage.INSTANCE, CssTreeElementFactory())
 
         registerExtensionPoint(StartTagEndTokenProvider.EP_NAME, StartTagEndTokenProvider::class.java)

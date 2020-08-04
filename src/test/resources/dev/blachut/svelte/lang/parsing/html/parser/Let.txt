@@ -24,7 +24,7 @@ SvelteHtmlFile: Let.svelte
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_PARAMETER
-              SvelteJS:EMBEDDED_PARAMETER
+              SvelteJSParameter
                 PsiElement(JS:IDENTIFIER)('local')
             PsiElement(END_MUSTACHE)('}')
       XmlToken:XML_TAG_END('>')

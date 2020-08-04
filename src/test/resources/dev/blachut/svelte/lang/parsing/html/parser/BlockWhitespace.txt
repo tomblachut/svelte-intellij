@@ -14,10 +14,10 @@ SvelteHtmlFile: BlockWhitespace.svelte
           PsiErrorElement:as expected
             <empty list>
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:IDENTIFIER)('asset')
           PsiElement(JS:COMMA)(',')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:IDENTIFIER)('i')
           PsiWhiteSpace(' ')
           PsiElement(JS:LPAR)('(')

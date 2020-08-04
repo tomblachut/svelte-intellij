@@ -15,7 +15,7 @@ SvelteHtmlFile: HtmlUnclosed2.svelte
             PsiElement(JS:SHARP)('#')
             PsiElement(JS:IF_KEYWORD)('if')
             PsiWhiteSpace(' ')
-            JS:LITERAL_EXPRESSION
+            JSLiteralExpression
               PsiElement(JS:TRUE_KEYWORD)('true')
             PsiElement(JS:RBRACE)('}')
           SvelteFragment

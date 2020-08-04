@@ -7,7 +7,7 @@ SvelteHtmlFile: Expression.svelte
       PsiElement(JS:AT)('@')
       PsiElement(JS:IDENTIFIER)('html')
       PsiWhiteSpace(' ')
-      JS:LITERAL_EXPRESSION
+      JSLiteralExpression
         PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
       PsiElement(JS:RBRACE)('}')
     PsiWhiteSpace('\n')
@@ -17,7 +17,7 @@ SvelteHtmlFile: Expression.svelte
       PsiElement(JS:AT)('@')
       PsiElement(JS:IDENTIFIER)('html')
       PsiWhiteSpace(' ')
-      JS:LITERAL_EXPRESSION
+      JSLiteralExpression
         PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
       PsiWhiteSpace(' ')
       PsiElement(JS:RBRACE)('}')
@@ -30,7 +30,7 @@ SvelteHtmlFile: Expression.svelte
       PsiWhiteSpace(' ')
       PsiElement(JS:IDENTIFIER)('html')
       PsiWhiteSpace(' ')
-      JS:LITERAL_EXPRESSION
+      JSLiteralExpression
         PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
       PsiElement(JS:RBRACE)('}')
     PsiWhiteSpace('\n')
