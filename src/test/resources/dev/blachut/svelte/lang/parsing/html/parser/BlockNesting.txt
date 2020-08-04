@@ -37,7 +37,7 @@ SvelteHtmlFile: BlockNesting.svelte
                 PsiWhiteSpace(' ')
                 PsiElement(JS:THEN_KEYWORD)('then')
                 PsiWhiteSpace(' ')
-                SvelteJS:EMBEDDED_PARAMETER
+                SvelteJSParameter
                   PsiElement(JS:IDENTIFIER)('x')
                 PsiElement(JS:RBRACE)('}')
               SvelteFragment
@@ -121,7 +121,7 @@ SvelteHtmlFile: BlockNesting.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:AS_KEYWORD)('as')
             PsiWhiteSpace(' ')
-            SvelteJS:EMBEDDED_PARAMETER
+            SvelteJSParameter
               PsiElement(JS:IDENTIFIER)('a')
             PsiElement(JS:RBRACE)('}')
           SvelteFragment

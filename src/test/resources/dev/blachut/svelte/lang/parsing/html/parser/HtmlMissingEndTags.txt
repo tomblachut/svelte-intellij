@@ -15,7 +15,7 @@ SvelteHtmlFile: HtmlMissingEndTags.svelte
             PsiElement(JS:SHARP)('#')
             PsiElement(JS:IF_KEYWORD)('if')
             PsiWhiteSpace(' ')
-            JS:LITERAL_EXPRESSION
+            JSLiteralExpression
               PsiElement(JS:TRUE_KEYWORD)('true')
             PsiElement(JS:RBRACE)('}')
           SvelteFragment
@@ -34,13 +34,13 @@ SvelteHtmlFile: HtmlMissingEndTags.svelte
                     PsiElement(JS:SHARP)('#')
                     PsiElement(JS:EACH_KEYWORD)('each')
                     PsiWhiteSpace(' ')
-                    JS:ARRAY_LITERAL
+                    JSArrayLiteralExpression
                       PsiElement(JS:LBRACKET)('[')
                       PsiElement(JS:RBRACKET)(']')
                     PsiWhiteSpace(' ')
                     PsiElement(JS:AS_KEYWORD)('as')
                     PsiWhiteSpace(' ')
-                    SvelteJS:EMBEDDED_PARAMETER
+                    SvelteJSParameter
                       PsiElement(JS:IDENTIFIER)('item')
                     PsiElement(JS:RBRACE)('}')
                   SvelteFragment

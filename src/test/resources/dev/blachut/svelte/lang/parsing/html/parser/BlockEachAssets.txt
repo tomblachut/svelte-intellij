@@ -14,11 +14,11 @@ SvelteHtmlFile: BlockEachAssets.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:IDENTIFIER)('asset')
           PsiElement(JS:COMMA)(',')
           PsiWhiteSpace(' ')
-          SvelteJS:EMBEDDED_PARAMETER
+          SvelteJSParameter
             PsiElement(JS:IDENTIFIER)('i')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment

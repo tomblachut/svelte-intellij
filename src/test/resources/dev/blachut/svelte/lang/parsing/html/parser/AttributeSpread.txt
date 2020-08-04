@@ -10,7 +10,7 @@ SvelteHtmlFile: AttributeSpread.svelte
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND
-            JS:SPREAD_EXPRESSION
+            JSSpreadExpression
               PsiElement(JS:DOT_DOT_DOT)('...')
               JSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('props')
@@ -30,7 +30,7 @@ SvelteHtmlFile: AttributeSpread.svelte
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND
-            JS:SPREAD_EXPRESSION
+            JSSpreadExpression
               PsiElement(JS:DOT_DOT_DOT)('...')
               JSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('props')
@@ -53,20 +53,20 @@ SvelteHtmlFile: AttributeSpread.svelte
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND
-            JS:SPREAD_EXPRESSION
+            JSSpreadExpression
               PsiElement(JS:DOT_DOT_DOT)('...')
-              JS:OBJECT_LITERAL
+              JSObjectLiteralExpression
                 PsiElement(JS:LBRACE)('{')
-                JS:ES6_PROPERTY
+                ES6Property
                   JSReferenceExpression
                     PsiElement(JS:IDENTIFIER)('technically')
                 PsiElement(JS:COMMA)(',')
                 PsiWhiteSpace(' ')
-                JS:PROPERTY
+                JSProperty
                   PsiElement(JS:IDENTIFIER)('possible')
                   PsiElement(JS:COLON)(':')
                   PsiWhiteSpace(' ')
-                  JS:LITERAL_EXPRESSION
+                  JSLiteralExpression
                     PsiElement(JS:TRUE_KEYWORD)('true')
                 PsiElement(JS:RBRACE)('}')
           PsiElement(END_MUSTACHE)('}')

@@ -19,7 +19,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
                 PsiWhiteSpace(' ')
                 PsiElement(JS:PLUS)('+')
                 PsiWhiteSpace(' ')
-                JS:LITERAL_EXPRESSION
+                JSLiteralExpression
                   PsiElement(JS:STRING_LITERAL)(''.'')
             PsiElement(END_MUSTACHE)('}')
       XmlToken:XML_TAG_END('>')
@@ -46,7 +46,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
                 PsiWhiteSpace(' ')
                 PsiElement(JS:PLUS)('+')
                 PsiWhiteSpace(' ')
-                JS:LITERAL_EXPRESSION
+                JSLiteralExpression
                   PsiElement(JS:STRING_LITERAL)(''.'')
             PsiElement(END_MUSTACHE)('}')
       PsiWhiteSpace(' ')
@@ -70,18 +70,18 @@ SvelteHtmlFile: AttributeUnquoted.svelte
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
-              JS:OBJECT_LITERAL
+              JSObjectLiteralExpression
                 PsiElement(JS:LBRACE)('{')
-                JS:ES6_PROPERTY
+                ES6Property
                   JSReferenceExpression
                     PsiElement(JS:IDENTIFIER)('option')
                 PsiElement(JS:COMMA)(',')
                 PsiWhiteSpace(' ')
-                JS:PROPERTY
+                JSProperty
                   PsiElement(JS:IDENTIFIER)('bag')
                   PsiElement(JS:COLON)(':')
                   PsiWhiteSpace(' ')
-                  JS:LITERAL_EXPRESSION
+                  JSLiteralExpression
                     PsiElement(JS:TRUE_KEYWORD)('true')
                 PsiElement(JS:RBRACE)('}')
             PsiElement(END_MUSTACHE)('}')
@@ -139,7 +139,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
                 PsiWhiteSpace(' ')
                 PsiElement(JS:PLUS)('+')
                 PsiWhiteSpace(' ')
-                JS:LITERAL_EXPRESSION
+                JSLiteralExpression
                   PsiElement(JS:STRING_LITERAL)(''.'')
             PsiElement(END_MUSTACHE)('}')
           XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('suffix')
