@@ -31,18 +31,22 @@ val platformDownloadSources: String by project
 group = pluginGroup
 version = pluginVersion
 
-val intellijPlugins = arrayOf("JavaScriptLanguage", "CSS")
+// https://plugins.jetbrains.com/plugin/11449-sass/versions/
+val sassPlugin = when (platformVersion) {
+    "2020.1.2" -> "org.jetbrains.plugins.sass:201.7846.80"
+    "2020.2" -> "org.jetbrains.plugins.sass:202.6397.47"
+    else -> throw IllegalArgumentException("Mussing Sass plugin version for platformVersion = $platformVersion")
+}
 
 // https://plugins.jetbrains.com/plugin/227-psiviewer/versions
-val psiViewerPlugin = when (platformVersion) {
-    "2020.1" -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
-    "2020.2" -> "PsiViewer:202-SNAPSHOT.3"
+val psiViewerPlugin = when {
+    platformVersion.startsWith("2020.1") -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
+    platformVersion.startsWith("2020.2") -> "PsiViewer:202-SNAPSHOT.3"
     else -> null
 }
 
-val resolvedPlugins = if (psiViewerPlugin != null) intellijPlugins + psiViewerPlugin else intellijPlugins
+val intellijPlugins = listOfNotNull("JavaScriptLanguage", "CSS", sassPlugin, psiViewerPlugin)
 
-// Configure project's dependencies
 repositories {
     mavenCentral()
     jcenter()
@@ -64,8 +68,8 @@ intellij {
     downloadSources = platformDownloadSources.toBoolean()
     updateSinceUntilBuild = true
 
-//  https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
-    setPlugins(*resolvedPlugins)
+    //  https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
+    setPlugins(*intellijPlugins.toTypedArray())
 }
 
 ktlint {
