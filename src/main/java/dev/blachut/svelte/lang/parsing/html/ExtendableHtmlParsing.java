@@ -95,6 +95,9 @@ public class ExtendableHtmlParsing extends HtmlParsing {
         }
 
         flushOpenTags();
+        myTagMarkersStack.clear();
+        myTagNamesStack.clear();
+        myOriginalTagNamesStack.clear();
 
         if (error != null) {
             error.error(XmlErrorBundle.message("top.level.element.is.not.completed"));
