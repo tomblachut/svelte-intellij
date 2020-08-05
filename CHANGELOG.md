@@ -1,7 +1,24 @@
 # Changelog
 
 ## [Unreleased]
+- More subtle file icons
+- Stop marking $ labels as unnecessary
 - Complete parser rewrite
+- Svelte is no longer a template language, so it can be used in one
+- Improved brace highlighting and auto insertion
+- Improved completion of svelte tags
+- More robust Emmet support
+- Complete rewrite of reference resolving
+- Fixed find usages for attribute expressions
+- Complete rewrite of formatter
+- Improved automatic indentation etc
+- One-line blocks stay one-line
+- Added missing fold regions
+- Individual fold levels for Svelte block clauses 
+- Improvements around shorthand attribute inspections and intentions
+- More graceful handling of typos
+- Ton of other small fixes
+- Drop compatibility with 2019.x platform
 
 ## [0.12.2]
 
