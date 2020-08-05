@@ -21,7 +21,7 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
         if (xmlTag.name == "script" && xmlTag.getAttribute("context") == null) {
             val element = LookupElementBuilder
                 .create("context=\"module\"")
-                .withIcon(SvelteIcons.FILE)
+                .withIcon(SvelteIcons.GRAY)
                 .let { PrioritizedLookupElement.withPriority(it, 10.0) }
 
             result.addElement(element)

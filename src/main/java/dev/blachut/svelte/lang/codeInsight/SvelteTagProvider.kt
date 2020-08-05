@@ -27,7 +27,7 @@ val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "opt
 
 // TODO Merge with svelteBareTagLookupElements
 val svelteNamespacedTagLookupElements = svelteTagNames.map {
-    LookupElementBuilder.create(sveltePrefix + it).withIcon(SvelteIcons.FILE)
+    LookupElementBuilder.create(sveltePrefix + it).withIcon(SvelteIcons.GRAY)
 }
 
 /**
@@ -35,7 +35,7 @@ val svelteNamespacedTagLookupElements = svelteTagNames.map {
  * I'm clearly missing something, but for now, let it be.
  */
 val svelteBareTagLookupElements = svelteTagNames.map {
-    val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.FILE)
+    val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.GRAY)
     PrioritizedLookupElement.withPriority(lookupElement, mediumPriority)
 }
 

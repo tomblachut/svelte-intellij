@@ -18,7 +18,7 @@ class SvelteHtmlFileType : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
     }
 
     override fun getIcon(): Icon? {
-        return SvelteIcons.FILE
+        return SvelteIcons.COLOR
     }
 
     companion object {
