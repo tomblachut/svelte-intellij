@@ -57,8 +57,6 @@ object SvelteJSLazyElementTypes {
         }
     }
 
-    private val allowedAtModifiers = setOf("html", "debug")
-
     private fun parseAtModifiers(builder: PsiBuilder) {
         if (builder.tokenType === JSTokenTypes.AT) {
             builder.advanceLexer()
@@ -67,7 +65,11 @@ object SvelteJSLazyElementTypes {
                 builder.error("whitespace is not allowed after @")
             }
 
-            if (builder.tokenType === JSTokenTypes.IDENTIFIER && allowedAtModifiers.contains(builder.tokenText)) {
+            if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
+                builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
+                builder.advanceLexer()
+            } else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
+                builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
                 builder.advanceLexer()
             } else {
                 val errorMarker = builder.mark()
@@ -82,7 +84,12 @@ object SvelteJSLazyElementTypes {
             val errorMarker = builder.mark()
             builder.advanceLexer()
 
-            if (builder.tokenType === JSTokenTypes.IDENTIFIER && allowedAtModifiers.contains(builder.tokenText)) {
+            // copied from parseAtModifiers above
+            if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
+                builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
+                builder.advanceLexer()
+            } else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
+                builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
                 builder.advanceLexer()
             }
 

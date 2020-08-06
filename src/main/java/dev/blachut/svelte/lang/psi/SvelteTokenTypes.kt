@@ -36,5 +36,21 @@ object SvelteTokenTypes {
     @JvmField
     val CATCH_KEYWORD: IElementType = JSTokenTypes.CATCH_KEYWORD
 
-    val KEYWORDS = TokenSet.create(IF_KEYWORD, ELSE_KEYWORD, EACH_KEYWORD, AS_KEYWORD, AWAIT_KEYWORD, THEN_KEYWORD, CATCH_KEYWORD)
+    @JvmField
+    val HTML_KEYWORD = JSKeywordElementType("html")
+
+    @JvmField
+    val DEBUG_KEYWORD = JSKeywordElementType("debug")
+
+    val KEYWORDS = TokenSet.create(
+        IF_KEYWORD,
+        ELSE_KEYWORD,
+        EACH_KEYWORD,
+        AS_KEYWORD,
+        AWAIT_KEYWORD,
+        THEN_KEYWORD,
+        CATCH_KEYWORD,
+        HTML_KEYWORD,
+        DEBUG_KEYWORD
+    )
 }

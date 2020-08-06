@@ -5,7 +5,7 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
-      PsiElement(JS:IDENTIFIER)('html')
+      PsiElement(JS:HTML_KEYWORD)('html')
       PsiWhiteSpace(' ')
       JSLiteralExpression
         PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
@@ -15,7 +15,7 @@ SvelteHtmlFile: Expression.svelte
       PsiElement(JS:LBRACE)('{')
       PsiWhiteSpace(' ')
       PsiElement(JS:AT)('@')
-      PsiElement(JS:IDENTIFIER)('html')
+      PsiElement(JS:HTML_KEYWORD)('html')
       PsiWhiteSpace(' ')
       JSLiteralExpression
         PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
@@ -28,7 +28,7 @@ SvelteHtmlFile: Expression.svelte
       PsiErrorElement:whitespace is not allowed after @
         <empty list>
       PsiWhiteSpace(' ')
-      PsiElement(JS:IDENTIFIER)('html')
+      PsiElement(JS:HTML_KEYWORD)('html')
       PsiWhiteSpace(' ')
       JSLiteralExpression
         PsiElement(JS:STRING_LITERAL)(''hello<script>virus()</script>'')
@@ -37,7 +37,7 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
-      PsiElement(JS:IDENTIFIER)('debug')
+      PsiElement(JS:DEBUG_KEYWORD)('debug')
       PsiWhiteSpace(' ')
       JSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')
@@ -47,7 +47,7 @@ SvelteHtmlFile: Expression.svelte
       PsiElement(JS:LBRACE)('{')
       PsiWhiteSpace(' ')
       PsiElement(JS:AT)('@')
-      PsiElement(JS:IDENTIFIER)('debug')
+      PsiElement(JS:DEBUG_KEYWORD)('debug')
       PsiWhiteSpace(' ')
       JSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')
@@ -60,7 +60,7 @@ SvelteHtmlFile: Expression.svelte
       PsiErrorElement:whitespace is not allowed after @
         <empty list>
       PsiWhiteSpace(' ')
-      PsiElement(JS:IDENTIFIER)('debug')
+      PsiElement(JS:DEBUG_KEYWORD)('debug')
       PsiWhiteSpace(' ')
       JSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')

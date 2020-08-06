@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 
+// TODO Merge SvelteJSBlockLazyElementType & SvelteJSLazyElementType
 abstract class SvelteJSBlockLazyElementType(debugName: String) :
     ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
     protected abstract val noTokensErrorMessage: String
