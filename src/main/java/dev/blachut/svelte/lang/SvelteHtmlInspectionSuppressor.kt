@@ -6,6 +6,9 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.xml.XmlAttribute
 
 class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
+    private val scriptAttributes = listOf("context")
+    private val styleAttributes = listOf("src", "global")
+
     override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
         if (inspectionId == "XmlUnboundNsPrefix") {
             return true
@@ -14,9 +17,11 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
         if (inspectionId == "HtmlUnknownAttribute") {
             val attribute = element.parent
             if (attribute is XmlAttribute) {
-                if (directives.contains(attribute.namespacePrefix) || suppressedAttributes.contains(attribute.name)) {
-                    return true
-                }
+                if (directives.contains(attribute.namespacePrefix)) return true
+
+                // TODO refactor into proper descriptors
+                if (attribute.parent.name == "script" && scriptAttributes.contains(attribute.name)) return true
+                if (attribute.parent.name == "style" && styleAttributes.contains(attribute.name)) return true
             }
         }
 
@@ -35,4 +40,3 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
 }
 
 val directives = listOf("on", "bind", "class", "use", "transition", "in", "out", "animate", "let")
-private val suppressedAttributes = listOf("context")

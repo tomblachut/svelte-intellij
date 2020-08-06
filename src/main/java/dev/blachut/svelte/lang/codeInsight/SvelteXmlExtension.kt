@@ -8,13 +8,15 @@ import dev.blachut.svelte.lang.directives
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteXmlExtension : HtmlXmlExtension() {
+    private val collapsibleTags = setOf("slot", "style", "script")
+
     override fun isAvailable(file: PsiFile): Boolean = file.language is SvelteHTMLLanguage
 
     /**
      * Whether writing self closing `<tag/>` is correct
      */
     override fun isSelfClosingTagAllowed(tag: XmlTag): Boolean {
-        return isSvelteComponentTag(tag.name) || tag.name == "slot" || super.isSelfClosingTagAllowed(tag)
+        return isSvelteComponentTag(tag.name) || collapsibleTags.contains(tag.name) || super.isSelfClosingTagAllowed(tag)
     }
 
     /**
@@ -29,7 +31,11 @@ class SvelteXmlExtension : HtmlXmlExtension() {
      */
     override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name) || tag.name == "slot"
 
-    override fun getAttributeValuePresentation(tag: XmlTag?, attributeName: String, defaultAttributeQuote: String): AttributeValuePresentation {
+    override fun getAttributeValuePresentation(
+        tag: XmlTag?,
+        attributeName: String,
+        defaultAttributeQuote: String
+    ): AttributeValuePresentation {
         if (attributeName == "slot") {
             return super.getAttributeValuePresentation(tag, attributeName, defaultAttributeQuote)
         }
