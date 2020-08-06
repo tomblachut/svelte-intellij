@@ -42,13 +42,11 @@ class SvelteFoldingBuilder : XmlFoldingBuilder(), DumbAware {
         for (child in block.children) {
             if (child is SvelteBranch) {
                 val fragment = child.fragment
-                val foldingRangeStartOffset = fragment.textRange.startOffset
-                val foldingRangeEndOffset = fragment.textRange.endOffset
-                val range = TextRange(foldingRangeStartOffset, foldingRangeEndOffset)
+                if (fragment.textLength > 0) {
+                    descriptors.add(FoldingDescriptor(block, fragment.textRange))
 
-                descriptors.add(FoldingDescriptor(block, range))
-
-                doAddForChildren(fragment, descriptors, document)
+                    doAddForChildren(fragment, descriptors, document)
+                }
             }
         }
     }

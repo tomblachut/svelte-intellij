@@ -55,10 +55,22 @@ class SvelteEditorTest : BasePlatformTestCase() {
     }
 
     fun testFoldingSvelteTag() {
-        myFixture.testFoldingWithCollapseStatus(testDataPath + "/" + basePath + "/" + getTestName(false) + ".svelte")
+        doTestFolding()
+    }
+
+    fun testFoldingEmptySvelteTag() {
+        doTestFolding()
+    }
+
+    fun testFoldingSvelteTagInHtmlTag() {
+        doTestFolding()
     }
 
     fun testFoldingEditorFold() {
+        doTestFolding()
+    }
+
+    private fun doTestFolding() {
         myFixture.testFoldingWithCollapseStatus(testDataPath + "/" + basePath + "/" + getTestName(false) + ".svelte")
     }
 }
