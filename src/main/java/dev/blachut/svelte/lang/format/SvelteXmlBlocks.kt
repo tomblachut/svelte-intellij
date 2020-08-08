@@ -9,6 +9,7 @@ import com.intellij.psi.formatter.xml.XmlFormattingPolicy
 import com.intellij.psi.formatter.xml.XmlTagBlock
 import com.intellij.psi.impl.source.SourceTreeToPsiMap
 import com.intellij.psi.xml.XmlTag
+import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes.CONTENT_EXPRESSION
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 class SvelteXmlBlock(
@@ -20,6 +21,21 @@ class SvelteXmlBlock(
     textRange: TextRange?,
     preserveSpace: Boolean
 ) : XmlBlock(node, wrap, alignment, policy, indent, textRange, preserveSpace) {
+    override fun processChild(
+        result: MutableList<Block>,
+        child: ASTNode,
+        wrap: Wrap?,
+        alignment: Alignment?,
+        indent: Indent?
+    ): ASTNode? {
+        if (child.elementType === CONTENT_EXPRESSION) {
+            result.add(SvelteExpressionBlock(child, indent, wrap, myXmlFormattingPolicy))
+            return child
+        }
+
+        return super.processChild(result, child, wrap, alignment, indent)
+    }
+
     override fun processSimpleChild(
         child: ASTNode,
         indent: Indent?,
@@ -93,6 +109,21 @@ abstract class SvelteXmlTagBlockBase(
     }
 
     abstract fun buildSvelteChildren(): List<Block>
+
+    override fun processChild(
+        result: MutableList<Block>,
+        child: ASTNode,
+        wrap: Wrap?,
+        alignment: Alignment?,
+        indent: Indent?
+    ): ASTNode? {
+        if (child.elementType === CONTENT_EXPRESSION) {
+            result.add(SvelteExpressionBlock(child, indent, wrap, myXmlFormattingPolicy))
+            return child
+        }
+
+        return super.processChild(result, child, wrap, alignment, indent)
+    }
 
     override fun processSimpleChild(
         child: ASTNode,
