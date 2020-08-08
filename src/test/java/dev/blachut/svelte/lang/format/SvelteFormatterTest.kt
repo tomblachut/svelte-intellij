@@ -20,4 +20,7 @@ class SvelteFormatterTest : FormatterTestCase() {
     fun testScriptContents() = doTest()
     fun testScriptContentsSingleLine() = doTest()
     fun testScriptStyleEmpty() = doTest()
+
+    fun testMultilineExpression() = doTest()
+    fun todoMultilineProp() = doTest()
 }
