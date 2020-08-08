@@ -6,7 +6,6 @@ import com.intellij.lang.xml.XmlFormattingModel
 import com.intellij.psi.PsiElement
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.FormattingDocumentModelImpl
-import com.intellij.psi.formatter.xml.HtmlPolicy
 import com.intellij.psi.impl.source.SourceTreeToPsiMap
 
 class SvelteFormattingModelBuilder : FormattingModelBuilder {
@@ -15,7 +14,7 @@ class SvelteFormattingModelBuilder : FormattingModelBuilder {
         val documentModel = FormattingDocumentModelImpl.createOn(psiFile)
 
         val astNode = SourceTreeToPsiMap.psiElementToTree(psiFile)
-        val formattingPolicy = HtmlPolicy(settings, documentModel)
+        val formattingPolicy = SvelteHtmlPolicy(settings, documentModel)
         val block = SvelteXmlBlock(astNode, null, null, formattingPolicy, null, null, false)
 
         return XmlFormattingModel(psiFile, block, documentModel)

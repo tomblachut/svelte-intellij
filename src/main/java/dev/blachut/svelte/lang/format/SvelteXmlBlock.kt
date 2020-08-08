@@ -167,6 +167,12 @@ open class SvelteXmlTagBlock(
     override fun createSyntheticBlock(localResult: ArrayList<Block>?, childrenIndent: Indent?): Block {
         return SvelteSyntheticBlock(localResult, this, Indent.getNoneIndent(), myXmlFormattingPolicy, childrenIndent)
     }
+
+    override fun canWrapTagEnd(tag: XmlTag): Boolean {
+        if (SvelteHtmlPolicy.wrappingTags.contains(tag.name)) return true
+
+        return super.canWrapTagEnd(tag)
+    }
 }
 
 private fun AbstractXmlBlock.createSimpleChild(xmlFormattingPolicy: XmlFormattingPolicy?, child: ASTNode?, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlBlock {
