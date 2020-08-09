@@ -1,6 +1,18 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.13.0]
 - More subtle file icons
 - Stop marking $ labels as unnecessary
 - Support await catch shorthand tag
