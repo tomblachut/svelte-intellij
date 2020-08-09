@@ -3,6 +3,8 @@
 ## [Unreleased]
 - More subtle file icons
 - Stop marking $ labels as unnecessary
+- Support await catch shorthand tag
+- Completions for src and global attributes of style tag
 - Complete parser rewrite
 - Svelte is no longer a template language, so it can be used in one
 - Improved brace highlighting and auto insertion
@@ -18,7 +20,7 @@
 - Improvements around shorthand attribute inspections and intentions
 - More graceful handling of typos
 - Ton of other small fixes
-- Drop compatibility with 2019.x platform
+- Dropped compatibility with 2019.x platform
 
 ## [0.12.2]
 
