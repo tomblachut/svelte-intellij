@@ -2,46 +2,41 @@ SvelteHtmlFile: BlockWhitespace.svelte
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>
-    SvelteEachBlock
-      SvelteEachPrimaryBranch
-        SvelteInitialTag(EACH_START)
-          PsiElement(JS:LBRACE)('{')
-          PsiElement(JS:SHARP)('#')
-          PsiElement(JS:EACH_KEYWORD)('eachassets')
-          PsiWhiteSpace(' ')
-          JSReferenceExpression
-            PsiElement(JS:AS_KEYWORD)('as')
-          PsiErrorElement:as expected
-            <empty list>
-          PsiWhiteSpace(' ')
-          SvelteJSParameter
-            PsiElement(JS:IDENTIFIER)('asset')
-          PsiElement(JS:COMMA)(',')
-          SvelteJSParameter
-            PsiElement(JS:IDENTIFIER)('i')
-          PsiWhiteSpace(' ')
-          PsiElement(JS:LPAR)('(')
-          PsiWhiteSpace(' ')
-          JSReferenceExpression
-            JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('asset')
-            PsiElement(JS:DOT)('.')
-            PsiElement(JS:IDENTIFIER)('id')
-          PsiWhiteSpace(' ')
-          PsiElement(JS:RPAR)(')')
-          PsiWhiteSpace(' ')
-          PsiElement(JS:RBRACE)('}')
-        SvelteFragment
-          <empty list>
-      SvelteEndTag(EACH_END)
-        PsiElement(JS:LBRACE)('{')
-        PsiElement(JS:DIV)('/')
-        PsiErrorElement:whitespace is not allowed after /
-          <empty list>
-        PsiWhiteSpace(' ')
-        PsiElement(JS:EACH_KEYWORD)('each')
-        PsiElement(CODE_FRAGMENT)(' ')
-        PsiElement(JS:RBRACE)('}')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiErrorElement:expression expected
+        <empty list>
+      PsiElement(JS:SHARP)('#')
+      PsiErrorElement:unexpected token
+        <empty list>
+      PsiElement(JS:IDENTIFIER)('eachassets')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:AS_KEYWORD)('as')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:IDENTIFIER)('asset')
+      PsiElement(JS:COMMA)(',')
+      PsiElement(JS:IDENTIFIER)('i')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:LPAR)('(')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:IDENTIFIER)('asset')
+      PsiElement(JS:DOT)('.')
+      PsiElement(JS:IDENTIFIER)('id')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:RPAR)(')')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:RBRACE)('}')
+    PsiErrorElement:Unexpected end tag
+      <empty list>
+    SvelteEndTag(EACH_END)
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:DIV)('/')
+      PsiErrorElement:whitespace is not allowed after /
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiElement(JS:EACH_KEYWORD)('each')
+      PsiElement(CODE_FRAGMENT)(' ')
+      PsiElement(JS:RBRACE)('}')
     PsiWhiteSpace('\n\n')
     SvelteIfBlock
       SvelteIfPrimaryBranch
@@ -59,19 +54,19 @@ SvelteHtmlFile: BlockWhitespace.svelte
           PsiWhiteSpace('\n    ')
           XmlToken:XML_DATA_CHARACTERS('First')
           PsiWhiteSpace('\n')
-      SvelteIfElseBranch
-        SvelteInitialTag(ELSE_CLAUSE)
-          PsiElement(JS:LBRACE)('{')
-          PsiWhiteSpace(' ')
-          PsiElement(JS:COLON)(':')
-          PsiElement(JS:IDENTIFIER)('elseif')
-          PsiWhiteSpace(' ')
-          PsiElement(JS:IDENTIFIER)('b')
-          PsiErrorElement:unexpected token
-            <empty list>
-          PsiWhiteSpace(' ')
-          PsiElement(JS:RBRACE)('}')
-        SvelteFragment
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiErrorElement:expression expected
+              <empty list>
+            PsiWhiteSpace(' ')
+            PsiElement(JS:COLON)(':')
+            PsiErrorElement:unexpected token
+              <empty list>
+            PsiElement(JS:IDENTIFIER)('elseif')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:IDENTIFIER)('b')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:RBRACE)('}')
           PsiWhiteSpace('\n    ')
           XmlToken:XML_DATA_CHARACTERS('Second')
           PsiWhiteSpace('\n')
