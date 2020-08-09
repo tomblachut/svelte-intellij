@@ -17,10 +17,11 @@ SvelteHtmlFile: BlockEachAsAsAsAs.svelte
           SvelteJSParameter
             PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
-          PsiElement(JS:LPAR)('(')
-          JSReferenceExpression
-            PsiElement(JS:AS_KEYWORD)('as')
-          PsiElement(JS:RPAR)(')')
+          SvelteTagDependentExpression
+            PsiElement(JS:LPAR)('(')
+            JSReferenceExpression
+              PsiElement(JS:AS_KEYWORD)('as')
+            PsiElement(JS:RPAR)(')')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
           <empty list>
