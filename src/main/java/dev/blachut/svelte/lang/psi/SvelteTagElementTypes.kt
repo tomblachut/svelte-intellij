@@ -60,6 +60,7 @@ object SvelteTagElementTypes {
             }
 
             if (builder.tokenType === JSTokenTypes.LPAR) {
+                val keyExpressionMarker = builder.mark()
                 builder.advanceLexer()
                 parser.expressionParser.parseExpression()
 
@@ -68,6 +69,7 @@ object SvelteTagElementTypes {
                 } else {
                     builder.error(") expected")
                 }
+                keyExpressionMarker.done(TAG_DEPENDENT_EXPRESSION)
             }
         }
     }
@@ -116,6 +118,8 @@ object SvelteTagElementTypes {
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
         }
     }
+
+    val TAG_DEPENDENT_EXPRESSION = SvelteJSElementType("TAG_DEPENDENT_EXPRESSION")
 
     val IF_END = SvelteJSElementType("IF_END")
     val EACH_END = SvelteJSElementType("EACH_END")

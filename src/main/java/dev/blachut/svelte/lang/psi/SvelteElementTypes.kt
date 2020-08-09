@@ -45,6 +45,8 @@ object SvelteElementTypes {
 
             ATTRIBUTE_EXPRESSION -> SveltePsiElement(node)
 
+            SvelteTagElementTypes.TAG_DEPENDENT_EXPRESSION -> SvelteTagDependentExpression(node)
+
             SvelteTagElementTypes.IF_END,
             SvelteTagElementTypes.EACH_END,
             SvelteTagElementTypes.AWAIT_END -> SvelteEndTag(node)
