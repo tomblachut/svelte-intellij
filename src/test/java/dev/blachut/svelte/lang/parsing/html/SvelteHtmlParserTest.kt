@@ -74,7 +74,6 @@ class SvelteHtmlParserTest : ParsingTestCase(
     fun testAttributeSpread() = doTest()
     fun testAttributeUnquoted() = doTest()
 
-    //  TODO Support await...catch blocks
     fun testBlockAwaitCatch() = doTest()
     fun testBlockAwaitThenThenThen() = doTest()
     fun testBlockEachAmbiguousAs() = doTest()

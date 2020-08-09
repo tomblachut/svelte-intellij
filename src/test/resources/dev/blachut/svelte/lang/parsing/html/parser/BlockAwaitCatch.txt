@@ -13,10 +13,9 @@ SvelteHtmlFile: BlockAwaitCatch.svelte
             PsiElement(JS:IDENTIFIER)('promise')
           PsiWhiteSpace(' ')
           PsiElement(JS:CATCH_KEYWORD)('catch')
-          PsiErrorElement:unexpected token
-            <empty list>
           PsiWhiteSpace(' ')
-          PsiElement(JS:IDENTIFIER)('error')
+          SvelteJSParameter
+            PsiElement(JS:IDENTIFIER)('error')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
           <empty list>

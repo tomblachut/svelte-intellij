@@ -90,6 +90,11 @@ object SvelteTagElementTypes {
 
                 parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
             }
+
+            if (builder.tokenType === SvelteTokenTypes.CATCH_KEYWORD) {
+                builder.advanceLexer()
+                parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+            }
         }
     }
 
