@@ -18,15 +18,18 @@ import com.intellij.util.Processor
 import dev.blachut.svelte.lang.isSvelteContext
 
 class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>(true) {
-    override fun processQuery(queryParameters: ReferencesSearch.SearchParameters, consumer: Processor<in PsiReference>) {
+    override fun processQuery(
+        queryParameters: ReferencesSearch.SearchParameters,
+        consumer: Processor<in PsiReference>
+    ) {
         val element = queryParameters.elementToSearch
         val containingFile = element.containingFile
-        val componentName = (element as? JSElement)?.name ?: return
+        val identifier = (element as? JSElement)?.name ?: return
 
         if (isSvelteContext(containingFile)) {
             if (element is ES6ImportedBinding) {
                 queryParameters.optimizer.searchWord(
-                    componentName,
+                    identifier,
                     LocalSearchScope(containingFile),
                     UsageSearchContext.IN_CODE,
                     true,
@@ -35,39 +38,46 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
             }
             if (element is ES6ImportSpecifierAlias) {
                 queryParameters.optimizer.searchWord(
-                    componentName,
+                    identifier,
                     LocalSearchScope(containingFile),
                     UsageSearchContext.IN_CODE,
                     true,
                     element,
-                    MyProcessor(element)
+                    ImportExportProcessor(element)
                 )
             }
         }
+
         if (element is ES6ExportSpecifierAlias && queryParameters.effectiveSearchScope is LocalSearchScope) {
             val scope = (queryParameters.effectiveSearchScope as LocalSearchScope).scope.firstOrNull() ?: return
             if (!isSvelteContext(scope.containingFile)) return
 
             queryParameters.optimizer.searchWord(
-                componentName,
+                identifier,
                 LocalSearchScope(scope.containingFile),
                 UsageSearchContext.IN_CODE,
                 true,
                 element,
-                MyProcessor(element)
+                ImportExportProcessor(element)
             )
         }
     }
 
-    private class MyProcessor(private val target: ES6ImportExportSpecifierAlias) : RequestResultProcessor(target) {
-        override fun processTextOccurrence(element: PsiElement, offsetInElement: Int, consumer: Processor<in PsiReference>): Boolean {
+    private class ImportExportProcessor(private val target: ES6ImportExportSpecifierAlias) :
+        RequestResultProcessor(target) {
+        override fun processTextOccurrence(
+            element: PsiElement,
+            offsetInElement: Int,
+            consumer: Processor<in PsiReference>
+        ): Boolean {
             if (!target.isValid) {
                 return false
             }
 
             if (element is XmlTag) {
                 if (element.name == target.name) {
-                    val references = PsiReferenceService.getService().getReferences(element, PsiReferenceService.Hints(target, offsetInElement))
+                    val references = PsiReferenceService.getService()
+                        .getReferences(element, PsiReferenceService.Hints(target, offsetInElement))
                     references.forEach { consumer.process(it) }
                 }
             }
