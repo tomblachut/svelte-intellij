@@ -48,6 +48,7 @@
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <html.scriptContentProvider language="SvelteJS"
                                     implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider"/>
+        <idIndexer filetype="Svelte" implementationClass="dev.blachut.svelte.lang.index.SvelteIdIndexer"/>
         <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
         <completion.contributor language="any"
                                 implementationClass="dev.blachut.svelte.lang.completion.SvelteCompletionContributor"
