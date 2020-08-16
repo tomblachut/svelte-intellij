@@ -24,7 +24,7 @@ class SvelteJSReferenceExpressionResolver(
     }
 
     override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-        val propsReferenceNames = arrayOf("\$\$props", "\$\$restProps")
+        val propsReferenceNames = arrayOf("\$\$props", "\$\$restProps", "\$\$slots")
 
         propsReferenceNames.forEach {
             if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, it)) {
