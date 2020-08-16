@@ -1,17 +1,8 @@
 # Changelog
 
 ## [Unreleased]
-### Added
+- Recognize $$slots
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [0.13.0]
 - More subtle file icons
 - Stop marking $ labels as unnecessary
