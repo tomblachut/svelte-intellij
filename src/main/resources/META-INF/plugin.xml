@@ -60,6 +60,7 @@
         <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
+        <postStartupActivity implementation="dev.blachut.svelte.lang.linters.EslintInitStartupActivity"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <dialectSpecificHandlersFactory language="SvelteJS"
