@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+- Enable ESLint support
+- Improve unused imports support
 - Recognize $$slots
 
 ## [0.13.0]
