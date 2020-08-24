@@ -9,7 +9,7 @@ SvelteHtmlFile: BlockAwaitCatch.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:AWAIT_KEYWORD)('await')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
+          SvelteJSReferenceExpression
             PsiElement(JS:IDENTIFIER)('promise')
           PsiWhiteSpace(' ')
           PsiElement(JS:CATCH_KEYWORD)('catch')

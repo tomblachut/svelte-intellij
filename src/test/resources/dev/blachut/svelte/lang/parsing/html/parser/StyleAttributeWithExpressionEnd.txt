@@ -46,7 +46,7 @@ SvelteHtmlFile: StyleAttributeWithExpressionEnd.svelte
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('svelteColor')
             PsiElement(END_MUSTACHE)('}')
           XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')

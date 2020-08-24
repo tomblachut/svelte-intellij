@@ -12,7 +12,7 @@ SvelteHtmlFile: AttributeSpread.svelte
           SvelteJS: SPREAD_OR_SHORTHAND
             JSSpreadExpression
               PsiElement(JS:DOT_DOT_DOT)('...')
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('props')
           PsiElement(END_MUSTACHE)('}')
       XmlToken:XML_TAG_END('>')
@@ -32,7 +32,7 @@ SvelteHtmlFile: AttributeSpread.svelte
           SvelteJS: SPREAD_OR_SHORTHAND
             JSSpreadExpression
               PsiElement(JS:DOT_DOT_DOT)('...')
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('props')
           PsiElement(END_MUSTACHE)('}')
       PsiWhiteSpace(' ')
@@ -58,7 +58,7 @@ SvelteHtmlFile: AttributeSpread.svelte
               JSObjectLiteralExpression
                 PsiElement(JS:LBRACE)('{')
                 ES6Property
-                  JSReferenceExpression
+                  SvelteJSReferenceExpression
                     PsiElement(JS:IDENTIFIER)('technically')
                 PsiElement(JS:COMMA)(',')
                 PsiWhiteSpace(' ')

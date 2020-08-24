@@ -19,6 +19,7 @@ import com.intellij.psi.xml.XmlTokenType
 import com.intellij.util.containers.ContainerUtil
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
+import dev.blachut.svelte.lang.psi.SvelteJSReferenceExpression
 import kotlin.experimental.or
 
 class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, originalLexer: Lexer) :
@@ -27,7 +28,10 @@ class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, originalLexer: L
         val tokenType = myDelegate.tokenType
         if (!SKIP_WORDS.contains(tokenType)) {
             if (IDENTIFIERS.contains(tokenType)) {
-                addOccurrenceInToken(UsageSearchContext.IN_CODE.toInt())
+                val subscribedStore = SvelteJSReferenceExpression.isDollarPrefixedName(tokenText)
+                val start = if (subscribedStore) 1 else 0
+                val length = if (subscribedStore) tokenText.length - tokenText.length else tokenText.length
+                addOccurrenceInToken(UsageSearchContext.IN_CODE.toInt(), start, length)
             }
             // TODO support directives, refer to Vue plugin
             // else if (tokenType === XML_NAME) { }

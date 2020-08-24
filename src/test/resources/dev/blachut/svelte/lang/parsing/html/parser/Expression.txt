@@ -39,7 +39,7 @@ SvelteHtmlFile: Expression.svelte
       PsiElement(JS:AT)('@')
       PsiElement(JS:DEBUG_KEYWORD)('debug')
       PsiWhiteSpace(' ')
-      JSReferenceExpression
+      SvelteJSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')
       PsiElement(JS:RBRACE)('}')
     PsiWhiteSpace('\n')
@@ -49,7 +49,7 @@ SvelteHtmlFile: Expression.svelte
       PsiElement(JS:AT)('@')
       PsiElement(JS:DEBUG_KEYWORD)('debug')
       PsiWhiteSpace(' ')
-      JSReferenceExpression
+      SvelteJSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')
       PsiWhiteSpace(' ')
       PsiElement(JS:RBRACE)('}')
@@ -62,7 +62,7 @@ SvelteHtmlFile: Expression.svelte
       PsiWhiteSpace(' ')
       PsiElement(JS:DEBUG_KEYWORD)('debug')
       PsiWhiteSpace(' ')
-      JSReferenceExpression
+      SvelteJSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')
       PsiElement(JS:RBRACE)('}')
     PsiWhiteSpace('\n')
@@ -72,6 +72,6 @@ SvelteHtmlFile: Expression.svelte
       PsiErrorElement:expected html or debug
         PsiElement(JS:IDENTIFIER)('unknown')
       PsiWhiteSpace(' ')
-      JSReferenceExpression
+      SvelteJSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')
       PsiElement(JS:RBRACE)('}')

@@ -19,7 +19,7 @@ SvelteHtmlFile: BlockNesting.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:IF_KEYWORD)('if')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
+          SvelteJSReferenceExpression
             PsiElement(JS:IDENTIFIER)('visible')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -32,7 +32,7 @@ SvelteHtmlFile: BlockNesting.svelte
                 PsiElement(JS:SHARP)('#')
                 PsiElement(JS:AWAIT_KEYWORD)('await')
                 PsiWhiteSpace(' ')
-                JSReferenceExpression
+                SvelteJSReferenceExpression
                   PsiElement(JS:IDENTIFIER)('promise')
                 PsiWhiteSpace(' ')
                 PsiElement(JS:THEN_KEYWORD)('then')
@@ -52,7 +52,7 @@ SvelteHtmlFile: BlockNesting.svelte
                     PsiElement(JS:AT)('@')
                     PsiElement(JS:HTML_KEYWORD)('html')
                     PsiWhiteSpace(' ')
-                    JSReferenceExpression
+                    SvelteJSReferenceExpression
                       PsiElement(JS:IDENTIFIER)('x')
                     PsiElement(JS:RBRACE)('}')
                   XmlToken:XML_END_TAG_START('</')
@@ -81,7 +81,7 @@ SvelteHtmlFile: BlockNesting.svelte
             PsiElement(JS:AT)('@')
             PsiElement(JS:DEBUG_KEYWORD)('debug')
             PsiWhiteSpace(' ')
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:IDENTIFIER)('name')
             PsiElement(JS:RBRACE)('}')
           XmlText
@@ -116,7 +116,7 @@ SvelteHtmlFile: BlockNesting.svelte
             PsiElement(JS:SHARP)('#')
             PsiElement(JS:EACH_KEYWORD)('each')
             PsiWhiteSpace(' ')
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:IDENTIFIER)('assets')
             PsiWhiteSpace(' ')
             PsiElement(JS:AS_KEYWORD)('as')
@@ -127,7 +127,7 @@ SvelteHtmlFile: BlockNesting.svelte
           SvelteFragment
             SvelteJS: CONTENT_EXPRESSION
               PsiElement(JS:LBRACE)('{')
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('a')
               PsiElement(JS:RBRACE)('}')
         SvelteEndTag(EACH_END)

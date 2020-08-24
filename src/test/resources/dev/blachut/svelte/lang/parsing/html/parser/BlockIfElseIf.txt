@@ -9,7 +9,7 @@ SvelteHtmlFile: BlockIfElseIf.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:IF_KEYWORD)('if')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
+          SvelteJSReferenceExpression
             PsiElement(JS:IDENTIFIER)('iffy')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -24,7 +24,7 @@ SvelteHtmlFile: BlockIfElseIf.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:IF_KEYWORD)('if')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
+          SvelteJSReferenceExpression
             PsiElement(JS:IDENTIFIER)('life')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
@@ -39,7 +39,7 @@ SvelteHtmlFile: BlockIfElseIf.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:IF_KEYWORD)('if')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
+          SvelteJSReferenceExpression
             PsiElement(JS:IDENTIFIER)('gif')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
