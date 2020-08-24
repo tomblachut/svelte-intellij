@@ -33,6 +33,10 @@
         <lang.formatter language="SvelteHTML"
                         implementationClass="dev.blachut.svelte.lang.format.SvelteFormattingModelBuilder"/>
         <extendWordSelectionHandler implementation="dev.blachut.svelte.lang.editor.SveltePrimaryBranchSelectioner"/>
+        <extendWordSelectionHandler
+            implementation="dev.blachut.svelte.lang.editor.SvelteSubscribedReferenceSelectioner"/>
+        <basicWordSelectionFilter
+            implementation="dev.blachut.svelte.lang.editor.SvelteSubscribedReferenceSelectionFilter"/>
         <multiLangCommenter implementation="dev.blachut.svelte.lang.editor.SvelteCommentProvider"/>
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTagEndTypedHandler" order="before xmlSlash"/>
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteBraceTypedHandler"/>
