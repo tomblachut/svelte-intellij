@@ -7,19 +7,11 @@ import com.intellij.lang.ecmascript6.parsing.ES6Parser
 import com.intellij.lang.ecmascript6.parsing.ES6StatementParser
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JSPsiTypeParser
-import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 
 class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>,
-    ES6FunctionParser<*>, JSPsiTypeParser<*>>(SvelteJSLanguage.INSTANCE, builder) {
+    ES6FunctionParser<*>, JSPsiTypeParser<*>>(SvelteJSLanguage.INSTANCE, SvelteJSPsiBuilder(builder)) {
     init {
-        myStatementParser = object : ES6StatementParser<SvelteJSParser>(this) {
-            override fun getVariableElementType(): IElementType {
-                // TODO Try to crate lazy element that splits variable and $ prefix
-                return super.getVariableElementType()
-            }
-        }
-
         myExpressionParser = object : ES6ExpressionParser<SvelteJSParser>(this) {
             override fun getCurrentBinarySignPriority(allowIn: Boolean, advance: Boolean): Int {
                 if (this.builder.tokenType === JSTokenTypes.AS_KEYWORD) {

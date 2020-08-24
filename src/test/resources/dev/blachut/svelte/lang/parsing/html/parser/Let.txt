@@ -13,7 +13,7 @@ SvelteHtmlFile: Let.svelte
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('local')
             PsiElement(END_MUSTACHE)('}')
       PsiWhiteSpace(' ')
@@ -30,7 +30,7 @@ SvelteHtmlFile: Let.svelte
       XmlToken:XML_TAG_END('>')
       SvelteJS: CONTENT_EXPRESSION
         PsiElement(JS:LBRACE)('{')
-        JSReferenceExpression
+        SvelteJSReferenceExpression
           PsiElement(JS:IDENTIFIER)('local')
         PsiElement(JS:RBRACE)('}')
       XmlToken:XML_END_TAG_START('</')
@@ -48,7 +48,7 @@ SvelteHtmlFile: Let.svelte
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('local')
             PsiElement(END_MUSTACHE)('}')
       PsiWhiteSpace(' ')
@@ -57,7 +57,7 @@ SvelteHtmlFile: Let.svelte
       XmlToken:XML_TAG_END('>')
       SvelteJS: CONTENT_EXPRESSION
         PsiElement(JS:LBRACE)('{')
-        JSReferenceExpression
+        SvelteJSReferenceExpression
           PsiElement(JS:IDENTIFIER)('local')
         PsiElement(JS:RBRACE)('}')
       XmlToken:XML_END_TAG_START('</')

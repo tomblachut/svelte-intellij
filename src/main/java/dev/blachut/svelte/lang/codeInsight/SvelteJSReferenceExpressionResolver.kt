@@ -2,7 +2,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.index.JSSymbolUtil
-import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
@@ -16,14 +15,6 @@ class SvelteJSReferenceExpressionResolver(
 ) :
     JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
     private val implicitIdentifiers = arrayOf("\$\$props", "\$\$restProps", "\$\$slots")
-
-    override fun adjustReferencedName(expression: JSReferenceExpression): String? {
-        val name = expression.referenceName
-        if (name != null && expression.qualifier == null && name.length > 1 && name[0] == '$' && name[1] != '$') {
-            return name.substring(1)
-        }
-        return name
-    }
 
     override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
         implicitIdentifiers.forEach {

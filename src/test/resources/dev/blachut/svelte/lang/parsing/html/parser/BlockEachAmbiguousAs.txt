@@ -10,10 +10,10 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSBinaryExpression
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiElement(JS:PLUS)('+')
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
@@ -36,8 +36,8 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
-            JSReferenceExpression
+          SvelteJSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiElement(JS:DOT)('.')
             PsiElement(JS:IDENTIFIER)('as')
@@ -62,8 +62,8 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
-            JSReferenceExpression
+          SvelteJSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:IDENTIFIER)('assets')
             PsiElement(JS:DOT)('.')
             PsiElement(JS:IDENTIFIER)('as')
@@ -88,8 +88,8 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
-            JSReferenceExpression
+          SvelteJSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiElement(JS:DOT)('.')
             PsiElement(JS:IDENTIFIER)('assets')
@@ -114,8 +114,8 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
-            JSReferenceExpression
+          SvelteJSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiElement(JS:DOT)('.')
             PsiWhiteSpace(' ')
@@ -142,7 +142,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSCallExpression
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             JSArgumentList
               PsiElement(JS:LPAR)('(')
@@ -152,7 +152,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
                   PsiElement(JS:IDENTIFIER)('x')
                   PsiElement(JS:COLON)(':')
                   PsiWhiteSpace(' ')
-                  JSReferenceExpression
+                  SvelteJSReferenceExpression
                     PsiElement(JS:AS_KEYWORD)('as')
                 PsiElement(JS:RBRACE)('}')
               PsiElement(JS:RPAR)(')')
@@ -183,7 +183,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
@@ -207,7 +207,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSBinaryExpression
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
@@ -236,7 +236,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSBinaryExpression
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
@@ -270,7 +270,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
             PsiWhiteSpace(' ')
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
@@ -294,7 +294,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSBinaryExpression
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')
@@ -324,7 +324,7 @@ SvelteHtmlFile: BlockEachAmbiguousAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSBinaryExpression
-            JSReferenceExpression
+            SvelteJSReferenceExpression
               PsiElement(JS:AS_KEYWORD)('as')
             PsiWhiteSpace(' ')
             PsiElement(JS:PLUS)('+')

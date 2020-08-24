@@ -90,18 +90,21 @@ class SvelteHtmlParserTest : ParsingTestCase(
     fun testHtmlAutoClosingTagsAcrossBlock() = doTest()
     fun testHtmlAutoClosingTagsInsideBlock() = doTest()
 
-    fun testHtmlMissingEndTags() = doTest()
-    fun testHtmlSpecialTags() = doTest()
-
     fun testHtmlClosingTagMatchesNothing1() = doTest()
     fun testHtmlClosingTagMatchesNothing2() = doTest()
     fun testHtmlClosingTagMatchesNothing3() = doTest()
+
+    fun testHtmlMissingEndTags() = doTest()
+    fun testHtmlSpecialTags() = doTest()
 
     fun testHtmlUnclosed1() = doTest()
     fun testHtmlUnclosed2() = doTest()
     fun testHtmlUnclosed3() = doTest()
 
     fun testLet() = doTest()
+
+    fun testQuoteBalanceScriptComment() = doTest()
+    fun testQuoteBalanceUnclosedStringLiteral() = doTest()
 
     fun testStyleTagDefault() = doTest()
     fun testStyleTagScss() = doTest()

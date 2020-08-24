@@ -22,7 +22,7 @@ SvelteHtmlFile: QuoteBalanceUnclosedStringLiteral.svelte
             JSExpressionStatement
               JSAssignmentExpression
                 JSDefinitionExpression
-                  JSReferenceExpression
+                  SvelteJSReferenceExpression
                     PsiElement(JS:IDENTIFIER)('text')
                 PsiWhiteSpace(' ')
                 PsiElement(JS:EQ)('=')

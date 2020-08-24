@@ -9,7 +9,7 @@ SvelteHtmlFile: BlockAwaitThenThenThen.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:AWAIT_KEYWORD)('await')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
+          SvelteJSReferenceExpression
             PsiElement(JS:IDENTIFIER)('then')
           PsiWhiteSpace(' ')
           PsiElement(JS:THEN_KEYWORD)('then')

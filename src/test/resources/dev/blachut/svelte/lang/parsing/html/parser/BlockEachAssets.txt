@@ -9,7 +9,7 @@ SvelteHtmlFile: BlockEachAssets.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
-          JSReferenceExpression
+          SvelteJSReferenceExpression
             PsiElement(JS:IDENTIFIER)('assets')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
