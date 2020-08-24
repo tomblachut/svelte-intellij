@@ -72,5 +72,6 @@
                                         implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
         <analysisHandlersFactory language="SvelteJS"
                                  implementationClass="dev.blachut.svelte.lang.SvelteJSAnalysisHandlersFactory"/>
+        <frameworkIndexingHandler implementation="dev.blachut.svelte.lang.SvelteFrameworkHandler" version="1"/>
     </extensions>
 </idea-plugin>
