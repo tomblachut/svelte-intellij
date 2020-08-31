@@ -3,7 +3,10 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.lang.Language
 import com.intellij.lexer.BaseHtmlLexer
 import com.intellij.lexer.Lexer
+import com.intellij.openapi.util.Comparing
+import com.intellij.psi.impl.source.tree.TreeUtil
 import com.intellij.psi.xml.XmlTokenType
+import org.jetbrains.annotations.NonNls
 
 // Adapted from org.jetbrains.vuejs.lang.html.lexer.VueLexerHelper
 class SvelteHtmlLexerHelper(private val handle: SvelteHtmlLexerHandle) {
@@ -15,6 +18,15 @@ class SvelteHtmlLexerHelper(private val handle: SvelteHtmlLexerHandle) {
 
     inner class SvelteLangAttributeHandler : BaseHtmlLexer.TokenHandler {
         override fun handleElement(lexer: Lexer) {
+
+            if (handle.seenScript && !handle.seenTag) {
+                handle.seenContentType = false
+                if ("lang" == lexer.tokenText) {
+                    handle.seenContentType = true
+                    return
+                }
+            }
+
             // Shoehorn lang attribute to behave the same as type attribute for lexing purposes
             if (!handle.seenTag && !handle.inTagState && handle.seenStyle && "lang" == lexer.tokenText) {
                 handle.seenStyleType = true

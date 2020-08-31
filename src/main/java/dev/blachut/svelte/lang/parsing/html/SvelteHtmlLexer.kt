@@ -4,6 +4,7 @@ import com.intellij.lang.HtmlScriptContentProvider
 import com.intellij.lang.Language
 import com.intellij.lang.LanguageHtmlScriptContentProvider
 import com.intellij.lang.css.CSSLanguage
+import com.intellij.lang.javascript.JavaScriptSupportLoader
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlLexer
 import com.intellij.psi.tree.IElementType
@@ -18,6 +19,12 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
                 this@SvelteHtmlLexer.seenTag = value
             }
 
+        override var seenContentType: Boolean
+            get() = this@SvelteHtmlLexer.seenContentType
+            set(value) {
+                this@SvelteHtmlLexer.seenContentType = value
+            }
+
         override var seenStyleType: Boolean
             get() = this@SvelteHtmlLexer.seenStylesheetType
             set(value) {
@@ -25,6 +32,7 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
             }
 
         override val seenStyle: Boolean get() = this@SvelteHtmlLexer.seenStyle
+        override val seenScript: Boolean get() = this@SvelteHtmlLexer.seenScript
         override val styleType: String? get() = this@SvelteHtmlLexer.styleType
         override val inTagState: Boolean get() = (state and HtmlHighlightingLexer.BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
 
@@ -46,8 +54,8 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
         return (nestingLevel shl 16) or (super.getState() and 0xffff)
     }
 
-    override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider {
-        return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteJSLanguage.INSTANCE)
+    override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
+        return getSvelteScriptContentProvider(mimeType)
     }
 
     override fun getStyleLanguage(): Language? =
@@ -55,5 +63,17 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
 
     override fun isHtmlTagState(state: Int): Boolean {
         return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
+    }
+
+    companion object {
+        fun getSvelteScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
+            if (mimeType == "ts" || mimeType == "typescript") {
+                //todo here we should use language extension similar to SvelteJSLanguage, instead of the original lang
+                return LanguageHtmlScriptContentProvider.getScriptContentProvider(JavaScriptSupportLoader.TYPESCRIPT)
+            }
+
+            return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteJSLanguage.INSTANCE)
+        }
+
     }
 }

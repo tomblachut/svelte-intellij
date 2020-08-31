@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspection
+import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownBooleanAttributeInspection
@@ -21,62 +22,6 @@ import com.sixrr.inspectjs.validity.UnreachableCodeJSInspection
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
 
 class SvelteHighlightingTest : BasePlatformTestCase() {
-    private fun configureDefaultLocalInspectionTools(): List<LocalInspectionTool> {
-        val l = mutableListOf<LocalInspectionTool>()
-        l.add(RequiredAttributesInspection())
-        l.add(JSConstantReassignmentInspection())
-        l.add(ES6UnusedImportsInspection())
-        l.add(JSUnresolvedFunctionInspection())
-        l.add(JSUnresolvedVariableInspection())
-        l.add(JSValidateTypesInspection())
-        l.add(JSIncompatibleTypesComparisonInspection())
-        val functionSignaturesInspection = JSCheckFunctionSignaturesInspection()
-        functionSignaturesInspection.myCheckGuessedTypes = true
-        l.add(functionSignaturesInspection)
-        l.add(JSValidateJSDocInspection())
-        l.add(JSUndeclaredVariableInspection())
-        l.add(XmlDuplicatedIdInspection())
-        l.add(ES6CheckImportInspection())
-        l.add(XmlInvalidIdInspection())
-        l.add(HtmlUnknownTagInspection())
-        l.add(HtmlUnknownBooleanAttributeInspection())
-        l.add(HtmlUnknownAttributeInspection())
-        l.add(XmlUnboundNsPrefixInspection())
-        l.add(JSUnusedLocalSymbolsInspection())
-        l.add(JSPotentiallyInvalidConstructorUsageInspection())
-        l.add(JSUnnecessarySemicolonInspection())
-        l.add(JSLastCommaInArrayLiteralInspection())
-        l.add(JSLastCommaInObjectLiteralInspection())
-        l.add(JSReferencingMutableVariableFromClosureInspection())
-        l.add(JSPotentiallyInvalidUsageOfThisInspection())
-        l.add(JSPotentiallyInvalidUsageOfClassThisInspection())
-        l.add(JSPotentiallyInvalidTargetOfIndexedPropertyAccess())
-        l.add(JSUndefinedPropertyAssignmentInspection())
-        l.add(JSClosureCompilerSyntaxInspection())
-        l.add(JSCommentMatchesSignatureInspection())
-        l.add(JSFileReferencesInspection())
-        l.add(JSUnusedGlobalSymbolsInspection())
-        l.add(JSReferencingArgumentsOutsideOfFunctionInspection())
-        l.add(JSAnnotatorInspection())
-        l.add(JSUnusedAssignmentInspection())
-        l.add(UnreachableCodeJSInspection())
-        l.add(TypeScriptValidateTypesInspection())
-        l.add(TypeScriptValidateJSTypesInspection())
-        l.add(TypeScriptUnresolvedFunctionInspection())
-        l.add(TypeScriptUnresolvedVariableInspection())
-        l.add(TypeScriptAccessibilityCheckInspection())
-        l.add(TypeScriptCheckImportInspection())
-        l.add(TypeScriptDuplicateUnionOrIntersectionTypeInspection())
-        l.add(PointlessBooleanExpressionJSInspection())
-        l.add(TypeScriptValidateGenericTypesInspection())
-        l.add(TypeScriptRedundantGenericTypeInspection())
-
-        // CF inspections
-        l.add(JSSuspiciousTypeGuardInspection())
-        l.add(JSObjectNullOrUndefinedInspection())
-        l.add(SvelteUnresolvedComponentInspection())
-        return l
-    }
 
     override fun setUp() {
         super.setUp()
@@ -323,5 +268,64 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
                 </select>
                 """.trimIndent())
         myFixture.testHighlighting()
+    }
+
+    companion object {
+        fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
+            val l = mutableListOf<LocalInspectionTool>()
+            l.add(RequiredAttributesInspection())
+            l.add(JSConstantReassignmentInspection())
+            l.add(ES6UnusedImportsInspection())
+            l.add(JSUnresolvedFunctionInspection())
+            l.add(JSUnresolvedVariableInspection())
+            l.add(JSValidateTypesInspection())
+            l.add(JSIncompatibleTypesComparisonInspection())
+            val functionSignaturesInspection = JSCheckFunctionSignaturesInspection()
+            functionSignaturesInspection.myCheckGuessedTypes = true
+            l.add(functionSignaturesInspection)
+            l.add(JSValidateJSDocInspection())
+            l.add(JSUndeclaredVariableInspection())
+            l.add(XmlDuplicatedIdInspection())
+            l.add(ES6CheckImportInspection())
+            l.add(XmlInvalidIdInspection())
+            l.add(HtmlUnknownTagInspection())
+            l.add(HtmlUnknownBooleanAttributeInspection())
+            l.add(HtmlUnknownAttributeInspection())
+            l.add(XmlUnboundNsPrefixInspection())
+            l.add(JSUnusedLocalSymbolsInspection())
+            l.add(JSPotentiallyInvalidConstructorUsageInspection())
+            l.add(JSUnnecessarySemicolonInspection())
+            l.add(JSLastCommaInArrayLiteralInspection())
+            l.add(JSLastCommaInObjectLiteralInspection())
+            l.add(JSReferencingMutableVariableFromClosureInspection())
+            l.add(JSPotentiallyInvalidUsageOfThisInspection())
+            l.add(JSPotentiallyInvalidUsageOfClassThisInspection())
+            l.add(JSPotentiallyInvalidTargetOfIndexedPropertyAccess())
+            l.add(JSUndefinedPropertyAssignmentInspection())
+            l.add(JSClosureCompilerSyntaxInspection())
+            l.add(JSCommentMatchesSignatureInspection())
+            l.add(JSFileReferencesInspection())
+            l.add(JSUnusedGlobalSymbolsInspection())
+            l.add(JSReferencingArgumentsOutsideOfFunctionInspection())
+            l.add(JSAnnotatorInspection())
+            l.add(JSUnusedAssignmentInspection())
+            l.add(UnreachableCodeJSInspection())
+            l.add(TypeScriptValidateTypesInspection())
+            l.add(TypeScriptValidateJSTypesInspection())
+            l.add(TypeScriptUnresolvedFunctionInspection())
+            l.add(TypeScriptUnresolvedVariableInspection())
+            l.add(TypeScriptAccessibilityCheckInspection())
+            l.add(TypeScriptCheckImportInspection())
+            l.add(TypeScriptDuplicateUnionOrIntersectionTypeInspection())
+            l.add(PointlessBooleanExpressionJSInspection())
+            l.add(TypeScriptValidateGenericTypesInspection())
+            l.add(TypeScriptRedundantGenericTypeInspection())
+
+            // CF inspections
+            l.add(JSSuspiciousTypeGuardInspection())
+            l.add(JSObjectNullOrUndefinedInspection())
+            l.add(SvelteUnresolvedComponentInspection())
+            return l
+        }
     }
 }

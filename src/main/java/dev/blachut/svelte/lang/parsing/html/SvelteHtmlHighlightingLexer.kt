@@ -33,6 +33,12 @@ private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(Inner
                 this@BaseSvelteHtmlHighlightingLexer.seenStylesheetType = value
             }
 
+        override var seenContentType: Boolean
+            get() = this@BaseSvelteHtmlHighlightingLexer.seenContentType
+            set(value) {
+                this@BaseSvelteHtmlHighlightingLexer.seenContentType = value
+            }
+        override val seenScript: Boolean get() = this@BaseSvelteHtmlHighlightingLexer.seenScript
         override val seenStyle: Boolean get() = this@BaseSvelteHtmlHighlightingLexer.seenStyle
         override val styleType: String? get() = this@BaseSvelteHtmlHighlightingLexer.styleType
         override val inTagState: Boolean get() = (state and BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
@@ -42,8 +48,8 @@ private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(Inner
         }
     })
 
-    override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider {
-        return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteJSLanguage.INSTANCE)
+    override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
+        return SvelteHtmlLexer.getSvelteScriptContentProvider(mimeType)
     }
 
     override fun isHtmlTagState(state: Int): Boolean {

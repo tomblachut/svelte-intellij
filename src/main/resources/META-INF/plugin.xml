@@ -68,6 +68,7 @@
         <postStartupActivity implementation="dev.blachut.svelte.lang.linters.EslintInitStartupActivity"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
+        <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>
         <dialectSpecificHandlersFactory language="SvelteJS"
                                         implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
         <analysisHandlersFactory language="SvelteJS"
