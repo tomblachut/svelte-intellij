@@ -3,10 +3,7 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.lang.Language
 import com.intellij.lexer.BaseHtmlLexer
 import com.intellij.lexer.Lexer
-import com.intellij.openapi.util.Comparing
-import com.intellij.psi.impl.source.tree.TreeUtil
 import com.intellij.psi.xml.XmlTokenType
-import org.jetbrains.annotations.NonNls
 
 // Adapted from org.jetbrains.vuejs.lang.html.lexer.VueLexerHelper
 class SvelteHtmlLexerHelper(private val handle: SvelteHtmlLexerHandle) {

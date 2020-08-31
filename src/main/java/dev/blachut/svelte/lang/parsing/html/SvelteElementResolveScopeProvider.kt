@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.parsing.html;
+package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.javascript.DialectDetector
 import com.intellij.lang.javascript.ecmascript6.TypeScriptResolveScopeProvider
@@ -13,11 +13,9 @@ class SvelteElementResolveScopeProvider : JSElementResolveScopeProvider {
     private val tsProvider = object : TypeScriptResolveScopeProvider() {
         override fun isApplicable(file: VirtualFile) = true
 
-        override fun restrictByFileType(file: VirtualFile,
-                                        libraryService: TypeScriptLibraryProvider,
-                                        moduleAndLibraryScope: GlobalSearchScope): GlobalSearchScope {
-            return super.restrictByFileType(file, libraryService, moduleAndLibraryScope).uniteWith(
-                GlobalSearchScope.getScopeRestrictedByFileTypes(moduleAndLibraryScope, file.fileType))
+        override fun restrictByFileType(file: VirtualFile, libraryService: TypeScriptLibraryProvider, moduleAndLibraryScope: GlobalSearchScope): GlobalSearchScope {
+            return super.restrictByFileType(file, libraryService, moduleAndLibraryScope)
+                .uniteWith(GlobalSearchScope.getScopeRestrictedByFileTypes(moduleAndLibraryScope, file.fileType))
         }
     }
 
