@@ -68,7 +68,7 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
     companion object {
         fun getSvelteScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
             if (mimeType == "ts" || mimeType == "typescript") {
-                //todo here we should use language extension similar to SvelteJSLanguage, instead of the original lang
+                // todo here we should use language extension similar to SvelteJSLanguage, instead of the original lang
                 return LanguageHtmlScriptContentProvider.getScriptContentProvider(JavaScriptSupportLoader.TYPESCRIPT)
             }
 
