@@ -66,6 +66,10 @@
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
         <postStartupActivity implementation="dev.blachut.svelte.lang.linters.EslintInitStartupActivity"/>
+
+        <!--suppress PluginXmlValidity -->
+        <lang.inspectionSuppressor language="JavaScript"
+                                   implementationClass="dev.blachut.svelte.lang.SvelteJSInspectionSuppressor"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>

@@ -1,15 +1,20 @@
 package dev.blachut.svelte.lang
 
-import com.intellij.lang.javascript.inspections.JSDefaultInspectionSuppressor
+import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.psi.PsiElement
-import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
+import com.intellij.codeInspection.SuppressQuickFix
+import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 
-object SvelteJSInspectionSuppressor : JSDefaultInspectionSuppressor() {
+class SvelteJSInspectionSuppressor : InspectionSuppressor {
     override fun isSuppressedFor(element: PsiElement, toolId: String): Boolean {
-        if (toolId == "UnnecessaryLabelJS") {
-            return element.textMatches(SvelteReactiveDeclarationsUtil.REACTIVE_LABEL)
+        if (element.containingFile is SvelteHtmlFile) {
+            if (toolId == "UnnecessaryLabelJS") {
+                return element.textMatches("$")
+            }
         }
 
-        return super.isSuppressedFor(element, toolId)
+        return false
     }
+
+    override fun getSuppressActions(element: PsiElement?, toolId: String): Array<SuppressQuickFix> = emptyArray()
 }
