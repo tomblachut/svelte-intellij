@@ -3,12 +3,14 @@ package dev.blachut.svelte.lang
 
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.codeInspection.InspectionSuppressor
+import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.ecmascript6.validation.ES6AnalysisHandlersFactory
+import com.intellij.lang.ecmascript6.validation.ES6AnnotatingVisitor
 import com.intellij.lang.javascript.DialectOptionHolder
-import com.intellij.lang.javascript.validation.JSKeywordHighlighterVisitor
-import com.intellij.lang.javascript.validation.JSReferenceChecker
-import com.intellij.lang.javascript.validation.JSReferenceInspectionProblemReporter
-import com.intellij.lang.javascript.validation.TypedJSReferenceChecker
+import com.intellij.lang.javascript.psi.JSLabeledStatement
+import com.intellij.lang.javascript.validation.*
+import com.intellij.psi.PsiElement
+import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
 class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
     override fun getReferenceChecker(reporter: JSReferenceInspectionProblemReporter): JSReferenceChecker {
@@ -20,6 +22,16 @@ class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
         dialectOptionHolder: DialectOptionHolder
     ): JSKeywordHighlighterVisitor {
         return SvelteKeywordHighlighterVisitor(holder)
+    }
+
+    override fun createAnnotatingVisitor(psiElement: PsiElement, holder: AnnotationHolder): JSAnnotatingVisitor {
+        return object : ES6AnnotatingVisitor(psiElement, holder) {
+            override fun visitJSLabeledStatement(node: JSLabeledStatement) {
+                if (node.label != SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+                    super.visitJSLabeledStatement(node)
+                }
+            }
+        }
     }
 
     override fun getInspectionSuppressor(): InspectionSuppressor {

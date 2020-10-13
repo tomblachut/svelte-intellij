@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.JSCompositeElementType
 import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
 import com.intellij.lang.javascript.types.JSExpressionElementType
 import com.intellij.lang.javascript.types.JSParameterElementType
+import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 
@@ -26,5 +27,9 @@ object SvelteJSElementTypes {
         override fun isModule() = true
 
         override fun toModule() = this
+
+        override fun construct(node: ASTNode): PsiElement {
+            return SvelteJSEmbeddedContentImpl(node)
+        }
     }
 }

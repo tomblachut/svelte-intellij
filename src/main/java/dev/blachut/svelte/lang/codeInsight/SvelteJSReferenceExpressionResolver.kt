@@ -5,6 +5,8 @@ import com.intellij.lang.javascript.index.JSSymbolUtil
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
+import com.intellij.lang.javascript.psi.resolve.ResolveResultSink
+import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.lang.javascript.psi.stubs.JSImplicitElement
 import com.intellij.lang.javascript.psi.stubs.impl.JSImplicitElementImpl
 import com.intellij.psi.ResolveResult
@@ -29,5 +31,9 @@ class SvelteJSReferenceExpressionResolver(
         }
 
         return super.resolve(expression, incompleteCode)
+    }
+
+    override fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
+        return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
     }
 }
