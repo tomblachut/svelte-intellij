@@ -32,10 +32,10 @@ group = pluginGroup
 version = pluginVersion
 
 // https://plugins.jetbrains.com/plugin/11449-sass/versions/
-val sassPlugin = when (platformVersion) {
-    "2020.1.2" -> "org.jetbrains.plugins.sass:201.7846.80"
-    "2020.2" -> "org.jetbrains.plugins.sass:202.6397.47"
-    else -> throw IllegalArgumentException("Mussing Sass plugin version for platformVersion = $platformVersion")
+val sassPlugin = when {
+    platformVersion.startsWith("2020.1") -> "org.jetbrains.plugins.sass:201.7846.80"
+    platformVersion.startsWith("2020.2") -> "org.jetbrains.plugins.sass:202.6397.47"
+    else -> throw GradleException("Missing Sass plugin version for platformVersion = $platformVersion")
 }
 
 // https://plugins.jetbrains.com/plugin/227-psiviewer/versions
