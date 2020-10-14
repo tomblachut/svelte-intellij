@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 - Enable ESLint support
-- Improve unused imports support
+- Improve unused imports detection
+- Recognize reactive declarations
+- Support Find Usages for subscribed store references
+- Unwrap subscribed store type for stores defined outside of components
 - Recognize $$slots
 
 ## [0.13.0]

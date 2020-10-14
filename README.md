@@ -23,7 +23,6 @@ Work in progress, pretty usable already.
 
 ## Known issues
 
-* $ labels aren't recognised properly
 * Directives treated as plain attributes
 * No TypeScript
 * ...
