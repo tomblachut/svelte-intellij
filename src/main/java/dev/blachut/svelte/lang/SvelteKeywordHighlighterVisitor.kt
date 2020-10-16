@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.psi.JSLabeledStatement
-import com.intellij.lang.javascript.validation.ES6KeywordHighlighterVisitor
 import com.intellij.lang.javascript.validation.TypeScriptKeywordHighlighterVisitor
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.psi.SvelteInitialTag

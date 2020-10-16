@@ -27,7 +27,7 @@ class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES
     }
 
     override fun buildTokenElement(type: IElementType) {
-        //there are too many places that uses element type JSElementTypes.REFERENCE_EXPRESSION,
+        // there are too many places that uses element type JSElementTypes.REFERENCE_EXPRESSION,
         // so use the new one only for the specific references
         return super.buildTokenElement(
             if (type === JSElementTypes.REFERENCE_EXPRESSION && builder.tokenText?.startsWith("$") == true) {

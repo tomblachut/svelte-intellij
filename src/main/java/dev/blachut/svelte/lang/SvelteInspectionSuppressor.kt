@@ -1,9 +1,8 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.codeInspection.InspectionSuppressor
-import com.intellij.psi.PsiElement
 import com.intellij.codeInspection.SuppressQuickFix
-import com.intellij.lang.javascript.psi.JSLabeledStatement
+import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 
 class SvelteInspectionSuppressor : InspectionSuppressor {

@@ -3,13 +3,12 @@ package dev.blachut.svelte.lang
 
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.lang.annotation.AnnotationHolder
-import com.intellij.lang.ecmascript6.validation.ES6AnalysisHandlersFactory
-import com.intellij.lang.ecmascript6.validation.ES6AnnotatingVisitor
 import com.intellij.lang.javascript.DialectOptionHolder
 import com.intellij.lang.javascript.ecmascript6.TypeScriptAnalysisHandlersFactory
 import com.intellij.lang.javascript.ecmascript6.TypeScriptAnnotatingVisitor
 import com.intellij.lang.javascript.psi.JSLabeledStatement
-import com.intellij.lang.javascript.validation.*
+import com.intellij.lang.javascript.validation.JSAnnotatingVisitor
+import com.intellij.lang.javascript.validation.JSKeywordHighlighterVisitor
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 

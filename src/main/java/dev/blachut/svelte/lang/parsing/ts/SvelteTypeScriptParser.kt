@@ -10,7 +10,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 class SvelteTypeScriptParser(builder: PsiBuilder) : TypeScriptParser(SvelteTypeScriptLanguage.INSTANCE, builder) {
     override fun buildTokenElement(type: IElementType) {
 
-        //there are too many places that uses element type JSElementTypes.REFERENCE_EXPRESSION,
+        // there are too many places that uses element type JSElementTypes.REFERENCE_EXPRESSION,
         // so use the new one only for the specific references
         return super.buildTokenElement(
             if (type === JSElementTypes.REFERENCE_EXPRESSION && builder.tokenText?.startsWith("$") == true) {
