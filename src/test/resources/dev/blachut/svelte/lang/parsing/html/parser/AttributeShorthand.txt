@@ -10,7 +10,7 @@ SvelteHtmlFile: AttributeShorthand.svelte
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND
-            SvelteJSReferenceExpression
+            JSReferenceExpression
               PsiElement(JS:IDENTIFIER)('title')
           PsiElement(END_MUSTACHE)('}')
       XmlToken:XML_TAG_END('>')
@@ -28,7 +28,7 @@ SvelteHtmlFile: AttributeShorthand.svelte
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND
-            SvelteJSReferenceExpression
+            JSReferenceExpression
               PsiElement(JS:IDENTIFIER)('title')
           PsiElement(END_MUSTACHE)('}')
       PsiWhiteSpace(' ')

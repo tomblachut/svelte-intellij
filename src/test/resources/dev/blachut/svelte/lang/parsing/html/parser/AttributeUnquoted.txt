@@ -14,7 +14,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
               JSBinaryExpression
-                SvelteJSReferenceExpression
+                JSReferenceExpression
                   PsiElement(JS:IDENTIFIER)('title')
                 PsiWhiteSpace(' ')
                 PsiElement(JS:PLUS)('+')
@@ -41,7 +41,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
               JSBinaryExpression
-                SvelteJSReferenceExpression
+                JSReferenceExpression
                   PsiElement(JS:IDENTIFIER)('title')
                 PsiWhiteSpace(' ')
                 PsiElement(JS:PLUS)('+')
@@ -73,7 +73,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
               JSObjectLiteralExpression
                 PsiElement(JS:LBRACE)('{')
                 ES6Property
-                  SvelteJSReferenceExpression
+                  JSReferenceExpression
                     PsiElement(JS:IDENTIFIER)('option')
                 PsiElement(JS:COMMA)(',')
                 PsiWhiteSpace(' ')
@@ -104,14 +104,14 @@ SvelteHtmlFile: AttributeUnquoted.svelte
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
-              SvelteJSReferenceExpression
+              JSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('title')
             PsiElement(END_MUSTACHE)('}')
           XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('infix')
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
-              SvelteJSReferenceExpression
+              JSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('second')
             PsiElement(END_MUSTACHE)('}')
       XmlToken:XML_TAG_END('>')
@@ -134,7 +134,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
               JSBinaryExpression
-                SvelteJSReferenceExpression
+                JSReferenceExpression
                   PsiElement(JS:IDENTIFIER)('title')
                 PsiWhiteSpace(' ')
                 PsiElement(JS:PLUS)('+')
@@ -167,7 +167,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
           SveltePsiElement
             PsiElement(START_MUSTACHE)('{')
             SvelteJS: ATTRIBUTE_EXPRESSION
-              SvelteJSReferenceExpression
+              JSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('title')
             PsiElement(END_MUSTACHE)('}')
       XmlToken:XML_TAG_END('>')
