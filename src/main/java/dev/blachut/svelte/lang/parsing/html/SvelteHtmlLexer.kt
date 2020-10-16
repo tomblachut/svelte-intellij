@@ -9,6 +9,7 @@ import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlLexer
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
+import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 
 class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
     private val helper = SvelteHtmlLexerHelper(object : SvelteHtmlLexerHandle {
@@ -68,8 +69,7 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
     companion object {
         fun getSvelteScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
             if (mimeType == "ts" || mimeType == "typescript") {
-                // todo here we should use language extension similar to SvelteJSLanguage, instead of the original lang
-                return LanguageHtmlScriptContentProvider.getScriptContentProvider(JavaScriptSupportLoader.TYPESCRIPT)
+                return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteTypeScriptLanguage.INSTANCE)
             }
 
             return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteJSLanguage.INSTANCE)
