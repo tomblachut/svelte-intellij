@@ -4,6 +4,7 @@
     <vendor url="https://github.com/tomblachut">Tomasz Błachut</vendor>
 
     <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.xml</depends>
     <depends>JavaScript</depends>
     <depends>com.intellij.css</depends>
 

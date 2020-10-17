@@ -76,6 +76,10 @@ ktlint {
     disabledRules.set(setOf("no-wildcard-imports", "import-ordering"))
 }
 
+changelog {
+    groups = listOf("")
+}
+
 val generateLexer = task<GenerateLexer>("generateLexer") {
     source = "src/main/java/dev/blachut/svelte/lang/parsing/html/SvelteHtmlLexer.flex"
     targetDir = "src/main/gen/dev/blachut/svelte/lang/parsing/html"

@@ -1,17 +1,8 @@
 # Changelog
 
 ## [Unreleased]
-### Added
+### 
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [0.14.0]
 - Enable ESLint support
 - Improve unused imports detection
