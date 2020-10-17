@@ -23,8 +23,12 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
         val xmlAttribute = parameters.position.parent as? XmlAttribute
         if (xmlTag == null || xmlAttribute == null) return
 
+        if (xmlTag.name == "script" && xmlTag.getAttribute("lang") == null) {
+            result.addElement(createLookupElement("lang=\"ts\"", 100))
+        }
+
         if (xmlTag.name == "script" && xmlTag.getAttribute("context") == null) {
-            result.addElement(createLookupElement("context=\"module\"", 10))
+            result.addElement(createLookupElement("context=\"module\"", 90))
         }
 
         // TODO refactor into proper descriptors
