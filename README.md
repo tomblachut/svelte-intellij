@@ -2,9 +2,10 @@
   <img width="320" src="./media/header.png" alt="Svelte IDE plugin. WebStorm, IntelliJ IDEA, more.">
 </p>
 
-![Build](https://github.com/tomblachut/intellij-template/workflows/Build/badge.svg)
+[![Build](https://github.com/tomblachut/svelte-intellij/workflows/Build/badge.svg)](https://github.com/tomblachut/svelte-intellij/actions?query=workflow%3ABuild)
 [![Version](https://img.shields.io/jetbrains/plugin/v/12375-svelte.svg)](https://plugins.jetbrains.com/plugin/12375-svelte)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/12375-svelte.svg)](https://plugins.jetbrains.com/plugin/12375-svelte)
+[![Twitter Follow](https://img.shields.io/twitter/follow/tomblachut?style=flat)](https://twitter.com/tomblachut)
 
 <!-- Plugin description -->
 Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
@@ -24,7 +25,6 @@ Work in progress, pretty usable already.
 ## Known issues
 
 * Directives treated as plain attributes
-* No TypeScript
 * ...
 
 ## Installation
