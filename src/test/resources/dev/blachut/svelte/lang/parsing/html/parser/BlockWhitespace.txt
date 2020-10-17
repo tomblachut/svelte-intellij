@@ -46,7 +46,7 @@ SvelteHtmlFile: BlockWhitespace.svelte
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:IF_KEYWORD)('if')
           PsiWhiteSpace(' ')
-          SvelteJSReferenceExpression
+          JSReferenceExpression
             PsiElement(JS:IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           PsiElement(JS:RBRACE)('}')

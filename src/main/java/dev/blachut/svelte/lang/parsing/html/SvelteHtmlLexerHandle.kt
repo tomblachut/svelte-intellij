@@ -8,7 +8,9 @@ interface SvelteHtmlLexerHandle {
     fun registerHandler(elementType: IElementType, value: BaseHtmlLexer.TokenHandler)
 
     var seenTag: Boolean
+    val seenScript: Boolean
     var seenStyleType: Boolean
+    var seenContentType: Boolean
     val seenStyle: Boolean
     val styleType: String?
     val inTagState: Boolean

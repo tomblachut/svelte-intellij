@@ -8,6 +8,7 @@ import com.intellij.lang.javascript.types.JSParameterElementType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
+import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 
 object SvelteJSElementTypes {
     val PARAMETER = object : JSParameterElementType("EMBEDDED_PARAMETER") {
@@ -24,6 +25,16 @@ object SvelteJSElementTypes {
     }
 
     val EMBEDDED_CONTENT_MODULE = object : JSEmbeddedContentElementType(SvelteJSLanguage.INSTANCE, "MOD_SVELTE_JS_") {
+        override fun isModule() = true
+
+        override fun toModule() = this
+
+        override fun construct(node: ASTNode): PsiElement {
+            return SvelteJSEmbeddedContentImpl(node)
+        }
+    }
+
+    val EMBEDDED_CONTENT_MODULE_TS = object : JSEmbeddedContentElementType(SvelteTypeScriptLanguage.INSTANCE, "MOD_SVELTE_TS_") {
         override fun isModule() = true
 
         override fun toModule() = this

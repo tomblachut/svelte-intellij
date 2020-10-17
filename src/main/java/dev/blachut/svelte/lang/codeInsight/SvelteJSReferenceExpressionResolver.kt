@@ -16,24 +16,33 @@ class SvelteJSReferenceExpressionResolver(
     ignorePerformanceLimits: Boolean
 ) :
     JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
-    private val implicitIdentifiers = arrayOf("\$\$props", "\$\$restProps", "\$\$slots")
-
     override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-        implicitIdentifiers.forEach {
-            if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, it)) {
-                val element = JSImplicitElementImpl.Builder(it, expression)
-                    .forbidAstAccess()
-                    .setType(JSImplicitElement.Type.Variable)
-                    .setProperties(JSImplicitElement.Property.Constant)
-                    .toImplicitElement()
-                return arrayOf(JSResolveResult(element))
-            }
-        }
+        val resolveImplicits = resolveImplicits(expression)
+        if (resolveImplicits.isNotEmpty()) return resolveImplicits
 
         return super.resolve(expression, incompleteCode)
     }
 
     override fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
         return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
+    }
+
+    companion object {
+
+        private val implicitIdentifiers = arrayOf("\$\$props", "\$\$restProps", "\$\$slots")
+
+        fun resolveImplicits(expression: JSReferenceExpressionImpl): Array<ResolveResult> {
+            implicitIdentifiers.forEach {
+                if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, it)) {
+                    val element = JSImplicitElementImpl.Builder(it, expression)
+                        .forbidAstAccess()
+                        .setType(JSImplicitElement.Type.Variable)
+                        .setProperties(JSImplicitElement.Property.Constant)
+                        .toImplicitElement()
+                    return arrayOf(JSResolveResult(element))
+                }
+            }
+            return emptyArray()
+        }
     }
 }

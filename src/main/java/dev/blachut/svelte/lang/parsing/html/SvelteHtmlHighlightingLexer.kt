@@ -2,14 +2,12 @@ package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.HtmlScriptContentProvider
 import com.intellij.lang.Language
-import com.intellij.lang.LanguageHtmlScriptContentProvider
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.javascript.JavaScriptHighlightingLexer
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.LayeredLexer
 import com.intellij.psi.tree.IElementType
-import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteHtmlHighlightingLexer : LayeredLexer(BaseSvelteHtmlHighlightingLexer()) {
@@ -33,6 +31,12 @@ private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(Inner
                 this@BaseSvelteHtmlHighlightingLexer.seenStylesheetType = value
             }
 
+        override var seenContentType: Boolean
+            get() = this@BaseSvelteHtmlHighlightingLexer.seenContentType
+            set(value) {
+                this@BaseSvelteHtmlHighlightingLexer.seenContentType = value
+            }
+        override val seenScript: Boolean get() = this@BaseSvelteHtmlHighlightingLexer.seenScript
         override val seenStyle: Boolean get() = this@BaseSvelteHtmlHighlightingLexer.seenStyle
         override val styleType: String? get() = this@BaseSvelteHtmlHighlightingLexer.styleType
         override val inTagState: Boolean get() = (state and BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
@@ -42,8 +46,8 @@ private open class BaseSvelteHtmlHighlightingLexer : HtmlHighlightingLexer(Inner
         }
     })
 
-    override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider {
-        return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteJSLanguage.INSTANCE)
+    override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
+        return SvelteHtmlLexer.getSvelteScriptContentProvider(mimeType)
     }
 
     override fun isHtmlTagState(state: Int): Boolean {

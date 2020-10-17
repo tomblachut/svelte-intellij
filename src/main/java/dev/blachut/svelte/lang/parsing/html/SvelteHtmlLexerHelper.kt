@@ -15,6 +15,15 @@ class SvelteHtmlLexerHelper(private val handle: SvelteHtmlLexerHandle) {
 
     inner class SvelteLangAttributeHandler : BaseHtmlLexer.TokenHandler {
         override fun handleElement(lexer: Lexer) {
+
+            if (handle.seenScript && !handle.seenTag) {
+                handle.seenContentType = false
+                if ("lang" == lexer.tokenText) {
+                    handle.seenContentType = true
+                    return
+                }
+            }
+
             // Shoehorn lang attribute to behave the same as type attribute for lexing purposes
             if (!handle.seenTag && !handle.inTagState && handle.seenStyle && "lang" == lexer.tokenText) {
                 handle.seenStyleType = true

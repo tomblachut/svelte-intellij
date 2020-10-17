@@ -16,8 +16,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Svelte" extensions="svelte" language="SvelteHTML"
                   implementationClass="dev.blachut.svelte.lang.SvelteHtmlFileType" fieldName="INSTANCE"/>
+
         <lang.parserDefinition language="SvelteJS"
                                implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition"/>
+        <lang.parserDefinition language="SvelteTS"
+                               implementationClass="dev.blachut.svelte.lang.parsing.ts.SvelteTypeScriptParserDefinition"/>
+
         <lang.parserDefinition language="SvelteHTML"
                                implementationClass="dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition"/>
         <lang.ast.factory language="SvelteHTML"
@@ -50,8 +54,12 @@
         <xml.fileNSInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteNSInfoProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
+
         <html.scriptContentProvider language="SvelteJS"
                                     implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider"/>
+        <html.scriptContentProvider language="SvelteTS"
+                                    implementationClass="dev.blachut.svelte.lang.parsing.ts.SvelteTypeScriptScriptContentProvider"/>
+
         <idIndexer filetype="Svelte" implementationClass="dev.blachut.svelte.lang.index.SvelteIdIndexer"/>
         <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
         <completion.contributor language="any"
@@ -66,12 +74,25 @@
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
         <postStartupActivity implementation="dev.blachut.svelte.lang.linters.EslintInitStartupActivity"/>
+
+        <!--suppress PluginXmlValidity -->
+        <lang.inspectionSuppressor language="JavaScript"
+                                   implementationClass="dev.blachut.svelte.lang.SvelteInspectionSuppressor"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
+        <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>
+
         <dialectSpecificHandlersFactory language="SvelteJS"
                                         implementationClass="dev.blachut.svelte.lang.SvelteJSSpecificHandlersFactory"/>
+        <dialectSpecificHandlersFactory language="SvelteTS"
+                                        implementationClass="dev.blachut.svelte.lang.SvelteTypeScriptSpecificHandlersFactory"/>
+
         <analysisHandlersFactory language="SvelteJS"
                                  implementationClass="dev.blachut.svelte.lang.SvelteJSAnalysisHandlersFactory"/>
+        <analysisHandlersFactory language="SvelteTS"
+                                 implementationClass="dev.blachut.svelte.lang.SvelteTypeScriptAnalysisHandlersFactory"/>
+
         <frameworkIndexingHandler implementation="dev.blachut.svelte.lang.SvelteFrameworkHandler" version="1"/>
+        <indexedFileTypeProvider implementation="dev.blachut.svelte.lang.SvelteIndexedFileTypeProvider"/>
     </extensions>
 </idea-plugin>
