@@ -12,20 +12,19 @@ jobs:
     release:
         name: Publish Plugin
         runs-on: ubuntu-latest
-        if: github.repository != 'JetBrains/intellij-platform-plugin-template'
         steps:
-
-            # Check out current repository
-            -   name: Fetch Sources
-                uses: actions/checkout@v2
-                with:
-                    ref: ${{ github.event.release.tag_name }}
 
             # Setup Java 1.8 environment for the next steps
             -   name: Setup Java
                 uses: actions/setup-java@v1
                 with:
                     java-version: 1.8
+
+            # Check out current repository
+            -   name: Fetch Sources
+                uses: actions/checkout@v2
+                with:
+                    ref: ${{ github.event.release.tag_name }}
 
             # Publish the plugin to the Marketplace
             -   name: Publish Plugin
@@ -36,20 +35,21 @@ jobs:
     # Patch changelog, commit and push to the current repository
     changelog:
         name: Update Changelog
+        needs: release
         runs-on: ubuntu-latest
         steps:
-
-            # Check out current repository
-            -   name: Fetch Sources
-                uses: actions/checkout@v2
-                with:
-                    ref: ${{ github.event.release.tag_name }}
 
             # Setup Java 1.8 environment for the next steps
             -   name: Setup Java
                 uses: actions/setup-java@v1
                 with:
                     java-version: 1.8
+
+            # Check out current repository
+            -   name: Fetch Sources
+                uses: actions/checkout@v2
+                with:
+                    ref: ${{ github.event.release.tag_name }}
 
             # Update Unreleased section with the current version
             -   name: Patch Changelog
@@ -61,9 +61,9 @@ jobs:
                     git config --local user.email "action@github.com"
                     git config --local user.name "GitHub Action"
                     git commit -m "Update changelog" -a
-
             # Push changes
             -   name: Push changes
                 uses: ad-m/github-push-action@master
                 with:
+                    branch: master
                     github_token: ${{ secrets.GITHUB_TOKEN }}
