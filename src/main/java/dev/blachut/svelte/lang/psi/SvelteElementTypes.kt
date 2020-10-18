@@ -19,12 +19,24 @@ object SvelteElementTypes {
     val AWAIT_THEN_BRANCH = SvelteElementType("AWAIT_THEN_BRANCH")
     val AWAIT_CATCH_BRANCH = SvelteElementType("AWAIT_CATCH_BRANCH")
 
+    val KEY_BLOCK = SvelteElementType("KEY_BLOCK")
+    val KEY_PRIMARY_BRANCH = SvelteElementType("KEY_PRIMARY_BRANCH")
+
     val FRAGMENT = SvelteElementType("FRAGMENT")
 
     // TODO remove this element
     val ATTRIBUTE_EXPRESSION = SvelteElementType("ATTRIBUTE_EXPRESSION")
 
-    val BRANCHES = TokenSet.create(IF_TRUE_BRANCH, IF_ELSE_BRANCH, EACH_LOOP_BRANCH, EACH_ELSE_BRANCH, AWAIT_MAIN_BRANCH, AWAIT_THEN_BRANCH, AWAIT_CATCH_BRANCH)
+    val BRANCHES = TokenSet.create(
+        IF_TRUE_BRANCH,
+        IF_ELSE_BRANCH,
+        EACH_LOOP_BRANCH,
+        EACH_ELSE_BRANCH,
+        AWAIT_MAIN_BRANCH,
+        AWAIT_THEN_BRANCH,
+        AWAIT_CATCH_BRANCH,
+        KEY_PRIMARY_BRANCH,
+    )
 
     fun createElement(node: ASTNode): PsiElement {
         return when (node.elementType) {
@@ -41,6 +53,9 @@ object SvelteElementTypes {
             AWAIT_THEN_BRANCH -> SvelteAwaitThenBranch(node)
             AWAIT_CATCH_BRANCH -> SvelteAwaitCatchBranch(node)
 
+            KEY_BLOCK -> SvelteKeyBlock(node)
+            KEY_PRIMARY_BRANCH -> SvelteKeyPrimaryBranch(node)
+
             FRAGMENT -> SvelteFragment(node)
 
             ATTRIBUTE_EXPRESSION -> SveltePsiElement(node)
@@ -49,7 +64,8 @@ object SvelteElementTypes {
 
             SvelteTagElementTypes.IF_END,
             SvelteTagElementTypes.EACH_END,
-            SvelteTagElementTypes.AWAIT_END -> SvelteEndTag(node)
+            SvelteTagElementTypes.AWAIT_END,
+            SvelteTagElementTypes.KEY_END -> SvelteEndTag(node)
 
             else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")
         }
