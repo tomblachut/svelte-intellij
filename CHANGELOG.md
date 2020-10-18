@@ -1,7 +1,8 @@
 # Changelog
 
 ## [Unreleased]
-### 
+- Support TypeScript
+- Support #key block
 
 ## [0.14.0]
 - Enable ESLint support
@@ -50,7 +51,7 @@
 - Enable completion of JS declarations from script tags
 - Initial support for module context scripts (inside Svelte files only)
 - More robust logic of resolving component declarations
-- Unresolved components are highlighted the same as other identifiers
+- Unresolved components highlighted the same as other identifiers
 - Remove buggy prop insertion while completing tag name
 - Stop inserting mustaches after typing = for attributes
 - Enable quote matching
