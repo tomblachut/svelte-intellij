@@ -13,8 +13,6 @@ plugins {
     id("org.jetbrains.grammarkit") version "2020.2.1"
     // https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "0.6.2"
-    // https://github.com/JLLeitschuh/ktlint-gradle
-    id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
 }
 
 // Import variables from gradle.properties file
@@ -69,10 +67,6 @@ intellij {
 
     //  https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
     setPlugins(*intellijPlugins.toTypedArray())
-}
-
-ktlint {
-    disabledRules.set(setOf("no-wildcard-imports", "import-ordering"))
 }
 
 changelog {
@@ -139,6 +133,7 @@ tasks {
     }
 
     withType<RunIdeTask> {
+        // autoReloadPlugins = true
         // Disable auto plugin reloading. See `com.intellij.ide.plugins.DynamicPluginVfsListener`
         // jvmArgs("-Didea.auto.reload.plugins=false")
         // systemProperty("ide.plugins.snapshot.on.unload.fail", true)
