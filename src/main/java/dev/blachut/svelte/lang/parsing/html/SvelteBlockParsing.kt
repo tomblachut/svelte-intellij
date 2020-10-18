@@ -10,6 +10,7 @@ object SvelteBlockParsing {
             SvelteTagElementTypes.IF_START -> IF_BLOCK_DEFINITION
             SvelteTagElementTypes.EACH_START -> EACH_BLOCK_DEFINITION
             SvelteTagElementTypes.AWAIT_START -> AWAIT_BLOCK_DEFINITION
+            SvelteTagElementTypes.KEY_START -> KEY_BLOCK_DEFINITION
             else -> throw IllegalArgumentException("Expected start tag token")
         }
 
@@ -24,7 +25,7 @@ object SvelteBlockParsing {
         primaryBranchToken = SvelteElementTypes.IF_TRUE_BRANCH,
         innerTagToBranchTokens = mapOf(SvelteTagElementTypes.ELSE_CLAUSE to SvelteElementTypes.IF_ELSE_BRANCH),
         endTag = SvelteTagElementTypes.IF_END,
-        missingEndTagMessage = "{if} is not closed"
+        missingEndTagMessage = "{#if} is not closed"
     )
 
     private val EACH_BLOCK_DEFINITION = BlockParsingDefinition(
@@ -32,7 +33,7 @@ object SvelteBlockParsing {
         primaryBranchToken = SvelteElementTypes.EACH_LOOP_BRANCH,
         innerTagToBranchTokens = mapOf(SvelteTagElementTypes.ELSE_CLAUSE to SvelteElementTypes.EACH_ELSE_BRANCH),
         endTag = SvelteTagElementTypes.EACH_END,
-        missingEndTagMessage = "{each} is not closed"
+        missingEndTagMessage = "{#each} is not closed"
     )
 
     private val AWAIT_BLOCK_DEFINITION = BlockParsingDefinition(
@@ -43,7 +44,15 @@ object SvelteBlockParsing {
             SvelteTagElementTypes.CATCH_CLAUSE to SvelteElementTypes.AWAIT_CATCH_BRANCH
         ),
         endTag = SvelteTagElementTypes.AWAIT_END,
-        missingEndTagMessage = "{await} is not closed"
+        missingEndTagMessage = "{#await} is not closed"
+    )
+
+    private val KEY_BLOCK_DEFINITION = BlockParsingDefinition(
+        blockToken = SvelteElementTypes.KEY_BLOCK,
+        primaryBranchToken = SvelteElementTypes.KEY_PRIMARY_BRANCH,
+        innerTagToBranchTokens = mapOf(),
+        endTag = SvelteTagElementTypes.KEY_END,
+        missingEndTagMessage = "{#key} is not closed"
     )
 }
 

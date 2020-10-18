@@ -1,0 +1,21 @@
+SvelteHtmlFile: BlockKey.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteKeyBlock
+      SvelteKeyPrimaryBranch
+        SvelteInitialTag(KEY_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IDENTIFIER)('key')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('expression')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          <empty list>
+      SvelteEndTag(KEY_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:KEY_KEYWORD)('key')
+        PsiElement(JS:RBRACE)('}')

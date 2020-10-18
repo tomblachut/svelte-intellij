@@ -20,7 +20,7 @@ SvelteHtmlFile: HtmlUnclosed2.svelte
             PsiElement(JS:RBRACE)('}')
           SvelteFragment
             <empty list>
-        PsiErrorElement:{if} is not closed
+        PsiErrorElement:{#if} is not closed
           <empty list>
       PsiErrorElement:Element div is not closed
         <empty list>

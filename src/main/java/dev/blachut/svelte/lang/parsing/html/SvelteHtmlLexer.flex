@@ -168,6 +168,7 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   "await"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.AWAIT_KEYWORD; }
   "then"             { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.THEN_KEYWORD; }
   "catch"            { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.CATCH_KEYWORD; }
+  "key"              { yybegin(SVELTE_INTERPOLATION); return SvelteTokenTypes.KEY_KEYWORD; }
   ({ALPHA})+         { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }

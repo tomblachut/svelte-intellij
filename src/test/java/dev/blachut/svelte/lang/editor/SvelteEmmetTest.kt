@@ -28,6 +28,11 @@ class SvelteEmmetTest : BasePlatformTestCase() {
         """{#await }{/await}"""
     )
 
+    fun testFirstKeyEOF() = doTest(
+        """key<caret>""",
+        """{#key }{/key}"""
+    )
+
     fun testElse() = doTest(
         """{#if true}else<caret>{/if}""",
         """{#if true}{:else}{/if}"""
@@ -68,8 +73,7 @@ class SvelteEmmetTest : BasePlatformTestCase() {
         """{#if .foo   }{/if}"""
     )
 
-    // TODO fix parser and enable test
-    fun _testAfterBlockStartTag() = doTest(
+    fun testAfterBlockStartTag() = doTest(
         """{#if true}.foo<caret>""",
         """{#if true}<div class="foo"></div>"""
     )
@@ -91,7 +95,7 @@ class SvelteEmmetTest : BasePlatformTestCase() {
     )
 
     private fun doTest(before: String, after: String) {
-        myFixture.configureByText("emmet.svelte", before)
+        myFixture.configureByText("Emmet.svelte", before)
         myFixture.type("\t")
         myFixture.checkResult(after)
     }

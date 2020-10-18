@@ -37,6 +37,9 @@ object SvelteTokenTypes {
     val CATCH_KEYWORD: IElementType = JSTokenTypes.CATCH_KEYWORD
 
     @JvmField
+    val KEY_KEYWORD: IElementType = JSKeywordElementType("key")
+
+    @JvmField
     val HTML_KEYWORD = JSKeywordElementType("html")
 
     @JvmField
@@ -50,6 +53,7 @@ object SvelteTokenTypes {
         AWAIT_KEYWORD,
         THEN_KEYWORD,
         CATCH_KEYWORD,
+        KEY_KEYWORD,
         HTML_KEYWORD,
         DEBUG_KEYWORD
     )

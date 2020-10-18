@@ -98,6 +98,18 @@ object SvelteTagElementTypes {
         }
     }
 
+    val KEY_START = object : SvelteJSBlockLazyElementType("KEY_START") {
+        override val noTokensErrorMessage = "expression expected"
+
+        override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+            builder.advanceLexer() // JSTokenTypes.SHARP
+            SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
+            builder.advanceLexer() // SvelteTokenTypes.KEY_KEYWORD
+
+            parser.expressionParser.parseExpression()
+        }
+    }
+
     val THEN_CLAUSE = object : SvelteJSBlockLazyElementType("THEN_CLAUSE") {
         override val noTokensErrorMessage = "expression expected"
 
@@ -129,10 +141,11 @@ object SvelteTagElementTypes {
     val IF_END = SvelteJSElementType("IF_END")
     val EACH_END = SvelteJSElementType("EACH_END")
     val AWAIT_END = SvelteJSElementType("AWAIT_END")
+    val KEY_END = SvelteJSElementType("KEY_END")
 
-    val START_TAGS = TokenSet.create(IF_START, EACH_START, AWAIT_START)
+    val START_TAGS = TokenSet.create(IF_START, EACH_START, AWAIT_START, KEY_START)
     val INNER_TAGS = TokenSet.create(ELSE_CLAUSE, THEN_CLAUSE, CATCH_CLAUSE)
-    val END_TAGS = TokenSet.create(IF_END, EACH_END, AWAIT_END)
+    val END_TAGS = TokenSet.create(IF_END, EACH_END, AWAIT_END, KEY_END)
     val INITIAL_TAGS = TokenSet.orSet(START_TAGS, INNER_TAGS)
     val TAIL_TAGS = TokenSet.orSet(INNER_TAGS, END_TAGS)
 }
