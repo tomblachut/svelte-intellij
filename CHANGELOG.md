@@ -1,7 +1,8 @@
 # Changelog
 
 ## [Unreleased]
-### 
+- Fix unresolved reactive declarations in TypeScript
+
 ## [0.15.0]
 - Support TypeScript
 - Support #key block
