@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### 
+## [0.15.1]
 - Fix unresolved reactive declarations in TypeScript
 
 ## [0.15.0]
