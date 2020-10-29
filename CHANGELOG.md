@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased]
-### 
+- Properly recognize svelte namespace elements inside blocks
+- Hide invalid completions for component tags after typing "<svelte:"
+- Add missing completion for slot element
+- Fix some IDE Errors related to TypeScript
+
 ## [0.15.1]
 - Fix unresolved reactive declarations in TypeScript
 
