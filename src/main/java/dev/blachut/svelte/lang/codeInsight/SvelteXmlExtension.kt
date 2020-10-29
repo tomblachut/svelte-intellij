@@ -8,6 +8,7 @@ import dev.blachut.svelte.lang.directives
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteXmlExtension : HtmlXmlExtension() {
+    // TODO expand this list
     private val collapsibleTags = setOf("slot", "style", "script")
 
     override fun isAvailable(file: PsiFile): Boolean = file.language is SvelteHTMLLanguage

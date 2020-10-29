@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.codeInsight.completion.PrioritizedLookupElement
+import com.intellij.codeInsight.completion.XmlTagInsertHandler
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.javascript.psi.JSElement
@@ -26,13 +27,16 @@ const val sveltePrefix = "$svelteNamespace:"
 val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "options")
 
 // TODO Merge with svelteBareTagLookupElements
-val svelteNamespacedTagLookupElements = svelteTagNames.map {
+// TODO Use XmlTagInsertHandler
+val svelteNamespaceTagLookupElements = svelteTagNames.map {
     LookupElementBuilder.create(sveltePrefix + it).withIcon(SvelteIcons.GRAY)
 }
 
+val slotLookupElement: LookupElementBuilder = LookupElementBuilder.create("slot").withIcon(SvelteIcons.GRAY)
+    .withInsertHandler(XmlTagInsertHandler.INSTANCE)
+
 /**
  * When user auto completes after writing colon in "svelte", editor will produce i.e. "svelte:svelte:self".
- * I'm clearly missing something, but for now, let it be.
  */
 val svelteBareTagLookupElements = svelteTagNames.map {
     val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.GRAY)
@@ -41,11 +45,17 @@ val svelteBareTagLookupElements = svelteTagNames.map {
 
 /**
  * interface XmlTagNameProvider feeds data for name completion popup
+ *
  * interface XmlElementDescriptorProvider enables, among others, navigation from tag to component file
  */
 class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
-    override fun getDescriptor(tag: XmlTag?): XmlElementDescriptor? {
-        if (tag == null || tag !is SvelteHtmlTag) return null
+    override fun getDescriptor(tag: XmlTag): XmlElementDescriptor? {
+        if (tag !is SvelteHtmlTag) return null
+
+        if (tag.namespacePrefix == svelteNamespace && svelteTagNames.contains(tag.localName) || tag.name == "slot") {
+            return SvelteElementDescriptor(tag)
+        }
+
         if (!isSvelteComponentTag(tag.name)) return null
 
         val result = SvelteTagReference(tag).resolve()
@@ -61,29 +71,33 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
         if (svelteNamespace == namespacePrefix) {
             elements.addAll(svelteBareTagLookupElements)
-            // in svelte there are no custom components to scan so early return
-            return
-        } else if (namespacePrefix.isNotEmpty()) {
-            // early return for namespaces other than svelte
-            return
-        } else {
-            elements.addAll(svelteNamespacedTagLookupElements)
-        }
+        } else if (namespacePrefix.isEmpty()) {
+            elements.addAll(svelteNamespaceTagLookupElements)
+            elements.add(slotLookupElement)
 
-        // TODO Link component documentation
-        elements.addAll(getReachableComponents(tag))
+            // TODO Link component documentation
+            elements.addAll(getReachableComponents(tag))
+        }
     }
 
     private fun getReachableComponents(tag: SvelteHtmlTag): List<LookupElement> {
         val lookupElements = mutableListOf<LookupElement>()
-        val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.allScope(tag.project))
+        val svelteVirtualFiles = FileTypeIndex.getFiles(
+            SvelteHtmlFileType.INSTANCE,
+            GlobalSearchScope.allScope(tag.project)
+        )
 
         svelteVirtualFiles.forEach { virtualFile ->
             val componentName = virtualFile.nameWithoutExtension
 
             if (!isSvelteComponentTag(componentName)) return@forEach
 
-            val moduleInfos = SvelteModuleUtil.getModuleInfos(tag.project, tag.containingFile.originalFile, virtualFile, componentName)
+            val moduleInfos = SvelteModuleUtil.getModuleInfos(
+                tag.project,
+                tag.containingFile.originalFile,
+                virtualFile,
+                componentName
+            )
             val typeText = " (${virtualFile.name})"
 
             for (info in moduleInfos) {
