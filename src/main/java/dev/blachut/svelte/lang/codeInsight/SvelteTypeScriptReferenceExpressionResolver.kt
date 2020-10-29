@@ -31,12 +31,14 @@ class SvelteTypeScriptReferenceExpressionResolver(
                 false,
                 null
             )
-            val jsElement = localProcessor.result
+            val jsElement = localProcessor.result ?: return resolved
+
             val labeledStatement = jsElement.parentOfType<JSLabeledStatement>()
             if (labeledStatement != null && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
                 return localProcessor.resultsAsResolveResults
             }
         }
+
         return resolved
     }
 
