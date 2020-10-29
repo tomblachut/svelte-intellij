@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### 
+## [0.15.2]
 - Properly recognize svelte namespace elements inside blocks
 - Hide invalid completions for component tags after typing "<svelte:"
 - Add missing completion for slot element
