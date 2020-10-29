@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.xml.XmlDescriptorUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
@@ -12,7 +11,9 @@ import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlElementsGroup
 import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
+import dev.blachut.svelte.lang.index.SvelteComponentDescriptorIndex
 import dev.blachut.svelte.lang.isSvelteContext
+import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import org.jetbrains.annotations.NonNls
 import java.util.*
 
@@ -23,7 +24,8 @@ import java.util.*
  * @ TODO Consider using BaseXmlElementDescriptorImpl, there are cache implementations there
  * @ TODO HtmlElementDescriptorImpl is used for example in HtmlUnknownTagInspectionBase: extending it could help or hinder code insight
  */
-class SvelteComponentTagDescriptor(private val myName: String, private val myDeclaration: JSElement) : XmlElementDescriptor {
+class SvelteComponentTagDescriptor(private val myName: String, private val myDeclaration: JSElement) :
+    XmlElementDescriptor {
     override fun getName(context: PsiElement): String = name
 
     override fun getName(): String = myName
@@ -47,10 +49,12 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myDec
             // val componentFile = declaration.findReferencedElements().firstOrNull()
             val componentFile = declaration.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
 
-            if (componentFile != null && componentFile is PsiFile && isSvelteContext(componentFile)) {
-                val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
+            if (componentFile is SvelteHtmlFile && isSvelteContext(componentFile)) {
+                val descriptor = SvelteComponentDescriptorIndex.forFile(componentFile.virtualFile, componentFile.project)
+
+                val props = descriptor?.props
                 if (props != null) {
-                    return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }
+                    return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it.key) }
                 }
             }
         }
