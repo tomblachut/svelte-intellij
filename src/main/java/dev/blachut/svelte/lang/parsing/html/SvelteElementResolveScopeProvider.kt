@@ -22,12 +22,16 @@ class SvelteElementResolveScopeProvider : JSElementResolveScopeProvider {
     }
 
     override fun getElementResolveScope(element: PsiElement): GlobalSearchScope? {
+        // Refer to https://github.com/tomblachut/svelte-intellij/issues/170
+        if (!element.isValid) return null
+
         val psiFile = element.containingFile
         if (psiFile?.fileType !is SvelteHtmlFileType) return null
         if (psiFile !is XmlFile) return null
-        val scriptTag = JSUtils.findScriptTagContent(psiFile)
+        // TODO what if one script is TS and other one is not
+        val scriptTagContent = JSUtils.findScriptTagContent(psiFile)
 
-        if (scriptTag != null && DialectDetector.isTypeScript(scriptTag)) {
+        if (scriptTagContent != null && DialectDetector.isTypeScript(scriptTagContent)) {
             return tsProvider.getResolveScope(psiFile.viewProvider.virtualFile, element.project)
         }
         return null
