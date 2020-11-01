@@ -6,7 +6,8 @@ import com.intellij.psi.impl.source.xml.TagNameReference
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.HtmlXmlExtension
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.directives
+import dev.blachut.svelte.lang.directives.SvelteDirectivesSupport
+import dev.blachut.svelte.lang.directives.SvelteDirectivesSupport.DIRECTIVE_SEPARATOR
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteXmlExtension : HtmlXmlExtension() {
@@ -51,8 +52,8 @@ class SvelteXmlExtension : HtmlXmlExtension() {
             return super.getAttributeValuePresentation(tag, attributeName, defaultAttributeQuote)
         }
 
-        val prefix = if (attributeName.contains(':')) attributeName.split(":").firstOrNull() else null
-        if (prefix != null && directives.contains(prefix)) {
+        val prefix = if (attributeName.contains(DIRECTIVE_SEPARATOR)) attributeName.split(DIRECTIVE_SEPARATOR).firstOrNull() else null
+        if (prefix != null && SvelteDirectivesSupport.directivePrefixes.contains(prefix)) {
             return object : AttributeValuePresentation {
                 override fun getPrefix(): String = "{"
                 override fun getPostfix(): String = "}"
