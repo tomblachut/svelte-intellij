@@ -21,14 +21,15 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
 
                 val componentName = tag.name
                 if (!isSvelteComponentTag(componentName)) return
-                if (tag.descriptor?.declaration != null) return
+                if (tag.reference?.resolve() != null) return
 
                 val range = TextRange(1, tag.name.length + 1)
 
                 val project = tag.project
                 val fileName = "$componentName.svelte"
                 // check if we have a corresponding svelte file
-                val componentFiles = FilenameIndex.getVirtualFilesByName(project, fileName, GlobalSearchScope.allScope(project))
+                val componentFiles =
+                    FilenameIndex.getVirtualFilesByName(project, fileName, GlobalSearchScope.allScope(project))
                 if (componentFiles.isEmpty()) {
                     holder.registerProblem(tag, displayName, ProblemHighlightType.ERROR, range)
                     return
@@ -39,10 +40,20 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
                 val quote = JSCodeStyleSettings.getQuote(currentFile)
 
                 componentFiles.forEach { componentVirtualFile ->
-                    val moduleInfos = SvelteModuleUtil.getModuleInfos(project, currentFile, componentVirtualFile, componentName)
+                    val moduleInfos =
+                        SvelteModuleUtil.getModuleInfos(project, currentFile, componentVirtualFile, componentName)
                     moduleInfos.forEach { info ->
-                        val quickFix = SvelteImportComponentFix(tag, quote, componentName, info, currentVirtualFile, componentVirtualFile)
-                        holder.registerProblem(tag, displayName, ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, range, quickFix)
+                        val quickFix = SvelteImportComponentFix(tag,
+                            quote,
+                            componentName,
+                            info,
+                            currentVirtualFile,
+                            componentVirtualFile)
+                        holder.registerProblem(tag,
+                            displayName,
+                            ProblemHighlightType.LIKE_UNKNOWN_SYMBOL,
+                            range,
+                            quickFix)
                     }
                 }
             }
