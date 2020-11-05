@@ -4,7 +4,7 @@ SvelteHtmlFile: BlockWhitespace.svelte
       <empty list>
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
-      PsiErrorElement:expression expected
+      PsiErrorElement:Expression expected
         <empty list>
       PsiElement(JS:SHARP)('#')
       PsiErrorElement:unexpected token
@@ -56,7 +56,7 @@ SvelteHtmlFile: BlockWhitespace.svelte
           PsiWhiteSpace('\n')
           SvelteJS: CONTENT_EXPRESSION
             PsiElement(JS:LBRACE)('{')
-            PsiErrorElement:expression expected
+            PsiErrorElement:Expression expected
               <empty list>
             PsiWhiteSpace(' ')
             PsiElement(JS:COLON)(':')

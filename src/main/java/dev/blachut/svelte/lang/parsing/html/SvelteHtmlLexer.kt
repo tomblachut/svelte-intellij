@@ -1,45 +1,17 @@
 package dev.blachut.svelte.lang.parsing.html
 
+import com.intellij.html.embedding.HtmlEmbeddedContentProvider
 import com.intellij.lang.HtmlScriptContentProvider
 import com.intellij.lang.Language
 import com.intellij.lang.LanguageHtmlScriptContentProvider
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlLexer
+import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
-import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 
 class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
-    private val helper = SvelteHtmlLexerHelper(object : SvelteHtmlLexerHandle {
-
-        override var seenTag: Boolean
-            get() = this@SvelteHtmlLexer.seenTag
-            set(value) {
-                this@SvelteHtmlLexer.seenTag = value
-            }
-
-        override var seenContentType: Boolean
-            get() = this@SvelteHtmlLexer.seenContentType
-            set(value) {
-                this@SvelteHtmlLexer.seenContentType = value
-            }
-
-        override var seenStyleType: Boolean
-            get() = this@SvelteHtmlLexer.seenStylesheetType
-            set(value) {
-                this@SvelteHtmlLexer.seenStylesheetType = value
-            }
-
-        override val seenStyle: Boolean get() = this@SvelteHtmlLexer.seenStyle
-        override val seenScript: Boolean get() = this@SvelteHtmlLexer.seenScript
-        override val styleType: String? get() = this@SvelteHtmlLexer.styleType
-        override val inTagState: Boolean get() = (state and HtmlHighlightingLexer.BASE_STATE_MASK) == _SvelteHtmlLexer.START_TAG_NAME
-
-        override fun registerHandler(elementType: IElementType, value: TokenHandler) {
-            this@SvelteHtmlLexer.registerHandler(elementType, value)
-        }
-    })
 
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
         // TODO Verify if those masks don't clash with ones used in BaseHtmlLexer.initState
@@ -54,24 +26,10 @@ class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
         return (nestingLevel shl 16) or (super.getState() and 0xffff)
     }
 
-    override fun findScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
-        return getSvelteScriptContentProvider(mimeType)
-    }
-
-    override fun getStyleLanguage(): Language? =
-        helper.styleViaLang(CSSLanguage.INSTANCE) ?: super.getStyleLanguage()
+    override fun acceptEmbeddedContentProvider(provider: HtmlEmbeddedContentProvider): Boolean =
+        provider::class != HtmlScriptStyleEmbeddedContentProvider::class
 
     override fun isHtmlTagState(state: Int): Boolean {
         return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
-    }
-
-    companion object {
-        fun getSvelteScriptContentProvider(mimeType: String?): HtmlScriptContentProvider? {
-            if (mimeType == "ts" || mimeType == "typescript") {
-                return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteTypeScriptLanguage.INSTANCE)
-            }
-
-            return LanguageHtmlScriptContentProvider.getScriptContentProvider(SvelteJSLanguage.INSTANCE)
-        }
     }
 }

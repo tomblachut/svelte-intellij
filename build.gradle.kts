@@ -8,7 +8,7 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.4.10"
     // https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.5.0"
+    id("org.jetbrains.intellij") version "0.6.3"
     // https://github.com/JetBrains/gradle-grammar-kit-plugin
     id("org.jetbrains.grammarkit") version "2020.2.1"
     // https://github.com/JetBrains/gradle-changelog-plugin
@@ -36,6 +36,7 @@ version = pluginVersion
 val sassPlugin = when {
     platformVersion.startsWith("2020.1") -> "org.jetbrains.plugins.sass:201.7846.80"
     platformVersion.startsWith("2020.2") -> "org.jetbrains.plugins.sass:202.6397.47"
+    platformVersion.startsWith("203-EAP-SNAPSHOT") -> "org.jetbrains.plugins.sass:203.5784.25"
     else -> throw GradleException("Missing Sass plugin version for platformVersion = $platformVersion")
 }
 
@@ -43,6 +44,7 @@ val sassPlugin = when {
 val psiViewerPlugin = when {
     platformVersion.startsWith("2020.1") -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
     platformVersion.startsWith("2020.2") -> "PsiViewer:202-SNAPSHOT.3"
+    platformVersion.startsWith("203-EAP-SNAPSHOT") -> "PsiViewer:203-SNAPSHOT"
     else -> null
 }
 
@@ -81,20 +83,21 @@ val generateLexer = task<GenerateLexer>("generateLexer") {
 }
 
 tasks {
-    // Set the compatibility versions to 1.8
+    // Set the compatibility versions to 11
     withType<JavaCompile> {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
     }
     listOf("compileKotlin", "compileTestKotlin").forEach {
         getByName<KotlinCompile>(it) {
-            kotlinOptions.jvmTarget = "1.8"
-            kotlinOptions.apiVersion = "1.3"
+            kotlinOptions.jvmTarget = "11"
         }
     }
 
     withType<KotlinCompile> {
         dependsOn(generateLexer)
+        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=compatibility")
     }
 
     patchPluginXml {

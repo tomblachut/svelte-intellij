@@ -51,8 +51,8 @@ class SvelteXmlBlock(
     }
 
     @Suppress("UnstableApiUsage")
-    override fun createSimpleChild(child: ASTNode?, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlBlock {
-        return createSimpleChild(myXmlFormattingPolicy, child, indent, wrap, alignment)
+    override fun createSimpleChild(child: ASTNode, indent: Indent?, wrap: Wrap?, alignment: Alignment?, range: TextRange?): XmlBlock {
+        return createSimpleChild(myXmlFormattingPolicy, child, indent, wrap, alignment, range)
     }
 
     override fun createTagBlock(child: ASTNode?, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlTagBlock {
@@ -140,8 +140,8 @@ abstract class SvelteXmlTagBlockBase(
     }
 
     @Suppress("UnstableApiUsage")
-    override fun createSimpleChild(child: ASTNode?, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlBlock {
-        return createSimpleChild(myXmlFormattingPolicy, child, indent, wrap, alignment)
+    override fun createSimpleChild(child: ASTNode, indent: Indent?, wrap: Wrap?, alignment: Alignment?, range: TextRange?): XmlBlock {
+        return createSimpleChild(myXmlFormattingPolicy, child, indent, wrap, alignment, range)
     }
 
     override fun createTagBlock(child: ASTNode?, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlTagBlock {
@@ -150,13 +150,14 @@ abstract class SvelteXmlTagBlockBase(
 }
 
 private fun AbstractXmlBlock.createSimpleChild(
-    xmlFormattingPolicy: XmlFormattingPolicy?,
-    child: ASTNode?,
+    xmlFormattingPolicy: XmlFormattingPolicy,
+    child: ASTNode,
     indent: Indent?,
     wrap: Wrap?,
-    alignment: Alignment?
+    alignment: Alignment?,
+    range: TextRange?
 ): XmlBlock {
-    return SvelteXmlBlock(child, wrap, alignment, xmlFormattingPolicy, indent, null, isPreserveSpace)
+    return SvelteXmlBlock(child, wrap, alignment, xmlFormattingPolicy, indent, range, isPreserveSpace)
 }
 
 private fun AbstractXmlBlock.createTagBlock(

@@ -4,5 +4,5 @@ SvelteHtmlFile: ExpressionIncomplete.svelte
       <empty list>
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
-      PsiErrorElement:expression expected
+      PsiErrorElement:Expression expected
         <empty list>

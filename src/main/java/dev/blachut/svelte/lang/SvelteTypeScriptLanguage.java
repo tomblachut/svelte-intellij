@@ -18,14 +18,4 @@ public class SvelteTypeScriptLanguage extends JSLanguageDialect implements Depen
     private SvelteTypeScriptLanguage() {
         super("SvelteTS", DialectOptionHolder.TS, JavaScriptSupportLoader.TYPESCRIPT);
     }
-
-    @Override
-    public String getFileExtension() {
-        return "ts";
-    }
-
-    @Override
-    public JavaScriptParser<?, ?, ?, ?> createParser(@NotNull PsiBuilder builder) {
-        return new SvelteTypeScriptParser(builder);
-    }
 }
