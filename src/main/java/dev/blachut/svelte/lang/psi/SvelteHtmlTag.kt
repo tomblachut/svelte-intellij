@@ -8,20 +8,18 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.impl.source.xml.XmlTagImpl
 import com.intellij.psi.scope.PsiScopeProcessor
-import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.xml.IXmlTagElementType
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.XmlUtil
-import dev.blachut.svelte.lang.SvelteHTMLLanguage
-
-class SvelteHtmlTagElementType(debugName: String) : IElementType(debugName, SvelteHTMLLanguage.INSTANCE), IXmlTagElementType
-
-val SVELTE_HTML_TAG = SvelteHtmlTagElementType("SVELTE_HTML_TAG")
 
 // Check XmlTagImpl.createDelegate && HtmlTagDelegate if something breaks. Esp. HtmlTagDelegate.findSubTags
-class SvelteHtmlTag : XmlTagImpl(SVELTE_HTML_TAG), HtmlTag {
-    override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
+class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTag {
+    override fun processDeclarations(
+        processor: PsiScopeProcessor,
+        state: ResolveState,
+        lastParent: PsiElement?,
+        place: PsiElement,
+    ): Boolean {
         for (attribute in attributes) {
             if (!attribute.name.startsWith("let:")) continue
             val value = attribute.valueElement ?: continue
