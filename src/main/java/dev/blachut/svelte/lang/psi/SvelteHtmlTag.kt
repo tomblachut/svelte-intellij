@@ -1,8 +1,5 @@
 package dev.blachut.svelte.lang.psi
 
-import com.intellij.lang.javascript.psi.JSParameter
-import com.intellij.lang.javascript.psi.JSVariable
-import com.intellij.lang.javascript.psi.util.JSDestructuringVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.html.HtmlTag
@@ -21,22 +18,7 @@ class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTa
         place: PsiElement,
     ): Boolean {
         for (attribute in attributes) {
-            if (!attribute.name.startsWith("let:")) continue
-            val value = attribute.valueElement ?: continue
-            val parameter = PsiTreeUtil.findChildOfType(value, SvelteJSParameter::class.java) ?: continue
-
-            var result = true
-            parameter.accept(object : JSDestructuringVisitor() {
-                override fun visitJSParameter(node: JSParameter) {
-                    if (result && !processor.execute(node, ResolveState.initial())) {
-                        result = false
-                    }
-                }
-
-                override fun visitJSVariable(node: JSVariable) {}
-            })
-
-            if (!result) {
+            if (!attribute.processDeclarations(processor, state, lastParent, place)) {
                 return false
             }
         }
@@ -50,10 +32,6 @@ class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTa
 
     override fun getRealNs(value: String?): String? {
         return if (XmlUtil.XHTML_URI == value) XmlUtil.HTML_URI else value
-    }
-
-    override fun toString(): String {
-        return "SvelteHtmlTag: $name"
     }
 
     override fun getParentTag(): XmlTag? {
@@ -70,5 +48,9 @@ class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTa
             XmlUtil.HTML_URI
         } else xmlNamespace
         // ex.: mathML and SVG namespaces can be used inside html file
+    }
+
+    override fun toString(): String {
+        return "SvelteHtmlTag: $name"
     }
 }
