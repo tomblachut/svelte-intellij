@@ -8,7 +8,7 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.4.10"
     // https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.5.0"
+    id("org.jetbrains.intellij") version "0.6.3"
     // https://github.com/JetBrains/gradle-grammar-kit-plugin
     id("org.jetbrains.grammarkit") version "2020.2.1"
     // https://github.com/JetBrains/gradle-changelog-plugin
@@ -24,6 +24,7 @@ val pluginName_: String by project
 val pluginVersion: String by project
 val pluginSinceBuild: String by project
 val pluginUntilBuild: String by project
+val pluginVerifierIdeVersions: String by project
 
 val platformType: String by project
 val platformVersion: String by project
@@ -122,6 +123,10 @@ tasks {
                 changelog.getLatest().toHTML()
             }
         )
+    }
+
+    runPluginVerifier {
+        ideVersions(pluginVerifierIdeVersions)
     }
 
     publishPlugin {
