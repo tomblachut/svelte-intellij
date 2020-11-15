@@ -24,6 +24,7 @@ val pluginName_: String by project
 val pluginVersion: String by project
 val pluginSinceBuild: String by project
 val pluginUntilBuild: String by project
+val pluginVerifierIdeVersions: String by project
 
 val platformType: String by project
 val platformVersion: String by project
@@ -125,6 +126,10 @@ tasks {
                 changelog.getLatest().toHTML()
             }
         )
+    }
+
+    runPluginVerifier {
+        ideVersions(pluginVerifierIdeVersions)
     }
 
     publishPlugin {

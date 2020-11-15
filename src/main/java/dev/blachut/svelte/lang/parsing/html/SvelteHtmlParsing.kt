@@ -46,7 +46,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     }
 
     override fun getHtmlTagElementType(): IElementType {
-        return SVELTE_HTML_TAG
+        return SvelteHtmlElementTypes.SVELTE_HTML_TAG
     }
 
     override fun isSingleTag(tagName: String, originalTagName: String): Boolean {
@@ -128,7 +128,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
     override fun parseCustomHeaderContent() {
         val att = mark()
         parseAttributeExpression(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
-        att.done(SVELTE_HTML_ATTRIBUTE)
+        att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)
     }
 
     override fun parseAttribute() {
@@ -145,7 +145,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
             parseAttributeValue(elementType)
         }
 
-        att.done(SVELTE_HTML_ATTRIBUTE)
+        att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)
     }
 
     private fun parseAttributeValue(elementType: IElementType) {

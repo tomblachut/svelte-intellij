@@ -1,6 +1,8 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiFile
+import com.intellij.psi.impl.source.xml.TagNameReference
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.HtmlXmlExtension
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
@@ -31,6 +33,14 @@ class SvelteXmlExtension : HtmlXmlExtension() {
      * Whether tag follows stricter rules of XML. Single tags are e.g. <p> & <li>, they don't require closing tag
      */
     override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name) || tag.name == "slot"
+
+    override fun createTagNameReference(nameElement: ASTNode, startTagFlag: Boolean): TagNameReference? {
+        return if (isSvelteComponentTag(nameElement.text)) {
+            SvelteTagNameReference(nameElement, startTagFlag)
+        } else {
+            super.createTagNameReference(nameElement, startTagFlag)
+        }
+    }
 
     override fun getAttributeValuePresentation(
         tag: XmlTag?,

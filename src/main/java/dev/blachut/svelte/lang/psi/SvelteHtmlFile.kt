@@ -58,11 +58,11 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
     private fun isModuleScript(tag: XmlTag): Boolean {
         return HtmlUtil.isScriptTag(tag) && tag.getAttributeValue("context") == "module"
     }
-}
 
-private fun findAncestorScript(place: PsiElement): XmlTag? {
-    val parentScript = PsiTreeUtil.findFirstContext(place, false) {
-        it is XmlTag && HtmlUtil.isScriptTag(it)
+    private fun findAncestorScript(place: PsiElement): XmlTag? {
+        val parentScript = PsiTreeUtil.findFirstContext(place, false) {
+            it is XmlTag && HtmlUtil.isScriptTag(it)
+        }
+        return parentScript as XmlTag?
     }
-    return parentScript as XmlTag?
 }
