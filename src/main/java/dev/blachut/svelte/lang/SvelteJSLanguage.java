@@ -18,14 +18,4 @@ public class SvelteJSLanguage extends JSLanguageDialect implements DependentLang
     private SvelteJSLanguage() {
         super("SvelteJS", DialectOptionHolder.ECMA_6, JavaScriptSupportLoader.ECMA_SCRIPT_6);
     }
-
-    @Override
-    public String getFileExtension() {
-        return "js";
-    }
-
-    @Override
-    public JavaScriptParser<?, ?, ?, ?> createParser(@NotNull PsiBuilder builder) {
-        return new SvelteJSParser(builder);
-    }
 }

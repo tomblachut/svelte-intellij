@@ -16,13 +16,13 @@ class SvelteTypeScriptParserDefinition : TypeScriptParserDefinition() {
 
     override fun createParser(project: Project?): PsiParser {
         return PsiParser { root, builder ->
-            SvelteTypeScriptLanguage.INSTANCE.createParser(builder).parseJS(root)
+            SvelteTypeScriptParser(builder).parseJS(root)
             builder.treeBuilt
         }
     }
 
     override fun createJSParser(builder: PsiBuilder): JavaScriptParser<*, *, *, *> {
-        return SvelteTypeScriptLanguage.INSTANCE.createParser(builder)
+        return SvelteTypeScriptParser(builder)
     }
 
     companion object {

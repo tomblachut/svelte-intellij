@@ -12,7 +12,7 @@ import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
 class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
-    override fun getReferenceChecker(reporter: JSReferenceInspectionProblemReporter): JSReferenceChecker {
+    override fun getReferenceChecker(reporter: JSProblemReporter<*>): JSReferenceChecker {
         return TypedJSReferenceChecker(reporter)
     }
 

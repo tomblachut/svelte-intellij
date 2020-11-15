@@ -1,5 +1,7 @@
 package dev.blachut.svelte.lang.parsing.html
 
+import com.intellij.html.embedding.HtmlEmbeddedContentSupport
+import com.intellij.javascript.JSHtmlEmbeddedContentSupport
 import com.intellij.lang.LanguageASTFactory
 import com.intellij.lang.LanguageHtmlScriptContentProvider
 import com.intellij.lang.css.CSSLanguage
@@ -9,14 +11,13 @@ import com.intellij.lang.xml.XMLLanguage
 import com.intellij.lang.xml.XmlASTFactory
 import com.intellij.lexer.EmbeddedTokenTypesProvider
 import com.intellij.psi.css.CssEmbeddedTokenTypesProvider
-import com.intellij.psi.css.CssRulesetBlockEmbeddedTokenTypesProvider
+import com.intellij.psi.css.CssHtmlEmbeddedContentSupport
 import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
 import com.intellij.testFramework.ParsingTestCase
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
-import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
 import org.jetbrains.plugins.scss.SCSSLanguage
 import org.jetbrains.plugins.scss.ScssTokenTypesProvider
 import org.jetbrains.plugins.scss.parser.SCSSParserDefinition
@@ -41,12 +42,6 @@ class SvelteHtmlParserTest : ParsingTestCase(
         addExplicitExtension(LanguageASTFactory.INSTANCE, CSSLanguage.INSTANCE, CssTreeElementFactory())
         addExplicitExtension(LanguageASTFactory.INSTANCE, SCSSLanguage.INSTANCE, SCSSTreeElementFactory())
 
-        addExplicitExtension(
-            LanguageHtmlScriptContentProvider.INSTANCE,
-            SvelteJSLanguage.INSTANCE,
-            SvelteJSScriptContentProvider()
-        )
-
         registerExtensionPoint(StartTagEndTokenProvider.EP_NAME, StartTagEndTokenProvider::class.java)
         registerExtensionPoint(EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java)
 
@@ -54,10 +49,12 @@ class SvelteHtmlParserTest : ParsingTestCase(
             EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java,
             listOf(
                 CssEmbeddedTokenTypesProvider(),
-                CssRulesetBlockEmbeddedTokenTypesProvider(),
                 ScssTokenTypesProvider()
             )
         )
+        HtmlEmbeddedContentSupport.register(application, testRootDisposable,
+            CssHtmlEmbeddedContentSupport::class.java, JSHtmlEmbeddedContentSupport::class.java,
+            SvelteHtmlEmbeddedContentSupport::class.java)
 
 //        registerExtensionPoint(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProvider::class.java)
 //        registerExtension(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProviderImpl())
