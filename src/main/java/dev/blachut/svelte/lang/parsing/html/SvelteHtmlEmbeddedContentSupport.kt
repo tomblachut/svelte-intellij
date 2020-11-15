@@ -19,9 +19,13 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
     }
 
     override fun createEmbeddedContentProviders(lexer: BaseHtmlLexer): List<HtmlEmbeddedContentProvider> =
-        listOf(SvelteHtmlContentProvider(lexer),
-            HtmlTokenEmbeddedContentProvider(lexer, SvelteTokenTypes.CODE_FRAGMENT,
-                { JavaScriptHighlightingLexer(JSLanguageLevel.ES6.dialect.optionHolder) })
+        listOf(
+            SvelteHtmlContentProvider(lexer),
+            HtmlTokenEmbeddedContentProvider(
+                lexer,
+                SvelteTokenTypes.CODE_FRAGMENT,
+                { JavaScriptHighlightingLexer(JSLanguageLevel.ES6.dialect.optionHolder) }
+            )
         )
 
     class SvelteHtmlContentProvider(lexer: BaseHtmlLexer) : HtmlScriptStyleEmbeddedContentProvider(lexer) {
