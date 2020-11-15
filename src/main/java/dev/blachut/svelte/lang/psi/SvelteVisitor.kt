@@ -1,13 +1,15 @@
 package dev.blachut.svelte.lang.psi
 
-import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiElement
 
 interface SvelteVisitor {
     fun visitInitialTag(tag: SvelteInitialTag) {
-        (this as PsiElementVisitor).visitElement(tag)
+        visitElement(tag)
     }
 
     fun visitLazyElement(element: SvelteJSLazyPsiElement) {
-        (this as PsiElementVisitor).visitElement(element)
+        visitElement(element)
     }
+
+    fun visitElement(element: PsiElement)
 }
