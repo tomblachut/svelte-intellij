@@ -9,7 +9,6 @@ import kotlin.math.min
 class SvelteAttributeNameLexer : LexerBase() {
     private var myBuffer: CharSequence = ""
 
-    //    private var myStartOffset = 0
     private var myEndOffset = 0
 
     private var myPosition = 0
@@ -19,12 +18,10 @@ class SvelteAttributeNameLexer : LexerBase() {
 
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
         myBuffer = buffer
-//        myStartOffset = startOffset
         myPosition = startOffset
         myEndOffset = endOffset
         myState = initialState
 
-        // todo check
         advance()
     }
 

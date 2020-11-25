@@ -18,7 +18,8 @@ import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlElement
-import dev.blachut.svelte.lang.directives.SvelteDirectivesSupport
+import dev.blachut.svelte.lang.directives.SvelteDirectiveSupport
+import dev.blachut.svelte.lang.directives.SvelteDirectiveTypes
 
 class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE) {
     val directive get() = calcDirective(this)
@@ -30,7 +31,7 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
         lastParent: PsiElement?,
         place: PsiElement,
     ): Boolean {
-        if (!name.startsWith("let:")) return true
+        if (directive?.directiveType != SvelteDirectiveTypes.LET) return true
 
         val implicit = shorthandLetImplicitParameter
         if (implicit != null) {
@@ -95,7 +96,7 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
 
     override fun getTextOffset(): Int {
         if (directive != null) {
-            val shift = name.indexOf(SvelteDirectivesSupport.DIRECTIVE_SEPARATOR) + 1
+            val shift = name.indexOf(SvelteDirectiveSupport.DIRECTIVE_SEPARATOR) + 1
             return nameElement.textRange.startOffset + shift
         }
 
@@ -109,10 +110,10 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
     companion object {
         val SPREAD_OR_SHORTHAND_FINDER: RoleFinder = DefaultRoleFinder(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
 
-        fun calcDirective(attribute: SvelteHtmlAttribute): SvelteDirectivesSupport.Directive? {
+        fun calcDirective(attribute: SvelteHtmlAttribute): SvelteDirectiveSupport.Directive? {
             return CachedValuesManager.getCachedValue(attribute) {
                 CachedValueProvider.Result(
-                    SvelteDirectivesSupport.parseDirective(attribute.name),
+                    SvelteDirectiveSupport.parseDirective(attribute.name),
                     PsiModificationTracker.MODIFICATION_COUNT
                 )
             }
@@ -120,9 +121,12 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
 
         fun calcShorthandLetImplicitParameter(attribute: SvelteHtmlAttribute): JSNamedElement? {
             return CachedValuesManager.getCachedValue(attribute) {
-                val implicit = if (attribute.name.startsWith("let:") && attribute.valueElement == null) {
-                    SvelteDirectiveImplicitParameter(attribute.localName, attribute)
-                } else null
+                val implicit =
+                    if (attribute.directive?.directiveType != SvelteDirectiveTypes.LET && attribute.valueElement == null) {
+                        SvelteDirectiveImplicitParameter(attribute.localName, attribute)
+                    } else {
+                        null
+                    }
 
                 CachedValueProvider.Result(implicit, PsiModificationTracker.MODIFICATION_COUNT)
             }

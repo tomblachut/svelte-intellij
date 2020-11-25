@@ -17,6 +17,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiPolyVariantReference
 import com.intellij.psi.PsiReference
 import com.intellij.psi.ResolveResult
+import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference
 import com.intellij.psi.xml.XmlAttribute
 import dev.blachut.svelte.lang.directives.ScopeReference
 import dev.blachut.svelte.lang.directives.ShorthandLetReference
@@ -28,14 +29,18 @@ class SvelteDirectivesAnnotator : Annotator {
             val highlighter = JSAnnotatingVisitor.getHighlighter(element)
 
             for (ref in element.references) {
-                if (!(ref is ScopeReference || ref is ShorthandLetReference)) {
-                    continue;
-                }
-
-                val attrKey = if (ref is PsiPolyVariantReference) {
-                    highlight(ref, highlighter)
-                } else {
-                    highlight(ref, highlighter)
+                val attrKey = when (ref) {
+                    is PsiMultiReference -> {
+                        val innerRef = ref.references.find { it is ScopeReference } ?: continue
+                        highlight(innerRef, highlighter)
+                    }
+                    is ScopeReference -> {
+                        highlight(ref, highlighter)
+                    }
+                    is ShorthandLetReference -> {
+                        highlight(ref, highlighter)
+                    }
+                    else -> continue
                 }
 
                 val elementRange = ref.element.textRange

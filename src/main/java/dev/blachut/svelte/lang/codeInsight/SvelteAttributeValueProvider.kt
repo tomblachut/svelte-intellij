@@ -4,6 +4,7 @@ import com.intellij.html.impl.providers.HtmlAttributeValueProvider
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.SmartList
 import com.intellij.xml.util.HtmlUtil
+import dev.blachut.svelte.lang.directives.SvelteDirectiveTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
@@ -22,7 +23,7 @@ class SvelteAttributeValueProvider : HtmlAttributeValueProvider() {
             if (attribute !is SvelteHtmlAttribute) continue
 
             val directive = attribute.directive
-            if (directive != null && directive.directiveType.prefix == "class") {
+            if (directive != null && directive.directiveType == SvelteDirectiveTypes.CLASS) {
                 directiveClasses.add(directive.specifiers[0].text)
             }
         }
