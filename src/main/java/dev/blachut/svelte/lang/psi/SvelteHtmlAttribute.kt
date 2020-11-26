@@ -18,8 +18,9 @@ import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlElement
-import dev.blachut.svelte.lang.directives.SvelteDirectiveSupport
 import dev.blachut.svelte.lang.directives.SvelteDirectiveTypes
+import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
+import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveParser
 
 class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE) {
     val directive get() = calcDirective(this)
@@ -96,7 +97,7 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
 
     override fun getTextOffset(): Int {
         if (directive != null) {
-            val shift = name.indexOf(SvelteDirectiveSupport.DIRECTIVE_SEPARATOR) + 1
+            val shift = name.indexOf(SvelteDirectiveUtil.DIRECTIVE_SEPARATOR) + 1
             return nameElement.textRange.startOffset + shift
         }
 
@@ -110,10 +111,10 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
     companion object {
         val SPREAD_OR_SHORTHAND_FINDER: RoleFinder = DefaultRoleFinder(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
 
-        fun calcDirective(attribute: SvelteHtmlAttribute): SvelteDirectiveSupport.Directive? {
+        fun calcDirective(attribute: SvelteHtmlAttribute): SvelteDirectiveUtil.Directive? {
             return CachedValuesManager.getCachedValue(attribute) {
                 CachedValueProvider.Result(
-                    SvelteDirectiveSupport.parseDirective(attribute.name),
+                    SvelteDirectiveParser.parse(attribute.name),
                     PsiModificationTracker.MODIFICATION_COUNT
                 )
             }

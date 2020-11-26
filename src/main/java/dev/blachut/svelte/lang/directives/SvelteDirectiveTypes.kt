@@ -1,6 +1,6 @@
 package dev.blachut.svelte.lang.directives
 
-import dev.blachut.svelte.lang.directives.SvelteDirectiveSupport.DirectiveTarget
+import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil.DirectiveTarget
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 
@@ -11,7 +11,7 @@ object SvelteDirectiveTypes {
         prefix = "bind",
         target = DirectiveTarget.BOTH,
         shorthandReferenceFactory = ::ScopeReference,
-        shorthandCompletionFactory = ::getScopeCompletions,
+        shorthandCompletionFactory = ::getPropCompletions,
         longhandReferenceFactory = ::PropReference,
         longhandCompletionFactory = ::getPropCompletions,
         valueElementType = SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION // TODO only variable references

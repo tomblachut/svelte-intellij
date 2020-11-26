@@ -6,6 +6,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import com.intellij.util.containers.Stack
+import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
@@ -135,14 +136,12 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         assert(token() === XmlTokenType.XML_NAME)
         val att = mark()
 
-        val elementType = when (builder.tokenText!!.startsWith("let:", true)) {
-            true -> SvelteJSLazyElementTypes.ATTRIBUTE_PARAMETER
-            false -> SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION
-        }
+        val attributeName = builder.tokenText
+
         advance()
         if (token() === XmlTokenType.XML_EQ) {
             advance()
-            parseAttributeValue(elementType)
+            parseAttributeValue(SvelteDirectiveUtil.chooseValueElementType(attributeName!!))
         }
 
         att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)

@@ -23,39 +23,39 @@ import dev.blachut.svelte.lang.directives.ScopeReference
 import dev.blachut.svelte.lang.directives.ShorthandLetReference
 import gnu.trove.TObjectIntHashMap
 
-class SvelteDirectivesAnnotator : Annotator {
+class SvelteDirectiveAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element is XmlAttribute) {
-            val highlighter = JSAnnotatingVisitor.getHighlighter(element)
+        if (element !is XmlAttribute) return
 
-            for (ref in element.references) {
-                val attrKey = when (ref) {
-                    is PsiMultiReference -> {
-                        val innerRef = ref.references.find { it is ScopeReference } ?: continue
-                        highlight(innerRef, highlighter)
-                    }
-                    is ScopeReference -> {
-                        highlight(ref, highlighter)
-                    }
-                    is ShorthandLetReference -> {
-                        highlight(ref, highlighter)
-                    }
-                    else -> continue
+        val highlighter = JSAnnotatingVisitor.getHighlighter(element)
+
+        for (ref in element.references) {
+            val attrKey = when (ref) {
+                is PsiMultiReference -> {
+                    val innerRef = ref.references.find { it is ScopeReference } ?: continue
+                    highlight(innerRef, highlighter)
                 }
-
-                val elementRange = ref.element.textRange
-                val refRange = ref.rangeInElement.shiftRight(elementRange.startOffset)
-
-                if (!refRange.intersects(elementRange)) continue
-
-                if (attrKey != null) {
-                    holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(refRange).textAttributes(attrKey)
-                        .create()
-                } else if (!ref.isSoft && ref.resolve() == null) {
-                    val message = XmlHighlightVisitor.getErrorDescription(ref)
-                    holder.newAnnotation(HighlightSeverity.ERROR, message).range(refRange)
-                        .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL).create()
+                is ScopeReference -> {
+                    highlight(ref, highlighter)
                 }
+                is ShorthandLetReference -> {
+                    highlight(ref, highlighter)
+                }
+                else -> continue
+            }
+
+            val elementRange = ref.element.textRange
+            val refRange = ref.rangeInElement.shiftRight(elementRange.startOffset)
+
+            if (!refRange.intersects(elementRange)) continue
+
+            if (attrKey != null) {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(refRange).textAttributes(attrKey)
+                    .create()
+            } else if (!ref.isSoft && ref.resolve() == null) {
+                val message = XmlHighlightVisitor.getErrorDescription(ref)
+                holder.newAnnotation(HighlightSeverity.ERROR, message).range(refRange)
+                    .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL).create()
             }
         }
     }

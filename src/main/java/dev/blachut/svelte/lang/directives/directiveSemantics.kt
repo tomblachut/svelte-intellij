@@ -15,6 +15,7 @@ import com.intellij.psi.css.resolve.HtmlCssClassOrIdReference
 import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference
+import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 
 class ScopeReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
@@ -35,6 +36,7 @@ class ScopeReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 fun getScopeCompletions(
     attribute: SvelteHtmlAttribute,
     parameters: CompletionParameters,
@@ -63,13 +65,20 @@ class PropReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 fun getPropCompletions(
     attribute: SvelteHtmlAttribute,
     parameters: CompletionParameters,
     result: CompletionResultSet,
 ) {
-    HtmlNSDescriptorImpl.getCommonAttributeDescriptors(attribute.parent).filter { !it.name.startsWith("on") }.forEach {
-        result.addElement(LookupElementBuilder.create(it.name))
+    if (isSvelteComponentTag(attribute.parent.name)) {
+        // TODO completions for component props
+    } else {
+        HtmlNSDescriptorImpl.getCommonAttributeDescriptors(attribute.parent)
+            .filter { !it.name.startsWith("on") }
+            .forEach {
+                result.addElement(LookupElementBuilder.create(it.name))
+            }
     }
 }
 
@@ -82,6 +91,7 @@ class EventReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 fun getEventCompletions(
     attribute: SvelteHtmlAttribute,
     parameters: CompletionParameters,

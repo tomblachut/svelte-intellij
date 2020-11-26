@@ -7,7 +7,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
-import dev.blachut.svelte.lang.directives.SvelteDirectiveSupport
+import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.icons.SvelteIcons
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 
@@ -41,7 +41,7 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
         val directiveType = attribute.directive?.directiveType
 
         if (directiveType == null) {
-            for (prefix in SvelteDirectiveSupport.getPrefixCompletions(xmlTag.name)) {
+            for (prefix in SvelteDirectiveUtil.getPrefixCompletions(xmlTag.name)) {
                 result.addElement(createDirectivePrefixLookupElement(prefix, parameters))
             }
             return
@@ -53,7 +53,7 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
         directiveType.longhandCompletionFactory?.invoke(attribute, parameters, result)
 
         val prefix = result.prefixMatcher.prefix
-        val lastSeparatorIndex = prefix.lastIndexOf(SvelteDirectiveSupport.MODIFIER_SEPARATOR)
+        val lastSeparatorIndex = prefix.lastIndexOf(SvelteDirectiveUtil.MODIFIER_SEPARATOR)
         if (lastSeparatorIndex < 0) return
 
         val newResult = result.withPrefixMatcher(prefix.substring(lastSeparatorIndex + 1))

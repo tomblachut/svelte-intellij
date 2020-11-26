@@ -11,7 +11,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 
 open class DirectiveType(
     val prefix: String,
-    val target: SvelteDirectiveSupport.DirectiveTarget,
+    val target: SvelteDirectiveUtil.DirectiveTarget,
     val targetValidator: (xmlTag: XmlTag) -> Boolean = { true },
     val modifiers: Set<String> = emptySet(),
     val nestedSpecifiers: Number? = null,
@@ -22,6 +22,8 @@ open class DirectiveType(
     val valueElementType: IElementType = SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION,
     val uniquenessSelector: Unit = Unit, // TODO
 ) {
+    val delimitedPrefix: String get() = prefix + SvelteDirectiveUtil.DIRECTIVE_SEPARATOR
+
     override fun toString(): String {
         return "DirectiveType($prefix)"
     }
@@ -29,7 +31,7 @@ open class DirectiveType(
 
 class TransitionInOutDirectiveType(prefix: String) : DirectiveType(
     prefix = prefix,
-    target = SvelteDirectiveSupport.DirectiveTarget.ELEMENT,
+    target = SvelteDirectiveUtil.DirectiveTarget.ELEMENT,
     modifiers = setOf("local"),
     shorthandReferenceFactory = ::ScopeReference,
     shorthandCompletionFactory = ::getScopeCompletions,

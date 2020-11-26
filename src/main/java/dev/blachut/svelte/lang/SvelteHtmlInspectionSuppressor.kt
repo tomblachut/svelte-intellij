@@ -4,7 +4,7 @@ import com.intellij.codeInspection.DefaultXmlSuppressionProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.xml.XmlAttribute
-import dev.blachut.svelte.lang.directives.SvelteDirectiveSupport
+import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 
 class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
     private val scriptAttributes = listOf("context")
@@ -18,7 +18,7 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
         if (inspectionId == "HtmlUnknownAttribute") {
             val attribute = element.parent
             if (attribute is XmlAttribute) {
-                if (SvelteDirectiveSupport.directivePrefixes.contains(attribute.namespacePrefix)) return true
+                if (SvelteDirectiveUtil.directivePrefixes.contains(attribute.namespacePrefix)) return true
 
                 // TODO refactor into proper descriptors
                 if (attribute.parent.name == "script" && scriptAttributes.contains(attribute.name)) return true

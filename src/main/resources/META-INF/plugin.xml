@@ -33,7 +33,7 @@
         <lang.syntaxHighlighterFactory language="SvelteHTML"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
         <highlightingPassFactory implementation="dev.blachut.svelte.lang.SvelteJSSemanticKeywordHighlighterFactory"/>
-        <annotator language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteDirectivesAnnotator"/>
+        <annotator language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteDirectiveAnnotator"/>
         <lang.foldingBuilder language="SvelteHTML"
                              implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
         <lang.formatter language="SvelteHTML"

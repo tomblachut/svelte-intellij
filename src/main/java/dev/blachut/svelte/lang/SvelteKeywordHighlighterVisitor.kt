@@ -13,7 +13,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.xml.XmlTokenType
 import com.intellij.refactoring.suggested.startOffset
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
-import dev.blachut.svelte.lang.parsing.html.SvelteAttributeNameLexer
+import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexer
 import dev.blachut.svelte.lang.psi.*
 
 class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptKeywordHighlighterVisitor(holder),
@@ -44,7 +44,7 @@ class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptK
             val startOffset = element.nameElement.startOffset
             highlight(JSHighlighter.JS_KEYWORD, TextRange(startOffset, element.textOffset))
 
-            val lexer = SvelteAttributeNameLexer()
+            val lexer = SvelteDirectiveLexer()
             lexer.start(element.name)
             while (lexer.tokenType != null) {
                 if (lexer.tokenType == JSTokenTypes.OR) {
