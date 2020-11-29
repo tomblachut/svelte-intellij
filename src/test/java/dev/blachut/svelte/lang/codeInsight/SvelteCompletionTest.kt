@@ -199,8 +199,8 @@ class SvelteCompletionTest : BasePlatformTestCase() {
                 """.trimIndent()
         )
         val items = myFixture.completeBasic()
-        hasElements(items, "title", "localVariable")
-        noElements(items, "onclick")
+        hasElements(items, "title")
+        noElements(items, "onclick", "localVariable")
     }
 
     fun testOnDirective() {

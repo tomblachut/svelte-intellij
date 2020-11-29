@@ -15,11 +15,14 @@ import com.intellij.psi.css.resolve.HtmlCssClassOrIdReference
 import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference
+import dev.blachut.svelte.lang.codeInsight.SveltePropsProvider
+import dev.blachut.svelte.lang.codeInsight.SvelteTagNameReference
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
+import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
-class ScopeReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
-    PsiPolyVariantReferenceBase<SvelteHtmlAttribute>(element, rangeInElement, false) {
+class ScopeReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
+    PsiPolyVariantReferenceBase<SvelteHtmlAttribute>(attribute, rangeInElement, false) {
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val resolver = ResolveCache.PolyVariantResolver<ScopeReference> { ref, _ ->
             val attribute = ref.element
@@ -56,12 +59,17 @@ fun getScopeCompletions(
     result.addAllElements(sink.resultsAsObjects)
 }
 
-class PropReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
-    PsiReferenceBase<SvelteHtmlAttribute>(element, rangeInElement, true) {
+class PropReference(val attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
+    PsiReferenceBase<SvelteHtmlAttribute>(attribute, rangeInElement, true) {
     override fun resolve(): PsiElement? {
-        val attributeName = element.directive!!.specifiers[0].text
-        // TODO check attribute providers
-        return HtmlNSDescriptorImpl.getCommonAttributeDescriptor(attributeName, element.parent)?.declaration
+        val attributeName = attribute.directive!!.specifiers[0].text
+        return if (isSvelteComponentTag(attribute.parent.name)) {
+            // TODO component props
+            null
+        } else {
+            // TODO check attribute providers
+            HtmlNSDescriptorImpl.getCommonAttributeDescriptor(attributeName, element.parent)?.declaration
+        }
     }
 }
 
@@ -71,8 +79,14 @@ fun getPropCompletions(
     parameters: CompletionParameters,
     result: CompletionResultSet,
 ) {
-    if (isSvelteComponentTag(attribute.parent.name)) {
-        // TODO completions for component props
+    val tag = attribute.parent
+    if (isSvelteComponentTag(tag.name) && tag is SvelteHtmlTag) {
+        val componentFile = SvelteTagNameReference.resolveComponentFile(tag)
+        if (componentFile != null) {
+            SveltePropsProvider.getComponentProps(componentFile.viewProvider)?.forEach {
+                result.addElement(LookupElementBuilder.create(it))
+            }
+        }
     } else {
         HtmlNSDescriptorImpl.getCommonAttributeDescriptors(attribute.parent)
             .filter { !it.name.startsWith("on") }
@@ -82,12 +96,12 @@ fun getPropCompletions(
     }
 }
 
-class EventReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
-    PsiReferenceBase<SvelteHtmlAttribute>(element, rangeInElement, true) {
+class EventReference(val attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
+    PsiReferenceBase<SvelteHtmlAttribute>(attribute, rangeInElement, true) {
     override fun resolve(): PsiElement? {
-        val eventName = element.directive!!.specifiers[0].text
+        val eventName = attribute.directive!!.specifiers[0].text
         // TODO check attribute providers
-        return HtmlNSDescriptorImpl.getCommonAttributeDescriptor("on$eventName", element.parent)?.declaration
+        return HtmlNSDescriptorImpl.getCommonAttributeDescriptor("on$eventName", attribute.parent)?.declaration
     }
 }
 
@@ -97,19 +111,20 @@ fun getEventCompletions(
     parameters: CompletionParameters,
     result: CompletionResultSet,
 ) {
-    HtmlNSDescriptorImpl.getCommonAttributeDescriptors(attribute.parent).filter { it.name.startsWith("on") }.forEach {
-        result.addElement(LookupElementBuilder.create(it.name.substring(2)))
-    }
+    HtmlNSDescriptorImpl.getCommonAttributeDescriptors(attribute.parent)
+        .filter { it.name.startsWith("on") }
+        .forEach {
+            result.addElement(LookupElementBuilder.create(it.name.substring(2)))
+        }
 }
 
-class ScopeAndClassReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
-    PsiMultiReference(arrayOf(ScopeReference(element, rangeInElement),
-        getClassReference(element, rangeInElement)), element)
+class ScopeAndClassReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
+    PsiMultiReference(arrayOf(ScopeReference(attribute, rangeInElement),
+        getClassReference(attribute, rangeInElement)), attribute)
 
-fun getClassReference(element: SvelteHtmlAttribute, rangeInElement: TextRange): PsiReference {
-//    val range = element.directive!!.specifiers[0].rangeInName
-    val descriptorProvider = CssDescriptorsUtil.findDescriptorProvider(element)!!
-    return descriptorProvider.getStyleReference(element, rangeInElement.startOffset, rangeInElement.endOffset, true)
+fun getClassReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange): PsiReference {
+    val descriptorProvider = CssDescriptorsUtil.findDescriptorProvider(attribute)!!
+    return descriptorProvider.getStyleReference(attribute, rangeInElement.startOffset, rangeInElement.endOffset, true)
 }
 
 fun getClassCompletions(attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) {
@@ -132,9 +147,9 @@ fun getClassCompletions(attribute: SvelteHtmlAttribute, parameters: CompletionPa
     }
 }
 
-class ShorthandLetReference(element: SvelteHtmlAttribute, rangeInElement: TextRange) :
-    PsiReferenceBase<SvelteHtmlAttribute>(element, rangeInElement, false) {
+class ShorthandLetReference(val attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
+    PsiReferenceBase<SvelteHtmlAttribute>(attribute, rangeInElement, false) {
     override fun resolve(): PsiElement? {
-        return element.shorthandLetImplicitParameter
+        return attribute.shorthandLetImplicitParameter
     }
 }
