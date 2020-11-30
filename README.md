@@ -10,22 +10,16 @@
 <!-- Plugin description -->
 Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
 
-Work in progress, pretty usable already.
-
 ## Features
 
 * Syntax highlighting
 * Code formatting
 * Typing assistance
-* Completions of components and props
+* Emmet-style abbreviations of Svelte blocks
+* Completions of components, props and some directives
 * Auto import of components
 * Navigation from components to their definition
 <!-- Plugin description end -->
-
-## Known issues
-
-* Directives treated as plain attributes
-* ...
 
 ## Installation
 

@@ -1,7 +1,9 @@
 # Changelog
 
 ## [Unreleased]
-### 
+- Initial support of directives
+- Debugger support
+
 ## [0.15.2]
 - Properly recognize svelte namespace elements inside blocks
 - Hide invalid completions for component tags after typing "<svelte:"
