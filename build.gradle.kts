@@ -49,7 +49,7 @@ val psiViewerPlugin = when {
     else -> null
 }
 
-val intellijPlugins = listOfNotNull("JavaScriptLanguage", "CSS", sassPlugin, psiViewerPlugin)
+val intellijPlugins = listOfNotNull("JavaScriptLanguage", "CSS", "JavaScriptDebugger", sassPlugin, psiViewerPlugin)
 
 repositories {
     mavenCentral()

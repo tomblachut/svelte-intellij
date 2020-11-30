@@ -120,7 +120,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             """
                 <script>
                     import Foo from './Foo.svelte';
-                    const spread = [];
+                    const spread = {};
                 </script>
                 <Foo {...spread} />
                 <Foo {...<error>unknownSpread</error>} />
@@ -266,6 +266,66 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 		                </option>
 	                {/each}
                 </select>
+                """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testBindDirective() {
+        myFixture.configureByText("Foo.svelte",
+            """
+                <script>
+                    let title = "text";
+                    let otherTitle = "text2";
+                </script>
+                <button bind:title>Click me</button>
+                <button bind:<error>unknownTitle</error>>Click me</button>
+                <button bind:name={otherTitle}>Click me</button>
+                <button bind:name={<error>unknownTitle</error>}>Click me</button>
+                """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testClassDirective() {
+        myFixture.configureByText("Foo.svelte",
+            """
+                <script>
+                    let active = true;
+                </script>
+                <button class:active>Click me</button>
+                <style>
+                    .active {
+                        background-color: cadetblue;
+                    }
+                </style>
+                """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testUseDirective() {
+        myFixture.configureByText("Foo.svelte",
+            """
+                <script>
+	                function action() {}
+                </script>
+                <button use:action>Click me</button>
+                <button use:action={{param: true}}>Click me</button>
+                <button use:<error>unknownAction</error>>Click me</button>
+                <button use:<error>unknownAction</error>={{param: true}}>Click me</button>
+                <button use:<error>unknownAction</error>.nested>Click me</button>
+                """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testTransitionDirective() {
+        myFixture.configureByText("Foo.svelte",
+            """
+                <script>
+	                function fade() {}
+                </script>
+                <button transition:fade>Click me</button>
+                <button transition:fade={{param: true}}>Click me</button>
+                <button transition:<error>unknownFade</error>>Click me</button>
+                <button transition:<error>unknownFade</error>={{param: true}}>Click me</button>
                 """.trimIndent())
         myFixture.testHighlighting()
     }
