@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.xml.XmlDescriptorUtil
 import com.intellij.psi.xml.XmlAttribute
@@ -10,8 +9,6 @@ import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlElementsGroup
 import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
-import dev.blachut.svelte.lang.isSvelteContext
-import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 import org.jetbrains.annotations.NonNls
 import java.util.*
@@ -38,18 +35,11 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myTag
             return XmlAttributeDescriptor.EMPTY
         }
 
-        val import = myTag.reference?.resolve()
-        if (import is ES6ImportedBinding && !import.isNamespaceImport) {
-            // com.intellij.javascript.JSFileReference.IMPLICIT_EXTENSIONS doesn't include .svelte
-            // probably because of that following call returns null
-            // val componentFile = declaration.findReferencedElements().firstOrNull()
-            val componentFile = import.declaration?.fromClause?.resolveReferencedElements()?.firstOrNull()
-
-            if (componentFile is SvelteHtmlFile && isSvelteContext(componentFile)) {
-                val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
-                if (props != null) {
-                    return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }
-                }
+        val componentFile = SvelteTagNameReference.resolveComponentFile(myTag)
+        if (componentFile != null) {
+            val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
+            if (props != null) {
+                return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }
             }
         }
 

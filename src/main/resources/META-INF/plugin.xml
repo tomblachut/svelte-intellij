@@ -34,6 +34,7 @@
         <lang.syntaxHighlighterFactory language="SvelteHTML"
                                        implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
         <highlightingPassFactory implementation="dev.blachut.svelte.lang.SvelteJSSemanticKeywordHighlighterFactory"/>
+        <annotator language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteDirectiveAnnotator"/>
         <lang.foldingBuilder language="SvelteHTML"
                              implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
         <lang.formatter language="SvelteHTML"
@@ -56,6 +57,7 @@
         <xml.fileNSInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteNSInfoProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
+        <html.attributeValueProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteAttributeValueProvider"/>
 
         <html.scriptContentProvider language="SvelteJS"
                                     implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider"/>
@@ -68,12 +70,14 @@
                                 implementationClass="dev.blachut.svelte.lang.completion.SvelteCompletionContributor"
                                 id="SvelteCompletionContributor"
                                 order="before JSPatternBasedCompletionContributor, before JSCompletionContributor, before xmlNonFirst, before cssClassOrIdReferenceCompletionContributor"/>
+        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteAutoPopupHandler"/>
         <localInspection groupName="Svelte" displayName="Unresolved Svelte component"
                          shortName="SvelteUnresolvedComponent" language="SvelteHTML"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
         <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
+        <css.classOrIdUsagesProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteCssUsagesProvider"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
         <postStartupActivity implementation="dev.blachut.svelte.lang.linters.EslintInitStartupActivity"/>
 
