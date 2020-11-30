@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### 
+## [0.16.0]
 - Initial support of directives
 - Debugger support
 
