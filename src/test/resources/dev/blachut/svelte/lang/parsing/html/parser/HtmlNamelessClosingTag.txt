@@ -1,0 +1,32 @@
+SvelteHtmlFile: HtmlNamelessClosingTag.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: hr
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('hr')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSLiteralExpression
+            PsiElement(JS:TRUE_KEYWORD)('true')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            XmlToken:XML_DATA_CHARACTERS('<>test')
+          XmlToken:XML_END_TAG_START('</')
+          PsiErrorElement:Closing tag name missing
+            <empty list>
+          XmlText
+            XmlToken:XML_DATA_CHARACTERS('>')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')
