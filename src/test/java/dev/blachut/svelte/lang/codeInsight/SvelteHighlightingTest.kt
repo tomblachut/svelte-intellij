@@ -270,6 +270,22 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testStoreShorthandAssignment() {
+        myFixture.configureByText("Foo.svelte",
+            """
+                <script>
+                    import { writable } from 'svelte/store';
+                    const store = writable();
+                    console.log(${"$"}store); // TODO required before fixing JSUnusedAssignment inspection
+                    ${"$"}store = 1;
+                    console.log(${"$"}store);
+                    <error>store</error> = writable();
+                </script>
+                {${"$"}store}
+                """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testBindDirective() {
         myFixture.configureByText("Foo.svelte",
             """
