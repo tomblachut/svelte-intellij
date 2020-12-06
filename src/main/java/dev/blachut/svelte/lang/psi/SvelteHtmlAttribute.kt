@@ -123,7 +123,7 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
         fun calcShorthandLetImplicitParameter(attribute: SvelteHtmlAttribute): JSNamedElement? {
             return CachedValuesManager.getCachedValue(attribute) {
                 val implicit =
-                    if (attribute.directive?.directiveType != SvelteDirectiveTypes.LET && attribute.valueElement == null) {
+                    if (attribute.directive?.directiveType == SvelteDirectiveTypes.LET && attribute.valueElement == null) {
                         SvelteDirectiveImplicitParameter(attribute.localName, attribute)
                     } else {
                         null
