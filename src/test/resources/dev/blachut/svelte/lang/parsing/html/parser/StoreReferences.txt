@@ -1,0 +1,53 @@
+SvelteHtmlFile: StoreReferences.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:MOD_SVELTE_JS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n    ')
+        JSExpressionStatement
+          SvelteJSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('$store')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n    ')
+        JSExpressionStatement
+          JSAssignmentExpression
+            JSDefinitionExpression
+              SvelteJSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('$store')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n    ')
+        JSExpressionStatement
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('$$props')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    XmlText
+      PsiElement(XML_COMMENT)
+        XmlToken:XML_COMMENT_START('<!--')
+        XmlToken:XML_COMMENT_CHARACTERS('<script lang="ts">\n    $store;\n    $store = 1;\n    $$props;\n</script>')
+        XmlToken:XML_COMMENT_END('-->')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      SvelteJSReferenceExpression
+        PsiElement(JS:IDENTIFIER)('$store')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      JSReferenceExpression
+        PsiElement(JS:IDENTIFIER)('$$props')
+      PsiElement(JS:RBRACE)('}')
