@@ -330,6 +330,14 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testLetDirectiveShorthand() {
+        myFixture.configureByText("Foo.svelte",
+            """
+                <div let:opened>Lorem ipsum {opened}</div>
+                """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     companion object {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
             val l = mutableListOf<LocalInspectionTool>()
