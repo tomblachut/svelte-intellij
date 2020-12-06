@@ -35,17 +35,13 @@ version = pluginVersion
 
 // https://plugins.jetbrains.com/plugin/11449-sass/versions/
 val sassPlugin = when {
-    platformVersion.startsWith("2020.1") -> "org.jetbrains.plugins.sass:201.7846.80"
-    platformVersion.startsWith("2020.2") -> "org.jetbrains.plugins.sass:202.6397.47"
-    platformVersion.startsWith("203-EAP-SNAPSHOT") -> "org.jetbrains.plugins.sass:203.5784.25"
+    platformVersion.startsWith("203") -> "org.jetbrains.plugins.sass:203.5981.98"
     else -> throw GradleException("Missing Sass plugin version for platformVersion = $platformVersion")
 }
 
 // https://plugins.jetbrains.com/plugin/227-psiviewer/versions
 val psiViewerPlugin = when {
-    platformVersion.startsWith("2020.1") -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
-    platformVersion.startsWith("2020.2") -> "PsiViewer:202-SNAPSHOT.3"
-    platformVersion.startsWith("203-EAP-SNAPSHOT") -> "PsiViewer:203-SNAPSHOT"
+    platformVersion.startsWith("203") -> "PsiViewer:203-SNAPSHOT"
     else -> null
 }
 
