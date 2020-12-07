@@ -294,7 +294,10 @@ public class ExtendableHtmlParsing extends HtmlParsing {
                 } else {
                     error(XmlPsiBundle.message("xml.parsing.closing.tag.is.not.done"));
                 }
-                if (hasTags()) doneTag();
+
+                if (hasRealTags()) {
+                    doneTag();
+                }
             } else if ((token() == XmlTokenType.XML_REAL_WHITE_SPACE || token() == XmlTokenType.XML_DATA_CHARACTERS) && !hasTags()) {
                 xmlText = terminateText(xmlText);
                 advance();
@@ -314,6 +317,11 @@ public class ExtendableHtmlParsing extends HtmlParsing {
 
     protected boolean hasTags() {
         return !myTagNamesStack.isEmpty();
+    }
+
+    protected boolean hasRealTags() {
+        // TODO try to merge back with hasTags
+        return hasTags();
     }
 
     protected void pushTag(PsiBuilder.Marker tagMarker, String tagName, String originalTagName) {

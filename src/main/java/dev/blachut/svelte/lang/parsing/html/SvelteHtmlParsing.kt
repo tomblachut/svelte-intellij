@@ -90,6 +90,10 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
         super.flushOpenTags()
     }
 
+    override fun hasRealTags(): Boolean {
+        return hasTags() && peekTagName() != SYNTHETIC_TAG
+    }
+
     override fun isTagNameFurtherInStack(endName: String): Boolean {
         if (hasTags() && peekTagName() == SYNTHETIC_TAG) {
             return false
