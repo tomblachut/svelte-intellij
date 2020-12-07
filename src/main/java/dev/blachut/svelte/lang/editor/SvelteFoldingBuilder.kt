@@ -51,7 +51,7 @@ class SvelteFoldingBuilder : XmlFoldingBuilder(), DumbAware {
         }
     }
 
-    override fun getLanguagePlaceholderText(node: ASTNode, range: TextRange): String {
+    override fun getLanguagePlaceholderText(node: ASTNode, range: TextRange): String? {
         if (node.psi is SvelteBlock) return "..."
         return super.getLanguagePlaceholderText(node, range)
     }

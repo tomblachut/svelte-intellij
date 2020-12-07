@@ -22,9 +22,7 @@ class SvelteBlockFakeXmlTag(private val svelteBlock: SvelteBlock) : FakePsiEleme
         return svelteBlock.textRange
     }
 
-    override fun getName(): String {
-        return ""
-    }
+    override fun getName(): String = ""
 
     override fun getParentTag(): XmlTag? {
         return parent as? XmlTag
@@ -34,13 +32,9 @@ class SvelteBlockFakeXmlTag(private val svelteBlock: SvelteBlock) : FakePsiEleme
         TODO("not implemented")
     }
 
-    override fun getAttributes(): Array<XmlAttribute> {
-        TODO("not implemented")
-    }
+    override fun getAttributes(): Array<XmlAttribute> = emptyArray()
 
-    override fun findSubTags(qname: String?): Array<XmlTag> {
-        TODO("not implemented")
-    }
+    override fun findSubTags(qname: String?): Array<XmlTag> = emptyArray()
 
     override fun findSubTags(localName: String?, namespace: String?): Array<XmlTag> {
         TODO("not implemented")
@@ -66,20 +60,20 @@ class SvelteBlockFakeXmlTag(private val svelteBlock: SvelteBlock) : FakePsiEleme
         TODO("not implemented")
     }
 
-    override fun getAttribute(name: String?, namespace: String?): XmlAttribute? {
-        TODO("not implemented")
-    }
+    override fun getAttribute(name: String?, namespace: String?): XmlAttribute? = null
 
-    override fun getAttribute(qname: String?): XmlAttribute? {
-        TODO("not implemented")
-    }
+    override fun getAttribute(qname: String?): XmlAttribute? = null
 
-    override fun createChildTag(localName: String?, namespace: String?, bodyText: String?, enforceNamespacesDeep: Boolean): XmlTag {
+    override fun createChildTag(
+        localName: String?,
+        namespace: String?,
+        bodyText: String?,
+        enforceNamespacesDeep: Boolean,
+    ): XmlTag {
         TODO("not implemented")
     }
 
     override fun collapseIfEmpty() {
-        TODO("not implemented")
     }
 
     override fun findFirstSubTag(qname: String?): XmlTag? {
@@ -110,21 +104,13 @@ class SvelteBlockFakeXmlTag(private val svelteBlock: SvelteBlock) : FakePsiEleme
         TODO("not implemented")
     }
 
-    override fun getLocalName(): String {
-        TODO("not implemented")
-    }
+    override fun getLocalName(): String = ""
 
-    override fun getSubTags(): Array<XmlTag> {
-        TODO("not implemented")
-    }
+    override fun getSubTags(): Array<XmlTag> = emptyArray()
 
-    override fun getAttributeValue(name: String?, namespace: String?): String? {
-        TODO("not implemented")
-    }
+    override fun getAttributeValue(name: String?, namespace: String?): String? = null
 
-    override fun getAttributeValue(qname: String?): String? {
-        TODO("not implemented")
-    }
+    override fun getAttributeValue(qname: String?): String? = null
 
     override fun knownNamespaces(): Array<String> {
         TODO("not implemented")
