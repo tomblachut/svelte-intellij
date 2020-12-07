@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### 
+## [0.17.0]
 - Support shorthand let directives
 - Enable CSS custom property references
 - Enable Sass mixin references
