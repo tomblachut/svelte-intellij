@@ -1,7 +1,13 @@
 # Changelog
 
 ## [Unreleased]
-### 
+- Support shorthand let directives
+- Enable CSS custom property references
+- Enable Sass mixin references
+- Fix some parser, formatter & folding crashes
+- Suppress store shorthand assignment error
+- Fix store shorthand regression in 2020.3
+
 ## [0.16.0]
 - Initial support of directives
 - Debugger support
