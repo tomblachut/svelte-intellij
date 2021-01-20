@@ -84,6 +84,9 @@
         <!--suppress PluginXmlValidity -->
         <lang.inspectionSuppressor language="JavaScript"
                                    implementationClass="dev.blachut.svelte.lang.compatibility.SvelteInspectionSuppressor"/>
+
+        <javascript.web.framework id="svelte" implementation="dev.blachut.svelte.lang.SvelteFramework"/>
+        <javascript.web.context framework="svelte" implementation="dev.blachut.svelte.lang.context.SvelteNodePackageContext"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>
