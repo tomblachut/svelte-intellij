@@ -33,7 +33,11 @@ object SvelteDirectiveUtil {
         val modifiers: List<DirectiveSegment>,
     )
 
-    data class DirectiveSegment(val text: String, val rangeInName: TextRange)
+    data class DirectiveSegment(val text: String, val rangeInName: TextRange) {
+        override fun toString(): String {
+            return """$text$rangeInName"""
+        }
+    }
 
     enum class DirectiveTarget {
         BOTH, ELEMENT, COMPONENT
