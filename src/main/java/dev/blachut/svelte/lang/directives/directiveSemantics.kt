@@ -26,10 +26,10 @@ class ScopeReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange) 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val resolver = ResolveCache.PolyVariantResolver<ScopeReference> { ref, _ ->
             val attribute = ref.element
-            val specifier = attribute.localName
+            val referenceName = attribute.directive!!.specifiers[0].text
 
-            val sink = ResolveResultSink(attribute, specifier, false, incompleteCode)
-            val processor = SinkResolveProcessor(specifier, attribute, sink)
+            val sink = ResolveResultSink(attribute, referenceName, false, incompleteCode)
+            val processor = SinkResolveProcessor(referenceName, attribute, sink)
             JSResolveUtil.treeWalkUp(processor, attribute, attribute, attribute, attribute.containingFile)
 
             processor.resultsAsResolveResults

@@ -339,9 +339,13 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 	                function fade() {}
                 </script>
                 <button transition:fade>Click me</button>
+                <button transition:fade|local>Click me</button>
                 <button transition:fade={{param: true}}>Click me</button>
+                <button transition:fade|local={{param: true}}>Click me</button>
                 <button transition:<error>unknownFade</error>>Click me</button>
+                <button transition:<error>unknownFade</error>|local>Click me</button>
                 <button transition:<error>unknownFade</error>={{param: true}}>Click me</button>
+                <button transition:<error>unknownFade</error>|local={{param: true}}>Click me</button>
                 """.trimIndent())
         myFixture.testHighlighting()
     }
