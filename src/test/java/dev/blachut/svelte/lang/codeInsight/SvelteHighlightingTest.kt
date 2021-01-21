@@ -358,6 +358,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testExpressionInStyleAttribute() {
+        myFixture.configureByText("Foo.svelte", """<div style="--custom: {'dynamic'}"></div>""")
+        myFixture.testHighlighting()
+    }
+
     companion object {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
             val l = mutableListOf<LocalInspectionTool>()
