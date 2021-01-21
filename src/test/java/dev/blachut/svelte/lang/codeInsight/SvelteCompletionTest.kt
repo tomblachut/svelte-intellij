@@ -165,6 +165,25 @@ class SvelteCompletionTest : BasePlatformTestCase() {
         hasElements(items, "hello11", "hello11Local")
     }
 
+    fun testKeywords() {
+        myFixture.configureByText("Test.svelte", """
+             <div>{<caret>}</div>
+        """.trimIndent())
+        val items = myFixture.completeBasic()
+        hasElements(items, "#if", "#await", "@html")
+    }
+
+    fun testKeywords2() {
+        myFixture.configureByText("Test.svelte", """
+             <div>{#aw<caret>}</div>
+        """.trimIndent())
+        val items = myFixture.completeBasic()
+        assertNull(items)
+        myFixture.checkResult("""
+             <div>{#await <caret>}</div>
+        """.trimIndent())
+    }
+
     fun testMustache() {
         myFixture.configureByText("Hello.svelte",
             """

@@ -6,7 +6,9 @@ import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
+import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
+import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
 fun isSvelteContext(context: PsiElement): Boolean {
     return context.containingFile is SvelteHtmlFile
@@ -26,4 +28,8 @@ fun PsiBuilder.isTokenAfterWhiteSpace(): Boolean {
     this.tokenType
     val lastRawToken = this.rawLookup(-1)
     return lastRawToken === TokenType.WHITE_SPACE
+}
+
+fun SvelteHtmlTag.isScriptOrStyleTag(): Boolean {
+    return this.name == HtmlUtil.SCRIPT_TAG_NAME || this.name == HtmlUtil.STYLE_TAG_NAME
 }

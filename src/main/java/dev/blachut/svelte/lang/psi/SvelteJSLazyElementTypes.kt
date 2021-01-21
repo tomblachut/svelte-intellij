@@ -58,6 +58,8 @@ object SvelteJSLazyElementTypes {
     }
 
     private fun parseAtModifiers(builder: PsiBuilder) {
+        val unexpectedTokens = setOf(JSTokenTypes.SHARP, JSTokenTypes.COLON, JSTokenTypes.DIV)
+
         if (builder.tokenType === JSTokenTypes.AT) {
             builder.advanceLexer()
 
@@ -76,6 +78,15 @@ object SvelteJSLazyElementTypes {
                 builder.advanceLexer()
                 errorMarker.error("expected html or debug")
             }
+        } else if (unexpectedTokens.contains(builder.tokenType)) {
+            builder.advanceLexer()
+
+            if (builder.isTokenAfterWhiteSpace()) {
+                builder.error("whitespace is not allowed here")
+            }
+            val errorMarker = builder.mark()
+            builder.advanceLexer()
+            errorMarker.error("invalid block name")
         }
     }
 
