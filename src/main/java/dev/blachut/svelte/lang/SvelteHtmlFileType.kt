@@ -1,26 +1,11 @@
 package dev.blachut.svelte.lang
 
+import com.intellij.javascript.web.lang.html.WebFrameworkHtmlFileType
 import com.intellij.openapi.fileTypes.LanguageFileType
 import dev.blachut.svelte.lang.icons.SvelteIcons
 import javax.swing.Icon
 
-class SvelteHtmlFileType : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
-    override fun getName(): String {
-        return "Svelte"
-    }
-
-    override fun getDescription(): String {
-        return "Svelte"
-    }
-
-    override fun getDefaultExtension(): String {
-        return "svelte"
-    }
-
-    override fun getIcon(): Icon? {
-        return SvelteIcons.COLOR
-    }
-
+class SvelteHtmlFileType : WebFrameworkHtmlFileType(SvelteHTMLLanguage.INSTANCE, "Svelte", "svelte") {
     companion object {
         @JvmField
         val INSTANCE = SvelteHtmlFileType()
