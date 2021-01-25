@@ -47,6 +47,7 @@
         <multiLangCommenter implementation="dev.blachut.svelte.lang.editor.SvelteCommentProvider"/>
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteTagEndTypedHandler" order="before xmlSlash"/>
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteBraceTypedHandler"/>
+        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteAutoPopupHandler" order="before xmlAuto"/>
         <backspaceHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteBraceBackspaceHandler"/>
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
         <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlContextType"/>
@@ -70,7 +71,6 @@
                                 implementationClass="dev.blachut.svelte.lang.completion.SvelteCompletionContributor"
                                 id="SvelteCompletionContributor"
                                 order="before JSPatternBasedCompletionContributor, before JSCompletionContributor, before xmlNonFirst, before cssClassOrIdReferenceCompletionContributor"/>
-        <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteAutoPopupHandler"/>
         <localInspection groupName="Svelte" displayName="Unresolved Svelte component"
                          shortName="SvelteUnresolvedComponent" language="SvelteHTML"
                          enabledByDefault="true" level="ERROR"
