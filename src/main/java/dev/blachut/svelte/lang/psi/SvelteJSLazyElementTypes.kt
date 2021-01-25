@@ -8,7 +8,7 @@ import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 
 object SvelteJSLazyElementTypes {
     val ATTRIBUTE_PARAMETER = object : SvelteJSLazyElementType("ATTRIBUTE_PARAMETER") {
-        override val noTokensErrorMessage = "parameter expected"
+        override val noTokensErrorMessage = "Parameter expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             parseAtModifiersError(builder)
@@ -17,7 +17,7 @@ object SvelteJSLazyElementTypes {
     }
 
     val ATTRIBUTE_EXPRESSION = object : SvelteJSLazyElementType("ATTRIBUTE_EXPRESSION") {
-        override val noTokensErrorMessage = "expression expected"
+        override val noTokensErrorMessage = "Expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             parseAtModifiersError(builder)
@@ -29,7 +29,7 @@ object SvelteJSLazyElementTypes {
      * Text, html and debug expressions
      */
     val CONTENT_EXPRESSION = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
-        override val noTokensErrorMessage = "expression expected"
+        override val noTokensErrorMessage = "Expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             // for now trailing { and } belong to this token
@@ -41,7 +41,7 @@ object SvelteJSLazyElementTypes {
     }
 
     val SPREAD_OR_SHORTHAND = object : SvelteJSLazyElementType("SPREAD_OR_SHORTHAND") {
-        override val noTokensErrorMessage = "shorthand attribute or spread expression expected"
+        override val noTokensErrorMessage = "Shorthand attribute or spread expression expected"
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             parseAtModifiersError(builder)
@@ -64,7 +64,7 @@ object SvelteJSLazyElementTypes {
             builder.advanceLexer()
 
             if (builder.isTokenAfterWhiteSpace()) {
-                builder.error("whitespace is not allowed after @")
+                builder.error("Whitespace is not allowed after @")
             }
 
             if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
@@ -76,17 +76,17 @@ object SvelteJSLazyElementTypes {
             } else {
                 val errorMarker = builder.mark()
                 builder.advanceLexer()
-                errorMarker.error("expected html or debug")
+                errorMarker.error("Expected html or debug")
             }
         } else if (unexpectedTokens.contains(builder.tokenType)) {
             builder.advanceLexer()
 
             if (builder.isTokenAfterWhiteSpace()) {
-                builder.error("whitespace is not allowed here")
+                builder.error("Whitespace is not allowed here")
             }
             val errorMarker = builder.mark()
             builder.advanceLexer()
-            errorMarker.error("invalid block name")
+            errorMarker.error("Invalid block name")
         }
     }
 

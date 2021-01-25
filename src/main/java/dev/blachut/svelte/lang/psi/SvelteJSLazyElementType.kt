@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.parsing.js.SvelteJSParser
 // TODO Merge SvelteJSBlockLazyElementType & SvelteJSLazyElementType
 abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
     protected abstract val noTokensErrorMessage: String
-    protected val excessTokensErrorMessage = "unexpected token"
+    protected val excessTokensErrorMessage = "Unexpected token"
 
     override fun createNode(text: CharSequence?): ASTNode? {
         text ?: return null
