@@ -25,7 +25,7 @@ open class DirectiveType(
     val delimitedPrefix: String get() = prefix + SvelteDirectiveUtil.DIRECTIVE_SEPARATOR
 
     override fun toString(): String {
-        return "DirectiveType($prefix)"
+        return prefix
     }
 }
 

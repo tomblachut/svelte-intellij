@@ -39,33 +39,25 @@ Works in JavaScript-enabled JetBrains IDEs starting from the version 2020.1.
 
 Information about older releases is available in [version history](https://plugins.jetbrains.com/plugin/12375-svelte/versions).
 
-## Maintenance & support
-
-This is a side project, there are weeks when I just don't want to reply because I'm mentally exhausted after my full time job. Please respect that.
-
-If you want to motivate me a bit, please leave a star, follow me on Twitter ([@tomblachut](https://twitter.com/tomblachut)) and spread the word. You can also [send me money](https://www.paypal.me/tomblachut). Thanks!
-
 ## Contributing
 
-Contributions are very much welcome! 
-
-That said IDE development is a complex task and project is still in its early stages so its often hard to tell exactly what should be contributed without doing time-consuming analysis.
+Contributions are very much welcome!
 
 IntelliJ Platform runs on JVM, yet Kotlin feels a lot like TypeScript. [IntelliJ Platform SDK documentation](https://jetbrains.org/intellij/sdk/docs/intro/welcome.html) is a good starting point.
 
 ### Building and running the plugin
 
-You'll need IntelliJ IDEA. The Community Edition is free and sufficient, you can also use Ultimate edition if you have one. 
+You'll need IntelliJ IDEA. The Community Edition is free and sufficient, you can also use Ultimate edition if you have one.
 
-Clone the repository and run `./gradlew runIde` (There are also intermediate tasks). 
+Clone the repository and run `./gradlew runIde` (There are also intermediate tasks).
 
-IntelliJ Ultimate will download in a bit, and you'll be prompted with license dialog - choose evaluation mode. After 30 days delete `build/idea-sandbox` and start again.
+IntelliJ Ultimate will download in a bit, and you'll be prompted with license dialog - choose evaluation mode.
 
 Ready to share `.zip` archive can be found in `build/distributions` after running `./gradlew buildPlugin`.
 
 ### Running tests
 
-Tests can be run with `./gradlew test` command or even better or by using run action in IntelliJ IDEA. 
+Tests can be run with `./gradlew test` command or even better or by using run action in IntelliJ IDEA.
 
 ### Writing Tests
 

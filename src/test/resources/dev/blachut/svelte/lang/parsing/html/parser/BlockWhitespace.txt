@@ -4,16 +4,16 @@ SvelteHtmlFile: BlockWhitespace.svelte
       <empty list>
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
-      PsiErrorElement:Expression expected
-        <empty list>
       PsiElement(JS:SHARP)('#')
-      PsiErrorElement:unexpected token
-        <empty list>
-      PsiElement(JS:IDENTIFIER)('eachassets')
+      PsiErrorElement:invalid block name
+        PsiElement(JS:IDENTIFIER)('eachassets')
       PsiWhiteSpace(' ')
-      PsiElement(JS:AS_KEYWORD)('as')
+      JSReferenceExpression
+        PsiElement(JS:AS_KEYWORD)('as')
       PsiWhiteSpace(' ')
       PsiElement(JS:IDENTIFIER)('asset')
+      PsiErrorElement:unexpected token
+        <empty list>
       PsiElement(JS:COMMA)(',')
       PsiElement(JS:IDENTIFIER)('i')
       PsiWhiteSpace(' ')
@@ -56,15 +56,13 @@ SvelteHtmlFile: BlockWhitespace.svelte
           PsiWhiteSpace('\n')
           SvelteJS: CONTENT_EXPRESSION
             PsiElement(JS:LBRACE)('{')
-            PsiErrorElement:Expression expected
-              <empty list>
             PsiWhiteSpace(' ')
             PsiElement(JS:COLON)(':')
-            PsiErrorElement:unexpected token
-              <empty list>
-            PsiElement(JS:IDENTIFIER)('elseif')
+            PsiErrorElement:invalid block name
+              PsiElement(JS:IDENTIFIER)('elseif')
             PsiWhiteSpace(' ')
-            PsiElement(JS:IDENTIFIER)('b')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('b')
             PsiWhiteSpace(' ')
             PsiElement(JS:RBRACE)('}')
           PsiWhiteSpace('\n    ')
