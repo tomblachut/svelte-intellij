@@ -1,7 +1,10 @@
 # Changelog
 
 ## [Unreleased]
-### 
+- Add Svelte keyword completions
+- Fix local transition reference bug
+- Fix some regressions in 2020.3
+
 ## [0.17.0]
 - Support shorthand let directives
 - Enable CSS custom property references
