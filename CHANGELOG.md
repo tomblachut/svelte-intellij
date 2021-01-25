@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### 
+## [0.18.0]
 - Add Svelte keyword completions
 - Fix local transition reference bug
 - Fix some regressions in 2020.3
