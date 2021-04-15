@@ -35,9 +35,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
 
 ## Compatible IDEs
 
-Works in JavaScript-enabled JetBrains IDEs starting from the version 2020.1.
-
-Information about older releases is available in [version history](https://plugins.jetbrains.com/plugin/12375-svelte/versions).
+Works in JavaScript-enabled JetBrains IDEs. Information about version compatibility and older releases is available in [version history](https://plugins.jetbrains.com/plugin/12375-svelte/versions).
 
 ## Contributing
 
