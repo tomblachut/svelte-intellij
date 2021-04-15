@@ -399,7 +399,6 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(JSCommentMatchesSignatureInspection())
             l.add(JSFileReferencesInspection())
             l.add(JSUnusedGlobalSymbolsInspection())
-            l.add(JSReferencingArgumentsOutsideOfFunctionInspection())
             l.add(JSAnnotatorInspection())
             l.add(JSUnusedAssignmentInspection())
             l.add(UnreachableCodeJSInspection())
