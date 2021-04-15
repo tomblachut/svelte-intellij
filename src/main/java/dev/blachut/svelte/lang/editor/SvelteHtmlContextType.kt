@@ -1,18 +1,20 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.codeInsight.template.HtmlContextType
+import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateContextType
 import com.intellij.codeInsight.template.XmlContextType
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
-import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiUtilCore
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteHtmlFileType
 
 class SvelteHtmlContextType : TemplateContextType("SVELTE_HTML", "Svelte HTML", HtmlContextType::class.java) {
-    override fun isInContext(file: PsiFile, offset: Int): Boolean {
+    override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
+        val file = templateActionContext.file
+        val offset = templateActionContext.startOffset
         return isMyLanguage(PsiUtilCore.getLanguageAtOffset(file, offset)) && !XmlContextType.isEmbeddedContent(file, offset)
     }
 
