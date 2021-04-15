@@ -4,46 +4,33 @@ import org.jetbrains.grammarkit.tasks.GenerateLexer
 import org.jetbrains.intellij.tasks.RunIdeTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+fun properties(key: String) = project.findProperty(key).toString()
+
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.4.10"
+    id("org.jetbrains.kotlin.jvm") version "1.4.32"
     // https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.6.3"
+    id("org.jetbrains.intellij") version "0.7.2"
     // https://github.com/JetBrains/gradle-grammar-kit-plugin
     id("org.jetbrains.grammarkit") version "2020.2.1"
     // https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "0.6.2"
+    id("org.jetbrains.changelog") version "1.1.2"
 }
 
-// Import variables from gradle.properties file
-val pluginGroup: String by project
-// `pluginName_` variable ends with `_` because of the collision with Kotlin magic getter in the `intellij` closure.
-// Read more about the issue: https://github.com/JetBrains/intellij-platform-plugin-template/issues/29
-@Suppress("PropertyName")
-val pluginName_: String by project
-val pluginVersion: String by project
-val pluginSinceBuild: String by project
-val pluginUntilBuild: String by project
-val pluginVerifierIdeVersions: String by project
-
-val platformType: String by project
-val platformVersion: String by project
-val platformDownloadSources: String by project
-
-group = pluginGroup
-version = pluginVersion
+group = properties("pluginGroup")
+version = properties("pluginVersion")
 
 // https://plugins.jetbrains.com/plugin/11449-sass/versions/
 val sassPlugin = when {
-    platformVersion.startsWith("2020.1") -> "org.jetbrains.plugins.sass:201.7846.80"
-    platformVersion.startsWith("2020.2") -> "org.jetbrains.plugins.sass:202.6397.47"
-    else -> throw GradleException("Missing Sass plugin version for platformVersion = $platformVersion")
+    properties("platformVersion").startsWith("2020.1") -> "org.jetbrains.plugins.sass:201.7846.80"
+    properties("platformVersion").startsWith("2020.2") -> "org.jetbrains.plugins.sass:202.6397.47"
+    else -> throw GradleException("Missing Sass plugin version for platformVersion = ${properties("platformVersion")}")
 }
 
 // https://plugins.jetbrains.com/plugin/227-psiviewer/versions
 val psiViewerPlugin = when {
-    platformVersion.startsWith("2020.1") -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
-    platformVersion.startsWith("2020.2") -> "PsiViewer:202-SNAPSHOT.3"
+    properties("platformVersion").startsWith("2020.1") -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
+    properties("platformVersion").startsWith("2020.2") -> "PsiViewer:202-SNAPSHOT.3"
     else -> null
 }
 
@@ -69,10 +56,10 @@ sourceSets.main {
 
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    pluginName = pluginName_
-    version = platformVersion
-    type = platformType
-    downloadSources = platformDownloadSources.toBoolean()
+    pluginName = properties("pluginName")
+    version = properties("platformVersion")
+    type = properties("platformType")
+    downloadSources = properties("platformDownloadSources").toBoolean()
     updateSinceUntilBuild = true
 
     //  https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
@@ -80,7 +67,8 @@ intellij {
 }
 
 changelog {
-    groups = listOf("")
+    version = properties("pluginVersion")
+    groups = emptyList()
 }
 
 val generateLexer = task<GenerateLexer>("generateLexer") {
@@ -93,29 +81,26 @@ val generateLexer = task<GenerateLexer>("generateLexer") {
 tasks {
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
+        dependsOn(generateLexer)
         sourceCompatibility = "1.8"
         targetCompatibility = "1.8"
-    }
-    listOf("compileKotlin", "compileTestKotlin").forEach {
-        getByName<KotlinCompile>(it) {
-            kotlinOptions.jvmTarget = "1.8"
-            kotlinOptions.apiVersion = "1.3"
-        }
     }
 
     withType<KotlinCompile> {
         dependsOn(generateLexer)
+        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.apiVersion = "1.3"
     }
 
     patchPluginXml {
-        version(pluginVersion)
-        sinceBuild(pluginSinceBuild)
-        untilBuild(pluginUntilBuild)
+        version(properties("pluginVersion"))
+        sinceBuild(properties("pluginSinceBuild"))
+        untilBuild(properties("pluginUntilBuild"))
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription(
             closure {
-                File("./README.md").readText().lines().run {
+                File(projectDir, "README.md").readText().lines().run {
                     val start = "<!-- Plugin description -->"
                     val end = "<!-- Plugin description end -->"
 
@@ -135,7 +120,7 @@ tasks {
     }
 
     runPluginVerifier {
-        ideVersions(pluginVerifierIdeVersions)
+        ideVersions(properties("pluginVerifierIdeVersions"))
     }
 
     publishPlugin {
@@ -143,8 +128,8 @@ tasks {
         token(System.getenv("PUBLISH_TOKEN"))
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
-        // https://jetbrains.org/intellij/sdk/docs/tutorials/build_system/deployment.html#specifying-a-release-channel
-        channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
+        // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
+        channels(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first())
     }
 
     withType<RunIdeTask> {
