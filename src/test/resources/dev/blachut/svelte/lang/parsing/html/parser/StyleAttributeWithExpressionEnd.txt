@@ -40,7 +40,7 @@ SvelteHtmlFile: StyleAttributeWithExpressionEnd.svelte
               PsiElement(CSS_IDENT)('color')
               PsiElement(CSS_COLON)(':')
               PsiElement(CSS_TERM_LIST)
-                PsiErrorElement:a term expected
+                PsiErrorElement:Term expected
                   <empty list>
             PsiWhiteSpace(' ')
           SveltePsiElement

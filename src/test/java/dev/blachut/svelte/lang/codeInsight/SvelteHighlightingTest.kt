@@ -407,7 +407,6 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(TypeScriptValidateJSTypesInspection())
             l.add(TypeScriptUnresolvedFunctionInspection())
             l.add(TypeScriptUnresolvedVariableInspection())
-            l.add(TypeScriptAccessibilityCheckInspection())
             l.add(TypeScriptCheckImportInspection())
             l.add(TypeScriptDuplicateUnionOrIntersectionTypeInspection())
             l.add(PointlessBooleanExpressionJSInspection())

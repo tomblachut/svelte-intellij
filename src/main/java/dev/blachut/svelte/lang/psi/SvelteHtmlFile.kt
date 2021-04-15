@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.psi
 
+import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
@@ -9,10 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
-import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
+
+fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
+    return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
+}
 
 class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE) {
     val moduleScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == "module" } as XmlTag?
+
     // By convention instanceScript is placed after module script
     // so it makes sense to resolve last script in case of ambiguity from missing context attribute
     // ambiguous scripts should then be highlighted by appropriate inspection
@@ -42,7 +47,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
         place: PsiElement,
         script: PsiElement?
     ): Boolean {
-        return SvelteJSScriptContentProvider.getJsEmbeddedContent(script)
+        return getJsEmbeddedContent(script)
             ?.processDeclarations(processor, state, lastParent, place) ?: true
     }
 

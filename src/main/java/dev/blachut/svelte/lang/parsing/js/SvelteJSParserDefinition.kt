@@ -1,10 +1,10 @@
 package dev.blachut.svelte.lang.parsing.js
 
 import com.intellij.lang.ASTNode
-import com.intellij.lang.PsiParser
+import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.dialects.ECMA6ParserDefinition
+import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.lang.javascript.types.JSFileElementType
-import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IFileElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
@@ -15,11 +15,8 @@ class SvelteJSParserDefinition : ECMA6ParserDefinition() {
         return FILE
     }
 
-    override fun createParser(project: Project?): PsiParser {
-        return PsiParser { root, builder ->
-            SvelteJSLanguage.INSTANCE.createParser(builder).parseJS(root)
-            builder.treeBuilt
-        }
+    override fun createJSParser(builder: PsiBuilder): JavaScriptParser<*, *, *, *> {
+        return SvelteJSParser(builder)
     }
 
     override fun createElement(node: ASTNode): PsiElement {

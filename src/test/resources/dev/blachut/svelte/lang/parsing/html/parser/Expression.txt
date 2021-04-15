@@ -25,7 +25,7 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
-      PsiErrorElement:whitespace is not allowed after @
+      PsiErrorElement:Whitespace is not allowed after @
         <empty list>
       PsiWhiteSpace(' ')
       PsiElement(JS:HTML_KEYWORD)('html')
@@ -57,7 +57,7 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
-      PsiErrorElement:whitespace is not allowed after @
+      PsiErrorElement:Whitespace is not allowed after @
         <empty list>
       PsiWhiteSpace(' ')
       PsiElement(JS:DEBUG_KEYWORD)('debug')
@@ -69,7 +69,7 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
-      PsiErrorElement:expected html or debug
+      PsiErrorElement:Expected html or debug
         PsiElement(JS:IDENTIFIER)('unknown')
       PsiWhiteSpace(' ')
       JSReferenceExpression

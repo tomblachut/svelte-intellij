@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.ecmascript6.psi.ES6ImportExportDeclaration
 import com.intellij.lang.ecmascript6.psi.impl.ES6CreateImportUtil
 import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil
 import com.intellij.lang.javascript.formatter.JSCodeStyleSettings
@@ -18,8 +19,8 @@ import com.intellij.psi.xml.XmlTag
 import com.jetbrains.rd.util.firstOrNull
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.getRelativePath
-import dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
+import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 object SvelteImportUtil {
     fun getImportText(currentFile: VirtualFile, componentFile: VirtualFile, componentName: String, quote: String, moduleInfo: JSModuleNameInfo?): String {
@@ -62,7 +63,8 @@ object SvelteImportUtil {
             val specifier = existingImports.specifiers.firstOrNull()?.value
             val declaration = specifier?.declaration
             if (declaration != null) {
-                val info = ES6ImportPsiUtil.CreateImportExportInfo(null, componentName, ES6ImportPsiUtil.ImportExportType.SPECIFIER)
+                val info = ES6ImportPsiUtil.CreateImportExportInfo(
+                    null, componentName, ES6ImportPsiUtil.ImportExportType.SPECIFIER, ES6ImportExportDeclaration.ImportExportPrefixKind.IMPORT)
                 ES6ImportPsiUtil.insertImportSpecifier(declaration, info)
                 return
             }
@@ -94,7 +96,7 @@ object SvelteImportUtil {
             }
         }
 
-        val jsElement = SvelteJSScriptContentProvider.getJsEmbeddedContent(instanceScript)
+        val jsElement = getJsEmbeddedContent(instanceScript)
         if (jsElement != null) return jsElement
 
         // instanceScript is empty, we need to insert something in order to parse JsEmbeddedContent
@@ -102,6 +104,6 @@ object SvelteImportUtil {
         document.insertString(instanceScript.value.textRange.startOffset, "\n")
         PsiDocumentManager.getInstance(project).commitDocument(document)
 
-        return SvelteJSScriptContentProvider.getJsEmbeddedContent(instanceScript)
+        return getJsEmbeddedContent(instanceScript)
     }
 }

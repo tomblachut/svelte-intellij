@@ -37,7 +37,7 @@ class SvelteExpressionBlock(
                     results.add(SvelteLeafBlock(child, indent = Indent.getNoneIndent()))
                 } else {
                     if (builder != null) {
-                        val childModel = builder.createModel(child.psi, policy.settings)
+                        val childModel = builder.createModel(FormattingContext.create(child.psi, policy.settings))
                         results.add(childModel.rootBlock)
                     } else {
                         results.add(SvelteLeafBlock(child))

@@ -60,11 +60,6 @@
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <html.attributeValueProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteAttributeValueProvider"/>
 
-        <html.scriptContentProvider language="SvelteJS"
-                                    implementationClass="dev.blachut.svelte.lang.parsing.js.SvelteJSScriptContentProvider"/>
-        <html.scriptContentProvider language="SvelteTS"
-                                    implementationClass="dev.blachut.svelte.lang.parsing.ts.SvelteTypeScriptScriptContentProvider"/>
-
         <idIndexer filetype="Svelte" implementationClass="dev.blachut.svelte.lang.index.SvelteIdIndexer"/>
         <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
         <completion.contributor language="any"
@@ -80,6 +75,7 @@
         <css.classOrIdUsagesProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteCssUsagesProvider"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
         <postStartupActivity implementation="dev.blachut.svelte.lang.linters.EslintInitStartupActivity"/>
+        <html.embeddedContentSupport implementation="dev.blachut.svelte.lang.parsing.html.SvelteHtmlEmbeddedContentSupport"/>
 
         <!--suppress PluginXmlValidity -->
         <lang.inspectionSuppressor language="JavaScript"

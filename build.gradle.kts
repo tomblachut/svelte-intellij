@@ -22,15 +22,13 @@ version = properties("pluginVersion")
 
 // https://plugins.jetbrains.com/plugin/11449-sass/versions/
 val sassPlugin = when {
-    properties("platformVersion").startsWith("2020.1") -> "org.jetbrains.plugins.sass:201.7846.80"
-    properties("platformVersion").startsWith("2020.2") -> "org.jetbrains.plugins.sass:202.6397.47"
+    properties("platformVersion").startsWith("203") -> "org.jetbrains.plugins.sass:203.5981.98"
     else -> throw GradleException("Missing Sass plugin version for platformVersion = ${properties("platformVersion")}")
 }
 
 // https://plugins.jetbrains.com/plugin/227-psiviewer/versions
 val psiViewerPlugin = when {
-    properties("platformVersion").startsWith("2020.1") -> "PsiViewer:201.6251.22-EAP-SNAPSHOT.3"
-    properties("platformVersion").startsWith("2020.2") -> "PsiViewer:202-SNAPSHOT.3"
+    properties("platformVersion").startsWith("203") -> "PsiViewer:203-SNAPSHOT"
     else -> null
 }
 
@@ -79,17 +77,17 @@ val generateLexer = task<GenerateLexer>("generateLexer") {
 }
 
 tasks {
-    // Set the compatibility versions to 1.8
+    // Set the compatibility versions to 11
     withType<JavaCompile> {
         dependsOn(generateLexer)
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
     }
 
     withType<KotlinCompile> {
         dependsOn(generateLexer)
-        kotlinOptions.jvmTarget = "1.8"
-        kotlinOptions.apiVersion = "1.3"
+        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=compatibility")
     }
 
     patchPluginXml {

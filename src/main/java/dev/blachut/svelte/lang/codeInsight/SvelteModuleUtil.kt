@@ -15,6 +15,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.util.containers.addIfNotNull
 import dev.blachut.svelte.lang.getRelativePath
 import dev.blachut.svelte.lang.isSvelteContext
 
@@ -35,7 +36,7 @@ object SvelteModuleUtil {
                 component ?: return@forEach
                 val moduleVirtualFile = declaration.containingFile.virtualFile
                 val configuration = JSImportPathConfigurationImpl(currentFile, it, moduleVirtualFile, false)
-                infos.add(ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration)))
+                infos.addIfNotNull(ES6CreateImportUtil.getExternalFileModuleName(JSImportPathBuilder.createBuilder(configuration)))
             }
         }
         infos.add(JSModuleNameInfoImpl(getRelativePath(currentFile.virtualFile, componentVirtualFile), componentVirtualFile, componentVirtualFile, currentFile, arrayOf("svelte"), true))

@@ -1,11 +1,11 @@
 package dev.blachut.svelte.lang.parsing.html
 
-import com.intellij.codeInsight.daemon.XmlErrorBundle
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import com.intellij.util.containers.Stack
+import com.intellij.xml.psi.XmlPsiBundle
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
@@ -119,7 +119,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
             val tagName = peekTagName()
             if (isEndTagRequired(tagName)) {
                 val errorMarker = beforeMarker.precede()
-                errorMarker.errorBefore(XmlErrorBundle.message("named.element.is.not.closed", tagName), beforeMarker)
+                errorMarker.errorBefore(XmlPsiBundle.message("xml.parsing.named.element.is.not.closed", tagName), beforeMarker)
             }
             val tag = closeTag()
             tag.doneBefore(htmlTagElementType, beforeMarker)
@@ -168,7 +168,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
                 if (tt === XmlTokenType.XML_BAD_CHARACTER) {
                     val error = mark()
                     advance()
-                    error.error(XmlErrorBundle.message("unescaped.ampersand.or.nonterminated.character.entity.reference"))
+                    error.error(XmlPsiBundle.message("xml.parsing.unescaped.ampersand.or.nonterminated.character.entity.reference"))
                 } else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
                     parseReference()
                 } else if (tt === SvelteTokenTypes.START_MUSTACHE) {
@@ -181,7 +181,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
             if (token() === XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER) {
                 advance()
             } else {
-                error(XmlErrorBundle.message("xml.parsing.unclosed.attribute.value"))
+                error(XmlPsiBundle.message("xml.parsing.unclosed.attribute.value"))
             }
         } else {
             // Unquoted attr value. Unlike unmodified IntelliJ HTML this isn't necessary single token

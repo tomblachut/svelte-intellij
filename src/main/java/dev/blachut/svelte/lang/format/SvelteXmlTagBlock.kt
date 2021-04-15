@@ -57,9 +57,9 @@ class SvelteXmlTagBlock(
                 if (child.elementType === JSTokenTypes.LBRACE) {
                     val startTag = SvelteTagElementTypes.START_TAGS.contains(tag.elementType)
                     val wrap = if (startTag) Wrap.createWrap(WrapType.ALWAYS, true) else null
-                    localResults.add(createSimpleChild(child, null, wrap, null))
+                    localResults.add(createSimpleChild(child, null, wrap, null, null))
                 } else if (child.elementType === JSTokenTypes.RBRACE) {
-                    localResults.add(createSimpleChild(child, Indent.getNoneIndent(), null, null))
+                    localResults.add(createSimpleChild(child, Indent.getNoneIndent(), null, null, null))
                 } else {
                     child = processChild(localResults, child, null, null, null)
                 }
