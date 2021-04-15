@@ -1,15 +1,8 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.html.embedding.HtmlEmbeddedContentProvider
-import com.intellij.lang.HtmlScriptContentProvider
-import com.intellij.lang.Language
-import com.intellij.lang.LanguageHtmlScriptContentProvider
-import com.intellij.lang.css.CSSLanguage
-import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlLexer
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
-import com.intellij.psi.tree.IElementType
-import dev.blachut.svelte.lang.SvelteJSLanguage
 
 class SvelteHtmlLexer : HtmlLexer(InnerSvelteHtmlLexer(), false) {
 
