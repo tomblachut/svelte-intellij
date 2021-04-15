@@ -47,7 +47,16 @@ val psiViewerPlugin = when {
     else -> null
 }
 
-val intellijPlugins = listOfNotNull("JavaScriptLanguage", "CSS", "JavaScriptDebugger", sassPlugin, psiViewerPlugin)
+val intellijPlugins = listOfNotNull(
+    "JavaScriptLanguage",
+    "JavaScriptDebugger",
+    "JSIntentionPowerPack",
+    "IntelliLang",
+    "HtmlTools",
+    "CSS",
+    sassPlugin,
+    psiViewerPlugin
+)
 
 repositories {
     mavenCentral()
@@ -140,8 +149,6 @@ tasks {
 
     withType<RunIdeTask> {
         // autoReloadPlugins = true
-        // Disable auto plugin reloading. See `com.intellij.ide.plugins.DynamicPluginVfsListener`
-        // jvmArgs("-Didea.auto.reload.plugins=false")
         // systemProperty("ide.plugins.snapshot.on.unload.fail", true)
         // uncomment if `unexpected exception ProcessCanceledException` prevents you from debugging a running IDE
         // jvmArgs("-Didea.ProcessCanceledException=disabled")
