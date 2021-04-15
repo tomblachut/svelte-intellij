@@ -146,8 +146,7 @@ public abstract class XmlParsingTest extends ParsingTestCase {
     }
 
     public void testManyErrors() throws Exception {
-        // TODO enable test
-        // doTestXml(loadFile("manyErrors.xml"));
+         doTestXml(loadFile("manyErrors.xml"));
     }
 
     public void _testLexerPerformance1() throws Exception {
