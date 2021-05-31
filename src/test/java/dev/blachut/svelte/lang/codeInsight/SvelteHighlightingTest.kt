@@ -304,6 +304,19 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testNullablePropFallback() {
+        myFixture.configureByText("Foo.svelte", """
+            <script>
+                export let nullable = null;
+
+                if (nullable) {
+                    nullable = {};
+                }
+            </script>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testBindDirective() {
         myFixture.configureByText("Foo.svelte",
                                   """

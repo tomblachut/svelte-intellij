@@ -27,6 +27,10 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
                 // TODO check if resolved variable is declared directly in instance script
                 return true
             }
+            if (toolId == "PointlessBooleanExpressionJS") {
+                // TODO check if reference expression resolves to prop
+                return true
+            }
         }
 
         return false
