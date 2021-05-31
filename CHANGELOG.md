@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.19.0]
+## [Unreleased]
 - Support `svelte:fragment`
 - Suppress some false-negative inspections
 - Compatibility with 2021.2 platform
