@@ -17,6 +17,7 @@ import com.intellij.lang.typescript.inspections.*
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.xml.util.XmlDuplicatedIdInspection
 import com.intellij.xml.util.XmlInvalidIdInspection
+import com.sixrr.inspectjs.assignment.SillyAssignmentJSInspection
 import com.sixrr.inspectjs.confusing.PointlessBooleanExpressionJSInspection
 import com.sixrr.inspectjs.validity.UnreachableCodeJSInspection
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
@@ -286,9 +287,26 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
-    fun testBindDirective() {
+    fun testArrayReassignment() {
+        // TODO check if resolved variable is declared directly in instance script
         myFixture.configureByText("Foo.svelte",
             """
+                <script>
+                    let users = [];
+
+                    function addUser(user) {
+                        users.push(user);
+                        users = users;
+                    }
+                </script>
+                <button on:click={addUser}>Hello</button>
+                """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testBindDirective() {
+        myFixture.configureByText("Foo.svelte",
+                                  """
                 <script>
                     let title = "text";
                     let otherTitle = "text2";
@@ -373,6 +391,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(JSUnresolvedVariableInspection())
             l.add(JSValidateTypesInspection())
             l.add(JSIncompatibleTypesComparisonInspection())
+            l.add(SillyAssignmentJSInspection())
             val functionSignaturesInspection = JSCheckFunctionSignaturesInspection()
             functionSignaturesInspection.myCheckGuessedTypes = true
             l.add(functionSignaturesInspection)

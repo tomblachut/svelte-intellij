@@ -23,6 +23,10 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
                     return true
                 }
             }
+            if (toolId == "SillyAssignmentJS") {
+                // TODO check if resolved variable is declared directly in instance script
+                return true
+            }
         }
 
         return false
