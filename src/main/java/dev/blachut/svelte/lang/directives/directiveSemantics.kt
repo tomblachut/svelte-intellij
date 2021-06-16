@@ -6,7 +6,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.CompletionResultSink
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
-import com.intellij.lang.javascript.psi.resolve.ResolveResultSink
 import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
@@ -16,6 +15,7 @@ import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference
 import dev.blachut.svelte.lang.codeInsight.SveltePropsProvider
+import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.codeInsight.SvelteTagNameReference
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
@@ -24,15 +24,10 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 class ScopeReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
     PsiPolyVariantReferenceBase<SvelteHtmlAttribute>(attribute, rangeInElement, false) {
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val resolver = ResolveCache.PolyVariantResolver<ScopeReference> { ref, _ ->
-            val attribute = ref.element
-            val referenceName = attribute.directive!!.specifiers[0].text
-
-            val sink = ResolveResultSink(attribute, referenceName, false, incompleteCode)
-            val processor = SinkResolveProcessor(referenceName, attribute, sink)
-            JSResolveUtil.treeWalkUp(processor, attribute, attribute, attribute, attribute.containingFile)
-
-            processor.resultsAsResolveResults
+        val resolver = ResolveCache.PolyVariantResolver<ScopeReference> { ref, incomplete ->
+            val place = ref.element
+            val referenceName =  place.directive!!.specifiers[0].text
+            SvelteReactiveDeclarationsUtil.processLocalDeclarations(place, referenceName, incomplete)
         }
 
         return JSResolveUtil.resolve(element.containingFile, this, resolver, incompleteCode)

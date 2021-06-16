@@ -1,36 +1,10 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.codeInsight.lookup.LookupElement
+import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import junit.framework.Assert
 
 class SvelteCompletionTest : BasePlatformTestCase() {
-
-    private fun checkElements(items: Array<LookupElement>, expected: Boolean, vararg variants: String) {
-        val toCheck = setOf(*variants)
-        val matched = mutableSetOf<String>()
-        for (e in items) {
-            val lookupString = e.lookupString
-            if (toCheck.contains(lookupString)) {
-                matched.add(lookupString)
-            }
-            if (matched.size == variants.size) break
-        }
-        if (expected) {
-            Assert.assertTrue("Actual: ${items.map { it.lookupString }}", matched.size == variants.size)
-        } else {
-            Assert.assertTrue("Actual: ${items.map { it.lookupString }}", matched.isEmpty())
-        }
-    }
-
-    private fun hasElements(items: Array<LookupElement>, vararg variants: String) {
-        checkElements(items, true, *variants)
-    }
-
-    private fun noElements(items: Array<LookupElement>, vararg variants: String) {
-        checkElements(items, false, *variants)
-    }
-
     fun testContextModuleAttribute() {
         myFixture.configureByText("foo.svelte", "<script c<caret>></script>")
         hasElements(myFixture.completeBasic(), "context=\"module\"")
@@ -61,6 +35,12 @@ class SvelteCompletionTest : BasePlatformTestCase() {
         myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
         myFixture.configureByText("foo.svelte", "<div><<caret></div>")
         hasElements(myFixture.completeBasic(), "div", "svelte:body", "svelte:self")
+    }
+
+    fun testSimpleSvelteNamespace() {
+        myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
+        myFixture.configureByText("foo.svelte", "<svelte:<caret>")
+        hasElements(myFixture.completeBasic(), "body", "self")
     }
 
     fun testComponentImportNoScript() {
@@ -120,49 +100,57 @@ class SvelteCompletionTest : BasePlatformTestCase() {
                 """.trimIndent())
 
         myFixture.configureByText("Usage.svelte",
-            """
+                                  """
                 <script>
-                    import App from "./Hello1.svelte";
+                    import Hello1 from "./Hello1.svelte";
                 </script>
-                <App <caret>
+                <Hello1 <caret>
                 """.trimIndent())
         val items = myFixture.completeBasic()
         hasElements(items, "slot", "hello11")
         noElements(items, "hello11NotAvailable", "hello22NotAvailable", "hello22")
     }
 
-    fun testInterpolation() {
-        myFixture.configureByText("Test.svelte",
-            """
-                <script>
-                    export let hello11;
-                    let hello11Local = 10;
-                </script>
-                <div>{h<caret>}</div>
-                """.trimIndent()
-        )
+    fun testReactiveStatement() {
+        myFixture.configureByText("Test.svelte", """
+            <script>
+                export let hello11 = "src"
+                let hello11Local = "src";
+                $: hello11Reactive = 20;
+
+                $: true && hello<caret>
+            </script>
+        """.trimIndent())
         val items = myFixture.completeBasic()
-        hasElements(items, "hello11", "hello11Local")
+        hasElements(items, "hello11", "hello11Local", "hello11Reactive")
+        UsefulTestCase.assertSize(3, items)
     }
 
-    fun testSimpleSvelteNamespace() {
-        myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
-        myFixture.configureByText("foo.svelte", "<svelte:<caret>")
-        hasElements(myFixture.completeBasic(), "body", "self")
+    fun testInterpolation() {
+        myFixture.configureByText("Test.svelte", """
+            <script>
+                export let hello11;
+                let hello11Local = 10;
+                $: hello11Reactive = 20;
+            </script>
+            <div>{h<caret>}</div>
+        """.trimIndent())
+        val items = myFixture.completeBasic()
+        hasElements(items, "hello11", "hello11Local", "hello11Reactive")
     }
 
     fun testInterpolationInAttribute() {
-        myFixture.configureByText("Test.svelte",
-            """
-                <script>
-                    export let hello11 = "src"
-                    let hello11Local = "src";
-                </script>
-                <img src={<caret>}>
-                """.trimIndent()
-        )
+        myFixture.configureByText("Test.svelte", """
+            <script>
+                export let hello11 = "src"
+                let hello11Local = "src";
+                $: hello11Reactive = 20;
+            </script>
+            <img src={hello<caret>}>
+        """.trimIndent())
         val items = myFixture.completeBasic()
-        hasElements(items, "hello11", "hello11Local")
+        hasElements(items, "hello11", "hello11Local", "hello11Reactive")
+        UsefulTestCase.assertSize(3, items)
     }
 
     fun testKeywords() {
@@ -316,4 +304,31 @@ class SvelteCompletionTest : BasePlatformTestCase() {
         val items = myFixture.completeBasic()
         hasElements(items, "fade")
     }
+
+    private fun checkElements(items: Array<LookupElement>, expected: Boolean, vararg variants: String) {
+        val toCheck = setOf(*variants)
+        val matched = mutableSetOf<String>()
+        for (e in items) {
+            val lookupString = e.lookupString
+            if (toCheck.contains(lookupString)) {
+                matched.add(lookupString)
+            }
+            if (matched.size == variants.size) break
+        }
+        if (expected) {
+            UsefulTestCase.assertTrue("Actual: ${items.map { it.lookupString }}", matched.size == variants.size)
+        }
+        else {
+            UsefulTestCase.assertTrue("Actual: ${items.map { it.lookupString }}", matched.isEmpty())
+        }
+    }
+
+    private fun hasElements(items: Array<LookupElement>, vararg variants: String) {
+        checkElements(items, true, *variants)
+    }
+
+    private fun noElements(items: Array<LookupElement>, vararg variants: String) {
+        checkElements(items, false, *variants)
+    }
+
 }
