@@ -1,5 +1,7 @@
 package dev.blachut.svelte.lang
 
+import com.intellij.codeInspection.InspectionProfileEntry
+import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.lang.PsiBuilder
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtil
@@ -32,4 +34,8 @@ fun PsiBuilder.isTokenAfterWhiteSpace(): Boolean {
 
 fun SvelteHtmlTag.isScriptOrStyleTag(): Boolean {
     return this.name == HtmlUtil.SCRIPT_TAG_NAME || this.name == HtmlUtil.STYLE_TAG_NAME
+}
+
+internal inline fun <reified T : LocalInspectionTool>String.equalsName(): Boolean {
+    return this == InspectionProfileEntry.getShortName(T::class.java.simpleName)
 }

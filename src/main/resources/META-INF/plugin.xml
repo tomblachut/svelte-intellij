@@ -53,7 +53,7 @@
         <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlContextType"/>
         <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlTextContextType"/>
         <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGenerator"/>
-        <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.SvelteHtmlInspectionSuppressor"/>
+        <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.compatibility.SvelteHtmlInspectionSuppressor"/>
         <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension" order="first"/>
         <xml.fileNSInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteNSInfoProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
@@ -79,7 +79,7 @@
 
         <!--suppress PluginXmlValidity -->
         <lang.inspectionSuppressor language="JavaScript"
-                                   implementationClass="dev.blachut.svelte.lang.SvelteInspectionSuppressor"/>
+                                   implementationClass="dev.blachut.svelte.lang.compatibility.SvelteInspectionSuppressor"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>

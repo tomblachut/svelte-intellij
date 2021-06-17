@@ -1,21 +1,27 @@
-package dev.blachut.svelte.lang
+package dev.blachut.svelte.lang.compatibility
 
+import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspection
 import com.intellij.codeInspection.DefaultXmlSuppressionProvider
+import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection
+import com.intellij.codeInspection.htmlInspections.HtmlUnknownTagInspection
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.xml.XmlAttribute
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
+import dev.blachut.svelte.lang.equalsName
+import dev.blachut.svelte.lang.isSvelteComponentTag
+import dev.blachut.svelte.lang.isSvelteContext
 
 class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
     private val scriptAttributes = listOf("context")
     private val styleAttributes = listOf("src", "global")
 
     override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
-        if (inspectionId == "XmlUnboundNsPrefix") {
+        if (inspectionId.equalsName<XmlUnboundNsPrefixInspection>()) {
             return true
         }
 
-        if (inspectionId == "HtmlUnknownAttribute") {
+        if (inspectionId.equalsName<HtmlUnknownAttributeInspection>()) {
             val attribute = element.parent
             if (attribute is XmlAttribute) {
                 if (SvelteDirectiveUtil.directivePrefixes.contains(attribute.namespacePrefix)) return true
@@ -26,7 +32,7 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
             }
         }
 
-        if (inspectionId == "HtmlUnknownTag") {
+        if (inspectionId.equalsName<HtmlUnknownTagInspection>()) {
             if (isSvelteComponentTag(element.text)) {
                 return true
             }
