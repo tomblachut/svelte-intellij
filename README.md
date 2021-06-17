@@ -19,6 +19,7 @@ Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
 * Completions of components, props and some directives
 * Auto import of components
 * Navigation from components to their definition
+* Debugger integration
 <!-- Plugin description end -->
 
 ## Installation
