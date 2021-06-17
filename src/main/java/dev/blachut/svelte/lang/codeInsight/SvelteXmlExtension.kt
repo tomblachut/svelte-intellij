@@ -17,7 +17,7 @@ class SvelteXmlExtension : HtmlXmlExtension() {
     override fun isAvailable(file: PsiFile): Boolean = file.language is SvelteHTMLLanguage
 
     /**
-     * Whether writing self closing `<tag/>` is correct
+     * Whether writing self-closing `<tag/>` is correct
      */
     override fun isSelfClosingTagAllowed(tag: XmlTag): Boolean {
         return isSvelteComponentTag(tag.name) || collapsibleTags.contains(tag.name) || super.isSelfClosingTagAllowed(tag)
@@ -35,10 +35,20 @@ class SvelteXmlExtension : HtmlXmlExtension() {
      */
     override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name) || tag.name == "slot"
 
+    override fun isRequiredAttributeImplicitlyPresent(tag: XmlTag, attrName: String): Boolean {
+        for (attribute in tag.attributes) {
+            if (attribute.name == attrName && attribute.nameElement.text[0] == '{') {
+                return true
+            }
+        }
+        return super.isRequiredAttributeImplicitlyPresent(tag, attrName)
+    }
+
     override fun createTagNameReference(nameElement: ASTNode, startTagFlag: Boolean): TagNameReference? {
         return if (isSvelteComponentTag(nameElement.text)) {
             SvelteTagNameReference(nameElement, startTagFlag)
-        } else {
+        }
+        else {
             super.createTagNameReference(nameElement, startTagFlag)
         }
     }

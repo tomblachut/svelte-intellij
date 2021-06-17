@@ -62,6 +62,19 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testShorthandAttributeRequired() {
+        configureComponentWithAttribute("Foo.svelte")
+        myFixture.configureByText("Usage.svelte", """
+            <script>
+                let src = 'tutorial/image.gif';
+                let alt = 'Rick Astley';
+            </script>
+
+            <img {src} {alt}>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testHandler() {
         myFixture.configureByText("Foo.svelte",
             """
