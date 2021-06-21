@@ -3,6 +3,9 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
+    override fun getTestDataPath(): String = "src/test/resources"
+    override fun getBasePath(): String = "dev/blachut/svelte/lang/codeInsight/tsHighlighting"
+
     override fun setUp() {
         super.setUp()
         myFixture.enableInspections(*SvelteHighlightingTest.configureDefaultLocalInspectionTools().toTypedArray())
@@ -42,6 +45,20 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
                 <title>test</title>
                 """.trimIndent()
         )
+        myFixture.testHighlighting()
+    }
+
+    fun testTsconfigDirectAncestorDiscovery() {
+        val base = basePath + "/" + getTestName(true)
+        myFixture.configureByFiles("$base/src/App.svelte", "$base/tsconfig.json")
+
+        myFixture.testHighlighting()
+    }
+
+    fun testTsconfigIndirectAncestorDiscovery() {
+        val base = basePath + "/" + getTestName(true)
+        myFixture.configureByFiles("$base/src/nested/Child.svelte", "$base/tsconfig.json")
+
         myFixture.testHighlighting()
     }
 }
