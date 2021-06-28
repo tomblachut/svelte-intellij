@@ -43,6 +43,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
                 <script>
                     import Foo from "./Foo.svelte";
                 </script>
+
                 <Foo />
                 """.trimIndent()
         )

@@ -52,6 +52,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
                 <script>
                     import Hello from "./Hello.svelte";
                 </script>
+
                 <h1><Hello</h1>
                 """.trimIndent())
     }
