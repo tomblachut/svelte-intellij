@@ -16,6 +16,10 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
     private val scriptAttributes = listOf("context")
     private val styleAttributes = listOf("src", "global")
 
+    override fun isProviderAvailable(file: PsiFile): Boolean {
+        return isSvelteContext(file)
+    }
+
     override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
         if (inspectionId.equalsName<XmlUnboundNsPrefixInspection>()) {
             return true
@@ -39,9 +43,5 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
         }
 
         return super.isSuppressedFor(element, inspectionId)
-    }
-
-    override fun isProviderAvailable(file: PsiFile): Boolean {
-        return isSvelteContext(file)
     }
 }
