@@ -7,13 +7,17 @@ import com.intellij.lang.ecmascript6.validation.ES6AnalysisHandlersFactory
 import com.intellij.lang.ecmascript6.validation.ES6AnnotatingVisitor
 import com.intellij.lang.javascript.DialectOptionHolder
 import com.intellij.lang.javascript.psi.JSLabeledStatement
-import com.intellij.lang.javascript.validation.*
+import com.intellij.lang.javascript.validation.JSAnnotatingVisitor
+import com.intellij.lang.javascript.validation.JSKeywordHighlighterVisitor
+import com.intellij.lang.javascript.validation.JSProblemReporter
+import com.intellij.lang.javascript.validation.JSReferenceChecker
 import com.intellij.psi.PsiElement
+import dev.blachut.svelte.lang.codeInsight.SvelteJSReferenceChecker
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
 class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
     override fun getReferenceChecker(reporter: JSProblemReporter<*>): JSReferenceChecker {
-        return TypedJSReferenceChecker(reporter)
+        return SvelteJSReferenceChecker(reporter)
     }
 
     override fun createKeywordHighlighterVisitor(
