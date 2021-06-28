@@ -9,6 +9,7 @@ import com.intellij.lexer.BaseHtmlLexer
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
+import dev.blachut.svelte.lang.isTSLangValue
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
@@ -38,7 +39,7 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
                 ?: super.styleLanguage(styleLang)
 
         override fun scriptEmbedmentInfo(mimeType: String?): HtmlEmbedmentInfo =
-            if (mimeType == "ts" || mimeType == "typescript")
+            if (isTSLangValue(mimeType))
                 HtmlLanguageEmbedmentInfo(SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE_TS,
                     SvelteTypeScriptLanguage.INSTANCE)
             else

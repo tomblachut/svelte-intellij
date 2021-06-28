@@ -16,9 +16,17 @@ fun isSvelteContext(context: PsiElement): Boolean {
     return context.containingFile is SvelteHtmlFile
 }
 
+fun isSvelteContext(file: VirtualFile): Boolean {
+    return file.fileType == SvelteHtmlFileType.INSTANCE
+}
+
 fun isSvelteComponentTag(name: String): Boolean {
     // TODO Support namespaced components
     return StringUtil.isCapitalized(name)
+}
+
+fun isTSLangValue(value: String?): Boolean {
+    return value == "ts" || value == "typescript"
 }
 
 fun getRelativePath(currentFile: VirtualFile, componentFile: VirtualFile): String {
