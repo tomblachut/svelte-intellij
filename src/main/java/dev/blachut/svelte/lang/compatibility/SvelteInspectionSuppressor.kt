@@ -3,6 +3,8 @@ package dev.blachut.svelte.lang.compatibility
 import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.codeInspection.SuppressQuickFix
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
+import com.intellij.lang.javascript.psi.ecma6.impl.JSXXmlLiteralExpressionImpl
+import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInspection
 import com.intellij.psi.PsiElement
 import com.sixrr.inspectjs.assignment.SillyAssignmentJSInspection
 import com.sixrr.inspectjs.confusing.PointlessBooleanExpressionJSInspection
@@ -37,6 +39,10 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
         if (inspectionId.equalsName<PointlessBooleanExpressionJSInspection>()) {
             // TODO check if reference expression resolves to prop
             return true
+        }
+        if (inspectionId.equalsName<TypeScriptMissingConfigOptionInspection>()) {
+            // JSXXmlLiteralExpressionImpl are invalid in Svelte anyway
+            if (element is JSXXmlLiteralExpressionImpl) return true
         }
 
         return false
