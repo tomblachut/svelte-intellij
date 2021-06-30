@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
+import com.intellij.lang.javascript.psi.JSModuleStatusOwner
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
@@ -27,7 +28,9 @@ fun findAncestorScript(place: PsiElement): XmlTag? {
     return parentScript as XmlTag?
 }
 
-class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE) {
+class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE), JSModuleStatusOwner {
+    override fun getModuleStatus(): JSModuleStatusOwner.ModuleStatus = JSModuleStatusOwner.ModuleStatus.ES6
+
     val moduleScript get() = document?.children?.find { it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == "module" } as XmlTag?
 
     // By convention instanceScript is placed after module script
