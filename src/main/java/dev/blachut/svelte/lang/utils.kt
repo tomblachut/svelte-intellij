@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang
 import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.lang.PsiBuilder
-import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
@@ -27,10 +26,6 @@ fun isSvelteComponentTag(name: String): Boolean {
 
 fun isTSLangValue(value: String?): Boolean {
     return value == "ts" || value == "typescript"
-}
-
-fun getRelativePath(currentFile: VirtualFile, componentFile: VirtualFile): String {
-    return FileUtil.getRelativePath(currentFile.parent.path, componentFile.path, '/') ?: ""
 }
 
 fun PsiBuilder.isTokenAfterWhiteSpace(): Boolean {
