@@ -1,5 +1,7 @@
 package dev.blachut.svelte.lang.compatibility
 
+import com.intellij.codeInsight.daemon.impl.analysis.HtmlUnknownAnchorTargetInspection
+import com.intellij.codeInsight.daemon.impl.analysis.HtmlUnknownTargetInspection
 import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspection
 import com.intellij.codeInspection.DefaultXmlSuppressionProvider
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection
@@ -22,6 +24,10 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
 
     override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
         if (inspectionId.equalsName<XmlUnboundNsPrefixInspection>()) {
+            return true
+        }
+
+        if (inspectionId.equalsName<HtmlUnknownTargetInspection>() || inspectionId.equalsName<HtmlUnknownAnchorTargetInspection>()) {
             return true
         }
 
