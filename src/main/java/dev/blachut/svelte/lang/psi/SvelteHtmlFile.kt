@@ -15,8 +15,8 @@ fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
     return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
 }
 
-fun isModuleScript(tag: XmlTag): Boolean {
-    return HtmlUtil.isScriptTag(tag) && tag.getAttributeValue("context") == "module"
+fun isModuleScript(tag: XmlTag?): Boolean {
+    return tag != null && HtmlUtil.isScriptTag(tag) && tag.getAttributeValue("context") == "module"
 }
 
 fun findAncestorScript(place: PsiElement): XmlTag? {
@@ -40,7 +40,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
 
         // TODO ScriptSupportUtil.processDeclarations caches found script tags
         val parentScript = findAncestorScript(place)
-        if (parentScript != null && isModuleScript(parentScript)) {
+        if (isModuleScript(parentScript)) {
             // place is inside module script, nothing more to process
             return true
         } else if (parentScript != null) {
