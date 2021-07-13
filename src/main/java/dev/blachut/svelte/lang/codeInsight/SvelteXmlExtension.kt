@@ -11,7 +11,6 @@ import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil.DIRECTIVE_SEPARATO
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteXmlExtension : HtmlXmlExtension() {
-    // TODO expand this list
     private val collapsibleTags = setOf("slot", "style", "script")
 
     override fun isAvailable(file: PsiFile): Boolean = file.language is SvelteHTMLLanguage
@@ -27,7 +26,7 @@ class SvelteXmlExtension : HtmlXmlExtension() {
      * Whether should warn when writing `<tag></tag>` with empty body, with quick fix that replaces it with `<tag/>`
      */
     override fun isCollapsibleTag(tag: XmlTag): Boolean {
-        return isSvelteComponentTag(tag.name) || tag.name == "slot" || super.isCollapsibleTag(tag)
+        return isSvelteComponentTag(tag.name) || super.isCollapsibleTag(tag)
     }
 
     /**

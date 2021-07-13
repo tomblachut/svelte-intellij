@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 class SvelteElementDescriptor(private val myTag: SvelteHtmlTag) : BaseXmlElementDescriptorImpl() {
     override fun init(element: PsiElement?) {}
 
-    override fun getDeclaration(): PsiElement? = myTag
+    override fun getDeclaration(): PsiElement = myTag
 
     override fun getName(context: PsiElement?): String = myTag.name
 

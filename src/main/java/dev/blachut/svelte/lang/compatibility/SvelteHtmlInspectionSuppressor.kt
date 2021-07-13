@@ -17,6 +17,7 @@ import dev.blachut.svelte.lang.isSvelteContext
 class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
     private val scriptAttributes = listOf("context")
     private val styleAttributes = listOf("src", "global")
+    private val legacyAAttributes = listOf("sapper:noscroll", "sapper:prefetch") // not descriptors, since we don't want completions
 
     override fun isProviderAvailable(file: PsiFile): Boolean {
         return isSvelteContext(file)
@@ -39,6 +40,7 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
                 // TODO refactor into proper descriptors
                 if (attribute.parent.name == "script" && scriptAttributes.contains(attribute.name)) return true
                 if (attribute.parent.name == "style" && styleAttributes.contains(attribute.name)) return true
+                if (attribute.parent.name == "a" && legacyAAttributes.contains(attribute.name)) return true
             }
         }
 

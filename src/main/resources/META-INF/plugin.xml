@@ -58,6 +58,7 @@
         <xml.fileNSInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteNSInfoProvider"/>
         <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
         <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
+        <xml.attributeDescriptorsProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteAttributeDescriptorProvider"/>
         <html.attributeValueProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteAttributeValueProvider"/>
 
         <idIndexer filetype="Svelte" implementationClass="dev.blachut.svelte.lang.index.SvelteIdIndexer"/>
