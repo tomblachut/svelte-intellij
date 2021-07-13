@@ -306,6 +306,16 @@ class SvelteCompletionTest : BasePlatformTestCase() {
         hasElements(items, "fade")
     }
 
+    fun testPrefetchAttribute() {
+        myFixture.configureByText("Test.svelte", """
+            <a svp<caret>>Hello</a>
+        """.trimIndent())
+        myFixture.completeBasic()
+        myFixture.checkResult("""
+            <a sveltekit:prefetch<caret>>Hello</a>
+        """.trimIndent())
+    }
+
     private fun checkElements(items: Array<LookupElement>, expected: Boolean, vararg variants: String) {
         val toCheck = setOf(*variants)
         val matched = mutableSetOf<String>()
