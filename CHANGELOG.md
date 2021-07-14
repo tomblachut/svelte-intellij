@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+## [0.20.0]
 - Provide completions for reactive declarations inside Svelte expressions
 - Add create variable and create function quick fixes that work from within expressions
 - Support `sveltekit:prefetch` etc. attributes
