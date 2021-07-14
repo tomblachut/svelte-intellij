@@ -1,6 +1,14 @@
 # Changelog
 
 ## [Unreleased]
+- Provide completions for reactive declarations inside Svelte expressions
+- Add create variable and create function quick fixes that work from within expressions
+- Support `sveltekit:prefetch` etc. attributes
+- Mark file-level SvelteKit config as implicitly used
+- Improve missing required attribute inspection for shorthand attributes
+- Suppress a lot of misleading inspections
+- Change spacing around script tags inserted by the IDE slightly
+
 ## [0.19.0]
 - Support `svelte:fragment`
 - Suppress some false-negative inspections
