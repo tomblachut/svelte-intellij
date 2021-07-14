@@ -1,7 +1,8 @@
 <idea-plugin url="https://github.com/tomblachut/svelte-intellij">
     <id>dev.blachut.svelte.lang</id>
     <name>Svelte</name>
-    <vendor url="https://github.com/tomblachut">Tomasz Błachut</vendor>
+    <category>JavaScript Frameworks and Tools</category>
+    <vendor>JetBrains</vendor>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.xml</depends>
