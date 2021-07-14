@@ -13,7 +13,7 @@ plugins {
     // https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "1.1.2"
     // https://github.com/JetBrains/gradle-grammar-kit-plugin
-    id("org.jetbrains.grammarkit") version "2020.3.2"
+    id("org.jetbrains.grammarkit") version "2021.1.3"
 }
 
 group = properties("pluginGroup")
