@@ -3,16 +3,13 @@ package dev.blachut.svelte.lang.completion
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
-import com.intellij.lang.javascript.DialectDetector
-import com.intellij.lang.javascript.completion.ES6CompletionKeywordsContributor
 import com.intellij.lang.javascript.completion.JSCompletionUtil
-import com.intellij.lang.javascript.completion.JSKeywordsCompletionProvider
+import com.intellij.lang.javascript.completion.JSReferenceCompletionProvider
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.CompletionResultSink
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
-import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
@@ -22,7 +19,7 @@ class SvelteReactiveDeclarationsCompletionProvider: CompletionProvider<Completio
     override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
         val parent = parameters.position.parent
         assert(parent is JSReferenceExpression)
-        if (skipReferenceCompletionByContext(parameters.position)) return
+        if (JSReferenceCompletionProvider.skipReferenceCompletionByContext(parameters.position)) return
         val referenceExpression = parent as JSReferenceExpression
 
         if (referenceExpression.hasQualifier()) return
@@ -49,16 +46,5 @@ class SvelteReactiveDeclarationsCompletionProvider: CompletionProvider<Completio
             // results will contain everything in scope, later LookupElement duplicates from JS core get merged
             JSCompletionUtil.pushVariants(results, emptySet(), resultSet)
         }
-    }
-
-    // copied JSReferenceCompletionProvider.skipReferenceCompletionByContext because it's package-private
-    @Deprecated(message = "Escalate original method and use it")
-    private fun skipReferenceCompletionByContext(position: PsiElement): Boolean {
-        val parent = position.parent ?: return false
-        if (DialectDetector.isActionScript(parent)) return false // for AS, some keywords are provided by reference completion, argh!
-        if (ES6CompletionKeywordsContributor.addFromOrAsKeyword(null, parent)) return true
-        if (ES6CompletionKeywordsContributor.addExtendsImplements(null, position)) return true
-        if (ES6CompletionKeywordsContributor.isAfterExport(parent)) return true
-        return if (JSKeywordsCompletionProvider.isExactContextForOperation(parent)) true else false
     }
 }

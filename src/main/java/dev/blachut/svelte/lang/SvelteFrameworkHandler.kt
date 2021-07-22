@@ -24,7 +24,7 @@ class SvelteFrameworkHandler : FrameworkIndexingHandler() {
                     subscribeMethod.parameters[0].inferredType?.substitute() as? JSFunctionType ?: return false
                 val storeContentType = subscriberFunction.parameters[0].inferredType ?: return false
 
-                evaluator.addType(storeContentType, expression)
+                evaluator.addType(storeContentType)
                 return true
             } catch (e: Exception) {
             }

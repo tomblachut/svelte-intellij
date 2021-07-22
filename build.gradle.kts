@@ -21,18 +21,18 @@ version = properties("pluginVersion")
 
 // https://plugins.jetbrains.com/plugin/11449-sass/versions/
 val sassPlugin = when {
-    properties("platformVersion").startsWith("203") -> "org.jetbrains.plugins.sass:203.5981.98"
+    properties("platformVersion").startsWith("212") -> "org.jetbrains.plugins.sass:212.4746.57"
     else -> throw GradleException("Missing Sass plugin version for platformVersion = ${properties("platformVersion")}")
 }
 
 // https://plugins.jetbrains.com/plugin/227-psiviewer/versions
 val psiViewerPlugin = when {
-    properties("platformVersion").startsWith("203") -> "PsiViewer:203-SNAPSHOT"
+    properties("platformVersion").startsWith("212") -> "PsiViewer:212-SNAPSHOT"
     else -> null
 }
 
 val intellijPlugins = listOfNotNull(
-    "JavaScriptLanguage",
+    "JavaScript",
     "JavaScriptDebugger",
     "JSIntentionPowerPack",
     "IntelliLang",
@@ -124,7 +124,6 @@ tasks {
     }
 
     withType<RunIdeTask> {
-        // autoReloadPlugins = true
         // systemProperty("ide.plugins.snapshot.on.unload.fail", true)
         // uncomment if `unexpected exception ProcessCanceledException` prevents you from debugging a running IDE
         // jvmArgs("-Didea.ProcessCanceledException=disabled")

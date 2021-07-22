@@ -25,7 +25,7 @@ class SvelteKeywordCompletionProvider : CompletionProvider<CompletionParameters>
         result: CompletionResultSet,
     ) {
         val expression =
-            parameters.position.parents.find { it.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION }!!
+            parameters.position.parents(false).find { it.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION }!!
         if (expression.firstChild.siblings().any { SvelteTokenTypes.KEYWORDS.contains(it.elementType) }) {
             return
         }
