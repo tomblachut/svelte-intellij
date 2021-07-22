@@ -102,5 +102,6 @@
 
         <frameworkIndexingHandler implementation="dev.blachut.svelte.lang.SvelteFrameworkHandler" version="1"/>
         <indexedFileTypeProvider implementation="dev.blachut.svelte.lang.SvelteIndexedFileTypeProvider"/>
+        <tsImportResolver implementation="dev.blachut.svelte.lang.codeInsight.SvelteTypeScriptImportsResolverProvider"/>
     </extensions>
 </idea-plugin>

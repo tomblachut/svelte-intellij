@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.JSCompositeElementType
 import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
 import com.intellij.lang.javascript.types.JSExpressionElementType
 import com.intellij.lang.javascript.types.JSParameterElementType
+import com.intellij.lang.javascript.types.TypeScriptEmbeddedContentElementType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
@@ -34,7 +35,7 @@ object SvelteJSElementTypes {
         }
     }
 
-    val EMBEDDED_CONTENT_MODULE_TS = object : JSEmbeddedContentElementType(SvelteTypeScriptLanguage.INSTANCE, "MOD_SVELTE_TS_") {
+    val EMBEDDED_CONTENT_MODULE_TS = object : TypeScriptEmbeddedContentElementType(SvelteTypeScriptLanguage.INSTANCE, "MOD_SVELTE_TS_") {
         override fun isModule() = true
 
         override fun toModule() = this
