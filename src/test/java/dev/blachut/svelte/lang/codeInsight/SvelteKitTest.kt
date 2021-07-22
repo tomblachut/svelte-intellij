@@ -11,7 +11,8 @@ class SvelteKitTest : BasePlatformTestCase() {
     override fun getTestDataPath(): String = "src/test/resources"
     override fun getBasePath(): String = "dev/blachut/svelte/lang/codeInsight/svelteKit"
 
-    fun testResolveAppModules() {
+    // TODO enable test
+    fun _testResolveAppModules() {
         val base = basePath + "/" + getTestName(false)
         myFixture.copyDirectoryToProject(base, "")
         myFixture.copyDirectoryToProject("dev/blachut/svelte/lang/_npm", "node_modules")
