@@ -98,6 +98,8 @@
         <analysisHandlersFactory language="SvelteTS"
                                  implementationClass="dev.blachut.svelte.lang.SvelteTypeScriptAnalysisHandlersFactory"/>
 
+        <moduleReferenceContributor implementation="dev.blachut.svelte.lang.codeInsight.SvelteKitModuleReferenceContributor"/>
+
         <frameworkIndexingHandler implementation="dev.blachut.svelte.lang.SvelteFrameworkHandler" version="1"/>
         <indexedFileTypeProvider implementation="dev.blachut.svelte.lang.SvelteIndexedFileTypeProvider"/>
     </extensions>
