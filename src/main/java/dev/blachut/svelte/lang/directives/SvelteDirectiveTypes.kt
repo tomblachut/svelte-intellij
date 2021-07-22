@@ -27,6 +27,7 @@ object SvelteDirectiveTypes {
             "self",
             "passive",
             "nonpassive",
+            "trusted",
         ),
         shorthandReferenceFactory = ::EventReference,
         shorthandCompletionFactory = ::getEventCompletions,
