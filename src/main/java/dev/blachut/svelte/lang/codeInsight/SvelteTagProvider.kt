@@ -1,20 +1,37 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.codeInsight.completion.InsertHandler
+import com.intellij.codeInsight.completion.InsertionContext
 import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.completion.XmlTagInsertHandler
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.lang.javascript.completion.JSImportCompletionUtil
+import com.intellij.lang.javascript.frameworks.react.ReactXmlExtension
+import com.intellij.lang.javascript.modules.JSImportPlaceInfo
+import com.intellij.lang.javascript.modules.imports.JSImportCandidate
+import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
+import com.intellij.lang.javascript.psi.JSDefinitionExpression
+import com.intellij.lang.javascript.psi.JSExpressionCodeFragment
+import com.intellij.lang.javascript.psi.JSNamedElement
+import com.intellij.lang.javascript.psi.ecma6.TypeScriptCompileTimeType
+import com.intellij.lang.javascript.psi.ecmal4.JSClass
+import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
+import com.intellij.lang.javascript.psi.resolve.ResolveProcessor
+import com.intellij.lang.javascript.psi.resolve.processors.JSResolveProcessor
+import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.util.NlsSafe
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.ResolveState
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
-import com.intellij.psi.search.FileTypeIndex
-import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
-import dev.blachut.svelte.lang.SvelteHtmlFileType
-import dev.blachut.svelte.lang.completion.SvelteInsertHandler
 import dev.blachut.svelte.lang.icons.SvelteIcons
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
+import java.util.function.Predicate
 
 // Vue plugin uses 100, it's ok for now
 const val highPriority = 100.0
@@ -60,53 +77,144 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         return SvelteComponentTagDescriptor(tag.name, tag)
     }
 
-    override fun addTagNameVariants(elements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {
+    override fun addTagNameVariants(resultElements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {
         if (tag !is SvelteHtmlTag) return
 
         if (svelteNamespace == namespacePrefix) {
-            elements.addAll(svelteBareTagLookupElements)
-        } else if (namespacePrefix.isEmpty()) {
-            elements.addAll(svelteNamespaceTagLookupElements)
-            elements.add(slotLookupElement)
+            resultElements.addAll(svelteBareTagLookupElements)
+        }
+        else if (namespacePrefix.isEmpty()) {
+            resultElements.addAll(svelteNamespaceTagLookupElements)
+            resultElements.add(slotLookupElement)
 
-            // TODO Link component documentation
-            elements.addAll(getReachableComponents(tag))
+            val localNames = mutableSetOf<String>()
+            addLocalComponents(tag, localNames, resultElements)
+            addExportedComponents(tag, localNames, resultElements)
         }
     }
 
-    private fun getReachableComponents(tag: SvelteHtmlTag): List<LookupElement> {
-        val lookupElements = mutableListOf<LookupElement>()
-        val svelteVirtualFiles = FileTypeIndex.getFiles(
-            SvelteHtmlFileType.INSTANCE,
-            GlobalSearchScope.allScope(tag.project)
-        )
+    private fun addLocalComponents(tag: XmlTag, localNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
+        val processor = createLocalCompletionProcessor(localNames, resultElements)
+        JSResolveUtil.treeWalkUp(processor, tag, null, tag)
+    }
 
-        svelteVirtualFiles.forEach { virtualFile ->
-            val componentName = virtualFile.nameWithoutExtension
+    // based on ReactComponentCompletionContributor.createCompletionProcessor, maybe unify it?
+    private fun createLocalCompletionProcessor(collectedNames: MutableSet<String>,
+                                               resultElements: MutableList<LookupElement>): JSResolveProcessor {
+        return object : JSResolveProcessor {
+            override fun getName(): String? {
+                return null
+            }
 
-            if (!isSvelteComponentTag(componentName)) return@forEach
+            override fun execute(element: PsiElement, state: ResolveState): Boolean {
+                // omit reactive declarations
+                if (element is JSDefinitionExpression) return true
 
-            val moduleInfos = SvelteModuleUtil.getModuleInfos(
-                tag.project,
-                tag.containingFile.originalFile,
-                virtualFile,
-                componentName
-            )
-            val typeText = " (${virtualFile.name})"
-
-            for (info in moduleInfos) {
-                val lookupObject = ComponentLookupObject(virtualFile, info)
-                val lookupElement = LookupElementBuilder.create(lookupObject, componentName)
-                    .withIcon(info.resolvedFile.fileType.icon)
-                    .withTailText(typeText, true)
-                    .withInsertHandler(SvelteInsertHandler)
-                    .let { PrioritizedLookupElement.withPriority(it, highPriority) }
-
-                lookupElements.add(lookupElement)
+                val name = ResolveProcessor.getName(element) ?: return true
+                if (isSvelteComponentTag(name) && !collectedNames.contains(name) /*&& prefixMatcher.prefixMatches(name)*/) {
+                    collectedNames.add(name)
+                    for (declaration in ReactXmlExtension.getElementsByImport(element)) {
+                        ProgressManager.checkCanceled()
+                        val isComponent = true // todo filter by type, after *.svelte type is evaluated correctly
+                        if (isComponent) {
+                            resultElements.add(createLookupElement(name, declaration, null))
+                            break
+                        }
+                    }
+                }
+                return true
             }
         }
+    }
 
-        // TODO Include imported & re-exported components
-        return lookupElements
+    private fun addExportedComponents(tag: SvelteHtmlTag, localNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
+        // todo possibly base on ReactComponentCompletionContributor.addExportedComponents
+        // todo and/or JSImportCompletionUtil.processExportedElements
+        // todo look into case sensitivity
+
+        // todo handle multiple files with same name, JSImportCompletionUtil.IMPORT_PRIORITY, merge lookup elements etc
+
+        val placeInfo = JSImportPlaceInfo(tag)
+
+        //val lowercaseName = StringUtil.trimEnd(tag.name, CompletionUtil.DUMMY_IDENTIFIER_TRIMMED).toLowerCase()
+        val keyFilter = Predicate { name: String ->
+            isSvelteComponentTag(name) && !localNames.contains(name)
+            // && name.toLowerCase().contains(lowercaseName)
+            // && prefixMatcher.prefixMatches(name)
+        }
+
+        val providers = JSImportCandidatesProvider.getProviders(placeInfo)
+
+        JSImportCompletionUtil.processExportedElements(tag, providers, keyFilter) { candidates: Collection<JSImportCandidate>, name ->
+            var seenJSCandidate = false
+            var seenSvelteCandidate = false
+            var bestLookup: LookupElement? = null
+
+            candidates.forEach { candidate ->
+                if (seenJSCandidate) return@forEach
+
+                val element = candidate.element // for Svelte files will be null, used by JSLookupElementRenderer to display useful info
+
+                if (element != null) {
+                    for (declaration in ReactXmlExtension.getElementsByImport(element)) {
+                        // todo namespaced components will require loosening of the condition
+                        if (!(declaration is JSClass && declaration !is TypeScriptCompileTimeType)) continue // or Svelte file
+                        val recordType = declaration.jsType.asRecordType()
+                        // older libraries may not contain all 3 properties
+                        if (!recordType.propertyNames.containsAll(listOf("\$set", "\$on", "\$destroy"))) continue
+                        val lookupElement = createLookupElement(name, declaration, createInsertHandler(tag.containingFile, candidate))
+                        bestLookup = lookupElement
+                        seenJSCandidate = true
+                        break
+                    }
+                }
+                else if (!seenSvelteCandidate) {
+                    // JSImportCandidate for SvelteHtmlFile does not contain PsiElement
+                    val lookupElement = createLookupElement(name, null, createInsertHandler(tag.containingFile, candidate))
+                    seenSvelteCandidate = true
+                    bestLookup = lookupElement
+                }
+            }
+
+            if (bestLookup != null) {
+                resultElements.add(bestLookup!!)
+            }
+
+            true
+        }
+    }
+
+    private fun createLookupElement(name: @NlsSafe String,
+                                    element: PsiElement?,
+                                    insertHandler: InsertHandler<LookupElement>?): LookupElement {
+        //val tailText = " (${candidate.containerText})"
+        val presentation = if (element is JSNamedElement) element.presentation else null
+
+        val builder = if (element != null) LookupElementBuilder.create(element, name) else LookupElementBuilder.create(name)
+        val lookupElement = builder
+            .withIcon(SvelteIcons.COLOR)
+            //.withTailText(tailText, true)
+            .withTailText(presentation?.locationString, true) // todo add space
+            //.withTypeText("SvelteComponent") // can't use type text because there are false positives here
+            .withInsertHandler(insertHandler)
+            //.let { JSLookupElementRenderer(name, JSImportCompletionUtil.IMPORT_PRIORITY, false, null).applyToBuilder(it) } // does not resolve imports unfortunately, JSImportCompletionUtil.expandElements handles that
+            .let { PrioritizedLookupElement.withPriority(it, highPriority) } // todo use proximity?
+
+        return lookupElement
+    }
+
+    private fun createInsertHandler(containingFile: PsiFile, candidate: JSImportCandidate): InsertHandler<LookupElement>? {
+        if (containingFile is JSExpressionCodeFragment) return null
+
+        if (!candidate.useAutoImport()) return null
+
+        // todo e.g. React uses both XmlTagInsertHandler & addReactImportInsertHandler
+        return SvelteComponentInsertHandler(candidate)
+    }
+}
+
+class SvelteComponentInsertHandler(private val candidate: JSImportCandidate) : InsertHandler<LookupElement> {
+    override fun handleInsert(context: InsertionContext, item: LookupElement) {
+        JSImportCompletionUtil.insertLookupItem(context, item, candidate, null)
     }
 }

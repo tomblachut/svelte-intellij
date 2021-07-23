@@ -88,6 +88,8 @@
     <extensions defaultExtensionNs="JavaScript">
         <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>
 
+        <importCandidatesFactory implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentCandidatesProvider$Companion"/>
+
         <handlersFactory language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteHtmlHandlersFactory"/>
         <handlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSHandlersFactory"/>
         <handlersFactory language="SvelteTS" implementationClass="dev.blachut.svelte.lang.SvelteTSHandlersFactory"/>
