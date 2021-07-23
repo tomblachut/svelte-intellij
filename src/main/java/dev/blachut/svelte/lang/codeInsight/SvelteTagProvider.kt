@@ -26,7 +26,6 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.ResolveState
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
 import com.intellij.psi.xml.XmlTag
-import com.intellij.util.containers.ContainerUtil
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
 import dev.blachut.svelte.lang.icons.SvelteIcons
@@ -147,25 +146,38 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         val providers = JSImportCandidatesProvider.getProviders(placeInfo)
 
         JSImportCompletionUtil.processExportedElements(tag, providers, keyFilter) { candidates: Collection<JSImportCandidate>, name ->
-            val candidate = if (candidates.size == 1) ContainerUtil.getFirstItem(candidates) else return@processExportedElements true
-            val element: PsiElement? = candidate.element // for Svelte files will be null, used by JSLookupElementRenderer to display useful info
+            var seenJSCandidate = false
+            var seenSvelteCandidate = false
+            var bestLookup: LookupElement? = null
 
-            if (element != null) {
-                for (declaration in ReactXmlExtension.getElementsByImport(element)) {
-                    // todo namespaced components will require loosening of the condition
-                    if (!(declaration is JSClass && declaration !is TypeScriptCompileTimeType)) continue // or Svelte file
-                    val recordType = declaration.jsType.asRecordType()
-                    // older libraries may not contain all 3 properties
-                    if (!recordType.propertyNames.containsAll(listOf("\$set", "\$on", "\$destroy"))) continue
-                    val lookupElement = createLookupElement(name, declaration, createImportInsertHandler(tag.containingFile, candidates))
-                    resultElements.add(lookupElement)
-                    break
+            candidates.forEach { candidate ->
+                if (seenJSCandidate) return@forEach
+
+                val element = candidate.element // for Svelte files will be null, used by JSLookupElementRenderer to display useful info
+
+                if (element != null) {
+                    for (declaration in ReactXmlExtension.getElementsByImport(element)) {
+                        // todo namespaced components will require loosening of the condition
+                        if (!(declaration is JSClass && declaration !is TypeScriptCompileTimeType)) continue // or Svelte file
+                        val recordType = declaration.jsType.asRecordType()
+                        // older libraries may not contain all 3 properties
+                        if (!recordType.propertyNames.containsAll(listOf("\$set", "\$on", "\$destroy"))) continue
+                        val lookupElement = createLookupElement(name, declaration, createInsertHandler(tag.containingFile, candidate))
+                        bestLookup = lookupElement
+                        seenJSCandidate = true
+                        break
+                    }
+                }
+                else if (!seenSvelteCandidate) {
+                    // JSImportCandidate for SvelteHtmlFile does not contain PsiElement
+                    val lookupElement = createLookupElement(name, null, createInsertHandler(tag.containingFile, candidate))
+                    seenSvelteCandidate = true
+                    bestLookup = lookupElement
                 }
             }
-            else {
-                // JSImportCandidate for SvelteHtmlFile does not contain PsiElement
-                val lookupElement = createLookupElement(name, null, createImportInsertHandler(tag.containingFile, candidates))
-                resultElements.add(lookupElement)
+
+            if (bestLookup != null) {
+                resultElements.add(bestLookup!!)
             }
 
             true
@@ -191,15 +203,12 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         return lookupElement
     }
 
-    private fun createImportInsertHandler(containingFile: PsiFile,
-                                          candidates: Collection<JSImportCandidate>): InsertHandler<LookupElement>? {
+    private fun createInsertHandler(containingFile: PsiFile, candidate: JSImportCandidate): InsertHandler<LookupElement>? {
         if (containingFile is JSExpressionCodeFragment) return null
 
-        val candidate = ContainerUtil.getFirstItem(candidates)
-        if (candidate == null || candidates.stream().noneMatch { obj -> obj.useAutoImport() }) return null
+        if (!candidate.useAutoImport()) return null
 
         // todo e.g. React uses both XmlTagInsertHandler & addReactImportInsertHandler
-
         return SvelteComponentInsertHandler(candidate)
     }
 }
