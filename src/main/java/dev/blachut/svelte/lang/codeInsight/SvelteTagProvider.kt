@@ -95,13 +95,13 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
     }
 
     private fun addLocalComponents(tag: XmlTag, localNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
-        val processor = createCompletionProcessor(localNames, resultElements)
+        val processor = createLocalCompletionProcessor(localNames, resultElements)
         JSResolveUtil.treeWalkUp(processor, tag, null, tag)
     }
 
-    // based on createCompletionProcessor, maybe unify it?
-    private fun createCompletionProcessor(collectedNames: MutableSet<String>,
-                                          resultElements: MutableList<LookupElement>): JSResolveProcessor {
+    // based on ReactComponentCompletionContributor.createCompletionProcessor, maybe unify it?
+    private fun createLocalCompletionProcessor(collectedNames: MutableSet<String>,
+                                               resultElements: MutableList<LookupElement>): JSResolveProcessor {
         return object : JSResolveProcessor {
             override fun getName(): String? {
                 return null
@@ -136,15 +136,12 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         // todo handle multiple files with same name, JSImportCompletionUtil.IMPORT_PRIORITY, merge lookup elements etc
 
         val placeInfo = JSImportPlaceInfo(tag)
-        //val placeInfo = JSImportPlaceInfo(object : ImplicitJSVariableImpl(tag.name, null as JSType?, tag) {
-        //    override fun getLanguage(): Language {
-        //        return JavaScriptSupportLoader.ECMA_SCRIPT_6
-        //    }
-        //})
-        //ImplicitJSVariableImpl(tag.name, JSAnyType.getWithLanguage(JSTypeSource.SourceLanguage.JS, false), tag)
 
+        //val lowercaseName = StringUtil.trimEnd(tag.name, CompletionUtil.DUMMY_IDENTIFIER_TRIMMED).toLowerCase()
         val keyFilter = Predicate { name: String ->
-            isSvelteComponentTag(name) && !localNames.contains(name) //&& prefixMatcher.prefixMatches(name)
+            isSvelteComponentTag(name) && !localNames.contains(name)
+            // && name.toLowerCase().contains(lowercaseName)
+            // && prefixMatcher.prefixMatches(name)
         }
 
         val providers = JSImportCandidatesProvider.getProviders(placeInfo)
@@ -203,11 +200,11 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
         // todo e.g. React uses both XmlTagInsertHandler & addReactImportInsertHandler
 
-        return NewInsertHandler(candidate)
+        return SvelteComponentInsertHandler(candidate)
     }
 }
 
-class NewInsertHandler(private val candidate: JSImportCandidate) : InsertHandler<LookupElement> {
+class SvelteComponentInsertHandler(private val candidate: JSImportCandidate) : InsertHandler<LookupElement> {
     override fun handleInsert(context: InsertionContext, item: LookupElement) {
         JSImportCompletionUtil.insertLookupItem(context, item, candidate, null)
     }
