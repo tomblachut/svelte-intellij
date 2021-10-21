@@ -6,3 +6,9 @@ SvelteHtmlFile: ExpressionIncomplete.svelte
       PsiElement(JS:LBRACE)('{')
       PsiErrorElement:Expression expected
         <empty list>
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiErrorElement:Expression expected
+        <empty list>

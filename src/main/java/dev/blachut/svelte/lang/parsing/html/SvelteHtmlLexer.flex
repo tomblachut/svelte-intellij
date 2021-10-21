@@ -12,10 +12,10 @@ import com.intellij.lang.javascript.JSTokenTypes;
 %unicode
 
 %{
-  private static int NO_QUOTE = 0;
-  private static int SINGLE_QUOTE = 1;
-  private static int DOUBLE_QUOTE = 2;
-  private static int BACKQUOTE = 3;
+  private static final int NO_QUOTE = 0;
+  private static final int SINGLE_QUOTE = 1;
+  private static final int DOUBLE_QUOTE = 2;
+  private static final int BACKQUOTE = 3;
 
   public int bracesNestingLevel = 0;
   public int quoteMode = NO_QUOTE;
@@ -25,7 +25,7 @@ import com.intellij.lang.javascript.JSTokenTypes;
     this((java.io.Reader)null);
   }
 
-  private void yybeginNestable(int state) {
+  public final void yybeginNestable(int state) {
       bracesNestingLevel = 0;
       quoteMode = NO_QUOTE;
       yybegin(state);

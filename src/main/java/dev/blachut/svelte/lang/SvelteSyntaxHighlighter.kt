@@ -27,7 +27,7 @@ internal class SvelteSyntaxHighlighter : HtmlFileHighlighter() {
 
                 // Only keywords not covered by other means
             SvelteTokenTypes.EACH_KEYWORD,
-            SvelteTokenTypes.KEY_KEYWORD,
+            SvelteTokenTypes.KEY_KEYWORD, // todo revisit after optimising lexing+parsing
             -> KEYWORDS
 
             else -> super.getTokenHighlights(tokenType)

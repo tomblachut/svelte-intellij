@@ -40,7 +40,7 @@ object SvelteTagElementTypes {
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
             builder.advanceLexer() // JSTokenTypes.SHARP
             SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
-            builder.remapCurrentToken(SvelteTokenTypes.EACH_KEYWORD)
+            builder.remapCurrentToken(SvelteTokenTypes.EACH_KEYWORD) // todo might be okay to remove all those remapCurrentToken
             builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake EACH_KEYWORD
 
             parser.expressionParser.parseExpression()

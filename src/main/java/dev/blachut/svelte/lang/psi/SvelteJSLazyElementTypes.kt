@@ -30,13 +30,11 @@ object SvelteJSLazyElementTypes {
      */
     val CONTENT_EXPRESSION = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
         override val noTokensErrorMessage = "Expression expected"
+        override val assumeExternalBraces = false // for now trailing { and } belong to this token
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            // for now trailing { and } belong to this token
-            builder.advanceLexer() // {
             parseAtModifiers(builder)
             parser.expressionParser.parseExpression()
-            builder.advanceLexer() // }
         }
     }
 

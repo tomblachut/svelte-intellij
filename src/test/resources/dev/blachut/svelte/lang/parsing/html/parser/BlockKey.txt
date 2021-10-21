@@ -7,7 +7,7 @@ SvelteHtmlFile: BlockKey.svelte
         SvelteInitialTag(KEY_START)
           PsiElement(JS:LBRACE)('{')
           PsiElement(JS:SHARP)('#')
-          PsiElement(JS:IDENTIFIER)('key')
+          PsiElement(JS:KEY_KEYWORD)('key')
           PsiWhiteSpace(' ')
           JSReferenceExpression
             PsiElement(JS:IDENTIFIER)('expression')

@@ -28,7 +28,7 @@ SvelteHtmlFile: QuoteBalanceUnclosedStringLiteral.svelte
                 PsiElement(JS:EQ)('=')
                 PsiWhiteSpace(' ')
                 JSLiteralExpression
-                  PsiElement(JS:STRING_LITERAL)(''oups;')
+                  PsiElement(JS:STRING_LITERAL)(''oops;')
                 PsiErrorElement:Unclosed string literal
                   <empty list>
             PsiWhiteSpace('\n    ')

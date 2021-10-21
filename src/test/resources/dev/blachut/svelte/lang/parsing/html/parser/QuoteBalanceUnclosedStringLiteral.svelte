@@ -1,6 +1,6 @@
 <script>
     if (true) {
-        text = 'oups;
+        text = 'oops;
     }
 </script>
 <div>test</div>

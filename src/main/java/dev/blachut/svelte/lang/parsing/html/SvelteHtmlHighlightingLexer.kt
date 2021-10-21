@@ -4,7 +4,7 @@ import com.intellij.html.embedding.HtmlEmbeddedContentProvider
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
 
-class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(InnerSvelteHtmlLexer(), false, null) {
+class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(SvelteHtmlBaseLexer(), false, null) {
 
     override fun acceptEmbeddedContentProvider(provider: HtmlEmbeddedContentProvider): Boolean =
         provider::class != HtmlScriptStyleEmbeddedContentProvider::class

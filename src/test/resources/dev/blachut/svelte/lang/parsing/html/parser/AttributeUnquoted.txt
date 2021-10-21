@@ -176,3 +176,24 @@ SvelteHtmlFile: AttributeUnquoted.svelte
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('div')
       XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              PsiErrorElement:Expression expected
+                <empty list>
+            PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('empty')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
