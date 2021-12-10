@@ -1,13 +1,11 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
-
 abstract class BaseSvelteCreateStatementTest(
     private val requestedAction: String,
     private val createdStatement: String,
     private val afterCaret: String,
     private val optionalLine: String = "",
-) : BasePlatformTestCase() {
+) : AbstractSvelteCreateStatementTest() {
     protected val caret = "<caret>"
     protected val basicResult // getter so that indentation is aligned
         get() = """
@@ -19,13 +17,13 @@ $createdStatement
         """.trimIndent()
 
 
-    fun testScriptMissing() {
+    override fun testScriptMissing() {
         doTest("""
             {unresolved$caret$afterCaret}
         """.trimIndent(), basicResult)
     }
 
-    fun testScriptCollapsed() {
+    override fun testScriptCollapsed() {
         doTest(
             """
             <script />
@@ -34,7 +32,7 @@ $createdStatement
         """.trimIndent(), basicResult)
     }
 
-    fun testScriptEmpty() {
+    override fun testScriptEmpty() {
         doTest("""
             <script></script>
 
@@ -42,7 +40,7 @@ $createdStatement
         """.trimIndent(), basicResult)
     }
 
-    fun testScriptBlank() {
+    override fun testScriptBlank() {
         doTest("""
             <script>
             </script>
@@ -51,7 +49,7 @@ $createdStatement
         """.trimIndent(), basicResult)
     }
 
-    fun testScriptNonEmpty() {
+    override fun testScriptNonEmpty() {
         doTest("""
             <script>
                 let existingVariable = 5;
@@ -69,7 +67,7 @@ $optionalLine$createdStatement
         )
     }
 
-    fun testNonConventionalScriptOrder() {
+    override fun testNonConventionalScriptOrder() {
         doTest("""
             {unresolved$caret$afterCaret}
 
@@ -87,7 +85,7 @@ $optionalLine$createdStatement
         )
     }
 
-    fun testInsideScriptStillWorksJS() {
+    override fun testInsideScriptStillWorksJS() {
         doTest("""
             <script>
                 let existingVariable = 5;
@@ -105,7 +103,7 @@ $createdStatement$optionalLine
         )
     }
 
-    fun testInsideScriptStillWorksTS() {
+    override fun testInsideScriptStillWorksTS() {
         doTest("""
             <script lang="ts">
                 let existingVariable = 5;
@@ -123,7 +121,7 @@ $createdStatement$optionalLine
         )
     }
 
-    fun testScriptMissingWithAdjacentModuleScript() {
+    override fun testScriptMissingWithAdjacentModuleScript() {
         doTest("""
             <script context="module">
                 let existingVariable = 5;
@@ -143,7 +141,7 @@ $createdStatement
         )
     }
 
-    fun testInsideModuleScriptWithAdjacentInstanceScript() {
+    override fun testInsideModuleScriptWithAdjacentInstanceScript() {
         doTest("""
             <script context="module">
                 unresolved$caret$afterCaret
@@ -166,9 +164,7 @@ $createdStatement$optionalLine
     private fun doTest(before: String, after: String) {
         myFixture.configureByText("Example.svelte", before)
 
-        myFixture.launchAction(
-            myFixture.findSingleIntention(requestedAction))
-
+        myFixture.launchAction(myFixture.findSingleIntention(requestedAction))
         myFixture.checkResult(after)
     }
 

@@ -5,11 +5,11 @@ import com.intellij.lang.javascript.inspections.JSUnresolvedVariableInspection
 import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedVariableInspection
 
 class SvelteCreateVariableTest : BaseSvelteCreateStatementTest(
-    JavaScriptBundle.message("javascript.create.variable.intention.name", "unresolved"),
-    """
+    requestedAction = JavaScriptBundle.message("javascript.create.variable.intention.name", "unresolved"),
+    createdStatement = """
         let unresolved;
     """.replaceIndent(replacedIndent),
-    ""
+    afterCaret = ""
 ) {
     override fun setUp() {
         super.setUp()
