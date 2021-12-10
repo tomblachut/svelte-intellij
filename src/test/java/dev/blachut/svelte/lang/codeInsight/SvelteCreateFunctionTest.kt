@@ -5,14 +5,14 @@ import com.intellij.lang.javascript.inspections.JSUnresolvedFunctionInspection
 import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedFunctionInspection
 
 class SvelteCreateFunctionTest : BaseSvelteCreateStatementTest(
-    JavaScriptBundle.message("javascript.create.function.intention.name", "unresolved"),
-    """
+    requestedAction = JavaScriptBundle.message("javascript.create.function.intention.name", "unresolved"),
+    createdStatement = """
         function unresolved() {
             <trim>
         }
     """.replaceIndent(replacedIndent).replace("<trim>", ""),
-    "()",
-    "\n"
+    afterCaret = "()",
+    optionalLine = "\n"
 ) {
     override fun setUp() {
         super.setUp()
