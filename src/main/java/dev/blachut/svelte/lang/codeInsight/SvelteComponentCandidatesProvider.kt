@@ -57,7 +57,7 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
 }
 
 class SvelteImportCandidate(name: String, place: PsiElement, private val virtualFile: VirtualFile)
-    : JSSimpleImportCandidate(name, null, place, JSImportCandidate.SourceType.ES6, true) {
+    : JSSimpleImportCandidate(name, null, place, true) {
     override fun createDescriptors(): List<JSImportDescriptor> {
         val place = place ?: return emptyList()
         val baseImportDescriptor = ES6CreateImportUtil.getImportDescriptor(name, null, virtualFile, place, true)

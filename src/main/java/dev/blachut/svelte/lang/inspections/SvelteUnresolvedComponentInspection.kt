@@ -43,6 +43,4 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
 }
 
 class SvelteComponentImportModulesSuggester(moduleReferenceInfo: ModuleReferenceInfo,
-                                            node: PsiElement) : JSImportModulesSuggester(moduleReferenceInfo, node) {
-    override fun isAvailableForES6Import(): Boolean = true
-}
+                                            node: PsiElement) : JSImportModulesSuggester(moduleReferenceInfo, node)
