@@ -12,6 +12,7 @@ src/main/gen
 
 out
 .gradle
+.qodana
 build
 
 .DS_Store

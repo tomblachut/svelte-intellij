@@ -10,6 +10,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
     id("org.jetbrains.intellij") version "1.3.0"
     id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.qodana") version "0.1.13"
     id("org.jetbrains.grammarkit") version "2021.2.1"
 }
 
@@ -65,6 +66,14 @@ changelog {
     groups.set(emptyList())
 }
 
+// https://github.com/JetBrains/gradle-qodana-plugin
+qodana {
+    cachePath.set(projectDir.resolve(".qodana").canonicalPath)
+    reportPath.set(projectDir.resolve("build/reports/inspections").canonicalPath)
+    saveReport.set(true)
+    showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
+}
+
 // https://github.com/JetBrains/gradle-grammar-kit-plugin
 val generateSvelteLexer = task<GenerateLexerTask>("generateSvelteLexer") {
     source.set("src/main/java/dev/blachut/svelte/lang/parsing/html/SvelteHtmlLexer.flex")
@@ -74,7 +83,7 @@ val generateSvelteLexer = task<GenerateLexerTask>("generateSvelteLexer") {
 }
 
 tasks {
-    val javaVersion = "11"
+    val javaVersion = properties("javaVersion")
 
     // Set the JVM compatibility versions
     withType<JavaCompile> {
@@ -88,6 +97,10 @@ tasks {
         kotlinOptions.jvmTarget = javaVersion
         kotlinOptions.languageVersion = "1.5"
         kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=compatibility")
+    }
+
+    wrapper {
+        gradleVersion = properties("gradleVersion")
     }
 
     patchPluginXml {
@@ -115,8 +128,18 @@ tasks {
         })
     }
 
-    runPluginVerifier {
-        ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+    // https://github.com/JetBrains/intellij-ui-test-robot
+    runIdeForUiTests {
+        systemProperty("robot-server.port", "8082")
+        systemProperty("ide.mac.message.dialogs.as.sheets", "false")
+        systemProperty("jb.privacy.policy.text", "<!--999.999-->")
+        systemProperty("jb.consents.confirmation.enabled", "false")
+    }
+
+    signPlugin {
+        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
+        privateKey.set(System.getenv("PRIVATE_KEY"))
+        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
     }
 
     // https://github.com/JetBrains/intellij-ui-test-robot
