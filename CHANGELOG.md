@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.21.2]
+## [Unreleased]
 - Prepare plugin for 2021.3.1 JavaScript changes
 
 ## [0.21.1]
