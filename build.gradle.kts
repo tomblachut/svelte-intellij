@@ -1,5 +1,5 @@
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 import org.jetbrains.intellij.tasks.RunIdeTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -7,13 +7,10 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.5.10"
-    // https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.1.4"
-    // https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "1.1.2"
-    // https://github.com/JetBrains/gradle-grammar-kit-plugin
-    id("org.jetbrains.grammarkit") version "2021.1.3"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.intellij") version "1.3.0"
+    id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.grammarkit") version "2021.2.1"
 }
 
 group = properties("pluginGroup")
@@ -22,12 +19,14 @@ version = properties("pluginVersion")
 // https://plugins.jetbrains.com/plugin/11449-sass/versions/
 val sassPlugin = when {
     properties("platformVersion").startsWith("212") -> "org.jetbrains.plugins.sass:212.4746.57"
+    properties("platformVersion").startsWith("213") -> "org.jetbrains.plugins.sass:213.5744.269"
     else -> throw GradleException("Missing Sass plugin version for platformVersion = ${properties("platformVersion")}")
 }
 
 // https://plugins.jetbrains.com/plugin/227-psiviewer/versions
 val psiViewerPlugin = when {
     properties("platformVersion").startsWith("212") -> "PsiViewer:212-SNAPSHOT"
+    properties("platformVersion").startsWith("213") -> "PsiViewer:213-SNAPSHOT"
     else -> null
 }
 
@@ -50,42 +49,44 @@ sourceSets.main {
     java.srcDirs("src/main/java", "src/main/gen")
 }
 
-// Read more: https://github.com/JetBrains/gradle-intellij-plugin
+// https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
     pluginName.set(properties("pluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
-    downloadSources.set(properties("platformDownloadSources").toBoolean())
-    updateSinceUntilBuild.set(true)
 
-    //  https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
+    // https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
     plugins.set(intellijPlugins)
 }
 
+// https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version = properties("pluginVersion")
-    groups = emptyList()
+    version.set(properties("pluginVersion"))
+    groups.set(emptyList())
 }
 
-val generateLexer = task<GenerateLexer>("generateLexer") {
-    source = "src/main/java/dev/blachut/svelte/lang/parsing/html/SvelteHtmlLexer.flex"
-    targetDir = "src/main/gen/dev/blachut/svelte/lang/parsing/html"
-    targetClass = "_SvelteHtmlLexer"
-    purgeOldFiles = true
+// https://github.com/JetBrains/gradle-grammar-kit-plugin
+val generateSvelteLexer = task<GenerateLexerTask>("generateSvelteLexer") {
+    source.set("src/main/java/dev/blachut/svelte/lang/parsing/html/SvelteHtmlLexer.flex")
+    targetDir.set("src/main/gen/dev/blachut/svelte/lang/parsing/html")
+    targetClass.set("_SvelteHtmlLexer")
+    purgeOldFiles.set(true)
 }
 
 tasks {
-    // Set the compatibility versions to 11
+    val javaVersion = "11"
+
+    // Set the JVM compatibility versions
     withType<JavaCompile> {
-        dependsOn(generateLexer)
-        sourceCompatibility = "11"
-        targetCompatibility = "11"
+        dependsOn(generateSvelteLexer)
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
 
     withType<KotlinCompile> {
-        dependsOn(generateLexer)
-        kotlinOptions.jvmTarget = "11"
-        kotlinOptions.languageVersion = "1.4"
+        dependsOn(generateSvelteLexer)
+        kotlinOptions.jvmTarget = javaVersion
+        kotlinOptions.languageVersion = "1.5"
         kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=compatibility")
     }
 
@@ -96,7 +97,7 @@ tasks {
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription.set(
-            File(projectDir, "README.md").readText().lines().run {
+            projectDir.resolve("README.md").readText().lines().run {
                 val start = "<!-- Plugin description -->"
                 val end = "<!-- Plugin description end -->"
 
@@ -107,11 +108,29 @@ tasks {
             }.joinToString("\n").run { markdownToHTML(this) }
         )
         // Get the latest available change notes from the changelog file
-        changeNotes.set(provider { changelog.getLatest().toHTML() })
+        changeNotes.set(provider {
+            changelog.run {
+                getOrNull(properties("pluginVersion")) ?: getLatest()
+            }.toHTML()
+        })
     }
 
     runPluginVerifier {
         ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+    }
+
+    // https://github.com/JetBrains/intellij-ui-test-robot
+    runIdeForUiTests {
+        systemProperty("robot-server.port", "8082")
+        systemProperty("ide.mac.message.dialogs.as.sheets", "false")
+        systemProperty("jb.privacy.policy.text", "<!--999.999-->")
+        systemProperty("jb.consents.confirmation.enabled", "false")
+    }
+
+    signPlugin {
+        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
+        privateKey.set(System.getenv("PRIVATE_KEY"))
+        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
     }
 
     publishPlugin {
