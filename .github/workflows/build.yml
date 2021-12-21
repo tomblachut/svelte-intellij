@@ -151,7 +151,7 @@ jobs:
     name: Verify
     needs: build
     runs-on: ubuntu-latest
-    continue-on-error: true
+    if: ${{ false }}
     steps:
 
       # Setup Java 11 environment for the next steps
@@ -206,7 +206,7 @@ jobs:
   releaseDraft:
     name: Release Draft
     if: github.event_name != 'pull_request'
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
 
