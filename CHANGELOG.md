@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.21.2]
 - Prepare plugin for 2021.3.1 JavaScript changes
 
 ## [0.21.1]
@@ -91,17 +93,14 @@
 - Dropped compatibility with 2019.x platform
 
 ## [0.12.2]
-
 - Fix compatibility with 2020.2 versions
 - Recognize $$restProps
 
 ## [0.12.1]
-
 - Extend supported IDE version range to 2020.x
 - Support basic interpolations inside style attributes
 
 ## [0.12.0]
-
 - Support for different CSS dialects via lang attribute
 - Initial support for $-prefixed store references
 - Enable completion of JS declarations from script tags
@@ -114,11 +113,9 @@
 - Bug fixes & stability improvements
 
 ## [0.11.1]
-
 - Fix regression about not working import suggestions
 
 ## [0.11.0]
-
 - Stop annotating directives as unknown attributes
 - Enable CSS references and completions
 - Recognize $$props variable
@@ -128,18 +125,15 @@
 - Minor fixes & stability improvements
 
 ## [0.10.0]
-
 - Support attribute value expressions
 - Support shorthand attribute expressions
 - Support spread attributes
 
 ## [0.9.1]
-
 - Fix buggy auto-inserted each block closing tag
 - Correctly set minimum version compatibility to 2019.2
 
 ## [0.9.0]
-
 - Connect template expressions to definitions inside script tag
 - Support complex JS expressions in Svelte tags
 - Recognize more component imports
@@ -148,7 +142,6 @@
 - Improve stability
 
 ## [0.8.0]
-
 - Add auto import for components
 - Highlight not imported components
 - Mark unused component imports properly
@@ -158,7 +151,6 @@
 - Extend supported IDE version range to 2019.2
 
 ## [0.7.0]
-
 - Support code formatting
 - Emmet-style expansions for Svelte tags. Try typing if\[TAB\]
 - Auto indent when writing newline between Svelte tags
@@ -169,12 +161,10 @@
 - Improve parser behavior for incomplete code
 
 ## [0.6.0]
-
 - Add syntax highlighting for JS inside blocks & expressions (bar attributes)
 - Add syntax highlighting for Svelte keywords
 - Improve parser recovery after errors
 - Additional minor improvements
 
 ## [0.5.0]
-
 - First public release
