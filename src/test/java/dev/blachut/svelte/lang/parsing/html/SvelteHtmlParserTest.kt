@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.html.embedding.HtmlEmbeddedContentSupport
 import com.intellij.javascript.JSHtmlEmbeddedContentSupport
 import com.intellij.lang.LanguageASTFactory
-import com.intellij.lang.LanguageHtmlScriptContentProvider
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.css.CSSParserDefinition
 import com.intellij.lang.javascript.JavascriptParserDefinition
@@ -16,7 +15,6 @@ import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
 import com.intellij.testFramework.ParsingTestCase
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
 import org.jetbrains.plugins.scss.SCSSLanguage
 import org.jetbrains.plugins.scss.ScssTokenTypesProvider

@@ -7,12 +7,17 @@ import com.intellij.lang.javascript.psi.JSElementVisitor
 import com.intellij.lang.javascript.psi.JSExpressionStatement
 import com.intellij.lang.javascript.psi.JSLabeledStatement
 import com.intellij.lang.javascript.psi.impl.JSEmbeddedContentImpl
+import com.intellij.lang.javascript.psi.stubs.JSEmbeddedContentStub
+import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.PsiScopeProcessor
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
-class SvelteJSEmbeddedContentImpl(node: ASTNode) : JSEmbeddedContentImpl(node) {
+class SvelteJSEmbeddedContentImpl : JSEmbeddedContentImpl {
+    constructor(node: ASTNode) : super(node)
+    constructor(stub: JSEmbeddedContentStub, type: JSEmbeddedContentElementType) : super(stub, type)
+
     override fun processDeclarations(
         processor: PsiScopeProcessor,
         state: ResolveState,
@@ -20,7 +25,7 @@ class SvelteJSEmbeddedContentImpl(node: ASTNode) : JSEmbeddedContentImpl(node) {
         place: PsiElement
     ): Boolean {
         return super.processDeclarations(processor, state, lastParent, place) &&
-            processReactiveStatements(processor, state, lastParent, place)
+               processReactiveStatements(processor, state, lastParent, place)
     }
 
     @Suppress("UNUSED_PARAMETER")
