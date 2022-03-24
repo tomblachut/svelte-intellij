@@ -55,7 +55,7 @@ class SvelteHTMLParserDefinition : HTMLParserDefinition() {
     // based on HtmlFileElementType
     class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>(SvelteHTMLLanguage.INSTANCE) {
         override fun getStubVersion(): Int {
-            return HtmlFileElementType.getHtmlStubVersion()
+            return HtmlFileElementType.getHtmlStubVersion() + 1
         }
     }
 }
