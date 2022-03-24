@@ -1,7 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.typescript.modules.TypeScriptNodeReference
+import com.intellij.lang.typescript.modules.TypeScriptNodeSearchProcessor.TS_PROCESSOR
 import com.intellij.lang.typescript.tsconfig.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
@@ -28,7 +28,7 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
 
     override fun contributeResolver(project: Project, config: TypeScriptConfig): TypeScriptFileImportsResolver? {
         // TODO check if package.json includes svelte
-        return TypeScriptFileImportsResolverImpl(project, config.resolveContext, TypeScriptNodeReference.TS_PROCESSOR, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
+        return TypeScriptFileImportsResolverImpl(project, config.resolveContext, TS_PROCESSOR, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
     }
 
     override fun contributeResolver(project: Project,
@@ -36,6 +36,6 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
                                     contextFile: VirtualFile): TypeScriptFileImportsResolver? {
         if (!isSvelteContext(contextFile)) return null
 
-        return TypeScriptFileImportsResolverImpl(project, context, TypeScriptNodeReference.TS_PROCESSOR, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
+        return TypeScriptFileImportsResolverImpl(project, context, TS_PROCESSOR, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
     }
 }
