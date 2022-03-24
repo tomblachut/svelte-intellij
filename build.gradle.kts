@@ -8,7 +8,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("org.jetbrains.intellij") version "1.3.0"
+    id("org.jetbrains.intellij") version "1.4.0"
     id("org.jetbrains.changelog") version "1.3.1"
     id("org.jetbrains.grammarkit") version "2021.2.1"
 }
@@ -20,6 +20,7 @@ version = properties("pluginVersion")
 val sassPlugin = when {
     properties("platformVersion").startsWith("212") -> "org.jetbrains.plugins.sass:212.4746.57"
     properties("platformVersion").startsWith("213") -> "org.jetbrains.plugins.sass:213.5744.269"
+    properties("platformVersion").startsWith("221") -> "org.jetbrains.plugins.sass:221.5080.20"
     else -> throw GradleException("Missing Sass plugin version for platformVersion = ${properties("platformVersion")}")
 }
 
@@ -27,6 +28,7 @@ val sassPlugin = when {
 val psiViewerPlugin = when {
     properties("platformVersion").startsWith("212") -> "PsiViewer:212-SNAPSHOT"
     properties("platformVersion").startsWith("213") -> "PsiViewer:213-SNAPSHOT"
+    properties("platformVersion").startsWith("221") -> "PsiViewer:221-SNAPSHOT"
     else -> null
 }
 

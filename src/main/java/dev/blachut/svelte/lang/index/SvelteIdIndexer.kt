@@ -9,14 +9,14 @@ import dev.blachut.svelte.lang.SvelteHTMLLanguage
 
 class SvelteIdIndexer : LexingIdIndexer {
     override fun map(inputData: FileContent): Map<IdIndexEntry, Int> {
-        return BaseFilterLexerUtil.scanContent(inputData) { consumer ->
+        return BaseFilterLexerUtil.calcIdEntries(inputData) { consumer ->
             SvelteFilterLexer(
                 consumer,
                 SyntaxHighlighterFactory.getSyntaxHighlighter(
                     SvelteHTMLLanguage.INSTANCE, inputData.project, inputData.file
                 ).highlightingLexer
             )
-        }.idMap
+        }
     }
 
     override fun getVersion(): Int {
