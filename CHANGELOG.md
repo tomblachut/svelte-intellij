@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+- Fix randomly unresolved reactive variables
+- Compatibility with 2022.1 platform
 
 ## [0.21.2]
 - Prepare plugin for 2021.3.1 JavaScript changes
