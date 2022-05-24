@@ -33,7 +33,7 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
         return true
     }
 
-    override fun getNames(keyFilter: Predicate<String>): Set<String> {
+    override fun getNames(keyFilter: Predicate<in String>): MutableSet<String> {
         return FilenameIndex.getAllFilesByExt(project, "svelte").stream()
             .map(::getComponentName)
             .filter(keyFilter)

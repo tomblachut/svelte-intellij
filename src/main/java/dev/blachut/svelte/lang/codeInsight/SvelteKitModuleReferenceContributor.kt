@@ -65,10 +65,10 @@ class SvelteKitModuleReferenceContributor : JSResolvableModuleReferenceContribut
 
     // based on TypeScriptUtil.createFilterByNodeModuleScope
     private fun createFilterByNodeModuleScope(scope: GlobalSearchScope, context: PsiElement): GlobalSearchScope {
-        var context = context
-        if (context is PsiFile) context = context.originalFile
-        val contextFile = PsiUtilCore.getVirtualFile(context)
-        val index = ProjectFileIndex.getInstance(context.project)
+        var mutableContext = context
+        if (mutableContext is PsiFile) mutableContext = mutableContext.originalFile
+        val contextFile = PsiUtilCore.getVirtualFile(mutableContext)
+        val index = ProjectFileIndex.getInstance(mutableContext.project)
         val resultScope = if (contextFile == null) scope
         else object : DelegatingGlobalSearchScope(scope) {
             override fun contains(file: VirtualFile): Boolean {
