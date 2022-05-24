@@ -79,7 +79,7 @@ val generateSvelteLexer = task<GenerateLexerTask>("generateSvelteLexer") {
 }
 
 tasks {
-    val javaVersion = "17"
+    val javaVersion = "11"
 
     // Set the JVM compatibility versions
     withType<JavaCompile> {
@@ -91,7 +91,7 @@ tasks {
     withType<KotlinCompile> {
         dependsOn(generateSvelteLexer)
         kotlinOptions.jvmTarget = javaVersion
-        kotlinOptions.languageVersion = "1.6"
+        kotlinOptions.languageVersion = "1.5"
         kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=compatibility")
     }
 
