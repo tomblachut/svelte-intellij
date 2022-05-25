@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.22.1]
 - Compatibility with 2022.2 platform
 
 ## [0.22.0]
