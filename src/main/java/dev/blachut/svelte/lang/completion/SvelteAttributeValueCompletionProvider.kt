@@ -53,7 +53,7 @@ class SvelteAttributeValueCompletionProvider : CompletionProvider<CompletionPara
         result.add("css")
         CSSLanguage.INSTANCE.dialects.forEach {
             if (it.displayName != "JQuery-CSS") {
-                result.add(it.displayName.toLowerCase(Locale.US))
+                result.add(it.displayName.lowercase(Locale.US))
             }
         }
         return result.toSet()
