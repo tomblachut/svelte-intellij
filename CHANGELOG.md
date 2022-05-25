@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- Compatibility with 2022.2 platform
 
 ## [0.22.0]
 - Fix randomly unresolved reactive variables
