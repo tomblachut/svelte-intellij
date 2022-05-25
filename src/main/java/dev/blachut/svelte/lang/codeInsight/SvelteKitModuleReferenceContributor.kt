@@ -31,7 +31,7 @@ class SvelteKitModuleReferenceContributor : JSResolvableModuleReferenceContribut
 
     override fun isAcceptableText(unquotedRefText: String): Boolean {
         val requiredModuleName = FileUtilRt.toSystemIndependentName(unquotedRefText)
-        return StringUtil.startsWith(requiredModuleName, "\$app/");
+        return StringUtil.startsWith(requiredModuleName, "\$app/")
     }
 
     override fun getDefaultWeight(): Int {
@@ -65,6 +65,7 @@ class SvelteKitModuleReferenceContributor : JSResolvableModuleReferenceContribut
 
     // based on TypeScriptUtil.createFilterByNodeModuleScope
     private fun createFilterByNodeModuleScope(scope: GlobalSearchScope, context: PsiElement): GlobalSearchScope {
+        @Suppress("NAME_SHADOWING")
         var context = context
         if (context is PsiFile) context = context.originalFile
         val contextFile = PsiUtilCore.getVirtualFile(context)
