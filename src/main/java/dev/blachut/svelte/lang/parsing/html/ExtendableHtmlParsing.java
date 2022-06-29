@@ -117,7 +117,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     protected boolean isEndTagRequired(@NotNull String tagName) {
-        return !HtmlUtil.isOptionalEndForHtmlTagL(tagName) && !"html".equals(tagName) && !"body".equals(tagName);
+        return !HtmlUtil.isOptionalEndForHtmlTagL(tagName) && !"dev/blachut/svelte/lang/parsing/html".equals(tagName) && !"body".equals(tagName);
     }
 
     protected boolean hasCustomTopLevelContent() {

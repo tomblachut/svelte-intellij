@@ -8,8 +8,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
-import dev.blachut.svelte.lang.icons.SvelteIcons
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
+import icons.SvelteIcons
 
 class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
@@ -65,7 +65,7 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
     private fun createLookupElement(text: String, priority: Int? = null): LookupElement {
         return LookupElementBuilder
             .create(text)
-            .withIcon(SvelteIcons.GRAY)
+            .withIcon(SvelteIcons.Gray)
             .let {
                 if (priority != null) {
                     PrioritizedLookupElement.withPriority(it, priority.toDouble())
@@ -79,7 +79,7 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
         return LookupElementBuilder
             .create(text)
             .withBoldness(true)
-            .withIcon(SvelteIcons.GRAY)
+            .withIcon(SvelteIcons.Gray)
             .withTypeText("Directive")
             .withInsertHandler { insertionContext, _ ->
                 insertionContext.setLaterRunnable {

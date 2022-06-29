@@ -1,7 +1,7 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.openapi.fileTypes.LanguageFileType
-import dev.blachut.svelte.lang.icons.SvelteIcons
+import icons.SvelteIcons
 import javax.swing.Icon
 
 class SvelteHtmlFileType : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
@@ -18,7 +18,7 @@ class SvelteHtmlFileType : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
     }
 
     override fun getIcon(): Icon? {
-        return SvelteIcons.COLOR
+        return SvelteIcons.Desaturated
     }
 
     companion object {

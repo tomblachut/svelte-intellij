@@ -10,6 +10,22 @@
     <depends>com.intellij.css</depends>
     <depends optional="true" config-file="svelte-js-debugger.xml">JavaScriptDebugger</depends>
 
+    <description><![CDATA[
+        Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
+
+        ## Features
+
+        * Syntax highlighting
+        * Code formatting
+        * Typing assistance
+        * Emmet-style abbreviations of Svelte blocks
+        * Completions of components, props and some directives
+        * Auto import of components
+        * Navigation from components to their definition
+        * Debugger integration
+]]>
+    </description>
+
     <actions>
         <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewJavaScriptFile"/>
@@ -77,7 +93,8 @@
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <css.classOrIdUsagesProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteCssUsagesProvider"/>
         <highlightErrorFilter implementation="dev.blachut.svelte.lang.css.SvelteCssExpressionErrorFilter"/>
-        <spellchecker.bundledDictionaryProvider implementation="dev.blachut.svelte.lang.spellchecker.SvelteSpellcheckingDictionaryProvider"/>
+        <spellchecker.bundledDictionaryProvider
+            implementation="dev.blachut.svelte.lang.spellchecker.SvelteSpellcheckingDictionaryProvider"/>
         <postStartupActivity implementation="dev.blachut.svelte.lang.linters.EslintInitStartupActivity"/>
         <html.embeddedContentSupport implementation="dev.blachut.svelte.lang.parsing.html.SvelteHtmlEmbeddedContentSupport"/>
 

@@ -4,14 +4,17 @@ import com.intellij.lang.ecmascript6.psi.impl.ES6CreateImportUtil
 import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil
 import com.intellij.lang.ecmascript6.psi.impl.ES6ImportPsiUtil.CreateImportExportInfo
 import com.intellij.lang.javascript.modules.JSImportPlaceInfo
-import com.intellij.lang.javascript.modules.imports.*
+import com.intellij.lang.javascript.modules.imports.JSImportCandidatesBase
+import com.intellij.lang.javascript.modules.imports.JSImportDescriptor
+import com.intellij.lang.javascript.modules.imports.JSSimpleImportCandidate
+import com.intellij.lang.javascript.modules.imports.JSSimpleImportDescriptor
 import com.intellij.lang.javascript.modules.imports.providers.JSCandidatesProcessor
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider.CandidatesFactory
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.FilenameIndex
-import dev.blachut.svelte.lang.icons.SvelteIcons
+import icons.SvelteIcons
 import java.util.function.Predicate
 import java.util.stream.Collectors
 import javax.swing.Icon
@@ -75,6 +78,6 @@ class SvelteImportCandidate(name: String, place: PsiElement, private val virtual
     }
 
     override fun getIcon(flags: Int): Icon {
-        return SvelteIcons.COLOR
+        return SvelteIcons.Desaturated
     }
 }

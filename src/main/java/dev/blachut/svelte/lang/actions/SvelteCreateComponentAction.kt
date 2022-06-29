@@ -8,9 +8,9 @@ import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
-import dev.blachut.svelte.lang.icons.SvelteIcons
+import icons.SvelteIcons
 
-class SvelteCreateComponentAction : CreateFileFromTemplateAction(NAME, DESCRIPTION, SvelteIcons.COLOR), DumbAware {
+class SvelteCreateComponentAction : CreateFileFromTemplateAction(NAME, DESCRIPTION, SvelteIcons.Desaturated), DumbAware {
     companion object {
         private const val TEMPLATE_NAME: String = "Svelte Component"
         private const val NAME = "Svelte Component"
@@ -20,7 +20,7 @@ class SvelteCreateComponentAction : CreateFileFromTemplateAction(NAME, DESCRIPTI
     override fun buildDialog(project: Project, directory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder) {
         builder
             .setTitle("New $NAME")
-            .addKind(NAME, SvelteIcons.COLOR, TEMPLATE_NAME)
+            .addKind(NAME, SvelteIcons.Desaturated, TEMPLATE_NAME)
     }
 
     override fun getActionName(directory: PsiDirectory?, newName: String, templateName: String?): String = "Create $NAME $newName"

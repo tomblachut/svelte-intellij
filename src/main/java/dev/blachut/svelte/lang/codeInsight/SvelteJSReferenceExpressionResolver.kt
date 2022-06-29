@@ -2,6 +2,7 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.index.JSSymbolUtil
+import com.intellij.lang.javascript.psi.JSLabeledStatement
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
@@ -10,6 +11,7 @@ import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.lang.javascript.psi.stubs.JSImplicitElement
 import com.intellij.lang.javascript.psi.stubs.impl.JSImplicitElementImpl
 import com.intellij.psi.ResolveResult
+import com.intellij.psi.util.parentOfType
 
 class SvelteJSReferenceExpressionResolver(
     referenceExpression: JSReferenceExpressionImpl,
@@ -20,10 +22,32 @@ class SvelteJSReferenceExpressionResolver(
         val resolveImplicits = resolveImplicits(expression)
         if (resolveImplicits.isNotEmpty()) return resolveImplicits
 
-        return super.resolve(expression, incompleteCode)
+        val resolved = super.resolve(expression, incompleteCode)
+
+        val referencedName = myReferencedName
+        if (resolved.isEmpty() && expression.qualifier == null && referencedName != null) {
+            val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
+            val localProcessor = createLocalResolveProcessor(sink)
+            JSReferenceExpressionImpl.doProcessLocalDeclarations(
+                myRef,
+                myQualifier,
+                localProcessor,
+                false,
+                false,
+                null
+            )
+            val jsElement = localProcessor.result ?: return resolved
+
+            val labeledStatement = jsElement.parentOfType<JSLabeledStatement>()
+            if (labeledStatement != null && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+                return localProcessor.resultsAsResolveResults
+            }
+        }
+
+        return resolved
     }
 
-    override fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
+    private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
         return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
     }
 

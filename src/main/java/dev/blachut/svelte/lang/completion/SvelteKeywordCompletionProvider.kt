@@ -11,9 +11,9 @@ import com.intellij.psi.util.parents
 import com.intellij.psi.util.prevLeaf
 import com.intellij.psi.util.siblings
 import com.intellij.util.ProcessingContext
-import dev.blachut.svelte.lang.icons.SvelteIcons
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
+import icons.SvelteIcons
 
 class SvelteKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
     private val symbolTokens = setOf(JSTokenTypes.SHARP, JSTokenTypes.COLON, JSTokenTypes.DIV, JSTokenTypes.AT)
@@ -41,7 +41,7 @@ class SvelteKeywordCompletionProvider : CompletionProvider<CompletionParameters>
             newResult.addElement(
                 LookupElementBuilder.create(completion)
                     .withBoldness(true)
-                    .withIcon(SvelteIcons.GRAY)
+                    .withIcon(SvelteIcons.Gray)
                     .withInsertHandler(AddSpaceInsertHandler.INSTANCE_WITH_AUTO_POPUP)
             )
         }

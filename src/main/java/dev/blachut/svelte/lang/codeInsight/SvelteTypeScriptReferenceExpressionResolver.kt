@@ -20,8 +20,9 @@ class SvelteTypeScriptReferenceExpressionResolver(
 
         val resolved = super.resolve(expression, incompleteCode)
 
-        if (resolved.isEmpty() && expression.qualifier == null && myReferencedName != null) {
-            val sink = ResolveResultSink(myRef, myReferencedName, false, incompleteCode)
+        val referencedName = myReferencedName
+        if (resolved.isEmpty() && expression.qualifier == null && referencedName != null) {
+            val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
             val localProcessor = createLocalResolveProcessor(sink)
             JSReferenceExpressionImpl.doProcessLocalDeclarations(
                 myRef,
@@ -42,7 +43,7 @@ class SvelteTypeScriptReferenceExpressionResolver(
         return resolved
     }
 
-    override fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
+    private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
         return SvelteReactiveDeclarationsUtil.SvelteTypeScriptResolveProcessor(sink, myContainingFile, myRef)
     }
 }

@@ -40,7 +40,7 @@ object SvelteTokenTypes {
     val KEY_KEYWORD: IElementType = JSKeywordElementType("key")
 
     @JvmField
-    val HTML_KEYWORD = JSKeywordElementType("html")
+    val HTML_KEYWORD = JSKeywordElementType("dev/blachut/svelte/lang/parsing/html")
 
     @JvmField
     val DEBUG_KEYWORD = JSKeywordElementType("debug")

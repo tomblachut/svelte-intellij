@@ -28,9 +28,9 @@ import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
-import dev.blachut.svelte.lang.icons.SvelteIcons
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
+import icons.SvelteIcons
 import java.util.function.Predicate
 
 // Vue plugin uses 100, it's ok for now
@@ -45,17 +45,17 @@ val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "opt
 // TODO Merge with svelteBareTagLookupElements
 // TODO Use XmlTagInsertHandler
 val svelteNamespaceTagLookupElements = svelteTagNames.map {
-    LookupElementBuilder.create(sveltePrefix + it).withIcon(SvelteIcons.GRAY)
+    LookupElementBuilder.create(sveltePrefix + it).withIcon(SvelteIcons.Gray)
 }
 
-val slotLookupElement: LookupElementBuilder = LookupElementBuilder.create("slot").withIcon(SvelteIcons.GRAY)
+val slotLookupElement: LookupElementBuilder = LookupElementBuilder.create("slot").withIcon(SvelteIcons.Gray)
     .withInsertHandler(XmlTagInsertHandler.INSTANCE)
 
 /**
  * When user auto completes after writing colon in "svelte", editor will produce i.e. "svelte:svelte:self".
  */
 val svelteBareTagLookupElements = svelteTagNames.map {
-    val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.GRAY)
+    val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.Gray)
     PrioritizedLookupElement.withPriority(lookupElement, mediumPriority)
 }
 
@@ -192,7 +192,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
         val builder = if (element != null) LookupElementBuilder.create(element, name) else LookupElementBuilder.create(name)
         val lookupElement = builder
-            .withIcon(SvelteIcons.COLOR)
+            .withIcon(SvelteIcons.Desaturated)
             //.withTailText(tailText, true)
             .withTailText(presentation?.locationString, true) // todo add space
             //.withTypeText("SvelteComponent") // can't use type text because there are false positives here

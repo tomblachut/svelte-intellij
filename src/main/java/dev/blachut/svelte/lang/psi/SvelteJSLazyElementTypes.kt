@@ -65,7 +65,7 @@ object SvelteJSLazyElementTypes {
                 builder.error("Whitespace is not allowed after @")
             }
 
-            if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
+            if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "dev/blachut/svelte/lang/parsing/html") {
                 builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
                 builder.advanceLexer()
             } else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
@@ -94,7 +94,7 @@ object SvelteJSLazyElementTypes {
             builder.advanceLexer()
 
             // copied from parseAtModifiers above
-            if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
+            if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "dev/blachut/svelte/lang/parsing/html") {
                 builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
                 builder.advanceLexer()
             } else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {

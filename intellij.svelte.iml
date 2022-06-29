@@ -48,11 +48,7 @@
     <orderEntry type="library" name="Trove4j" level="project" />
     <orderEntry type="module" module-name="intellij.platform.testFramework" scope="TEST" />
     <orderEntry type="module" module-name="intellij.javascript" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.vuejs" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.javascript.psi.impl" scope="TEST" />
     <orderEntry type="module" module-name="intellij.javascript.testFramework" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.javascript.impl" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.css.psi" scope="TEST" />
     <orderEntry type="module" module-name="intellij.copyright" scope="TEST" />
     <orderEntry type="module" module-name="intellij.javascript.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass" scope="TEST" />
@@ -60,6 +56,5 @@
     <orderEntry type="module" module-name="intellij.postcss" scope="TEST" />
     <orderEntry type="module" module-name="intellij.stylus" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.tests" scope="TEST" />
-    <orderEntry type="library" name="rd-core" level="project" />
   </component>
 </module>
