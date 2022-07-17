@@ -59,20 +59,19 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
 
 class SvelteImportCandidate(name: String, place: PsiElement, private val virtualFile: VirtualFile)
     : JSSimpleImportCandidate(name, null, place) {
-    override fun createDescriptors(): List<JSImportDescriptor> {
-        val place = place ?: return emptyList()
+    override fun createDescriptor(): JSImportDescriptor? {
+        val place = place ?: return null
         val baseImportDescriptor = ES6CreateImportUtil.getImportDescriptor(name, null, virtualFile, place, true)
-        if (baseImportDescriptor == null) return emptyList()
+        if (baseImportDescriptor == null) return null
 
         // JavaScript plugin does not understand .svelte files, so it tries to import them like assets, i.e. bare import
         val info = CreateImportExportInfo(name, ES6ImportPsiUtil.ImportExportType.DEFAULT)
-        return listOf(JSSimpleImportDescriptor(baseImportDescriptor.moduleDescriptor, info))
+        return JSSimpleImportDescriptor(baseImportDescriptor.moduleDescriptor, info)
     }
 
     override fun getContainerText(): String {
-        val item = descriptors.first()
 
-        return item.moduleName
+        return descriptor?.moduleName ?: ""
     }
 
     override fun getIcon(flags: Int): Icon {
