@@ -20,7 +20,7 @@ import java.util.stream.Collectors
 import javax.swing.Icon
 
 class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImportCandidatesBase(placeInfo) {
-    override fun processCandidates(ref: String, processor: JSCandidatesProcessor, forCompletion: Boolean): Boolean {
+    override fun processCandidates(ref: String, processor: JSCandidatesProcessor, forCompletion: Boolean) {
         // val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.allScope(project))
         // todo filter out current file
         // todo ensure Uppercase first char
@@ -32,8 +32,6 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
                 processor.processCandidate(SvelteImportCandidate(ref, place, virtualFile))
             }
         }
-
-        return true
     }
 
     override fun getNames(keyFilter: Predicate<in String>): Set<String> {
@@ -60,7 +58,7 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
 }
 
 class SvelteImportCandidate(name: String, place: PsiElement, private val virtualFile: VirtualFile)
-    : JSSimpleImportCandidate(name, null, place, true) {
+    : JSSimpleImportCandidate(name, null, place) {
     override fun createDescriptors(): List<JSImportDescriptor> {
         val place = place ?: return emptyList()
         val baseImportDescriptor = ES6CreateImportUtil.getImportDescriptor(name, null, virtualFile, place, true)
