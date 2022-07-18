@@ -19,6 +19,7 @@ class SvelteJSReferenceExpression(elementType: IElementType) : JSReferenceExpres
         return isSubscribedReference
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getReferencedName(): String? {
         val name = super.getReferencedName()
         return if (name != null && qualifier == null && isDollarPrefixedName(name)) name.substring(1) else name
