@@ -12,6 +12,6 @@ public class SvelteJSLanguage extends JSLanguageDialect implements DependentLang
     public static final SvelteJSLanguage INSTANCE = new SvelteJSLanguage();
 
     private SvelteJSLanguage() {
-        super("SvelteJS", DialectOptionHolder.ECMA_6, JavaScriptSupportLoader.ECMA_SCRIPT_6);
+        super("SvelteJS", DialectOptionHolder.JS_WITH_JSX, JavaScriptSupportLoader.ECMA_SCRIPT_6);
     }
 }

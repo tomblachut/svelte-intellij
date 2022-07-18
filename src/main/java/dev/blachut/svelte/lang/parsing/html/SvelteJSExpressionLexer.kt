@@ -11,6 +11,6 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
  */
 class SvelteJSExpressionLexer(assumeExternalBraces: Boolean) : LayeredLexer(SvelteHtmlBaseLexer(assumeExternalBraces)) {
     init {
-        registerLayer(JSFlexAdapter(DialectOptionHolder.ECMA_6), SvelteTokenTypes.CODE_FRAGMENT)
+        registerLayer(JSFlexAdapter(DialectOptionHolder.JS_WITH_JSX), SvelteTokenTypes.CODE_FRAGMENT)
     }
 }
