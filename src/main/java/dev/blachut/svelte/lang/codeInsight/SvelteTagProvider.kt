@@ -6,8 +6,8 @@ import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.completion.XmlTagInsertHandler
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.lang.ecmascript6.resolve.ES6PsiUtil
 import com.intellij.lang.javascript.completion.JSImportCompletionUtil
-import com.intellij.lang.javascript.frameworks.react.ReactXmlExtension
 import com.intellij.lang.javascript.modules.JSImportPlaceInfo
 import com.intellij.lang.javascript.modules.imports.JSImportCandidate
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
@@ -19,7 +19,6 @@ import com.intellij.lang.javascript.psi.ecmal4.JSClass
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
 import com.intellij.lang.javascript.psi.resolve.ResolveProcessor
 import com.intellij.lang.javascript.psi.resolve.processors.JSResolveProcessor
-import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
@@ -31,6 +30,7 @@ import com.intellij.xml.XmlTagNameProvider
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 import icons.SvelteIcons
+import java.util.*
 import java.util.function.Predicate
 
 // Vue plugin uses 100, it's ok for now
@@ -113,14 +113,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
                 val name = ResolveProcessor.getName(element) ?: return true
                 if (isSvelteComponentTag(name) && !collectedNames.contains(name) /*&& prefixMatcher.prefixMatches(name)*/) {
                     collectedNames.add(name)
-                    for (declaration in ReactXmlExtension.getElementsByImport(element)) {
-                        ProgressManager.checkCanceled()
-                        val isComponent = true // todo filter by type, after *.svelte type is evaluated correctly
-                        if (isComponent) {
-                            resultElements.add(createLookupElement(name, declaration, null))
-                            break
-                        }
-                    }
+                    resultElements.add(createLookupElement(name, element, null))
                 }
                 return true
             }
@@ -156,7 +149,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
                 val element = candidate.element // for Svelte files will be null, used by JSLookupElementRenderer to display useful info
 
                 if (element != null) {
-                    for (declaration in ReactXmlExtension.getElementsByImport(element)) {
+                    for (declaration in ES6PsiUtil.expandElements(tag, Collections.singleton(element))) {
                         // todo namespaced components will require loosening of the condition
                         if (!(declaration is JSClass && declaration !is TypeScriptCompileTimeType)) continue // or Svelte file
                         val recordType = declaration.jsType.asRecordType()
@@ -191,16 +184,15 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         val presentation = if (element is JSNamedElement) element.presentation else null
 
         val builder = if (element != null) LookupElementBuilder.create(element, name) else LookupElementBuilder.create(name)
-        val lookupElement = builder
+
+        return builder
             .withIcon(SvelteIcons.Desaturated)
             //.withTailText(tailText, true)
             .withTailText(presentation?.locationString, true) // todo add space
             //.withTypeText("SvelteComponent") // can't use type text because there are false positives here
             .withInsertHandler(insertHandler)
             //.let { JSLookupElementRenderer(name, JSImportCompletionUtil.IMPORT_PRIORITY, false, null).applyToBuilder(it) } // does not resolve imports unfortunately, JSImportCompletionUtil.expandElements handles that
-            .let { PrioritizedLookupElement.withPriority(it, highPriority) } // todo use proximity?
-
-        return lookupElement
+            .let { PrioritizedLookupElement.withPriority(it, highPriority) }
     }
 
     private fun createInsertHandler(containingFile: PsiFile, candidate: JSImportCandidate): InsertHandler<LookupElement>? {
