@@ -20,7 +20,8 @@ import java.util.stream.Collectors
 import javax.swing.Icon
 
 class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImportCandidatesBase(placeInfo) {
-    override fun processCandidates(ref: String, processor: JSCandidatesProcessor, forCompletion: Boolean) {
+    override fun processCandidates(ref: String,
+                                   processor: JSCandidatesProcessor) {
         // val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.allScope(project))
         // todo filter out current file
         // todo ensure Uppercase first char
