@@ -206,8 +206,6 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
     private fun createInsertHandler(containingFile: PsiFile, candidate: JSImportCandidate): InsertHandler<LookupElement>? {
         if (containingFile is JSExpressionCodeFragment) return null
 
-        if (!candidate.useAutoImport()) return null
-
         // todo e.g. React uses both XmlTagInsertHandler & addReactImportInsertHandler
         return SvelteComponentInsertHandler(candidate)
     }
