@@ -11,20 +11,21 @@
     <depends optional="true" config-file="svelte-js-debugger.xml">JavaScriptDebugger</depends>
 
     <description><![CDATA[
-        Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.
+        <p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>
 
-        ## Features
+        <h2>Features</h2>
 
-        * Syntax highlighting
-        * Code formatting
-        * Typing assistance
-        * Emmet-style abbreviations of Svelte blocks
-        * Completions of components, props and some directives
-        * Auto import of components
-        * Navigation from components to their definition
-        * Debugger integration
-]]>
-    </description>
+        <ul>
+            <li>Syntax highlighting</li>
+            <li>Code formatting</li>
+            <li>Typing assistance</li>
+            <li>Emmet-style abbreviations of Svelte blocks</li>
+            <li>Completions of components, props and some directives</li>
+            <li>Auto import of components</li>
+            <li>Navigation from components to their definition</li>
+            <li>Debugger integration</li>
+        </ul>
+    ]]></description>
 
     <actions>
         <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction">
