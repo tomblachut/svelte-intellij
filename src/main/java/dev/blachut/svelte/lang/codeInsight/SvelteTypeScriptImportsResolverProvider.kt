@@ -15,7 +15,7 @@ const val svelteExtension = ".svelte"
 val svelteExtensionsWithDot = arrayOf(svelteExtension)
 
 class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvider {
-    override fun isDynamicFile(project: Project, file: VirtualFile): Boolean {
+    override fun isImplicitTypeScriptFile(project: Project, file: VirtualFile): Boolean {
         if (file.fileType != SvelteHtmlFileType.INSTANCE) return false
 
         val psiFile = PsiManager.getInstance(project).findFile(file) as? SvelteHtmlFile ?: return false
@@ -23,7 +23,6 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
         return isTSLangValue(langAttr)
     }
 
-    override fun useExplicitExtension(extensionWithDot: String): Boolean = extensionWithDot == svelteExtension
     override fun getExtensions(): Array<String> = svelteExtensionsWithDot
 
     override fun contributeResolver(project: Project, config: TypeScriptConfig): TypeScriptFileImportsResolver? {
