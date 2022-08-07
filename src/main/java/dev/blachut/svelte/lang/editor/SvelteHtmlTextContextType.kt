@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiUtilCore
 import dev.blachut.svelte.lang.psi.blocks.SvelteFragment
 
-class SvelteHtmlTextContextType : TemplateContextType("SVELTE_HTML_TEXT", "Svelte HTML Text", HtmlTextContextType::class.java) {
+class SvelteHtmlTextContextType : TemplateContextType("Svelte HTML Text") {
     override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
         val file = templateActionContext.file
         val offset = templateActionContext.startOffset

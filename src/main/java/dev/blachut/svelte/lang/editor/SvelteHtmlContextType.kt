@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.editor
 
-import com.intellij.codeInsight.template.HtmlContextType
 import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateContextType
 import com.intellij.codeInsight.template.XmlContextType
@@ -11,7 +10,7 @@ import com.intellij.psi.util.PsiUtilCore
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteHtmlFileType
 
-class SvelteHtmlContextType : TemplateContextType("SVELTE_HTML", "Svelte HTML", HtmlContextType::class.java) {
+class SvelteHtmlContextType : TemplateContextType("Svelte HTML") {
     override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
         val file = templateActionContext.file
         val offset = templateActionContext.startOffset

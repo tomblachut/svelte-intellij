@@ -68,8 +68,8 @@
         <typedHandler implementation="dev.blachut.svelte.lang.editor.SvelteAutoPopupHandler" order="before xmlAuto"/>
         <backspaceHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteBraceBackspaceHandler"/>
         <enterHandlerDelegate implementation="dev.blachut.svelte.lang.editor.SvelteEnterHandler"/>
-        <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlContextType"/>
-        <liveTemplateContext implementation="dev.blachut.svelte.lang.editor.SvelteHtmlTextContextType"/>
+        <liveTemplateContext contextId="SVELTE_HTML" baseContextId="HTML" implementation="dev.blachut.svelte.lang.editor.SvelteHtmlContextType"/>
+        <liveTemplateContext contextId="SVELTE_HTML_TEXT" baseContextId="HTML_TEXT" implementation="dev.blachut.svelte.lang.editor.SvelteHtmlTextContextType"/>
         <xml.zenCodingGenerator implementation="dev.blachut.svelte.lang.editor.SvelteZenCodingGenerator"/>
         <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.compatibility.SvelteHtmlInspectionSuppressor"/>
         <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension" order="first"/>
