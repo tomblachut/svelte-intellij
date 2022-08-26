@@ -21,7 +21,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference
 import com.intellij.psi.xml.XmlAttribute
 import dev.blachut.svelte.lang.directives.ScopeReference
 import dev.blachut.svelte.lang.directives.ShorthandLetReference
-import gnu.trove.TObjectIntHashMap
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 
 class SvelteDirectiveAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -76,7 +76,7 @@ class SvelteDirectiveAnnotator : Annotator {
             if (JSResolveResult.isTooManyCandidatesResult(results)) {
 //        } else if (JSSemanticHighlightingUtil.isGlobalUndefined(node)) {
             } else {
-                var countByTypes: TObjectIntHashMap<TextAttributeKeyInfo?> = TObjectIntHashMap()
+                var countByTypes = Object2IntOpenHashMap<TextAttributeKeyInfo?>()
                 var tsdOccurred = false
                 for (result in results) {
                     val resolve = result.element
@@ -85,7 +85,7 @@ class SvelteDirectiveAnnotator : Annotator {
                         val isFromTsd = file != null && TypeScriptUtil.isDefinitionFile(file)
                         if (isFromTsd && !tsdOccurred) {
                             tsdOccurred = true
-                            countByTypes = TObjectIntHashMap()
+                            countByTypes = Object2IntOpenHashMap()
                         }
                         if (!tsdOccurred || isFromTsd) {
                             val info = JSSemanticHighlightingUtil.buildHighlightForResolveResult(
@@ -94,7 +94,7 @@ class SvelteDirectiveAnnotator : Annotator {
                                 highlighter,
                             )
                             if (info != null) {
-                                countByTypes.put(info, countByTypes[info] + 1)
+                                countByTypes.put(info, countByTypes.getInt(info) + 1)
                             }
                         }
                     }
@@ -102,14 +102,15 @@ class SvelteDirectiveAnnotator : Annotator {
 
                 val maxCountRef = Ref.create(0)
                 val infoRef: Ref<TextAttributeKeyInfo?> = Ref.create(null)
-                countByTypes.forEachEntry { key: TextAttributeKeyInfo?, count: Int ->
+                countByTypes.object2IntEntrySet().forEach { entry ->
+                    val key = entry.key
+                    val count = entry.intValue
                     if (count > maxCountRef.get()) {
                         maxCountRef.set(count)
                         infoRef.set(key)
-                    } else if (count == maxCountRef.get() && infoRef.get()!!.text.compareTo(key!!.text) > 0) {
+                    } else if (count == maxCountRef.get() && infoRef.get()!!.text > key!!.text) {
                         infoRef.set(key)
                     }
-                    true
                 }
 
                 return infoRef.get()?.type
