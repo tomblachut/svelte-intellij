@@ -26,7 +26,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSEmbeddedContentImpl
 class SvelteJSReferenceChecker(reporter: JSProblemReporter<*>) : TypedJSReferenceChecker(reporter) {
     override fun addCreateFromUsageFixes(node: JSReferenceExpression,
                                          resolveResults: Array<out ResolveResult>,
-                                         fixes: MutableList<LocalQuickFix>,
+                                         fixes: MutableList<in LocalQuickFix>,
                                          inTypeContext: Boolean,
                                          ecma: Boolean): Boolean {
         if (node.parentOfType<JSEmbeddedContent>() is SvelteJSEmbeddedContentImpl) {
@@ -40,7 +40,7 @@ class SvelteJSReferenceChecker(reporter: JSProblemReporter<*>) : TypedJSReferenc
     }
 
     override fun addFunctionFixes(node: JSReferenceExpression,
-                                  fixes: MutableList<LocalQuickFix>,
+                                  fixes: MutableList<in LocalQuickFix>,
                                   refName: String?,
                                   dialect: DialectOptionHolder?,
                                   qualifier: JSExpression?) {
