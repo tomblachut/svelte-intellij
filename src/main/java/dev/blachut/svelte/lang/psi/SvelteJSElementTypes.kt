@@ -17,7 +17,7 @@ object SvelteJSElementTypes {
         override fun construct(node: ASTNode) = SvelteJSParameter(node)
         override fun createPsi(stub: JSParameterStub) = SvelteJSParameter(stub, this)
 
-        override fun toString(): String = "Svelte" + super.toString()
+        override fun getExternalId(): String = "Svelte$debugName"
     }
 
     val REFERENCE_EXPRESSION: IElementType = object : JSCompositeElementType("SVELTE_JS_REFERENCE_EXPRESSION"), JSExpressionElementType {
