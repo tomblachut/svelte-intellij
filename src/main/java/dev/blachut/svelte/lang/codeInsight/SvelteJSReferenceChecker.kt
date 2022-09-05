@@ -49,7 +49,8 @@ class SvelteJSReferenceChecker(reporter: JSProblemReporter<*>) : TypedJSReferenc
             return super.addFunctionFixes(node, fixes, refName, dialect, qualifier)
         }
 
-        fixes.add(SvelteCreateJSFunctionIntentionAction(node))
+        fixes.add(SvelteCreateJSFunctionIntentionAction(node, true))
+        fixes.add(SvelteCreateJSFunctionIntentionAction(node, false))
     }
 }
 
@@ -70,8 +71,8 @@ class SvelteCreateJSVariableIntentionAction(reference: JSReferenceExpression)
     }
 }
 
-class SvelteCreateJSFunctionIntentionAction(reference: JSReferenceExpression)
-    : CreateJSFunctionIntentionAction(reference.referenceName, false, false, false) {
+class SvelteCreateJSFunctionIntentionAction(reference: JSReferenceExpression, isArrow: Boolean)
+    : CreateJSFunctionIntentionAction(reference.referenceName, false, false, false, isArrow) {
     private val myRefExpressionPointer = SmartPointerManager.getInstance(reference.project).createSmartPsiElementPointer(reference)
 
     override fun calculateAnchors(psiElement: PsiElement): Pair<JSReferenceExpression?, PsiElement?> {
