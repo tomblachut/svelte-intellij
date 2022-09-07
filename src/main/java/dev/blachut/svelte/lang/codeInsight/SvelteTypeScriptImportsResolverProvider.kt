@@ -1,7 +1,6 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.typescript.modules.TypeScriptNodeSearchProcessor.TS_PROCESSOR
 import com.intellij.lang.typescript.tsconfig.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
