@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Create a new issue on YouTrack
+    url: https://youtrack.jetbrains.com/newIssue?project=WEB
+    about: Please create an issue in WebStorm YouTrack instead of here. WebStorm team will be able to help faster that way.
+  - name: Existing YouTrack issues about Svelte
+    url: https://youtrack.jetbrains.com/issues/WEB?q=tag:%20Svelte
+    about: Before creating a new issue, it's best to check if it's been already reported.
