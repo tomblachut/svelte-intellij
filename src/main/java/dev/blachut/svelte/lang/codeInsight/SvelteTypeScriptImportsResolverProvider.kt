@@ -27,7 +27,7 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
 
     override fun contributeResolver(project: Project, config: TypeScriptConfig): TypeScriptFileImportsResolver? {
         // TODO check if package.json includes svelte
-        return TypeScriptFileImportsResolverImpl(project, config.resolveContext, TS_PROCESSOR, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
+        return TypeScriptFileImportsResolverImpl(project, config.resolveContext, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
     }
 
     override fun contributeResolver(project: Project,
@@ -35,6 +35,6 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
                                     contextFile: VirtualFile): TypeScriptFileImportsResolver? {
         if (!isSvelteContext(contextFile)) return null
 
-        return TypeScriptFileImportsResolverImpl(project, context, TS_PROCESSOR, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
+        return TypeScriptFileImportsResolverImpl(project, context, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
     }
 }
