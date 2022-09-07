@@ -16,30 +16,25 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.search.FilenameIndex
 import icons.SvelteIcons
 import java.util.function.Predicate
-import java.util.stream.Collectors
 import javax.swing.Icon
 
 class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImportCandidatesBase(placeInfo) {
+
+    private val candidates: Map<String, List<VirtualFile>> by lazy {
+        FilenameIndex.getAllFilesByExt(project, "svelte",
+                                       createProjectImportsScope(placeInfo, getStructureModuleRoot(placeInfo)))
+            .groupBy { getComponentName(it) }
+    }
+
     override fun processCandidates(ref: String,
                                    processor: JSCandidatesProcessor) {
-        // val svelteVirtualFiles = FileTypeIndex.getFiles(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.allScope(project))
-        // todo filter out current file
-        // todo ensure Uppercase first char
-
         val place = myPlaceInfo.place
-
-        FilenameIndex.getAllFilesByExt(project, "svelte").forEach { virtualFile ->
-            if (getComponentName(virtualFile) == ref) {
-                processor.processCandidate(SvelteImportCandidate(ref, place, virtualFile))
-            }
-        }
+        val candidates = candidates[ref]
+        candidates?.forEach { processor.processCandidate(SvelteImportCandidate(ref, place, it)) }
     }
 
     override fun getNames(keyFilter: Predicate<in String>): Set<String> {
-        return FilenameIndex.getAllFilesByExt(project, "svelte").stream()
-            .map(::getComponentName)
-            .filter(keyFilter)
-            .collect(Collectors.toSet())
+        return candidates.keys.filter(keyFilter::test).toSet()
     }
 
     private fun getComponentName(virtualFile: VirtualFile): String {

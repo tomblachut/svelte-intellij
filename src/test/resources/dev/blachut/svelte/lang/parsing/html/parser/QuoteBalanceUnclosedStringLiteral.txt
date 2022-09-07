@@ -6,7 +6,7 @@ SvelteHtmlFile: QuoteBalanceUnclosedStringLiteral.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('script')
       XmlToken:XML_TAG_END('>')
-      SvelteJSEmbeddedContent:MOD_SVELTE_JS_EMBEDDED_CONTENT
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_JS_EMBEDDED_CONTENT
         PsiWhiteSpace('\n    ')
         JSIfStatement
           PsiElement(JS:IF_KEYWORD)('if')
