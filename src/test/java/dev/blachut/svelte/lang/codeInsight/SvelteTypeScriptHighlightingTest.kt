@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import junit.framework.TestCase
 
 class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
     override fun getTestDataPath(): String = "src/test/resources"
@@ -60,5 +61,13 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
         myFixture.configureByFiles("$base/src/nested/Child.svelte", "$base/tsconfig.json")
 
         myFixture.testHighlighting()
+    }
+
+    fun testSvelteKitPathMapping() {
+        val base = basePath + "/" + getTestName(true)
+        myFixture.copyDirectoryToProject(base, "")
+        myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
+        myFixture.testHighlighting()
+        TestCase.assertNotNull(myFixture.findSingleIntention ("Insert 'import Counter from \"\$lib/Counter.svelte\"'"))
     }
 }
