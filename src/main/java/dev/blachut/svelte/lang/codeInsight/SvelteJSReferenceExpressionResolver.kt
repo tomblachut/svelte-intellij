@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.index.JSSymbolUtil
 import com.intellij.lang.javascript.psi.JSLabeledStatement
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
@@ -55,7 +56,7 @@ class SvelteJSReferenceExpressionResolver(
 
         private val implicitIdentifiers = arrayOf("\$\$props", "\$\$restProps", "\$\$slots")
 
-        fun resolveImplicits(expression: JSReferenceExpressionImpl): Array<ResolveResult> {
+        fun resolveImplicits(expression: JSReferenceExpression): Array<ResolveResult> {
             implicitIdentifiers.forEach {
                 if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, it)) {
                     val element = JSImplicitElementImpl.Builder(it, expression)
