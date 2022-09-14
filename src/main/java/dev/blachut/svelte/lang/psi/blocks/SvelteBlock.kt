@@ -9,5 +9,5 @@ abstract class SvelteBlock(node: ASTNode) : SveltePsiElement(node), JSElement {
     val startTag: SvelteTag get() = primaryBranch.tag
     val endTag: SvelteTag? get() = lastChild as? SvelteTag
 
-    val primaryBranch get() = firstChild as SveltePrimaryBranch
+    private val primaryBranch get() = firstChild as SveltePrimaryBranch
 }
