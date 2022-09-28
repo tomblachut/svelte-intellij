@@ -56,32 +56,37 @@ public class ExtendableHtmlParsingTest extends XmlParsingTest {
     }
 
     public void testHtmlComments() throws Exception {
-        doTestHtml("<!--Valid comment-->\n" +
-            "<!--Valid comment<!-->\n" +
-            "<!--Invalid content <!-- -->\n" +
-            "<!--Invalid comment starts: --> <!--> <!--->\n" +
-            "<!--Invalid end <!--->\n" +
-            "<!--Invalid end --!>\n");
+        doTestHtml("""
+                     <!--Valid comment-->
+                     <!--Valid comment<!-->
+                     <!--Invalid content <!-- -->
+                     <!--Invalid comment starts: --> <!--> <!--->
+                     <!--Invalid end <!--->
+                     <!--Invalid end --!>
+                     """);
     }
 
     public void testHtmlIEConditionalComments1() throws Exception {
-        doTestHtml("<!--[if IE 6]>\n" +
-            "<p>You are using Internet Explorer 6.</p>\n" +
-            "<![endif]-->");
+        doTestHtml("""
+                     <!--[if IE 6]>
+                     <p>You are using Internet Explorer 6.</p>
+                     <![endif]-->""");
     }
 
     public void testHtmlIEConditionalComments2() throws Exception {
-        doTestHtml("<!--[if lte IE 7]>\n" +
-            "<style type=\"text/css\">\n" +
-            "/* CSS here */\n" +
-            "</style>\n" +
-            "<![endif]-->");
+        doTestHtml("""
+                     <!--[if lte IE 7]>
+                     <style type="text/css">
+                     /* CSS here */
+                     </style>
+                     <![endif]-->""");
     }
 
     public void testHtmlIEConditionalComments3() throws Exception {
-        doTestHtml("<!--[if !IE]>-->\n" +
-            "<link href=\"non-ie.css\" rel=\"stylesheet\">\n" +
-            "<!--<![endif]-->");
+        doTestHtml("""
+                     <!--[if !IE]>-->
+                     <link href="non-ie.css" rel="stylesheet">
+                     <!--<![endif]-->""");
     }
 
     public void ignoreTestScriptEmbeddingParsing() throws Exception {
