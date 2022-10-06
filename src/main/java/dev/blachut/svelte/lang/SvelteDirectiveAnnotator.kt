@@ -6,9 +6,9 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.lang.javascript.ecmascript6.TypeScriptUtil
+import com.intellij.lang.javascript.highlighting.JSHighlightDescriptor
 import com.intellij.lang.javascript.highlighting.JSHighlighter
 import com.intellij.lang.javascript.highlighting.JSSemanticHighlightingUtil
-import com.intellij.lang.javascript.highlighting.JSSemanticHighlightingUtil.TextAttributeKeyInfo
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.lang.javascript.validation.JSAnnotatingVisitor
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -65,8 +65,7 @@ class SvelteDirectiveAnnotator : Annotator {
         return JSSemanticHighlightingUtil.buildHighlightForResolveResult(
             resolve,
             reference.element,
-            highlighter,
-        )?.type
+        )?.getAttributesKey(highlighter)
     }
 
     // based on JSSemanticHighlightingUtil.highlight(JSPsiReferenceElement node, JSHighlighter highlighter, AnnotationHolder holder)
@@ -76,7 +75,7 @@ class SvelteDirectiveAnnotator : Annotator {
             if (JSResolveResult.isTooManyCandidatesResult(results)) {
 //        } else if (JSSemanticHighlightingUtil.isGlobalUndefined(node)) {
             } else {
-                var countByTypes = Object2IntOpenHashMap<TextAttributeKeyInfo?>()
+                var countByTypes = Object2IntOpenHashMap<JSHighlightDescriptor?>()
                 var tsdOccurred = false
                 for (result in results) {
                     val resolve = result.element
@@ -91,7 +90,6 @@ class SvelteDirectiveAnnotator : Annotator {
                             val info = JSSemanticHighlightingUtil.buildHighlightForResolveResult(
                                 resolve,
                                 reference.element,
-                                highlighter,
                             )
                             if (info != null) {
                                 countByTypes.put(info, countByTypes.getInt(info) + 1)
@@ -101,19 +99,19 @@ class SvelteDirectiveAnnotator : Annotator {
                 }
 
                 val maxCountRef = Ref.create(0)
-                val infoRef: Ref<TextAttributeKeyInfo?> = Ref.create(null)
+                val infoRef: Ref<JSHighlightDescriptor?> = Ref.create(null)
                 countByTypes.object2IntEntrySet().forEach { entry ->
                     val key = entry.key
                     val count = entry.intValue
                     if (count > maxCountRef.get()) {
                         maxCountRef.set(count)
                         infoRef.set(key)
-                    } else if (count == maxCountRef.get() && infoRef.get()!!.text > key!!.text) {
+                    } else if (count == maxCountRef.get() && infoRef.get()!!.debugName > key!!.debugName) {
                         infoRef.set(key)
                     }
                 }
 
-                return infoRef.get()?.type
+                return infoRef.get()?.getAttributesKey(highlighter)
             }
         }
 
