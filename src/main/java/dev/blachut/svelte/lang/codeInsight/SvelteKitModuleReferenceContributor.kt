@@ -42,6 +42,12 @@ class SvelteKitModuleReferenceContributor : JSResolvableModuleReferenceContribut
         return findExternalModule(element.containingFile.originalFile, text)
     }
 
+    @Suppress("RedundantOverride")
+    override fun getDependencies(unquoted: String, host: PsiElement): Collection<*> {
+        //the same as in TypeScriptExternalModuleReferenceContributor, so skip
+        return super.getDependencies(unquoted, host)
+    }
+
     // based on TypeScriptUtil.findExternalModule
     private fun findExternalModule(refFile: PsiFile, unquotedEscapedModuleText: String): Array<ResolveResult> {
         ApplicationManager.getApplication().assertReadAccessAllowed()
