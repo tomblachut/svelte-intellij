@@ -150,6 +150,5 @@ tasks {
     withType<RunIdeTask> {
         // systemProperty("ide.plugins.snapshot.on.unload.fail", true)
         // uncomment if `unexpected exception ProcessCanceledException` prevents you from debugging a running IDE
-        // jvmArgs("-Didea.ProcessCanceledException=disabled")
     }
 }
