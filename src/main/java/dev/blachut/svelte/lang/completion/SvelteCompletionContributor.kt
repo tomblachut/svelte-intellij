@@ -26,6 +26,7 @@ class SvelteCompletionContributor : CompletionContributor() {
                     return !(parent is ES6Property && parent.isShorthanded)
                 }
             })
+            .inFile(psiFile(SvelteHtmlFile::class.java))
 
         extend(
             CompletionType.BASIC,
