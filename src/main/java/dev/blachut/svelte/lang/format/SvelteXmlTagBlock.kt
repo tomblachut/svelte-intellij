@@ -11,10 +11,10 @@ import dev.blachut.svelte.lang.psi.SvelteEndTag
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 
 class SvelteXmlTagBlock(
-    node: ASTNode?,
+    node: ASTNode,
     wrap: Wrap?,
     alignment: Alignment?,
-    policy: XmlFormattingPolicy?,
+    policy: XmlFormattingPolicy,
     indent: Indent?,
     preserveSpace: Boolean
 ) : SvelteXmlTagBlockBase(node, wrap, alignment, policy, indent, preserveSpace) {
@@ -37,7 +37,8 @@ class SvelteXmlTagBlock(
 
                     processTag(results, tag)
                     processFragment(results, fragment, textWrap)
-                } else if (child.psi is SvelteEndTag) {
+                }
+                else if (child.psi is SvelteEndTag) {
                     processTag(results, child)
                 }
             }
@@ -58,9 +59,11 @@ class SvelteXmlTagBlock(
                     val startTag = SvelteTagElementTypes.START_TAGS.contains(tag.elementType)
                     val wrap = if (startTag) Wrap.createWrap(WrapType.ALWAYS, true) else null
                     localResults.add(createSimpleChild(child, null, wrap, null, null))
-                } else if (child.elementType === JSTokenTypes.RBRACE) {
+                }
+                else if (child.elementType === JSTokenTypes.RBRACE) {
                     localResults.add(createSimpleChild(child, Indent.getNoneIndent(), null, null, null))
-                } else {
+                }
+                else {
                     child = processChild(localResults, child, null, null, null)
                 }
             }
@@ -95,7 +98,7 @@ class SvelteXmlTagBlock(
         }
     }
 
-    override fun createSyntheticBlock(localResult: ArrayList<Block>?, childrenIndent: Indent?): Block {
+    override fun createSyntheticBlock(localResult: ArrayList<Block>, childrenIndent: Indent?): Block {
         return SvelteSyntheticBlock(localResult, this, Indent.getNoneIndent(), myXmlFormattingPolicy, childrenIndent)
     }
 }

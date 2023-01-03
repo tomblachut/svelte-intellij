@@ -10,10 +10,10 @@ import com.intellij.psi.formatter.xml.XmlFormattingPolicy
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteSyntheticBlock(
-    subBlocks: List<Block?>?,
-    parent: Block?,
+    subBlocks: List<Block>,
+    parent: Block,
     indent: Indent?,
-    policy: XmlFormattingPolicy?,
+    policy: XmlFormattingPolicy,
     childIndent: Indent?
 ) : SyntheticBlock(subBlocks, parent, indent, policy, childIndent) {
 

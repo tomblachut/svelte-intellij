@@ -54,16 +54,17 @@ fun getScopeCompletions(
     result.addAllElements(sink.resultsAsObjects)
 }
 
-class PropReference(val attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
+class PropReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
     PsiReferenceBase<SvelteHtmlAttribute>(attribute, rangeInElement, true) {
     override fun resolve(): PsiElement? {
-        val attributeName = attribute.directive!!.specifiers[0].text
-        return if (isSvelteComponentTag(attribute.parent.name)) {
+        val attributeName = element.directive!!.specifiers[0].text
+        val parent = element.parent ?: return null
+        return if (isSvelteComponentTag(parent.name)) {
             // TODO component props
             null
         } else {
             // TODO check attribute providers
-            HtmlNSDescriptorImpl.getCommonAttributeDescriptor(attributeName, element.parent)?.declaration
+            HtmlNSDescriptorImpl.getCommonAttributeDescriptor(attributeName, parent)?.declaration
         }
     }
 }
@@ -74,7 +75,7 @@ fun getPropCompletions(
     parameters: CompletionParameters,
     result: CompletionResultSet,
 ) {
-    val tag = attribute.parent
+    val tag = attribute.parent ?: return
     if (isSvelteComponentTag(tag.name) && tag is SvelteHtmlTag) {
         val componentFile = SvelteTagNameReference.resolveComponentFile(tag)
         if (componentFile != null) {
@@ -83,7 +84,7 @@ fun getPropCompletions(
             }
         }
     } else {
-        HtmlNSDescriptorImpl.getCommonAttributeDescriptors(attribute.parent)
+        HtmlNSDescriptorImpl.getCommonAttributeDescriptors(tag)
             .filter { !it.name.startsWith("on") }
             .forEach {
                 result.addElement(LookupElementBuilder.create(it.name))

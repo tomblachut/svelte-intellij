@@ -57,7 +57,7 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
         return result
     }
 
-    override fun getNameElement(): XmlElement {
+    override fun getNameElement(): XmlElement? {
         if (firstChild is SveltePsiElement) {
             return this
         }
@@ -96,7 +96,8 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
     }
 
     override fun getTextOffset(): Int {
-        if (directive != null) {
+        val nameElement = nameElement
+        if (directive != null && nameElement != null) {
             val shift = name.indexOf(SvelteDirectiveUtil.DIRECTIVE_SEPARATOR) + 1
             return nameElement.textRange.startOffset + shift
         }

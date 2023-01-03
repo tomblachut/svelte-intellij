@@ -41,7 +41,7 @@ class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptK
 
     override fun visitElement(element: PsiElement) {
         if (element is SvelteHtmlAttribute && element.directive != null) {
-            val startOffset = element.nameElement.startOffset
+            val startOffset = element.nameElement?.startOffset ?: 0
             highlight(JSHighlighter.JS_KEYWORD, TextRange(startOffset, element.textOffset))
 
             val lexer = SvelteDirectiveLexer()

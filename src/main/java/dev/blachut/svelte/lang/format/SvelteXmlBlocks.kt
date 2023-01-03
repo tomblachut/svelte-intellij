@@ -45,7 +45,8 @@ class SvelteXmlBlock(
     ) {
         if (isSvelteBlock(child)) {
             result.add(createTagBlock(child, indent ?: Indent.getNoneIndent(), wrap, alignment))
-        } else {
+        }
+        else {
             super.processSimpleChild(child, indent, result, wrap, alignment)
         }
     }
@@ -55,16 +56,16 @@ class SvelteXmlBlock(
         return createSimpleChild(myXmlFormattingPolicy, child, indent, wrap, alignment, range)
     }
 
-    override fun createTagBlock(child: ASTNode?, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlTagBlock {
+    override fun createTagBlock(child: ASTNode, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlTagBlock {
         return createTagBlock(myXmlFormattingPolicy, child, indent, wrap, alignment)
     }
 }
 
 abstract class SvelteXmlTagBlockBase(
-    node: ASTNode?,
+    node: ASTNode,
     wrap: Wrap?,
     alignment: Alignment?,
-    policy: XmlFormattingPolicy?,
+    policy: XmlFormattingPolicy,
     indent: Indent?,
     preserveSpace: Boolean
 ) : XmlTagBlock(node, wrap, alignment, policy, indent, preserveSpace) {
@@ -134,7 +135,8 @@ abstract class SvelteXmlTagBlockBase(
     ) {
         if (isSvelteBlock(child)) {
             result.add(createTagBlock(child, indent ?: Indent.getNoneIndent(), wrap, alignment))
-        } else {
+        }
+        else {
             super.processSimpleChild(child, indent, result, wrap, alignment)
         }
     }
@@ -144,7 +146,7 @@ abstract class SvelteXmlTagBlockBase(
         return createSimpleChild(myXmlFormattingPolicy, child, indent, wrap, alignment, range)
     }
 
-    override fun createTagBlock(child: ASTNode?, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlTagBlock {
+    override fun createTagBlock(child: ASTNode, indent: Indent?, wrap: Wrap?, alignment: Alignment?): XmlTagBlock {
         return createTagBlock(myXmlFormattingPolicy, child, indent, wrap, alignment)
     }
 }
@@ -161,8 +163,8 @@ private fun AbstractXmlBlock.createSimpleChild(
 }
 
 private fun AbstractXmlBlock.createTagBlock(
-    xmlFormattingPolicy: XmlFormattingPolicy?,
-    child: ASTNode?,
+    xmlFormattingPolicy: XmlFormattingPolicy,
+    child: ASTNode,
     indent: Indent?,
     wrap: Wrap?,
     alignment: Alignment?
