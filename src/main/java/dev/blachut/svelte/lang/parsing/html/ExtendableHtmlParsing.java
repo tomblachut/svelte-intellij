@@ -121,7 +121,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     protected boolean hasCustomTopLevelContent() {
-        return false;
+      return super.hasCustomTopLevelContent();
     }
 
     protected PsiBuilder.Marker parseCustomTopLevelContent(PsiBuilder.Marker error) {
@@ -129,7 +129,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     protected boolean hasCustomTagContent() {
-        return false;
+      return super.hasCustomTagContent();
     }
 
     protected PsiBuilder.Marker parseCustomTagContent(PsiBuilder.Marker xmlText) {
@@ -312,7 +312,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     protected boolean isSingleTag(@NotNull String tagName, @NotNull String originalTagName) {
-        return HtmlUtil.isSingleHtmlTagL(tagName);
+      return super.isSingleTag(tagName, originalTagName);
     }
 
     protected boolean hasTags() {
@@ -377,7 +377,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     protected IElementType getHtmlTagElementType() {
-        return XmlElementType.HTML_TAG;
+      return super.getHtmlTagElementType();
     }
 
     private void parseHeader(String tagName) {
@@ -454,10 +454,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
 
     @NotNull
     protected PsiBuilder.Marker startText(@Nullable PsiBuilder.Marker xmlText) {
-        if (xmlText == null) {
-            xmlText = mark();
-        }
-        return xmlText;
+      return super.startText(xmlText);
     }
 
     @Nullable
@@ -470,17 +467,8 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     protected void parseCData() {
-        assert token() == XmlTokenType.XML_CDATA_START;
-        final PsiBuilder.Marker cdata = mark();
-        while (token() != XmlTokenType.XML_CDATA_END && !eof()) {
-            advance();
-        }
 
-        if (!eof()) {
-            advance();
-        }
-
-        cdata.done(XmlElementType.XML_CDATA);
+      super.parseCData();
     }
 
     protected void parseComment() {
@@ -513,15 +501,7 @@ public class ExtendableHtmlParsing extends HtmlParsing {
     }
 
     protected void parseReference() {
-        if (token() == XmlTokenType.XML_CHAR_ENTITY_REF) {
-            advance();
-        } else if (token() == XmlTokenType.XML_ENTITY_REF_TOKEN) {
-            final PsiBuilder.Marker ref = mark();
-            advance();
-            ref.done(XmlElementType.XML_ENTITY_REF);
-        } else {
-            assert false : "Unexpected token";
-        }
+      super.parseReference();
     }
 
     protected void parseAttribute() {
