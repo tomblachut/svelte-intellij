@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
+import com.intellij.lang.html.HtmlParsing
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
@@ -11,7 +12,7 @@ import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.*
 
-class SvelteHtmlParsing(builder: PsiBuilder) : ExtendableHtmlParsing(builder) {
+class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     private val blockLevel get() = if (openedBlocks.empty()) 0 else openedBlocks.peek().tagLevel
 
     private val openedBlocks = Stack<OpenedBlock>()
