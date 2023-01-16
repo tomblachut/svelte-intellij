@@ -127,11 +127,11 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         }
     }
 
-    override fun hasCustomHeaderContent(): Boolean {
+    override fun hasCustomTagHeaderContent(): Boolean {
         return token() === SvelteTokenTypes.START_MUSTACHE
     }
 
-    override fun parseCustomHeaderContent() {
+    override fun parseCustomTagHeaderContent() {
         val att = mark()
         parseAttributeExpression(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
         att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)
