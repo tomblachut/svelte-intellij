@@ -1,9 +1,10 @@
 package dev.blachut.svelte.lang.format
 
 import com.intellij.psi.formatter.FormatterTestCase
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteFormatterTest : FormatterTestCase() {
-    override fun getTestDataPath(): String = "src/test/resources"
+    override fun getTestDataPath(): String = getSvelteTestDataPath()
     override fun getBasePath(): String = "dev/blachut/svelte/lang/format"
     override fun getFileExtension(): String = "svelte"
 

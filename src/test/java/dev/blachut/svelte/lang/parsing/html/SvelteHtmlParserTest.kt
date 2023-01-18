@@ -15,6 +15,7 @@ import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
 import com.intellij.testFramework.ParsingTestCase
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
 import org.jetbrains.plugins.scss.SCSSLanguage
 import org.jetbrains.plugins.scss.ScssTokenTypesProvider
@@ -30,7 +31,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
     CSSParserDefinition(),
     SCSSParserDefinition()
 ) {
-    override fun getTestDataPath(): String = "src/test/resources"
+    override fun getTestDataPath(): String = getSvelteTestDataPath()
 
     override fun setUp() {
         super.setUp()

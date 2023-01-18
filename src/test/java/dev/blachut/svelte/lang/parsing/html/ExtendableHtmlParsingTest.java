@@ -3,7 +3,10 @@ package dev.blachut.svelte.lang.parsing.html;
 
 import com.intellij.lang.LanguageASTFactory;
 import com.intellij.lexer.EmbeddedTokenTypesProvider;
+import com.intellij.xml.XmlParsingTest;
 import dev.blachut.svelte.lang.SvelteHTMLLanguage;
+
+import static dev.blachut.svelte.lang.SvelteTestUtilKt.getSvelteTestDataPath;
 
 /**
  * Copied over from intellij-community
@@ -11,6 +14,11 @@ import dev.blachut.svelte.lang.SvelteHTMLLanguage;
 public class ExtendableHtmlParsingTest extends XmlParsingTest {
     public ExtendableHtmlParsingTest() {
         super("dev/blachut/svelte/lang/parsing/html/regressionHtml", "svelte", new SvelteHTMLParserDefinition());
+    }
+
+    @Override
+    protected String getTestDataPath() {
+        return getSvelteTestDataPath();
     }
 
     @Override

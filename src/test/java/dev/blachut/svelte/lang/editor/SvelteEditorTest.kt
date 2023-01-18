@@ -1,9 +1,10 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteEditorTest : BasePlatformTestCase() {
-    override fun getTestDataPath(): String = "src/test/resources"
+    override fun getTestDataPath(): String = getSvelteTestDataPath()
     override fun getBasePath(): String = "dev/blachut/svelte/lang/editor"
 
     fun testEnterBetweenSvelteTags() {

@@ -5,12 +5,12 @@ import com.intellij.testFramework.LexerTestCase
 import com.intellij.testFramework.LightProjectDescriptor
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 import kotlin.properties.Delegates
 
 class SvelteHighlightingLexerTest : LexerTestCase() {
     private var fixture: IdeaProjectTestFixture by Delegates.notNull()
 
-    override fun getDirPath(): String = "src/test/resources/dev/blachut/svelte/lang/parsing/html/lexer"
     override fun getExpectedFileExtension(): String = ".tokens"
 
     override fun setUp() {
@@ -32,9 +32,9 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
         }
     }
 
-    override fun getPathToTestDataFile(extension: String?): String {
-        return dirPath + "/" + getTestName(false) + extension
-    }
+    override fun getDirPath() = "dev/blachut/svelte/lang/parsing/html/lexer"
+
+    override fun getPathToTestDataFile(extension: String?): String = getSvelteTestDataPath() + "/$dirPath/" + getTestName(false) + extension
 
     override fun createLexer(): Lexer {
         return SvelteHtmlHighlightingLexer()

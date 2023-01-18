@@ -1,10 +1,11 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 import junit.framework.TestCase
 
 class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
-    override fun getTestDataPath(): String = "src/test/resources"
+    override fun getTestDataPath(): String = getSvelteTestDataPath()
     override fun getBasePath(): String = "dev/blachut/svelte/lang/codeInsight/tsHighlighting"
 
     override fun setUp() {

@@ -4,10 +4,11 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
 import com.intellij.psi.util.contextOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 import junit.framework.TestCase
 
 class SvelteResolveTest : BasePlatformTestCase() {
-    override fun getTestDataPath(): String = "src/test/resources"
+    override fun getTestDataPath(): String = getSvelteTestDataPath()
     override fun getBasePath(): String = "dev/blachut/svelte/lang/resolve"
 
     fun testBlock() {

@@ -6,9 +6,10 @@ import com.intellij.lang.javascript.psi.ecma6.TypeScriptModule
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.psi.PsiPolyVariantReference
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteKitTest : BasePlatformTestCase() {
-    override fun getTestDataPath(): String = "src/test/resources"
+    override fun getTestDataPath(): String = getSvelteTestDataPath()
     override fun getBasePath(): String = "dev/blachut/svelte/lang/codeInsight/svelteKit"
 
     fun testResolveAppModules() {
