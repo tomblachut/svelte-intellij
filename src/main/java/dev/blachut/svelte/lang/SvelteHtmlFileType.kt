@@ -4,7 +4,7 @@ import com.intellij.openapi.fileTypes.LanguageFileType
 import icons.SvelteIcons
 import javax.swing.Icon
 
-class SvelteHtmlFileType : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
+class SvelteHtmlFileType private constructor(): LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
     override fun getName(): String {
         return "Svelte"
     }
