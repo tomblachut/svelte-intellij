@@ -158,7 +158,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
                     exported
                 </script>
             """.trimIndent(),
-            "Add import"
+            "Insert 'import {exported} from \"./utils\"'"
         )
     }
 

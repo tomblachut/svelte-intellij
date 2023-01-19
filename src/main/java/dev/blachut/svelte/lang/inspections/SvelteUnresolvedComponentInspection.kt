@@ -26,7 +26,7 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
 
                 val range = TextRange(1, tag.name.length + 1)
 
-                val suggester = SvelteComponentImportModulesSuggester(JSSimpleModuleReferenceInfo(componentName), tag)
+                val suggester = JSImportModulesSuggester(JSSimpleModuleReferenceInfo(componentName), tag)
                 val quickFixes = suggester.findFixes(ResolveResult.EMPTY_ARRAY)
                 val message = suggester.getMessage(quickFixes) ?: displayName
 
@@ -41,6 +41,3 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
         }
     }
 }
-
-class SvelteComponentImportModulesSuggester(moduleReferenceInfo: ModuleReferenceInfo,
-                                            node: PsiElement) : JSImportModulesSuggester(moduleReferenceInfo, node)
