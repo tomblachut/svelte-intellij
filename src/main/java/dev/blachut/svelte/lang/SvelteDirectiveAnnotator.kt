@@ -8,7 +8,7 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.lang.javascript.ecmascript6.TypeScriptUtil
 import com.intellij.lang.javascript.highlighting.JSHighlightDescriptor
 import com.intellij.lang.javascript.highlighting.JSHighlighter
-import com.intellij.lang.javascript.highlighting.JSSemanticHighlightingUtil
+import com.intellij.lang.javascript.highlighting.JSSemanticHighlightingVisitor
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.lang.javascript.validation.JSAnnotatingVisitor
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -62,7 +62,7 @@ class SvelteDirectiveAnnotator : Annotator {
 
     private fun highlight(reference: PsiReference, highlighter: JSHighlighter): TextAttributesKey? {
         val resolve = reference.resolve() ?: return null
-        return JSSemanticHighlightingUtil.buildHighlightForResolveResult(
+        return JSSemanticHighlightingVisitor.buildHighlightForResolveResult(
             resolve,
             reference.element,
         )?.getAttributesKey(highlighter)
@@ -87,7 +87,7 @@ class SvelteDirectiveAnnotator : Annotator {
                             countByTypes = Object2IntOpenHashMap()
                         }
                         if (!tsdOccurred || isFromTsd) {
-                            val info = JSSemanticHighlightingUtil.buildHighlightForResolveResult(
+                            val info = JSSemanticHighlightingVisitor.buildHighlightForResolveResult(
                                 resolve,
                                 reference.element,
                             )
