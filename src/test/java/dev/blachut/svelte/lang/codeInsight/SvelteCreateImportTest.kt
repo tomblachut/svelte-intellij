@@ -1,7 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.javascript.inspections.JSUnresolvedFunctionInspection
-import com.intellij.lang.javascript.inspections.JSUnresolvedVariableInspection
+import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
 import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedVariableInspection
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
 
@@ -308,10 +307,9 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         myFixture.configureByText("utils.ts", """export const exported = 42;""")
         myFixture.configureByText("Hello.svelte", """Hello World""")
         myFixture.enableInspections(
-            JSUnresolvedVariableInspection(),
-            TypeScriptUnresolvedVariableInspection(),
-            SvelteUnresolvedComponentInspection(),
-            JSUnresolvedFunctionInspection()
+          JSUnresolvedReferenceInspection(),
+          TypeScriptUnresolvedVariableInspection(),
+          SvelteUnresolvedComponentInspection(),
         )
     }
 }
