@@ -95,12 +95,12 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         return hasTags() && peekTagName() != SYNTHETIC_TAG
     }
 
-    override fun isTagNameFurtherInStack(endName: String): Boolean {
-        if (hasTags() && peekTagName() == SYNTHETIC_TAG) {
+    override fun isTagNameFurtherInStack(endName: String, tagNames: Stack<String>): Boolean {
+        if (!tagNames.empty() && tagNames.peek() == SYNTHETIC_TAG) {
             return false
         }
 
-        return super.isTagNameFurtherInStack(endName)
+        return super.isTagNameFurtherInStack(endName, tagNames)
     }
 
     override fun childTerminatesParent(childName: String?, parentName: String?, tagLevel: Int): Boolean? {
