@@ -5,6 +5,18 @@ import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class SvelteCompletionTest : BasePlatformTestCase() {
+    fun testScriptKeywordsJS() {
+        myFixture.configureByText("Component.svelte", "<script><caret></script>")
+        val items = myFixture.completeBasic()
+        hasElements(items, "export")
+        noElements(items, "interface")
+    }
+
+    fun testScriptKeywordsTS() {
+        myFixture.configureByText("Component.svelte", "<script lang='ts'><caret></script>")
+        hasElements(myFixture.completeBasic(), "export", "interface")
+    }
+
     fun testContextModuleAttribute() {
         myFixture.configureByText("foo.svelte", "<script c<caret>></script>")
         hasElements(myFixture.completeBasic(), "context=\"module\"")
