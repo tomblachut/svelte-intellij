@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.JavaScriptBundle
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
-import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedFunctionInspection
+import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection
 
 class SvelteCreateConstHoldingArrowFunctionTest : BaseSvelteCreateStatementTest(
     requestedAction = JavaScriptBundle.message("javascript.create.constant.holding.arrow.function.intention.name", "unresolved"),
@@ -15,6 +15,7 @@ class SvelteCreateConstHoldingArrowFunctionTest : BaseSvelteCreateStatementTest(
 ) {
     override fun setUp() {
         super.setUp()
-        myFixture.enableInspections(JSUnresolvedReferenceInspection(), TypeScriptUnresolvedFunctionInspection())
+        myFixture.enableInspections(JSUnresolvedReferenceInspection(),
+                                    TypeScriptUnresolvedReferenceInspection())
     }
 }

@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.JavaScriptBundle
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
-import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedVariableInspection
+import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection
 
 class SvelteCreateVariableTest : BaseSvelteCreateStatementTest(
     requestedAction = JavaScriptBundle.message("javascript.create.variable.intention.name", "unresolved"),
@@ -13,6 +13,7 @@ class SvelteCreateVariableTest : BaseSvelteCreateStatementTest(
 ) {
     override fun setUp() {
         super.setUp()
-        myFixture.enableInspections(JSUnresolvedReferenceInspection(), TypeScriptUnresolvedVariableInspection())
+        myFixture.enableInspections(JSUnresolvedReferenceInspection(),
+                                    TypeScriptUnresolvedReferenceInspection())
     }
 }

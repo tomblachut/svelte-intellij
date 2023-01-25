@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.JavaScriptBundle
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
-import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedFunctionInspection
+import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection
 
 class SvelteCreateFunctionTest : BaseSvelteCreateStatementTest(
     requestedAction = JavaScriptBundle.message("javascript.create.function.intention.name", "unresolved"),
@@ -16,6 +16,7 @@ class SvelteCreateFunctionTest : BaseSvelteCreateStatementTest(
 ) {
     override fun setUp() {
         super.setUp()
-        myFixture.enableInspections(JSUnresolvedReferenceInspection(), TypeScriptUnresolvedFunctionInspection())
+        myFixture.enableInspections(JSUnresolvedReferenceInspection(),
+                                    TypeScriptUnresolvedReferenceInspection())
     }
 }
