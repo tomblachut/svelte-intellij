@@ -11,7 +11,6 @@ import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
 import com.intellij.lang.javascript.inspection.JSSuspiciousTypeGuardInspection
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.*
-import com.intellij.lang.javascript.modules.ES6CheckImportInspection
 import com.intellij.lang.javascript.modules.TypeScriptCheckImportInspection
 import com.intellij.lang.typescript.inspections.*
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -424,7 +423,6 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(JSValidateJSDocInspection())
             l.add(JSUndeclaredVariableInspection())
             l.add(XmlDuplicatedIdInspection())
-            l.add(ES6CheckImportInspection())
             l.add(XmlInvalidIdInspection())
             l.add(HtmlUnknownTagInspection())
             l.add(HtmlUnknownBooleanAttributeInspection())
