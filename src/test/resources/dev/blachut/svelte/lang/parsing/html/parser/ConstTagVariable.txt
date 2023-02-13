@@ -1,0 +1,245 @@
+SvelteHtmlFile: ConstTagVariable.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSLiteralExpression
+            PsiElement(JS:TRUE_KEYWORD)('true')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('y')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('3')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              PsiElement(JS:LPAR)('(')
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('y')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('3')
+              PsiElement(JS:RPAR)(')')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              JSDestructuringElement
+                JSDestructuringObject
+                  PsiElement(JS:LBRACE)('{')
+                  JSDestructuringShorthandedProperty
+                    SvelteJSConstTagVariable
+                      PsiElement(JS:IDENTIFIER)('x')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSDestructuringShorthandedProperty
+                    SvelteJSConstTagVariable
+                      PsiElement(JS:IDENTIFIER)('y')
+                  PsiElement(JS:RBRACE)('}')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSObjectLiteralExpression
+                  PsiElement(JS:LBRACE)('{')
+                  JSProperty
+                    PsiElement(JS:IDENTIFIER)('x')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:NUMERIC_LITERAL)('1')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSProperty
+                    PsiElement(JS:IDENTIFIER)('y')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:NUMERIC_LITERAL)('3')
+                  PsiElement(JS:RBRACE)('}')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              PsiElement(JS:LPAR)('(')
+              JSDestructuringElement
+                JSDestructuringObject
+                  PsiElement(JS:LBRACE)('{')
+                  JSDestructuringShorthandedProperty
+                    SvelteJSConstTagVariable
+                      PsiElement(JS:IDENTIFIER)('x')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSDestructuringShorthandedProperty
+                    SvelteJSConstTagVariable
+                      PsiElement(JS:IDENTIFIER)('y')
+                  PsiElement(JS:RBRACE)('}')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSObjectLiteralExpression
+                  PsiElement(JS:LBRACE)('{')
+                  JSProperty
+                    PsiElement(JS:IDENTIFIER)('x')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:NUMERIC_LITERAL)('1')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSProperty
+                    PsiElement(JS:IDENTIFIER)('y')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:NUMERIC_LITERAL)('3')
+                  PsiElement(JS:RBRACE)('}')
+              PsiElement(JS:RPAR)(')')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('y')
+            PsiElement(JS:COLON)(':')
+            PsiErrorElement:Unexpected token
+              <empty list>
+            PsiWhiteSpace(' ')
+            PsiElement(JS:IDENTIFIER)('TypesAreUnsupported')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:NUMERIC_LITERAL)('3')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              PsiElement(JS:LPAR)('(')
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('y')
+              PsiErrorElement:) expected
+                <empty list>
+            PsiElement(JS:COLON)(':')
+            PsiErrorElement:Unexpected token
+              <empty list>
+            PsiWhiteSpace(' ')
+            PsiElement(JS:IDENTIFIER)('TypesAreUnsupported')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:NUMERIC_LITERAL)('3')
+            PsiElement(JS:RPAR)(')')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('onlyEqualsIsSupported')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:PLUSEQ)('+=')
+            PsiErrorElement:Unexpected token
+              <empty list>
+            PsiWhiteSpace(' ')
+            PsiElement(JS:NUMERIC_LITERAL)('3')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('y')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('3')
+            PsiElement(JS:COMMA)(',')
+            PsiErrorElement:Unexpected token
+              <empty list>
+            PsiWhiteSpace(' ')
+            PsiElement(JS:IDENTIFIER)('commaIsUnsupported')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:NUMERIC_LITERAL)('4')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              PsiElement(JS:LPAR)('(')
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('y')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('3')
+              PsiErrorElement:) expected
+                <empty list>
+            PsiElement(JS:COMMA)(',')
+            PsiErrorElement:Unexpected token
+              <empty list>
+            PsiWhiteSpace(' ')
+            PsiElement(JS:IDENTIFIER)('commaIsUnsupported')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:NUMERIC_LITERAL)('4')
+            PsiElement(JS:RPAR)(')')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')

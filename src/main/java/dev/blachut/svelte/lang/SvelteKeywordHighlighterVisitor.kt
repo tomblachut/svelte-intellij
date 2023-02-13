@@ -27,6 +27,7 @@ class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptK
     override fun visitLazyElement(element: SvelteJSLazyPsiElement) {
         highlightChildKeywordOfType(element, SvelteTokenTypes.HTML_KEYWORD)
         highlightChildKeywordOfType(element, SvelteTokenTypes.DEBUG_KEYWORD)
+        highlightChildKeywordOfType(element, SvelteTokenTypes.CONST_KEYWORD)
 
         super.visitLazyElement(element)
     }

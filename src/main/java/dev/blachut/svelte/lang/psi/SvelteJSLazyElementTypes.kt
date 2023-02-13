@@ -2,8 +2,10 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSElementTypes
+import com.intellij.lang.javascript.JSStubElementTypes
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
+import com.intellij.lang.javascript.parsing.JavaScriptParserBase
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 
 object SvelteJSLazyElementTypes {
@@ -26,15 +28,37 @@ object SvelteJSLazyElementTypes {
     }
 
     /**
-     * Text, html and debug expressions
+     * Text, html and debug expressions + const
      */
     val CONTENT_EXPRESSION = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
         override val noTokensErrorMessage = "Expression expected"
         override val assumeExternalBraces = false // for now trailing { and } belong to this token
 
         override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-            parseAtModifiers(builder)
-            parser.expressionParser.parseExpression()
+            if (parseAtModifiers(builder)) {
+                parseSvelteDeclaringAssignmentExpression(builder, parser)
+            }
+            else {
+                parser.expressionParser.parseExpression()
+            }
+        }
+
+        private fun parseSvelteDeclaringAssignmentExpression(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+            val expr: PsiBuilder.Marker = builder.mark()
+
+            var openedPar = false
+            if (builder.tokenType === JSTokenTypes.LPAR) {
+                openedPar = true
+                builder.advanceLexer()
+            }
+
+            parser.statementParser.parseVarDeclaration(SvelteJSElementTypes.CONST_TAG_VARIABLE, false, false)
+
+            if (openedPar) {
+                JavaScriptParserBase.checkMatches(builder, JSTokenTypes.RPAR, "javascript.parser.message.expected.rparen")
+            }
+
+            expr.done(JSStubElementTypes.VAR_STATEMENT)
         }
     }
 
@@ -55,8 +79,10 @@ object SvelteJSLazyElementTypes {
         }
     }
 
-    private fun parseAtModifiers(builder: PsiBuilder) {
+    private fun parseAtModifiers(builder: PsiBuilder): Boolean {
         val unexpectedTokens = setOf(JSTokenTypes.SHARP, JSTokenTypes.COLON, JSTokenTypes.DIV)
+
+        var constMode = false
 
         if (builder.tokenType === JSTokenTypes.AT) {
             builder.advanceLexer()
@@ -68,13 +94,19 @@ object SvelteJSLazyElementTypes {
             if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
                 builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
                 builder.advanceLexer()
-            } else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
+            }
+            else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
                 builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
                 builder.advanceLexer()
-            } else {
+            }
+            else if (builder.tokenType === SvelteTokenTypes.CONST_KEYWORD) {
+                constMode = true
+                builder.advanceLexer()
+            }
+            else {
                 val errorMarker = builder.mark()
                 builder.advanceLexer()
-                errorMarker.error("Expected html or debug")
+                errorMarker.error("Expected html, debug or const")
             }
         } else if (unexpectedTokens.contains(builder.tokenType)) {
             builder.advanceLexer()
@@ -86,6 +118,8 @@ object SvelteJSLazyElementTypes {
             builder.advanceLexer()
             errorMarker.error("Invalid block name")
         }
+
+        return constMode
     }
 
     private fun parseAtModifiersError(builder: PsiBuilder) {
@@ -97,8 +131,13 @@ object SvelteJSLazyElementTypes {
             if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
                 builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
                 builder.advanceLexer()
-            } else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
+            }
+            else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
                 builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
+                builder.advanceLexer()
+            }
+            else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "const") {
+                builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD)
                 builder.advanceLexer()
             }
 

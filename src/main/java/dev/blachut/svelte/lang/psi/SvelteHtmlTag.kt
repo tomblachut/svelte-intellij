@@ -8,6 +8,7 @@ import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.XmlUtil
+import dev.blachut.svelte.lang.psi.blocks.processConstTagDeclarations
 
 // Check XmlTagImpl.createDelegate && HtmlTagDelegate if something breaks. Esp. HtmlTagDelegate.findSubTags
 class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTag {
@@ -17,6 +18,10 @@ class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTa
         lastParent: PsiElement?,
         place: PsiElement,
     ): Boolean {
+        if (!processConstTagDeclarations(processor, state, lastParent, place)) {
+            return false
+        }
+
         for (attribute in attributes) {
             if (!attribute.processDeclarations(processor, state, lastParent, place)) {
                 return false

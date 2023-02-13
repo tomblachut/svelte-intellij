@@ -172,7 +172,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
              <div>{<caret>}</div>
         """.trimIndent())
         val items = myFixture.completeBasic()
-        hasElements(items, "#if", "#await", "@html")
+        hasElements(items, "#if", "#each", "#await", "@html", "@debug", "@const")
     }
 
     fun testKeywords2() {
@@ -184,6 +184,17 @@ class SvelteCompletionTest : BasePlatformTestCase() {
         myFixture.checkResult("""
              <div>{#await <caret>}</div>
         """.trimIndent())
+    }
+
+    fun testConstTagVariables() {
+        myFixture.configureByText("Test.svelte", """
+            {#if true}
+                {@const localOne = 3}
+                {<caret>}
+                {@const localTwo = 3}
+            {/if}
+        """.trimIndent())
+        hasElements(myFixture.completeBasic(), "localOne", "localTwo")
     }
 
     fun testMustache() {

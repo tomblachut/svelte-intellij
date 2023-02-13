@@ -18,6 +18,7 @@ import com.intellij.psi.xml.HtmlFileElementType
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
+import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 
 class SvelteHTMLParserDefinition : HTMLParserDefinition() {
     override fun createLexer(project: Project): Lexer {
@@ -55,7 +56,7 @@ class SvelteHTMLParserDefinition : HTMLParserDefinition() {
     // based on HtmlFileElementType
     class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte file", SvelteHTMLLanguage.INSTANCE) {
         override fun getStubVersion(): Int {
-            return HtmlFileElementType.getHtmlStubVersion() + 1
+            return HtmlFileElementType.getHtmlStubVersion() + SvelteJSElementTypes.STUB_VERSION
         }
     }
 }

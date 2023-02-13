@@ -4,15 +4,22 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.javascript.JSCompositeElementType
 import com.intellij.lang.javascript.psi.stubs.JSEmbeddedContentStub
 import com.intellij.lang.javascript.psi.stubs.JSParameterStub
-import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
-import com.intellij.lang.javascript.types.JSExpressionElementType
-import com.intellij.lang.javascript.types.JSParameterElementType
-import com.intellij.lang.javascript.types.TypeScriptEmbeddedContentElementType
+import com.intellij.lang.javascript.types.*
+import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 
 object SvelteJSElementTypes {
+    const val STUB_VERSION = 2
+
+    val CONST_TAG_VARIABLE: JSVariableElementType = object : JSVariableElementType("CONST_TAG_VARIABLE") {
+        override fun construct(node: ASTNode): PsiElement = SvelteJSConstTagVariable(node)
+        override fun shouldCreateStub(node: ASTNode): Boolean = false
+
+        override fun getExternalId(): String = "Svelte$debugName"
+    }
+
     val PARAMETER = object : JSParameterElementType("EMBEDDED_PARAMETER") {
         override fun construct(node: ASTNode) = SvelteJSParameter(node)
         override fun createPsi(stub: JSParameterStub) = SvelteJSParameter(stub, this)

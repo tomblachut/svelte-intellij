@@ -407,6 +407,39 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testConstTagDisallowNestedAssignment() {
+        myFixture.configureByText("Foo.svelte", """
+            {#if true}
+                {@const y = <error descr="Unresolved variable or type x">x</error> = 3}
+                {x + y}
+            {/if}
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testConstTagReassignment() {
+        myFixture.configureByText("Foo.svelte", """
+            {#if true}
+                {@const area = 1}
+                <p on:click={() => <error descr="Attempt to assign to const or readonly variable">area</error> = 50}>
+                    {area}
+                </p>
+            {/if}
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testConstTagUseBeforeDeclare() {
+        myFixture.configureByText("Foo.svelte", """
+            {#if true}
+                <p>{area}</p>
+                {@const area = 1 + areaLast}
+                {@const areaLast = 2}
+            {/if}
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     companion object {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
             val l = mutableListOf<LocalInspectionTool>()

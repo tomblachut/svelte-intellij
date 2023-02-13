@@ -69,7 +69,75 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
-      PsiErrorElement:Expected html or debug
+      PsiElement(JS:CONST_KEYWORD)('const')
+      PsiWhiteSpace(' ')
+      JSVarStatement
+        SvelteJSConstTagVariable
+          PsiElement(JS:IDENTIFIER)('x')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:EQ)('=')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:PLUS)('+')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:CONST_KEYWORD)('const')
+      PsiWhiteSpace(' ')
+      JSVarStatement
+        SvelteJSConstTagVariable
+          PsiElement(JS:IDENTIFIER)('x')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:EQ)('=')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:PLUS)('+')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiErrorElement:Whitespace is not allowed after @
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiElement(JS:CONST_KEYWORD)('const')
+      PsiWhiteSpace(' ')
+      JSVarStatement
+        SvelteJSConstTagVariable
+          PsiElement(JS:IDENTIFIER)('x')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:EQ)('=')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:PLUS)('+')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('1')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiErrorElement:Expected html, debug or const
         PsiElement(JS:IDENTIFIER)('unknown')
       PsiWhiteSpace(' ')
       JSReferenceExpression

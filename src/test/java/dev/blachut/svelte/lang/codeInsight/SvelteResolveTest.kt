@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
 import com.intellij.psi.util.contextOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.blachut.svelte.lang.getSvelteTestDataPath
+import dev.blachut.svelte.lang.psi.blocks.SvelteEachPrimaryBranch
 import junit.framework.TestCase
 
 class SvelteResolveTest : BasePlatformTestCase() {
@@ -94,4 +95,41 @@ class SvelteResolveTest : BasePlatformTestCase() {
         TestCase.assertNotNull(variable)
         TestCase.assertNotNull(variable!!.contextOfType<JSTagEmbeddedContent>())
     }
+
+    fun testConstTagVariableShadowing() {
+        myFixture.configureByText(
+            "Example.svelte", """
+            <script>
+                const people = [1, 2, 3];
+            </script>
+
+            {#each people as person}
+                {@const people = ["hello"]}
+                {<caret>people}
+            {/each}
+            """.trimIndent()
+        )
+        val reference = myFixture.getReferenceAtCaretPosition()
+        TestCase.assertNotNull(reference)
+
+        val variable = reference!!.resolve()
+        TestCase.assertNotNull(variable)
+        TestCase.assertNotNull(variable!!.contextOfType<SvelteEachPrimaryBranch>())
+    }
+
+    fun testConstTagBlockScope() {
+        myFixture.configureByText(
+            "Example.svelte", """
+            {#each <caret>people as person}
+                {@const people = ["hello"]}
+            {/each}
+            """.trimIndent()
+        )
+        val reference = myFixture.getReferenceAtCaretPosition()
+        TestCase.assertNotNull(reference)
+
+        val variable = reference!!.resolve()
+        TestCase.assertNull(variable)
+    }
+
 }

@@ -25,6 +25,28 @@ SvelteHtmlFile: BlockNesting.svelte
         SvelteFragment
           XmlText
             PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('x')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSBinaryExpression
+                  JSLiteralExpression
+                    PsiElement(JS:NUMERIC_LITERAL)('1')
+                  PsiWhiteSpace(' ')
+                  PsiElement(JS:PLUS)('+')
+                  PsiWhiteSpace(' ')
+                  JSLiteralExpression
+                    PsiElement(JS:NUMERIC_LITERAL)('1')
+            PsiElement(JS:RBRACE)('}')
+          XmlText
+            PsiWhiteSpace('\n    ')
           SvelteAwaitBlock
             SvelteAwaitPrimaryBranch
               SvelteInitialTag(AWAIT_START)

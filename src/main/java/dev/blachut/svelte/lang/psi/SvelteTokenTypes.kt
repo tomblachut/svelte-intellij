@@ -45,6 +45,9 @@ object SvelteTokenTypes {
     @JvmField
     val DEBUG_KEYWORD = JSKeywordElementType("debug")
 
+    @JvmField
+    val CONST_KEYWORD: IElementType = JSTokenTypes.CONST_KEYWORD
+
     val KEYWORDS = TokenSet.create(
         IF_KEYWORD,
         ELSE_KEYWORD,
@@ -55,6 +58,7 @@ object SvelteTokenTypes {
         CATCH_KEYWORD,
         KEY_KEYWORD,
         HTML_KEYWORD,
-        DEBUG_KEYWORD
+        DEBUG_KEYWORD,
+        CONST_KEYWORD
     )
 }
