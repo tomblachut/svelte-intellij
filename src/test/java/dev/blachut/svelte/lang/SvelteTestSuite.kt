@@ -32,6 +32,7 @@ import org.junit.runners.Suite
     SvelteNavigationTest::class,
     SvelteTypeScriptCompletionTest::class,
     SvelteTypeScriptHighlightingTest::class,
+    SvelteCopyPasteTest::class,
     SvelteCreateVariableTest::class,
     SvelteCreateFunctionTest::class,
     SvelteCreateImportTest::class,
