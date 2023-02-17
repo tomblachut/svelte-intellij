@@ -1,8 +1,11 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder.Marker
+import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.tree.IElementType
+import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.psi.*
+import org.jetbrains.annotations.Nls
 
 object SvelteBlockParsing {
     fun startBlock(tagLevel: Int, tagToken: IElementType, tagMarker: Marker, fragmentMarker: Marker): OpenedBlock {
@@ -25,7 +28,7 @@ object SvelteBlockParsing {
         primaryBranchToken = SvelteElementTypes.IF_TRUE_BRANCH,
         innerTagToBranchTokens = mapOf(SvelteTagElementTypes.ELSE_CLAUSE to SvelteElementTypes.IF_ELSE_BRANCH),
         endTag = SvelteTagElementTypes.IF_END,
-        missingEndTagMessage = "{#if} is not closed"
+        missingEndTagMessage = SvelteBundle.message("svelte.parsing.if.is.not.closed")
     )
 
     private val EACH_BLOCK_DEFINITION = BlockParsingDefinition(
@@ -33,7 +36,7 @@ object SvelteBlockParsing {
         primaryBranchToken = SvelteElementTypes.EACH_LOOP_BRANCH,
         innerTagToBranchTokens = mapOf(SvelteTagElementTypes.ELSE_CLAUSE to SvelteElementTypes.EACH_ELSE_BRANCH),
         endTag = SvelteTagElementTypes.EACH_END,
-        missingEndTagMessage = "{#each} is not closed"
+        missingEndTagMessage = SvelteBundle.message("svelte.parsing.each.is.not.closed")
     )
 
     private val AWAIT_BLOCK_DEFINITION = BlockParsingDefinition(
@@ -44,7 +47,7 @@ object SvelteBlockParsing {
             SvelteTagElementTypes.CATCH_CLAUSE to SvelteElementTypes.AWAIT_CATCH_BRANCH
         ),
         endTag = SvelteTagElementTypes.AWAIT_END,
-        missingEndTagMessage = "{#await} is not closed"
+        missingEndTagMessage = SvelteBundle.message("svelte.parsing.await.is.not.closed")
     )
 
     private val KEY_BLOCK_DEFINITION = BlockParsingDefinition(
@@ -52,7 +55,7 @@ object SvelteBlockParsing {
         primaryBranchToken = SvelteElementTypes.KEY_PRIMARY_BRANCH,
         innerTagToBranchTokens = mapOf(),
         endTag = SvelteTagElementTypes.KEY_END,
-        missingEndTagMessage = "{#key} is not closed"
+        missingEndTagMessage = SvelteBundle.message("svelte.parsing.key.is.not.closed")
     )
 }
 
@@ -73,7 +76,7 @@ data class OpenedBlock(
         fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
         innerMarker.doneBefore(lastInnerElement, resultMarker)
         lastInnerElement = parsingDefinition.innerTagToBranchTokens[token]
-            ?: throw IllegalArgumentException("Expected matching inner clause")
+                           ?: throw IllegalArgumentException("Expected matching inner clause")
         innerMarker = resultMarker.precede()
         fragmentMarker = nextFragmentMarker
     }
@@ -97,5 +100,5 @@ data class BlockParsingDefinition(
     val primaryBranchToken: SvelteElementType,
     val innerTagToBranchTokens: Map<SvelteJSBlockLazyElementType, SvelteElementType>,
     val endTag: SvelteJSElementType,
-    val missingEndTagMessage: String
+    @Nls @NlsContexts.ParsingError val missingEndTagMessage: String
 )

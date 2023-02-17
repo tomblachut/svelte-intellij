@@ -31,7 +31,7 @@ SvelteHtmlFile: BlockWhitespace.svelte
     SvelteEndTag(EACH_END)
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:DIV)('/')
-      PsiErrorElement:whitespace is not allowed after /
+      PsiErrorElement:Whitespace is not allowed after /
         <empty list>
       PsiWhiteSpace(' ')
       PsiElement(JS:EACH_KEYWORD)('each')
@@ -73,7 +73,7 @@ SvelteHtmlFile: BlockWhitespace.svelte
           PsiElement(JS:LBRACE)('{')
           PsiWhiteSpace(' ')
           PsiElement(JS:COLON)(':')
-          PsiErrorElement:whitespace is not allowed after :
+          PsiErrorElement:Whitespace is not allowed after :
             <empty list>
           PsiWhiteSpace(' ')
           PsiElement(JS:ELSE_KEYWORD)('else')

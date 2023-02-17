@@ -4,22 +4,11 @@ import com.intellij.openapi.fileTypes.LanguageFileType
 import icons.SvelteIcons
 import javax.swing.Icon
 
-class SvelteHtmlFileType private constructor(): LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
-    override fun getName(): String {
-        return "Svelte"
-    }
-
-    override fun getDescription(): String {
-        return "Svelte"
-    }
-
-    override fun getDefaultExtension(): String {
-        return "svelte"
-    }
-
-    override fun getIcon(): Icon? {
-        return SvelteIcons.Desaturated
-    }
+class SvelteHtmlFileType private constructor() : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
+    override fun getName(): String = "Svelte"
+    override fun getDescription(): String = SvelteBundle.message("svelte.file.type.description")
+    override fun getDefaultExtension(): String = "svelte"
+    override fun getIcon(): Icon = SvelteIcons.Desaturated
 
     companion object {
         @JvmField

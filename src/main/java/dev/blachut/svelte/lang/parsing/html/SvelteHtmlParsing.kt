@@ -7,6 +7,7 @@ import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import com.intellij.util.containers.Stack
 import com.intellij.xml.psi.XmlPsiBundle
+import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
@@ -32,7 +33,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                 flushHtmlTags(tagMarker, openedBlock.tagLevel)
                 openedBlock.handleInnerTag(tagToken, tagMarker, builder.mark())
             } else {
-                tagMarker.precede().errorBefore("Unexpected inner tag", tagMarker)
+                tagMarker.precede().errorBefore(SvelteBundle.message("svelte.parsing.error.unexpected.inner.tag"), tagMarker)
             }
         } else if (SvelteTagElementTypes.END_TAGS.contains(tagToken)) {
             if (!openedBlocks.empty() && openedBlocks.peek().isMatchingEndTag(tagToken)) {
@@ -42,7 +43,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
                 closeTag() // SYNTHETIC_TAG
                 openedBlock.handleEndTag(tagMarker)
             } else {
-                tagMarker.precede().errorBefore("Unexpected end tag", tagMarker)
+                tagMarker.precede().errorBefore(SvelteBundle.message("svelte.parsing.error.unexpected.end.tag"), tagMarker)
             }
         }
     }

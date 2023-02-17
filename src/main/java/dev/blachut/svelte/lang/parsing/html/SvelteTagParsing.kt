@@ -2,17 +2,19 @@ package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
+import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.ILazyParseableElementType
+import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 object SvelteTagParsing {
-    fun parseNotAllowedWhitespace(builder: PsiBuilder, precedingSymbol: String) {
+    fun parseNotAllowedWhitespace(builder: PsiBuilder, @NlsSafe precedingSymbol: String) {
         if (builder.isTokenAfterWhiteSpace()) {
-            builder.error("whitespace is not allowed after $precedingSymbol")
+            builder.error(SvelteBundle.message("svelte.parsing.error.whitespace.not.allowed.after.with", precedingSymbol))
         }
     }
 
@@ -65,7 +67,7 @@ object SvelteTagParsing {
             builder.remapCurrentToken(JSTokenTypes.RBRACE)
             builder.advanceLexer()
         } else {
-            builder.error("missing }")
+            builder.error(SvelteBundle.message("svelte.parsing.error.missing"))
         }
 
         if (endToken is ILazyParseableElementType) {
