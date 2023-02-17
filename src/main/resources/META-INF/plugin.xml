@@ -86,10 +86,13 @@
                                 implementationClass="dev.blachut.svelte.lang.completion.SvelteCompletionContributor"
                                 id="SvelteCompletionContributor"
                                 order="before JSPatternBasedCompletionContributor, before JSCompletionContributor, before xmlNonFirst, before cssClassOrIdReferenceCompletionContributor"/>
-        <localInspection groupName="Svelte" displayName="Unresolved Svelte component"
-                         shortName="SvelteUnresolvedComponent" language="SvelteHTML"
+        <localInspection groupKey="svelte.name"
+                         shortName="SvelteUnresolvedComponent"
+                         language="SvelteHTML"
+                         bundle="messages.SvelteBundle"
                          enabledByDefault="true" level="ERROR"
-                         implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"/>
+                         implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"
+                         key="svelte.inspection.unresolved.component.display.name"/>
         <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
         <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
         <css.classOrIdUsagesProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteCssUsagesProvider"/>

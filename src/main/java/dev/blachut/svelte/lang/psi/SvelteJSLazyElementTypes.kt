@@ -6,6 +6,7 @@ import com.intellij.lang.javascript.JSStubElementTypes
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.lang.javascript.parsing.JavaScriptParserBase
+import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 
 object SvelteJSLazyElementTypes {
@@ -88,7 +89,7 @@ object SvelteJSLazyElementTypes {
             builder.advanceLexer()
 
             if (builder.isTokenAfterWhiteSpace()) {
-                builder.error("Whitespace is not allowed after @")
+                builder.error(SvelteBundle.message("svelte.parsing.error.whitespace.not.allowed.after"))
             }
 
             if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
@@ -106,17 +107,17 @@ object SvelteJSLazyElementTypes {
             else {
                 val errorMarker = builder.mark()
                 builder.advanceLexer()
-                errorMarker.error("Expected html, debug or const")
+                errorMarker.error(SvelteBundle.message("svelte.parsing.error.expected.html.debug.or.const"))
             }
         } else if (unexpectedTokens.contains(builder.tokenType)) {
             builder.advanceLexer()
 
             if (builder.isTokenAfterWhiteSpace()) {
-                builder.error("Whitespace is not allowed here")
+                builder.error(SvelteBundle.message("svelte.parsing.error.whitespace.not.allowed.here"))
             }
             val errorMarker = builder.mark()
             builder.advanceLexer()
-            errorMarker.error("Invalid block name")
+            errorMarker.error(SvelteBundle.message("svelte.parsing.error.invalid.block.name"))
         }
 
         return constMode
@@ -141,7 +142,7 @@ object SvelteJSLazyElementTypes {
                 builder.advanceLexer()
             }
 
-            errorMarker.error("@-modifiers are not allowed here")
+            errorMarker.error(SvelteBundle.message("svelte.parsing.error.modifiers.are.not.allowed.here"))
         }
     }
 }

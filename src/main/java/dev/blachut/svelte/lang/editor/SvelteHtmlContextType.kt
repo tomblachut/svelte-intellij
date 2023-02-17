@@ -7,10 +7,11 @@ import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.psi.util.PsiUtilCore
+import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteHtmlFileType
 
-class SvelteHtmlContextType : TemplateContextType("Svelte HTML") {
+class SvelteHtmlContextType : TemplateContextType(SvelteBundle.message("svelte.context.html")) {
     override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
         val file = templateActionContext.file
         val offset = templateActionContext.startOffset

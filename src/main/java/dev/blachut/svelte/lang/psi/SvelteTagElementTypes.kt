@@ -4,6 +4,7 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.psi.tree.TokenSet
+import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.parsing.html.SvelteTagParsing
 
 object SvelteTagElementTypes {
@@ -48,7 +49,7 @@ object SvelteTagElementTypes {
             if (builder.tokenType === SvelteTokenTypes.AS_KEYWORD) {
                 builder.advanceLexer()
             } else {
-                builder.error("as expected")
+                builder.error(SvelteBundle.message("svelte.parsing.error.as.expected"))
             }
 
             parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
@@ -67,7 +68,7 @@ object SvelteTagElementTypes {
                 if (builder.tokenType === JSTokenTypes.RPAR) {
                     builder.advanceLexer()
                 } else {
-                    builder.error(") expected")
+                    builder.error(SvelteBundle.message("svelte.parsing.error.expected.closing.brace"))
                 }
                 keyExpressionMarker.done(TAG_DEPENDENT_EXPRESSION)
             }
