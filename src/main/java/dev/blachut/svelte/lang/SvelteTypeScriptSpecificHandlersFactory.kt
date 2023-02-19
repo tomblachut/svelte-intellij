@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang
 
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
-import com.intellij.lang.javascript.psi.util.JSStubBasedPsiTreeUtil
+import com.intellij.lang.javascript.psi.util.JSStubBasedScopeHandler
 import com.intellij.lang.typescript.TypeScriptSpecificHandlersFactory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.resolve.ResolveCache
@@ -17,7 +17,7 @@ class SvelteTypeScriptSpecificHandlersFactory : TypeScriptSpecificHandlersFactor
         return SvelteTypeScriptReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits)
     }
 
-    override fun getStubBasedScopeHandler(): JSStubBasedPsiTreeUtil.JSStubBasedScopeHandler =
+    override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler =
         SvelteStubBasedScopeHandler
 
     override fun getExportScope(element: PsiElement): JSElement? =
