@@ -1,13 +1,13 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.javascript.psi.util.JSStubBasedPsiTreeUtil
+import com.intellij.lang.javascript.psi.util.JSStubBasedScopeHandler
 import com.intellij.psi.PsiElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
-object SvelteStubBasedScopeHandler : JSStubBasedPsiTreeUtil.JSStubBasedScopeHandler() {
+object SvelteStubBasedScopeHandler : JSStubBasedScopeHandler() {
 
     override fun processDeclarationsInScope(context: PsiElement, processor: PsiScopeProcessor, includeParentScopes: Boolean): Boolean {
         val initialScope = getScope(context)
