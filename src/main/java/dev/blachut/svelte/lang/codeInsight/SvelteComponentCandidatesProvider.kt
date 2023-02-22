@@ -46,7 +46,7 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
         }
     }
 
-    companion object : CandidatesFactory {
+    class Factory : CandidatesFactory {
         override fun createProvider(placeInfo: JSImportPlaceInfo): JSImportCandidatesProvider {
             return SvelteComponentCandidatesProvider(placeInfo)
         }
