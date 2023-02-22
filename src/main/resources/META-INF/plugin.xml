@@ -111,7 +111,7 @@
     <extensions defaultExtensionNs="JavaScript">
         <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>
 
-        <importCandidatesFactory implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentCandidatesProvider$Companion"/>
+        <importCandidatesFactory implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentCandidatesProvider$Factory"/>
 
         <handlersFactory language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteHtmlHandlersFactory"/>
         <handlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSHandlersFactory"/>
