@@ -1,0 +1,127 @@
+SvelteHtmlFile: test.html
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: ul
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('ul')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n   ')
+      SvelteHtmlTag: li
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('li')
+        XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n       ')
+        SvelteHtmlTag: menu
+          XmlToken:XML_START_TAG_START('<')
+          XmlToken:XML_NAME('menu')
+          XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n         ')
+          SvelteHtmlTag: li
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('li')
+            XmlToken:XML_TAG_END('>')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('li')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n       ')
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('menu')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n   ')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('li')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('ul')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: menu
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('menu')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n   ')
+      SvelteHtmlTag: li
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('li')
+        XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n       ')
+        SvelteHtmlTag: menu
+          XmlToken:XML_START_TAG_START('<')
+          XmlToken:XML_NAME('menu')
+          XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n         ')
+          SvelteHtmlTag: li
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('li')
+            XmlToken:XML_TAG_END('>')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('li')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n       ')
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('menu')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n   ')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('li')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('menu')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: UlUnlisted
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('UlUnlisted')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n   ')
+      SvelteHtmlTag: li
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('li')
+        XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n     ')
+        SvelteHtmlTag: UlUnlisted
+          XmlToken:XML_START_TAG_START('<')
+          XmlToken:XML_NAME('UlUnlisted')
+          XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n       ')
+          SvelteHtmlTag: li
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('li')
+            XmlToken:XML_TAG_END('>')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('li')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n     ')
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('UlUnlisted')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace('\n   ')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('li')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('UlUnlisted')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')

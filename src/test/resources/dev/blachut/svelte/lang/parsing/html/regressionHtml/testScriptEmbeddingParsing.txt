@@ -1,12 +1,12 @@
-HtmlFile:test.html
+SvelteHtmlFile: test.html
   PsiElement(HTML_DOCUMENT)
     PsiElement(XML_PROLOG)
       <empty list>
-    HtmlTag:script
+    SvelteHtmlTag: script
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('script')
       PsiWhiteSpace(' ')
-      PsiElement(XML_ATTRIBUTE)
+      SvelteHtmlAttribute: type
         XmlToken:XML_NAME('type')
         XmlToken:XML_EQ('=')
         PsiElement(XML_ATTRIBUTE_VALUE)
@@ -20,11 +20,11 @@ HtmlFile:test.html
       XmlToken:XML_NAME('script')
       XmlToken:XML_TAG_END('>')
     PsiWhiteSpace('\n')
-    HtmlTag:script
+    SvelteHtmlTag: script
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('script')
       PsiWhiteSpace(' ')
-      PsiElement(XML_ATTRIBUTE)
+      SvelteHtmlAttribute: type
         XmlToken:XML_NAME('type')
         XmlToken:XML_EQ('=')
         PsiElement(XML_ATTRIBUTE_VALUE)
@@ -33,7 +33,9 @@ HtmlFile:test.html
           XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
       XmlToken:XML_TAG_END('>')
       XmlText
-        XmlToken:XML_DATA_CHARACTERS('<div> </div>')
+        XmlToken:XML_DATA_CHARACTERS('<div>')
+        PsiWhiteSpace(' ')
+        XmlToken:XML_DATA_CHARACTERS('</div>')
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('script')
       XmlToken:XML_TAG_END('>')

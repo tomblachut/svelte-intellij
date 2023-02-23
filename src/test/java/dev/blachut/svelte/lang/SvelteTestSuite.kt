@@ -13,7 +13,7 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
     // Parsing
-    ExtendableHtmlParsingTest::class,
+    SvelteHtmlRegressionParsingTest::class,
     SvelteHighlightingLexerTest::class,
     SvelteHtmlParserTest::class,
     SvelteDirectiveLexerTest::class,

@@ -104,10 +104,16 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         return super.isTagNameFurtherInStack(endName, tagNames)
     }
 
-    override fun childTerminatesParent(childName: String?, parentName: String?, tagLevel: Int): Boolean? {
+    override fun canOpeningTagAutoClose(tagOnStack: String, openingTag: String, tagLevel: Int): Boolean? {
         if (tagLevel <= blockLevel) return false
 
-        return super.childTerminatesParent(childName, parentName, tagLevel)
+        return super.canOpeningTagAutoClose(tagOnStack, openingTag, tagLevel)
+    }
+
+    override fun canClosingTagAutoClose(tagOnStack: String, closingTag: String): Boolean {
+        if (tagLevel() <= blockLevel) return false
+
+        return super.canClosingTagAutoClose(tagOnStack, closingTag)
     }
 
     override fun terminateAutoClosingParentTag(tag: PsiBuilder.Marker, tagName: String) {
