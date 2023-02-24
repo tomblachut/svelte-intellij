@@ -27,15 +27,12 @@ SvelteHtmlFile: HtmlClosingTagMatchesNothing3.svelte
               XmlToken:XML_TAG_END('>')
               XmlText
                 PsiWhiteSpace('\n            ')
-              PsiErrorElement:Element section is not closed
-                <empty list>
-            PsiErrorElement:Closing tag matches nothing
-              XmlToken:XML_END_TAG_START('</')
-              XmlToken:XML_NAME('div')
-              XmlToken:XML_TAG_END('>')
-            XmlText
-              PsiWhiteSpace('\n        ')
-            PsiErrorElement:Closing tag matches nothing
+              PsiErrorElement:Closing tag matches nothing
+                XmlToken:XML_END_TAG_START('</')
+                XmlToken:XML_NAME('div')
+                XmlToken:XML_TAG_END('>')
+              XmlText
+                PsiWhiteSpace('\n        ')
               XmlToken:XML_END_TAG_START('</')
               XmlToken:XML_NAME('section')
               XmlToken:XML_TAG_END('>')
