@@ -28,12 +28,12 @@ SvelteHtmlFile: HtmlClosingTagMatchesNothing2.svelte
               XmlText
                 XmlToken:XML_DATA_CHARACTERS('test')
                 PsiWhiteSpace('\n        ')
-            PsiErrorElement:Closing tag matches nothing
-              XmlToken:XML_END_TAG_START('</')
-              XmlToken:XML_NAME('div')
-              XmlToken:XML_TAG_END('>')
-            XmlText
-              PsiWhiteSpace('\n    ')
+              PsiErrorElement:Closing tag matches nothing
+                XmlToken:XML_END_TAG_START('</')
+                XmlToken:XML_NAME('div')
+                XmlToken:XML_TAG_END('>')
+              XmlText
+                PsiWhiteSpace('\n    ')
         SvelteEndTag(IF_END)
           PsiElement(JS:LBRACE)('{')
           PsiElement(JS:DIV)('/')
