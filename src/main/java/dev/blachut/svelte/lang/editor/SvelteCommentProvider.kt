@@ -25,17 +25,18 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
     override fun getLineCommenter(
         file: PsiFile,
         editor: Editor,
-        lineStartLanguage: Language?,
-        lineEndLanguage: Language?
+        lineStartLanguage: Language,
+        lineEndLanguage: Language
     ): Commenter? {
-        if (lineStartLanguage?.isKindOf(JavascriptLanguage.INSTANCE) == true) {
+        if (lineStartLanguage.isKindOf(JavascriptLanguage.INSTANCE)) {
             val offset = editor.caretModel.offset
             val wrapper = PsiTreeUtil.getContextOfType(file.findElementAt(offset), JSTagEmbeddedContent::class.java)
 
             val language = if (wrapper != null) {
                 // inside script tag
                 SvelteJSLanguage.INSTANCE
-            } else {
+            }
+            else {
                 // inside template
                 SvelteHTMLLanguage.INSTANCE
             }
@@ -46,10 +47,10 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
         // Copied from CommentByBlockCommentHandler.getCommenter
         val fileLanguage = file.language
         val lang = if (
-            lineStartLanguage == null ||
             LanguageCommenters.INSTANCE.forLanguage(lineStartLanguage) == null ||
             fileLanguage.baseLanguage === lineStartLanguage // file language is a more specific dialect of the line language
-        ) fileLanguage else lineStartLanguage
+        ) fileLanguage
+        else lineStartLanguage
 
         return LanguageCommenters.INSTANCE.forLanguage(lang)
     }
