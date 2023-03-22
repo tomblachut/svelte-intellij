@@ -1,7 +1,9 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.javascript.config.JSImportResolveContext
 import com.intellij.lang.typescript.tsconfig.*
+import com.intellij.lang.typescript.tsconfig.TypeScriptFileImportsResolver.JS_DEFAULT_PRIORITY
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
@@ -26,7 +28,7 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
 
     override fun contributeResolver(project: Project, config: TypeScriptConfig): TypeScriptFileImportsResolver? {
         // TODO check if package.json includes svelte
-        return TypeScriptFileImportsResolverImpl(project, config.resolveContext, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
+        return SvelteFileImportsResolverImpl(project, config.resolveContext)
     }
 
     override fun contributeResolver(project: Project,
@@ -34,6 +36,11 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
                                     contextFile: VirtualFile): TypeScriptFileImportsResolver? {
         if (!isSvelteContext(contextFile)) return null
 
-        return TypeScriptFileImportsResolverImpl(project, context, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE))
+        return SvelteFileImportsResolverImpl(project, context)
     }
+}
+
+class SvelteFileImportsResolverImpl(project: Project, resolveContext: JSImportResolveContext)
+    : TypeScriptFileImportsResolverImpl(project, resolveContext, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE)) {
+    override fun getPriority(): Int = JS_DEFAULT_PRIORITY
 }
