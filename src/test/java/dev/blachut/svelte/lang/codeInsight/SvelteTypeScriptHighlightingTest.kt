@@ -65,10 +65,15 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testSvelteKitPathMapping() {
-        val base = basePath + "/" + getTestName(true)
-        myFixture.copyDirectoryToProject(base, "")
+        myFixture.copyDirectoryToProject(basePath + "/" + getTestName(true), "")
         myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
         myFixture.testHighlighting()
         TestCase.assertNotNull(myFixture.findSingleIntention ("Insert 'import Counter from \"\$lib/Counter.svelte\"'"))
+    }
+
+    fun testTsOverSvelte() {
+        myFixture.copyDirectoryToProject(basePath + "/" + getTestName(true), "")
+        myFixture.configureFromTempProjectFile("+page.svelte")
+        myFixture.testHighlighting()
     }
 }

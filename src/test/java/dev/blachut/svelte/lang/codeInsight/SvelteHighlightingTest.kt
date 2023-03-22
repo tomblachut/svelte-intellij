@@ -440,6 +440,22 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testJSOverSvelte() {
+        myFixture.configureByText("usage.svelte", """
+            <script>console.log("hello")</script>
+        """.trimIndent())
+        myFixture.configureByText("usage.js", """
+            export function hello() {return "hello"}
+        """.trimIndent())
+        myFixture.configureByText("+page.svelte", """
+            <script>
+                import {hello} from './usage'
+                console.log(hello());
+            </script>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     companion object {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
             val l = mutableListOf<LocalInspectionTool>()
