@@ -29,7 +29,7 @@
 
     <actions>
         <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction">
-            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewJavaScriptFile"/>
+            <add-to-group group-id="NewWebDevelopment" anchor="before" relative-to-action="NewJavaScriptFile"/>
         </action>
     </actions>
 
