@@ -17,6 +17,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.xml.util.XmlDuplicatedIdInspection
 import com.intellij.xml.util.XmlInvalidIdInspection
 import com.sixrr.inspectjs.assignment.SillyAssignmentJSInspection
+import com.sixrr.inspectjs.confusing.CommaExpressionJSInspection
 import com.sixrr.inspectjs.confusing.PointlessBooleanExpressionJSInspection
 import com.sixrr.inspectjs.validity.UnreachableCodeJSInspection
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
@@ -456,6 +457,26 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testDebugTagNoCommaExpressionWarnings() {
+        myFixture.configureByText("Commas.svelte", """
+            <script>
+                const a = 0, b = 1;
+                const x = (a<warning descr="Comma expression">,</warning> b);
+            </script>
+
+            {#if true}
+                {@const y = (a<warning descr="Comma expression">,</warning> b)}
+                {#if a<warning descr="Comma expression">,</warning> b}maybe{/if}
+                {a, b<warning descr="Comma expression">,</warning> y}
+                {@debug a, b}
+                {@debug (a, b, x, y)}
+                {@debug a, b, (a, b)} <!-- todo disallow arbitrary expressions in @debug -->
+            {/if}
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+
     companion object {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
             val l = mutableListOf<LocalInspectionTool>()
@@ -466,6 +487,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(JSValidateTypesInspection())
             l.add(JSIncompatibleTypesComparisonInspection())
             l.add(SillyAssignmentJSInspection())
+            l.add(CommaExpressionJSInspection())
             val functionSignaturesInspection = JSCheckFunctionSignaturesInspection()
             functionSignaturesInspection.myCheckGuessedTypes = true
             l.add(functionSignaturesInspection)
