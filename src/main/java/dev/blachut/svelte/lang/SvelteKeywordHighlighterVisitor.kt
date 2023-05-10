@@ -66,7 +66,6 @@ class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptK
     private fun highlight(key: TextAttributesKey, range: TextRange) {
         val mappedKey = myHighlighter.getMappedKey(key)
         val info = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)
-            .severity(HighlightInfoType.SYMBOL_TYPE_SEVERITY)
             .range(range).textAttributes(mappedKey).create()
 
         myHolder.add(info)
