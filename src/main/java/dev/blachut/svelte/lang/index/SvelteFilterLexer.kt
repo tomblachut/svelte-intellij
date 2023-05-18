@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang.index
 
 import com.intellij.lang.Language
 import com.intellij.lang.html.HTMLLanguage
-import com.intellij.lang.javascript.JSExtendedLanguagesTokenSetProvider
 import com.intellij.lang.javascript.JSKeywordSets
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.xml.XMLLanguage
@@ -92,9 +91,9 @@ class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, originalLexer: L
         )
 
         private val SKIP_WORDS = orSet(
-            JSExtendedLanguagesTokenSetProvider.SKIP_WORDS_SCAN_SET,
-            XmlFilterLexer.NO_WORDS_TOKEN_SET,
-            create(XmlTokenType.XML_COMMA)
+          JSTokenTypes.SKIP_WORDS_SCAN_SET,
+          XmlFilterLexer.NO_WORDS_TOKEN_SET,
+          create(XmlTokenType.XML_COMMA)
         )
     }
 }
