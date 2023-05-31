@@ -16,58 +16,58 @@ import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexer
 import dev.blachut.svelte.lang.psi.*
 
-class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptKeywordHighlighterVisitor(holder),
-    SvelteVisitor {
-    override fun visitInitialTag(tag: SvelteInitialTag) {
-        highlightChildKeywordOfType(tag, SvelteTokenTypes.AS_KEYWORD)
-        highlightChildKeywordOfType(tag, SvelteTokenTypes.THEN_KEYWORD)
-        super.visitInitialTag(tag)
+class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptKeywordHighlighterVisitor(holder), SvelteVisitor {
+  override fun visitInitialTag(tag: SvelteInitialTag) {
+    highlightChildKeywordOfType(tag, SvelteTokenTypes.AS_KEYWORD)
+    highlightChildKeywordOfType(tag, SvelteTokenTypes.THEN_KEYWORD)
+    super.visitInitialTag(tag)
+  }
+
+  override fun visitLazyElement(element: SvelteJSLazyPsiElement) {
+    highlightChildKeywordOfType(element, SvelteTokenTypes.HTML_KEYWORD)
+    highlightChildKeywordOfType(element, SvelteTokenTypes.DEBUG_KEYWORD)
+    highlightChildKeywordOfType(element, SvelteTokenTypes.CONST_KEYWORD)
+
+    super.visitLazyElement(element)
+  }
+
+  override fun visitJSLabeledStatement(node: JSLabeledStatement) {
+    if (node.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+      highlightChildKeywordOfType(node, JSTokenTypes.IDENTIFIER)
     }
 
-    override fun visitLazyElement(element: SvelteJSLazyPsiElement) {
-        highlightChildKeywordOfType(element, SvelteTokenTypes.HTML_KEYWORD)
-        highlightChildKeywordOfType(element, SvelteTokenTypes.DEBUG_KEYWORD)
-        highlightChildKeywordOfType(element, SvelteTokenTypes.CONST_KEYWORD)
+    super.visitJSLabeledStatement(node)
+  }
 
-        super.visitLazyElement(element)
-    }
+  override fun visitElement(element: PsiElement) {
+    if (element is SvelteHtmlAttribute && element.directive != null) {
+      val startOffset = element.nameElement?.startOffset ?: 0
+      highlight(JSHighlighter.JS_KEYWORD, TextRange(startOffset, element.textOffset))
 
-    override fun visitJSLabeledStatement(node: JSLabeledStatement) {
-        if (node.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
-            highlightChildKeywordOfType(node, JSTokenTypes.IDENTIFIER)
+      val lexer = SvelteDirectiveLexer()
+      lexer.start(element.name)
+      while (lexer.tokenType != null) {
+        if (lexer.tokenType == JSTokenTypes.OR) {
+          highlight(JSHighlighter.ES6_DECORATOR,
+                    TextRange(lexer.tokenStart, lexer.tokenEnd).shiftRight(startOffset))
+        }
+        else if (lexer.tokenType == XmlTokenType.XML_NAME) {
+          highlight(JSHighlighter.ES6_DECORATOR,
+                    TextRange(lexer.tokenStart, lexer.tokenEnd).shiftRight(startOffset))
         }
 
-        super.visitJSLabeledStatement(node)
+        lexer.advance()
+      }
     }
 
-    override fun visitElement(element: PsiElement) {
-        if (element is SvelteHtmlAttribute && element.directive != null) {
-            val startOffset = element.nameElement?.startOffset ?: 0
-            highlight(JSHighlighter.JS_KEYWORD, TextRange(startOffset, element.textOffset))
+    super.visitElement(element)
+  }
 
-            val lexer = SvelteDirectiveLexer()
-            lexer.start(element.name)
-            while (lexer.tokenType != null) {
-                if (lexer.tokenType == JSTokenTypes.OR) {
-                    highlight(JSHighlighter.ES6_DECORATOR,
-                        TextRange(lexer.tokenStart, lexer.tokenEnd).shiftRight(startOffset))
-                } else if (lexer.tokenType == XmlTokenType.XML_NAME) {
-                    highlight(JSHighlighter.ES6_DECORATOR,
-                        TextRange(lexer.tokenStart, lexer.tokenEnd).shiftRight(startOffset))
-                }
+  private fun highlight(key: TextAttributesKey, range: TextRange) {
+    val mappedKey = myHighlighter.getMappedKey(key)
+    val info = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)
+      .range(range).textAttributes(mappedKey).create()
 
-                lexer.advance()
-            }
-        }
-
-        super.visitElement(element)
-    }
-
-    private fun highlight(key: TextAttributesKey, range: TextRange) {
-        val mappedKey = myHighlighter.getMappedKey(key)
-        val info = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)
-            .range(range).textAttributes(mappedKey).create()
-
-        myHolder.add(info)
-    }
+    myHolder.add(info)
+  }
 }

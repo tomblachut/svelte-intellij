@@ -16,31 +16,31 @@ const val svelteExtension = ".svelte"
 val svelteExtensionsWithDot = arrayOf(svelteExtension)
 
 class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvider {
-    override fun isImplicitTypeScriptFile(project: Project, file: VirtualFile): Boolean {
-        if (file.fileType != SvelteHtmlFileType.INSTANCE) return false
+  override fun isImplicitTypeScriptFile(project: Project, file: VirtualFile): Boolean {
+    if (file.fileType != SvelteHtmlFileType.INSTANCE) return false
 
-        val psiFile = PsiManager.getInstance(project).findFile(file) as? SvelteHtmlFile ?: return false
-        val langAttr = psiFile.instanceScript?.getAttribute("lang")?.value
-        return isTSLangValue(langAttr)
-    }
+    val psiFile = PsiManager.getInstance(project).findFile(file) as? SvelteHtmlFile ?: return false
+    val langAttr = psiFile.instanceScript?.getAttribute("lang")?.value
+    return isTSLangValue(langAttr)
+  }
 
-    override fun getExtensions(): Array<String> = svelteExtensionsWithDot
+  override fun getExtensions(): Array<String> = svelteExtensionsWithDot
 
-    override fun contributeResolver(project: Project, config: TypeScriptConfig): TypeScriptFileImportsResolver? {
-        // TODO check if package.json includes svelte
-        return SvelteFileImportsResolverImpl(project, config.resolveContext)
-    }
+  override fun contributeResolver(project: Project, config: TypeScriptConfig): TypeScriptFileImportsResolver? {
+    // TODO check if package.json includes svelte
+    return SvelteFileImportsResolverImpl(project, config.resolveContext)
+  }
 
-    override fun contributeResolver(project: Project,
-                                    context: TypeScriptImportResolveContext,
-                                    contextFile: VirtualFile): TypeScriptFileImportsResolver? {
-        if (!isSvelteContext(contextFile)) return null
+  override fun contributeResolver(project: Project,
+                                  context: TypeScriptImportResolveContext,
+                                  contextFile: VirtualFile): TypeScriptFileImportsResolver? {
+    if (!isSvelteContext(contextFile)) return null
 
-        return SvelteFileImportsResolverImpl(project, context)
-    }
+    return SvelteFileImportsResolverImpl(project, context)
+  }
 }
 
 class SvelteFileImportsResolverImpl(project: Project, resolveContext: JSImportResolveContext)
-    : TypeScriptFileImportsResolverImpl(project, resolveContext, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE)) {
-    override fun getPriority(): Int = JS_DEFAULT_PRIORITY
+  : TypeScriptFileImportsResolverImpl(project, resolveContext, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE)) {
+  override fun getPriority(): Int = JS_DEFAULT_PRIORITY
 }

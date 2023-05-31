@@ -9,21 +9,21 @@ import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.psi.blocks.SvelteFragment
 
 class SvelteHtmlTextContextType : TemplateContextType(SvelteBundle.message("svelte.context.html.text")) {
-    override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
-        val file = templateActionContext.file
-        val offset = templateActionContext.startOffset
+  override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
+    val file = templateActionContext.file
+    val offset = templateActionContext.startOffset
 
-        val language = PsiUtilCore.getLanguageAtOffset(file, offset)
-        if (!SvelteHtmlContextType.isMyLanguage(language)) {
-            return false
-        }
-        val element = file.viewProvider.findElementAt(offset, language)
-        return element == null || isInContext(element)
+    val language = PsiUtilCore.getLanguageAtOffset(file, offset)
+    if (!SvelteHtmlContextType.isMyLanguage(language)) {
+      return false
     }
+    val element = file.viewProvider.findElementAt(offset, language)
+    return element == null || isInContext(element)
+  }
 
-    companion object {
-        fun isInContext(context: PsiElement): Boolean {
-            return HtmlTextContextType.isInContext(context) || context.parent is SvelteFragment
-        }
+  companion object {
+    fun isInContext(context: PsiElement): Boolean {
+      return HtmlTextContextType.isInContext(context) || context.parent is SvelteFragment
     }
+  }
 }

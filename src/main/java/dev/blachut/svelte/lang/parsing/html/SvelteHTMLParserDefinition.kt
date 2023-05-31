@@ -21,42 +21,43 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 
 class SvelteHTMLParserDefinition : HTMLParserDefinition() {
-    override fun createLexer(project: Project): Lexer {
-        return SvelteHtmlLexer()
-    }
+  override fun createLexer(project: Project): Lexer {
+    return SvelteHtmlLexer()
+  }
 
-    override fun createParser(project: Project?): PsiParser {
-        return object : HTMLParser() {
-            override fun createHtmlParsing(builder: PsiBuilder): HtmlParsing {
-                return SvelteHtmlParsing(builder)
-            }
-        }
+  override fun createParser(project: Project?): PsiParser {
+    return object : HTMLParser() {
+      override fun createHtmlParsing(builder: PsiBuilder): HtmlParsing {
+        return SvelteHtmlParsing(builder)
+      }
     }
+  }
 
-    override fun getFileNodeType(): IFileElementType {
-        return FILE
-    }
+  override fun getFileNodeType(): IFileElementType {
+    return FILE
+  }
 
-    override fun createFile(viewProvider: FileViewProvider): PsiFile {
-        return SvelteHtmlFile(viewProvider)
-    }
+  override fun createFile(viewProvider: FileViewProvider): PsiFile {
+    return SvelteHtmlFile(viewProvider)
+  }
 
-    override fun createElement(node: ASTNode): PsiElement {
-        return try {
-            SvelteElementTypes.createElement(node)
-        } catch (e: Exception) {
-            super.createElement(node)
-        }
+  override fun createElement(node: ASTNode): PsiElement {
+    return try {
+      SvelteElementTypes.createElement(node)
     }
+    catch (e: Exception) {
+      super.createElement(node)
+    }
+  }
 
-    companion object {
-        val FILE = SvelteHtmlFileElementType()
-    }
+  companion object {
+    val FILE = SvelteHtmlFileElementType()
+  }
 
-    // based on HtmlFileElementType
-    class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte file", SvelteHTMLLanguage.INSTANCE) {
-        override fun getStubVersion(): Int {
-            return HtmlFileElementType.getHtmlStubVersion() + SvelteJSElementTypes.STUB_VERSION
-        }
+  // based on HtmlFileElementType
+  class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte file", SvelteHTMLLanguage.INSTANCE) {
+    override fun getStubVersion(): Int {
+      return HtmlFileElementType.getHtmlStubVersion() + SvelteJSElementTypes.STUB_VERSION
     }
+  }
 }

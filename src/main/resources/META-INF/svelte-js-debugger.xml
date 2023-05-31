@@ -1,5 +1,5 @@
 <idea-plugin>
-    <extensions defaultExtensionNs="com.jetbrains">
-        <javaScriptDebugAware implementation="dev.blachut.svelte.lang.run.SvelteDebugAware"/>
-    </extensions>
+  <extensions defaultExtensionNs="com.jetbrains">
+    <javaScriptDebugAware implementation="dev.blachut.svelte.lang.run.SvelteDebugAware"/>
+  </extensions>
 </idea-plugin>

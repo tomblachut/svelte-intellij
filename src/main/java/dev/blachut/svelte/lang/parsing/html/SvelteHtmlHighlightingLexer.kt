@@ -6,11 +6,11 @@ import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
 
 class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(SvelteHtmlBaseLexer(), false, null) {
 
-    override fun acceptEmbeddedContentProvider(provider: HtmlEmbeddedContentProvider): Boolean =
-        provider::class != HtmlScriptStyleEmbeddedContentProvider::class
+  override fun acceptEmbeddedContentProvider(provider: HtmlEmbeddedContentProvider): Boolean =
+    provider::class != HtmlScriptStyleEmbeddedContentProvider::class
 
-    override fun isHtmlTagState(state: Int): Boolean {
-        return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
-    }
+  override fun isHtmlTagState(state: Int): Boolean {
+    return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
+  }
 
 }

@@ -13,61 +13,61 @@ import dev.blachut.svelte.lang.parsing.html.SvelteJSExpressionLexer
 
 // TODO Merge SvelteJSBlockLazyElementType & SvelteJSLazyElementType
 abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
-    protected abstract val noTokensErrorMessage: String
-    protected open val excessTokensErrorMessage = "Unexpected token"
+  protected abstract val noTokensErrorMessage: String
+  protected open val excessTokensErrorMessage = "Unexpected token"
 
-    protected open val assumeExternalBraces: Boolean = true
+  protected open val assumeExternalBraces: Boolean = true
 
-    override fun createNode(text: CharSequence?): ASTNode? {
-        text ?: return null
-        return SvelteJSLazyPsiElement(this, text)
+  override fun createNode(text: CharSequence?): ASTNode? {
+    text ?: return null
+    return SvelteJSLazyPsiElement(this, text)
+  }
+
+  override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
+    val project = psi.project
+    val lexer = SvelteJSExpressionLexer(assumeExternalBraces)
+    val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, lexer, language, chameleon.chars)
+    val parser = JSLanguageUtil.createJSParser(language, builder)
+
+    val rootMarker = builder.mark()
+
+    if (builder.eof()) {
+      builder.error(noTokensErrorMessage)
+    }
+    else {
+      if (!assumeExternalBraces) {
+        builder.remapCurrentToken(JSTokenTypes.LBRACE)
+        builder.advanceLexer()
+      }
+      parseTokens(builder, parser)
+      if (!assumeExternalBraces) {
+        if (builder.tokenType == SvelteTokenTypes.END_MUSTACHE) {
+          builder.remapCurrentToken(JSTokenTypes.RBRACE)
+        }
+        builder.advanceLexer()
+      }
+
+      ensureEof(builder)
     }
 
-    override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
-        val project = psi.project
-        val lexer = SvelteJSExpressionLexer(assumeExternalBraces)
-        val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, lexer, language, chameleon.chars)
-        val parser = JSLanguageUtil.createJSParser(language, builder)
+    rootMarker.done(this)
 
-        val rootMarker = builder.mark()
+    return builder.treeBuilt.firstChildNode
+  }
 
-        if (builder.eof()) {
-            builder.error(noTokensErrorMessage)
-        }
-        else {
-            if (!assumeExternalBraces) {
-                builder.remapCurrentToken(JSTokenTypes.LBRACE)
-                builder.advanceLexer()
-            }
-            parseTokens(builder, parser)
-            if (!assumeExternalBraces) {
-                if (builder.tokenType == SvelteTokenTypes.END_MUSTACHE) {
-                    builder.remapCurrentToken(JSTokenTypes.RBRACE)
-                }
-                builder.advanceLexer()
-            }
+  protected abstract fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>)
 
-            ensureEof(builder)
-        }
-
-        rootMarker.done(this)
-
-        return builder.treeBuilt.firstChildNode
+  private fun ensureEof(builder: PsiBuilder) {
+    if (!builder.eof()) {
+      builder.error(excessTokensErrorMessage)
+      // todo merge back into SvelteTagParsing.finishTag
+      while (!builder.eof() && builder.tokenType !== SvelteTokenTypes.END_MUSTACHE) {
+        builder.advanceLexer()
+      }
+      if (builder.tokenType === SvelteTokenTypes.END_MUSTACHE) {
+        builder.remapCurrentToken(JSTokenTypes.RBRACE)
+        builder.advanceLexer()
+      }
     }
-
-    protected abstract fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>)
-
-    private fun ensureEof(builder: PsiBuilder) {
-        if (!builder.eof()) {
-            builder.error(excessTokensErrorMessage)
-            // todo merge back into SvelteTagParsing.finishTag
-            while (!builder.eof() && builder.tokenType !== SvelteTokenTypes.END_MUSTACHE) {
-                builder.advanceLexer()
-            }
-            if (builder.tokenType === SvelteTokenTypes.END_MUSTACHE) {
-                builder.remapCurrentToken(JSTokenTypes.RBRACE)
-                builder.advanceLexer()
-            }
-        }
-    }
+  }
 }

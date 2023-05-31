@@ -11,23 +11,24 @@ import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 
 class SvelteJSParserDefinition : ECMA6ParserDefinition() {
-    override fun getFileNodeType(): IFileElementType {
-        return FILE
-    }
+  override fun getFileNodeType(): IFileElementType {
+    return FILE
+  }
 
-    override fun createJSParser(builder: PsiBuilder): JavaScriptParser<*, *, *, *> {
-        return SvelteJSParser(builder)
-    }
+  override fun createJSParser(builder: PsiBuilder): JavaScriptParser<*, *, *, *> {
+    return SvelteJSParser(builder)
+  }
 
-    override fun createElement(node: ASTNode): PsiElement {
-        return try {
-            SvelteElementTypes.createElement(node)
-        } catch (e: Exception) {
-            super.createElement(node)
-        }
+  override fun createElement(node: ASTNode): PsiElement {
+    return try {
+      SvelteElementTypes.createElement(node)
     }
+    catch (e: Exception) {
+      super.createElement(node)
+    }
+  }
 
-    companion object {
-        val FILE: IFileElementType = JSFileElementType.create(SvelteJSLanguage.INSTANCE)
-    }
+  companion object {
+    val FILE: IFileElementType = JSFileElementType.create(SvelteJSLanguage.INSTANCE)
+  }
 }

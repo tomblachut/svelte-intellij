@@ -6,14 +6,14 @@ import com.intellij.psi.xml.IXmlTagElementType
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 
 object SvelteHtmlElementTypes {
-    val SVELTE_HTML_TAG = SvelteHtmlTagElementType("SVELTE_HTML_TAG")
-    val SVELTE_HTML_ATTRIBUTE = SvelteHtmlAttributeElementType("SVELTE_HTML_ATTRIBUTE")
+  val SVELTE_HTML_TAG = SvelteHtmlTagElementType("SVELTE_HTML_TAG")
+  val SVELTE_HTML_ATTRIBUTE = SvelteHtmlAttributeElementType("SVELTE_HTML_ATTRIBUTE")
 
-    class SvelteHtmlTagElementType(debugName: String) :
-        IElementType(debugName, SvelteHTMLLanguage.INSTANCE),
-        IXmlTagElementType
+  class SvelteHtmlTagElementType(debugName: String) :
+    IElementType(debugName, SvelteHTMLLanguage.INSTANCE),
+    IXmlTagElementType
 
-    class SvelteHtmlAttributeElementType(debugName: String) :
-        IElementType(debugName, SvelteHTMLLanguage.INSTANCE),
-        IXmlAttributeElementType
+  class SvelteHtmlAttributeElementType(debugName: String) :
+    IElementType(debugName, SvelteHTMLLanguage.INSTANCE),
+    IXmlAttributeElementType
 }

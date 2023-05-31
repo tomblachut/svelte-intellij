@@ -12,35 +12,35 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
 class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
-    TagNameReference(nameElement, startTagFlag), PsiPolyVariantReference {
+  TagNameReference(nameElement, startTagFlag), PsiPolyVariantReference {
 
-    override fun resolve(): PsiElement? {
-        val results = this.multiResolve(false)
-        return if (results.isNotEmpty()) results[0].element else null
+  override fun resolve(): PsiElement? {
+    val results = this.multiResolve(false)
+    return if (results.isNotEmpty()) results[0].element else null
+  }
+
+  override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
+    val resolver = ResolveCache.PolyVariantResolver<SvelteTagNameReference> { ref, incomplete ->
+      val place = ref.tagElement ?: return@PolyVariantResolver emptyArray()
+      val referenceName = place.name
+      SvelteReactiveDeclarationsUtil.processLocalDeclarations(place, referenceName, incomplete)
     }
 
-    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val resolver = ResolveCache.PolyVariantResolver<SvelteTagNameReference> { ref, incomplete ->
-            val place = ref.tagElement ?: return@PolyVariantResolver emptyArray()
-            val referenceName =  place.name
-            SvelteReactiveDeclarationsUtil.processLocalDeclarations(place, referenceName, incomplete)
+    return JSResolveUtil.resolve(element.containingFile, this, resolver, incompleteCode)
+  }
+
+  companion object {
+    fun resolveComponentFile(tag: SvelteHtmlTag): SvelteHtmlFile? {
+      val import = tag.reference?.resolve()
+      if (import is ES6ImportedBinding && !import.isNamespaceImport) {
+        val componentFile = import.findReferencedElements().firstOrNull()
+
+        if (componentFile is SvelteHtmlFile) {
+          return componentFile
         }
+      }
 
-        return JSResolveUtil.resolve(element.containingFile, this, resolver, incompleteCode)
+      return null
     }
-
-    companion object {
-        fun resolveComponentFile(tag: SvelteHtmlTag): SvelteHtmlFile? {
-            val import = tag.reference?.resolve()
-            if (import is ES6ImportedBinding && !import.isNamespaceImport) {
-                val componentFile = import.findReferencedElements().firstOrNull()
-
-                if (componentFile is SvelteHtmlFile) {
-                    return componentFile
-                }
-            }
-
-            return null
-        }
-    }
+  }
 }

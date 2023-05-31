@@ -12,52 +12,52 @@ import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 import dev.blachut.svelte.lang.psi.blocks.SvelteBranch
 
 class SvelteFoldingBuilder : XmlFoldingBuilder(), DumbAware {
-    override fun doAddForChildren(tag: XmlElement, descriptors: MutableList<FoldingDescriptor>, document: Document) {
-        for (child in tag.children) {
-            if (child is SvelteBlock) {
-                appendBlockDescriptors(child, descriptors, document)
-            }
-        }
-
-        super.doAddForChildren(tag, descriptors, document)
+  override fun doAddForChildren(tag: XmlElement, descriptors: MutableList<FoldingDescriptor>, document: Document) {
+    for (child in tag.children) {
+      if (child is SvelteBlock) {
+        appendBlockDescriptors(child, descriptors, document)
+      }
     }
 
-    private fun appendBlockDescriptors(block: SvelteBlock, descriptors: MutableList<FoldingDescriptor>, document: Document) {
-        if (isSingleLine(block, document)) {
-            return
-        }
+    super.doAddForChildren(tag, descriptors, document)
+  }
 
-        val endTag = block.endTag
-
-        if (endTag != null) {
-            // Following offsets ensure that we fold start and end tag together exactly like HTML does
-            // E.g. {#if condition...}
-            val foldingRangeStartOffset = block.startTag.textRange.endOffset - 1
-            val foldingRangeEndOffset = endTag.textRange.endOffset - 1
-            val range = TextRange(foldingRangeStartOffset, foldingRangeEndOffset)
-
-            descriptors.add(FoldingDescriptor(block, range))
-        }
-
-        for (child in block.children) {
-            if (child is SvelteBranch) {
-                val fragment = child.fragment
-                if (fragment.textLength > 0) {
-                    descriptors.add(FoldingDescriptor(block, fragment.textRange))
-
-                    doAddForChildren(fragment, descriptors, document)
-                }
-            }
-        }
+  private fun appendBlockDescriptors(block: SvelteBlock, descriptors: MutableList<FoldingDescriptor>, document: Document) {
+    if (isSingleLine(block, document)) {
+      return
     }
 
-    override fun getLanguagePlaceholderText(node: ASTNode, range: TextRange): String? {
-        if (node.psi is SvelteBlock) return "..."
-        return super.getLanguagePlaceholderText(node, range)
+    val endTag = block.endTag
+
+    if (endTag != null) {
+      // Following offsets ensure that we fold start and end tag together exactly like HTML does
+      // E.g. {#if condition...}
+      val foldingRangeStartOffset = block.startTag.textRange.endOffset - 1
+      val foldingRangeEndOffset = endTag.textRange.endOffset - 1
+      val range = TextRange(foldingRangeStartOffset, foldingRangeEndOffset)
+
+      descriptors.add(FoldingDescriptor(block, range))
     }
 
-    private fun isSingleLine(element: PsiElement, document: Document): Boolean {
-        val range = element.textRange
-        return document.getLineNumber(range.startOffset) == document.getLineNumber(range.endOffset)
+    for (child in block.children) {
+      if (child is SvelteBranch) {
+        val fragment = child.fragment
+        if (fragment.textLength > 0) {
+          descriptors.add(FoldingDescriptor(block, fragment.textRange))
+
+          doAddForChildren(fragment, descriptors, document)
+        }
+      }
     }
+  }
+
+  override fun getLanguagePlaceholderText(node: ASTNode, range: TextRange): String? {
+    if (node.psi is SvelteBlock) return "..."
+    return super.getLanguagePlaceholderText(node, range)
+  }
+
+  private fun isSingleLine(element: PsiElement, document: Document): Boolean {
+    val range = element.textRange
+    return document.getLineNumber(range.startOffset) == document.getLineNumber(range.endOffset)
+  }
 }

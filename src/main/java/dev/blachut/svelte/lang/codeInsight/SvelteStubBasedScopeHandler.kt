@@ -9,30 +9,30 @@ import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 object SvelteStubBasedScopeHandler : JSStubBasedScopeHandler() {
 
-    override fun processDeclarationsInScope(context: PsiElement, processor: PsiScopeProcessor, includeParentScopes: Boolean): Boolean {
-        val initialScope = getScope(context)
-        return if (initialScope == null)
-            processDeclarationsInTemplateScope(context, processor, false)
-        else
-            super.processDeclarationsInScope(context, processor, includeParentScopes)
-            && (!includeParentScopes || processDeclarationsInTemplateScope(context, processor, true))
-    }
+  override fun processDeclarationsInScope(context: PsiElement, processor: PsiScopeProcessor, includeParentScopes: Boolean): Boolean {
+    val initialScope = getScope(context)
+    return if (initialScope == null)
+      processDeclarationsInTemplateScope(context, processor, false)
+    else
+      super.processDeclarationsInScope(context, processor, includeParentScopes)
+      && (!includeParentScopes || processDeclarationsInTemplateScope(context, processor, true))
+  }
 
-    private fun processDeclarationsInTemplateScope(context: PsiElement,
-                                                   processor: PsiScopeProcessor,
-                                                   includeParentScopes: Boolean): Boolean {
-        val file = context.containingFile as? SvelteHtmlFile ?: return true
+  private fun processDeclarationsInTemplateScope(context: PsiElement,
+                                                 processor: PsiScopeProcessor,
+                                                 includeParentScopes: Boolean): Boolean {
+    val file = context.containingFile as? SvelteHtmlFile ?: return true
 
-        file.instanceScript
-            ?.let { getJsEmbeddedContent(it) }
-            ?.let { super.processDeclarationsInScope(it, processor, includeParentScopes) }
-            ?.let {
-                if (!it || !includeParentScopes)
-                    return it
-            }
-        return file.moduleScript
-            ?.let { getJsEmbeddedContent(it) }
-            ?.let { super.processDeclarationsInScope(it, processor, includeParentScopes) } != false
-    }
+    file.instanceScript
+      ?.let { getJsEmbeddedContent(it) }
+      ?.let { super.processDeclarationsInScope(it, processor, includeParentScopes) }
+      ?.let {
+        if (!it || !includeParentScopes)
+          return it
+      }
+    return file.moduleScript
+      ?.let { getJsEmbeddedContent(it) }
+      ?.let { super.processDeclarationsInScope(it, processor, includeParentScopes) } != false
+  }
 
 }

@@ -13,32 +13,32 @@ import dev.blachut.svelte.lang.psi.SveltePsiElement
 import dev.blachut.svelte.lang.psi.SvelteTag
 
 sealed class SvelteBranch(node: ASTNode) : SveltePsiElement(node), JSElement {
-    val tag get() = firstChild as SvelteTag
-    val fragment get() = lastChild as SvelteFragment
+  val tag get() = firstChild as SvelteTag
+  val fragment get() = lastChild as SvelteFragment
 
-    @Suppress("UNUSED_PARAMETER")
-    protected fun processParameterDeclarations(
-        processor: PsiScopeProcessor,
-        state: ResolveState,
-        lastParent: PsiElement?,
-        place: PsiElement
-    ): Boolean {
-        if (lastParent != null && (lastParent != tag || place.contextOfType<SvelteTagDependentExpression>() != null)) {
-            var result = true
-            tag.acceptChildren(object : JSDestructuringVisitor() {
-                override fun visitJSParameter(node: JSParameter) {
-                    if (result && !processor.execute(node, ResolveState.initial())) {
-                        result = false
-                    }
-                }
-
-                override fun visitJSVariable(node: JSVariable) {}
-            })
-            return result
+  @Suppress("UNUSED_PARAMETER")
+  protected fun processParameterDeclarations(
+    processor: PsiScopeProcessor,
+    state: ResolveState,
+    lastParent: PsiElement?,
+    place: PsiElement
+  ): Boolean {
+    if (lastParent != null && (lastParent != tag || place.contextOfType<SvelteTagDependentExpression>() != null)) {
+      var result = true
+      tag.acceptChildren(object : JSDestructuringVisitor() {
+        override fun visitJSParameter(node: JSParameter) {
+          if (result && !processor.execute(node, ResolveState.initial())) {
+            result = false
+          }
         }
 
-        return true
+        override fun visitJSVariable(node: JSVariable) {}
+      })
+      return result
     }
+
+    return true
+  }
 }
 
 abstract class SveltePrimaryBranch(node: ASTNode) : SvelteBranch(node)

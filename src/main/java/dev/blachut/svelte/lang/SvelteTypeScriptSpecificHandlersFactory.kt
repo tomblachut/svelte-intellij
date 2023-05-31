@@ -10,16 +10,16 @@ import dev.blachut.svelte.lang.codeInsight.SvelteStubBasedScopeHandler
 import dev.blachut.svelte.lang.codeInsight.SvelteTypeScriptReferenceExpressionResolver
 
 class SvelteTypeScriptSpecificHandlersFactory : TypeScriptSpecificHandlersFactory() {
-    override fun createReferenceExpressionResolver(
-        referenceExpression: JSReferenceExpressionImpl,
-        ignorePerformanceLimits: Boolean
-    ): ResolveCache.PolyVariantResolver<JSReferenceExpressionImpl> {
-        return SvelteTypeScriptReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits)
-    }
+  override fun createReferenceExpressionResolver(
+    referenceExpression: JSReferenceExpressionImpl,
+    ignorePerformanceLimits: Boolean
+  ): ResolveCache.PolyVariantResolver<JSReferenceExpressionImpl> {
+    return SvelteTypeScriptReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits)
+  }
 
-    override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler =
-        SvelteStubBasedScopeHandler
+  override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler =
+    SvelteStubBasedScopeHandler
 
-    override fun getExportScope(element: PsiElement): JSElement? =
-        SvelteJSSpecificHandlersFactory.getExportScope(element)
+  override fun getExportScope(element: PsiElement): JSElement? =
+    SvelteJSSpecificHandlersFactory.getExportScope(element)
 }

@@ -5,7 +5,7 @@ import com.intellij.lang.javascript.modules.imports.path.JSImportModulePathStrat
 import com.intellij.psi.PsiElement
 
 class SvelteImportModulePathStrategy : JSImportModulePathStrategy {
-    override fun getPathSettings(place: PsiElement, extensionWithDot: String, auto: Boolean): ExtensionSettings? {
-        return if (auto && extensionWithDot == svelteExtension) ExtensionSettings.FORCE_EXTENSION else null
-    }
+  override fun getPathSettings(place: PsiElement, extensionWithDot: String, auto: Boolean): ExtensionSettings? {
+    return if (auto && extensionWithDot == svelteExtension) ExtensionSettings.FORCE_EXTENSION else null
+  }
 }

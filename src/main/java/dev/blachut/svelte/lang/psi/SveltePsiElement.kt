@@ -5,7 +5,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.text.StringUtil
 
 open class SveltePsiElement(node: ASTNode) : ASTWrapperPsiElement(node) {
-    override fun toString(): String {
-        return StringUtil.trimEnd(javaClass.simpleName, "Impl")
-    }
+  override fun toString(): String {
+    return StringUtil.trimEnd(javaClass.simpleName, "Impl")
+  }
 }

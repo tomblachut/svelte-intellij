@@ -8,14 +8,14 @@ import com.intellij.psi.formatter.FormattingDocumentModelImpl
 import com.intellij.psi.impl.source.SourceTreeToPsiMap
 
 class SvelteFormattingModelBuilder : FormattingModelBuilder {
-    override fun createModel(formattingContext: FormattingContext): FormattingModel {
-        val psiFile = formattingContext.psiElement.containingFile
-        val documentModel = FormattingDocumentModelImpl.createOn(psiFile)
+  override fun createModel(formattingContext: FormattingContext): FormattingModel {
+    val psiFile = formattingContext.psiElement.containingFile
+    val documentModel = FormattingDocumentModelImpl.createOn(psiFile)
 
-        val astNode = SourceTreeToPsiMap.psiElementToTree(psiFile)
-        val formattingPolicy = SvelteHtmlPolicy(formattingContext.codeStyleSettings, documentModel)
-        val block = SvelteXmlBlock(astNode, null, null, formattingPolicy, null, null, false)
+    val astNode = SourceTreeToPsiMap.psiElementToTree(psiFile)
+    val formattingPolicy = SvelteHtmlPolicy(formattingContext.codeStyleSettings, documentModel)
+    val block = SvelteXmlBlock(astNode, null, null, formattingPolicy, null, null, false)
 
-        return XmlFormattingModel(psiFile, block, documentModel)
-    }
+    return XmlFormattingModel(psiFile, block, documentModel)
+  }
 }

@@ -16,24 +16,24 @@ import dev.blachut.svelte.lang.codeInsight.SvelteJSReferenceChecker
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
 class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
-    override fun getReferenceChecker(reporter: JSProblemReporter<*>): JSReferenceChecker {
-        return SvelteJSReferenceChecker(reporter)
-    }
+  override fun getReferenceChecker(reporter: JSProblemReporter<*>): JSReferenceChecker {
+    return SvelteJSReferenceChecker(reporter)
+  }
 
-    override fun createKeywordHighlighterVisitor(
-        holder: HighlightInfoHolder,
-        dialectOptionHolder: DialectOptionHolder
-    ): JSKeywordHighlighterVisitor {
-        return SvelteKeywordHighlighterVisitor(holder)
-    }
+  override fun createKeywordHighlighterVisitor(
+    holder: HighlightInfoHolder,
+    dialectOptionHolder: DialectOptionHolder
+  ): JSKeywordHighlighterVisitor {
+    return SvelteKeywordHighlighterVisitor(holder)
+  }
 
-    override fun createAnnotatingVisitor(psiElement: PsiElement, holder: AnnotationHolder): JSAnnotatingVisitor {
-        return object : ES6AnnotatingVisitor(psiElement, holder) {
-            override fun visitJSLabeledStatement(node: JSLabeledStatement) {
-                if (node.label != SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
-                    super.visitJSLabeledStatement(node)
-                }
-            }
+  override fun createAnnotatingVisitor(psiElement: PsiElement, holder: AnnotationHolder): JSAnnotatingVisitor {
+    return object : ES6AnnotatingVisitor(psiElement, holder) {
+      override fun visitJSLabeledStatement(node: JSLabeledStatement) {
+        if (node.label != SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+          super.visitJSLabeledStatement(node)
         }
+      }
     }
+  }
 }

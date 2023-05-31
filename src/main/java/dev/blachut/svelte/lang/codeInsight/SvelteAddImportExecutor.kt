@@ -7,16 +7,16 @@ import dev.blachut.svelte.lang.psi.findAncestorScript
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 class SvelteAddImportExecutor(place: PsiElement) : ES6AddImportExecutor(place) {
-    override fun prepareScopeToAdd(place: PsiElement, fromExternalModule: Boolean): PsiElement? {
-        val parentScript = findAncestorScript(place)
-        if (parentScript != null) {
-            // inside module or instance script
-            return getJsEmbeddedContent(parentScript)
-        }
-
-        // inside Svelte expression
-        val containingFile = place.containingFile as? SvelteHtmlFile ?: return null
-
-        return prepareInstanceScriptContent(containingFile)
+  override fun prepareScopeToAdd(place: PsiElement, fromExternalModule: Boolean): PsiElement? {
+    val parentScript = findAncestorScript(place)
+    if (parentScript != null) {
+      // inside module or instance script
+      return getJsEmbeddedContent(parentScript)
     }
+
+    // inside Svelte expression
+    val containingFile = place.containingFile as? SvelteHtmlFile ?: return null
+
+    return prepareInstanceScriptContent(containingFile)
+  }
 }

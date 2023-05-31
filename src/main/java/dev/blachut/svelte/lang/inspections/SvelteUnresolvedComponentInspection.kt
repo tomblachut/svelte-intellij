@@ -15,29 +15,29 @@ import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
-    override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
-        return object : XmlElementVisitor() {
-            override fun visitXmlTag(tag: XmlTag) {
-                if (!tag.isValid) return
+  override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
+    return object : XmlElementVisitor() {
+      override fun visitXmlTag(tag: XmlTag) {
+        if (!tag.isValid) return
 
-                val componentName = tag.name
-                if (!isSvelteComponentTag(componentName)) return
-                if (tag.reference?.resolve() != null) return
+        val componentName = tag.name
+        if (!isSvelteComponentTag(componentName)) return
+        if (tag.reference?.resolve() != null) return
 
-                val range = TextRange(1, tag.name.length + 1)
+        val range = TextRange(1, tag.name.length + 1)
 
-                val suggester = JSImportModulesSuggester(JSSimpleModuleReferenceInfo(componentName), tag)
-                val quickFixes = suggester.findFixes(ResolveResult.EMPTY_ARRAY)
-                val message = suggester.getMessage(quickFixes) ?: displayName
+        val suggester = JSImportModulesSuggester(JSSimpleModuleReferenceInfo(componentName), tag)
+        val quickFixes = suggester.findFixes(ResolveResult.EMPTY_ARRAY)
+        val message = suggester.getMessage(quickFixes) ?: displayName
 
-                holder.registerProblem(
-                    tag,
-                    message,
-                    ProblemHighlightType.LIKE_UNKNOWN_SYMBOL,
-                    range,
-                    *quickFixes.toTypedArray(),
-                )
-            }
-        }
+        holder.registerProblem(
+          tag,
+          message,
+          ProblemHighlightType.LIKE_UNKNOWN_SYMBOL,
+          range,
+          *quickFixes.toTypedArray(),
+        )
+      }
     }
+  }
 }

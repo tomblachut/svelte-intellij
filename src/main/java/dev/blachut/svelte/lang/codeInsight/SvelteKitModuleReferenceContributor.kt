@@ -25,70 +25,70 @@ import com.intellij.util.containers.ContainerUtil
 import dev.blachut.svelte.lang.isSvelteContext
 
 class SvelteKitModuleReferenceContributor : JSResolvableModuleReferenceContributor() {
-    override fun isApplicable(host: PsiElement): Boolean {
-        return super.isApplicable(host) && isSvelteContext(host)
-    }
+  override fun isApplicable(host: PsiElement): Boolean {
+    return super.isApplicable(host) && isSvelteContext(host)
+  }
 
-    override fun isAcceptableText(unquotedRefText: String): Boolean {
-        val requiredModuleName = FileUtilRt.toSystemIndependentName(unquotedRefText)
-        return StringUtil.startsWith(requiredModuleName, "\$app/")
-    }
+  override fun isAcceptableText(unquotedRefText: String): Boolean {
+    val requiredModuleName = FileUtilRt.toSystemIndependentName(unquotedRefText)
+    return StringUtil.startsWith(requiredModuleName, "\$app/")
+  }
 
-    override fun getDefaultWeight(): Int {
-        return JSModuleBaseReference.ModuleTypes.TS_MODULE.weight()
-    }
+  override fun getDefaultWeight(): Int {
+    return JSModuleBaseReference.ModuleTypes.TS_MODULE.weight()
+  }
 
-    override fun resolveElement(element: PsiElement, text: String): Array<ResolveResult> {
-        return findExternalModule(element.containingFile.originalFile, text)
-    }
+  override fun resolveElement(element: PsiElement, text: String): Array<ResolveResult> {
+    return findExternalModule(element.containingFile.originalFile, text)
+  }
 
-    @Suppress("RedundantOverride")
-    override fun getDependencies(unquoted: String, host: PsiElement): Collection<*> {
-        //the same as in TypeScriptExternalModuleReferenceContributor, so skip
-        return super.getDependencies(unquoted, host)
-    }
+  @Suppress("RedundantOverride")
+  override fun getDependencies(unquoted: String, host: PsiElement): Collection<*> {
+    //the same as in TypeScriptExternalModuleReferenceContributor, so skip
+    return super.getDependencies(unquoted, host)
+  }
 
-    // based on TypeScriptUtil.findExternalModule
-    private fun findExternalModule(refFile: PsiFile, unquotedEscapedModuleText: String): Array<ResolveResult> {
-        ApplicationManager.getApplication().assertReadAccessAllowed()
+  // based on TypeScriptUtil.findExternalModule
+  private fun findExternalModule(refFile: PsiFile, unquotedEscapedModuleText: String): Array<ResolveResult> {
+    ApplicationManager.getApplication().assertReadAccessAllowed()
 
-        val quoted = StringUtil.wrapWithDoubleQuote(JSStringUtil.unescapeStringLiteralValue(unquotedEscapedModuleText))
-        val unifiedName = CommonJSUtil.unifyModuleName(quoted)
-        val scope = createFilterByNodeModuleScope(JSResolveUtil.getResolveScope(refFile), refFile)
+    val quoted = StringUtil.wrapWithDoubleQuote(JSStringUtil.unescapeStringLiteralValue(unquotedEscapedModuleText))
+    val unifiedName = CommonJSUtil.unifyModuleName(quoted)
+    val scope = createFilterByNodeModuleScope(JSResolveUtil.getResolveScope(refFile), refFile)
 
-        val modules = TypeScriptClassResolver.getInstance().findGlobalElementsByQName(refFile.project, unifiedName, scope)
-        if (!modules.isEmpty()) {
-            val result: MutableList<ResolveResult> = ArrayList()
-            for (module in modules) {
-                if (module is TypeScriptModule && !module.isAugmentation) {
-                    result.add(JSResolveResult(module))
-                }
-            }
-            if (!ContainerUtil.isEmpty(result)) return result.toTypedArray()
+    val modules = TypeScriptClassResolver.getInstance().findGlobalElementsByQName(refFile.project, unifiedName, scope)
+    if (!modules.isEmpty()) {
+      val result: MutableList<ResolveResult> = ArrayList()
+      for (module in modules) {
+        if (module is TypeScriptModule && !module.isAugmentation) {
+          result.add(JSResolveResult(module))
         }
-        return ResolveResult.EMPTY_ARRAY
+      }
+      if (!ContainerUtil.isEmpty(result)) return result.toTypedArray()
+    }
+    return ResolveResult.EMPTY_ARRAY
+  }
+
+  // based on TypeScriptUtil.createFilterByNodeModuleScope
+  private fun createFilterByNodeModuleScope(scope: GlobalSearchScope, context: PsiElement): GlobalSearchScope {
+    @Suppress("NAME_SHADOWING")
+    var context = context
+    if (context is PsiFile) context = context.originalFile
+    val contextFile = PsiUtilCore.getVirtualFile(context)
+    val index = ProjectFileIndex.getInstance(context.project)
+    val resultScope = if (contextFile == null) scope
+    else object : DelegatingGlobalSearchScope(scope) {
+      override fun contains(file: VirtualFile): Boolean {
+        if (!super.contains(file)) return false
+        val currentNodeModules = JSLibraryUtil.findAncestorLibraryDir(file, JSLibraryUtil.NODE_MODULES) ?: return true
+        val parentDir = currentNodeModules.parent
+
+        //for global libraries and node core libraries
+        val isPartOfProject = index.isInContent(parentDir) || index.isInLibrary(parentDir)
+        return !isPartOfProject || VfsUtilCore.isAncestor(parentDir, contextFile, true)
+      }
     }
 
-    // based on TypeScriptUtil.createFilterByNodeModuleScope
-    private fun createFilterByNodeModuleScope(scope: GlobalSearchScope, context: PsiElement): GlobalSearchScope {
-        @Suppress("NAME_SHADOWING")
-        var context = context
-        if (context is PsiFile) context = context.originalFile
-        val contextFile = PsiUtilCore.getVirtualFile(context)
-        val index = ProjectFileIndex.getInstance(context.project)
-        val resultScope = if (contextFile == null) scope
-        else object : DelegatingGlobalSearchScope(scope) {
-            override fun contains(file: VirtualFile): Boolean {
-                if (!super.contains(file)) return false
-                val currentNodeModules = JSLibraryUtil.findAncestorLibraryDir(file, JSLibraryUtil.NODE_MODULES) ?: return true
-                val parentDir = currentNodeModules.parent
-
-                //for global libraries and node core libraries
-                val isPartOfProject = index.isInContent(parentDir) || index.isInLibrary(parentDir)
-                return !isPartOfProject || VfsUtilCore.isAncestor(parentDir, contextFile, true)
-            }
-        }
-
-        return resultScope
-    }
+    return resultScope
+  }
 }

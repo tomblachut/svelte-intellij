@@ -14,20 +14,20 @@ import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
 class SvelteTypeScriptAnalysisHandlersFactory : TypeScriptAnalysisHandlersFactory() {
 
-    override fun createKeywordHighlighterVisitor(
-        holder: HighlightInfoHolder,
-        dialectOptionHolder: DialectOptionHolder
-    ): JSKeywordHighlighterVisitor {
-        return SvelteKeywordHighlighterVisitor(holder)
-    }
+  override fun createKeywordHighlighterVisitor(
+    holder: HighlightInfoHolder,
+    dialectOptionHolder: DialectOptionHolder
+  ): JSKeywordHighlighterVisitor {
+    return SvelteKeywordHighlighterVisitor(holder)
+  }
 
-    override fun createAnnotatingVisitor(psiElement: PsiElement, holder: AnnotationHolder): JSAnnotatingVisitor {
-        return object : TypeScriptAnnotatingVisitor(psiElement, holder) {
-            override fun visitJSLabeledStatement(node: JSLabeledStatement) {
-                if (node.label != SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
-                    super.visitJSLabeledStatement(node)
-                }
-            }
+  override fun createAnnotatingVisitor(psiElement: PsiElement, holder: AnnotationHolder): JSAnnotatingVisitor {
+    return object : TypeScriptAnnotatingVisitor(psiElement, holder) {
+      override fun visitJSLabeledStatement(node: JSLabeledStatement) {
+        if (node.label != SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+          super.visitJSLabeledStatement(node)
         }
+      }
     }
+  }
 }

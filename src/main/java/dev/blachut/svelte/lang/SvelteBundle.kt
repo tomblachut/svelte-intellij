@@ -8,14 +8,13 @@ import org.jetbrains.annotations.PropertyKey
 private const val SVELTE_BUNDLE = "messages.SvelteBundle"
 
 object SvelteBundle : DynamicBundle(SVELTE_BUNDLE) {
+  @Suppress("SpreadOperator")
+  @JvmStatic
+  fun message(@PropertyKey(resourceBundle = SVELTE_BUNDLE) key: String, vararg params: Any) =
+    getMessage(key, *params)
 
-    @Suppress("SpreadOperator")
-    @JvmStatic
-    fun message(@PropertyKey(resourceBundle = SVELTE_BUNDLE) key: String, vararg params: Any) =
-        getMessage(key, *params)
-
-    @Suppress("SpreadOperator", "unused")
-    @JvmStatic
-    fun messagePointer(@PropertyKey(resourceBundle = SVELTE_BUNDLE) key: String, vararg params: Any) =
-        getLazyMessage(key, *params)
+  @Suppress("SpreadOperator", "unused")
+  @JvmStatic
+  fun messagePointer(@PropertyKey(resourceBundle = SVELTE_BUNDLE) key: String, vararg params: Any) =
+    getLazyMessage(key, *params)
 }

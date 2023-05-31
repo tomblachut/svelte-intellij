@@ -6,68 +6,68 @@ import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.psi.blocks.*
 
 object SvelteElementTypes {
-    val IF_BLOCK = SvelteElementType("IF_BLOCK")
-    val IF_TRUE_BRANCH = SvelteElementType("IF_TRUE_BRANCH")
-    val IF_ELSE_BRANCH = SvelteElementType("IF_ELSE_BRANCH")
+  val IF_BLOCK = SvelteElementType("IF_BLOCK")
+  val IF_TRUE_BRANCH = SvelteElementType("IF_TRUE_BRANCH")
+  val IF_ELSE_BRANCH = SvelteElementType("IF_ELSE_BRANCH")
 
-    val EACH_BLOCK = SvelteElementType("EACH_BLOCK")
-    val EACH_LOOP_BRANCH = SvelteElementType("EACH_LOOP_BRANCH")
-    val EACH_ELSE_BRANCH = SvelteElementType("EACH_ELSE_BRANCH")
+  val EACH_BLOCK = SvelteElementType("EACH_BLOCK")
+  val EACH_LOOP_BRANCH = SvelteElementType("EACH_LOOP_BRANCH")
+  val EACH_ELSE_BRANCH = SvelteElementType("EACH_ELSE_BRANCH")
 
-    val AWAIT_BLOCK = SvelteElementType("AWAIT_BLOCK")
-    val AWAIT_MAIN_BRANCH = SvelteElementType("AWAIT_PENDING_BRANCH")
-    val AWAIT_THEN_BRANCH = SvelteElementType("AWAIT_THEN_BRANCH")
-    val AWAIT_CATCH_BRANCH = SvelteElementType("AWAIT_CATCH_BRANCH")
+  val AWAIT_BLOCK = SvelteElementType("AWAIT_BLOCK")
+  val AWAIT_MAIN_BRANCH = SvelteElementType("AWAIT_PENDING_BRANCH")
+  val AWAIT_THEN_BRANCH = SvelteElementType("AWAIT_THEN_BRANCH")
+  val AWAIT_CATCH_BRANCH = SvelteElementType("AWAIT_CATCH_BRANCH")
 
-    val KEY_BLOCK = SvelteElementType("KEY_BLOCK")
-    val KEY_PRIMARY_BRANCH = SvelteElementType("KEY_PRIMARY_BRANCH")
+  val KEY_BLOCK = SvelteElementType("KEY_BLOCK")
+  val KEY_PRIMARY_BRANCH = SvelteElementType("KEY_PRIMARY_BRANCH")
 
-    val FRAGMENT = SvelteElementType("FRAGMENT")
+  val FRAGMENT = SvelteElementType("FRAGMENT")
 
-    // TODO remove this element
-    val ATTRIBUTE_EXPRESSION = SvelteElementType("ATTRIBUTE_EXPRESSION")
+  // TODO remove this element
+  val ATTRIBUTE_EXPRESSION = SvelteElementType("ATTRIBUTE_EXPRESSION")
 
-    val BRANCHES = TokenSet.create(
-        IF_TRUE_BRANCH,
-        IF_ELSE_BRANCH,
-        EACH_LOOP_BRANCH,
-        EACH_ELSE_BRANCH,
-        AWAIT_MAIN_BRANCH,
-        AWAIT_THEN_BRANCH,
-        AWAIT_CATCH_BRANCH,
-        KEY_PRIMARY_BRANCH,
-    )
+  val BRANCHES = TokenSet.create(
+    IF_TRUE_BRANCH,
+    IF_ELSE_BRANCH,
+    EACH_LOOP_BRANCH,
+    EACH_ELSE_BRANCH,
+    AWAIT_MAIN_BRANCH,
+    AWAIT_THEN_BRANCH,
+    AWAIT_CATCH_BRANCH,
+    KEY_PRIMARY_BRANCH,
+  )
 
-    fun createElement(node: ASTNode): PsiElement {
-        return when (node.elementType) {
-            IF_BLOCK -> SvelteIfBlock(node)
-            IF_TRUE_BRANCH -> SvelteIfPrimaryBranch(node)
-            IF_ELSE_BRANCH -> SvelteIfElseBranch(node)
+  fun createElement(node: ASTNode): PsiElement {
+    return when (node.elementType) {
+      IF_BLOCK -> SvelteIfBlock(node)
+      IF_TRUE_BRANCH -> SvelteIfPrimaryBranch(node)
+      IF_ELSE_BRANCH -> SvelteIfElseBranch(node)
 
-            EACH_BLOCK -> SvelteEachBlock(node)
-            EACH_LOOP_BRANCH -> SvelteEachPrimaryBranch(node)
-            EACH_ELSE_BRANCH -> SvelteEachElseBranch(node)
+      EACH_BLOCK -> SvelteEachBlock(node)
+      EACH_LOOP_BRANCH -> SvelteEachPrimaryBranch(node)
+      EACH_ELSE_BRANCH -> SvelteEachElseBranch(node)
 
-            AWAIT_BLOCK -> SvelteAwaitBlock(node)
-            AWAIT_MAIN_BRANCH -> SvelteAwaitPrimaryBranch(node)
-            AWAIT_THEN_BRANCH -> SvelteAwaitThenBranch(node)
-            AWAIT_CATCH_BRANCH -> SvelteAwaitCatchBranch(node)
+      AWAIT_BLOCK -> SvelteAwaitBlock(node)
+      AWAIT_MAIN_BRANCH -> SvelteAwaitPrimaryBranch(node)
+      AWAIT_THEN_BRANCH -> SvelteAwaitThenBranch(node)
+      AWAIT_CATCH_BRANCH -> SvelteAwaitCatchBranch(node)
 
-            KEY_BLOCK -> SvelteKeyBlock(node)
-            KEY_PRIMARY_BRANCH -> SvelteKeyPrimaryBranch(node)
+      KEY_BLOCK -> SvelteKeyBlock(node)
+      KEY_PRIMARY_BRANCH -> SvelteKeyPrimaryBranch(node)
 
-            FRAGMENT -> SvelteFragment(node)
+      FRAGMENT -> SvelteFragment(node)
 
-            ATTRIBUTE_EXPRESSION -> SveltePsiElement(node)
+      ATTRIBUTE_EXPRESSION -> SveltePsiElement(node)
 
-            SvelteTagElementTypes.TAG_DEPENDENT_EXPRESSION -> SvelteTagDependentExpression(node)
+      SvelteTagElementTypes.TAG_DEPENDENT_EXPRESSION -> SvelteTagDependentExpression(node)
 
-            SvelteTagElementTypes.IF_END,
-            SvelteTagElementTypes.EACH_END,
-            SvelteTagElementTypes.AWAIT_END,
-            SvelteTagElementTypes.KEY_END -> SvelteEndTag(node)
+      SvelteTagElementTypes.IF_END,
+      SvelteTagElementTypes.EACH_END,
+      SvelteTagElementTypes.AWAIT_END,
+      SvelteTagElementTypes.KEY_END -> SvelteEndTag(node)
 
-            else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")
-        }
+      else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")
     }
+  }
 }

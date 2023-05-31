@@ -15,59 +15,59 @@ import com.intellij.psi.ResolveResult
 import com.intellij.psi.util.parentOfType
 
 class SvelteJSReferenceExpressionResolver(
-    referenceExpression: JSReferenceExpressionImpl,
-    ignorePerformanceLimits: Boolean
+  referenceExpression: JSReferenceExpressionImpl,
+  ignorePerformanceLimits: Boolean
 ) :
-    JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
-    override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-        val resolveImplicits = resolveImplicits(expression)
-        if (resolveImplicits.isNotEmpty()) return resolveImplicits
+  JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
+  override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
+    val resolveImplicits = resolveImplicits(expression)
+    if (resolveImplicits.isNotEmpty()) return resolveImplicits
 
-        val resolved = super.resolve(expression, incompleteCode)
+    val resolved = super.resolve(expression, incompleteCode)
 
-        val referencedName = myReferencedName
-        if (resolved.isEmpty() && expression.qualifier == null && referencedName != null) {
-            val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
-            val localProcessor = createLocalResolveProcessor(sink)
-            JSReferenceExpressionImpl.doProcessLocalDeclarations(
-                myRef,
-                myQualifier,
-                localProcessor,
-                false,
-                false,
-                null
-            )
-            val jsElement = localProcessor.result ?: return resolved
+    val referencedName = myReferencedName
+    if (resolved.isEmpty() && expression.qualifier == null && referencedName != null) {
+      val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
+      val localProcessor = createLocalResolveProcessor(sink)
+      JSReferenceExpressionImpl.doProcessLocalDeclarations(
+        myRef,
+        myQualifier,
+        localProcessor,
+        false,
+        false,
+        null
+      )
+      val jsElement = localProcessor.result ?: return resolved
 
-            val labeledStatement = jsElement.parentOfType<JSLabeledStatement>()
-            if (labeledStatement != null && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
-                return localProcessor.resultsAsResolveResults
-            }
+      val labeledStatement = jsElement.parentOfType<JSLabeledStatement>()
+      if (labeledStatement != null && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+        return localProcessor.resultsAsResolveResults
+      }
+    }
+
+    return resolved
+  }
+
+  private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
+    return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
+  }
+
+  companion object {
+
+    private val implicitIdentifiers = arrayOf("\$\$props", "\$\$restProps", "\$\$slots")
+
+    fun resolveImplicits(expression: JSReferenceExpression): Array<ResolveResult> {
+      implicitIdentifiers.forEach {
+        if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, it)) {
+          val element = JSImplicitElementImpl.Builder(it, expression)
+            .forbidAstAccess()
+            .setType(JSImplicitElement.Type.Variable)
+            .setProperties(JSImplicitElement.Property.Constant)
+            .toImplicitElement()
+          return arrayOf(JSResolveResult(element))
         }
-
-        return resolved
+      }
+      return emptyArray()
     }
-
-    private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
-        return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
-    }
-
-    companion object {
-
-        private val implicitIdentifiers = arrayOf("\$\$props", "\$\$restProps", "\$\$slots")
-
-        fun resolveImplicits(expression: JSReferenceExpression): Array<ResolveResult> {
-            implicitIdentifiers.forEach {
-                if (JSSymbolUtil.isAccurateReferenceExpressionName(expression, it)) {
-                    val element = JSImplicitElementImpl.Builder(it, expression)
-                        .forbidAstAccess()
-                        .setType(JSImplicitElement.Type.Variable)
-                        .setProperties(JSImplicitElement.Property.Constant)
-                        .toImplicitElement()
-                    return arrayOf(JSResolveResult(element))
-                }
-            }
-            return emptyArray()
-        }
-    }
+  }
 }

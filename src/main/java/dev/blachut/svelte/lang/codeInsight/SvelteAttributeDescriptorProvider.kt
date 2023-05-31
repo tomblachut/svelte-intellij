@@ -6,25 +6,25 @@ import com.intellij.xml.XmlAttributeDescriptorsProvider
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
 
 class SvelteAttributeDescriptorProvider : XmlAttributeDescriptorsProvider {
-    private val aAttributes = arrayOf("sveltekit:noscroll", "sveltekit:prefetch")
-        .map {
-            object : AnyXmlAttributeDescriptor(it) {
-                override fun isEnumerated(): Boolean = true
-                override fun getEnumeratedValues(): Array<String> {
-                    return arrayOf(it)
-                }
-            }
-        }.toTypedArray<XmlAttributeDescriptor>()
-
-    override fun getAttributeDescriptors(context: XmlTag): Array<XmlAttributeDescriptor> {
-        if (context.name == "a") {
-            return aAttributes
+  private val aAttributes = arrayOf("sveltekit:noscroll", "sveltekit:prefetch")
+    .map {
+      object : AnyXmlAttributeDescriptor(it) {
+        override fun isEnumerated(): Boolean = true
+        override fun getEnumeratedValues(): Array<String> {
+          return arrayOf(it)
         }
+      }
+    }.toTypedArray<XmlAttributeDescriptor>()
 
-        return XmlAttributeDescriptor.EMPTY
+  override fun getAttributeDescriptors(context: XmlTag): Array<XmlAttributeDescriptor> {
+    if (context.name == "a") {
+      return aAttributes
     }
 
-    override fun getAttributeDescriptor(attributeName: String?, context: XmlTag?): XmlAttributeDescriptor? {
-        return aAttributes.find { it.name == attributeName }
-    }
+    return XmlAttributeDescriptor.EMPTY
+  }
+
+  override fun getAttributeDescriptor(attributeName: String?, context: XmlTag?): XmlAttributeDescriptor? {
+    return aAttributes.find { it.name == attributeName }
+  }
 }

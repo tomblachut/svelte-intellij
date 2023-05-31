@@ -10,31 +10,31 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 
 open class DirectiveType(
-    val prefix: String,
-    val target: SvelteDirectiveUtil.DirectiveTarget,
-    val targetValidator: (xmlTag: XmlTag) -> Boolean = { true },
-    val modifiers: Set<String> = emptySet(),
-    val nestedSpecifiers: Number? = null,
-    val shorthandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference)?,
-    val shorthandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
-    val longhandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference)?,
-    val longhandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
-    val valueElementType: IElementType = SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION,
-    val uniquenessSelector: Unit = Unit, // TODO
+  val prefix: String,
+  val target: SvelteDirectiveUtil.DirectiveTarget,
+  val targetValidator: (xmlTag: XmlTag) -> Boolean = { true },
+  val modifiers: Set<String> = emptySet(),
+  val nestedSpecifiers: Number? = null,
+  val shorthandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference)?,
+  val shorthandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
+  val longhandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference)?,
+  val longhandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
+  val valueElementType: IElementType = SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION,
+  val uniquenessSelector: Unit = Unit, // TODO
 ) {
-    val delimitedPrefix: String get() = prefix + SvelteDirectiveUtil.DIRECTIVE_SEPARATOR
+  val delimitedPrefix: String get() = prefix + SvelteDirectiveUtil.DIRECTIVE_SEPARATOR
 
-    override fun toString(): String {
-        return prefix
-    }
+  override fun toString(): String {
+    return prefix
+  }
 }
 
 class TransitionInOutDirectiveType(prefix: String) : DirectiveType(
-    prefix = prefix,
-    target = SvelteDirectiveUtil.DirectiveTarget.ELEMENT,
-    modifiers = setOf("local"),
-    shorthandReferenceFactory = ::ScopeReference,
-    shorthandCompletionFactory = ::getScopeCompletions,
-    longhandReferenceFactory = ::ScopeReference,
-    longhandCompletionFactory = ::getScopeCompletions,
+  prefix = prefix,
+  target = SvelteDirectiveUtil.DirectiveTarget.ELEMENT,
+  modifiers = setOf("local"),
+  shorthandReferenceFactory = ::ScopeReference,
+  shorthandCompletionFactory = ::getScopeCompletions,
+  longhandReferenceFactory = ::ScopeReference,
+  longhandCompletionFactory = ::getScopeCompletions,
 )

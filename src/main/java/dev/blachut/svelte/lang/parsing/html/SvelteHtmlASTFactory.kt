@@ -8,14 +8,14 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlElementTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
 class SvelteHtmlASTFactory : XmlASTFactory() {
-    override fun createComposite(type: IElementType): CompositeElement? {
-        if (type === SvelteHtmlElementTypes.SVELTE_HTML_TAG) {
-            return SvelteHtmlTag()
-        }
-        if (type === SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE) {
-            return SvelteHtmlAttribute()
-        }
-
-        return super.createComposite(type)
+  override fun createComposite(type: IElementType): CompositeElement? {
+    if (type === SvelteHtmlElementTypes.SVELTE_HTML_TAG) {
+      return SvelteHtmlTag()
     }
+    if (type === SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE) {
+      return SvelteHtmlAttribute()
+    }
+
+    return super.createComposite(type)
+  }
 }

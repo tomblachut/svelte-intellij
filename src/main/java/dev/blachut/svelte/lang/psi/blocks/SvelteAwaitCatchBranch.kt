@@ -6,7 +6,7 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.PsiScopeProcessor
 
 class SvelteAwaitCatchBranch(node: ASTNode) : SvelteAuxiliaryBranch(node) {
-    override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
-        return processParameterDeclarations(processor, state, lastParent, place)
-    }
+  override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
+    return processParameterDeclarations(processor, state, lastParent, place)
+  }
 }

@@ -8,27 +8,27 @@ import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.codeInsight.SvelteAddImportExecutor
 
 fun createSvelteImportFactories(): List<JSImportExecutorFactory> {
-    return listOf(object : JSImportExecutorFactory {
-        override fun createExecutor(place: PsiElement): JSAddImportExecutor {
-            return SvelteAddImportExecutor(place)
-        }
-    })
+  return listOf(object : JSImportExecutorFactory {
+    override fun createExecutor(place: PsiElement): JSAddImportExecutor {
+      return SvelteAddImportExecutor(place)
+    }
+  })
 }
 
 class SvelteHtmlHandlersFactory : ES6HandlersFactory() {
-    override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
-        return createSvelteImportFactories()
-    }
+  override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
+    return createSvelteImportFactories()
+  }
 }
 
 class SvelteJSHandlersFactory : ES6HandlersFactory() {
-    override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
-        return createSvelteImportFactories()
-    }
+  override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
+    return createSvelteImportFactories()
+  }
 }
 
 class SvelteTSHandlersFactory : TypeScriptHandlersFactory() {
-    override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
-        return createSvelteImportFactories()
-    }
+  override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
+    return createSvelteImportFactories()
+  }
 }

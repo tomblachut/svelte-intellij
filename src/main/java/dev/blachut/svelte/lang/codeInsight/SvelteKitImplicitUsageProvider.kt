@@ -11,27 +11,27 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.isModuleScript
 
 class SvelteKitImplicitUsageProvider : ImplicitUsageProvider {
-    private val functionNames = setOf("load")
-    private val variableNames = setOf("hydrate", "prerender", "router", "ssr")
+  private val functionNames = setOf("load")
+  private val variableNames = setOf("hydrate", "prerender", "router", "ssr")
 
-    override fun isImplicitUsage(element: PsiElement): Boolean {
-        if (element is JSElementBase && element.containingFile is SvelteHtmlFile && element.isExported) {
-            if (element is JSVariable && variableNames.contains(element.name) ||
-                element is JSFunction && functionNames.contains(element.name)) {
-                return isModuleScript(element.parentOfType<HtmlTag>())
-            }
-        }
-
-        // todo hooks
-
-        return false
+  override fun isImplicitUsage(element: PsiElement): Boolean {
+    if (element is JSElementBase && element.containingFile is SvelteHtmlFile && element.isExported) {
+      if (element is JSVariable && variableNames.contains(element.name) ||
+          element is JSFunction && functionNames.contains(element.name)) {
+        return isModuleScript(element.parentOfType<HtmlTag>())
+      }
     }
 
-    override fun isImplicitRead(element: PsiElement): Boolean {
-        return false
-    }
+    // todo hooks
 
-    override fun isImplicitWrite(element: PsiElement): Boolean {
-        return false
-    }
+    return false
+  }
+
+  override fun isImplicitRead(element: PsiElement): Boolean {
+    return false
+  }
+
+  override fun isImplicitWrite(element: PsiElement): Boolean {
+    return false
+  }
 }

@@ -9,29 +9,29 @@ import com.intellij.psi.impl.source.tree.LazyParseablePsiElement
 import com.intellij.psi.tree.IElementType
 
 interface SvelteTag : JSElement {
-    val type: IElementType
+  val type: IElementType
 }
 
 class SvelteInitialTag(type: IElementType, text: CharSequence) : LazyParseablePsiElement(type, text), SvelteTag, JSEmbeddedContent {
-    override val type: IElementType get() = elementType
+  override val type: IElementType get() = elementType
 
-    override fun accept(visitor: PsiElementVisitor) {
-        when (visitor) {
-            is SvelteVisitor -> visitor.visitInitialTag(this)
-            is JSElementVisitor -> visitor.visitJSEmbeddedContent(this)
-            else -> super.accept(visitor)
-        }
+  override fun accept(visitor: PsiElementVisitor) {
+    when (visitor) {
+      is SvelteVisitor -> visitor.visitInitialTag(this)
+      is JSElementVisitor -> visitor.visitJSEmbeddedContent(this)
+      else -> super.accept(visitor)
     }
+  }
 
-    override fun toString(): String {
-        return "SvelteInitialTag($elementType)"
-    }
+  override fun toString(): String {
+    return "SvelteInitialTag($elementType)"
+  }
 }
 
 class SvelteEndTag(node: ASTNode) : SveltePsiElement(node), SvelteTag {
-    override val type: IElementType get() = node.elementType
+  override val type: IElementType get() = node.elementType
 
-    override fun toString(): String {
-        return super.toString() + "(" + node.elementType.toString() + ")"
-    }
+  override fun toString(): String {
+    return super.toString() + "(" + node.elementType.toString() + ")"
+  }
 }

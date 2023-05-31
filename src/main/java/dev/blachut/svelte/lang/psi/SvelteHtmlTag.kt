@@ -12,50 +12,51 @@ import dev.blachut.svelte.lang.psi.blocks.processConstTagDeclarations
 
 // Check XmlTagImpl.createDelegate && HtmlTagDelegate if something breaks. Esp. HtmlTagDelegate.findSubTags
 class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTag {
-    override fun processDeclarations(
-        processor: PsiScopeProcessor,
-        state: ResolveState,
-        lastParent: PsiElement?,
-        place: PsiElement,
-    ): Boolean {
-        if (!processConstTagDeclarations(processor, state, lastParent, place)) {
-            return false
-        }
-
-        for (attribute in attributes) {
-            if (!attribute.processDeclarations(processor, state, lastParent, place)) {
-                return false
-            }
-        }
-
-        return true
+  override fun processDeclarations(
+    processor: PsiScopeProcessor,
+    state: ResolveState,
+    lastParent: PsiElement?,
+    place: PsiElement,
+  ): Boolean {
+    if (!processConstTagDeclarations(processor, state, lastParent, place)) {
+      return false
     }
 
-    override fun isCaseSensitive(): Boolean {
-        return true
+    for (attribute in attributes) {
+      if (!attribute.processDeclarations(processor, state, lastParent, place)) {
+        return false
+      }
     }
 
-    override fun getRealNs(value: String?): String? {
-        return if (XmlUtil.XHTML_URI == value) XmlUtil.HTML_URI else value
-    }
+    return true
+  }
 
-    override fun getParentTag(): XmlTag? {
-        return PsiTreeUtil.getParentOfType(this, XmlTag::class.java)
-    }
+  override fun isCaseSensitive(): Boolean {
+    return true
+  }
 
-    // Copied from HTML
-    override fun getNamespaceByPrefix(prefix: String): String {
-        val xmlNamespace = super.getNamespaceByPrefix(prefix)
-        if (prefix.isNotEmpty()) {
-            return xmlNamespace
-        }
-        return if (xmlNamespace.isEmpty() || xmlNamespace == XmlUtil.XHTML_URI) {
-            XmlUtil.HTML_URI
-        } else xmlNamespace
-        // ex.: mathML and SVG namespaces can be used inside html file
-    }
+  override fun getRealNs(value: String?): String? {
+    return if (XmlUtil.XHTML_URI == value) XmlUtil.HTML_URI else value
+  }
 
-    override fun toString(): String {
-        return "SvelteHtmlTag: $name"
+  override fun getParentTag(): XmlTag? {
+    return PsiTreeUtil.getParentOfType(this, XmlTag::class.java)
+  }
+
+  // Copied from HTML
+  override fun getNamespaceByPrefix(prefix: String): String {
+    val xmlNamespace = super.getNamespaceByPrefix(prefix)
+    if (prefix.isNotEmpty()) {
+      return xmlNamespace
     }
+    return if (xmlNamespace.isEmpty() || xmlNamespace == XmlUtil.XHTML_URI) {
+      XmlUtil.HTML_URI
+    }
+    else xmlNamespace
+    // ex.: mathML and SVG namespaces can be used inside html file
+  }
+
+  override fun toString(): String {
+    return "SvelteHtmlTag: $name"
+  }
 }

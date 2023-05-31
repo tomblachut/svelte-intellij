@@ -11,12 +11,12 @@ import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.psi.blocks.SvelteBranch
 
 class SvelteJSParameter : JSParameterImpl {
-    constructor(node: ASTNode) : super(node)
-    constructor(stub: JSParameterStub, elementType: JSParameterElementType) : super(stub, elementType)
+  constructor(node: ASTNode) : super(node)
+  constructor(stub: JSParameterStub, elementType: JSParameterElementType) : super(stub, elementType)
 
-    override fun getUseScope(): SearchScope {
-        val tag = PsiTreeUtil.getParentOfType(this, SvelteBranch::class.java, XmlTag::class.java)
-        tag ?: return LocalSearchScope.EMPTY
-        return LocalSearchScope(tag)
-    }
+  override fun getUseScope(): SearchScope {
+    val tag = PsiTreeUtil.getParentOfType(this, SvelteBranch::class.java, XmlTag::class.java)
+    tag ?: return LocalSearchScope.EMPTY
+    return LocalSearchScope(tag)
+  }
 }

@@ -10,7 +10,7 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
  * Too powerful, relies on input starting with `{`, could be refactored and inlined.
  */
 class SvelteJSExpressionLexer(assumeExternalBraces: Boolean) : LayeredLexer(SvelteHtmlBaseLexer(assumeExternalBraces)) {
-    init {
-        registerLayer(JSFlexAdapter(DialectOptionHolder.JS_WITH_JSX), SvelteTokenTypes.CODE_FRAGMENT)
-    }
+  init {
+    registerLayer(JSFlexAdapter(DialectOptionHolder.JS_WITH_JSX), SvelteTokenTypes.CODE_FRAGMENT)
+  }
 }

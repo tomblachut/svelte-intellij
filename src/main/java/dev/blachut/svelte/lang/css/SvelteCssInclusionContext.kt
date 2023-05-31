@@ -5,6 +5,6 @@ import com.intellij.psi.css.resolve.CssInclusionContext
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 
 class SvelteCssInclusionContext : CssInclusionContext() {
-    override fun processAllCssFilesOnResolving(context: PsiElement): Boolean =
-        context.containingFile?.language is SvelteHTMLLanguage
+  override fun processAllCssFilesOnResolving(context: PsiElement): Boolean =
+    context.containingFile?.language is SvelteHTMLLanguage
 }

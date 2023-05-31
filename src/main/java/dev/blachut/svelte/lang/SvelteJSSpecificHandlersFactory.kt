@@ -15,30 +15,30 @@ import dev.blachut.svelte.lang.psi.findAncestorScript
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 class SvelteJSSpecificHandlersFactory : ES6SpecificHandlersFactory() {
-    override fun createReferenceExpressionResolver(
-        referenceExpression: JSReferenceExpressionImpl,
-        ignorePerformanceLimits: Boolean
-    ): ResolveCache.PolyVariantResolver<JSReferenceExpressionImpl> {
-        return SvelteJSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits)
+  override fun createReferenceExpressionResolver(
+    referenceExpression: JSReferenceExpressionImpl,
+    ignorePerformanceLimits: Boolean
+  ): ResolveCache.PolyVariantResolver<JSReferenceExpressionImpl> {
+    return SvelteJSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits)
+  }
+
+  override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler =
+    SvelteStubBasedScopeHandler
+
+  override fun getExportScope(element: PsiElement): JSElement? =
+    Companion.getExportScope(element)
+
+  companion object {
+    fun getExportScope(element: PsiElement): JSElement? {
+      if (element is PsiFile || element is SvelteJSEmbeddedContentImpl)
+        return null
+      val svelteFile = element.containingFile as? SvelteHtmlFile
+                       ?: return null
+      val script = findAncestorScript(element)
+                   ?: svelteFile.instanceScript
+                   ?: svelteFile.moduleScript
+      return script?.let { getJsEmbeddedContent(it) }
     }
-
-    override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler =
-        SvelteStubBasedScopeHandler
-
-    override fun getExportScope(element: PsiElement): JSElement? =
-        Companion.getExportScope(element)
-
-    companion object {
-        fun getExportScope(element: PsiElement): JSElement? {
-            if (element is PsiFile || element is SvelteJSEmbeddedContentImpl)
-                return null
-            val svelteFile = element.containingFile as? SvelteHtmlFile
-                             ?: return null
-            val script = findAncestorScript(element)
-                         ?: svelteFile.instanceScript
-                         ?: svelteFile.moduleScript
-            return script?.let { getJsEmbeddedContent(it) }
-        }
-    }
+  }
 
 }

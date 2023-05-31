@@ -15,44 +15,44 @@ import com.intellij.psi.scope.PsiScopeProcessor
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
 class SvelteJSEmbeddedContentImpl : JSEmbeddedContentImpl {
-    constructor(node: ASTNode) : super(node)
-    constructor(stub: JSEmbeddedContentStub, type: JSEmbeddedContentElementType) : super(stub, type)
+  constructor(node: ASTNode) : super(node)
+  constructor(stub: JSEmbeddedContentStub, type: JSEmbeddedContentElementType) : super(stub, type)
 
-    override fun processDeclarations(
-        processor: PsiScopeProcessor,
-        state: ResolveState,
-        lastParent: PsiElement?,
-        place: PsiElement
-    ): Boolean {
-        return super.processDeclarations(processor, state, lastParent, place) &&
-               processReactiveStatements(processor, state, lastParent, place)
-    }
+  override fun processDeclarations(
+    processor: PsiScopeProcessor,
+    state: ResolveState,
+    lastParent: PsiElement?,
+    place: PsiElement
+  ): Boolean {
+    return super.processDeclarations(processor, state, lastParent, place) &&
+           processReactiveStatements(processor, state, lastParent, place)
+  }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun processReactiveStatements(
-        processor: PsiScopeProcessor,
-        state: ResolveState,
-        lastParent: PsiElement?,
-        place: PsiElement
-    ): Boolean {
-        var result = true
+  @Suppress("UNUSED_PARAMETER")
+  private fun processReactiveStatements(
+    processor: PsiScopeProcessor,
+    state: ResolveState,
+    lastParent: PsiElement?,
+    place: PsiElement
+  ): Boolean {
+    var result = true
 
-        acceptChildren(object : JSElementVisitor() {
-            override fun visitJSLabeledStatement(labeledStatement: JSLabeledStatement) {
-                if (result && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL && labeledStatement.statement is JSExpressionStatement) {
-                    val expression = (labeledStatement.statement as JSExpressionStatement).expression ?: return
+    acceptChildren(object : JSElementVisitor() {
+      override fun visitJSLabeledStatement(labeledStatement: JSLabeledStatement) {
+        if (result && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL && labeledStatement.statement is JSExpressionStatement) {
+          val expression = (labeledStatement.statement as JSExpressionStatement).expression ?: return
 
-                    val definition =
-                        expression.node.findChildByType(JSStubElementTypes.DEFINITION_EXPRESSION)?.psi as JSDefinitionExpression?
-                            ?: return
+          val definition =
+            expression.node.findChildByType(JSStubElementTypes.DEFINITION_EXPRESSION)?.psi as JSDefinitionExpression?
+            ?: return
 
-                    if (!processor.execute(definition, ResolveState.initial())) {
-                        result = false
-                    }
-                }
-            }
-        })
+          if (!processor.execute(definition, ResolveState.initial())) {
+            result = false
+          }
+        }
+      }
+    })
 
-        return result
-    }
+    return result
+  }
 }

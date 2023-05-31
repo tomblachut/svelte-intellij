@@ -16,34 +16,35 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 import icons.SvelteIcons
 
 class SvelteKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
-    private val symbolTokens = setOf(JSTokenTypes.SHARP, JSTokenTypes.COLON, JSTokenTypes.DIV, JSTokenTypes.AT)
-    private val completions = listOf("#if", "#each", "#await", ":else", ":then", ":catch", "#key", "@const", "@html", "@debug")
+  private val symbolTokens = setOf(JSTokenTypes.SHARP, JSTokenTypes.COLON, JSTokenTypes.DIV, JSTokenTypes.AT)
+  private val completions = listOf("#if", "#each", "#await", ":else", ":then", ":catch", "#key", "@const", "@html", "@debug")
 
-    override fun addCompletions(
-        parameters: CompletionParameters,
-        context: ProcessingContext,
-        result: CompletionResultSet,
-    ) {
-        val expression =
-            parameters.position.parents(false).find { it.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION }!!
-        if (expression.firstChild.siblings().any { SvelteTokenTypes.KEYWORDS.contains(it.elementType) }) {
-            return
-        }
-
-        val token = parameters.position.prevLeaf()
-        val newResult = if (token != null && symbolTokens.contains(token.elementType)) {
-            result.withPrefixMatcher(token.text + result.prefixMatcher.prefix)
-        } else {
-            result
-        }
-
-        for (completion in completions) {
-            newResult.addElement(
-                LookupElementBuilder.create(completion)
-                    .withBoldness(true)
-                    .withIcon(SvelteIcons.Gray)
-                    .withInsertHandler(AddSpaceInsertHandler.INSTANCE_WITH_AUTO_POPUP)
-            )
-        }
+  override fun addCompletions(
+    parameters: CompletionParameters,
+    context: ProcessingContext,
+    result: CompletionResultSet,
+  ) {
+    val expression =
+      parameters.position.parents(false).find { it.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION }!!
+    if (expression.firstChild.siblings().any { SvelteTokenTypes.KEYWORDS.contains(it.elementType) }) {
+      return
     }
+
+    val token = parameters.position.prevLeaf()
+    val newResult = if (token != null && symbolTokens.contains(token.elementType)) {
+      result.withPrefixMatcher(token.text + result.prefixMatcher.prefix)
+    }
+    else {
+      result
+    }
+
+    for (completion in completions) {
+      newResult.addElement(
+        LookupElementBuilder.create(completion)
+          .withBoldness(true)
+          .withIcon(SvelteIcons.Gray)
+          .withInsertHandler(AddSpaceInsertHandler.INSTANCE_WITH_AUTO_POPUP)
+      )
+    }
+  }
 }

@@ -13,25 +13,25 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
  * Needed for (erroneous) nesting of more than {{}}, eg. {{{}}} so the user can easily delete after error.
  */
 class SvelteBraceBackspaceHandler : BackspaceHandlerDelegate() {
-    override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {
-        if ((c == '{') && CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
-            val nextOffset = editor.caretModel.offset
-            if (nextOffset >= editor.document.textLength) return
+  override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {
+    if ((c == '{') && CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
+      val nextOffset = editor.caretModel.offset
+      if (nextOffset >= editor.document.textLength) return
 
-            if (!isSvelteContext(file)) return
+      if (!isSvelteContext(file)) return
 
-            val element = file.findElementAt(nextOffset - 1) ?: return
+      val element = file.findElementAt(nextOffset - 1) ?: return
 
-            if (element.elementType === SvelteTokenTypes.START_MUSTACHE || isNestedInSvelteElement(element)) {
-                val c1 = editor.document.charsSequence[nextOffset]
-                if (c1 != BackspaceHandler.getRightChar(c)) return
+      if (element.elementType === SvelteTokenTypes.START_MUSTACHE || isNestedInSvelteElement(element)) {
+        val c1 = editor.document.charsSequence[nextOffset]
+        if (c1 != BackspaceHandler.getRightChar(c)) return
 
-                editor.document.deleteString(nextOffset, nextOffset + 1)
-            }
-        }
+        editor.document.deleteString(nextOffset, nextOffset + 1)
+      }
     }
+  }
 
-    override fun charDeleted(c: Char, file: PsiFile, editor: Editor): Boolean {
-        return false
-    }
+  override fun charDeleted(c: Char, file: PsiFile, editor: Editor): Boolean {
+    return false
+  }
 }

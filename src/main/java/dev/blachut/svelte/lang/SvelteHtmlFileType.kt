@@ -5,13 +5,13 @@ import icons.SvelteIcons
 import javax.swing.Icon
 
 class SvelteHtmlFileType private constructor() : LanguageFileType(SvelteHTMLLanguage.INSTANCE) {
-    override fun getName(): String = "Svelte"
-    override fun getDescription(): String = SvelteBundle.message("svelte.file.type.description")
-    override fun getDefaultExtension(): String = "svelte"
-    override fun getIcon(): Icon = SvelteIcons.Desaturated
+  override fun getName(): String = "Svelte"
+  override fun getDescription(): String = SvelteBundle.message("svelte.file.type.description")
+  override fun getDefaultExtension(): String = "svelte"
+  override fun getIcon(): Icon = SvelteIcons.Desaturated
 
-    companion object {
-        @JvmField
-        val INSTANCE = SvelteHtmlFileType()
-    }
+  companion object {
+    @JvmField
+    val INSTANCE = SvelteHtmlFileType()
+  }
 }

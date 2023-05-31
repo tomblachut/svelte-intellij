@@ -12,11 +12,11 @@ import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.psi.blocks.SvelteBranch
 
 class SvelteJSConstTagVariable(node: ASTNode) : JSVariableImpl<JSVariableStubBase<JSVariable>, JSVariable>(node) {
-    override fun hasBlockScope(): Boolean = true
+  override fun hasBlockScope(): Boolean = true
 
-    override fun getDeclarationScope(): PsiElement? {
-        return PsiTreeUtil.getContextOfType(this, SvelteBranch::class.java, XmlTag::class.java, PsiFile::class.java)
-    }
+  override fun getDeclarationScope(): PsiElement? {
+    return PsiTreeUtil.getContextOfType(this, SvelteBranch::class.java, XmlTag::class.java, PsiFile::class.java)
+  }
 
-    override fun isConst(): Boolean = true
+  override fun isConst(): Boolean = true
 }

@@ -24,66 +24,66 @@ import dev.blachut.svelte.lang.psi.SvelteJSEmbeddedContentImpl
  * No TypeScript counterpart because right now JSEmbeddedContent is JS-only
  */
 class SvelteJSReferenceChecker(reporter: JSProblemReporter<*>) : TypedJSReferenceChecker(reporter) {
-    override fun addCreateFromUsageFixes(node: JSReferenceExpression,
-                                         resolveResults: Array<out ResolveResult>,
-                                         fixes: MutableList<in LocalQuickFix>,
-                                         inTypeContext: Boolean,
-                                         ecma: Boolean): Boolean {
-        if (node.parentOfType<JSEmbeddedContent>() is SvelteJSEmbeddedContentImpl) {
-            // only override Svelte expressions and blocks
-            return super.addCreateFromUsageFixes(node, resolveResults, fixes, inTypeContext, ecma)
-        }
-
-        fixes.add(SvelteCreateJSVariableIntentionAction(node))
-
-        return inTypeContext
+  override fun addCreateFromUsageFixes(node: JSReferenceExpression,
+                                       resolveResults: Array<out ResolveResult>,
+                                       fixes: MutableList<in LocalQuickFix>,
+                                       inTypeContext: Boolean,
+                                       ecma: Boolean): Boolean {
+    if (node.parentOfType<JSEmbeddedContent>() is SvelteJSEmbeddedContentImpl) {
+      // only override Svelte expressions and blocks
+      return super.addCreateFromUsageFixes(node, resolveResults, fixes, inTypeContext, ecma)
     }
 
-    override fun addFunctionFixes(node: JSReferenceExpression,
-                                  fixes: MutableList<in LocalQuickFix>,
-                                  refName: String?,
-                                  dialect: DialectOptionHolder?,
-                                  qualifier: JSExpression?) {
-        if (node.parentOfType<JSEmbeddedContent>() is SvelteJSEmbeddedContentImpl) {
-            // only override Svelte expressions and blocks
-            return super.addFunctionFixes(node, fixes, refName, dialect, qualifier)
-        }
+    fixes.add(SvelteCreateJSVariableIntentionAction(node))
 
-        fixes.add(SvelteCreateJSFunctionIntentionAction(node, true))
-        fixes.add(SvelteCreateJSFunctionIntentionAction(node, false))
+    return inTypeContext
+  }
+
+  override fun addFunctionFixes(node: JSReferenceExpression,
+                                fixes: MutableList<in LocalQuickFix>,
+                                refName: String?,
+                                dialect: DialectOptionHolder?,
+                                qualifier: JSExpression?) {
+    if (node.parentOfType<JSEmbeddedContent>() is SvelteJSEmbeddedContentImpl) {
+      // only override Svelte expressions and blocks
+      return super.addFunctionFixes(node, fixes, refName, dialect, qualifier)
     }
+
+    fixes.add(SvelteCreateJSFunctionIntentionAction(node, true))
+    fixes.add(SvelteCreateJSFunctionIntentionAction(node, false))
+  }
 }
 
 class SvelteCreateJSVariableIntentionAction(reference: JSReferenceExpression)
-    : CreateJSVariableIntentionAction(reference.referenceName, false, false, false) {
-    private val myRefExpressionPointer = SmartPointerManager.getInstance(reference.project).createSmartPsiElementPointer(reference)
+  : CreateJSVariableIntentionAction(reference.referenceName, false, false, false) {
+  private val myRefExpressionPointer = SmartPointerManager.getInstance(reference.project).createSmartPsiElementPointer(reference)
 
-    override fun calculateAnchors(psiElement: PsiElement): Pair<JSReferenceExpression?, PsiElement?> {
-        return Pair.create(myRefExpressionPointer.element, psiElement.lastChild)
-    }
+  override fun calculateAnchors(psiElement: PsiElement): Pair<JSReferenceExpression?, PsiElement?> {
+    return Pair.create(myRefExpressionPointer.element, psiElement.lastChild)
+  }
 
-    override fun applyFix(project: Project, psiElement: PsiElement, file: PsiFile, editor: Editor?) {
-        // assumes psiElement isn't inside script tag
-        val containingFile = file as? SvelteHtmlFile ?: return
-        val embeddedContent = prepareInstanceScriptContent(containingFile)
+  override fun applyFix(project: Project, psiElement: PsiElement, file: PsiFile, editor: Editor?) {
+    // assumes psiElement isn't inside script tag
+    val containingFile = file as? SvelteHtmlFile ?: return
+    val embeddedContent = prepareInstanceScriptContent(containingFile)
 
-        doApplyFix(project, embeddedContent, file, editor)
-    }
+    doApplyFix(project, embeddedContent, file, editor)
+  }
 }
 
 class SvelteCreateJSFunctionIntentionAction(reference: JSReferenceExpression, isArrow: Boolean)
-    : CreateJSFunctionIntentionAction(reference.referenceName, false, false, false, isArrow) {
-    private val myRefExpressionPointer = SmartPointerManager.getInstance(reference.project).createSmartPsiElementPointer(reference)
+  : CreateJSFunctionIntentionAction(reference.referenceName, false, false, false, isArrow) {
+  private val myRefExpressionPointer = SmartPointerManager.getInstance(reference.project).createSmartPsiElementPointer(reference)
 
-    override fun calculateAnchors(psiElement: PsiElement): Pair<JSReferenceExpression?, PsiElement?> {
-        return Pair.create(myRefExpressionPointer.element, psiElement.lastChild)
-    }
+  override fun calculateAnchors(psiElement: PsiElement): Pair<JSReferenceExpression?, PsiElement?> {
+    return Pair.create(myRefExpressionPointer.element, psiElement.lastChild)
+  }
 
-    override fun applyFix(project: Project?, psiElement: PsiElement?, file: PsiFile, editor: Editor?) {
-        // assumes psiElement isn't inside script tag
-        val containingFile = file as? SvelteHtmlFile ?: return
-        val embeddedContent = prepareInstanceScriptContent(containingFile)
+  override fun applyFix(project: Project?, psiElement: PsiElement?, file: PsiFile, editor: Editor?) {
+    // assumes psiElement isn't inside script tag
+    val containingFile = file as? SvelteHtmlFile ?: return
+    val embeddedContent = prepareInstanceScriptContent(containingFile)
 
-        doApplyFix(project, embeddedContent, file, editor)
-    }
+    doApplyFix(project, embeddedContent, file, editor)
+  }
 }

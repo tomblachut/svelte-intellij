@@ -11,31 +11,31 @@ import dev.blachut.svelte.lang.parsing.html.SvelteHtmlHighlightingLexer
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 internal class SvelteSyntaxHighlighter : HtmlFileHighlighter() {
-    override fun getHighlightingLexer(): Lexer {
-        return SvelteHtmlHighlightingLexer()
+  override fun getHighlightingLexer(): Lexer {
+    return SvelteHtmlHighlightingLexer()
+  }
+
+  override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
+    return when (tokenType) {
+      SvelteTokenTypes.START_MUSTACHE,
+      SvelteTokenTypes.END_MUSTACHE,
+
+      JSTokenTypes.SHARP,
+      JSTokenTypes.COLON,
+      JSTokenTypes.DIV,
+      JSTokenTypes.AT,
+
+        // Only keywords not covered by other means
+      SvelteTokenTypes.EACH_KEYWORD,
+      SvelteTokenTypes.KEY_KEYWORD, // todo revisit after optimising lexing+parsing
+      -> KEYWORDS
+
+      else -> super.getTokenHighlights(tokenType)
     }
+  }
 
-    override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
-        return when (tokenType) {
-            SvelteTokenTypes.START_MUSTACHE,
-            SvelteTokenTypes.END_MUSTACHE,
-
-            JSTokenTypes.SHARP,
-            JSTokenTypes.COLON,
-            JSTokenTypes.DIV,
-            JSTokenTypes.AT,
-
-                // Only keywords not covered by other means
-            SvelteTokenTypes.EACH_KEYWORD,
-            SvelteTokenTypes.KEY_KEYWORD, // todo revisit after optimising lexing+parsing
-            -> KEYWORDS
-
-            else -> super.getTokenHighlights(tokenType)
-        }
-    }
-
-    companion object {
-        private val KEYWORD = createTextAttributesKey("SVELTE_KEYWORD", JSHighlighter.JS_KEYWORD)
-        private val KEYWORDS = pack(KEYWORD)
-    }
+  companion object {
+    private val KEYWORD = createTextAttributesKey("SVELTE_KEYWORD", JSHighlighter.JS_KEYWORD)
+    private val KEYWORDS = pack(KEYWORD)
+  }
 }

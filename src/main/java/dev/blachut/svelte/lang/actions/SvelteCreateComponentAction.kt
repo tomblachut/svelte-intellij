@@ -15,22 +15,22 @@ import icons.SvelteIcons
 class SvelteCreateComponentAction : CreateFileFromTemplateAction(SvelteBundle.message("svelte.component.action"),
                                                                  SvelteBundle.message("svelte.component.action.description"),
                                                                  SvelteIcons.Desaturated), DumbAware {
-    companion object {
-        private const val TEMPLATE_NAME: String = "Svelte Component"
-    }
+  companion object {
+    private const val TEMPLATE_NAME: String = "Svelte Component"
+  }
 
-    override fun buildDialog(project: Project, directory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder) {
-        val name = SvelteBundle.message("svelte.component")
-        builder
-            .setTitle(SvelteBundle.message("svelte.create.component.title", name))
-            .addKind(name, SvelteIcons.Desaturated, TEMPLATE_NAME)
-    }
+  override fun buildDialog(project: Project, directory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder) {
+    val name = SvelteBundle.message("svelte.component")
+    builder
+      .setTitle(SvelteBundle.message("svelte.create.component.title", name))
+      .addKind(name, SvelteIcons.Desaturated, TEMPLATE_NAME)
+  }
 
-    override fun getActionName(directory: PsiDirectory?, @NlsSafe newName: String, templateName: String?): String =
-        SvelteBundle.message("svelte.new.component.create", SvelteBundle.message("svelte.component"), newName)
+  override fun getActionName(directory: PsiDirectory?, @NlsSafe newName: String, templateName: String?): String =
+    SvelteBundle.message("svelte.new.component.create", SvelteBundle.message("svelte.component"), newName)
 
-    override fun createFile(name: String, templateName: String?, dir: PsiDirectory?): PsiFile? {
-        val template = CustomFileTemplate(name, "svelte")
-        return createFileFromTemplate(name, template, dir)
-    }
+  override fun createFile(name: String, templateName: String?, dir: PsiDirectory?): PsiFile? {
+    val template = CustomFileTemplate(name, "svelte")
+    return createFileFromTemplate(name, template, dir)
+  }
 }

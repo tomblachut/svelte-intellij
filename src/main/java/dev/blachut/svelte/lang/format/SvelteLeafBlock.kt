@@ -8,12 +8,12 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.formatter.common.AbstractBlock
 
 class SvelteLeafBlock(node: ASTNode, private val indent: Indent? = null, wrap: Wrap? = null) :
-    AbstractBlock(node, wrap, null) {
-    override fun isLeaf(): Boolean = true
+  AbstractBlock(node, wrap, null) {
+  override fun isLeaf(): Boolean = true
 
-    override fun buildChildren(): MutableList<Block> = EMPTY
+  override fun buildChildren(): MutableList<Block> = EMPTY
 
-    override fun getSpacing(child1: Block?, child2: Block): Spacing? = null
+  override fun getSpacing(child1: Block?, child2: Block): Spacing? = null
 
-    override fun getIndent(): Indent? = indent
+  override fun getIndent(): Indent? = indent
 }

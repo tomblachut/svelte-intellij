@@ -26,39 +26,39 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
  * See [SvelteEnterHandler] for custom actions on Enter.
  */
 class SvelteBraceTypedHandler : TypedHandlerDelegate() {
-    override fun beforeCharTyped(c: Char, project: Project, editor: Editor, file: PsiFile, fileType: FileType): Result {
-        if (c != '{' || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
-            return Result.CONTINUE
-        }
-
-        if (!isSvelteContext(file)) {
-            return Result.CONTINUE
-        }
-
-        PsiDocumentManager.getInstance(project).commitDocument(editor.document)
-
-        val offset = editor.caretModel.offset
-
-        val element = file.findElementAt(offset) ?: return Result.CONTINUE
-
-        if (element.elementType === SvelteTokenTypes.END_MUSTACHE || isNestedInSvelteElement(element)) {
-            CommandProcessor.getInstance().currentCommandName = EditorBundle.message("typing.in.editor.command.name")
-            EditorModificationUtil.insertStringAtCaret(editor, "{}", true, true, 1)
-            (UndoManager.getInstance(project) as UndoManagerImpl).addDocumentAsAffected(editor.document)
-            TabOutScopesTracker.getInstance().registerEmptyScope(editor, offset + 1)
-
-            return Result.STOP
-        }
-
-        return Result.CONTINUE
+  override fun beforeCharTyped(c: Char, project: Project, editor: Editor, file: PsiFile, fileType: FileType): Result {
+    if (c != '{' || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
+      return Result.CONTINUE
     }
+
+    if (!isSvelteContext(file)) {
+      return Result.CONTINUE
+    }
+
+    PsiDocumentManager.getInstance(project).commitDocument(editor.document)
+
+    val offset = editor.caretModel.offset
+
+    val element = file.findElementAt(offset) ?: return Result.CONTINUE
+
+    if (element.elementType === SvelteTokenTypes.END_MUSTACHE || isNestedInSvelteElement(element)) {
+      CommandProcessor.getInstance().currentCommandName = EditorBundle.message("typing.in.editor.command.name")
+      EditorModificationUtil.insertStringAtCaret(editor, "{}", true, true, 1)
+      (UndoManager.getInstance(project) as UndoManagerImpl).addDocumentAsAffected(editor.document)
+      TabOutScopesTracker.getInstance().registerEmptyScope(editor, offset + 1)
+
+      return Result.STOP
+    }
+
+    return Result.CONTINUE
+  }
 }
 
 fun isNestedInSvelteElement(element: PsiElement): Boolean {
-    val wrapper = PsiTreeUtil.getContextOfType(
-        element,
-        SvelteJSLazyPsiElement::class.java,
-        SvelteInitialTag::class.java
-    )
-    return wrapper != null
+  val wrapper = PsiTreeUtil.getContextOfType(
+    element,
+    SvelteJSLazyPsiElement::class.java,
+    SvelteInitialTag::class.java
+  )
+  return wrapper != null
 }
