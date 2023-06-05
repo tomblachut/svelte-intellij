@@ -109,8 +109,13 @@
     <!--suppress PluginXmlValidity -->
     <lang.inspectionSuppressor language="JavaScript"
                                implementationClass="dev.blachut.svelte.lang.compatibility.SvelteInspectionSuppressor"/>
+
+    <lsp.serverSupportProvider implementation="dev.blachut.svelte.lang.service.SvelteLspServerSupportProvider"/>
+    <registryKey key="svelte.enable.lsp" defaultValue="false" description="Enable Svelte Language Tools service"/>
   </extensions>
   <extensions defaultExtensionNs="JavaScript">
+    <languageServiceProvider order="first" implementation="dev.blachut.svelte.lang.service.SvelteLanguageServiceProvider"/>
+
     <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>
 
     <importCandidatesFactory implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentCandidatesProvider$Factory"/>
