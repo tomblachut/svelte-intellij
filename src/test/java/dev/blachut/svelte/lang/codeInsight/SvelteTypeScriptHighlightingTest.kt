@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.vite.createAndSetViteConfig
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import junit.framework.TestCase
 
@@ -76,4 +77,13 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
         myFixture.configureFromTempProjectFile("+page.svelte")
         myFixture.testHighlighting()
     }
+
+  fun testViteAlias() {
+    val root = myFixture.copyDirectoryToProject(basePath + "/" + getTestName(true), "")
+    createAndSetViteConfig(project, testRootDisposable, "aliasPath", "src", null, root.path)
+    myFixture.configureFromTempProjectFile(getTestName(false) + ".svelte")
+    myFixture.testHighlighting()
+    TestCase.assertNotNull(myFixture.findSingleIntention ("Insert 'import Other from \"aliasPath/Other.svelte\"'"))
+  }
+
 }
