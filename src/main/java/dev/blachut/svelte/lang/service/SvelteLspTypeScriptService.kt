@@ -7,7 +7,7 @@ import com.intellij.lang.typescript.compiler.languageService.protocol.commands.r
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
 import com.intellij.lsp.api.LspServerDescriptor
 import com.intellij.lsp.api.LspServerSupportProvider
-import com.intellij.lsp.methods.HoverMethod
+import com.intellij.lsp.requests.LspHoverRequest
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
@@ -24,8 +24,8 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
 
   private fun quickInfo(element: PsiElement): TypeScriptQuickInfoResponse? {
     val server = getServer() ?: return null
-    val hoverMethod = HoverMethod.create(server, element) ?: return null
-    val raw = server.sendRequestSync(hoverMethod) ?: return null
+    val hoverRequest = LspHoverRequest.create(server, element) ?: return null
+    val raw = server.sendRequestSync(hoverRequest) ?: return null
     val response = TypeScriptQuickInfoResponse()
     response.displayString = raw.substring("<html><body><pre>".length, raw.length - "</pre></body></html>".length)
     return response
