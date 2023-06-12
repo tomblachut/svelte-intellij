@@ -4,9 +4,10 @@ package dev.blachut.svelte.lang.service
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.library.TypeScriptLibraryProvider
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.registry.Registry
 import com.intellij.openapi.vfs.VirtualFile
 import dev.blachut.svelte.lang.isSvelteContext
+import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
+import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 
 
 /**
@@ -33,5 +34,5 @@ fun isServiceEnabledByContextAndSettings(project: Project, context: VirtualFile)
 }
 
 fun isSvelteServiceEnabledBySettings(project: Project): Boolean {
-  return Registry.`is`("svelte.enable.lsp", false)
+  return getSvelteServiceSettings(project).serviceMode == SvelteServiceMode.ENABLED
 }

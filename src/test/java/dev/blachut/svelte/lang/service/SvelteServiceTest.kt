@@ -6,12 +6,13 @@ import com.intellij.lang.javascript.modules.JSTempDirWithNodeInterpreterTest
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.library.download.TypeScriptDefinitionFilesDirectory
-import com.intellij.platform.lsp.tests.checkLspHighlighting
 import com.intellij.openapi.util.Disposer
-import com.intellij.openapi.util.registry.Registry
+import com.intellij.platform.lsp.tests.checkLspHighlighting
 import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
+import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
+import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import junit.framework.TestCase
 import org.junit.Test
 
@@ -20,18 +21,17 @@ class SvelteServiceTest : JSTempDirWithNodeInterpreterTest() {
   override fun setUp() {
     super.setUp()
 
+    val serviceSettings = getSvelteServiceSettings(project)
+    val old = serviceSettings.serviceMode
     TypeScriptLanguageServiceUtil.setUseService(true)
     TypeScriptExternalDefinitionsRegistry.testTypingsRootPath = TypeScriptDefinitionFilesDirectory.getGlobalAutoDownloadTypesDirectoryPath()
 
-
-    val oldRegistryValue = Registry.`is`("svelte.enable.lsp")
-    Registry.get("svelte.enable.lsp").setValue(true)
-
     Disposer.register(testRootDisposable) {
+      serviceSettings.serviceMode = old
       TypeScriptLanguageServiceUtil.setUseService(false)
-      Registry.get("svelte.enable.lsp").setValue(oldRegistryValue)
     }
 
+    serviceSettings.serviceMode = SvelteServiceMode.ENABLED
     (myFixture as CodeInsightTestFixtureImpl).canChangeDocumentDuringHighlighting(true)
 
     SvelteLspExecutableDownloader.getExecutableOrRefresh(project) // could run blocking download
