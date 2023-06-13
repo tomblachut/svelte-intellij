@@ -5,16 +5,11 @@ import com.intellij.lang.javascript.ecmascript6.TypeScriptAnnotatorCheckerProvid
 import com.intellij.lang.typescript.compiler.TypeScriptLanguageServiceAnnotatorCheckerProvider
 import com.intellij.lang.typescript.compiler.languageService.protocol.commands.response.TypeScriptQuickInfoResponse
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
-import com.intellij.platform.lsp.api.LspServerDescriptor
-import com.intellij.platform.lsp.api.LspServerSupportProvider
-import com.intellij.platform.lsp.impl.LspServerImpl
-import com.intellij.platform.lsp.impl.requests.LspHoverRequest
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiElement
+import com.intellij.platform.lsp.api.LspServerDescriptor
+import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.psi.PsiFile
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.CompletableFuture.completedFuture
 
 class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptService(project) {
   override fun getProviderClass(): Class<out LspServerSupportProvider> = SvelteLspServerSupportProvider::class.java
@@ -23,23 +18,11 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
   override val prefix = "Svelte"
   override val serverVersion = svelteLanguageToolsVersion
 
-  private fun quickInfo(element: PsiElement): TypeScriptQuickInfoResponse? {
-    val server = getServer() ?: return null
-    val hoverRequest = LspHoverRequest.create(server, element) ?: return null
-    val raw = (server as LspServerImpl).sendRequestSync(hoverRequest) ?: return null
-    val response = TypeScriptQuickInfoResponse()
-    response.displayString = raw.substring("<html><body><pre>".length, raw.length - "</pre></body></html>".length)
-    return response
+  override fun createQuickInfoResponse(rawResponse: String): TypeScriptQuickInfoResponse {
+    return TypeScriptQuickInfoResponse().apply {
+      displayString = rawResponse.removeSurrounding("<html><body><pre>", "</pre></body></html>")
+    }
   }
-
-  private fun processHoverResponse(raw: String): String {
-    return raw.substring("<html><body>".length, raw.length - "</body></html>".length)
-  }
-
-  override fun getQuickInfoAt(element: PsiElement,
-                              originalElement: PsiElement,
-                              originalFile: VirtualFile): CompletableFuture<TypeScriptQuickInfoResponse?> =
-    completedFuture(quickInfo(element))
 
   override fun canHighlight(file: PsiFile): Boolean {
     val provider = TypeScriptAnnotatorCheckerProvider.getCheckerProvider(file)
