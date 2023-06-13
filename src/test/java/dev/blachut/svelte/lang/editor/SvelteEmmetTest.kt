@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.editor
 
+import com.intellij.lang.javascript.JSTestUtils
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class SvelteEmmetTest : BasePlatformTestCase() {
@@ -94,9 +95,10 @@ class SvelteEmmetTest : BasePlatformTestCase() {
         {/if}""".trimIndent()
     )
 
-    private fun doTest(before: String, after: String) {
-        myFixture.configureByText("Emmet.svelte", before)
-        myFixture.type("\t")
-        myFixture.checkResult(after)
-    }
+  private fun doTest(before: String, after: String) {
+    myFixture.configureByText("Emmet.svelte", before)
+    JSTestUtils.runEmmetTemplate(myFixture)
+
+    myFixture.checkResult(after)
+  }
 }
