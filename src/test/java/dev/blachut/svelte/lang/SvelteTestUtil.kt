@@ -5,9 +5,10 @@ import java.io.File
 
 private const val SVELTE_TEST_DATA_PATH = "/svelte/src/test/resources"
 
-fun getSvelteTestDataPath(): String =
-    getPluginsPath() + SVELTE_TEST_DATA_PATH
+fun getRelativeSvelteTestDataPath(): String {
+  return "/plugins$SVELTE_TEST_DATA_PATH"
+}
 
-private fun getPluginsPath(): String {
-  return IdeaTestExecutionPolicy.getHomePathWithPolicy() + "/plugins"
+fun getSvelteTestDataPath(): String {
+  return "${IdeaTestExecutionPolicy.getHomePathWithPolicy()}/plugins$SVELTE_TEST_DATA_PATH"
 }

@@ -6,10 +6,12 @@ import com.intellij.lang.typescript.compiler.TypeScriptLanguageServiceAnnotatorC
 import com.intellij.lang.typescript.compiler.languageService.protocol.commands.response.TypeScriptQuickInfoResponse
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerDescriptor
 import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.psi.PsiFile
+import com.intellij.util.ui.UIUtil
 
 class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptService(project) {
   override fun getProviderClass(): Class<out LspServerSupportProvider> = SvelteLspServerSupportProvider::class.java
@@ -20,7 +22,17 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
 
   override fun createQuickInfoResponse(rawResponse: String): TypeScriptQuickInfoResponse {
     return TypeScriptQuickInfoResponse().apply {
-      displayString = rawResponse.removeSurrounding("<html><body><pre>", "</pre></body></html>")
+      val content = UIUtil.getHtmlBody(rawResponse)
+      val parts = content.split("<hr />")
+
+      displayString = parts[0]
+        .removeSurrounding("<pre><code class=\"language-typescript\">", "</code></pre>")
+        .trim()
+        .let(StringUtil::unescapeXmlEntities)
+      if (parts.size == 2) {
+        documentation = parts[1]
+      }
+      // Svelte LS omits "export" so we can't assign kindModifiers
     }
   }
 
