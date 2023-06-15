@@ -7,12 +7,11 @@ import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
 
 /**
- * Based on [com.intellij.lang.javascript.typescript.service.TypeScriptServiceDocumentationTest]
+ * @see com.intellij.lang.javascript.typescript.service.TypeScriptServiceDocumentationTest
  */
 class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   override fun getBasePath(): String = getRelativeSvelteTestDataPath() + "/dev/blachut/svelte/lang/service/documentation"
 
-  @Throws(Exception::class)
   override fun setUp() {
     super.setUp()
     RegistryManager.getInstance().get("typescript.show.own.type").setValue(true, testRootDisposable)
@@ -22,7 +21,7 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   fun testNullChecks() = defaultQuickNavigateTest()
 
   @Test
-  fun testReferenceUsedInsteadOfDeclaration() = defaultQuickNavigateTest()
+  fun testTypeNarrowing() = defaultQuickNavigateTest()
 
   @Test
   fun testGenericType() = defaultQuickNavigateTest()
@@ -39,5 +38,4 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
     val doc = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
     JSAbstractDocumentationTest.checkExpected(doc, testDataPath + "/" + getTestName(false) + ".expected.html")
   }
-
 }
