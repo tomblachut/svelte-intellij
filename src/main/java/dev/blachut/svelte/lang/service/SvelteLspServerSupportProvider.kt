@@ -6,12 +6,11 @@ import com.intellij.lang.typescript.lsp.JSFrameworkLspServerDescriptor
 import com.intellij.lang.typescript.lsp.LspServerDownloader
 import com.intellij.lang.typescript.lsp.getLspServerExecutablePath
 import com.intellij.lang.typescript.lsp.scheduleLspServerDownloading
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerDescriptor
 import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.platform.lsp.api.LspServerSupportProvider.LspServerStarter
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.guessProjectDir
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.text.SemVer
 import org.jetbrains.annotations.ApiStatus
 
@@ -28,13 +27,11 @@ class SvelteLspServerSupportProvider : LspServerSupportProvider {
 
 fun getSvelteServerDescriptor(project: Project, file: VirtualFile): LspServerDescriptor? {
   if (!isServiceEnabledAndAvailable(project, file)) return null
-  val projectDir = project.guessProjectDir() ?: return null
-  return SvelteLspServerDescriptor(project, projectDir)
+  return SvelteLspServerDescriptor(project)
 }
 
 
-class SvelteLspServerDescriptor(project: Project, vararg roots: VirtualFile)
-  : JSFrameworkLspServerDescriptor(project, "Svelte", *roots) {
+class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, "Svelte") {
   override val relativeScriptPath = packageRelativePath
   override val npmPackage = serverPackageName
 
