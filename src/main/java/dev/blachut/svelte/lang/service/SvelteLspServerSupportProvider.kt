@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.library.typings.TypeScriptPackageName
 import com.intellij.lang.typescript.lsp.JSFrameworkLspServerDescriptor
+import com.intellij.lang.typescript.lsp.LspServerDownloader
 import com.intellij.lang.typescript.lsp.getLspServerExecutablePath
 import com.intellij.lang.typescript.lsp.scheduleLspServerDownloading
 import com.intellij.platform.lsp.api.LspServerDescriptor
@@ -43,13 +44,13 @@ class SvelteLspServerDescriptor(project: Project, vararg roots: VirtualFile)
 }
 
 @ApiStatus.Experimental
-object SvelteLspExecutableDownloader {
-  fun getExecutable(): String? {
+object SvelteLspExecutableDownloader : LspServerDownloader {
+  override fun getExecutable(project: Project): String? {
     return getLspServerExecutablePath(serverPackageName, packageRelativePath)
   }
 
-  fun getExecutableOrRefresh(project: Project): String? {
-    val executable = getExecutable()
+  override fun getExecutableOrRefresh(project: Project): String? {
+    val executable = getExecutable(project)
     if (executable != null) return executable
     scheduleLspServerDownloading(project, serverPackageName)
     return null

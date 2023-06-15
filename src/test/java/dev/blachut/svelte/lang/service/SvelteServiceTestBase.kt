@@ -41,8 +41,7 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
     }
     serviceSettings.serviceMode = SvelteServiceMode.ENABLED
 
-    SvelteLspExecutableDownloader.getExecutableOrRefresh(project) // could run blocking download
-    assertNotNull(SvelteLspExecutableDownloader.getExecutable())
+    ensureServerDownloaded(SvelteLspExecutableDownloader)
   }
 
   protected fun assertCorrectService() {
