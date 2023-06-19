@@ -111,6 +111,8 @@
                                implementationClass="dev.blachut.svelte.lang.compatibility.SvelteInspectionSuppressor"/>
 
     <platform.lsp.serverSupportProvider implementation="dev.blachut.svelte.lang.service.SvelteLspServerSupportProvider"/>
+    <gotoDeclarationHandler implementation="dev.blachut.svelte.lang.editor.SvelteGotoDeclarationHandler" order="first"/>
+    <lang.documentationProvider language="SvelteJS" implementationClass="dev.blachut.svelte.lang.editor.SvelteJSDocumentationProvider"/>
 
     <!-- we store settings under ts since there are only ts server specific options there -->
     <projectConfigurable parentId="settings.typescriptcompiler"
