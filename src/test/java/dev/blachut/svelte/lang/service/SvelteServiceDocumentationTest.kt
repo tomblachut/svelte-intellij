@@ -4,6 +4,7 @@ import com.intellij.lang.javascript.JSAbstractDocumentationTest
 import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 import org.junit.Test
 
 /**
@@ -38,9 +39,22 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   @Test
   fun testNoDummyResolve2() = defaultComboTest()
 
-  private fun defaultComboTest() {
-    myFixture.configureByText("tsconfig.json", tsconfig)
-    myFixture.configureByFile(getTestName(false) + "." + extension)
+  @Test
+  fun testKitDataProp() = defaultComboTest(true)
+
+  private fun defaultComboTest(directory: Boolean = false) {
+    if (directory) {
+      copyDirectory()
+      myFixture.testDataPath = getSvelteTestDataPath()
+      myFixture.copyDirectoryToProject("dev/blachut/svelte/lang/_npm", "node_modules")
+      myFixture.testDataPath = testDataPath
+      myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
+    }
+    else {
+      myFixture.configureByText("tsconfig.json", tsconfig)
+      myFixture.configureByFile(getTestName(false) + "." + extension)
+    }
+
     myFixture.checkLspHighlighting()
     assertCorrectService()
 
