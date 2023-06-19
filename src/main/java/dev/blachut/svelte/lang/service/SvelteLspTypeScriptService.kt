@@ -1,10 +1,13 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service
 
+import com.intellij.lang.javascript.documentation.JSQuickNavigateBuilder
 import com.intellij.lang.javascript.ecmascript6.TypeScriptAnnotatorCheckerProvider
 import com.intellij.lang.typescript.compiler.TypeScriptLanguageServiceAnnotatorCheckerProvider
 import com.intellij.lang.typescript.compiler.languageService.protocol.commands.response.TypeScriptQuickInfoResponse
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.text.HtmlBuilder
 import com.intellij.openapi.util.text.StringUtil
@@ -12,8 +15,13 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerDescriptor
 import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.platform.lsp.util.convertMarkupContentToHtml
+import com.intellij.platform.lsp.util.getOffsetInDocument
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import org.eclipse.lsp4j.MarkupContent
+import com.intellij.psi.PsiManager
+import com.intellij.util.ui.UIUtil
 
 class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptService(project) {
   override fun getProviderClass(): Class<out LspServerSupportProvider> = SvelteLspServerSupportProvider::class.java
@@ -36,6 +44,26 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
       }
       // Svelte LS omits "export" so we can't assign kindModifiers
     }
+  }
+
+  override fun getNavigationFor(document: Document, sourceElement: PsiElement): Array<PsiElement> {
+    return withServer {
+      val file = FileDocumentManager.getInstance().getFile(document) ?: return emptyArray()
+      val raw = getElementDefinitions(file, sourceElement.textOffset)
+
+      raw.mapNotNull { locationLink ->
+        val targetFile = findFileByUri(locationLink.targetUri) ?: return@mapNotNull null
+        val targetPsiFile = PsiManager.getInstance(project).findFile(targetFile) ?: return@mapNotNull null
+        val targetDocument = PsiDocumentManager.getInstance(project).getDocument(targetPsiFile) ?: return@mapNotNull null
+        val offset = getOffsetInDocument(targetDocument, locationLink.targetSelectionRange.start)
+        if (offset != null) {
+          val leaf = targetPsiFile.findElementAt(offset)
+          JSQuickNavigateBuilder.getOriginalElementOrParentIfLeaf(leaf)
+        } else {
+          targetPsiFile
+        }
+      }.toTypedArray()
+    } ?: emptyArray()
   }
 
   override fun canHighlight(file: PsiFile): Boolean {
