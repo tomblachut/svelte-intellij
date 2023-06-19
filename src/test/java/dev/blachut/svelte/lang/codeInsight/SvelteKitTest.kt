@@ -16,7 +16,7 @@ class SvelteKitTest : BasePlatformTestCase() {
         val base = basePath + "/" + getTestName(true)
         myFixture.copyDirectoryToProject(base, "")
         myFixture.copyDirectoryToProject("dev/blachut/svelte/lang/_npm", "node_modules")
-        myFixture.configureFromTempProjectFile("src/routes/index.svelte")
+        myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
 
         val ref = myFixture.getReferenceAtCaretPositionWithAssertion() as PsiPolyVariantReference
 
