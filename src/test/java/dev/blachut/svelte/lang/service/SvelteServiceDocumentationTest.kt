@@ -29,6 +29,15 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   @Test
   fun testQualifiedReference() = defaultComboTest()
 
+  @Test
+  fun testQualifiedReference2() = defaultComboTest()
+
+  @Test
+  fun testNoDummyResolve() = defaultComboTest()
+
+  @Test
+  fun testNoDummyResolve2() = defaultComboTest()
+
   private fun defaultComboTest() {
     myFixture.configureByText("tsconfig.json", tsconfig)
     myFixture.configureByFile(getTestName(false) + "." + extension)
