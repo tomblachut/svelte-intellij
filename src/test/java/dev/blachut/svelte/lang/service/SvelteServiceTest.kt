@@ -18,12 +18,18 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <script lang="ts">
         let <error descr="Svelte: Type 'number' is not assignable to type 'string'.">local</error>: string = 1;
         local;
+        
+        function acceptNumber(num: number): number { return num; }
+        
+        acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'.">true</error>);
       </script>
+      
+      <!-- todo remove duplicate internal warning -->
+      {acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'."><weak_warning descr="Argument type  boolean  is not assignable to parameter type  number ">true</weak_warning></error>)}
       
       <input <warning descr="Svelte: A11y: Avoid using autofocus">autofocus</warning>>
     """)
-    myFixture.doHighlighting()
-    assertCorrectService()
     myFixture.checkLspHighlighting()
+    assertCorrectService()
   }
 }
