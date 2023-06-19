@@ -37,6 +37,9 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
 
     val quickNavigateText = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
     JSAbstractDocumentationTest.checkExpected(quickNavigateText, "$testFileAbsolutePathWithoutExtension.nav.expected.html")
+
+    val doc = JSAbstractDocumentationTest.getQuickDocumentationText(myFixture) ?: "No documentation found."
+    JSAbstractDocumentationTest.checkExpected(doc, "$testFileAbsolutePathWithoutExtension.doc.expected.html")
   }
 
   private val testFileAbsolutePathWithoutExtension
