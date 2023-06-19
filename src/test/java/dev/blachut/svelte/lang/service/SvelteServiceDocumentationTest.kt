@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSAbstractDocumentationTest
 import com.intellij.openapi.util.registry.RegistryManager
-import com.intellij.platform.lsp.tests.waitForDiagnosticsDataFromServer
+import com.intellij.platform.lsp.tests.checkLspHighlighting
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
 
@@ -31,9 +31,10 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
 
   private fun defaultQuickNavigateTest(directory: Boolean = false) {
     myFixture.configureByText("tsconfig.json", tsconfig)
-    doDefaultHighlightingTest(directory)
+    myFixture.configureByFile(getTestName(false) + "." + extension)
+    myFixture.doHighlighting()
     assertCorrectService()
-    waitForDiagnosticsDataFromServer(project, file.virtualFile)
+    myFixture.checkLspHighlighting()
 
     val doc = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
     JSAbstractDocumentationTest.checkExpected(doc, testDataPath + "/" + getTestName(false) + ".expected.html")
