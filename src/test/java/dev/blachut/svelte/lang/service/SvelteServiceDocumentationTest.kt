@@ -18,24 +18,27 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   }
 
   @Test
-  fun testNullChecks() = defaultQuickNavigateTest()
+  fun testNullChecks() = defaultComboTest()
 
   @Test
-  fun testTypeNarrowing() = defaultQuickNavigateTest()
+  fun testTypeNarrowing() = defaultComboTest()
 
   @Test
-  fun testGenericType() = defaultQuickNavigateTest()
+  fun testGenericType() = defaultComboTest()
 
   @Test
-  fun testQualifiedReference() = defaultQuickNavigateTest()
+  fun testQualifiedReference() = defaultComboTest()
 
-  private fun defaultQuickNavigateTest(directory: Boolean = false) {
+  private fun defaultComboTest() {
     myFixture.configureByText("tsconfig.json", tsconfig)
     myFixture.configureByFile(getTestName(false) + "." + extension)
     myFixture.checkLspHighlighting()
     assertCorrectService()
 
-    val doc = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
-    JSAbstractDocumentationTest.checkExpected(doc, testDataPath + "/" + getTestName(false) + ".expected.html")
+    val quickNavigateText = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
+    JSAbstractDocumentationTest.checkExpected(quickNavigateText, "$testFileAbsolutePathWithoutExtension.nav.expected.html")
   }
+
+  private val testFileAbsolutePathWithoutExtension
+    get() = testDataPath + "/" + getTestName(false)
 }
