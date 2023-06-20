@@ -51,7 +51,7 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
       myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
     }
     else {
-      myFixture.configureByText("tsconfig.json", tsconfig)
+      myFixture.addFileToProject("tsconfig.json", tsconfig)
       myFixture.configureByFile(getTestName(false) + "." + extension)
     }
 

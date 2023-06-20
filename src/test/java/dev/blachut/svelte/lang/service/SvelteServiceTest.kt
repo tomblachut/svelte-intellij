@@ -13,7 +13,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testServiceWorks() {
-    myFixture.configureByText("tsconfig.json", tsconfig)
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
         let <error descr="Svelte: Type 'number' is not assignable to type 'string'.">local</error>: string = 1;
