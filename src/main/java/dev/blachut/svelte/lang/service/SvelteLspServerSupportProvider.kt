@@ -19,6 +19,9 @@ internal const val npmPackage = "svelte-language-server"
 private const val packageRelativePath = "/bin/server.js"
 val serverPackageName = TypeScriptPackageName(npmPackage, svelteLanguageToolsVersion)
 
+/**
+ * @see SvelteLspTypeScriptService
+ */
 class SvelteLspServerSupportProvider : LspServerSupportProvider {
   override fun fileOpened(project: Project, file: VirtualFile, serverStarter: LspServerStarter) {
     getSvelteServerDescriptor(project, file)?.let { serverStarter.ensureServerStarted(it) }
@@ -30,7 +33,9 @@ fun getSvelteServerDescriptor(project: Project, file: VirtualFile): LspServerDes
   return SvelteLspServerDescriptor(project)
 }
 
-
+/**
+ * @see SvelteLspTypeScriptService
+ */
 class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, "Svelte") {
   override val relativeScriptPath = packageRelativePath
   override val npmPackage = serverPackageName

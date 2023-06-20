@@ -21,8 +21,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import org.eclipse.lsp4j.MarkupContent
 import com.intellij.psi.PsiManager
-import com.intellij.util.ui.UIUtil
 
+/**
+ * @see SvelteLspServerSupportProvider
+ * @see SvelteLspServerDescriptor
+ */
 class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptService(project) {
   override fun getProviderClass(): Class<out LspServerSupportProvider> = SvelteLspServerSupportProvider::class.java
 
