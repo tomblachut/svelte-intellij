@@ -19,8 +19,8 @@ import com.intellij.platform.lsp.util.getOffsetInDocument
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import org.eclipse.lsp4j.MarkupContent
 import com.intellij.psi.PsiManager
+import org.eclipse.lsp4j.MarkupContent
 
 /**
  * @see SvelteLspServerSupportProvider
@@ -55,14 +55,15 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
       val raw = getElementDefinitions(file, sourceElement.textOffset)
 
       raw.mapNotNull { locationLink ->
-        val targetFile = findFileByUri(locationLink.targetUri) ?: return@mapNotNull null
+        val targetFile = descriptor.findFileByUri(locationLink.targetUri) ?: return@mapNotNull null
         val targetPsiFile = PsiManager.getInstance(project).findFile(targetFile) ?: return@mapNotNull null
         val targetDocument = PsiDocumentManager.getInstance(project).getDocument(targetPsiFile) ?: return@mapNotNull null
         val offset = getOffsetInDocument(targetDocument, locationLink.targetSelectionRange.start)
         if (offset != null) {
           val leaf = targetPsiFile.findElementAt(offset)
           JSQuickNavigateBuilder.getOriginalElementOrParentIfLeaf(leaf)
-        } else {
+        }
+        else {
           targetPsiFile
         }
       }.toTypedArray()
