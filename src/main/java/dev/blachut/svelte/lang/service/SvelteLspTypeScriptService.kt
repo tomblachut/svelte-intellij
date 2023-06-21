@@ -62,7 +62,8 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
         if (offset != null) {
           val leaf = targetPsiFile.findElementAt(offset)
           JSQuickNavigateBuilder.getOriginalElementOrParentIfLeaf(leaf)
-        } else {
+        }
+        else {
           targetPsiFile
         }
       }.toTypedArray()
