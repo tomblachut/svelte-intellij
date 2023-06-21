@@ -6,6 +6,7 @@ import com.intellij.lang.javascript.psi.ecma6.TypeScriptModule
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.psi.PsiPolyVariantReference
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import dev.blachut.svelte.lang.copyBundledSvelteKit
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteKitTest : BasePlatformTestCase() {
@@ -15,7 +16,7 @@ class SvelteKitTest : BasePlatformTestCase() {
     fun testResolveAppModules() {
         val base = basePath + "/" + getTestName(true)
         myFixture.copyDirectoryToProject(base, "")
-        myFixture.copyDirectoryToProject("dev/blachut/svelte/lang/_npm", "node_modules")
+        myFixture.copyBundledSvelteKit()
         myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
 
         val ref = myFixture.getReferenceAtCaretPositionWithAssertion() as PsiPolyVariantReference

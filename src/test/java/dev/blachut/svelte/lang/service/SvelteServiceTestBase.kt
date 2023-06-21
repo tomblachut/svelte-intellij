@@ -5,6 +5,8 @@ import com.intellij.lang.javascript.library.typings.TypeScriptExternalDefinition
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.library.download.TypeScriptDefinitionFilesDirectory
 import com.intellij.openapi.util.Disposer
+import dev.blachut.svelte.lang.copyBundledSvelteKit
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 
@@ -46,5 +48,29 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
 
   protected fun assertCorrectService() {
     assertCorrectServiceImpl<SvelteLspTypeScriptService>()
+  }
+
+  protected fun withTestDataPathOverriden(action: () -> Unit) {
+    myFixture.testDataPath = getSvelteTestDataPath()
+    try {
+      action()
+    }
+    finally {
+      myFixture.testDataPath = testDataPath
+    }
+  }
+
+  protected fun configureDefault(directory: Boolean) {
+    if (directory) {
+      copyDirectory()
+      withTestDataPathOverriden {
+        myFixture.copyBundledSvelteKit()
+      }
+      myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
+    }
+    else {
+      myFixture.addFileToProject("tsconfig.json", tsconfig)
+      myFixture.configureByFile(getTestName(false) + "." + extension)
+    }
   }
 }
