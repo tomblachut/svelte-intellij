@@ -404,7 +404,29 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testExpressionInStyleAttribute() {
-        myFixture.configureByText("Foo.svelte", """<div style="--custom: {'dynamic'}"></div>""")
+        myFixture.configureByText("Foo.svelte", """
+            <div style="--custom: {'dynamic'}"></div>
+            <div style="transform: translate(0, {100}%)"></div>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testStyleTagErrorsOriginatingInInlineStyleSuppressed() {
+        myFixture.configureByText("Foo.svelte", """
+            <script>
+                let bgOpacity = 0.5;
+                let myColor = bgOpacity < 0.6 ? "#000" : "#fff";
+            </script>
+
+            <p style="--myColor: {myColor}; --opacity: {bgOpacity};">This is a paragraph.</p>
+
+            <style>
+                p {
+                    color: var(--myColor);
+                    background: rgba(255, 62, 0, var(--opacity));
+                }
+            </style>
+        """.trimIndent())
         myFixture.testHighlighting()
     }
 
