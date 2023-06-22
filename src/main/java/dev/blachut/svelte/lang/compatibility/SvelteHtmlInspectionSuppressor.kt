@@ -8,7 +8,13 @@ import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspectio
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownTagInspection
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.css.CssElement
+import com.intellij.psi.css.inspections.CssBaseInspection
+import com.intellij.psi.css.inspections.invalid.CssInvalidFunctionInspection
+import com.intellij.psi.css.inspections.invalid.CssUnresolvedCustomPropertyInspection
+import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlAttribute
+import com.intellij.psi.xml.XmlAttributeValue
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.equalsName
 import dev.blachut.svelte.lang.isSvelteComponentTag
@@ -48,6 +54,14 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
       if (isSvelteComponentTag(element.text)) {
         return true
       }
+    }
+
+    if (inspectionId.equalsName<CssUnresolvedCustomPropertyInspection>()) { // WEB-60171
+      return true // todo rewrite inline style parser to handle expressions, e.g.: style="--myColor: {myColor}; --opacity: {bgOpacity};"
+    }
+
+    if (element is CssElement && inspectionId.lowercase().startsWith("css") /* dangerous */) {
+      return element.parentOfType<XmlAttributeValue>() != null
     }
 
     return super.isSuppressedFor(element, inspectionId)
