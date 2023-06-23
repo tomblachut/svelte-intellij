@@ -1,6 +1,7 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service
 
+import com.intellij.lang.javascript.JSNavigationTest
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
 import org.junit.Test
@@ -32,4 +33,62 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     myFixture.checkLspHighlighting()
     assertCorrectService()
   }
+
+  @Test
+  fun testFunctionDeclarationGTDU() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        function <caret>handleClick() {
+          console.log("clicked!");
+        }
+      
+        handleClick();
+      </script>
+      
+      <button on:click={handleClick}>Hello</button>
+    """)
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    JSNavigationTest.doTestGTDU(myFixture, true)
+  }
+
+  @Test
+  fun testFunctionReferenceGTDU() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        function handleClick() {
+          console.log("clicked!");
+        }
+      
+        handleClick();
+      </script>
+      
+      <button on:click={<caret>handleClick}>Hello</button>
+    """)
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    JSNavigationTest.doTestGTDU(myFixture, false)
+  }
+
+  @Test
+  fun testReactiveDeclarationReferenceGTDU() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    // todo hide internal errors for destructured reactive declaration references
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        ${'$'}: ({ foo } = { foo: 1 });
+      </script>
+      
+      <p>Foo: {<caret><error descr="Unresolved variable or type foo">foo</error>}</p>
+    """)
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    JSNavigationTest.doTestGTDU(myFixture, false)
+  }
+
 }
