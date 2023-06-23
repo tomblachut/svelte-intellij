@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
+import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiPolyVariantReference
@@ -23,6 +24,8 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
     val resolver = ResolveCache.PolyVariantResolver<SvelteTagNameReference> { ref, incomplete ->
       val place = ref.tagElement ?: return@PolyVariantResolver emptyArray()
       val referenceName = place.name
+      // TODO Support namespaced components WEB-61636
+      if (referenceName.contains('.')) return@PolyVariantResolver arrayOf(JSResolveResult(place))
       SvelteReactiveDeclarationsUtil.processLocalDeclarations(place, referenceName, incomplete)
     }
 
