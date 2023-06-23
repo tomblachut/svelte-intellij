@@ -56,7 +56,7 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
   override fun getNavigationFor(document: Document, sourceElement: PsiElement): Array<PsiElement> {
     return withServer {
       val file = FileDocumentManager.getInstance().getFile(document) ?: return emptyArray()
-      val raw = getElementDefinitions(file, sourceElement.textOffset)
+      val raw = requestExecutor.getElementDefinitions(file, sourceElement.textOffset)
 
       raw.mapNotNull { locationLink ->
         val targetFile = descriptor.findFileByUri(locationLink.targetUri) ?: return@mapNotNull null
