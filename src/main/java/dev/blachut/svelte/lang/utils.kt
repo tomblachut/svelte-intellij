@@ -20,7 +20,7 @@ fun isSvelteContext(file: VirtualFile): Boolean {
 }
 
 fun isSvelteComponentTag(name: String): Boolean {
-  // TODO Support namespaced components
+  // TODO Support namespaced components WEB-61636
   return StringUtil.isCapitalized(name)
 }
 
