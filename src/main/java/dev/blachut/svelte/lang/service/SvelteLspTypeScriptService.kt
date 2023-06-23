@@ -65,6 +65,7 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
         val offset = getOffsetInDocument(targetDocument, locationLink.targetSelectionRange.start)
         if (offset != null) {
           val leaf = targetPsiFile.findElementAt(offset)
+          if (leaf  == sourceElement) return@mapNotNull null // discard self referencing LocationLinks, otherwise GTDU is confused
           JSQuickNavigateBuilder.getOriginalElementOrParentIfLeaf(leaf)
         }
         else {
