@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.compatibility
 
 import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.codeInspection.SuppressQuickFix
+import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.JSStatement
@@ -54,6 +55,9 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
     if (inspectionId.equalsName<TypeScriptMissingConfigOptionInspection>()) {
       // JSXXmlLiteralExpressionImpl are invalid in Svelte anyway
       if (element is JSXXmlLiteralExpressionImpl) return true
+    }
+    if (inspectionId.equalsName<JSUnusedAssignmentInspection>()) {
+      return true; // props + not yet isolated modifications from reactive statements WEB-61576
     }
 
     return false
