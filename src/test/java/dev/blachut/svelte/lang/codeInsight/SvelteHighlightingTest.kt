@@ -340,6 +340,36 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testPropIsInitialised() {
+        myFixture.configureByText("Foo.svelte", """
+            <script lang="ts">
+                export let data: { foo: true };
+              
+                data.foo;
+            </script>
+            
+            {data.foo}
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testNoRedundancyFromReactiveStatement() {
+        myFixture.configureByText("Foo.svelte", """
+            <script lang="ts">
+                let init = { foo: true };
+
+                ${'$'}: {
+                    init = { foo: true };
+                }
+
+                init.foo;
+            </script>
+            
+            {init.foo}
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testBindDirective() {
         myFixture.configureByText("Foo.svelte",
                                   """
