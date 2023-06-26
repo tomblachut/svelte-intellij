@@ -11,6 +11,7 @@ import com.intellij.lang.javascript.inspections.*
 import com.intellij.lang.javascript.modules.TypeScriptCheckImportInspection
 import com.intellij.lang.typescript.inspections.*
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.xml.util.CheckEmptyTagInspection
 import com.intellij.xml.util.XmlDuplicatedIdInspection
 import com.intellij.xml.util.XmlInvalidIdInspection
 import com.sixrr.inspectjs.assignment.SillyAssignmentJSInspection
@@ -94,6 +95,13 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             <button disabled>Hello</button>
             <button disabled="<warning descr="Wrong attribute value">true</warning>">Hello</button>
             <button disabled="disabled">Hello</button> <!-- valid according to HTML, todo invalid according to Svelte -->
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testEmptyTagWarningHidden() {
+        myFixture.configureByText("Test.svelte", """
+            <div />
         """.trimIndent())
         myFixture.testHighlighting()
     }
@@ -582,6 +590,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(XmlDuplicatedIdInspection())
             l.add(XmlInvalidIdInspection())
             l.add(HtmlUnknownTagInspection())
+            l.add(CheckEmptyTagInspection())
             l.add(HtmlUnknownBooleanAttributeInspection())
             l.add(HtmlUnknownAttributeInspection())
             l.add(HtmlWrongAttributeValueInspection())

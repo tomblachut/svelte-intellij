@@ -11,15 +11,15 @@ import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil.DIRECTIVE_SEPARATO
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteXmlExtension : HtmlXmlExtension() {
-  private val collapsibleTags = setOf("slot", "style", "script")
-
   override fun isAvailable(file: PsiFile): Boolean = file.language is SvelteHTMLLanguage
 
   /**
-   * Whether writing self-closing `<tag/>` is correct
+   * Whether writing self-closing `<tag/>` is correct.
+   *
+   * Svelte compiles it to proper HTML in all cases.
    */
   override fun isSelfClosingTagAllowed(tag: XmlTag): Boolean {
-    return isSvelteComponentTag(tag.name) || collapsibleTags.contains(tag.name) || super.isSelfClosingTagAllowed(tag)
+    return true
   }
 
   /**
