@@ -370,6 +370,18 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testReactiveDeclarationReference() {
+        myFixture.configureByText("Foo.svelte", """
+            <script lang="ts">
+                ${'$'}: doubled = 2;
+                ${'$'}: quadrupled = doubled * 2;
+            </script>
+
+            <p>{doubled}</p>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testBindDirective() {
         myFixture.configureByText("Foo.svelte",
                                   """
