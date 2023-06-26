@@ -4,7 +4,9 @@ import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.codeInspection.SuppressQuickFix
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
+import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.JSStatement
 import com.intellij.lang.javascript.psi.ecma6.impl.JSXXmlLiteralExpressionImpl
 import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInspection
@@ -58,6 +60,13 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
     }
     if (inspectionId.equalsName<JSUnusedAssignmentInspection>()) {
       return true; // props + not yet isolated modifications from reactive statements WEB-61576
+    }
+    if (inspectionId.equalsName<JSUnresolvedReferenceInspection>()) {
+      // reactive declaration references
+      val referenceExpression = element.parent as? JSReferenceExpression
+      return referenceExpression != null
+             && referenceExpression.qualifier == null
+             && referenceExpression.multiResolve(false).isNotEmpty()
     }
 
     return false
