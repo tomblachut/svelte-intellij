@@ -64,9 +64,11 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
     if (inspectionId.equalsName<JSUnresolvedReferenceInspection>()) {
       // reactive declaration references
       val referenceExpression = element.parent as? JSReferenceExpression
-      return referenceExpression != null
-             && referenceExpression.qualifier == null
-             && referenceExpression.multiResolve(false).isNotEmpty()
+      if (referenceExpression != null
+          && referenceExpression.qualifier == null
+          && referenceExpression.multiResolve(false).isNotEmpty()) {
+        return true;
+      }
     }
 
     return false
