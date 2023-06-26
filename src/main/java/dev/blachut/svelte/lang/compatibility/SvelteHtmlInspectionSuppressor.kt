@@ -6,12 +6,13 @@ import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspectio
 import com.intellij.codeInspection.DefaultXmlSuppressionProvider
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownTagInspection
+import com.intellij.codeInspection.htmlInspections.HtmlWrongAttributeValueInspection
+import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.css.CssElement
-import com.intellij.psi.css.inspections.CssBaseInspection
-import com.intellij.psi.css.inspections.invalid.CssInvalidFunctionInspection
 import com.intellij.psi.css.inspections.invalid.CssUnresolvedCustomPropertyInspection
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlAttributeValue
@@ -56,6 +57,10 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
       }
     }
 
+    if (inspectionId.equalsName<HtmlWrongAttributeValueInspection>()) {
+      return element is XmlAttributeValue && hasChildMarkupExpression(element)
+    }
+
     if (inspectionId.equalsName<CssUnresolvedCustomPropertyInspection>()) { // WEB-60171
       return true // todo rewrite inline style parser to handle expressions, e.g.: style="--myColor: {myColor}; --opacity: {bgOpacity};"
     }
@@ -66,4 +71,9 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
 
     return super.isSuppressedFor(element, inspectionId)
   }
+}
+
+fun hasChildMarkupExpression(attributeValue: XmlAttributeValue): Boolean {
+  // TODO Replace ASTWrapperPsiElement with dedicated expression type
+  return PsiTreeUtil.getChildOfType(attributeValue, ASTWrapperPsiElement::class.java) != null
 }
