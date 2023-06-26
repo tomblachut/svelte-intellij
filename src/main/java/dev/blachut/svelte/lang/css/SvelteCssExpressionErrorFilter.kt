@@ -7,6 +7,7 @@ import com.intellij.psi.css.CssElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlAttributeValue
+import dev.blachut.svelte.lang.compatibility.hasChildMarkupExpression
 
 class SvelteCssExpressionErrorFilter : HighlightErrorFilter() {
   override fun shouldHighlightErrorElement(element: PsiErrorElement): Boolean {
@@ -16,7 +17,6 @@ class SvelteCssExpressionErrorFilter : HighlightErrorFilter() {
   private fun isSvelteExpressionSpecialCase(element: PsiErrorElement): Boolean {
     if (element.parent !is CssElement) return false
     val ancestor = element.parentOfType<XmlAttributeValue>() ?: return false
-    // make sure we have an expression embedded TODO Replace ASTWrapperPsiElement with dedicated expression type
-    return PsiTreeUtil.getChildOfType(ancestor, ASTWrapperPsiElement::class.java) != null
+    return hasChildMarkupExpression(ancestor)
   }
 }

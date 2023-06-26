@@ -3,10 +3,7 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspection
 import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
-import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection
-import com.intellij.codeInspection.htmlInspections.HtmlUnknownBooleanAttributeInspection
-import com.intellij.codeInspection.htmlInspections.HtmlUnknownTagInspection
-import com.intellij.codeInspection.htmlInspections.RequiredAttributesInspection
+import com.intellij.codeInspection.htmlInspections.*
 import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
 import com.intellij.lang.javascript.inspection.JSSuspiciousTypeGuardInspection
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
@@ -81,6 +78,22 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             </script>
 
             <img {src} {alt}>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testNoWrongAttributeValueForDynamicExpressions() {
+        myFixture.configureByText("Test.svelte", """
+            <script>
+                let flag = false;
+            </script>
+
+            <button disabled="{flag}">Hello</button>
+            <button disabled={flag}>Hello</button>
+            <button disabled={false}>Hello</button>
+            <button disabled>Hello</button>
+            <button disabled="<warning descr="Wrong attribute value">true</warning>">Hello</button>
+            <button disabled="disabled">Hello</button> <!-- valid according to HTML, todo invalid according to Svelte -->
         """.trimIndent())
         myFixture.testHighlighting()
     }
@@ -571,6 +584,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(HtmlUnknownTagInspection())
             l.add(HtmlUnknownBooleanAttributeInspection())
             l.add(HtmlUnknownAttributeInspection())
+            l.add(HtmlWrongAttributeValueInspection())
             l.add(XmlUnboundNsPrefixInspection())
             l.add(JSUnusedLocalSymbolsInspection())
             l.add(JSPotentiallyInvalidConstructorUsageInspection())
