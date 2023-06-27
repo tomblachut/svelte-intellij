@@ -35,6 +35,42 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testReactiveDeclarationDestructuredJS() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        ${'$'}: ({ foo1 } = { foo1: 1 });
+      
+        foo1;
+        <error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>;
+      </script>
+      
+      <p>{foo1}</p>
+      <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
+  fun testReactiveDeclarationDestructuredTS() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        ${'$'}: ({ foo1 } = { foo1: 1 });
+      
+        foo1;
+        <error descr="Svelte: Cannot find name 'foo2'.">foo2</error>;
+      </script>
+      
+      <p>{foo1}</p>
+      <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testFunctionDeclarationGTDU() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Hello.svelte", """
@@ -83,7 +119,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         ${'$'}: ({ foo } = { foo: 1 });
       </script>
       
-      <p>Foo: {<caret><error descr="Unresolved variable or type foo">foo</error>}</p>
+      <p>Foo: {<caret>foo}</p>
     """)
     myFixture.checkLspHighlighting()
     assertCorrectService()

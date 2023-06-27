@@ -23,6 +23,7 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSReferenceExpression
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
+import dev.blachut.svelte.lang.service.settings.tryRecheckResolveResults
 
 class SvelteInspectionSuppressor : InspectionSuppressor {
   override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
@@ -82,6 +83,12 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
           && referenceExpression.multiResolve(false).isNotEmpty()) {
         return true;
       }
+    }
+    if (inspectionId.equalsName<JSUnresolvedReferenceInspection>() || inspectionId.equalsName<TypeScriptUnresolvedReferenceInspection>()) {
+      // destructured reactive declaration references, etc.
+      val referenceExpression = element.parent as? JSReferenceExpression
+      return referenceExpression != null
+             && tryRecheckResolveResults(referenceExpression)
     }
 
     return false
