@@ -421,6 +421,42 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testReactiveDeclarationDestructuredJS() {
+        myFixture.configureByText("Foo.svelte", """
+            <script>
+                ${'$'}: ({ foo1 } = { foo1: 1 });
+                dollar: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
+                ({ <error descr="Unresolved variable or type foo3">foo3</error> } = { foo3: 1 });
+              
+                // todo actually implement resolve on IDE side
+                <error descr="Unresolved variable or type foo1">foo1</error>;
+                <error descr="Unresolved variable or type foo2">foo2</error>;
+            </script>
+            
+            <p>{<error descr="Unresolved variable or type foo1">foo1</error>}</p>
+            <p>{<error descr="Unresolved variable or type foo2">foo2</error>}</p>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testReactiveDeclarationDestructuredTS() {
+        myFixture.configureByText("Foo.svelte", """
+            <script lang="ts">
+                ${'$'}: ({ foo1 } = { foo1: 1 });
+                dollar: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
+                ({ <error descr="Unresolved variable or type foo3">foo3</error> } = { foo3: 1 });
+              
+                // todo actually implement resolve on IDE side
+                <error descr="Unresolved variable or type foo1">foo1</error>;
+                <error descr="Unresolved variable or type foo2">foo2</error>;
+            </script>
+            
+            <p>{<error descr="Unresolved variable or type foo1">foo1</error>}</p>
+            <p>{<error descr="Unresolved variable or type foo2">foo2</error>}</p>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testBindDirective() {
         myFixture.configureByText("Foo.svelte",
                                   """

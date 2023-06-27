@@ -5,12 +5,12 @@ import com.intellij.codeInspection.SuppressQuickFix
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
-import com.intellij.lang.javascript.psi.JSEmbeddedContent
-import com.intellij.lang.javascript.psi.JSReferenceExpression
-import com.intellij.lang.javascript.psi.JSStatement
+import com.intellij.lang.javascript.psi.*
 import com.intellij.lang.javascript.psi.ecma6.impl.JSXXmlLiteralExpressionImpl
 import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInspection
+import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parents
 import com.sixrr.inspectjs.assignment.SillyAssignmentJSInspection
 import com.sixrr.inspectjs.confusing.CommaExpressionJSInspection
@@ -19,7 +19,10 @@ import com.sixrr.inspectjs.control.UnnecessaryLabelJSInspection
 import com.sixrr.inspectjs.validity.BadExpressionStatementJSInspection
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.equalsName
-import dev.blachut.svelte.lang.psi.*
+import dev.blachut.svelte.lang.psi.SvelteHtmlFile
+import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteJSReferenceExpression
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteInspectionSuppressor : InspectionSuppressor {
   override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
@@ -60,6 +63,16 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
     }
     if (inspectionId.equalsName<JSUnusedAssignmentInspection>()) {
       return true; // props + not yet isolated modifications from reactive statements WEB-61576
+    }
+    if (inspectionId.equalsName<JSUnresolvedReferenceInspection>() || inspectionId.equalsName<TypeScriptUnresolvedReferenceInspection>()) {
+      if (element.parent is JSReferenceExpression
+          && element
+            .parentOfType<JSObjectLiteralExpression>()
+            ?.parentOfType<JSAssignmentExpression>()
+            ?.parentOfType<JSLabeledStatement>()
+            ?.takeIf { it.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL } != null) {
+        return true // likely suppresses too much
+      }
     }
     if (inspectionId.equalsName<JSUnresolvedReferenceInspection>()) {
       // reactive declaration references
