@@ -71,6 +71,58 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testImportFromModuleScriptJS() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.addFileToProject("Helper.svelte", """
+      <script context="module">
+        export class Inner {
+          foo = true;
+        }
+      </script>
+    """.trimIndent())
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        import { Inner, Inner as Renamed } from "./Helper.svelte";
+      
+        new Inner;
+        new Renamed;
+      </script>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
+  fun testImportFromModuleScriptTS() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.addFileToProject("Helper.svelte", """
+      <script context="module" lang="ts">
+        export class Inner {
+          foo = true;
+        }
+
+        export interface Foo {
+          bar: number;
+        }
+      </script>
+    """.trimIndent())
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        import { Inner, Inner as Renamed, type Foo } from "./Helper.svelte";
+      
+        new Inner;
+        new Renamed;
+      
+        const x: Foo = {bar: 42};
+      </script>
+      
+      {x}
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testFunctionDeclarationGTDU() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Hello.svelte", """

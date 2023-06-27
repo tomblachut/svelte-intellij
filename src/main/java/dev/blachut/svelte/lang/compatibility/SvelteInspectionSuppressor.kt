@@ -5,6 +5,7 @@ import com.intellij.codeInspection.SuppressQuickFix
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
+import com.intellij.lang.javascript.modules.TypeScriptCheckImportInspection
 import com.intellij.lang.javascript.psi.*
 import com.intellij.lang.javascript.psi.ecma6.impl.JSXXmlLiteralExpressionImpl
 import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInspection
@@ -84,9 +85,11 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
         return true;
       }
     }
-    if (inspectionId.equalsName<JSUnresolvedReferenceInspection>() || inspectionId.equalsName<TypeScriptUnresolvedReferenceInspection>()) {
+    if (inspectionId.equalsName<JSUnresolvedReferenceInspection>()
+        || inspectionId.equalsName<TypeScriptUnresolvedReferenceInspection>()
+        || inspectionId.equalsName<TypeScriptCheckImportInspection>()) {
       // destructured reactive declaration references, etc.
-      val referenceExpression = element.parent as? JSReferenceExpression
+      val referenceExpression = element.parent as? JSPsiReferenceElement
       return referenceExpression != null
              && tryRecheckResolveResults(referenceExpression)
     }
