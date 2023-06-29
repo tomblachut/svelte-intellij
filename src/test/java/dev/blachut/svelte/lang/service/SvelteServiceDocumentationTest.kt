@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSAbstractDocumentationTest
 import com.intellij.openapi.util.registry.RegistryManager
-import com.intellij.platform.lsp.tests.checkLspHighlighting
+import com.intellij.platform.lsp.tests.waitUntilFileOpenedByLspServer
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
 
@@ -44,7 +44,7 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   private fun defaultComboTest(directory: Boolean = false) {
     configureDefault(directory)
 
-    myFixture.checkLspHighlighting()
+    waitUntilFileOpenedByLspServer(project, file.virtualFile)
     assertCorrectService()
 
     val quickNavigateText = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
