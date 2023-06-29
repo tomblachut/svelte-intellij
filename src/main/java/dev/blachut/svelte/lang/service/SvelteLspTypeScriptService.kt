@@ -8,15 +8,13 @@ import com.intellij.lang.typescript.compiler.TypeScriptLanguageServiceAnnotatorC
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.compiler.languageService.protocol.commands.response.TypeScriptQuickInfoResponse
-import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
+import com.intellij.lang.typescript.lsp.BaseLspTypeScriptService
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.text.HtmlBuilder
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.platform.lsp.api.LspServerDescriptor
-import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.platform.lsp.util.convertMarkupContentToHtml
 import com.intellij.platform.lsp.util.getOffsetInDocument
 import com.intellij.psi.PsiDocumentManager
@@ -30,9 +28,7 @@ import org.eclipse.lsp4j.MarkupContent
  * @see SvelteLspServerSupportProvider
  * @see SvelteLspServerDescriptor
  */
-class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptService(project) {
-  override fun getProviderClass(): Class<out LspServerSupportProvider> = SvelteLspServerSupportProvider::class.java
-
+class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java) {
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
   override val serverVersion = svelteLanguageToolsVersion
@@ -65,7 +61,7 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
         val offset = getOffsetInDocument(targetDocument, locationLink.targetSelectionRange.start)
         if (offset != null) {
           val leaf = targetPsiFile.findElementAt(offset)
-          if (leaf  == sourceElement) return@mapNotNull null // discard self referencing LocationLinks, otherwise GTDU is confused
+          if (leaf == sourceElement) return@mapNotNull null // discard self referencing LocationLinks, otherwise GTDU is confused
           JSQuickNavigateBuilder.getOriginalElementOrParentIfLeaf(leaf)
         }
         else {
@@ -96,12 +92,4 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
   }
 
   override fun isAcceptable(file: VirtualFile) = isServiceEnabledAndAvailable(project, file)
-
-  override fun isServiceEnabledBySettings(project: Project): Boolean {
-    return isSvelteServiceEnabledBySettings(project)
-  }
-
-  override fun getLspServerDescriptor(project: Project, file: VirtualFile): LspServerDescriptor? {
-    return getSvelteServerDescriptor(project, file)
-  }
 }
