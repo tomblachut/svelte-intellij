@@ -27,10 +27,10 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   fun testGenericType() = defaultComboTest()
 
   @Test
-  fun testQualifiedReference() = defaultComboTest()
+  fun testQualifiedReferenceToMethod() = defaultComboTest()
 
   @Test
-  fun testQualifiedReference2() = defaultComboTest()
+  fun QualifiedReferenceToProperty() = defaultComboTest()
 
   @Test
   fun testNoDummyResolve() = defaultComboTest()
