@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang
 import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.lang.PsiBuilder
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
@@ -19,9 +18,9 @@ fun isSvelteContext(file: VirtualFile): Boolean {
   return file.fileType == SvelteHtmlFileType.INSTANCE
 }
 
-fun isSvelteComponentTag(name: String): Boolean {
+fun isSvelteComponentTag(tagName: CharSequence): Boolean {
   // TODO Support namespaced components WEB-61636
-  return StringUtil.isCapitalized(name)
+  return tagName.isNotEmpty() && tagName[0].isUpperCase()
 }
 
 fun isTSLangValue(value: String?): Boolean {
