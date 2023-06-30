@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.html.embedding.HtmlEmbeddedContentProvider
 import com.intellij.lexer.HtmlHighlightingLexer
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
+import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(SvelteHtmlBaseLexer(), false, null) {
 
@@ -11,6 +12,10 @@ class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(SvelteHtmlBaseLexer(),
 
   override fun isHtmlTagState(state: Int): Boolean {
     return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
+  }
+
+  override fun isPossiblyComponentTag(tagName: CharSequence): Boolean {
+    return isSvelteComponentTag(tagName)
   }
 
 }

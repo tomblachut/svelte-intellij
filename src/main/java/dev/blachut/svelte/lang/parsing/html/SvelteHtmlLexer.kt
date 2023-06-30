@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.html.embedding.HtmlEmbeddedContentProvider
 import com.intellij.lexer.HtmlLexer
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
+import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteHtmlLexer : HtmlLexer(SvelteHtmlBaseLexer(), false) {
 
@@ -24,5 +25,9 @@ class SvelteHtmlLexer : HtmlLexer(SvelteHtmlBaseLexer(), false) {
 
   override fun isHtmlTagState(state: Int): Boolean {
     return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
+  }
+
+  override fun isPossiblyComponentTag(tagName: CharSequence): Boolean {
+    return isSvelteComponentTag(tagName)
   }
 }
