@@ -16,11 +16,11 @@ class SvelteServiceConfigurable(project: Project) : UiDslUnnamedConfigurable.Sim
       buttonsGroup {
         row {
           radioButton(SvelteBundle.message("svelte.service.configurable.service.disabled"), SvelteServiceMode.DISABLED)
-          contextHelp(SvelteBundle.message("svelte.service.configurable.service.disabled.help"))
+            .comment(SvelteBundle.message("svelte.service.configurable.service.disabled.help"))
         }
         row {
           radioButton(SvelteBundle.message("svelte.service.configurable.service.lsp"), SvelteServiceMode.ENABLED)
-          contextHelp(SvelteBundle.message("svelte.service.configurable.service.lsp.help"))
+            .comment(SvelteBundle.message("svelte.service.configurable.service.lsp.help"))
         }
       }.apply {
         bind(settings::serviceMode)
