@@ -14,7 +14,7 @@ import com.intellij.platform.lsp.api.LspServerSupportProvider.LspServerStarter
 import com.intellij.util.text.SemVer
 import org.jetbrains.annotations.ApiStatus
 
-internal val svelteLanguageToolsVersion = SemVer.parseFromText("0.15.12")
+internal val svelteLanguageToolsVersion = SemVer.parseFromText("0.15.13")
 internal const val npmPackage = "svelte-language-server"
 private const val packageRelativePath = "/bin/server.js"
 val serverPackageName = TypeScriptPackageName(npmPackage, svelteLanguageToolsVersion)
