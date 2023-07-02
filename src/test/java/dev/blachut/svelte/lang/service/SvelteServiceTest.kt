@@ -2,6 +2,7 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSNavigationTest
+import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
 import org.junit.Test
@@ -10,6 +11,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   override fun setUp() {
     super.setUp()
     myFixture.enableInspections(*SvelteHighlightingTest.configureDefaultLocalInspectionTools().toTypedArray())
+    RegistryManager.getInstance().get("svelte.service.reference.resolve.gtd").setValue("[off|basic*|extended]", testRootDisposable)
   }
 
   @Test
