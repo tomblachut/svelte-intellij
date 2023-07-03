@@ -5,7 +5,6 @@ import com.intellij.javascript.JSHtmlEmbeddedContentSupport
 import com.intellij.lang.LanguageASTFactory
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.css.CSSParserDefinition
-import com.intellij.lang.html.HTMLParserDefinition
 import com.intellij.lang.javascript.JavascriptParserDefinition
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.lang.xml.XmlASTFactory
@@ -29,7 +28,6 @@ class SvelteHtmlParserTest : ParsingTestCase(
     SvelteHTMLParserDefinition(),
     SvelteJSParserDefinition(),
     JavascriptParserDefinition(),
-    HTMLParserDefinition(),
     CSSParserDefinition(),
     SCSSParserDefinition()
 ) {
@@ -114,7 +112,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
     fun testStyleTagScss() = doTest()
     fun testStyleAttribute() = doTest()
     fun testStyleAttributeWithExpressionEnd() = doTest()
-    fun testTitleComponent() = doTest()
+    fun testRawText() = doTest()
 
     private fun doTest() = doTest(true)
 }

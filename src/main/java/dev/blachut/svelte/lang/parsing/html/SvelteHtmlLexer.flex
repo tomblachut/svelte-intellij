@@ -74,7 +74,6 @@ import com.intellij.lang.javascript.JSTokenTypes;
 %state SVELTE_INTERPOLATION_KEYWORD
 %state SVELTE_INTERPOLATION
 %state RAW_CONTENT
-/* IMPORTANT! number of states should not exceed 16. See JspHighlightingLexer. */
 
 ALPHA=[:letter:]
 DIGIT=[0-9]

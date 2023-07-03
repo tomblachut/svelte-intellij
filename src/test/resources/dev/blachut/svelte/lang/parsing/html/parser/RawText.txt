@@ -1,0 +1,314 @@
+SvelteHtmlFile: RawText.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: svelte:head
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('svelte:head')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n  ')
+      SvelteHtmlTag: title
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_TAG_END('>')
+        HtmlRawText
+          XmlToken:XML_DATA_CHARACTERS('This')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('is')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('<std>title</std>')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('and')
+          PsiWhiteSpace(' ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiWhiteSpace(' ')
+            JSBinaryExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('an')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:PLUS)('+')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('expression')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('within')
+          XmlToken:XML_CHAR_ENTITY_REF('&nbsp;')
+          XmlToken:XML_DATA_CHARACTERS('it')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n  ')
+      SvelteHtmlTag: title
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_TAG_END('>')
+        HtmlRawText
+          SvelteIfBlock
+            SvelteIfPrimaryBranch
+              SvelteInitialTag(IF_START)
+                PsiElement(JS:LBRACE)('{')
+                PsiElement(JS:SHARP)('#')
+                PsiElement(JS:IF_KEYWORD)('if')
+                PsiWhiteSpace(' ')
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('iffy')
+                PsiElement(JS:RBRACE)('}')
+              SvelteFragment
+                XmlText
+                  PsiWhiteSpace(' ')
+                  XmlToken:XML_DATA_CHARACTERS('OK')
+                  PsiWhiteSpace(' ')
+            SvelteEndTag(IF_END)
+              PsiElement(JS:LBRACE)('{')
+              PsiElement(JS:DIV)('/')
+              PsiElement(JS:IF_KEYWORD)('if')
+              PsiElement(JS:RBRACE)('}')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:SHARP)('#')
+            PsiErrorElement:Invalid block name
+              PsiElement(JS:IDENTIFIER)('ife')
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('wrong')
+            PsiElement(JS:RBRACE)('}')
+          PsiErrorElement:Unexpected end tag
+            <empty list>
+          SvelteEndTag(IF_END)
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:DIV)('/')
+            PsiElement(JS:IF_KEYWORD)('if')
+            PsiElement(JS:RBRACE)('}')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n  ')
+      SvelteHtmlTag: title
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_TAG_END('>')
+        HtmlRawText
+          XmlToken:XML_DATA_CHARACTERS('An')
+          PsiWhiteSpace(' ')
+          SvelteIfBlock
+            SvelteIfPrimaryBranch
+              SvelteInitialTag(IF_START)
+                PsiElement(JS:LBRACE)('{')
+                PsiElement(JS:SHARP)('#')
+                PsiElement(JS:IF_KEYWORD)('if')
+                PsiWhiteSpace(' ')
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('iffy')
+                PsiElement(JS:RBRACE)('}')
+              SvelteFragment
+                XmlText
+                  XmlToken:XML_DATA_CHARACTERS('inside')
+            SvelteEndTag(IF_END)
+              PsiElement(JS:LBRACE)('{')
+              PsiElement(JS:DIV)('/')
+              PsiElement(JS:IF_KEYWORD)('if')
+              PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('a')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('text')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('svelte:head')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n  ')
+      SvelteHtmlTag: Title
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('Title')
+        XmlToken:XML_TAG_END('>')
+        XmlText
+          XmlToken:XML_DATA_CHARACTERS('This')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('is')
+          PsiWhiteSpace(' ')
+        SvelteHtmlTag: custom
+          XmlToken:XML_START_TAG_START('<')
+          XmlToken:XML_NAME('custom')
+          XmlToken:XML_TAG_END('>')
+          XmlText
+            XmlToken:XML_DATA_CHARACTERS('title')
+          XmlToken:XML_END_TAG_START('</')
+          XmlToken:XML_NAME('custom')
+          XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('and')
+          PsiWhiteSpace(' ')
+        SvelteJS: CONTENT_EXPRESSION
+          PsiElement(JS:LBRACE)('{')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('an')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:PLUS)('+')
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('expression')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:RBRACE)('}')
+        XmlText
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('within')
+          XmlToken:XML_CHAR_ENTITY_REF('&nbsp;')
+          XmlToken:XML_DATA_CHARACTERS('it')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('Title')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n  ')
+      SvelteHtmlTag: Title
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('Title')
+        XmlToken:XML_TAG_END('>')
+        SvelteIfBlock
+          SvelteIfPrimaryBranch
+            SvelteInitialTag(IF_START)
+              PsiElement(JS:LBRACE)('{')
+              PsiElement(JS:SHARP)('#')
+              PsiElement(JS:IF_KEYWORD)('if')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('iffy')
+              PsiElement(JS:RBRACE)('}')
+            SvelteFragment
+              XmlText
+                PsiWhiteSpace(' ')
+                XmlToken:XML_DATA_CHARACTERS('OK')
+                PsiWhiteSpace(' ')
+          SvelteEndTag(IF_END)
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:DIV)('/')
+            PsiElement(JS:IF_KEYWORD)('if')
+            PsiElement(JS:RBRACE)('}')
+        SvelteJS: CONTENT_EXPRESSION
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiErrorElement:Invalid block name
+            PsiElement(JS:IDENTIFIER)('ife')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('wrong')
+          PsiElement(JS:RBRACE)('}')
+        PsiErrorElement:Unexpected end tag
+          <empty list>
+        SvelteEndTag(IF_END)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:DIV)('/')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiElement(JS:RBRACE)('}')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('Title')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n  ')
+      SvelteHtmlTag: Title
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('Title')
+        XmlToken:XML_TAG_END('>')
+        XmlText
+          XmlToken:XML_DATA_CHARACTERS('An')
+          PsiWhiteSpace(' ')
+        SvelteIfBlock
+          SvelteIfPrimaryBranch
+            SvelteInitialTag(IF_START)
+              PsiElement(JS:LBRACE)('{')
+              PsiElement(JS:SHARP)('#')
+              PsiElement(JS:IF_KEYWORD)('if')
+              PsiWhiteSpace(' ')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('iffy')
+              PsiElement(JS:RBRACE)('}')
+            SvelteFragment
+              XmlText
+                XmlToken:XML_DATA_CHARACTERS('inside')
+          SvelteEndTag(IF_END)
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:DIV)('/')
+            PsiElement(JS:IF_KEYWORD)('if')
+            PsiElement(JS:RBRACE)('}')
+        XmlText
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('a')
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('text')
+        XmlToken:XML_END_TAG_START('</')
+        XmlToken:XML_NAME('Title')
+        XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteHtmlTag: textarea
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('textarea')
+      XmlToken:XML_TAG_END('>')
+      HtmlRawText
+        XmlToken:XML_DATA_CHARACTERS('a')
+        PsiWhiteSpace(' ')
+        SvelteJS: CONTENT_EXPRESSION
+          PsiElement(JS:LBRACE)('{')
+          JSLiteralExpression
+            PsiElement(JS:STRING_LITERAL)('"</textarea>"')
+          PsiElement(JS:RBRACE)('}')
+        PsiWhiteSpace(' ')
+        XmlToken:XML_DATA_CHARACTERS('with')
+        PsiWhiteSpace(' ')
+        XmlToken:XML_DATA_CHARACTERS('<div>')
+        PsiWhiteSpace(' ')
+        XmlToken:XML_DATA_CHARACTERS('inside')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('textarea')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: Textarea
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('Textarea')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('a')
+        PsiWhiteSpace(' ')
+      SvelteJS: CONTENT_EXPRESSION
+        PsiElement(JS:LBRACE)('{')
+        JSLiteralExpression
+          PsiElement(JS:STRING_LITERAL)('"</Textarea>"')
+        PsiElement(JS:RBRACE)('}')
+      XmlText
+        PsiWhiteSpace(' ')
+        XmlToken:XML_DATA_CHARACTERS('with')
+        PsiWhiteSpace(' ')
+      SvelteHtmlTag: div
+        XmlToken:XML_START_TAG_START('<')
+        XmlToken:XML_NAME('div')
+        XmlToken:XML_TAG_END('>')
+        XmlText
+          PsiWhiteSpace(' ')
+          XmlToken:XML_DATA_CHARACTERS('inside')
+        PsiErrorElement:Element div is not closed
+          <empty list>
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('Textarea')
+      XmlToken:XML_TAG_END('>')

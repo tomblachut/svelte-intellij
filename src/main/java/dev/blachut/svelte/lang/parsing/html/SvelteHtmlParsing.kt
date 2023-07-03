@@ -18,7 +18,8 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
   private val openedBlocks = Stack<OpenedBlock>()
 
-  private fun parseSvelteTag() {
+  internal fun parseSvelteTag() {
+    assert(token() === SvelteTokenTypes.START_MUSTACHE)
     val (tagToken, tagMarker) = SvelteTagParsing.parseTag(builder)
 
     if (SvelteTagElementTypes.START_TAGS.contains(tagToken)) {
@@ -51,6 +52,9 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
       }
     }
   }
+
+  internal fun hasOpenedBlocks(): Boolean =
+     openedBlocks.isNotEmpty()
 
   override fun getHtmlTagElementType(info: HtmlTagInfo, tagLevel: Int): IElementType {
     return SvelteHtmlElementTypes.SVELTE_HTML_TAG
