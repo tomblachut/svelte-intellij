@@ -29,4 +29,6 @@ class SvelteServiceConfigurable(project: Project) : UiDslUnnamedConfigurable.Sim
   }
 
   override fun getDisplayName() = SvelteBundle.message("svelte.service.configurable.title")
+
+  override fun getHelpTopic() = "settings.svelteservice"
 }
