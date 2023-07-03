@@ -42,7 +42,8 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
     if (inspectionId.equalsName<HtmlUnknownAttributeInspection>()) {
       val attribute = element.parent
       if (attribute is XmlAttribute) {
-        if (SvelteDirectiveUtil.directivePrefixes.contains(attribute.namespacePrefix)) return true
+        if (SvelteDirectiveUtil.directivePrefixes.contains(attribute.namespacePrefix)
+            || "style" == attribute.namespacePrefix) return true
 
         // TODO refactor into proper descriptors
         if (attribute.parent.name == "script" && scriptAttributes.contains(attribute.name)) return true

@@ -532,6 +532,13 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testStyleDirective() {
+        myFixture.configureByText("Foo.svelte", """
+            <button style:color="red">Hello</button>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testLetDirectiveShorthand() {
         myFixture.configureByText("Foo.svelte",
             """
