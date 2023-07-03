@@ -49,6 +49,7 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
     fun testExpression() = doTest()
 
     fun testStyleTagScss() = doTest()
+    fun testRawText() = doTest()
 
 //    fun testRestart() = checkCorrectRestartOnEveryToken("""<img alt={{foo: {}}}>""")
 
