@@ -17,7 +17,7 @@ class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(SvelteHtmlBaseLexer(),
     return state == _SvelteHtmlLexer.START_TAG_NAME || state == _SvelteHtmlLexer.END_TAG_NAME
   }
 
-  override fun isPossiblyComponentTag(tagName: CharSequence): Boolean {
+  override fun isPossiblyCustomTagName(tagName: CharSequence): Boolean {
     return isSvelteComponentTag(tagName)
   }
 
