@@ -29,11 +29,6 @@ class SvelteXmlExtension : HtmlXmlExtension() {
     return isSvelteComponentTag(tag.name) || super.isCollapsibleTag(tag)
   }
 
-  /**
-   * Whether tag follows stricter rules of XML. Single tags are e.g. <p> & <li>, they don't require closing tag
-   */
-  override fun isSingleTagException(tag: XmlTag): Boolean = isSvelteComponentTag(tag.name) || tag.name == "slot"
-
   override fun isRequiredAttributeImplicitlyPresent(tag: XmlTag, attrName: String): Boolean {
     for (attribute in tag.attributes) {
       if (attribute.name == attrName && attribute.nameElement.text[0] == '{') {
