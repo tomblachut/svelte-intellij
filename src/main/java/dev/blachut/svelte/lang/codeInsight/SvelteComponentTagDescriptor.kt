@@ -5,6 +5,7 @@ import com.intellij.psi.impl.source.xml.XmlDescriptorUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlAttributeDescriptor
+import com.intellij.xml.XmlCustomElementDescriptor
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlElementsGroup
 import com.intellij.xml.XmlNSDescriptor
@@ -19,7 +20,7 @@ import java.util.*
  * TODO HtmlElementDescriptorImpl is used for example in HtmlUnknownTagInspectionBase: extending it could help or hinder code insight
  */
 class SvelteComponentTagDescriptor(private val myName: String, private val myTag: SvelteHtmlTag) :
-  XmlElementDescriptor {
+  XmlElementDescriptor, XmlCustomElementDescriptor {
   override fun getName(context: PsiElement): String = name
 
   override fun getName(): String = myName
@@ -77,6 +78,8 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myTag
   override fun getDefaultValue(): String? = null
 
   override fun init(element: PsiElement) {}
+
+  override fun isCustomElement(): Boolean = true
 
   companion object {
     private val slotDescriptor = AnyXmlAttributeDescriptor("slot")

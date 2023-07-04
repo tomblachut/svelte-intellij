@@ -3,13 +3,15 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.psi.PsiElement
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlAttributeDescriptor
+import com.intellij.xml.XmlCustomElementDescriptor
 import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.impl.dtd.BaseXmlElementDescriptorImpl
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
+import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
-class SvelteElementDescriptor(private val myTag: SvelteHtmlTag) : BaseXmlElementDescriptorImpl() {
+class SvelteElementDescriptor(private val myTag: SvelteHtmlTag) : BaseXmlElementDescriptorImpl(), XmlCustomElementDescriptor {
   override fun init(element: PsiElement?) {}
 
   override fun getDeclaration(): PsiElement = myTag
@@ -50,6 +52,8 @@ class SvelteElementDescriptor(private val myTag: SvelteHtmlTag) : BaseXmlElement
   override fun collectElementDescriptorsMap(element: XmlTag?): HashMap<String, XmlElementDescriptor> {
     return HashMap()
   }
+
+  override fun isCustomElement(): Boolean = true
 
   companion object {
     private val optionsAttributeDescriptors = arrayOf(

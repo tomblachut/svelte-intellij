@@ -4,6 +4,8 @@ import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspectio
 import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.htmlInspections.*
+import com.intellij.htmltools.codeInspection.htmlInspections.HtmlRequiredAltAttributeInspection
+import com.intellij.htmltools.codeInspection.htmlInspections.HtmlRequiredTitleElementInspection
 import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
 import com.intellij.lang.javascript.inspection.JSSuspiciousTypeGuardInspection
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
@@ -642,6 +644,31 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testHeadTag() {
+      myFixture.enableInspections(HtmlRequiredTitleElementInspection())
+      myFixture.configureByText("head.svelte", """
+          <script>
+            import Head from "./head.svelte";
+          </script>
+          <<warning descr="Missing required 'title' element">head</warning>></head>
+          <Head></Head>
+      """.trimIndent())
+      myFixture.testHighlighting()
+    }
+
+    fun testAreaTag() {
+      myFixture.enableInspections(HtmlRequiredAltAttributeInspection())
+      myFixture.configureByText("area.svelte", """
+          <script>
+            import Area from "./area.svelte";
+          </script>
+          <div>
+            <<warning descr="Missing required 'alt' attribute">area</warning>></area>
+            <Area></Area>
+          </div>
+        """.trimIndent())
+      myFixture.testHighlighting()
+    }
 
     companion object {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
