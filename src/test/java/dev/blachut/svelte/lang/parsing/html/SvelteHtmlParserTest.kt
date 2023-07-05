@@ -114,5 +114,19 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testStyleAttributeWithExpressionEnd() = doTest()
   fun testRawText() = doTest()
 
+  fun testStyleReparse() {
+    doReparseTest("<style global></styl\n", "<style global></style\n")
+    doReparseTest("<style global></styl\n", "<style global></style><div\n")
+    doReparseTest("<style global>.foo { }</styl\n", "<style global>.foo { }</style\n")
+    doReparseTest("<style global>.foo { }</styl\n", "<style global>.foo { }</style><div\n")
+  }
+
+  fun testScriptReparse() {
+    doReparseTest("<script></scrip\n", "<script></script\n")
+    doReparseTest("<script></scrip\n", "<script></script><div\n")
+    doReparseTest("<script>$: foo = 2;</scrip\n", "<script>$: foo = 2;</script\n")
+    doReparseTest("<script>$: foo = 2;</scrip\n", "<script>$: foo = 2;</script><div\n")
+  }
+
   private fun doTest() = doTest(true)
 }
