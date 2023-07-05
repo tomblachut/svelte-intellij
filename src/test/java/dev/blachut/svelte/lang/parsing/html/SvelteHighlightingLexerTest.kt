@@ -9,49 +9,51 @@ import dev.blachut.svelte.lang.getSvelteTestDataPath
 import kotlin.properties.Delegates
 
 class SvelteHighlightingLexerTest : LexerTestCase() {
-    private var fixture: IdeaProjectTestFixture by Delegates.notNull()
+  private var fixture: IdeaProjectTestFixture by Delegates.notNull()
 
-    override fun getExpectedFileExtension(): String = ".tokens"
+  override fun getExpectedFileExtension(): String = ".tokens"
 
-    override fun setUp() {
-        super.setUp()
+  override fun setUp() {
+    super.setUp()
 
-        // needed for various XML extension points registration
-        fixture = IdeaTestFixtureFactory.getFixtureFactory()
-            .createLightFixtureBuilder(LightProjectDescriptor.EMPTY_PROJECT_DESCRIPTOR, getTestName(false)).fixture
-        fixture.setUp()
+    // needed for various XML extension points registration
+    fixture = IdeaTestFixtureFactory.getFixtureFactory()
+      .createLightFixtureBuilder(LightProjectDescriptor.EMPTY_PROJECT_DESCRIPTOR, getTestName(false)).fixture
+    fixture.setUp()
+  }
+
+  override fun tearDown() {
+    try {
+      fixture.tearDown()
     }
-
-    override fun tearDown() {
-        try {
-            fixture.tearDown()
-        } catch (e: Throwable) {
-            addSuppressedException(e)
-        } finally {
-            super.tearDown()
-        }
+    catch (e: Throwable) {
+      addSuppressedException(e)
     }
-
-    override fun getDirPath() = "dev/blachut/svelte/lang/parsing/html/lexer"
-
-    override fun getPathToTestDataFile(extension: String?): String = getSvelteTestDataPath() + "/$dirPath/" + getTestName(false) + extension
-
-    override fun createLexer(): Lexer {
-        return SvelteHtmlHighlightingLexer()
+    finally {
+      super.tearDown()
     }
+  }
 
-    fun testBlockAwaitThenThenThen() = doTest()
-    fun testBlockEachAsAsAsAs() = doTest()
-    fun testBlockEachAssets() = doTest()
-    fun testBlockIfElseIf() = doTest()
-    fun testBlockWhitespace() = doTest()
+  override fun getDirPath() = "dev/blachut/svelte/lang/parsing/html/lexer"
 
-    fun testExpression() = doTest()
+  override fun getPathToTestDataFile(extension: String?): String = getSvelteTestDataPath() + "/$dirPath/" + getTestName(false) + extension
 
-    fun testStyleTagScss() = doTest()
-    fun testRawText() = doTest()
+  override fun createLexer(): Lexer {
+    return SvelteHtmlHighlightingLexer()
+  }
 
-//    fun testRestart() = checkCorrectRestartOnEveryToken("""<img alt={{foo: {}}}>""")
+  fun testBlockAwaitThenThenThen() = doTest()
+  fun testBlockEachAsAsAsAs() = doTest()
+  fun testBlockEachAssets() = doTest()
+  fun testBlockIfElseIf() = doTest()
+  fun testBlockWhitespace() = doTest()
 
-    private fun doTest() = doFileTest("svelte")
+  fun testExpression() = doTest()
+
+  fun testStyleTagScss() = doTest()
+  fun testRawText() = doTest()
+
+  // fun testRestart() = checkCorrectRestartOnEveryToken("""<img alt={{foo: {}}}>""")
+
+  private fun doTest() = doFileTest("svelte")
 }
