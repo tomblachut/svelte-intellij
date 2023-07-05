@@ -2,50 +2,37 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteCommenterTest : BasePlatformTestCase() {
-    override fun getTestDataPath(): String = getSvelteTestDataPath()
-    override fun getBasePath(): String = "dev/blachut/svelte/lang/editor"
+  override fun getTestDataPath(): String = getSvelteTestDataPath()
+  override fun getBasePath(): String = "dev/blachut/svelte/lang/editor"
 
-    fun testSvelteStartTag() {
-        myFixture.initTest(
-            """
-            {#if true}<caret>
-                test
-            {/if}
-            """.trimIndent()
-        )
-        myFixture.performEditorAction("CommentByLineComment")
-        myFixture.checkResult(
-            """
-            <!--{#if true}-->
-                test
-            {/if}
-            """.trimIndent()
-        )
-    }
+  fun testSvelteStartTag() {
+    myFixture.configureByText("Foo.svelte", """
+      {#if true}<caret>
+        test
+      {/if}
+    """.trimIndent())
+    myFixture.performEditorAction("CommentByLineComment")
+    myFixture.checkResult("""
+      <!--{#if true}-->
+        test
+      {/if}
+    """.trimIndent())
+  }
 
-    fun testSvelteEndTag() {
-        myFixture.initTest(
-            """
-            {#if true}
-                test
-            {/if}<caret>
-            """.trimIndent()
-        )
-        myFixture.performEditorAction("CommentByLineComment")
-        myFixture.checkResult(
-            """
-            {#if true}
-                test
-            <!--{/if}-->
-            """.trimIndent()
-        )
-    }
-
-    private fun CodeInsightTestFixture.initTest(text: String) {
-        this.configureByText("Foo.svelte", text)
-    }
+  fun testSvelteEndTag() {
+    myFixture.configureByText("Foo.svelte", """
+      {#if true}
+        test
+      {/if}<caret>
+    """.trimIndent())
+    myFixture.performEditorAction("CommentByLineComment")
+    myFixture.checkResult("""
+      {#if true}
+        test
+      <!--{/if}-->
+    """.trimIndent())
+  }
 }
