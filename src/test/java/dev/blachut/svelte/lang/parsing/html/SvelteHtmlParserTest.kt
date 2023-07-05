@@ -23,96 +23,96 @@ import org.jetbrains.plugins.scss.parser.SCSSParserDefinition
 import org.jetbrains.plugins.scss.psi.SCSSTreeElementFactory
 
 class SvelteHtmlParserTest : ParsingTestCase(
-    "dev/blachut/svelte/lang/parsing/html/parser",
-    "svelte",
-    SvelteHTMLParserDefinition(),
-    SvelteJSParserDefinition(),
-    JavascriptParserDefinition(),
-    CSSParserDefinition(),
-    SCSSParserDefinition()
+  "dev/blachut/svelte/lang/parsing/html/parser",
+  "svelte",
+  SvelteHTMLParserDefinition(),
+  SvelteJSParserDefinition(),
+  JavascriptParserDefinition(),
+  CSSParserDefinition(),
+  SCSSParserDefinition()
 ) {
-    override fun getTestDataPath(): String = getSvelteTestDataPath()
+  override fun getTestDataPath(): String = getSvelteTestDataPath()
 
-    override fun setUp() {
-        super.setUp()
+  override fun setUp() {
+    super.setUp()
 
-        addExplicitExtension(LanguageASTFactory.INSTANCE, SvelteHTMLLanguage.INSTANCE, SvelteHtmlASTFactory())
-        addExplicitExtension(LanguageASTFactory.INSTANCE, XMLLanguage.INSTANCE, XmlASTFactory())
-        addExplicitExtension(LanguageASTFactory.INSTANCE, CSSLanguage.INSTANCE, CssTreeElementFactory())
-        addExplicitExtension(LanguageASTFactory.INSTANCE, SCSSLanguage.INSTANCE, SCSSTreeElementFactory())
+    addExplicitExtension(LanguageASTFactory.INSTANCE, SvelteHTMLLanguage.INSTANCE, SvelteHtmlASTFactory())
+    addExplicitExtension(LanguageASTFactory.INSTANCE, XMLLanguage.INSTANCE, XmlASTFactory())
+    addExplicitExtension(LanguageASTFactory.INSTANCE, CSSLanguage.INSTANCE, CssTreeElementFactory())
+    addExplicitExtension(LanguageASTFactory.INSTANCE, SCSSLanguage.INSTANCE, SCSSTreeElementFactory())
 
-        registerExtensionPoint(StartTagEndTokenProvider.EP_NAME, StartTagEndTokenProvider::class.java)
-        registerExtensionPoint(EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java)
+    registerExtensionPoint(StartTagEndTokenProvider.EP_NAME, StartTagEndTokenProvider::class.java)
+    registerExtensionPoint(EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java)
 
-        registerExtensions(
-            EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java,
-            listOf(
-                CssEmbeddedTokenTypesProvider(),
-                ScssTokenTypesProvider()
-            )
-        )
-        HtmlEmbeddedContentSupport.register(application, testRootDisposable,
-            CssHtmlEmbeddedContentSupport::class.java, JSHtmlEmbeddedContentSupport::class.java,
-            SvelteHtmlEmbeddedContentSupport::class.java)
+    registerExtensions(
+      EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider::class.java,
+      listOf(
+        CssEmbeddedTokenTypesProvider(),
+        ScssTokenTypesProvider()
+      )
+    )
+    HtmlEmbeddedContentSupport.register(application, testRootDisposable,
+                                        CssHtmlEmbeddedContentSupport::class.java, JSHtmlEmbeddedContentSupport::class.java,
+                                        SvelteHtmlEmbeddedContentSupport::class.java)
 
-//        registerExtensionPoint(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProvider::class.java)
-//        registerExtension(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProviderImpl())
-//        application.registerService(
-//            CssElementDescriptorFactory2::class.java,
-//            CssElementDescriptorFactory2("css-parsing-tests.xml")
-//        )
+    //        registerExtensionPoint(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProvider::class.java)
+    //        registerExtension(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProviderImpl())
+    //        application.registerService(
+    //            CssElementDescriptorFactory2::class.java,
+    //            CssElementDescriptorFactory2("css-parsing-tests.xml")
+    //        )
 
-//        registerExtensionPoint(FrameworkIndexingHandler.EP_NAME, FrameworkIndexingHandlerEP::class.java)
-    }
+    //        registerExtensionPoint(FrameworkIndexingHandler.EP_NAME, FrameworkIndexingHandlerEP::class.java)
+  }
 
-    fun testAttributeQuoted() = doTest()
-    fun testAttributeShorthand() = doTest()
-    fun testAttributeSpread() = doTest()
-    fun testAttributeUnquoted() = doTest()
+  fun testAttributeQuoted() = doTest()
+  fun testAttributeShorthand() = doTest()
+  fun testAttributeSpread() = doTest()
+  fun testAttributeUnquoted() = doTest()
 
-    fun testBlockAwaitCatch() = doTest()
-    fun testBlockAwaitThenThenThen() = doTest()
-    fun testBlockEachAmbiguousAs() = doTest()
-    fun testBlockEachAsAsAsAs() = doTest()
-    fun testBlockEachAssets() = doTest()
-    fun testBlockIfElseIf() = doTest()
-    fun testBlockKey() = doTest()
-    fun testBlockNesting() = doTest()
-    fun testBlockWhitespace() = doTest()
+  fun testBlockAwaitCatch() = doTest()
+  fun testBlockAwaitThenThenThen() = doTest()
+  fun testBlockEachAmbiguousAs() = doTest()
+  fun testBlockEachAsAsAsAs() = doTest()
+  fun testBlockEachAssets() = doTest()
+  fun testBlockIfElseIf() = doTest()
+  fun testBlockKey() = doTest()
+  fun testBlockNesting() = doTest()
+  fun testBlockWhitespace() = doTest()
 
-    fun testExpression() = doTest()
-    fun testExpressionIncomplete() = doTest()
+  fun testExpression() = doTest()
+  fun testExpressionIncomplete() = doTest()
 
-    fun testConstTagVariable() = doTest()
+  fun testConstTagVariable() = doTest()
 
-    fun testHtmlAutoClosingTags() = doTest()
-    fun testHtmlAutoClosingTagsAcrossBlock() = doTest()
-    fun testHtmlAutoClosingTagsInsideBlock() = doTest()
+  fun testHtmlAutoClosingTags() = doTest()
+  fun testHtmlAutoClosingTagsAcrossBlock() = doTest()
+  fun testHtmlAutoClosingTagsInsideBlock() = doTest()
 
-    fun testHtmlClosingTagMatchesNothing1() = doTest()
-    fun testHtmlClosingTagMatchesNothing2() = doTest()
-    fun testHtmlClosingTagMatchesNothing3() = doTest()
+  fun testHtmlClosingTagMatchesNothing1() = doTest()
+  fun testHtmlClosingTagMatchesNothing2() = doTest()
+  fun testHtmlClosingTagMatchesNothing3() = doTest()
 
-    fun testHtmlMissingEndTags() = doTest()
-    fun testHtmlNamelessClosingTag() = doTest()
-    fun testHtmlSpecialTags() = doTest()
+  fun testHtmlMissingEndTags() = doTest()
+  fun testHtmlNamelessClosingTag() = doTest()
+  fun testHtmlSpecialTags() = doTest()
 
-    fun testHtmlUnclosed1() = doTest()
-    fun testHtmlUnclosed2() = doTest()
-    fun testHtmlUnclosed3() = doTest()
+  fun testHtmlUnclosed1() = doTest()
+  fun testHtmlUnclosed2() = doTest()
+  fun testHtmlUnclosed3() = doTest()
 
-    fun testLet() = doTest()
+  fun testLet() = doTest()
 
-    fun testQuoteBalanceScriptComment() = doTest()
-    fun testQuoteBalanceUnclosedStringLiteral() = doTest()
+  fun testQuoteBalanceScriptComment() = doTest()
+  fun testQuoteBalanceUnclosedStringLiteral() = doTest()
 
-    fun testStoreReferences() = doTest()
+  fun testStoreReferences() = doTest()
 
-    fun testStyleTagDefault() = doTest()
-    fun testStyleTagScss() = doTest()
-    fun testStyleAttribute() = doTest()
-    fun testStyleAttributeWithExpressionEnd() = doTest()
-    fun testRawText() = doTest()
+  fun testStyleTagDefault() = doTest()
+  fun testStyleTagScss() = doTest()
+  fun testStyleAttribute() = doTest()
+  fun testStyleAttributeWithExpressionEnd() = doTest()
+  fun testRawText() = doTest()
 
-    private fun doTest() = doTest(true)
+  private fun doTest() = doTest(true)
 }
