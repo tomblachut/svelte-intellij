@@ -18,23 +18,9 @@ object SvelteHtmlRawTextElementType : HtmlCustomEmbeddedContentTokenType("SVELTE
                                       IStrongWhitespaceHolderElementType {
 
   override fun parse(builder: PsiBuilder) {
-    val svelteParsing = SvelteHtmlParsing(builder)
     val start = builder.mark()
-    var text: Marker? = null
-    while (!builder.eof()) {
-      if (builder.tokenType == SvelteTokenTypes.START_MUSTACHE) {
-        text?.done(XML_TEXT)
-        text = null
-        svelteParsing.parseSvelteTag()
-      }
-      else {
-        if (svelteParsing.hasOpenedBlocks() && text == null) {
-          text = builder.mark()
-        }
-        builder.advanceLexer()
-      }
-    }
-    text?.done(XML_TEXT)
+    val svelteParsing = SvelteHtmlParsing(builder)
+    svelteParsing.parseRawTextContents()
     start.done(XML_TEXT)
   }
 
