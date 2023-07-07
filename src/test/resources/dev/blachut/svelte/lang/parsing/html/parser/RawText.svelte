@@ -11,3 +11,5 @@
 
 <textarea>a {"</textarea>"} with <div> inside</textarea>
 <Textarea>a {"</Textarea>"} with <div> inside</Textarea>
+
+<textarea>unclosed {#if true} inside</textarea>
