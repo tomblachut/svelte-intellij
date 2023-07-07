@@ -72,6 +72,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
       }
     }
     text?.done(XmlElementType.XML_TEXT)
+    flushOpenTags()
   }
 
   override fun getHtmlTagElementType(info: HtmlTagInfo, tagLevel: Int): IElementType {

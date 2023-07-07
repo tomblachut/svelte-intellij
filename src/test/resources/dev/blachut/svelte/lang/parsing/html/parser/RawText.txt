@@ -312,3 +312,30 @@ SvelteHtmlFile: RawText.svelte
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('Textarea')
       XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteHtmlTag: textarea
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('textarea')
+      XmlToken:XML_TAG_END('>')
+      HtmlRawText
+        XmlToken:XML_DATA_CHARACTERS('unclosed')
+        PsiWhiteSpace(' ')
+        SvelteIfBlock
+          SvelteIfPrimaryBranch
+            SvelteInitialTag(IF_START)
+              PsiElement(JS:LBRACE)('{')
+              PsiElement(JS:SHARP)('#')
+              PsiElement(JS:IF_KEYWORD)('if')
+              PsiWhiteSpace(' ')
+              JSLiteralExpression
+                PsiElement(JS:TRUE_KEYWORD)('true')
+              PsiElement(JS:RBRACE)('}')
+            SvelteFragment
+              XmlText
+                PsiWhiteSpace(' ')
+                XmlToken:XML_DATA_CHARACTERS('inside')
+          PsiErrorElement:{#if} is not closed
+            <empty list>
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('textarea')
+      XmlToken:XML_TAG_END('>')
