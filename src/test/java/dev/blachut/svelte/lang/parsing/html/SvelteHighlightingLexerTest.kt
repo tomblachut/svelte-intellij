@@ -36,7 +36,7 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
 
   override fun getDirPath() = "dev/blachut/svelte/lang/parsing/html/lexer"
 
-  override fun getPathToTestDataFile(extension: String?): String = getSvelteTestDataPath() + "/$dirPath/" + getTestName(false) + extension
+  override fun getPathToTestDataFile(extension: String): String = getSvelteTestDataPath() + "/$dirPath/" + getTestName(false) + extension
 
   override fun createLexer(): Lexer {
     return SvelteHtmlHighlightingLexer()
