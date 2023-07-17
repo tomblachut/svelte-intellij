@@ -12,7 +12,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import dev.blachut.svelte.lang.isSvelteContext
 
 internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServiceProvider {
-  private val lspService by lazy(LazyThreadSafetyMode.NONE) { project.service<SvelteServiceWrapper>() }
+  private val lspService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SvelteServiceWrapper>() }
 
   override fun getAllServices(): List<JSLanguageService> = listOf(lspService.service)
 
