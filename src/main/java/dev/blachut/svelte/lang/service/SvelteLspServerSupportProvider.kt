@@ -36,9 +36,7 @@ class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescript
   override val relativeScriptPath = packageRelativePath
   override val npmPackage = serverPackageName
 
-  override fun isSupportedFile(file: VirtualFile): Boolean {
-    return isServiceEnabledAndAvailable(project, file)
-  }
+  override fun isSupportedFile(file: VirtualFile): Boolean = isFileAcceptableForService(file)
 }
 
 @ApiStatus.Experimental
