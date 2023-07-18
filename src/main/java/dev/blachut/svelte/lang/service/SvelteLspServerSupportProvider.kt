@@ -8,7 +8,6 @@ import com.intellij.lang.typescript.lsp.getLspServerExecutablePath
 import com.intellij.lang.typescript.lsp.scheduleLspServerDownloading
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.platform.lsp.api.LspServerDescriptor
 import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.platform.lsp.api.LspServerSupportProvider.LspServerStarter
 import com.intellij.util.text.SemVer
@@ -24,13 +23,10 @@ val serverPackageName = TypeScriptPackageName(npmPackage, svelteLanguageToolsVer
  */
 class SvelteLspServerSupportProvider : LspServerSupportProvider {
   override fun fileOpened(project: Project, file: VirtualFile, serverStarter: LspServerStarter) {
-    getSvelteServerDescriptor(project, file)?.let { serverStarter.ensureServerStarted(it) }
+    if (isServiceEnabledAndAvailable(project, file)) {
+      serverStarter.ensureServerStarted(SvelteLspServerDescriptor(project))
+    }
   }
-}
-
-fun getSvelteServerDescriptor(project: Project, file: VirtualFile): LspServerDescriptor? {
-  if (!isServiceEnabledAndAvailable(project, file)) return null
-  return SvelteLspServerDescriptor(project)
 }
 
 /**
