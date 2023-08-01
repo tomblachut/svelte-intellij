@@ -94,6 +94,30 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testDestructuredAssignmentAssignability() { // WEB-60202
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        class Account {
+        }
+      
+        interface TransactionInit {
+          sourceAccount?: Account;
+        }
+      
+        export let init: TransactionInit;
+      
+        let sourceAccount: Account | undefined;
+        ${'$'}: ({ sourceAccount } = init);
+      </script>
+      
+      {sourceAccount}
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testImportFromModuleScriptJS() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.addFileToProject("Helper.svelte", """
