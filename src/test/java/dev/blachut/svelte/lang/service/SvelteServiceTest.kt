@@ -35,6 +35,29 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testTypesFromSeparateScriptTags() { // WEB-54516
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Foo.svelte", """
+      <script context='module' lang='ts'>
+        export interface User {
+          foo: number;
+        }
+      
+        export let defaultUser: User = {
+          foo: 5,
+        }
+      </script>
+      
+      <script lang='ts'>
+        export let user: User;
+        defaultUser = user;
+      </script>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testReactiveDeclarationDestructuredJS() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
