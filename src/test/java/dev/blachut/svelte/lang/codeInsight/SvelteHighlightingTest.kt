@@ -81,6 +81,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             </script>
 
             <img {src} {alt}>
+            <img bind:src bind:alt> <!-- not really valid, but we also expect another error from LS -->
         """.trimIndent())
         myFixture.testHighlighting()
     }
@@ -645,7 +646,6 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testHeadTag() {
-      myFixture.enableInspections(HtmlRequiredTitleElementInspection())
       myFixture.configureByText("head.svelte", """
           <script>
             import Head from "./head.svelte";
@@ -657,7 +657,6 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testAreaTag() {
-      myFixture.enableInspections(HtmlRequiredAltAttributeInspection())
       myFixture.configureByText("area.svelte", """
           <script>
             import Area from "./area.svelte";
@@ -674,6 +673,8 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
             val l = mutableListOf<LocalInspectionTool>()
             l.add(RequiredAttributesInspection())
+            l.add(HtmlRequiredAltAttributeInspection())
+            l.add(HtmlRequiredTitleElementInspection())
             l.add(JSConstantReassignmentInspection())
             l.add(ES6UnusedImportsInspection())
             l.add(JSUnresolvedReferenceInspection())

@@ -6,6 +6,7 @@ import com.intellij.psi.impl.source.xml.TagNameReference
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.HtmlXmlExtension
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.directives.SvelteDirectiveTypes
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil.DIRECTIVE_SEPARATOR
 import dev.blachut.svelte.lang.isSvelteComponentTag
@@ -32,6 +33,10 @@ class SvelteXmlExtension : HtmlXmlExtension() {
   override fun isRequiredAttributeImplicitlyPresent(tag: XmlTag, attrName: String): Boolean {
     for (attribute in tag.attributes) {
       if (attribute.name == attrName && attribute.nameElement.text[0] == '{') {
+        return true
+      }
+
+      if (attribute.name.startsWith(SvelteDirectiveTypes.BIND.delimitedPrefix) && attribute.localName == attrName) {
         return true
       }
     }
