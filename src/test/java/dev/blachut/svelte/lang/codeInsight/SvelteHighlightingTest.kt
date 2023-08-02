@@ -102,6 +102,31 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testNoInvalidIdReference() {
+        myFixture.configureByText("Test.svelte", """
+          <script lang="ts">
+            let id = "hello";
+            ${'$'}: renamedId = id;
+          </script>
+          
+          <input id={id}>
+          <label for={renamedId}></label>
+          <label for="constButDefinedInAnotherComponent"></label>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+    fun testNoDuplicateIdReference() {
+        myFixture.configureByText("Test.svelte", """
+          {#if true}
+            <div id="id"></div>
+          {:else}
+            <div id="id"></div>
+          {/if}
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testEmptyTagWarningHidden() {
         myFixture.configureByText("Test.svelte", """
             <div />
