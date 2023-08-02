@@ -40,7 +40,7 @@ const val mediumPriority = 50.0
 const val svelteNamespace = "svelte"
 const val sveltePrefix = "$svelteNamespace:"
 
-val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "options", "fragment")
+val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "options", "fragment", "element")
 
 // TODO Merge with svelteBareTagLookupElements
 // TODO Use XmlTagInsertHandler

@@ -40,19 +40,19 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     fun testSimpleTag() {
         myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
         myFixture.configureByText("foo.svelte", "<<caret>")
-        hasElements(myFixture.completeBasic(), "div", "main", "svelte:body", "svelte:self")
+        hasElements(myFixture.completeBasic(), "div", "main", "svelte:body", "svelte:self", "svelte:element")
     }
 
     fun testSimpleTagNested() {
         myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
         myFixture.configureByText("foo.svelte", "<div><<caret></div>")
-        hasElements(myFixture.completeBasic(), "div", "svelte:body", "svelte:self")
+        hasElements(myFixture.completeBasic(), "div", "svelte:body", "svelte:self", "svelte:element")
     }
 
     fun testSimpleSvelteNamespace() {
         myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
         myFixture.configureByText("foo.svelte", "<svelte:<caret>")
-        hasElements(myFixture.completeBasic(), "body", "self")
+        hasElements(myFixture.completeBasic(), "body", "self", "element")
     }
 
     fun testComponentImportNoScript() {
