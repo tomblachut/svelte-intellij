@@ -84,6 +84,9 @@
     <idIndexer filetype="Svelte" implementationClass="dev.blachut.svelte.lang.index.SvelteIdIndexer"/>
     <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteKitImplicitUsageProvider"/>
+
+    <include.provider implementation="dev.blachut.svelte.lang.index.SvelteFileIncludeProvider"/>
+
     <completion.contributor language="any"
                             implementationClass="dev.blachut.svelte.lang.completion.SvelteCompletionContributor"
                             id="SvelteCompletionContributor"
