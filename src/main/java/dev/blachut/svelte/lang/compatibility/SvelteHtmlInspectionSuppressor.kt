@@ -16,6 +16,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlAttributeValue
+import com.intellij.xml.util.XmlDuplicatedIdInspection
+import com.intellij.xml.util.XmlInvalidIdInspection
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.equalsName
 import dev.blachut.svelte.lang.isSvelteComponentTag
@@ -60,6 +62,14 @@ class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
 
     if (inspectionId.equalsName<HtmlWrongAttributeValueInspection>()) {
       return element is XmlAttributeValue && hasChildMarkupExpression(element)
+    }
+
+    if (inspectionId.equalsName<XmlInvalidIdInspection>()) {
+      return true // could try to limit it with hasChildMarkupExpression(element) as a next step
+    }
+
+    if (inspectionId.equalsName<XmlDuplicatedIdInspection>()) {
+      return true // we'd need to use control flow analysis in XmlDuplicatedIdInspection for if blocks
     }
 
     if (inspectionId.equalsName<CssUnresolvedCustomPropertyInspection>()) { // WEB-60171
