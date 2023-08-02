@@ -651,6 +651,64 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testTSResolveToAmbientModule() {
+        myFixture.configureByText("friend.d.ts", """
+          export {}
+          
+          declare module "friend" {
+            export interface Options {
+              orientation?: "p" | "portrait" | "l" | "landscape";
+              unit?: "pt" | "px" | "in" | "mm" | "cm" | "ex" | "em" | "pc";
+              format?: string | number[];
+            }
+          
+            export interface HTMLOptions {
+              callback?: (doc: Builder) => void;
+              width?: number;
+            }
+          
+            export class Builder {
+              constructor(options?: Options);
+              constructor(
+                orientation?: "p" | "portrait" | "l" | "landscape",
+                unit?: "pt" | "px" | "in" | "mm" | "cm" | "ex" | "em" | "pc",
+                format?: string | number[],
+              );
+              
+              save(filename: string, options: { returnPromise: true }): Promise<void>;
+              save(filename?: string): Builder;
+          
+              html(src: string | HTMLElement, options?: HTMLOptions): Promise<any>;
+            }
+          
+            export default Builder;
+          }
+        """.trimIndent())
+
+        myFixture.configureByText("Usage.svelte", """
+          <script lang="ts">
+            import {Builder} from "friend"
+          
+            type Data = { id: string }
+          
+            export let data: Data
+            let content: HTMLElement
+          
+            function generate() {
+              const doc = new Builder({orientation: "l", unit: "cm"});
+              doc.html(content, {
+                width: 6,
+                callback: (doc) => doc.save(data.id),
+              })
+            }
+          </script>
+          
+          <button on:click={generate}>Generate</button>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
+
     fun testDebugTagNoCommaExpressionWarnings() {
         myFixture.configureByText("Commas.svelte", """
             <script>
