@@ -68,6 +68,40 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testTypeNarrowing() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        type SuccessModel = {
+          success: true;
+          successMessage: string;
+        };
+      
+        type ErrorModel = {
+          success: false;
+          errorMessage: string;
+        };
+      
+        type Model = SuccessModel | ErrorModel;
+      
+        function getModel(): Model {
+          return {success: true, successMessage: "hello"};
+        }
+      
+        const model = getModel();
+      </script>
+      
+      {#if model.success}
+        <p>{model.successMessage}</p>
+      {:else}
+        <p>{model.errorMessage}</p>
+      {/if}
+    """)
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testTypesFromSeparateScriptTags() { // WEB-54516
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
