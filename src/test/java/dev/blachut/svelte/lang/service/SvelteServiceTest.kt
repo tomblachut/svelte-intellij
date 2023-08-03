@@ -35,6 +35,39 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testTypeCheckingForProps() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.addFileToProject("Child.svelte", """
+      <script lang="ts">
+        export let numA: number = 1;
+        let numBPrivate: number;
+        
+        export { numBPrivate as numB }
+      </script>
+
+      <p>{numA}</p>
+      <p>{numBPrivate}</p>
+    """.trimIndent())
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        import Child from "./Child.svelte";
+      </script>
+      
+      <Child <error descr="Svelte: Type 'string' is not assignable to type 'number'.">numA</error>="1" numB={10} />
+      <Child <error descr="Svelte: Type 'boolean' is not assignable to type 'number'.">numB</error>={true} />
+      
+      <Child numA={undefined} numB={1} />
+      <Child <error descr="Svelte: Type 'null' is not assignable to type 'number | undefined'.">numA</error>={null} numB={1} />
+      <<error descr="Svelte: Property 'numB' is missing in type '{}' but required in type '{ numA?: number | undefined; numB: number; }'.">Child</error> />
+      
+      <Child <error descr="Svelte: Type '{ numBPrivate: undefined; numB: number; }' is not assignable to type '{ numA?: number | undefined; numB: number; }'.
+  Object literal may only specify known properties, and '\"numBPrivate\"' does not exist in type '{ numA?: number | undefined; numB: number; }'.">numBPrivate</error>={undefined} numB={1} />
+    """)
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testTypesFromSeparateScriptTags() { // WEB-54516
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
