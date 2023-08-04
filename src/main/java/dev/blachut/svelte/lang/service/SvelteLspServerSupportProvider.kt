@@ -26,24 +26,21 @@ class SvelteLspServerSupportProvider : LspServerSupportProvider {
 /**
  * @see SvelteLspTypeScriptService
  */
-class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, "Svelte") {
-  override val relativeScriptPath = svelteLspServerPackageDescriptor.packageRelativePath
-  override val npmPackage = svelteLspServerPackageDescriptor.serverPackageName
-
+class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, svelteLspServerPackageDescriptor, "Svelte") {
   override fun isSupportedFile(file: VirtualFile): Boolean = isFileAcceptableForService(file)
 }
 
 @ApiStatus.Experimental
 object SvelteLspExecutableDownloader : LspServerDownloader {
   override fun getExecutable(project: Project): String? {
-    return getLspServerExecutablePath(svelteLspServerPackageDescriptor.serverPackageName,
+    return getLspServerExecutablePath(svelteLspServerPackageDescriptor.serverPackage,
                                       svelteLspServerPackageDescriptor.packageRelativePath)
   }
 
   override fun getExecutableOrRefresh(project: Project): String? {
     val executable = getExecutable(project)
     if (executable != null) return executable
-    scheduleLspServerDownloading(project, svelteLspServerPackageDescriptor.serverPackageName)
+    scheduleLspServerDownloading(project, svelteLspServerPackageDescriptor.serverPackage)
     return null
   }
 }
