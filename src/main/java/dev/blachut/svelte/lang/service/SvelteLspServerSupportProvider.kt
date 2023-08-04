@@ -31,16 +31,4 @@ class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescript
 }
 
 @ApiStatus.Experimental
-object SvelteLspExecutableDownloader : LspServerDownloader {
-  override fun getExecutable(project: Project): String? {
-    return getLspServerExecutablePath(svelteLspServerPackageDescriptor.serverPackage,
-                                      svelteLspServerPackageDescriptor.packageRelativePath)
-  }
-
-  override fun getExecutableOrRefresh(project: Project): String? {
-    val executable = getExecutable(project)
-    if (executable != null) return executable
-    scheduleLspServerDownloading(project, svelteLspServerPackageDescriptor.serverPackage)
-    return null
-  }
-}
+object SvelteLspExecutableDownloader : LspServerDownloader(svelteLspServerPackageDescriptor)
