@@ -31,7 +31,7 @@ import org.eclipse.lsp4j.MarkupContent
 class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java) {
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
-  override val serverVersion = svelteLanguageToolsVersion
+  override val serverVersion = svelteLspServerPackageDescriptor.defaultSemVer
 
   override fun createQuickInfoResponse(markupContent: MarkupContent): TypeScriptQuickInfoResponse {
     return TypeScriptQuickInfoResponse().apply {
