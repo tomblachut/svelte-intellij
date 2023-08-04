@@ -1,11 +1,13 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service
 
+import com.intellij.javascript.nodejs.util.NodePackageRef
 import com.intellij.lang.typescript.lsp.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.platform.lsp.api.LspServerSupportProvider.LspServerStarter
+import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.jetbrains.annotations.ApiStatus
 
 val svelteLspServerPackageDescriptor = LspServerPackageDescriptor("svelte-language-server",
@@ -31,4 +33,8 @@ class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescript
 }
 
 @ApiStatus.Experimental
-object SvelteLspExecutableDownloader : LspServerDownloader(svelteLspServerPackageDescriptor)
+object SvelteLspExecutableDownloader : LspServerDownloader(svelteLspServerPackageDescriptor) {
+  override fun getSelectedPackageRef(project: Project): NodePackageRef {
+    return getSvelteServiceSettings(project).packageRef
+  }
+}
