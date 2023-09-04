@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.psi.blocks.SvelteBranch
 
 // TODO implement JSParameter, align with SvelteJSParameter
 class SvelteDirectiveImplicitParameter(name: String, provider: PsiElement) :
-  ImplicitJSVariableImpl(name, JSAnyType.getWithLanguage(JSTypeSource.SourceLanguage.JS, false), provider) {
+  ImplicitJSVariableImpl(name, JSAnyType.getWithLanguage(JSTypeSource.SourceLanguage.JS), provider) {
   override fun canNavigate(): Boolean {
     return true
   }
