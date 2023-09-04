@@ -432,6 +432,26 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.testHighlighting()
     }
 
+    fun testReactiveStatementsIsolatedForNullChecks() {
+        myFixture.configureByText("Foo.svelte", """
+            <script lang="ts">
+                let someOtherVar = false;
+                let user0: { number: number; } | null = null;
+                let user: { number: number; } | null = null;
+                let test: number = 0;
+                user0.number; // todo report "user0 is null"
+  
+                ${'$'}: if (someOtherVar) {
+                    if (user) {
+                        test = user.number;
+                        user.number.toFixed();
+                    }
+                }
+            </script>
+        """.trimIndent())
+        myFixture.testHighlighting()
+    }
+
     fun testReactiveDeclarationReferenceJS() {
         myFixture.configureByText("Foo.svelte", """
             <script>

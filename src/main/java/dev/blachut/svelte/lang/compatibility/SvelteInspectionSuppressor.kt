@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.compatibility
 
 import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.codeInspection.SuppressQuickFix
+import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
@@ -64,7 +65,10 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
       if (element is JSXXmlLiteralExpressionImpl) return true
     }
     if (inspectionId.equalsName<JSUnusedAssignmentInspection>()) {
-      return true; // props + not yet isolated modifications from reactive statements WEB-61576
+      return true // props + not yet isolated modifications from reactive statements WEB-61576
+    }
+    if (inspectionId.equalsName<JSObjectNullOrUndefinedInspection>()) {
+      return true // not yet isolated modifications from reactive statements WEB-62551
     }
     if (inspectionId.equalsName<JSUnresolvedReferenceInspection>() || inspectionId.equalsName<TypeScriptUnresolvedReferenceInspection>()) {
       if (element.parent is JSReferenceExpression
