@@ -11,6 +11,7 @@ import com.intellij.lang.javascript.inspection.JSSuspiciousTypeGuardInspection
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.*
 import com.intellij.lang.javascript.modules.TypeScriptCheckImportInspection
+import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInspection
 import com.intellij.lang.typescript.inspections.*
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.xml.util.CheckEmptyTagInspection
@@ -19,6 +20,7 @@ import com.intellij.xml.util.XmlInvalidIdInspection
 import com.sixrr.inspectjs.assignment.SillyAssignmentJSInspection
 import com.sixrr.inspectjs.confusing.CommaExpressionJSInspection
 import com.sixrr.inspectjs.confusing.PointlessBooleanExpressionJSInspection
+import com.sixrr.inspectjs.control.UnnecessaryLabelJSInspection
 import com.sixrr.inspectjs.validity.UnreachableCodeJSInspection
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
 
@@ -464,7 +466,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.configureByText("Foo.svelte", """
             <script>
                 ${'$'}: ({ foo1 } = { foo1: 1 });
-                dollar: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
+                <warning>dollar</warning>: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
                 ({ <error descr="Unresolved variable or type foo3">foo3</error> } = { foo3: 1 });
               
                 // todo actually implement resolve on IDE side
@@ -482,7 +484,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         myFixture.configureByText("Foo.svelte", """
             <script lang="ts">
                 ${'$'}: ({ foo1 } = { foo1: 1 });
-                dollar: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
+                <warning>dollar</warning>: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
                 ({ <error descr="Unresolved variable or type foo3">foo3</error> } = { foo3: 1 });
               
                 // todo actually implement resolve on IDE side
@@ -755,6 +757,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     companion object {
         fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
             val l = mutableListOf<LocalInspectionTool>()
+            l.add(TypeScriptMissingConfigOptionInspection())
             l.add(RequiredAttributesInspection())
             l.add(HtmlRequiredAltAttributeInspection())
             l.add(HtmlRequiredTitleElementInspection())
@@ -764,6 +767,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
             l.add(JSValidateTypesInspection())
             l.add(JSIncompatibleTypesComparisonInspection())
             l.add(SillyAssignmentJSInspection())
+            l.add(UnnecessaryLabelJSInspection())
             l.add(CommaExpressionJSInspection())
             val functionSignaturesInspection = JSCheckFunctionSignaturesInspection()
             functionSignaturesInspection.myCheckGuessedTypes = true
