@@ -22,7 +22,7 @@ fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolea
 fun isFileAcceptableForService(file: VirtualFile): Boolean {
   if (!TypeScriptLanguageServiceUtil.IS_VALID_FILE_FOR_SERVICE.value(file)) return false
 
-  return isSvelteContext(file) || TypeScriptLanguageServiceUtil.ACCEPTABLE_TS_FILE.value(file)
+  return isSvelteContext(file)
 }
 
 fun isServiceEnabledByContextAndSettings(project: Project, context: VirtualFile): Boolean {
