@@ -8,7 +8,7 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ecmascript6.resolve.ES6PsiUtil
 import com.intellij.lang.javascript.completion.JSImportCompletionUtil
-import com.intellij.lang.javascript.modules.JSImportPlaceInfo
+import com.intellij.lang.javascript.dialects.JSHandlersFactory
 import com.intellij.lang.javascript.modules.imports.JSImportCandidate
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
 import com.intellij.lang.javascript.psi.JSDefinitionExpression
@@ -127,7 +127,7 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
 
     // todo handle multiple files with same name, JSImportCompletionUtil.IMPORT_PRIORITY, merge lookup elements etc
 
-    val placeInfo = JSImportPlaceInfo(tag)
+    val placeInfo = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
 
     //val lowercaseName = StringUtil.trimEnd(tag.name, CompletionUtil.DUMMY_IDENTIFIER_TRIMMED).toLowerCase()
     val keyFilter = Predicate { name: String ->
