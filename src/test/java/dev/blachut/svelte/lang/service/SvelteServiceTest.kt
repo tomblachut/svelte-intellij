@@ -196,10 +196,11 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.configureByText("Foo.svelte", """
       <script>
-        import { Inner, Inner as Renamed } from "./Helper.svelte";
+        import { Inner, Inner as Renamed, Wrong } from "./Helper.svelte";
       
         new Inner;
         new Renamed;
+        new Wrong;
       </script>
     """.trimIndent())
     myFixture.checkLspHighlighting()
@@ -222,10 +223,11 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        import { Inner, Inner as Renamed, type Foo } from "./Helper.svelte";
+        import { Inner, Inner as Renamed, Wrong, type Foo } from "./Helper.svelte";
       
         new Inner;
         new Renamed;
+        new Wrong;
       
         const x: Foo = {bar: 42};
       </script>

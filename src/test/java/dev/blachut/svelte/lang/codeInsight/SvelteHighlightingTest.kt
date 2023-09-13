@@ -751,6 +751,78 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testImportFromModuleScriptJS() {
+    myFixture.addFileToProject("Helper.svelte", """
+      <script context="module">
+        export class Inner {
+          foo = true;
+        }
+      </script>
+    """.trimIndent())
+
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        import { Inner, Inner as Renamed, <weak_warning descr="Cannot resolve symbol 'Wrong'">Wrong</weak_warning> } from "./Helper.svelte";
+      
+        new Inner;
+        new Renamed;
+        new Wrong;
+      </script>
+    """.trimIndent())
+    myFixture.testHighlighting()
+
+    myFixture.configureByText("bar.js", """
+      import { Inner, Inner as Renamed, <weak_warning descr="Cannot resolve symbol 'Wrong'">Wrong</weak_warning> } from "./Helper.svelte";
+    
+      new Inner;
+      new Renamed;
+      new Wrong;
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testImportFromModuleScriptTS() {
+    myFixture.addFileToProject("Helper.svelte", """
+      <script context="module" lang="ts">
+        export class Inner {
+          foo = true;
+        }
+
+        export interface Foo {
+          bar: number;
+        }
+      </script>
+    """.trimIndent())
+
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        import { Inner, Inner as Renamed, <error descr="Cannot resolve symbol 'Wrong'">Wrong</error>, type Foo } from "./Helper.svelte";
+      
+        new Inner;
+        new Renamed;
+        new Wrong;
+      
+        const x: Foo = {bar: 42};
+      </script>
+      
+      {x}
+    """.trimIndent())
+    myFixture.testHighlighting()
+
+    myFixture.configureByText("bar.ts", """
+      import { Inner, Inner as Renamed, <error descr="Cannot resolve symbol 'Wrong'">Wrong</error>, type Foo } from "./Helper.svelte";
+    
+      new Inner;
+      new Renamed;
+      new Wrong;
+    
+      const x: Foo = {bar: 42};
+      
+      console.log(x);
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   companion object {
     fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
       val l = mutableListOf<LocalInspectionTool>()
