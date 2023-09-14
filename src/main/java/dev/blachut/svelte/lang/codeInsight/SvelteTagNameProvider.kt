@@ -11,6 +11,7 @@ import com.intellij.lang.javascript.completion.JSImportCompletionUtil
 import com.intellij.lang.javascript.dialects.JSHandlersFactory
 import com.intellij.lang.javascript.frameworks.jsx.JSXComponentCompletionContributor
 import com.intellij.lang.javascript.modules.imports.JSImportCandidate
+import com.intellij.lang.javascript.modules.imports.providers.ES6ExportedCandidatesProvider
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
 import com.intellij.lang.javascript.psi.JSDefinitionExpression
 import com.intellij.lang.javascript.psi.JSExpressionCodeFragment
@@ -77,6 +78,7 @@ class SvelteTagNameProvider : XmlTagNameProvider {
 
   // based on JSXComponentCompletionContributor.addLocalVariants
   private fun addLocalVariants(tag: XmlTag, collectedNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
+    val placeInfo = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
     val processor =  object : JSResolveProcessor {
       override fun getName(): String? {
         return null
@@ -88,8 +90,11 @@ class SvelteTagNameProvider : XmlTagNameProvider {
 
         val name = ResolveProcessor.getName(element) ?: return true
         if (isSvelteComponentTag(name) && !collectedNames.contains(name) /*&& prefixMatcher.prefixMatches(name)*/) {
+          val expandedElement = ES6ExportedCandidatesProvider.expandElementAndFilter(element, placeInfo).orElse(null)
           collectedNames.add(name)
-          resultElements.add(createLookupElement(name, element, null))
+          if (expandedElement != null) {
+            resultElements.add(createLookupElement(name, element, null))
+          }
         }
         return true
       }
