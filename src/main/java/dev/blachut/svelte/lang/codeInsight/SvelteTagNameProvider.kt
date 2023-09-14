@@ -9,6 +9,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ecmascript6.resolve.ES6PsiUtil
 import com.intellij.lang.javascript.completion.JSImportCompletionUtil
 import com.intellij.lang.javascript.dialects.JSHandlersFactory
+import com.intellij.lang.javascript.frameworks.jsx.JSXComponentCompletionContributor
 import com.intellij.lang.javascript.modules.imports.JSImportCandidate
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
 import com.intellij.lang.javascript.psi.JSDefinitionExpression
@@ -23,9 +24,7 @@ import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.ResolveState
-import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider
 import com.intellij.psi.xml.XmlTag
-import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlTagNameProvider
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
@@ -36,11 +35,6 @@ import java.util.function.Predicate
 // Vue plugin uses 100, it's ok for now
 const val highPriority = 100.0
 const val mediumPriority = 50.0
-
-const val svelteNamespace = "svelte"
-const val sveltePrefix = "$svelteNamespace:"
-
-val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "options", "fragment", "element")
 
 // TODO Merge with svelteBareTagLookupElements
 // TODO Use XmlTagInsertHandler
@@ -60,23 +54,11 @@ val svelteBareTagLookupElements = svelteTagNames.map {
 }
 
 /**
- * interface XmlTagNameProvider feeds data for name completion popup
+ * Feeds data for tag name completion popup, including HtmlElementInTextCompletionProvider (completion without a leading <)
  *
- * interface XmlElementDescriptorProvider enables, among others, navigation from tag to component file
+ * Since Svelte components follow ECMAScript scope resolution rules, it is analogous to [JSXComponentCompletionContributor]
  */
-class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
-  override fun getDescriptor(tag: XmlTag): XmlElementDescriptor? {
-    if (tag !is SvelteHtmlTag) return null
-
-    if (tag.namespacePrefix == svelteNamespace && svelteTagNames.contains(tag.localName) || tag.name == "slot") {
-      return SvelteElementDescriptor(tag)
-    }
-
-    if (!isSvelteComponentTag(tag.name)) return null
-
-    return SvelteComponentTagDescriptor(tag.name, tag)
-  }
-
+class SvelteTagNameProvider : XmlTagNameProvider {
   override fun addTagNameVariants(resultElements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {
     if (tag !is SvelteHtmlTag) return
 
@@ -87,21 +69,15 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
       resultElements.addAll(svelteNamespaceTagLookupElements)
       resultElements.add(slotLookupElement)
 
-      val localNames = mutableSetOf<String>()
-      addLocalComponents(tag, localNames, resultElements)
-      addExportedComponents(tag, localNames, resultElements)
+      val collectedNames = mutableSetOf<String>()
+      addLocalVariants(tag, collectedNames, resultElements)
+      addExportedComponents(tag, collectedNames, resultElements)
     }
   }
 
-  private fun addLocalComponents(tag: XmlTag, localNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
-    val processor = createLocalCompletionProcessor(localNames, resultElements)
-    JSResolveUtil.treeWalkUp(processor, tag, null, tag)
-  }
-
-  // based on ReactComponentCompletionContributor.createCompletionProcessor, maybe unify it?
-  private fun createLocalCompletionProcessor(collectedNames: MutableSet<String>,
-                                             resultElements: MutableList<LookupElement>): JSResolveProcessor {
-    return object : JSResolveProcessor {
+  // based on JSXComponentCompletionContributor.addLocalVariants
+  private fun addLocalVariants(tag: XmlTag, collectedNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
+    val processor =  object : JSResolveProcessor {
       override fun getName(): String? {
         return null
       }
@@ -118,10 +94,11 @@ class SvelteTagProvider : XmlElementDescriptorProvider, XmlTagNameProvider {
         return true
       }
     }
+    JSResolveUtil.treeWalkUp(processor, tag, null, tag)
   }
 
   private fun addExportedComponents(tag: SvelteHtmlTag, localNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
-    // todo possibly base on ReactComponentCompletionContributor.addExportedComponents
+    // todo possibly base on JSXComponentCompletionContributor.addExportedComponents
     // todo and/or JSImportCompletionUtil.processExportedElements
     // todo look into case sensitivity
 

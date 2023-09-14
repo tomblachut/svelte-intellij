@@ -76,8 +76,8 @@
     <xml.xmlSuppressionProvider implementation="dev.blachut.svelte.lang.compatibility.SvelteHtmlInspectionSuppressor"/>
     <xml.xmlExtension implementation="dev.blachut.svelte.lang.codeInsight.SvelteXmlExtension" order="first"/>
     <xml.fileNSInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteNSInfoProvider"/>
-    <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
-    <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagProvider"/>
+    <xml.tagNameProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteTagNameProvider"/>
+    <xml.elementDescriptorProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteElementDescriptorProvider"/>
     <xml.attributeDescriptorsProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteAttributeDescriptorProvider"/>
     <html.attributeValueProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteAttributeValueProvider"/>
 
