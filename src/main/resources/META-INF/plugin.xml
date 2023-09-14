@@ -91,6 +91,7 @@
                             implementationClass="dev.blachut.svelte.lang.completion.SvelteCompletionContributor"
                             id="SvelteCompletionContributor"
                             order="before JSPatternBasedCompletionContributor, before JSCompletionContributor, before xmlNonFirst, before cssClassOrIdReferenceCompletionContributor"/>
+
     <localInspection groupKey="svelte.name"
                      shortName="SvelteUnresolvedComponent"
                      language="SvelteHTML"
@@ -137,6 +138,8 @@
     <elementScopeProvider implementation="dev.blachut.svelte.lang.parsing.html.SvelteElementResolveScopeProvider"/>
 
     <importCandidatesFactory implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentCandidatesProvider$Factory"/>
+    <completionPlaceFilter implementation="dev.blachut.svelte.lang.codeInsight.SvelteHtmlTagCompletionPlaceFilterProvider" />
+    <importModulePathStrategy implementation="dev.blachut.svelte.lang.codeInsight.SvelteImportModulePathStrategy"/>
 
     <handlersFactory language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteHtmlHandlersFactory"/>
     <handlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSHandlersFactory"/>
@@ -160,6 +163,5 @@
     <frameworkIndexingHandler implementation="dev.blachut.svelte.lang.SvelteFrameworkHandler" version="1"/>
     <indexedFileTypeProvider implementation="dev.blachut.svelte.lang.SvelteIndexedFileTypeProvider"/>
     <tsImportResolver implementation="dev.blachut.svelte.lang.codeInsight.SvelteTypeScriptImportsResolverProvider"/>
-    <importModulePathStrategy implementation="dev.blachut.svelte.lang.codeInsight.SvelteImportModulePathStrategy"/>
   </extensions>
 </idea-plugin>

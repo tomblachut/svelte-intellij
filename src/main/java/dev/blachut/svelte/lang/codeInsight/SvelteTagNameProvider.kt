@@ -1,12 +1,8 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.codeInsight.completion.InsertHandler
-import com.intellij.codeInsight.completion.InsertionContext
-import com.intellij.codeInsight.completion.PrioritizedLookupElement
-import com.intellij.codeInsight.completion.XmlTagInsertHandler
+import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.lang.ecmascript6.resolve.ES6PsiUtil
 import com.intellij.lang.javascript.completion.JSImportCompletionUtil
 import com.intellij.lang.javascript.dialects.JSHandlersFactory
 import com.intellij.lang.javascript.frameworks.jsx.JSXComponentCompletionContributor
@@ -14,16 +10,11 @@ import com.intellij.lang.javascript.modules.imports.JSImportCandidate
 import com.intellij.lang.javascript.modules.imports.providers.ES6ExportedCandidatesProvider
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
 import com.intellij.lang.javascript.psi.JSDefinitionExpression
-import com.intellij.lang.javascript.psi.JSExpressionCodeFragment
 import com.intellij.lang.javascript.psi.JSNamedElement
-import com.intellij.lang.javascript.psi.ecma6.TypeScriptCompileTimeType
-import com.intellij.lang.javascript.psi.ecmal4.JSClass
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
 import com.intellij.lang.javascript.psi.resolve.ResolveProcessor
 import com.intellij.lang.javascript.psi.resolve.processors.JSResolveProcessor
-import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.ResolveState
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.XmlTagNameProvider
@@ -79,7 +70,7 @@ class SvelteTagNameProvider : XmlTagNameProvider {
   // based on JSXComponentCompletionContributor.addLocalVariants
   private fun addLocalVariants(tag: XmlTag, collectedNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
     val placeInfo = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
-    val processor =  object : JSResolveProcessor {
+    val processor = object : JSResolveProcessor {
       override fun getName(): String? {
         return null
       }
@@ -93,7 +84,8 @@ class SvelteTagNameProvider : XmlTagNameProvider {
           val expandedElement = ES6ExportedCandidatesProvider.expandElementAndFilter(element, placeInfo).orElse(null)
           collectedNames.add(name)
           if (expandedElement != null) {
-            resultElements.add(createLookupElement(name, element, null))
+            val lookup = createLookup(name, null, element, XmlTagInsertHandler.INSTANCE)
+            resultElements.add(lookup)
           }
         }
         return true
@@ -103,90 +95,33 @@ class SvelteTagNameProvider : XmlTagNameProvider {
   }
 
   private fun addExportedComponents(tag: SvelteHtmlTag, localNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
-    // todo possibly base on JSXComponentCompletionContributor.addExportedComponents
-    // todo and/or JSImportCompletionUtil.processExportedElements
-    // todo look into case sensitivity
-
-    // todo handle multiple files with same name, JSImportCompletionUtil.IMPORT_PRIORITY, merge lookup elements etc
-
-    val placeInfo = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
-
-    //val lowercaseName = StringUtil.trimEnd(tag.name, CompletionUtil.DUMMY_IDENTIFIER_TRIMMED).toLowerCase()
+    val info = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
+    val providers = JSImportCandidatesProvider.getProviders(info)
     val keyFilter = Predicate { name: String ->
-      isSvelteComponentTag(name) && !localNames.contains(name)
-      // && name.toLowerCase().contains(lowercaseName)
-      // && prefixMatcher.prefixMatches(name)
+      isSvelteComponentTag(name) /* && prefixMatcher.prefixMatches(name) */ && !localNames.contains(name)
     }
-
-    val providers = JSImportCandidatesProvider.getProviders(placeInfo)
-
-    JSImportCompletionUtil.processExportedElements(tag, providers, keyFilter) { candidates: Collection<JSImportCandidate>, name ->
-      var seenJSCandidate = false
-      var seenSvelteCandidate = false
-      var bestLookup: LookupElement? = null
-
-      candidates.forEach { candidate ->
-        if (seenJSCandidate) return@forEach
-
-        val element = candidate.element // for Svelte files will be null, used by JSLookupElementRenderer to display useful info
-
-        if (element != null) {
-          for (declaration in ES6PsiUtil.expandElements(tag, Collections.singleton(element))) {
-            // todo namespaced components will require loosening of the condition
-            if (!(declaration is JSClass && declaration !is TypeScriptCompileTimeType)) continue // or Svelte file
-            val recordType = declaration.jsType.asRecordType()
-            // older libraries may not contain all 3 properties
-            if (!recordType.propertyNames.containsAll(listOf("\$set", "\$on", "\$destroy"))) continue
-            val lookupElement = createLookupElement(name, declaration, createInsertHandler(tag.containingFile, candidate))
-            bestLookup = lookupElement
-            seenJSCandidate = true
-            break
-          }
-        }
-        else if (!seenSvelteCandidate) {
-          // JSImportCandidate for SvelteHtmlFile does not contain PsiElement
-          val lookupElement = createLookupElement(name, null, createInsertHandler(tag.containingFile, candidate))
-          seenSvelteCandidate = true
-          bestLookup = lookupElement
-        }
-      }
-
-      if (bestLookup != null) {
-        resultElements.add(bestLookup!!)
-      }
-
+    JSImportCompletionUtil.processExportedElements(tag, providers, keyFilter) { elements: Collection<JSImportCandidate>, name: String ->
+      val importCandidate = if (elements.size == 1) elements.firstOrNull() else null
+      val element = importCandidate?.getElement()
+      val lookup = createLookup(name, importCandidate, element, JSImportCompletionUtil.TAG_IMPORT_INSERT_HANDLER)
+      resultElements.add(lookup)
       true
     }
   }
 
-  private fun createLookupElement(name: @NlsSafe String,
-                                  element: PsiElement?,
-                                  insertHandler: InsertHandler<LookupElement>?): LookupElement {
-    //val tailText = " (${candidate.containerText})"
+  private fun createLookup(name: String,
+                           importCandidate: JSImportCandidate?,
+                           element: PsiElement?,
+                           insertHandler: InsertHandler<LookupElement>): LookupElement {
     val presentation = if (element is JSNamedElement) element.presentation else null
-
-    val builder = if (element != null) LookupElementBuilder.create(element, name) else LookupElementBuilder.create(name)
-
+    val lookupObject = importCandidate ?: element
+    val builder =
+      if (lookupObject == null) LookupElementBuilder.create(name)
+      else LookupElementBuilder.create(lookupObject, name)
     return builder
+      .withTypeText(presentation?.locationString, true)
       .withIcon(SvelteIcons.Desaturated)
-      //.withTailText(tailText, true)
-      .withTailText(presentation?.locationString, true) // todo add space
-      //.withTypeText("SvelteComponent") // can't use type text because there are false positives here
       .withInsertHandler(insertHandler)
-      //.let { JSLookupElementRenderer(name, JSImportCompletionUtil.IMPORT_PRIORITY, false, null).applyToBuilder(it) } // does not resolve imports unfortunately, JSImportCompletionUtil.expandElements handles that
       .let { PrioritizedLookupElement.withPriority(it, highPriority) }
-  }
-
-  private fun createInsertHandler(containingFile: PsiFile, candidate: JSImportCandidate): InsertHandler<LookupElement>? {
-    if (containingFile is JSExpressionCodeFragment) return null
-
-    // todo e.g. React uses both XmlTagInsertHandler & addReactImportInsertHandler
-    return SvelteComponentInsertHandler(candidate)
-  }
-}
-
-class SvelteComponentInsertHandler(private val candidate: JSImportCandidate) : InsertHandler<LookupElement> {
-  override fun handleInsert(context: InsertionContext, item: LookupElement) {
-    JSImportCompletionUtil.insertLookupItem(context, item, candidate, null)
   }
 }

@@ -13,10 +13,9 @@ import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidates
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider.CandidatesFactory
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.search.FilenameIndex
-import icons.SvelteIcons
 import java.util.function.Predicate
-import javax.swing.Icon
 
 class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImportCandidatesBase(placeInfo) {
 
@@ -27,11 +26,15 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
       .groupBy { getComponentName(it) }
   }
 
-  override fun processCandidates(ref: String,
-                                 processor: JSCandidatesProcessor) {
+  override fun processCandidates(name: String, processor: JSCandidatesProcessor) {
     val place = myPlaceInfo.place
-    val candidates = candidates[ref]
-    candidates?.forEach { processor.processCandidate(SvelteImportCandidate(ref, place, it)) }
+    val candidates = candidates[name] // not sorted by shortest module path yet at this line
+    val manager = place.manager
+    candidates?.forEach { virtualFile ->
+      manager.findFile(virtualFile)?.let { psiFile ->
+        processor.processCandidate(SvelteImportCandidate(name, psiFile, place))
+      }
+    }
   }
 
   override fun getNames(keyFilter: Predicate<in String>): Set<String> {
@@ -54,24 +57,15 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
   }
 }
 
-class SvelteImportCandidate(name: String, place: PsiElement, private val virtualFile: VirtualFile)
-  : JSSimpleImportCandidate(name, null, place) {
+class SvelteImportCandidate(name: String, candidate: PsiFile, place: PsiElement) : JSSimpleImportCandidate(name, candidate, place) {
   override fun createDescriptor(): JSImportDescriptor? {
     val place = place ?: return null
-    val baseImportDescriptor = ES6CreateImportUtil.getImportDescriptor(name, null, virtualFile, place, true)
+    val elementFile = elementFile ?: return null
+    val baseImportDescriptor = ES6CreateImportUtil.getImportDescriptor(name, null, elementFile, place, true)
     if (baseImportDescriptor == null) return null
 
-    // JavaScript plugin does not understand .svelte files, so it tries to import them like assets, i.e. bare import
+    // JavaScript plugin does not understand .svelte files, so it tries to import them like assets, i.e., bare import
     val info = CreateImportExportInfo(name, ES6ImportPsiUtil.ImportExportType.DEFAULT)
     return JSSimpleImportDescriptor(baseImportDescriptor.moduleDescriptor, info)
-  }
-
-  override fun getContainerText(): String {
-
-    return descriptor?.moduleName ?: ""
-  }
-
-  override fun getIcon(flags: Int): Icon {
-    return SvelteIcons.Desaturated
   }
 }
