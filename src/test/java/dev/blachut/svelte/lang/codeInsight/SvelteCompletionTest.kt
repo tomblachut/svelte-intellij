@@ -89,11 +89,54 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  fun testComponentImportSyncTagEditing() {
+    myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
+    myFixture.configureByText("Usage.svelte", """
+      <h1><Hel<caret>></Hel></h1>
+    """.trimIndent())
+    myFixture.completeBasic()
+    myFixture.checkResult("""
+      <script>
+          import Hello from "./Hello.svelte";
+      </script>
+
+      <h1><Hello></Hello></h1>
+    """.trimIndent())
+  }
+
   fun testComponentsTopLevel() {
     myFixture.configureByText("Hello1.svelte", "<h1>Test</h1>")
     myFixture.configureByText("Hello2.svelte", "<h1>Test</h1>")
     myFixture.configureByText("Usage.svelte", "<Hel<caret>")
     hasElements(myFixture.completeBasic(), "Hello1", "Hello2")
+  }
+
+  fun testComponentCaseSensitivity() {
+    myFixture.configureByText("Hello1.svelte", "<h1>Test</h1>")
+    myFixture.configureByText("Hello2.svelte", "<h1>Test</h1>")
+    myFixture.configureByText("Usage.svelte", "<hel<caret>")
+    hasElements(myFixture.completeBasic(), "Hello1", "Hello2")
+  }
+
+  fun testComponentImportVariants() {
+    myFixture.addFileToProject("Hello1.svelte", "<h1>Test</h1>")
+    myFixture.addFileToProject("lib.ts", """
+      class SvelteComponent {} // Svelte 4+
+      class Intermediate extends SvelteComponent {}
+      class SvelteComponentTyped {} // Svelte 3
+      
+      export default class Hello3 extends SvelteComponent {}
+      export class Hello4 extends SvelteComponent {}
+      export class Hello5 extends Intermediate {}
+      export class Hello6 extends SvelteComponentTyped {}
+      export class HelloInvalid {}
+    """.trimIndent())
+    myFixture.configureByText("Usage.svelte", """
+      <<caret>
+    """.trimIndent())
+    val items = myFixture.completeBasic()
+    hasElements(items, "Hello1", "Hello3", "Hello4", "Hello5", "Hello6")
+    noElements(items, "HelloInvalid", "SvelteComponent", "SvelteComponentTyped")
   }
 
   fun testComponentProps() {

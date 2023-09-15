@@ -9,6 +9,7 @@ import com.intellij.psi.PsiPolyVariantReference
 import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.xml.TagNameReference
+import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
@@ -25,7 +26,7 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
       val place = ref.tagElement ?: return@PolyVariantResolver emptyArray()
       val referenceName = place.name
       // TODO Support namespaced components WEB-61636
-      if (referenceName.contains('.')) return@PolyVariantResolver arrayOf(JSResolveResult(place))
+      if (isSvelteNamespacedComponentTag(referenceName)) return@PolyVariantResolver arrayOf(JSResolveResult(place))
       SvelteReactiveDeclarationsUtil.processLocalDeclarations(place, referenceName, incomplete)
     }
 

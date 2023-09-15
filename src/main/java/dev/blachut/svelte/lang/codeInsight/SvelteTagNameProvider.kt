@@ -46,9 +46,9 @@ val svelteBareTagLookupElements = svelteTagNames.map {
 }
 
 /**
- * Feeds data for tag name completion popup, including HtmlElementInTextCompletionProvider (completion without a leading <)
+ * Feeds data for tag name completion popup, including HtmlElementInTextCompletionProvider (completion without a leading <).
  *
- * Since Svelte components follow ECMAScript scope resolution rules, it is analogous to [JSXComponentCompletionContributor]
+ * For components, see [SvelteComponentCompletionContributor] due to performance reasons.
  */
 class SvelteTagNameProvider : XmlTagNameProvider {
   override fun addTagNameVariants(resultElements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {
@@ -60,68 +60,6 @@ class SvelteTagNameProvider : XmlTagNameProvider {
     else if (namespacePrefix.isEmpty()) {
       resultElements.addAll(svelteNamespaceTagLookupElements)
       resultElements.add(slotLookupElement)
-
-      val collectedNames = mutableSetOf<String>()
-      addLocalVariants(tag, collectedNames, resultElements)
-      addExportedComponents(tag, collectedNames, resultElements)
     }
-  }
-
-  // based on JSXComponentCompletionContributor.addLocalVariants
-  private fun addLocalVariants(tag: XmlTag, collectedNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
-    val placeInfo = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
-    val processor = object : JSResolveProcessor {
-      override fun getName(): String? {
-        return null
-      }
-
-      override fun execute(element: PsiElement, state: ResolveState): Boolean {
-        // omit reactive declarations
-        if (element is JSDefinitionExpression) return true
-
-        val name = ResolveProcessor.getName(element) ?: return true
-        if (isSvelteComponentTag(name) && !collectedNames.contains(name) /*&& prefixMatcher.prefixMatches(name)*/) {
-          val expandedElement = ES6ExportedCandidatesProvider.expandElementAndFilter(element, placeInfo).orElse(null)
-          collectedNames.add(name)
-          if (expandedElement != null) {
-            val lookup = createLookup(name, null, element, XmlTagInsertHandler.INSTANCE)
-            resultElements.add(lookup)
-          }
-        }
-        return true
-      }
-    }
-    JSResolveUtil.treeWalkUp(processor, tag, null, tag)
-  }
-
-  private fun addExportedComponents(tag: SvelteHtmlTag, localNames: MutableSet<String>, resultElements: MutableList<LookupElement>) {
-    val info = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
-    val providers = JSImportCandidatesProvider.getProviders(info)
-    val keyFilter = Predicate { name: String ->
-      isSvelteComponentTag(name) /* && prefixMatcher.prefixMatches(name) */ && !localNames.contains(name)
-    }
-    JSImportCompletionUtil.processExportedElements(tag, providers, keyFilter) { elements: Collection<JSImportCandidate>, name: String ->
-      val importCandidate = if (elements.size == 1) elements.firstOrNull() else null
-      val element = importCandidate?.getElement()
-      val lookup = createLookup(name, importCandidate, element, JSImportCompletionUtil.TAG_IMPORT_INSERT_HANDLER)
-      resultElements.add(lookup)
-      true
-    }
-  }
-
-  private fun createLookup(name: String,
-                           importCandidate: JSImportCandidate?,
-                           element: PsiElement?,
-                           insertHandler: InsertHandler<LookupElement>): LookupElement {
-    val presentation = if (element is JSNamedElement) element.presentation else null
-    val lookupObject = importCandidate ?: element
-    val builder =
-      if (lookupObject == null) LookupElementBuilder.create(name)
-      else LookupElementBuilder.create(lookupObject, name)
-    return builder
-      .withTypeText(presentation?.locationString, true)
-      .withIcon(SvelteIcons.Desaturated)
-      .withInsertHandler(insertHandler)
-      .let { PrioritizedLookupElement.withPriority(it, highPriority) }
   }
 }

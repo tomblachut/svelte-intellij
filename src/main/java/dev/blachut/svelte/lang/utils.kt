@@ -23,6 +23,10 @@ fun isSvelteComponentTag(tagName: CharSequence): Boolean {
   return tagName.isNotEmpty() && tagName[0].isUpperCase()
 }
 
+fun isSvelteNamespacedComponentTag(tagName: CharSequence): Boolean {
+  return tagName.contains('.')
+}
+
 fun isTSLangValue(value: String?): Boolean {
   return value == "ts" || value == "typescript"
 }
