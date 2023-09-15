@@ -20,8 +20,9 @@ import javax.swing.Icon
 
 class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImportCandidatesBase(placeInfo) {
 
-  private val candidates: Map<String, List<VirtualFile>> by lazy {
-    FilenameIndex.getAllFilesByExt(project, "svelte",
+  private val candidates: Map<String, List<VirtualFile>> by lazy(LazyThreadSafetyMode.PUBLICATION) {
+    FilenameIndex.getAllFilesByExt(project,
+                                   "svelte",
                                    createProjectImportsScope(placeInfo, getStructureModuleRoot(placeInfo)))
       .groupBy { getComponentName(it) }
   }
