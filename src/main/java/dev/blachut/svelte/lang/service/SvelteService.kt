@@ -30,7 +30,6 @@ fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolea
 
 private fun isServiceEnabledByContextAndSettings(project: Project, context: VirtualFile): Boolean {
   return TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
-         isSvelteContext(context) &&
          !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
          isSvelteServiceEnabledBySettings(project)
 }
