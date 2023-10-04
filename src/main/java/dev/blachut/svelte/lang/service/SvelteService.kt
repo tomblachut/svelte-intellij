@@ -6,6 +6,7 @@ import com.intellij.lang.typescript.library.TypeScriptLibraryProvider
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import dev.blachut.svelte.lang.isSvelteContext
+import dev.blachut.svelte.lang.isSvelteProjectContext
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 
@@ -27,7 +28,20 @@ fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolea
          TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
          !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
          isSvelteServiceEnabledBySettings(project) &&
+         isSvelteProjectContext(project, context) &&
          SvelteLspExecutableDownloader.getExecutableOrRefresh(project) != null
+}
+
+/**
+ * If enabled but not available, will launch a background task that will eventually restart the services
+ */
+fun isTypeScriptPluginEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
+  return TypeScriptLanguageServiceUtil.ACCEPTABLE_TS_FILE.value(context) &&
+         TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
+         !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
+         isSvelteServiceEnabledBySettings(project) &&
+         isSvelteProjectContext(project, context) &&
+         SvelteTypeScriptPluginPackageDownloader.getExecutableOrRefresh(project) != null
 }
 
 private fun isSvelteServiceEnabledBySettings(project: Project): Boolean {

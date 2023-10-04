@@ -11,10 +11,11 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFile
 import dev.blachut.svelte.lang.isSvelteContext
 
-internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServiceProvider {
-  private val lspService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SvelteServiceWrapper>() }
+internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServiceProvider { // add ts plugin
+  private val lspService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SvelteLspTypeScriptServiceWrapper>() }
+  private val tsService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SveltePluginTypeScriptServiceWrapper>() }
 
-  override fun getAllServices(): List<JSLanguageService> = listOf(lspService.service)
+  override fun getAllServices(): List<JSLanguageService> = listOf(lspService.service, tsService.service)
 
   override fun getService(file: VirtualFile): JSLanguageService? = allServices.firstOrNull { it.isAcceptable(file) }
 
@@ -25,8 +26,17 @@ internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServi
 }
 
 @Service(Service.Level.PROJECT)
-private class SvelteServiceWrapper(project: Project) : Disposable {
+private class SvelteLspTypeScriptServiceWrapper(project: Project) : Disposable {
   val service = SvelteLspTypeScriptService(project)
+
+  override fun dispose() {
+    Disposer.dispose(service)
+  }
+}
+
+@Service(Service.Level.PROJECT)
+private class SveltePluginTypeScriptServiceWrapper(project: Project) : Disposable {
+  val service = SveltePluginTypeScriptService(project)
 
   override fun dispose() {
     Disposer.dispose(service)

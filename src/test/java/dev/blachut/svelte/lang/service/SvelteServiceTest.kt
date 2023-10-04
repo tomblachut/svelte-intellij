@@ -336,4 +336,47 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     JSNavigationTest.doTestGTDU(myFixture, false)
   }
 
+  @Test
+  fun testTypeScriptPluginWorks() {
+    performNpmInstallForPackageJson("package.json") // required by typescript-plugin-svelte
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        export let prop1 = 5;
+      </script>
+      
+      {prop1}
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    myFixture.configureByText("usage.ts", """
+      import Foo from "./Foo.svelte";
+
+      new Foo({props: {<error descr="TS2322: Type 'string' is not assignable to type 'number'.">prop1</error>: "foo"}});
+      let <error descr="TS2322: Type 'number' is not assignable to type 'typeof Foo__SvelteComponent_'.">foo</error>: typeof Foo = 5;
+      console.log(foo);
+    """.trimIndent())
+    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    assertCorrectServiceForTsFile()
+
+    // typescript-plugin-svelte for now doesn't check the path, only file name
+    myFixture.configureByText("+page.server.ts", """
+      // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols // todo update after WEB-61821
+
+      export async function load(event<error descr="TS2307: Cannot find module './${"$"}types.js' or its corresponding type declarations. (this likely means that SvelteKit's type generation didn't run yet - try running it by executing 'npm run dev' or 'npm run build')">)</error> {
+        helper(event);
+        return {};
+      }
+      
+      export async function <error descr="TS71001: Invalid export 'misspelledLoad' (valid exports are prerender, ssr, csr, trailingSlash, config, actions, load, entries, or anything with a '_' prefix)">misspelledLoad</error>(event: any) {
+        helper(event);
+        return {};
+      }
+      
+      function helper(<error descr="TS7006: Parameter 'implicitAny' implicitly has an 'any' type.">implicitAny</error>) {
+        return implicitAny;
+      }
+    """.trimIndent())
+    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+  }
+
 }

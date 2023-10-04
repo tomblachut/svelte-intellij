@@ -10,18 +10,24 @@ import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.bind
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.service.SvelteLspExecutableDownloader
+import dev.blachut.svelte.lang.service.SvelteTypeScriptPluginPackageDownloader
 
 class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedConfigurable.Simple(), Configurable {
   private val settings = getSvelteServiceSettings(project)
 
   override fun Panel.createContent() {
     group(SvelteBundle.message("svelte.service.configurable.service.group")) {
-      row(SvelteBundle.message("svelte.service.configurable.service.package")) {
+      row(SvelteBundle.message("svelte.service.configurable.service.languageServerPackage")) {
         cell(SvelteLspExecutableDownloader.createNodePackageField(project))
           .align(AlignX.FILL)
           .bind(settings::lspServerPackageRef)
       }
 
+      row(SvelteBundle.message("svelte.service.configurable.service.tsPluginPackage")) {
+        cell(SvelteTypeScriptPluginPackageDownloader.createNodePackageField(project))
+          .align(AlignX.FILL)
+          .bind(settings::tsPluginPackageRef)
+      }
 
       buttonsGroup {
         row {

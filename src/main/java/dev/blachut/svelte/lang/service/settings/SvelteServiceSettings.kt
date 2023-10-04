@@ -8,6 +8,7 @@ import com.intellij.lang.typescript.lsp.restartTypeScriptServicesAsync
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
 import dev.blachut.svelte.lang.service.svelteLspServerPackageDescriptor
+import dev.blachut.svelte.lang.service.svelteTypeScriptPluginDescriptor
 
 fun getSvelteServiceSettings(project: Project): SvelteServiceSettings = project.service<SvelteServiceSettings>()
 
@@ -30,11 +31,21 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
       state.lspServerPackageName = refText
       if (changed) restartTypeScriptServicesAsync(project)
     }
+
+  var tsPluginPackageRef
+    get() = createPackageRef(state.tsPluginPackageName, svelteTypeScriptPluginDescriptor.serverPackage)
+    set(value) {
+      val refText = extractRefText(value)
+      val changed = state.tsPluginPackageName != refText
+      state.tsPluginPackageName = refText
+      if (changed) restartTypeScriptServicesAsync(project)
+    }
 }
 
 class SvelteServiceState : BaseState() {
   var innerServiceMode by enum(SvelteServiceMode.ENABLED)
   var lspServerPackageName by string(defaultPackageKey)
+  var tsPluginPackageName by string(defaultPackageKey)
 }
 
 enum class SvelteServiceMode {

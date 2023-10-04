@@ -34,6 +34,24 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
     }
   """.trimIndent()
 
+  protected val packageJson = """
+    {
+    	"name": "svelte-test",
+    	"version": "0.0.1",
+    	"private": true,
+    	"devDependencies": {
+    		"@sveltejs/adapter-auto": "^2.0.0",
+    		"@sveltejs/kit": "^1.20.4",
+    		"svelte": "^4.0.5",
+    		"svelte-check": "^3.4.3",
+    		"tslib": "^2.4.1",
+    		"typescript": "^5.0.0",
+    		"vite": "^4.4.2"
+    	},
+    	"type": "module"
+    }
+  """.trimIndent()
+
   override fun getExtension(): String = "svelte"
 
   override fun setUp() {
@@ -51,10 +69,16 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
     serviceSettings.serviceMode = SvelteServiceMode.ENABLED
 
     ensureServerDownloaded(SvelteLspExecutableDownloader)
+
+    myFixture.addFileToProject("package.json", packageJson)
   }
 
   protected fun assertCorrectService() {
     assertCorrectServiceImpl<SvelteLspTypeScriptService>()
+  }
+
+  protected fun assertCorrectServiceForTsFile() {
+    assertCorrectServiceImpl<SveltePluginTypeScriptService>()
   }
 
   protected fun withTestDataPathOverriden(action: () -> Unit) {
