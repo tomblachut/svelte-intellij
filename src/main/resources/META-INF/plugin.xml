@@ -133,6 +133,8 @@
                          key="svelte.service.configurable.title"
                          nonDefaultProject="true"
     />
+
+    <webSymbols.webTypes source="web-types/svelte.web-types.json" enableByDefault="true"/>
   </extensions>
   <extensions defaultExtensionNs="JavaScript">
     <languageServiceProvider order="first" implementation="dev.blachut.svelte.lang.service.SvelteLanguageServiceProvider"/>

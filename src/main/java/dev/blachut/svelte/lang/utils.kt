@@ -3,9 +3,11 @@ package dev.blachut.svelte.lang
 import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.lang.PsiBuilder
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
+import com.intellij.webSymbols.context.WebSymbolsContext
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
@@ -16,6 +18,14 @@ fun isSvelteContext(context: PsiElement): Boolean {
 
 fun isSvelteContext(file: VirtualFile): Boolean {
   return file.fileType == SvelteHtmlFileType.INSTANCE
+}
+
+fun isSvelteProjectContext(context: PsiElement): Boolean {
+  return WebSymbolsContext.get("svelte-project", context) == "svelte"
+}
+
+fun isSvelteProjectContext(project: Project, context: VirtualFile): Boolean {
+  return WebSymbolsContext.get("svelte-project", context, project) == "svelte"
 }
 
 fun isSvelteComponentTag(tagName: CharSequence): Boolean {
