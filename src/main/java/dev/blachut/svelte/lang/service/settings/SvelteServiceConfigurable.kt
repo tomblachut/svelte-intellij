@@ -19,7 +19,7 @@ class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedConfigurable
       row(SvelteBundle.message("svelte.service.configurable.service.package")) {
         cell(SvelteLspExecutableDownloader.createNodePackageField(project))
           .align(AlignX.FILL)
-          .bind(settings::packageRef)
+          .bind(settings::lspServerPackageRef)
       }
 
 

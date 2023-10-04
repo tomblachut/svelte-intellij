@@ -22,19 +22,19 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
       if (changed) restartTypeScriptServicesAsync(project)
     }
 
-  var packageRef
-    get() = createPackageRef(state.packageName, svelteLspServerPackageDescriptor.serverPackage)
+  var lspServerPackageRef
+    get() = createPackageRef(state.lspServerPackageName, svelteLspServerPackageDescriptor.serverPackage)
     set(value) {
       val refText = extractRefText(value)
-      val changed = state.packageName != refText
-      state.packageName = refText
+      val changed = state.lspServerPackageName != refText
+      state.lspServerPackageName = refText
       if (changed) restartTypeScriptServicesAsync(project)
     }
 }
 
 class SvelteServiceState : BaseState() {
   var innerServiceMode by enum(SvelteServiceMode.ENABLED)
-  var packageName by string(defaultPackageKey)
+  var lspServerPackageName by string(defaultPackageKey)
 }
 
 enum class SvelteServiceMode {
