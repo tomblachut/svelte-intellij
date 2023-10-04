@@ -11,7 +11,7 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.jetbrains.annotations.ApiStatus
 
 val svelteLspServerPackageDescriptor = LspServerPackageDescriptor("svelte-language-server",
-                                                                  "0.15.16",
+                                                                  "0.15.19",
                                                                   "/bin/server.js")
 
 /**
