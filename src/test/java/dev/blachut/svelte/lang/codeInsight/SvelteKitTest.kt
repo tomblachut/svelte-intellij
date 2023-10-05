@@ -24,17 +24,13 @@ class SvelteKitTest : BasePlatformTestCase() {
         assertInstanceOf(JSResolveResult.resolve(ref.multiResolve(false)), TypeScriptModule::class.java)
     }
 
-    fun testImplicitlyUsedExports() {
+    fun testImplicitlyUsedExportsDeosntApplyToSvelteFiles() {
         myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)
         myFixture.enableInspections(JSUnusedGlobalSymbolsInspection::class.java)
 
         myFixture.configureByText("index.svelte", """
             <script context="module" lang="ts">
-                const <warning>router</warning> = true;
-                export const prerender = true;
-                export const ssr = true;
-                export const hydrate = true;
-                export const <warning>hydrate2</warning> = true;
+                export const <warning>prerender</warning> = true;
             </script>
             <script lang="ts">
                 export const <warning>hydrate</warning> = true;
