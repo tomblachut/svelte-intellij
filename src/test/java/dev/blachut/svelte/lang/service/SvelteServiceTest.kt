@@ -196,7 +196,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.configureByText("Foo.svelte", """
       <script>
-        import { Inner, Inner as Renamed, <weak_warning descr="Cannot resolve symbol 'Wrong'">Wrong</weak_warning> } from "./Helper.svelte";
+        import { Inner, Inner as Renamed, <error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?"><weak_warning descr="Cannot resolve symbol 'Wrong'">Wrong</weak_warning></error> } from "./Helper.svelte";
       
         new Inner;
         new Renamed;
@@ -223,7 +223,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        import { Inner, Inner as Renamed, <error descr="Cannot resolve symbol 'Wrong'">Wrong</error>, type Foo } from "./Helper.svelte";
+        import { Inner, Inner as Renamed, <error descr="Cannot resolve symbol 'Wrong'"><error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?">Wrong</error></error>, type Foo } from "./Helper.svelte";
       
         new Inner;
         new Renamed;
