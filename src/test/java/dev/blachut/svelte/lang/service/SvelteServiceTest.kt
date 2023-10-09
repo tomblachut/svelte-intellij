@@ -2,7 +2,12 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSNavigationTest
+import com.intellij.mock.MockDocument
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.platform.lsp.tests.checkLspHighlighting
+import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
+import com.intellij.testFramework.ExpectedHighlightingData
+import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
 import org.junit.Test
 
@@ -32,6 +37,42 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
+  }
+
+  @Test
+  fun testNotificationsForTSFileChanges() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("helper.ts", "") // empty file will trigger "not a module" error
+    val helperDocument = myFixture.editor.document
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        import * as ns from <error>"./helper"</error>;
+        
+        const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
+        console.log(ns, expectError);
+      </script>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    WriteCommandAction.runWriteCommandAction(project) {
+      helperDocument.insertString(0, "export {};")
+    }
+
+    val checkDoc = MockDocument()
+    checkDoc.replaceText("""
+      <script lang="ts">
+        import * as ns from "./helper";
+        
+        const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
+        console.log(ns, expectError);
+      </script>
+    """.trimIndent(), 0)
+
+    val data = ExpectedHighlightingData(checkDoc, true, true, false)
+    data.init()
+    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    (myFixture as CodeInsightTestFixtureImpl).collectAndCheckHighlighting(data)
   }
 
   @Test

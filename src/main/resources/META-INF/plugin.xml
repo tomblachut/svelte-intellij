@@ -134,6 +134,8 @@
                          nonDefaultProject="true"
     />
 
+    <editorFactoryDocumentListener implementation="dev.blachut.svelte.lang.service.SvelteLspCustomDocumentListener"/>
+
     <webSymbols.webTypes source="web-types/svelte.web-types.json" enableByDefault="true"/>
   </extensions>
   <extensions defaultExtensionNs="JavaScript">

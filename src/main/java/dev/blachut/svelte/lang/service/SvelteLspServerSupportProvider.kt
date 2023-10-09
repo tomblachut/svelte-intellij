@@ -8,6 +8,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.platform.lsp.api.LspServerSupportProvider.LspServerStarter
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
+import org.eclipse.lsp4j.services.LanguageServer
 import org.jetbrains.annotations.ApiStatus
 
 val svelteLspServerPackageDescriptor = LspServerPackageDescriptor("svelte-language-server",
@@ -30,6 +31,8 @@ class SvelteLspServerSupportProvider : LspServerSupportProvider {
  */
 class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, svelteLspServerPackageDescriptor, "Svelte") {
   override fun isSupportedFile(file: VirtualFile): Boolean = isFileAcceptableForService(file)
+
+  override val lsp4jServerClass: Class<out LanguageServer> = SvelteLsp4jServer::class.java
 }
 
 @ApiStatus.Experimental
