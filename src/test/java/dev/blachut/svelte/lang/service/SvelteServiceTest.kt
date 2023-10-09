@@ -29,7 +29,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       {acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'."><weak_warning descr="Argument type  boolean  is not assignable to parameter type  number ">true</weak_warning></error>)}
       
       <input <warning descr="Svelte: A11y: Avoid using autofocus">autofocus</warning>>
-    """)
+    """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
   }
@@ -61,8 +61,8 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <<error descr="Svelte: Property 'numB' is missing in type '{}' but required in type '{ numA?: number | undefined; numB: number; }'.">Child</error> />
       
       <Child <error descr="Svelte: Type '{ numBPrivate: undefined; numB: number; }' is not assignable to type '{ numA?: number | undefined; numB: number; }'.
-  Object literal may only specify known properties, and '\"numBPrivate\"' does not exist in type '{ numA?: number | undefined; numB: number; }'.">numBPrivate</error>={undefined} numB={1} />
-    """)
+        Object literal may only specify known properties, and '\"numBPrivate\"' does not exist in type '{ numA?: number | undefined; numB: number; }'.">numBPrivate</error>={undefined} numB={1} />
+    """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
   }
@@ -96,7 +96,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       {:else}
         <p>{model.errorMessage}</p>
       {/if}
-    """)
+    """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
   }
@@ -251,7 +251,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <button on:click={handleClick}>Hello</button>
-    """)
+    """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
 
@@ -271,7 +271,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <button on:click={<caret>handleClick}>Hello</button>
-    """)
+    """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
 
@@ -288,7 +288,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <p>Foo: {<caret>foo}</p>
-    """)
+    """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
 
