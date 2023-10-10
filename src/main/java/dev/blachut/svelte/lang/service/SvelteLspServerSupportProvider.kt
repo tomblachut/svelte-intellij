@@ -12,7 +12,7 @@ import org.eclipse.lsp4j.services.LanguageServer
 import org.jetbrains.annotations.ApiStatus
 
 val svelteLspServerPackageDescriptor = LspServerPackageDescriptor("svelte-language-server",
-                                                                  "0.15.19",
+                                                                  "0.15.20",
                                                                   "/bin/server.js")
 
 /**
