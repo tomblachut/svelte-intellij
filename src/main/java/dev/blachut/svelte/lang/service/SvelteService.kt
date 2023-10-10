@@ -24,14 +24,10 @@ fun isFileAcceptableForService(file: VirtualFile): Boolean {
  */
 fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
   return isFileAcceptableForService(context) &&
-         isServiceEnabledByContextAndSettings(project, context) &&
-         SvelteLspExecutableDownloader.getExecutableOrRefresh(project) != null
-}
-
-private fun isServiceEnabledByContextAndSettings(project: Project, context: VirtualFile): Boolean {
-  return TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
+         TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
          !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
-         isSvelteServiceEnabledBySettings(project)
+         isSvelteServiceEnabledBySettings(project) &&
+         SvelteLspExecutableDownloader.getExecutableOrRefresh(project) != null
 }
 
 private fun isSvelteServiceEnabledBySettings(project: Project): Boolean {
