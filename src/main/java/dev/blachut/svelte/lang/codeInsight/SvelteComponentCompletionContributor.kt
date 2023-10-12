@@ -7,7 +7,7 @@ import com.intellij.lang.javascript.completion.JSImportCompletionUtil
 import com.intellij.lang.javascript.dialects.JSHandlersFactory
 import com.intellij.lang.javascript.frameworks.jsx.JSXComponentCompletionContributor
 import com.intellij.lang.javascript.modules.imports.JSImportCandidate
-import com.intellij.lang.javascript.modules.imports.providers.ES6ExportedCandidatesProvider
+import com.intellij.lang.javascript.modules.imports.providers.ES6ExportedCandidatesProviderBase
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
 import com.intellij.lang.javascript.psi.JSDefinitionExpression
 import com.intellij.lang.javascript.psi.JSNamedElement
@@ -18,7 +18,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.impl.source.xml.TagNameReference
 import com.intellij.psi.xml.XmlTag
-import com.intellij.util.containers.orNull
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
@@ -58,7 +57,7 @@ class SvelteComponentCompletionContributor : CompletionContributor() {
 
         val name = ResolveProcessor.getName(element) ?: return true
         if (isSvelteComponentTag(name) && !collectedNames.contains(name) && prefixMatcher.prefixMatches(name)) {
-          val expandedElement = ES6ExportedCandidatesProvider.expandElementAndFilter(element, placeInfo).orNull()
+          val expandedElement = ES6ExportedCandidatesProviderBase.expandElementAndFilter(element, placeInfo)
           collectedNames.add(name)
           if (expandedElement != null) {
             val lookup = createLookup(name, null, element, XmlTagInsertHandler.INSTANCE)
