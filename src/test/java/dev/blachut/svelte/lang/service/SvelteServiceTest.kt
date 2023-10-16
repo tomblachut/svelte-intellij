@@ -31,7 +31,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <!-- todo remove duplicate internal warning -->
-      {acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'."><weak_warning descr="Argument type  boolean  is not assignable to parameter type  number ">true</weak_warning></error>)}
+      {acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'."><weak_warning descr="Argument type boolean is not assignable to parameter type number">true</weak_warning></error>)}
       
       <input <warning descr="Svelte: A11y: Avoid using autofocus">autofocus</warning>>
     """.trimIndent())
