@@ -38,6 +38,6 @@ class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescript
 @ApiStatus.Experimental
 object SvelteLspExecutableDownloader : LspServerDownloader(svelteLspServerPackageDescriptor) {
   override fun getSelectedPackageRef(project: Project): NodePackageRef {
-    return getSvelteServiceSettings(project).tsPluginPackageRef
+    return getSvelteServiceSettings(project).lspServerPackageRef
   }
 }

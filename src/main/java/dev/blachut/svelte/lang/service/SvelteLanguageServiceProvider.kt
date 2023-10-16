@@ -11,7 +11,7 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFile
 import dev.blachut.svelte.lang.isSvelteContext
 
-internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServiceProvider { // add ts plugin
+internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServiceProvider {
   private val lspService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SvelteLspTypeScriptServiceWrapper>() }
   private val tsService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SveltePluginTypeScriptServiceWrapper>() }
 
