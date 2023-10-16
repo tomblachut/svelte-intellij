@@ -23,7 +23,14 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true
-      }
+      },
+      // include is adapted from SvelteKit, but more loose
+      "include": [
+        "./**/*.js",
+        "./**/*.ts",
+        "./**/*.d.ts",
+        "./**/*.svelte",
+      ]
     }
   """.trimIndent()
 
