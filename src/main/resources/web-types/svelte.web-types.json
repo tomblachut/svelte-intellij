@@ -1,7 +1,7 @@
 {
   "$schema": "../../../community/platform/webSymbols/web-types-gen/resources/web-types.json",
   "name": "svelte",
-  "version": "4.0.0",
+  "version": "3.0.0",
   "contexts-config": {
     "svelte": {
       "kind": "svelte-project",
