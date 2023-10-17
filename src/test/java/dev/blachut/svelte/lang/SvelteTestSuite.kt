@@ -7,6 +7,7 @@ import dev.blachut.svelte.lang.editor.SvelteEditorTest
 import dev.blachut.svelte.lang.editor.SvelteEmmetTest
 import dev.blachut.svelte.lang.format.SvelteFormatterTest
 import dev.blachut.svelte.lang.parsing.html.*
+import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
 import dev.blachut.svelte.lang.service.SvelteServiceDocumentationTest
 import dev.blachut.svelte.lang.service.SvelteServiceTest
 import org.junit.runner.RunWith
@@ -15,6 +16,7 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
   SvelteServiceTest::class,
+  SvelteServiceCompletionTest::class,
   SvelteServiceDocumentationTest::class,
 )
 class SvelteServiceTestSuite
