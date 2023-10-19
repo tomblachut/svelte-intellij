@@ -17,7 +17,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
   }
 
   @Test
-  fun _testPropertiesOnNullableReferences() { // WEB-63103
+  fun testPropertiesOnNullableReferences() { // WEB-63103
     myFixture.addFileToProject("tsconfig.json", tsconfig)
 
     myFixture.addFileToProject("api.ts", """
