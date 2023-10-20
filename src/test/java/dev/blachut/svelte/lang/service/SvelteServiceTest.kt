@@ -146,7 +146,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   fun testTypesFromSeparateScriptTags() { // WEB-54516
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
-      <script context='module' lang='ts'>
+      <script context="module" lang="ts">
         export interface User {
           foo: number;
         }
@@ -156,7 +156,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         }
       </script>
       
-      <script lang='ts'>
+      <script lang="ts">
         export let user: User;
         defaultUser = user;
       </script>

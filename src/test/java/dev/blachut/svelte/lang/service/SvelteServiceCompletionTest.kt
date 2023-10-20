@@ -63,7 +63,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
     """.trimIndent())
 
     myFixture.configureByText("Usage.svelte", """
-      <script lang='ts'>
+      <script lang="ts">
         import type { ActionData } from './api';
       
         export let form: ActionData;
@@ -80,7 +80,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
 
     // todo missing support for additionalTextEdits in LspCompletionSupport, replace with below
     myFixture.checkResult("""
-      <script lang='ts'>
+      <script lang="ts">
         import type { ActionData } from './api';
       
         export let form: ActionData;

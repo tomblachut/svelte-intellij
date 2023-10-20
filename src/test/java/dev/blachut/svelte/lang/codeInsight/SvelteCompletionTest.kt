@@ -13,7 +13,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
   }
 
   fun testScriptKeywordsTS() {
-    myFixture.configureByText("Component.svelte", "<script lang='ts'><caret></script>")
+    myFixture.configureByText("Component.svelte", """<script lang="ts"><caret></script>""")
     hasElements(myFixture.completeBasic(), "export", "interface")
   }
 
