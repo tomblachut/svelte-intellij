@@ -1,7 +1,9 @@
 package dev.blachut.svelte.lang.service
 
+import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.lang.javascript.typescript.service.TypeScriptServiceTestBase
 import com.intellij.platform.lsp.tests.checkLspHighlighting
+import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import dev.blachut.svelte.lang.checkCompletionContains
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
@@ -14,6 +16,26 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
     defaultCompletionTest(directory = true)
     val lookupElements = myFixture.completeBasic()
     lookupElements.checkCompletionContains("somePost", "uniqueName")
+  }
+
+  @Test
+  fun testEventSnippet() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Usage.svelte", """
+      <button :blu<caret> />
+    """.trimIndent())
+
+    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    assertCorrectService()
+
+    myFixture.completeBasic()
+    myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR)
+    myFixture.type("|prevent")
+    myFixture.completeBasic()
+
+    myFixture.checkResult("""
+      <button on:blur|preventDefault={} />
+    """.trimIndent())
   }
 
   @Test
