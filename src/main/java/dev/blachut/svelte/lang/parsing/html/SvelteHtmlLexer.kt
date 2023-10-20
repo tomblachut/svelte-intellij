@@ -9,19 +9,28 @@ import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
-class SvelteHtmlLexer : HtmlLexer(SvelteHtmlBaseLexer(), false) {
+class SvelteHtmlLexer(highlightMode: Boolean) : HtmlLexer(SvelteHtmlBaseLexer(), false, highlightMode) {
 
   override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
-    // TODO Verify if those masks don't clash with ones used in BaseHtmlLexer.initState
-    val baseState = initialState and 0xffff
-    val nestingLevel = initialState shr 16
-    (delegate as SvelteHtmlBaseLexer).flexLexer.bracesNestingLevel = nestingLevel
-    super.start(buffer, startOffset, endOffset, baseState)
+    if (isHighlighting) {
+      super.start(buffer, startOffset, endOffset, initialState)
+    }
+    else {
+      // TODO Verify if those masks don't clash with ones used in BaseHtmlLexer.initState
+      val baseState = initialState and 0xffff
+      val nestingLevel = initialState shr 16
+      (delegate as SvelteHtmlBaseLexer).flexLexer.bracesNestingLevel = nestingLevel
+      super.start(buffer, startOffset, endOffset, baseState)
+    }
   }
 
   override fun getState(): Int {
-    val nestingLevel = (delegate as SvelteHtmlBaseLexer).flexLexer.bracesNestingLevel
-    return (nestingLevel shl 16) or (super.getState() and 0xffff)
+    if (isHighlighting) {
+      return super.getState()
+    } else {
+      val nestingLevel = (delegate as SvelteHtmlBaseLexer).flexLexer.bracesNestingLevel
+      return (nestingLevel shl 16) or (super.getState() and 0xffff)
+    }
   }
 
   override fun acceptEmbeddedContentProvider(provider: HtmlEmbeddedContentProvider): Boolean =

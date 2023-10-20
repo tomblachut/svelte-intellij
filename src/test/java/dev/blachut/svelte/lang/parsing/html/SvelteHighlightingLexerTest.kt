@@ -39,7 +39,7 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
   override fun getPathToTestDataFile(extension: String): String = getSvelteTestDataPath() + "/$dirPath/" + getTestName(false) + extension
 
   override fun createLexer(): Lexer {
-    return SvelteHtmlHighlightingLexer()
+    return SvelteHtmlLexer(true)
   }
 
   fun testBlockAwaitThenThenThen() = doTest()

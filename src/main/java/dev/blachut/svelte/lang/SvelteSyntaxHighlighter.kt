@@ -7,12 +7,12 @@ import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey
 import com.intellij.psi.tree.IElementType
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlHighlightingLexer
+import dev.blachut.svelte.lang.parsing.html.SvelteHtmlLexer
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 internal class SvelteSyntaxHighlighter : HtmlFileHighlighter() {
   override fun getHighlightingLexer(): Lexer {
-    return SvelteHtmlHighlightingLexer()
+    return SvelteHtmlLexer(true)
   }
 
   override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {

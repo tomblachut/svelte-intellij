@@ -22,7 +22,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 
 class SvelteHTMLParserDefinition : HTMLParserDefinition() {
   override fun createLexer(project: Project): Lexer {
-    return SvelteHtmlLexer()
+    return SvelteHtmlLexer(false)
   }
 
   override fun createParser(project: Project?): PsiParser {

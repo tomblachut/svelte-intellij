@@ -17,7 +17,7 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
 
   override fun isEnabled(lexer: BaseHtmlLexer): Boolean {
-    return lexer is SvelteHtmlLexer || lexer is SvelteHtmlHighlightingLexer
+    return lexer is SvelteHtmlLexer
   }
 
   override fun createEmbeddedContentProviders(lexer: BaseHtmlLexer): List<HtmlEmbeddedContentProvider> =
