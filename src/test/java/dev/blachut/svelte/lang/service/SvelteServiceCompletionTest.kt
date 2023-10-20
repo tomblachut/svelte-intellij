@@ -78,7 +78,6 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
     val elements = myFixture.completeBasic()
     myFixture.type('\t')
 
-    // todo missing support for additionalTextEdits in LspCompletionSupport, replace with below
     myFixture.checkResult("""
       <script lang="ts">
         import type { ActionData } from './api';
