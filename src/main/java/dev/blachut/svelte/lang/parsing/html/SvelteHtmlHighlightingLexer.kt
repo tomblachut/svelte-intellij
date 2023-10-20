@@ -7,7 +7,7 @@ import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
-class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(SvelteHtmlBaseLexer(), false, null) {
+class SvelteHtmlHighlightingLexer : HtmlHighlightingLexer(SvelteHtmlBaseLexer(), false) {
 
   override fun acceptEmbeddedContentProvider(provider: HtmlEmbeddedContentProvider): Boolean =
     provider::class != HtmlScriptStyleEmbeddedContentProvider::class
