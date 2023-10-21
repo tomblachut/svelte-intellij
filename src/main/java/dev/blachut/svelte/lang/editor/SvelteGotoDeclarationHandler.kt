@@ -15,6 +15,7 @@ class SvelteGotoDeclarationHandler : GotoDeclarationHandler {
     ApplicationManager.getApplication().assertReadAccessAllowed()
     sourceElement ?: return null
     if (!isSvelteContext(sourceElement)) return null
-    return getResultsFromService(editor.project ?: return null, sourceElement, editor)
+    val project = editor.project ?: return null
+    return getResultsFromService(project, sourceElement, editor)
   }
 }
