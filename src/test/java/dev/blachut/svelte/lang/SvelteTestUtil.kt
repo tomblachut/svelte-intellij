@@ -7,6 +7,24 @@ import com.intellij.testFramework.fixtures.IdeaTestExecutionPolicy
 
 private const val SVELTE_TEST_DATA_PATH = "/svelte/src/test/resources"
 
+internal val svelteKitPackageJson = """
+  {
+    "name": "svelte-test",
+    "version": "0.0.1",
+    "private": true,
+    "devDependencies": {
+      "@sveltejs/adapter-auto": "^2.0.0",
+      "@sveltejs/kit": "^1.20.4",
+      "svelte": "^4.0.5",
+      "svelte-check": "^3.4.3",
+      "tslib": "^2.4.1",
+      "typescript": "^5.0.0",
+      "vite": "^4.4.2"
+    },
+    "type": "module"
+  }
+""".trimIndent()
+
 fun getRelativeSvelteTestDataPath(): String {
   return "/plugins$SVELTE_TEST_DATA_PATH"
 }
