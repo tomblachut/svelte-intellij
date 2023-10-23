@@ -6,7 +6,6 @@ import com.intellij.lang.html.HtmlParsing
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
-import com.intellij.util.containers.Stack
 import com.intellij.xml.psi.XmlPsiBundle
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
@@ -16,42 +15,46 @@ import dev.blachut.svelte.lang.psi.*
 
 class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
-  private val openedBlocks = Stack<OpenedBlock>()
-
   private fun parseSvelteTag() {
     assert(token() === SvelteTokenTypes.START_MUSTACHE)
     val (tagToken, tagMarker) = SvelteTagParsing.parseTag(builder)
-
+    val topLevelBlock = topLevelBlock
     if (SvelteTagElementTypes.START_TAGS.contains(tagToken)) {
-      val blockTagLevel = stackSize() + 1
-      val openedBlock = SvelteBlockParsing.startBlock(blockTagLevel, tagToken, tagMarker, builder.mark())
-      pushItemToStack(SyntheticTag(tagMarker))
-      openedBlocks.push(openedBlock)
+      val openedBlock = SvelteBlockParsing.startBlock(tagToken, tagMarker, builder.mark())
+      pushItemToStack(openedBlock)
     }
     else if (SvelteTagElementTypes.INNER_TAGS.contains(tagToken)) {
-      if (!openedBlocks.empty() && openedBlocks.peek().isMatchingInnerTag(tagToken)) {
-        val openedBlock = openedBlocks.peek()
-
-        flushHtmlTags(tagMarker, openedBlock.tagLevel)
-        openedBlock.handleInnerTag(tagToken, tagMarker, builder.mark())
+      if (topLevelBlock != null && topLevelBlock.isMatchingInnerTag(tagToken)) {
+        flushOpenItemsWhile(tagMarker) { it !is SvelteBlock }
+        topLevelBlock.handleInnerTag(tagToken, tagMarker, builder.mark())
       }
       else {
         tagMarker.precede().errorBefore(SvelteBundle.message("svelte.parsing.error.unexpected.inner.tag"), tagMarker)
       }
     }
     else if (SvelteTagElementTypes.END_TAGS.contains(tagToken)) {
-      if (!openedBlocks.empty() && openedBlocks.peek().isMatchingEndTag(tagToken)) {
-        val openedBlock = openedBlocks.pop()
-
-        flushHtmlTags(tagMarker, openedBlock.tagLevel)
-        popItemFromStack() // SYNTHETIC_TAG
-        openedBlock.handleEndTag(tagMarker)
+      if (topLevelBlock != null && topLevelBlock.isMatchingEndTag(tagToken)) {
+        flushOpenItemsWhile(tagMarker) { it !is SvelteBlock }
+        (popItemFromStack() as SvelteBlock).handleEndTag(tagMarker)
       }
       else {
         tagMarker.precede().errorBefore(SvelteBundle.message("svelte.parsing.error.unexpected.end.tag"), tagMarker)
       }
     }
   }
+
+  private val topLevelBlock: SvelteBlock?
+    get() {
+      var result: SvelteBlock? = null
+      processStackItems {
+        if (it is SvelteBlock) {
+          result = it
+          false
+        }
+        else true
+      }
+      return result
+    }
 
   /**
    * Do not use in combination with [parseDocument]
@@ -65,14 +68,14 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         parseSvelteTag()
       }
       else {
-        if (openedBlocks.isNotEmpty() && text == null) {
+        if (topLevelBlock != null && text == null) {
           text = builder.mark()
         }
         builder.advanceLexer()
       }
     }
     text?.done(XmlElementType.XML_TEXT)
-    flushOpenTags()
+    flushOpenItemsWhile { true }
   }
 
   override fun getHtmlTagElementType(info: HtmlTagInfo, tagLevel: Int): IElementType {
@@ -107,27 +110,11 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     return null
   }
 
-  override fun flushOpenTags() {
-    while (!openedBlocks.empty()) {
-      val openedBlock = openedBlocks.pop()
-      val marker = builder.mark()
-      flushHtmlTags(marker, openedBlock.tagLevel)
-      popItemFromStack() // SYNTHETIC_TAG
-      openedBlock.handleMissingEndTag(marker)
-    }
-
-    super.flushOpenTags()
-  }
-
-  private fun flushHtmlTags(beforeMarker: Marker, targetTagLevel: Int) {
-    while (stackSize() > targetTagLevel) {
-      val tagInfo = peekTagInfo()
-      if (isEndTagRequired(tagInfo)) {
-        val errorMarker = beforeMarker.precede()
-        errorMarker.errorBefore(XmlPsiBundle.message("xml.parsing.named.element.is.not.closed", tagInfo.originalName), beforeMarker)
-      }
-      doneTagBefore(beforeMarker)
-    }
+  override fun autoCloseItem(item: HtmlParserStackItem, beforeMarker: Marker?) {
+    if (item is SvelteBlock)
+      item.handleMissingEndTag(beforeMarker ?: builder.mark())
+    else
+      super.autoCloseItem(item, beforeMarker)
   }
 
   override fun hasCustomTagHeaderContent(): Boolean {
@@ -223,11 +210,6 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
     advance() // }
     expressionMarker.done(SvelteElementTypes.ATTRIBUTE_EXPRESSION)
-  }
-
-  // TODO Merge with OpenedBlock
-  private class SyntheticTag(private val startMarker: Marker) : HtmlParserStackItem {
-    override fun getStartMarker(): Marker = startMarker
   }
 
 }

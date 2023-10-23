@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.parsing.html
 
 import com.intellij.lang.PsiBuilder.Marker
+import com.intellij.lang.html.HtmlParsing
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteBundle
@@ -8,7 +9,7 @@ import dev.blachut.svelte.lang.psi.*
 import org.jetbrains.annotations.Nls
 
 object SvelteBlockParsing {
-  fun startBlock(tagLevel: Int, tagToken: IElementType, tagMarker: Marker, fragmentMarker: Marker): OpenedBlock {
+  fun startBlock(tagToken: IElementType, tagMarker: Marker, fragmentMarker: Marker): SvelteBlock {
     val parsingDefinition = when (tagToken) {
       SvelteTagElementTypes.IF_START -> IF_BLOCK_DEFINITION
       SvelteTagElementTypes.EACH_START -> EACH_BLOCK_DEFINITION
@@ -20,7 +21,7 @@ object SvelteBlockParsing {
     val outerMarker = tagMarker.precede()
     val innerMarker = tagMarker.precede()
 
-    return OpenedBlock(parsingDefinition, tagLevel, outerMarker, innerMarker, fragmentMarker)
+    return SvelteBlock(parsingDefinition, outerMarker, innerMarker, fragmentMarker)
   }
 
   private val IF_BLOCK_DEFINITION = BlockParsingDefinition(
@@ -59,13 +60,12 @@ object SvelteBlockParsing {
   )
 }
 
-data class OpenedBlock(
+data class SvelteBlock(
   private val parsingDefinition: BlockParsingDefinition,
-  val tagLevel: Int,
   val outerMarker: Marker,
   private var innerMarker: Marker,
   private var fragmentMarker: Marker
-) {
+): HtmlParsing.HtmlParserStackItem {
   private var lastInnerElement = parsingDefinition.primaryBranchToken
 
   fun isMatchingInnerTag(token: IElementType) = parsingDefinition.innerTagToBranchTokens.containsKey(token)
