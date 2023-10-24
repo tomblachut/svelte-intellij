@@ -9,7 +9,8 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiFile
 import com.intellij.psi.templateLanguages.MultipleLangCommentProvider
-import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.contextOfType
+import com.intellij.psi.xml.XmlAttributeValue
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.isSvelteContext
@@ -29,18 +30,14 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
     lineEndLanguage: Language
   ): Commenter? {
     if (lineStartLanguage.isKindOf(JavascriptLanguage.INSTANCE)) {
-      val offset = editor.caretModel.offset
-      val wrapper = PsiTreeUtil.getContextOfType(file.findElementAt(offset), JSTagEmbeddedContent::class.java)
+      val startElement = file.findElementAt(editor.caretModel.offset)
 
-      val language = if (wrapper != null) {
-        // inside script tag
-        SvelteJSLanguage.INSTANCE
-      }
-      else {
-        // inside template
-        SvelteHTMLLanguage.INSTANCE
-      }
+      val jsMode = startElement?.contextOfType(
+        JSTagEmbeddedContent::class, // inside script tag
+        XmlAttributeValue::class,    // inside attribute value
+      ) != null
 
+      val language = if (jsMode) SvelteJSLanguage.INSTANCE else SvelteHTMLLanguage.INSTANCE
       return LanguageCommenters.INSTANCE.forLanguage(language)
     }
 
