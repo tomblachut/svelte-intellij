@@ -145,7 +145,8 @@
 
     <importCandidatesFactory implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentCandidatesProvider$Factory"/>
     <completionPlaceFilter implementation="dev.blachut.svelte.lang.codeInsight.SvelteHtmlTagCompletionPlaceFilterProvider"/>
-    <importModulePathStrategy implementation="dev.blachut.svelte.lang.codeInsight.SvelteImportModulePathStrategy"/>
+    <importModulePathStrategy order="after TypeScript"
+                              implementation="dev.blachut.svelte.lang.codeInsight.SvelteImportModulePathStrategy"/>
 
     <handlersFactory language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteHtmlHandlersFactory"/>
     <handlersFactory language="SvelteJS" implementationClass="dev.blachut.svelte.lang.SvelteJSHandlersFactory"/>
