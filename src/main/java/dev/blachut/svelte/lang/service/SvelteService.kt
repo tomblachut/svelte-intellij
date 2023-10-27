@@ -36,8 +36,7 @@ fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolea
  * If enabled but not available, will launch a background task that will eventually restart the services
  */
 fun isTypeScriptPluginEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
-  return TypeScriptLanguageServiceUtil.ACCEPTABLE_TS_FILE.value(context) &&
-         TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
+  return TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
          !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
          isSvelteServiceEnabledBySettings(project) &&
          isSvelteProjectContext(project, context) &&
