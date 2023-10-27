@@ -40,6 +40,22 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testSyntaxError() {
+    // This test checks if we properly process Diagnostics without code.
+    // It's important because exceptions in our highlighting are swallowed but appear to affect performance.
+    // Would be good to actually completely hide this annotation, but then I'm not sure how to still verify the above.
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts"><EOLError descr="Svelte: [svelte-preprocess] Encountered type error"></EOLError>
+        let hello = "hello"<error descr="Svelte: ',' expected."><error descr="Newline or semicolon expected">w</error>rong</error>;
+        console.log(hello);
+      </script>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testNotificationsForTSFileChanges() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("helper.ts", "") // empty file will trigger "not a module" error
