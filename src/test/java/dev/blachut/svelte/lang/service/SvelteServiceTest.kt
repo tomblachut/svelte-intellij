@@ -364,6 +364,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       {prop1}
     """.trimIndent())
     myFixture.checkLspHighlighting()
+
     myFixture.configureByText("usage.ts", """
       import Foo from "./Foo.svelte";
 
@@ -393,6 +394,16 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       }
     """.trimIndent())
     myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+
+
+    // todo suppress "Method expression is not of Function type"
+    myFixture.configureByText("anotherUsage.js", """
+      import Foo from "./Foo.svelte";
+
+      new <weak_warning>Foo</weak_warning>({props: {<error descr="TS2322: Type 'string' is not assignable to type 'number'.">prop1</error>: "foo"}});
+    """.trimIndent())
+    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    assertCorrectServiceForTsFile()
   }
 
 }
