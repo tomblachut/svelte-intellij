@@ -5,6 +5,7 @@ import com.intellij.codeInspection.SuppressQuickFix
 import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
+import com.intellij.lang.javascript.inspections.JSUndeclaredVariableInspection
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
 import com.intellij.lang.javascript.modules.TypeScriptCheckImportInspection
 import com.intellij.lang.javascript.psi.*
@@ -96,6 +97,9 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
       val referenceExpression = element.parent as? JSPsiReferenceElement
       return referenceExpression != null
              && tryRecheckResolveResults(referenceExpression)
+    }
+    if (inspectionId.equalsName<JSUndeclaredVariableInspection>()) { // WEB-63611
+      return true
     }
 
     return false
