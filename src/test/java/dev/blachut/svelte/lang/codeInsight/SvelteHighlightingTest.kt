@@ -434,31 +434,39 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testReactiveDeclarationReferenceJS() {
+  fun testReactiveDeclarationReferenceJS() { // WEB-59293 + WEB-63611
     myFixture.configureByText("Foo.svelte", """
       <script>
         ${'$'}: doubled = 2;
         ${'$'}: quadrupled = doubled * 2;
         
         <error descr="Unresolved variable or type reallyUnresolved">reallyUnresolved</error>;
+
+        function update() {
+          doubled = 42;
+        }
       </script>
 
-      <p>{doubled}</p>
+      <p on:click={update}>{doubled}</p>
       <p>{<error descr="Unresolved variable or type reallyUnresolved">reallyUnresolved</error>}</p>
     """.trimIndent())
     myFixture.testHighlighting()
   }
 
-  fun testReactiveDeclarationReferenceTS() {
+  fun testReactiveDeclarationReferenceTS() { // WEB-59293 + WEB-63611
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
         ${'$'}: doubled = 2;
         ${'$'}: quadrupled = doubled * 2;
         
         <error descr="Unresolved variable or type reallyUnresolved">reallyUnresolved</error>;
+        
+        function update() {
+          doubled = 42;
+        }
       </script>
 
-      <p>{doubled}</p>
+      <p on:click={update}>{doubled}</p>
       <p>{<error descr="Unresolved variable or type reallyUnresolved">reallyUnresolved</error>}</p>
     """.trimIndent())
     myFixture.testHighlighting()
