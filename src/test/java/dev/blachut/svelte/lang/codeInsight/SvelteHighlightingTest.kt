@@ -309,6 +309,18 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testBlockKeywords() {
+    myFixture.configureByText("Foo.svelte", """
+      {#each [] <info descr="null">as</info> <info descr="identifiers//parameter">local</info>}{/each}
+      {#await {} <info descr="null">then</info> <info descr="identifiers//parameter">local</info>}{/await}
+      
+      {@<info descr="null">debug</info> <info descr="identifiers//global variable">window</info>}
+      {@<info descr="null">html</info> ''}
+      {@<info descr="null">const</info> <info descr="identifiers//local variable">x</info> = 1}
+    """.trimIndent())
+    myFixture.testHighlighting(false, true, false)
+  }
+
   fun testEventsWithModifiers() {
     myFixture.configureByText("Foo.svelte", """
       <script>

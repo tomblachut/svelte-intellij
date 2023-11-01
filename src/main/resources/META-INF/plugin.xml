@@ -51,7 +51,6 @@
                        implementationClass="dev.blachut.svelte.lang.editor.SvelteBraceMatcher"/>
     <lang.syntaxHighlighterFactory language="SvelteHTML"
                                    implementationClass="dev.blachut.svelte.lang.SvelteSyntaxHighlighterFactory"/>
-    <highlightVisitor implementation="dev.blachut.svelte.lang.SvelteJSSemanticKeywordHighlighter"/>
     <annotator language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.SvelteDirectiveAnnotator"/>
     <lang.foldingBuilder language="SvelteHTML"
                          implementationClass="dev.blachut.svelte.lang.editor.SvelteFoldingBuilder"/>
