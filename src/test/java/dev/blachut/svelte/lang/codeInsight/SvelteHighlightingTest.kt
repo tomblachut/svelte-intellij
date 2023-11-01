@@ -409,6 +409,32 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testReactiveLabelKeywordJS() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        <info descr="reactive">${'$'}</info>: {
+          break <info descr="reactive">${'$'}</info>;
+        }
+        
+        <info descr="label">unrelated</info>: 1;
+      </script>
+    """.trimIndent())
+    myFixture.testHighlighting(false, true, false)
+  }
+
+  fun testReactiveLabelKeywordTS() {
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        <info descr="reactive">${'$'}</info>: {
+          break <info descr="reactive">${'$'}</info>;
+        }
+        
+        <info descr="label">unrelated</info>: 1;
+      </script>
+    """.trimIndent())
+    myFixture.testHighlighting(false, true, false)
+  }
+
   fun testNoRedundancyFromReactiveStatement() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">

@@ -5,7 +5,9 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.highlighting.JSHighlighter
+import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSLabeledStatement
+import com.intellij.lang.javascript.psi.JSStatementWithLabelReference
 import com.intellij.lang.javascript.validation.TypeScriptKeywordHighlighterVisitor
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
@@ -32,11 +34,26 @@ class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptK
   }
 
   override fun visitJSLabeledStatement(node: JSLabeledStatement) {
-    if (node.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
-      highlightChildKeywordOfType(node, JSTokenTypes.IDENTIFIER)
+    highlightReactiveLabel(node, node.label)
+    || super.visitJSLabeledStatement(node).let { true }
+  }
+
+  override fun visitJSStatementWithLabelReference(node: JSStatementWithLabelReference) {
+    highlightReactiveLabel(node, node.label)
+    || super.visitJSStatementWithLabelReference(node).let { true }
+  }
+
+  private fun highlightReactiveLabel(node: JSElement, label: String?): Boolean {
+    if (label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+      val identifier = node.node.findChildByType(JSTokenTypes.IDENTIFIER)
+        ?.psi
+      if (identifier != null) {
+        lineMarker(identifier, myHighlighter.getMappedKey(JSHighlighter.JS_KEYWORD), "reactive", myHolder)
+        return true
+      }
     }
 
-    super.visitJSLabeledStatement(node)
+    return false
   }
 
   override fun visitElement(element: PsiElement) {
