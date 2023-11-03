@@ -21,7 +21,6 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
-import com.intellij.util.text.SemVer
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 import org.eclipse.lsp4j.MarkupContent
 
@@ -32,10 +31,6 @@ import org.eclipse.lsp4j.MarkupContent
 class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java) {
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
-
-  override fun getServiceVersion(): SemVer {
-    return SvelteLspExecutableDownloader.calculateVersion(project)
-  }
 
   override fun createQuickInfoResponse(markupContent: MarkupContent): TypeScriptQuickInfoResponse {
     return TypeScriptQuickInfoResponse().apply {
