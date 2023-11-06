@@ -9,6 +9,7 @@ import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import com.intellij.testFramework.ExpectedHighlightingData
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
+import junit.framework.TestCase
 import org.junit.Test
 
 class SvelteServiceTest : SvelteServiceTestBase() {
@@ -404,6 +405,48 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
     assertCorrectServiceForTsFile()
+  }
+
+  @Test
+  fun testTypeScriptServiceResolve() {
+    performNpmInstallForPackageJson("package.json") // required by typescript-plugin-svelte
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.addFileToProject("randomFile.ts", """
+      export async function run() {
+        return {
+          /**
+           * bug-maker
+           */
+          exposedStuff: true,
+        };
+      }
+    """.trimIndent())
+
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        /**
+         * docs!
+         */
+        export function exposedStuff() {
+          console.log("hello!");
+        }
+      </script>
+      
+      <button on:click|preventDefault={exposedStuff} />
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+
+    myFixture.configureByText("usageTS.ts", """
+      import Foo from "./Foo.svelte";
+
+      let foo = new Foo({target: document}); // ts
+      foo.<caret>exposedStuff
+    """.trimIndent())
+    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    assertCorrectServiceForTsFile()
+    myFixture.getReferenceAtCaretPositionWithAssertion().let { ref ->
+      TestCase.assertEquals("Foo.svelte", ref.resolve()?.containingFile?.name)
+    }
   }
 
 }
