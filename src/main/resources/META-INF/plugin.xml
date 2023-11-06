@@ -34,6 +34,7 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+    <registryKey defaultValue="0.15.20" description="Svelte service version for downloading" key="svelte.language.server.default.version"/>
     <fileType name="Svelte" extensions="svelte" language="SvelteHTML"
               implementationClass="dev.blachut.svelte.lang.SvelteHtmlFileType" fieldName="INSTANCE"/>
 
