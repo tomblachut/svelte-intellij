@@ -447,6 +447,18 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     myFixture.getReferenceAtCaretPositionWithAssertion().let { ref ->
       TestCase.assertEquals("Foo.svelte", ref.resolve()?.containingFile?.name)
     }
+
+    myFixture.configureByText("usageJS.js", """
+      import Foo from "./Foo.svelte";
+
+      let foo = new <weak_warning>Foo</weak_warning>({target: document}); // js
+      foo.<caret>exposedStuff
+    """.trimIndent())
+    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    assertCorrectServiceForTsFile()
+    myFixture.getReferenceAtCaretPositionWithAssertion().let { ref ->
+      TestCase.assertEquals("Foo.svelte", ref.resolve()?.containingFile?.name)
+    }
   }
 
 }
