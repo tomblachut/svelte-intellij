@@ -24,7 +24,7 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
     }
 
   var lspServerPackageRef
-    get() = createPackageRef(state.lspServerPackageName, svelteLspServerPackageDescriptor.serverPackage)
+    get() = createPackageRef(state.lspServerPackageName, svelteLspServerPackageDescriptor().serverPackage)
     set(value) {
       val refText = extractRefText(value)
       val changed = state.lspServerPackageName != refText
