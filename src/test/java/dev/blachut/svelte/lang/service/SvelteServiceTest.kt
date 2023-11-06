@@ -378,8 +378,6 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
     // typescript-plugin-svelte for now doesn't check the path, only file name
     myFixture.configureByText("+page.server.ts", """
-      // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols // todo update after WEB-61821
-
       export async function load(event<error descr="TS2307: Cannot find module './${"$"}types.js' or its corresponding type declarations. (this likely means that SvelteKit's type generation didn't run yet - try running it by executing 'npm run dev' or 'npm run build')">)</error> {
         helper(event);
         return {};
