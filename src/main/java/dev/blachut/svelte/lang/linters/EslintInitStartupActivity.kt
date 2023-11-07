@@ -1,28 +1,27 @@
 package dev.blachut.svelte.lang.linters
 
-import com.intellij.ide.util.RunOnceUtil
-import com.intellij.openapi.diagnostic.Logger
+import com.intellij.ide.util.runOnceForApp
+import com.intellij.openapi.components.serviceAsync
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.StartupActivity
-import com.intellij.openapi.util.registry.Registry
+import com.intellij.openapi.startup.ProjectActivity
+import com.intellij.openapi.util.registry.RegistryManager
 import java.util.*
 
-class EslintInitStartupActivity : StartupActivity {
-
-  override fun runActivity(project: Project) {
+private class EslintInitStartupActivity : ProjectActivity {
+  override suspend fun execute(project: Project) {
     val key = "eslint.additional.file.extensions"
-
-    RunOnceUtil.runOnceForApp("svelte.init.key") {
+    runOnceForApp("svelte.init.key") {
       try {
-        val stringValue = Registry.stringValue(key)
-        if (!stringValue.contains("svelte")) {
-          val newValue = if (stringValue.isEmpty()) "svelte" else "$stringValue,svelte"
-          val value = Registry.get(key)
-          value.setValue(newValue)
+        val registryManager = serviceAsync<RegistryManager>()
+        val stringValue = registryManager.stringValue(key)
+        if (stringValue == null || !stringValue.contains("svelte")) {
+          val newValue = if (stringValue.isNullOrEmpty()) "svelte" else "$stringValue,svelte"
+          registryManager.get(key).setValue(newValue)
         }
       }
       catch (e: MissingResourceException) {
-        Logger.getInstance(EslintInitStartupActivity::class.java).warn("Cannot find the key: $key")
+        thisLogger().warn("Cannot find the key: $key")
       }
     }
   }
