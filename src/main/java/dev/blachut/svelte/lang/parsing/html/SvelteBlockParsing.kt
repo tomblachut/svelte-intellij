@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.parsing.html
 
+import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiBuilder.Marker
 import com.intellij.lang.html.HtmlParsing
 import com.intellij.openapi.util.NlsContexts
@@ -62,10 +63,10 @@ object SvelteBlockParsing {
 
 data class SvelteBlock(
   private val parsingDefinition: BlockParsingDefinition,
-  val outerMarker: Marker,
+  private val outerMarker: Marker,
   private var innerMarker: Marker,
   private var fragmentMarker: Marker
-): HtmlParsing.HtmlParserStackItem {
+) : HtmlParsing.HtmlParserStackItem {
   private var lastInnerElement = parsingDefinition.primaryBranchToken
 
   fun isMatchingInnerTag(token: IElementType) = parsingDefinition.innerTagToBranchTokens.containsKey(token)
@@ -81,17 +82,25 @@ data class SvelteBlock(
     fragmentMarker = nextFragmentMarker
   }
 
-  fun handleEndTag(resultMarker: Marker) {
-    fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
-    innerMarker.doneBefore(lastInnerElement, resultMarker)
-    outerMarker.done(parsingDefinition.blockToken)
-  }
-
-  fun handleMissingEndTag(errorMarker: Marker) {
-    fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, errorMarker)
-    innerMarker.doneBefore(lastInnerElement, errorMarker)
-    errorMarker.error(parsingDefinition.missingEndTagMessage)
-    outerMarker.done(parsingDefinition.blockToken)
+  override fun done(builder: PsiBuilder,
+                    beforeMarker: Marker?,
+                    incomplete: Boolean) {
+    if (beforeMarker == null) {
+      fragmentMarker.done(SvelteElementTypes.FRAGMENT)
+      innerMarker.done(lastInnerElement)
+      if (incomplete) {
+        builder.mark().error(parsingDefinition.missingEndTagMessage)
+      }
+      outerMarker.done(parsingDefinition.blockToken)
+    }
+    else {
+      fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, beforeMarker)
+      innerMarker.doneBefore(lastInnerElement, beforeMarker)
+      if (incomplete) {
+        builder.mark().error(parsingDefinition.missingEndTagMessage)
+      }
+      outerMarker.done(parsingDefinition.blockToken)
+    }
   }
 }
 
