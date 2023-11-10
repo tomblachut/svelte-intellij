@@ -2,6 +2,7 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSNavigationTest
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.mock.MockDocument
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.platform.lsp.tests.checkLspHighlighting
@@ -434,29 +435,31 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.checkLspHighlighting()
 
-    myFixture.configureByText("usageTS.ts", """
+    checkTypeScriptServiceResolve("usageTS.ts", """
       import Foo from "./Foo.svelte";
 
       let foo = new Foo({target: document}); // ts
       foo.<caret>exposedStuff
     """.trimIndent())
-    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
-    assertCorrectServiceForTsFile()
-    myFixture.getReferenceAtCaretPositionWithAssertion().let { ref ->
-      TestCase.assertEquals("Foo.svelte", ref.resolve()?.containingFile?.name)
-    }
 
-    myFixture.configureByText("usageJS.js", """
+    checkTypeScriptServiceResolve("usageJS.js", """
       import Foo from "./Foo.svelte";
 
-      let foo = new <weak_warning>Foo</weak_warning>({target: document}); // js
+      // noinspection JSValidateTypes
+      let foo = new Foo({target: document}); // js
       foo.<caret>exposedStuff
     """.trimIndent())
+  }
+
+  private fun checkTypeScriptServiceResolve(fileName: String, text: String) {
+    myFixture.configureByText(fileName, text)
     myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
     assertCorrectServiceForTsFile()
-    myFixture.getReferenceAtCaretPositionWithAssertion().let { ref ->
-      TestCase.assertEquals("Foo.svelte", ref.resolve()?.containingFile?.name)
-    }
+    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+    ref as JSReferenceExpression
+    TestCase.assertEquals(1, ref.multiResolve(false).size)
+    val target = ref.resolve()!!
+    TestCase.assertEquals("Foo.svelte", target.containingFile?.name)
   }
 
 }
