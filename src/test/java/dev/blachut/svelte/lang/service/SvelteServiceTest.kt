@@ -460,6 +460,9 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     TestCase.assertEquals(1, ref.multiResolve(false).size)
     val target = ref.resolve()!!
     TestCase.assertEquals("Foo.svelte", target.containingFile?.name)
+    // we'd love to double check what's the target of navigation but Svelte service works differently in prod and in tests
+    //target as JSFunctionDeclaration
+    //TestCase.assertEquals("exposedStuff", target.name)
   }
 
 }
