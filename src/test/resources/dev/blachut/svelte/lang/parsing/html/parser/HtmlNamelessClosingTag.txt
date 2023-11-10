@@ -21,7 +21,7 @@ SvelteHtmlFile: HtmlNamelessClosingTag.svelte
           XmlText
             XmlToken:XML_DATA_CHARACTERS('<>test')
           XmlToken:XML_END_TAG_START('</')
-          PsiErrorElement:Closing tag name missing
+          PsiErrorElement:Closing tag name is missing
             <empty list>
           XmlText
             XmlToken:XML_DATA_CHARACTERS('>')
