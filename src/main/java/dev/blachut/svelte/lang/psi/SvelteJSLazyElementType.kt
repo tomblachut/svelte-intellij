@@ -6,6 +6,7 @@ import com.intellij.lang.PsiBuilderFactory
 import com.intellij.lang.javascript.JSLanguageUtil
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
+import com.intellij.psi.ParsingDiagnostics
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
@@ -27,6 +28,7 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
     val project = psi.project
     val lexer = SvelteJSExpressionLexer(assumeExternalBraces)
     val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, lexer, language, chameleon.chars)
+    val startTime = System.nanoTime()
     val parser = JSLanguageUtil.createJSParser(language, builder)
 
     val rootMarker = builder.mark()
@@ -52,7 +54,9 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
 
     rootMarker.done(this)
 
-    return builder.treeBuilt.firstChildNode
+    val result = builder.treeBuilt.firstChildNode
+    ParsingDiagnostics.registerParse(builder, getLanguage(), System.nanoTime() - startTime);
+    return result
   }
 
   protected abstract fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>)
