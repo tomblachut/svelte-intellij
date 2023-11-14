@@ -7,8 +7,8 @@ import com.intellij.lang.typescript.lsp.extractRefText
 import com.intellij.lang.typescript.lsp.restartTypeScriptServicesAsync
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
-import dev.blachut.svelte.lang.service.svelteLspServerPackageDescriptor
-import dev.blachut.svelte.lang.service.svelteTypeScriptPluginDescriptor
+import dev.blachut.svelte.lang.service.SvelteLspExecutableDownloader
+import dev.blachut.svelte.lang.service.SvelteTypeScriptPluginPackageDownloader
 
 fun getSvelteServiceSettings(project: Project): SvelteServiceSettings = project.service<SvelteServiceSettings>()
 
@@ -24,7 +24,7 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
     }
 
   var lspServerPackageRef
-    get() = createPackageRef(state.lspServerPackageName, svelteLspServerPackageDescriptor().serverPackage)
+    get() = createPackageRef(state.lspServerPackageName, SvelteLspExecutableDownloader.packageDescriptor.serverPackage)
     set(value) {
       val refText = extractRefText(value)
       val changed = state.lspServerPackageName != refText
@@ -33,7 +33,7 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
     }
 
   var tsPluginPackageRef
-    get() = createPackageRef(state.tsPluginPackageName, svelteTypeScriptPluginDescriptor().serverPackage)
+    get() = createPackageRef(state.tsPluginPackageName, SvelteTypeScriptPluginPackageDownloader.packageDescriptor.serverPackage)
     set(value) {
       val refText = extractRefText(value)
       val changed = state.tsPluginPackageName != refText
