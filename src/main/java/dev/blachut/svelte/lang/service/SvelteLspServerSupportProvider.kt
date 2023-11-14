@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.eclipse.lsp4j.services.LanguageServer
 import org.jetbrains.annotations.ApiStatus
 
-val svelteLspServerPackageDescriptor: () -> LspServerPackageDescriptor = {
+private val svelteLspServerPackageDescriptor: () -> LspServerPackageDescriptor = {
   LspServerPackageDescriptor("svelte-language-server",
                              Registry.stringValue("svelte.language.server.default.version"),
                              "/bin/server.js")
