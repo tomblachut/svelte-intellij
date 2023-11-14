@@ -9,7 +9,7 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.jetbrains.annotations.ApiStatus
 
 
-val svelteTypeScriptPluginDescriptor: () -> LspServerPackageDescriptor = {
+private val svelteTypeScriptPluginDescriptor: () -> LspServerPackageDescriptor = {
   LspServerPackageDescriptor("typescript-svelte-plugin",
                              Registry.stringValue("svelte.typescript.plugin.default.version"),
                              "")
