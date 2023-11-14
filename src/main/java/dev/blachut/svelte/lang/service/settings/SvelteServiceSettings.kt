@@ -33,7 +33,7 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
     }
 
   var tsPluginPackageRef
-    get() = createPackageRef(state.tsPluginPackageName, svelteTypeScriptPluginDescriptor.serverPackage)
+    get() = createPackageRef(state.tsPluginPackageName, svelteTypeScriptPluginDescriptor().serverPackage)
     set(value) {
       val refText = extractRefText(value)
       val changed = state.tsPluginPackageName != refText
