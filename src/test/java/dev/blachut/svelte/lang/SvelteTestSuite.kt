@@ -39,6 +39,7 @@ class SvelteServiceTestSuite
     SvelteAutoPopupTest::class,
     SvelteCompletionTest::class,
     SvelteHighlightingTest::class,
+    SvelteRenameTest::class,
     SvelteResolveTest::class,
     SvelteNavigationTest::class,
     SvelteTypeScriptCompletionTest::class,
