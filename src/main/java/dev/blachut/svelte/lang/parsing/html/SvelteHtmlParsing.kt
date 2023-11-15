@@ -25,7 +25,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     }
     else if (SvelteTagElementTypes.INNER_TAGS.contains(tagToken)) {
       if (currentBlock != null && currentBlock.isMatchingInnerTag(tagToken)) {
-        flushIncompleteItemsWhile(tagMarker) { it !is SvelteBlock }
+        flushIncompleteStackItemsWhile(tagMarker) { it !is SvelteBlock }
         currentBlock.handleInnerTag(tagToken, tagMarker, builder.mark())
       }
       else {
@@ -34,8 +34,8 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     }
     else if (SvelteTagElementTypes.END_TAGS.contains(tagToken)) {
       if (currentBlock != null && currentBlock.isMatchingEndTag(tagToken)) {
-        flushIncompleteItemsWhile(tagMarker) { it !is SvelteBlock }
-        completeTopItemBefore(tagMarker)
+        flushIncompleteStackItemsWhile(tagMarker) { it !is SvelteBlock }
+        completeTopStackItemBefore(tagMarker)
       }
       else {
         tagMarker.precede().errorBefore(SvelteBundle.message("svelte.parsing.error.unexpected.end.tag"), tagMarker)
@@ -75,7 +75,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
       }
     }
     text?.done(XmlElementType.XML_TEXT)
-    flushIncompleteItemsWhile { true }
+    flushIncompleteStackItemsWhile { true }
   }
 
   override fun getHtmlTagElementType(info: HtmlTagInfo, tagLevel: Int): IElementType {
