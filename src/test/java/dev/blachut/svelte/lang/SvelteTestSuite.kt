@@ -48,6 +48,7 @@ class SvelteServiceTestSuite
     SvelteCreateFunctionTest::class,
     SvelteCreateImportTest::class,
     SvelteKitTest::class,
+    // Service
     SvelteServiceTestSuite::class,
 )
 class SvelteTestSuite
