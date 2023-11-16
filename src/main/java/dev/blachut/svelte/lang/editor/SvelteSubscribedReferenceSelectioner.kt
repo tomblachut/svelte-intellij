@@ -6,11 +6,11 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
-import dev.blachut.svelte.lang.psi.SvelteJSReferenceExpression
+import dev.blachut.svelte.lang.psi.isDollarPrefixedName
 
 class SvelteSubscribedReferenceSelectioner : ExtendWordSelectionHandlerBase() {
   override fun canSelect(e: PsiElement): Boolean {
-    return e.elementType == JSTokenTypes.IDENTIFIER && SvelteJSReferenceExpression.isDollarPrefixedName(e.text)
+    return e.elementType == JSTokenTypes.IDENTIFIER && isDollarPrefixedName(e.text)
   }
 
   override fun select(

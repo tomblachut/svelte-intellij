@@ -38,10 +38,8 @@ class SvelteJSReferenceExpression(elementType: IElementType) : JSReferenceExpres
     val correctedName = if (isSubscribedReference) "\$$newElementName" else newElementName
     return super.handleElementRename(correctedName)
   }
+}
 
-  companion object {
-    fun isDollarPrefixedName(name: String): Boolean {
-      return name.length > 1 && name[0] == '$' && name[1] != '$'
-    }
-  }
+fun isDollarPrefixedName(name: String): Boolean {
+  return name.length > 1 && name[0] == '$' && name[1] != '$'
 }

@@ -11,7 +11,7 @@ import com.intellij.lang.javascript.parsing.JSPsiTypeParser
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
-import dev.blachut.svelte.lang.psi.SvelteJSReferenceExpression
+import dev.blachut.svelte.lang.psi.isDollarPrefixedName
 
 class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>,
   ES6FunctionParser<*>, JSPsiTypeParser<*>>(SvelteJSLanguage.INSTANCE, builder) {
@@ -31,7 +31,7 @@ class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES
     // there are too many places that uses element type JSElementTypes.REFERENCE_EXPRESSION,
     // so use the new one only for the specific references
     return super.buildTokenElement(
-      if (type === JSElementTypes.REFERENCE_EXPRESSION && SvelteJSReferenceExpression.isDollarPrefixedName(builder.tokenText!!)) {
+      if (type === JSElementTypes.REFERENCE_EXPRESSION && isDollarPrefixedName(builder.tokenText!!)) {
         SvelteJSElementTypes.REFERENCE_EXPRESSION
       }
       else {
