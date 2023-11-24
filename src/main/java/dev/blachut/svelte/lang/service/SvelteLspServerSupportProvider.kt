@@ -39,7 +39,7 @@ class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescript
   override val lsp4jServerClass: Class<out LanguageServer> = SvelteLsp4jServer::class.java
 }
 
-internal interface SvelteLsp4jServer : LanguageServer {
+internal interface SvelteLsp4jServer : JSFrameworkLsp4jServer {
   @JsonNotification("\$/onDidChangeTsOrJsFile")
   fun didChangeTsOrJsFile(params: SvelteLspDidChangeTsOrJsFileParams)
 }
