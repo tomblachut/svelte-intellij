@@ -10,8 +10,6 @@ import com.intellij.platform.lsp.api.requests.LspClientNotification
 import com.intellij.platform.lsp.impl.LspServerManagerImpl
 import com.intellij.platform.lsp.impl.requests.DidChangeNotification
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent
-import org.eclipse.lsp4j.jsonrpc.services.JsonNotification
-import org.eclipse.lsp4j.services.LanguageServer
 
 /**
  * All symbols in this file are equivalent of function
@@ -30,11 +28,6 @@ internal class SvelteLspDidChangeTsOrJSFileNotification(base: DidChangeNotificat
 }
 
 internal data class SvelteLspDidChangeTsOrJsFileParams(val uri: String, val changes: List<TextDocumentContentChangeEvent>)
-
-internal interface SvelteLsp4jServer : LanguageServer {
-  @JsonNotification("\$/onDidChangeTsOrJsFile")
-  fun didChangeTsOrJsFile(params: SvelteLspDidChangeTsOrJsFileParams)
-}
 
 private val workaroundFileTypes = setOf(JavaScriptFileType.INSTANCE, TypeScriptFileType.INSTANCE)
 
