@@ -27,8 +27,9 @@
     </ul>
   ]]></description>
 
-  <actions>
-    <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction">
+  <actions resource-bundle="messages.SvelteBundle">
+    <action class="dev.blachut.svelte.lang.actions.SvelteCreateComponentAction" id="SvelteCreateComponentAction"
+            icon="icons.SvelteIcons.Desaturated">
       <add-to-group group-id="NewWebDevelopment" anchor="before" relative-to-action="NewJavaScriptFile"/>
     </action>
   </actions>

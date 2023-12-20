@@ -12,9 +12,7 @@ import com.intellij.psi.PsiFile
 import dev.blachut.svelte.lang.SvelteBundle
 import icons.SvelteIcons
 
-class SvelteCreateComponentAction : CreateFileFromTemplateAction(SvelteBundle.message("svelte.component.action"),
-                                                                 SvelteBundle.message("svelte.component.action.description"),
-                                                                 SvelteIcons.Desaturated), DumbAware {
+class SvelteCreateComponentAction : CreateFileFromTemplateAction(), DumbAware {
   companion object {
     private const val TEMPLATE_NAME: String = "Svelte Component"
   }
