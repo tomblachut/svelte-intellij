@@ -140,6 +140,7 @@
     <editorFactoryDocumentListener implementation="dev.blachut.svelte.lang.service.SvelteLspCustomDocumentListener"/>
 
     <webSymbols.webTypes source="web-types/svelte@3.0.0.web-types.json" enableByDefault="true"/>
+    <codeInsight.codeVisionSettingsPreviewLanguage language="SvelteHTML" modelId="component.usage"/>
   </extensions>
   <extensions defaultExtensionNs="JavaScript">
     <languageServiceProvider order="first" implementation="dev.blachut.svelte.lang.service.SvelteLanguageServiceProvider"/>
@@ -173,5 +174,6 @@
     <frameworkIndexingHandler implementation="dev.blachut.svelte.lang.SvelteFrameworkHandler" version="1"/>
     <indexedFileTypeProvider implementation="dev.blachut.svelte.lang.SvelteIndexedFileTypeProvider"/>
     <tsImportResolver implementation="dev.blachut.svelte.lang.codeInsight.SvelteTypeScriptImportsResolverProvider"/>
+    <componentUsageProvider language="SvelteHTML" implementationClass="dev.blachut.svelte.lang.codeInsight.SvelteComponentUsageProvider"/>
   </extensions>
 </idea-plugin>
