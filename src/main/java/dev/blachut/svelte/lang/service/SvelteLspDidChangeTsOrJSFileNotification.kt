@@ -4,10 +4,12 @@ import com.intellij.lang.javascript.JavaScriptFileType
 import com.intellij.lang.javascript.TypeScriptFileType
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.ProjectManager
+import com.intellij.openapi.util.text.StringUtil
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerManager
 import com.intellij.platform.lsp.api.requests.LspClientNotification
-import com.intellij.platform.lsp.impl.LspServerManagerImpl
 import com.intellij.platform.lsp.impl.requests.DidChangeNotification
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent
 
@@ -33,7 +35,7 @@ private val workaroundFileTypes = setOf(JavaScriptFileType.INSTANCE, TypeScriptF
 
 internal class SvelteLspCustomDocumentListener : DocumentListener {
   override fun beforeDocumentChange(event: DocumentEvent) {
-    val virtualFile = LspServerManagerImpl.LspDocumentListener.getFileToHandle(event) ?: return
+    val virtualFile = getFileToHandle(event) ?: return
     if (virtualFile.fileType !in workaroundFileTypes) return
 
     for (project in ProjectManager.getInstance().getOpenProjects()) {
@@ -44,4 +46,9 @@ internal class SvelteLspCustomDocumentListener : DocumentListener {
       }
     }
   }
+
+  private fun getFileToHandle(event: DocumentEvent): VirtualFile? =
+    FileDocumentManager.getInstance().getFile(event.document)?.takeIf {
+      it.isInLocalFileSystem && !StringUtil.equals(event.oldFragment, event.newFragment)
+    }
 }
