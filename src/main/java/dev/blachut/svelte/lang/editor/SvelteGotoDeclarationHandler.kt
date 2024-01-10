@@ -1,7 +1,7 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler
-import com.intellij.lang.javascript.documentation.JSQuickNavigateBuilder
+import com.intellij.lang.javascript.documentation.JSDocumentationUtils
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.typescript.TypeScriptGotoDeclarationHandler
 import com.intellij.lang.typescript.getResultsFromService
@@ -18,7 +18,8 @@ class SvelteGotoDeclarationHandler : GotoDeclarationHandler {
     ApplicationManager.getApplication().assertReadAccessAllowed()
     sourceElement ?: return null
     if (!isSvelteContext(sourceElement)) return null
-    if (JSQuickNavigateBuilder.getOriginalElementOrParentIfLeaf(sourceElement) is JSElement) {
+    if (JSDocumentationUtils.getOriginalElementOrParentIfLeaf(
+        sourceElement) is JSElement) {
       // pass to normal resolve and then to TypeScriptGotoDeclarationHandler
       return null
     }
