@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.JSNavigationTest
 import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.mock.MockDocument
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import com.intellij.testFramework.ExpectedHighlightingData
@@ -401,6 +402,32 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       import Foo from "./Foo.svelte";
 
       new <weak_warning>Foo</weak_warning>({props: {<error descr="TS2322: Type 'string' is not assignable to type 'number'.">prop1</error>: "foo"}});
+    """.trimIndent())
+    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    assertCorrectServiceForTsFile()
+  }
+
+  @Test
+  fun testTypeScriptPluginWorksWithLegacyToolWindow() {
+    RegistryManager.getInstance().get("ts.tool.window.show").setValue(true, testRootDisposable)
+
+    performNpmInstallForPackageJson("package.json") // required by typescript-plugin-svelte
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        export let prop1 = 5;
+      </script>
+      
+      {prop1}
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+
+    myFixture.configureByText("usage.ts", """
+      import Foo from "./Foo.svelte";
+
+      new Foo({props: {<error descr="TS2322: Type 'string' is not assignable to type 'number'.">prop1</error>: "foo"}});
+      let <error descr="TS2322: Type 'number' is not assignable to type 'typeof Foo__SvelteComponent_'.">foo</error>: typeof Foo = 5;
+      console.log(foo);
     """.trimIndent())
     myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
     assertCorrectServiceForTsFile()
