@@ -136,8 +136,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <Child <error descr="Svelte: Type 'null' is not assignable to type 'number | undefined'.">numA</error>={null} numB={1} />
       <<error descr="Svelte: Property 'numB' is missing in type '{}' but required in type '{ numA?: number | undefined; numB: number; }'.">Child</error> />
       
-      <Child <error descr="Svelte: Type '{ numBPrivate: undefined; numB: number; }' is not assignable to type '{ numA?: number | undefined; numB: number; }'.
-        Object literal may only specify known properties, and '\"numBPrivate\"' does not exist in type '{ numA?: number | undefined; numB: number; }'.">numBPrivate</error>={undefined} numB={1} />
+      <Child <error descr="Svelte: Object literal may only specify known properties, and '\"numBPrivate\"' does not exist in type '{ numA?: number | undefined; numB: number; }'.">numBPrivate</error>={undefined} numB={1} />
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
@@ -401,7 +400,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         return {};
       }
       
-      export async function <error descr="TS71001: Invalid export 'misspelledLoad' (valid exports are prerender, ssr, csr, trailingSlash, config, actions, load, entries, or anything with a '_' prefix)">misspelledLoad</error>(event: any) {
+      export async function <warning descr="TS71001: Invalid export 'misspelledLoad' (valid exports are prerender, ssr, csr, trailingSlash, config, actions, load, entries, or anything with a '_' prefix)">misspelledLoad</warning>(event: any) {
         helper(event);
         return {};
       }
