@@ -59,6 +59,22 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testStyleLangNoCrash() {
+    // Svelte LS will print long error "Cannot find module 'sass'" with require stack.
+    // Description is not important, in 2023.3 the LS crashed instead of showing any errors.
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Hello.svelte", """
+      <style lang="scss"><EOLError></EOLError>
+        div {
+          color: red;
+        }
+      </style>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
   fun testNotificationsForTSFileChanges() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("helper.ts", "") // empty file will trigger "not a module" error
