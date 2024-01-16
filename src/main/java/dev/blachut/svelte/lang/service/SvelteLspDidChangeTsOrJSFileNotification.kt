@@ -4,13 +4,9 @@ import com.intellij.lang.javascript.JavaScriptFileType
 import com.intellij.lang.javascript.TypeScriptFileType
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.ProjectManager
-import com.intellij.openapi.util.text.StringUtil
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerManager
-import com.intellij.platform.lsp.api.requests.LspClientNotification
-import com.intellij.platform.lsp.impl.requests.DidChangeNotification
+import com.intellij.platform.lsp.impl.LspDidChangeUtil
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent
 
 /**
@@ -22,33 +18,21 @@ import org.eclipse.lsp4j.TextDocumentContentChangeEvent
  * because Svelte Language Server doesn't currently support opening those files (JS & TS are supported via TSService).
  */
 
-internal class SvelteLspDidChangeTsOrJSFileNotification(base: DidChangeNotification) : LspClientNotification(base.lspServer) {
-  private val params = SvelteLspDidChangeTsOrJsFileParams(uri = base.params.textDocument.uri, changes = base.params.contentChanges)
-  override fun sendNotification() {
-    (lspServer.lsp4jServer as SvelteLsp4jServer).didChangeTsOrJsFile(params)
-  }
-}
-
 internal data class SvelteLspDidChangeTsOrJsFileParams(val uri: String, val changes: List<TextDocumentContentChangeEvent>)
 
 private val workaroundFileTypes = setOf(JavaScriptFileType.INSTANCE, TypeScriptFileType.INSTANCE)
 
 internal class SvelteLspCustomDocumentListener : DocumentListener {
   override fun beforeDocumentChange(event: DocumentEvent) {
-    val virtualFile = getFileToHandle(event) ?: return
+    val virtualFile = LspDidChangeUtil.getFileToHandle(event) ?: return
     if (virtualFile.fileType !in workaroundFileTypes) return
 
     for (project in ProjectManager.getInstance().getOpenProjects()) {
       for (lspServer in LspServerManager.getInstance(project).getServersForProvider(SvelteLspServerSupportProvider::class.java)) {
-        lspServer.requestExecutor.sendNotification(
-          SvelteLspDidChangeTsOrJSFileNotification(
-            DidChangeNotification.createIncrementalNotificationBeforeRealDocumentChange(lspServer, event, virtualFile)))
+        val didChangeParams = LspDidChangeUtil.createIncrementalDidChangeParamsBeforeDocumentChange(lspServer, event, virtualFile)
+        val params = SvelteLspDidChangeTsOrJsFileParams(didChangeParams.textDocument.uri, didChangeParams.contentChanges)
+        lspServer.sendNotification { (it as SvelteLsp4jServer).didChangeTsOrJsFile(params) }
       }
     }
   }
-
-  private fun getFileToHandle(event: DocumentEvent): VirtualFile? =
-    FileDocumentManager.getInstance().getFile(event.document)?.takeIf {
-      it.isInLocalFileSystem && !StringUtil.equals(event.oldFragment, event.newFragment)
-    }
 }
