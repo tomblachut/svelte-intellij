@@ -2,6 +2,7 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.codeInsight.completion.CompletionParameters
+import com.intellij.lang.documentation.QuickDocCodeHighlightingHelper.removeSurroundingStyledCodeBlock
 import com.intellij.lang.javascript.documentation.JSDocumentationUtils
 import com.intellij.lang.javascript.ecmascript6.TypeScriptAnnotatorCheckerProvider
 import com.intellij.lang.typescript.compiler.TypeScriptLanguageServiceAnnotatorCheckerProvider
@@ -34,11 +35,10 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
 
   override fun createQuickInfoResponse(markupContent: MarkupContent): TypeScriptQuickInfoResponse {
     return TypeScriptQuickInfoResponse().apply {
-      val content = HtmlBuilder().appendRaw(convertMarkupContentToHtml(markupContent)).toString()
+      val content = HtmlBuilder().appendRaw(convertMarkupContentToHtml(markupContent, project)).toString()
       val parts = content.split("<hr />")
 
-      displayString = parts[0]
-        .removeSurrounding("<pre><code class=\"language-typescript\">", "</code></pre>")
+      displayString = removeSurroundingStyledCodeBlock(parts[0])
         .trim()
         .let(StringUtil::unescapeXmlEntities)
       if (parts.size == 2) {
