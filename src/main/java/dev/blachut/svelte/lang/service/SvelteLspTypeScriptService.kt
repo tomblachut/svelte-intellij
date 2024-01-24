@@ -2,28 +2,22 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.codeInsight.completion.CompletionParameters
-import com.intellij.lang.documentation.QuickDocHighlightingHelper.removeSurroundingStyledCodeBlock
 import com.intellij.lang.javascript.documentation.JSDocumentationUtils
 import com.intellij.lang.javascript.ecmascript6.TypeScriptAnnotatorCheckerProvider
 import com.intellij.lang.typescript.compiler.TypeScriptLanguageServiceAnnotatorCheckerProvider
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
-import com.intellij.lang.typescript.compiler.languageService.protocol.commands.response.TypeScriptQuickInfoResponse
 import com.intellij.lang.typescript.lsp.BaseLspTypeScriptService
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.text.HtmlBuilder
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.platform.lsp.util.convertMarkupContentToHtml
 import com.intellij.platform.lsp.util.getOffsetInDocument
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
-import org.eclipse.lsp4j.MarkupContent
 
 /**
  * @see SvelteLspServerSupportProvider
@@ -32,21 +26,6 @@ import org.eclipse.lsp4j.MarkupContent
 class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java) {
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
-
-  override fun createQuickInfoResponse(markupContent: MarkupContent): TypeScriptQuickInfoResponse {
-    return TypeScriptQuickInfoResponse().apply {
-      val content = HtmlBuilder().appendRaw(convertMarkupContentToHtml(project, markupContent)).toString()
-      val parts = content.split("<hr />")
-
-      displayString = removeSurroundingStyledCodeBlock(parts[0])
-        .trim()
-        .let(StringUtil::unescapeXmlEntities)
-      if (parts.size == 2) {
-        documentation = parts[1]
-      }
-      // Svelte LS omits "export" so we can't assign kindModifiers
-    }
-  }
 
   override fun getNavigationFor(document: Document, sourceElement: PsiElement): Array<PsiElement> {
     return withServer {
