@@ -915,7 +915,6 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       l.add(JSUnusedAssignmentInspection())
       l.add(UnreachableCodeJSInspection())
       l.add(TypeScriptValidateTypesInspection())
-      l.add(TypeScriptValidateJSTypesInspection())
       l.add(TypeScriptUnresolvedReferenceInspection())
       l.add(TypeScriptCheckImportInspection())
       l.add(TypeScriptDuplicateUnionOrIntersectionTypeInspection())
