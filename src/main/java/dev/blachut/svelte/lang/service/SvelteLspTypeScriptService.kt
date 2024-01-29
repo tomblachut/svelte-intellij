@@ -49,13 +49,6 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
     } ?: emptyArray()
   }
 
-  override fun canHighlight(file: PsiFile): Boolean {
-    val provider = TypeScriptAnnotatorCheckerProvider.getCheckerProvider(file)
-    if (provider !is TypeScriptLanguageServiceAnnotatorCheckerProvider) return false
-
-    return isFileAcceptableForService(file.virtualFile ?: return false)
-  }
-
   override fun getCompletionMergeStrategy(parameters: CompletionParameters,
                                           file: PsiFile,
                                           context: PsiElement): TypeScriptService.CompletionMergeStrategy {
