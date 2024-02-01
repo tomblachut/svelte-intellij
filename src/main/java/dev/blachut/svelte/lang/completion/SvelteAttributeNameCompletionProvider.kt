@@ -7,6 +7,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
+import com.intellij.xml.util.HtmlUtil.*
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 import icons.SvelteIcons
@@ -21,21 +22,21 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
     val attribute = parameters.position.parent as? SvelteHtmlAttribute
     if (xmlTag == null || attribute == null) return
 
-    if (xmlTag.name == "script" && xmlTag.getAttribute("lang") == null) {
+    if (xmlTag.name == SCRIPT_TAG_NAME && xmlTag.getAttribute(LANG_ATTRIBUTE_NAME) == null) {
       result.addElement(createLookupElement("lang=\"ts\"", 100))
     }
 
-    if (xmlTag.name == "script" && xmlTag.getAttribute("context") == null) {
+    if (xmlTag.name == SCRIPT_TAG_NAME && xmlTag.getAttribute("context") == null) {
       result.addElement(createLookupElement("context=\"module\"", 90))
     }
 
     // TODO refactor into proper descriptors
-    if (xmlTag.name == "style" && xmlTag.getAttribute("global") == null) {
+    if (xmlTag.name == STYLE_TAG_NAME && xmlTag.getAttribute("global") == null) {
       result.addElement(createLookupElement("global"))
     }
 
-    if (xmlTag.name == "style" && xmlTag.getAttribute("src") == null) {
-      result.addElement(createLookupElement("src"))
+    if (xmlTag.name == STYLE_TAG_NAME && xmlTag.getAttribute(SRC_ATTRIBUTE_NAME) == null) {
+      result.addElement(createLookupElement(SRC_ATTRIBUTE_NAME))
     }
 
     val directiveType = attribute.directive?.directiveType

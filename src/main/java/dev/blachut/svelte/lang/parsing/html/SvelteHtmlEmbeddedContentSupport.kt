@@ -7,6 +7,7 @@ import com.intellij.lang.javascript.JavaScriptHighlightingLexer
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lexer.*
 import com.intellij.psi.tree.IElementType
+import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 import dev.blachut.svelte.lang.isTSLangValue
@@ -34,7 +35,7 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
   class SvelteHtmlContentProvider(lexer: BaseHtmlLexer) : HtmlScriptStyleEmbeddedContentProvider(lexer) {
 
     override fun isInterestedInAttribute(attributeName: CharSequence): Boolean =
-      namesEqual(attributeName, "lang") || super.isInterestedInAttribute(attributeName)
+      namesEqual(attributeName, HtmlUtil.LANG_ATTRIBUTE_NAME) || super.isInterestedInAttribute(attributeName)
 
     override fun styleLanguage(styleLang: String?): Language? =
       CSSLanguage.INSTANCE.dialects.firstOrNull { it.id.equals(styleLang, ignoreCase = true) }

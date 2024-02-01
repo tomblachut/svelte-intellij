@@ -9,6 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
+import com.intellij.xml.util.HtmlUtil
 import java.util.*
 
 class SvelteAttributeValueCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -30,10 +31,10 @@ class SvelteAttributeValueCompletionProvider : CompletionProvider<CompletionPara
   }
 
   private fun listOfCompletions(xmlTag: XmlTag, xmlAttribute: XmlAttribute): Set<String> {
-    if (xmlAttribute.name == "lang") {
+    if (xmlAttribute.name == HtmlUtil.LANG_ATTRIBUTE_NAME) {
       when (xmlTag.name) {
-        "script" -> return scriptLanguages
-        "style" -> return styleLanguages
+        HtmlUtil.SCRIPT_TAG_NAME -> return scriptLanguages
+        HtmlUtil.STYLE_TAG_NAME -> return styleLanguages
       }
     }
 

@@ -7,6 +7,7 @@ import com.intellij.lang.typescript.tsconfig.TypeScriptFileImportsResolver.JS_DE
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
+import com.intellij.xml.util.HtmlUtil.LANG_ATTRIBUTE_NAME
 import dev.blachut.svelte.lang.SvelteHtmlFileType
 import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.isTSLangValue
@@ -20,7 +21,7 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
     if (file.fileType != SvelteHtmlFileType.INSTANCE) return false
 
     val psiFile = PsiManager.getInstance(project).findFile(file) as? SvelteHtmlFile ?: return false
-    val langAttr = psiFile.instanceScript?.getAttribute("lang")?.value
+    val langAttr = psiFile.instanceScript?.getAttribute(LANG_ATTRIBUTE_NAME)?.value
     return isTSLangValue(langAttr)
   }
 
