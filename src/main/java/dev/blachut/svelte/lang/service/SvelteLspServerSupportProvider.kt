@@ -2,13 +2,21 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.javascript.nodejs.util.NodePackageRef
-import com.intellij.lang.typescript.lsp.*
+import com.intellij.lang.typescript.lsp.JSFrameworkLsp4jServer
+import com.intellij.lang.typescript.lsp.JSFrameworkLspServerDescriptor
+import com.intellij.lang.typescript.lsp.LspServerDownloader
+import com.intellij.lang.typescript.lsp.LspServerPackageDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.registry.Registry
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.platform.lsWidget.LanguageServiceWidgetContext
+import com.intellij.platform.lsp.api.LspServer
 import com.intellij.platform.lsp.api.LspServerSupportProvider
 import com.intellij.platform.lsp.api.LspServerSupportProvider.LspServerStarter
+import com.intellij.platform.lsp.api.lsWidget.LspServerWidgetItem
+import dev.blachut.svelte.lang.service.settings.SvelteServiceConfigurable
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
+import icons.SvelteIcons
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification
 import org.eclipse.lsp4j.services.LanguageServer
 import org.jetbrains.annotations.ApiStatus
@@ -28,6 +36,9 @@ class SvelteLspServerSupportProvider : LspServerSupportProvider {
       serverStarter.ensureServerStarted(SvelteLspServerDescriptor(project))
     }
   }
+
+  override fun getLspServerWidgetItem(context: LanguageServiceWidgetContext, lspServer: LspServer): LspServerWidgetItem =
+    LspServerWidgetItem(context, lspServer, SvelteIcons.Original, SvelteServiceConfigurable::class.java)
 }
 
 /**
