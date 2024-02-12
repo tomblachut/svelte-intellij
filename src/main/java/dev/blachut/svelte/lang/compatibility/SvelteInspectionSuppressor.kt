@@ -14,6 +14,7 @@ import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInsp
 import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
+import com.intellij.psi.util.parentOfTypes
 import com.intellij.psi.util.parents
 import com.sixrr.inspectjs.assignment.SillyAssignmentJSInspection
 import com.sixrr.inspectjs.confusing.CommaExpressionJSInspection
@@ -74,7 +75,7 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
     if (inspectionId.equalsName<JSUnresolvedReferenceInspection>() || inspectionId.equalsName<TypeScriptUnresolvedReferenceInspection>()) {
       if (element.parent is JSReferenceExpression
           && element
-            .parentOfType<JSObjectLiteralExpression>()
+            .parentOfTypes(JSObjectLiteralExpression::class, JSArrayLiteralExpression::class)
             ?.parentOfType<JSAssignmentExpression>()
             ?.parentOfType<JSLabeledStatement>()
             ?.takeIf { it.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL } != null) {
