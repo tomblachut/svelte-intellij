@@ -4,10 +4,15 @@ import com.intellij.lang.javascript.service.protocol.JSLanguageServiceObject
 import com.intellij.lang.javascript.service.protocol.JSLanguageServiceSimpleCommand
 import com.intellij.lang.typescript.compiler.languageService.frameworks.DownloadableTypeScriptServicePlugin
 import com.intellij.lang.typescript.compiler.languageService.frameworks.PluggableTypeScriptService
-import com.intellij.lang.typescript.compiler.languageService.protocol.commands.*
+import com.intellij.lang.typescript.compiler.languageService.protocol.commands.ConfigurePluginRequest
+import com.intellij.lang.typescript.compiler.languageService.protocol.commands.ConfigurePluginRequestArguments
+import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import dev.blachut.svelte.lang.service.settings.SvelteServiceConfigurable
+import icons.SvelteIcons
 import java.util.function.Consumer
+import javax.swing.Icon
 
 private val plugin = DownloadableTypeScriptServicePlugin("Svelte", SvelteTypeScriptPluginPackageDownloader)
 
@@ -38,4 +43,8 @@ class SveltePluginTypeScriptService(project: Project) : PluggableTypeScriptServi
                                                                           "assumeIsSvelteProject" to true))
     result[ConfigurePluginRequest(arguments)] = Consumer {}
   }
+
+  override fun getWidgetItemIcon(): Icon = SvelteIcons.Original
+
+  override fun getSettingsPageClass(): Class<out Configurable> = SvelteServiceConfigurable::class.java
 }
