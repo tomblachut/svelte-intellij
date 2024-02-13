@@ -3,8 +3,6 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.lang.javascript.documentation.JSDocumentationUtils
-import com.intellij.lang.javascript.ecmascript6.TypeScriptAnnotatorCheckerProvider
-import com.intellij.lang.typescript.compiler.TypeScriptLanguageServiceAnnotatorCheckerProvider
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.lsp.BaseLspTypeScriptService
@@ -63,6 +61,4 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
   }
 
   override fun isAcceptable(file: VirtualFile) = isServiceEnabledAndAvailable(project, file)
-
-  override fun getServiceId(): String = "svelte"
 }
