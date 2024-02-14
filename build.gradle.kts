@@ -60,7 +60,7 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
 
-    // https://www.jetbrains.org/intellij/sdk/docs/basics/plugin_structure/plugin_dependencies.html
+    // https://plugins.jetbrains.com/docs/intellij/plugin-dependencies.html
     plugins.set(intellijPlugins)
 }
 
