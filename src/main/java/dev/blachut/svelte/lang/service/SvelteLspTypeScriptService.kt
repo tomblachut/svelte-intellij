@@ -26,25 +26,24 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
   override val prefix = "Svelte"
 
   override fun getNavigationFor(document: Document, sourceElement: PsiElement): Array<PsiElement> {
-    return withServer {
-      val file = FileDocumentManager.getInstance().getFile(document) ?: return emptyArray()
-      val raw = requestExecutor.getElementDefinitions(file, sourceElement.textOffset)
+    val server = getServer() ?: return emptyArray()
+    val file = FileDocumentManager.getInstance().getFile(document) ?: return emptyArray()
+    val raw = server.requestExecutor.getElementDefinitions(file, sourceElement.textOffset)
 
-      raw.mapNotNull { locationLink ->
-        val targetFile = descriptor.findFileByUri(locationLink.targetUri) ?: return@mapNotNull null
-        val targetPsiFile = PsiManager.getInstance(project).findFile(targetFile) ?: return@mapNotNull null
-        val targetDocument = PsiDocumentManager.getInstance(project).getDocument(targetPsiFile) ?: return@mapNotNull null
-        val offset = getOffsetInDocument(targetDocument, locationLink.targetSelectionRange.start)
-        if (offset != null) {
-          val leaf = targetPsiFile.findElementAt(offset)
-          if (leaf == sourceElement) return@mapNotNull null // discard self referencing LocationLinks, otherwise GTDU is confused
-          JSDocumentationUtils.getOriginalElementOrParentIfLeaf(leaf)
-        }
-        else {
-          targetPsiFile
-        }
-      }.toTypedArray()
-    } ?: emptyArray()
+    return raw.mapNotNull { locationLink ->
+      val targetFile = server.descriptor.findFileByUri(locationLink.targetUri) ?: return@mapNotNull null
+      val targetPsiFile = PsiManager.getInstance(project).findFile(targetFile) ?: return@mapNotNull null
+      val targetDocument = PsiDocumentManager.getInstance(project).getDocument(targetPsiFile) ?: return@mapNotNull null
+      val offset = getOffsetInDocument(targetDocument, locationLink.targetSelectionRange.start)
+      if (offset != null) {
+        val leaf = targetPsiFile.findElementAt(offset)
+        if (leaf == sourceElement) return@mapNotNull null // discard self referencing LocationLinks, otherwise GTDU is confused
+        JSDocumentationUtils.getOriginalElementOrParentIfLeaf(leaf)
+      }
+      else {
+        targetPsiFile
+      }
+    }.toTypedArray()
   }
 
   override fun getCompletionMergeStrategy(parameters: CompletionParameters,
