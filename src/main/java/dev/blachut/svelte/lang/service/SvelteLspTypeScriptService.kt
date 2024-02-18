@@ -25,6 +25,8 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
 
+  override fun isAcceptable(file: VirtualFile) = isServiceEnabledAndAvailable(project, file)
+
   override fun getNavigationFor(document: Document, sourceElement: PsiElement): Array<PsiElement> {
     val server = getServer() ?: return emptyArray()
     val file = FileDocumentManager.getInstance().getFile(document) ?: return emptyArray()
@@ -58,6 +60,4 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
     val isJavaScript = false // this might be too strict
     return TypeScriptLanguageServiceUtil.getMergeStrategyForPosition(context, isJavaScript)
   }
-
-  override fun isAcceptable(file: VirtualFile) = isServiceEnabledAndAvailable(project, file)
 }
