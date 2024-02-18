@@ -1,9 +1,9 @@
 package dev.blachut.svelte.lang.completion
 
-import com.intellij.lang.typescript.compiler.languageService.ide.TypeScriptLanguageServiceCompletionContributor
+import com.intellij.lang.typescript.compiler.languageService.ide.TypeScriptServiceCompletionContributor
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 
 /**
- * Required to rebind [TypeScriptLanguageServiceCompletionContributor] to [SvelteHTMLLanguage] contexts
+ * Required to rebind [TypeScriptServiceCompletionContributor] to [SvelteHTMLLanguage] contexts
  */
-class SvelteServiceCompletionContributor : TypeScriptLanguageServiceCompletionContributor()
+class SvelteServiceCompletionContributor : TypeScriptServiceCompletionContributor()
