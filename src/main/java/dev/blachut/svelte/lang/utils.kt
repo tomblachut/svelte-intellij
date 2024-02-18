@@ -64,8 +64,8 @@ internal inline fun <reified T : LocalInspectionTool> String.equalsName(): Boole
   return this == InspectionProfileEntry.getShortName(T::class.java.simpleName)
 }
 
-fun hasSvelteFiles(project: Project): Boolean =
-  CachedValuesManager.getManager(project).getCachedValue(project) {
+fun hasSvelteFiles(project: Project): Boolean {
+  return CachedValuesManager.getManager(project).getCachedValue(project) {
     CachedValueProvider.Result.create(
       FileBasedIndexImpl.disableUpToDateCheckIn<Boolean, Exception> {
         FileTypeIndex.containsFileOfType(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.projectScope(project))
@@ -74,3 +74,4 @@ fun hasSvelteFiles(project: Project): Boolean =
       DumbService.getInstance(project)
     )
   }
+}
