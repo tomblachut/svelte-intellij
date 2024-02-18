@@ -4,7 +4,7 @@ import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler
 import com.intellij.lang.javascript.documentation.JSDocumentationUtils
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.typescript.TypeScriptGotoDeclarationHandler
-import com.intellij.lang.typescript.getResultsFromService
+import com.intellij.lang.typescript.getNavigationFromService
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
@@ -18,12 +18,11 @@ class SvelteGotoDeclarationHandler : GotoDeclarationHandler {
     ApplicationManager.getApplication().assertReadAccessAllowed()
     sourceElement ?: return null
     if (!isSvelteContext(sourceElement)) return null
-    if (JSDocumentationUtils.getOriginalElementOrParentIfLeaf(
-        sourceElement) is JSElement) {
+    if (JSDocumentationUtils.getOriginalElementOrParentIfLeaf(sourceElement) is JSElement) {
       // pass to normal resolve and then to TypeScriptGotoDeclarationHandler
       return null
     }
     val project = editor.project ?: return null
-    return getResultsFromService(project, sourceElement, editor)
+    return getNavigationFromService(project, sourceElement, editor)
   }
 }
