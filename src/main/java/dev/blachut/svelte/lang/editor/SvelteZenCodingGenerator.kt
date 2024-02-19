@@ -24,11 +24,11 @@ class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
   private val elseTemplate = "{:else}\$END\$"
 
   override fun isMyLanguage(language: Language): Boolean {
-    return SvelteHtmlContextType.isMyLanguage(language)
+    return isSvelteLanguage(language)
   }
 
   override fun isMyContext(context: PsiElement, wrapping: Boolean): Boolean {
-    return isSvelteContext(context) && (wrapping || SvelteHtmlTextContextType.isInContext(context))
+    return isSvelteContext(context) && (wrapping || isInSvelteHtmlTextLiveTemplateContext(context))
   }
 
   override fun createTemplateByKey(key: String, forceSingleTag: Boolean): TemplateImpl? {

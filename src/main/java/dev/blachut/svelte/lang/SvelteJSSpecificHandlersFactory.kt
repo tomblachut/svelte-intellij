@@ -22,23 +22,22 @@ class SvelteJSSpecificHandlersFactory : ES6SpecificHandlersFactory() {
     return SvelteJSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits)
   }
 
-  override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler =
-    SvelteStubBasedScopeHandler
-
-  override fun getExportScope(element: PsiElement): JSElement? =
-    Companion.getExportScope(element)
-
-  companion object {
-    fun getExportScope(element: PsiElement): JSElement? {
-      if (element is PsiFile || element is SvelteJSEmbeddedContentImpl)
-        return null
-      val svelteFile = element.containingFile as? SvelteHtmlFile
-                       ?: return null
-      val script = findAncestorScript(element)
-                   ?: svelteFile.instanceScript
-                   ?: svelteFile.moduleScript
-      return script?.let { getJsEmbeddedContent(it) }
-    }
+  override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler {
+    return SvelteStubBasedScopeHandler
   }
 
+  override fun getExportScope(element: PsiElement): JSElement? {
+    return getSvelteExportScope(element)
+  }
+}
+
+fun getSvelteExportScope(element: PsiElement): JSElement? {
+  if (element is PsiFile || element is SvelteJSEmbeddedContentImpl)
+    return null
+  val svelteFile = element.containingFile as? SvelteHtmlFile
+                   ?: return null
+  val script = findAncestorScript(element)
+               ?: svelteFile.instanceScript
+               ?: svelteFile.moduleScript
+  return script?.let { getJsEmbeddedContent(it) }
 }

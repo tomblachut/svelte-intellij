@@ -18,7 +18,7 @@ val svelteExtensionsWithDot = arrayOf(svelteExtension)
 
 class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvider {
   override fun isImplicitTypeScriptFile(project: Project, file: VirtualFile): Boolean {
-    if (file.fileType != SvelteHtmlFileType.INSTANCE) return false
+    if (file.fileType != SvelteHtmlFileType) return false
 
     val psiFile = PsiManager.getInstance(project).findFile(file) as? SvelteHtmlFile ?: return false
     val langAttr = psiFile.instanceScript?.getAttribute(LANG_ATTRIBUTE_NAME)?.value
@@ -42,6 +42,6 @@ class SvelteTypeScriptImportsResolverProvider : TypeScriptImportsResolverProvide
 }
 
 class SvelteFileImportsResolverImpl(project: Project, resolveContext: JSImportResolveContext)
-  : TypeScriptFileImportsResolverImpl(project, resolveContext, svelteExtensionsWithDot, listOf(SvelteHtmlFileType.INSTANCE)) {
+  : TypeScriptFileImportsResolverImpl(project, resolveContext, svelteExtensionsWithDot, listOf(SvelteHtmlFileType)) {
   override fun getPriority(): Int = JS_DEFAULT_PRIORITY
 }

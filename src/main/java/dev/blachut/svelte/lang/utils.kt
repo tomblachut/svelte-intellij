@@ -25,7 +25,7 @@ fun isSvelteContext(context: PsiElement): Boolean {
 }
 
 fun isSvelteContext(file: VirtualFile): Boolean {
-  return file.fileType == SvelteHtmlFileType.INSTANCE
+  return file.fileType == SvelteHtmlFileType
 }
 
 fun isSvelteProjectContext(context: PsiElement): Boolean {
@@ -68,7 +68,7 @@ fun hasSvelteFiles(project: Project): Boolean {
   return CachedValuesManager.getManager(project).getCachedValue(project) {
     CachedValueProvider.Result.create(
       FileBasedIndexImpl.disableUpToDateCheckIn<Boolean, Exception> {
-        FileTypeIndex.containsFileOfType(SvelteHtmlFileType.INSTANCE, GlobalSearchScope.projectScope(project))
+        FileTypeIndex.containsFileOfType(SvelteHtmlFileType, GlobalSearchScope.projectScope(project))
       },
       VirtualFileManager.VFS_STRUCTURE_MODIFICATIONS,
       DumbService.getInstance(project)

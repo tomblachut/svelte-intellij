@@ -11,14 +11,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.stubs.PsiFileStub
 import com.intellij.psi.tree.IFileElementType
-import com.intellij.psi.tree.IStubFileElementType
-import com.intellij.psi.xml.HtmlFileElementType
-import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
-import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 
 class SvelteHTMLParserDefinition : HTMLParserDefinition() {
   override fun createLexer(project: Project): Lexer {
@@ -34,7 +29,7 @@ class SvelteHTMLParserDefinition : HTMLParserDefinition() {
   }
 
   override fun getFileNodeType(): IFileElementType {
-    return FILE
+    return SvelteHtmlFileElementType.FILE
   }
 
   override fun createFile(viewProvider: FileViewProvider): PsiFile {
@@ -50,14 +45,4 @@ class SvelteHTMLParserDefinition : HTMLParserDefinition() {
     }
   }
 
-  companion object {
-    val FILE = SvelteHtmlFileElementType()
-  }
-
-  // based on HtmlFileElementType
-  class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte file", SvelteHTMLLanguage.INSTANCE) {
-    override fun getStubVersion(): Int {
-      return HtmlFileElementType.getHtmlStubVersion() + SvelteJSElementTypes.STUB_VERSION
-    }
-  }
 }

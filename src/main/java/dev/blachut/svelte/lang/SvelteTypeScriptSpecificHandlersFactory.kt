@@ -17,9 +17,11 @@ class SvelteTypeScriptSpecificHandlersFactory : TypeScriptSpecificHandlersFactor
     return SvelteTypeScriptReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits)
   }
 
-  override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler =
-    SvelteStubBasedScopeHandler
+  override fun getStubBasedScopeHandler(): JSStubBasedScopeHandler {
+    return SvelteStubBasedScopeHandler
+  }
 
-  override fun getExportScope(element: PsiElement): JSElement? =
-    SvelteJSSpecificHandlersFactory.getExportScope(element)
+  override fun getExportScope(element: PsiElement): JSElement? {
+    return getSvelteExportScope(element)
+  }
 }

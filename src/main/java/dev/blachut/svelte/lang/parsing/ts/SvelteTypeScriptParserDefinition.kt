@@ -7,6 +7,8 @@ import com.intellij.lang.javascript.types.JSFileElementType
 import com.intellij.psi.tree.IFileElementType
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 
+private val FILE: IFileElementType = JSFileElementType.create(SvelteTypeScriptLanguage.INSTANCE)
+
 class SvelteTypeScriptParserDefinition : TypeScriptParserDefinition() {
   override fun getFileNodeType(): IFileElementType {
     return FILE
@@ -14,9 +16,5 @@ class SvelteTypeScriptParserDefinition : TypeScriptParserDefinition() {
 
   override fun createJSParser(builder: PsiBuilder): JavaScriptParser<*, *, *, *> {
     return SvelteTypeScriptParser(builder)
-  }
-
-  companion object {
-    val FILE: IFileElementType = JSFileElementType.create(SvelteTypeScriptLanguage.INSTANCE)
   }
 }

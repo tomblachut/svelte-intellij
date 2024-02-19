@@ -24,6 +24,7 @@ import com.intellij.psi.xml.XmlDocument
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.XmlTagUtil
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
+import dev.blachut.svelte.lang.codeInsight.SvelteComponentCopyPasteProcessor.SvelteComponentImportsTransferableData
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
@@ -31,7 +32,7 @@ import java.awt.datatransfer.DataFlavor
 import kotlin.Pair
 import com.intellij.openapi.util.Pair as OpenApiPair
 
-class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteComponentCopyPasteProcessor.SvelteComponentImportsTransferableData>() {
+class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteComponentImportsTransferableData>() {
 
   override val dataFlavor: DataFlavor
     get() = SVELTE_COMPONENT_IMPORTS_FLAVOR
@@ -110,12 +111,11 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
   }
 
   class SvelteComponentImportsTransferableData(list: ArrayList<ImportedElement>) : ES6ImportsTransferableDataBase(list) {
-    override fun getFlavor(): DataFlavor =
-      SVELTE_COMPONENT_IMPORTS_FLAVOR
+    override fun getFlavor(): DataFlavor {
+      return SVELTE_COMPONENT_IMPORTS_FLAVOR
+    }
   }
 
-  companion object {
-    private val SVELTE_COMPONENT_IMPORTS_FLAVOR = DataFlavor(SvelteComponentImportsTransferableData::class.java,
-                                                             "svelte component imports")
-  }
 }
+
+private val SVELTE_COMPONENT_IMPORTS_FLAVOR = DataFlavor(SvelteComponentImportsTransferableData::class.java, "svelte component imports")

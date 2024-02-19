@@ -21,11 +21,12 @@ import com.intellij.psi.xml.XmlDocument
 import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
+import dev.blachut.svelte.lang.codeInsight.SvelteTemplateExpressionsCopyPasteProcessor.SvelteTemplateExpressionsImportsTransferableData
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 import java.awt.datatransfer.DataFlavor
 
-class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteTemplateExpressionsCopyPasteProcessor.SvelteTemplateExpressionsImportsTransferableData>() {
+class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteTemplateExpressionsImportsTransferableData>() {
 
   override val dataFlavor: DataFlavor
     get() = SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR
@@ -79,12 +80,11 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
   }
 
   class SvelteTemplateExpressionsImportsTransferableData(list: ArrayList<ImportedElement>) : ES6ImportsTransferableDataBase(list) {
-    override fun getFlavor(): DataFlavor =
-      SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR
+    override fun getFlavor(): DataFlavor {
+      return SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR
+    }
   }
 
-  companion object {
-    private val SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR = DataFlavor(SvelteTemplateExpressionsImportsTransferableData::class.java,
-                                                                        "svelte es6 imports")
-  }
 }
+
+private val SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR = DataFlavor(SvelteTemplateExpressionsImportsTransferableData::class.java, "svelte es6 imports")

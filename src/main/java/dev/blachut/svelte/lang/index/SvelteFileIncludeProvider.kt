@@ -13,7 +13,7 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 
-class SvelteFileIncludeProvider : JSFrameworkFileIncludeProvider(SvelteHtmlFileType.INSTANCE) {
+class SvelteFileIncludeProvider : JSFrameworkFileIncludeProvider(SvelteHtmlFileType) {
   override fun getIncludeInfos(content: FileContent): Array<FileIncludeInfo> {
     if (!ES6FileIncludeProvider.checkTextHasFromKeyword(content)) return emptyArray()
 

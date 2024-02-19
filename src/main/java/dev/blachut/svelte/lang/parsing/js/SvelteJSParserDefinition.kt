@@ -10,6 +10,8 @@ import com.intellij.psi.tree.IFileElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 
+private val FILE: IFileElementType = JSFileElementType.create(SvelteJSLanguage.INSTANCE)
+
 class SvelteJSParserDefinition : ECMA6ParserDefinition() {
   override fun getFileNodeType(): IFileElementType {
     return FILE
@@ -26,9 +28,5 @@ class SvelteJSParserDefinition : ECMA6ParserDefinition() {
     catch (e: Exception) {
       super.createElement(node)
     }
-  }
-
-  companion object {
-    val FILE: IFileElementType = JSFileElementType.create(SvelteJSLanguage.INSTANCE)
   }
 }

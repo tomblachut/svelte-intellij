@@ -11,6 +11,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
+import dev.blachut.svelte.lang.parsing.html.SvelteHtmlFileElementType
 
 fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
   return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
@@ -28,7 +29,7 @@ fun findAncestorScript(place: PsiElement): XmlTag? {
   return parentScript as XmlTag?
 }
 
-class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHTMLParserDefinition.FILE), JSModuleStatusOwner {
+class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHtmlFileElementType.FILE), JSModuleStatusOwner {
   override fun getModuleStatus(): JSModuleStatusOwner.ModuleStatus = JSModuleStatusOwner.ModuleStatus.ES6
 
   val moduleScript
