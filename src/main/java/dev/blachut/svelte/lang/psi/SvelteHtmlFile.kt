@@ -10,7 +10,6 @@ import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
-import dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition
 import dev.blachut.svelte.lang.parsing.html.SvelteHtmlFileElementType
 
 fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
@@ -18,8 +17,10 @@ fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
 }
 
 fun isModuleScript(tag: XmlTag?): Boolean {
-  return tag != null && HtmlUtil.isScriptTag(tag) && tag.getAttributeValue("context") == "module"
+  return tag != null && HtmlUtil.isScriptTag(tag) && hasModuleContextAttribute(tag)
 }
+
+fun hasModuleContextAttribute(tag: XmlTag) = tag.getAttributeValue("context") == "module"
 
 fun findAncestorScript(place: PsiElement): XmlTag? {
   // TODO optimize for XmlTag, or only walk up from JSElements?
@@ -34,7 +35,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
 
   val moduleScript
     get() = document?.children?.find {
-      it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == "module"
+      it is XmlTag && HtmlUtil.isScriptTag(it) && hasModuleContextAttribute(it)
     } as XmlTag?
 
   // By convention instanceScript is placed after module script
