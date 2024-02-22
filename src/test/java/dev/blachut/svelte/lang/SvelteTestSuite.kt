@@ -1,10 +1,7 @@
 package dev.blachut.svelte.lang
 
 import dev.blachut.svelte.lang.codeInsight.*
-import dev.blachut.svelte.lang.editor.SvelteBraceTypedTest
-import dev.blachut.svelte.lang.editor.SvelteCommenterTest
-import dev.blachut.svelte.lang.editor.SvelteEditorTest
-import dev.blachut.svelte.lang.editor.SvelteEmmetTest
+import dev.blachut.svelte.lang.editor.*
 import dev.blachut.svelte.lang.format.SvelteFormatterTest
 import dev.blachut.svelte.lang.parsing.html.*
 import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
@@ -24,32 +21,34 @@ class SvelteServiceTestSuite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
     // Parsing
-    SvelteHtmlRegressionParsingTest::class,
-    SvelteHighlightingLexerTest::class,
-    SvelteHtmlParserTest::class,
-    SvelteDirectiveLexerTest::class,
-    SvelteDirectiveParserTest::class,
+  SvelteHtmlRegressionParsingTest::class,
+  SvelteHighlightingLexerTest::class,
+  SvelteHtmlParserTest::class,
+  SvelteDirectiveLexerTest::class,
+  SvelteDirectiveParserTest::class,
     // Editing
-    SvelteFormatterTest::class,
-    SvelteBraceTypedTest::class,
-    SvelteCommenterTest::class,
-    SvelteEditorTest::class,
-    SvelteEmmetTest::class,
+  SvelteFormatterTest::class,
+  SvelteBraceTypedTest::class,
+  SvelteCommenterTest::class,
+  SvelteEditorTest::class,
+  SvelteEmmetTest::class,
     // Code insight
-    SvelteAutoPopupTest::class,
-    SvelteCompletionTest::class,
-    SvelteHighlightingTest::class,
-    SvelteRenameTest::class,
-    SvelteResolveTest::class,
-    SvelteNavigationTest::class,
-    SvelteTypeScriptCompletionTest::class,
-    SvelteTypeScriptHighlightingTest::class,
-    SvelteCopyPasteTest::class,
-    SvelteCreateVariableTest::class,
-    SvelteCreateFunctionTest::class,
-    SvelteCreateImportTest::class,
-    SvelteKitTest::class,
+  SvelteAutoPopupTest::class,
+  SvelteCompletionTest::class,
+  SvelteHighlightingTest::class,
+  SvelteRenameTest::class,
+  SvelteResolveTest::class,
+  SvelteNavigationTest::class,
+  SvelteBreadcrumbsTest::class,
+
+  SvelteTypeScriptCompletionTest::class,
+  SvelteTypeScriptHighlightingTest::class,
+  SvelteCopyPasteTest::class,
+  SvelteCreateVariableTest::class,
+  SvelteCreateFunctionTest::class,
+  SvelteCreateImportTest::class,
+  SvelteKitTest::class,
     // Service
-    SvelteServiceTestSuite::class,
+  SvelteServiceTestSuite::class,
 )
 class SvelteTestSuite
