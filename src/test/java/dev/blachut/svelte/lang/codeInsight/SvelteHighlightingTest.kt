@@ -53,7 +53,8 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testNamespacedComponent() {
     // TODO Support namespaced components WEB-61636
     myFixture.configureByText("Usage.svelte", """
-      <<error descr=""><error descr="Cannot resolve symbol 'Unresolved'">Unresolved</error></error> test="" />
+      <<error descr="Cannot resolve symbol 'Unresolved'"><error descr="Unresolved Svelte component">Unresolved</error></error> test="" />
+      <Also.Unresolved test="" />
       <Also.Unresolved test="" />
     """.trimIndent())
     myFixture.testHighlighting()
