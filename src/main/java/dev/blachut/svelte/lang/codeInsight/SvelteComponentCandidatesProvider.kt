@@ -15,6 +15,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.search.FilenameIndex
+import java.util.function.Consumer
 import java.util.function.Predicate
 
 class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImportCandidatesBase(placeInfo) {
@@ -37,8 +38,8 @@ class SvelteComponentCandidatesProvider(placeInfo: JSImportPlaceInfo) : JSImport
     }
   }
 
-  override fun getNames(keyFilter: Predicate<in String>): Set<String> {
-    return candidates.keys.filter(keyFilter::test).toSet()
+  override fun collectNames(consumer: Consumer<String>) {
+    candidates.keys.forEach(consumer)
   }
 
   private fun getComponentName(virtualFile: VirtualFile): String {
