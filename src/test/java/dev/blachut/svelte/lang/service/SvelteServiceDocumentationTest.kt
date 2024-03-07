@@ -1,7 +1,9 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSAbstractDocumentationTest
+import com.intellij.lang.typescript.documentation.TypeScriptDocumentationTargetProvider
 import com.intellij.openapi.util.registry.RegistryManager
+import com.intellij.platform.backend.documentation.PsiDocumentationTargetProvider
 import com.intellij.platform.lsp.tests.waitUntilFileOpenedByLspServer
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
@@ -15,6 +17,9 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
   override fun setUp() {
     super.setUp()
     RegistryManager.getInstance().get("typescript.show.own.type").setValue(true, testRootDisposable)
+
+    PsiDocumentationTargetProvider.EP_NAME.point
+      .registerExtension(TypeScriptDocumentationTargetProvider(), testRootDisposable)
   }
 
   @Test
