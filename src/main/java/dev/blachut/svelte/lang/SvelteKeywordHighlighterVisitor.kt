@@ -12,8 +12,8 @@ import com.intellij.lang.javascript.validation.TypeScriptKeywordHighlighterVisit
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.startOffset
 import com.intellij.psi.xml.XmlTokenType
-import com.intellij.refactoring.suggested.startOffset
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexer
 import dev.blachut.svelte.lang.psi.*
