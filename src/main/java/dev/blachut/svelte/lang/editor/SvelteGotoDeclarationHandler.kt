@@ -14,7 +14,7 @@ import dev.blachut.svelte.lang.isSvelteContext
  * Meant to supersede ALL GotoDeclarationHandlers for Svelte files, since [TypeScriptServiceGotoDeclarationHandler] is executed too late.
  */
 class SvelteGotoDeclarationHandler : GotoDeclarationHandler {
-  override fun getGotoDeclarationTargets(sourceElement: PsiElement?, offset: Int, editor: Editor): Array<PsiElement>? {
+  override fun getGotoDeclarationTargets(sourceElement: PsiElement?, offset: Int, editor: Editor): Array<out PsiElement>? {
     ApplicationManager.getApplication().assertReadAccessAllowed()
     sourceElement ?: return null
     if (!isSvelteContext(sourceElement)) return null
