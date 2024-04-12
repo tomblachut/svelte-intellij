@@ -101,18 +101,6 @@ object SvelteTagElementTypes {
     }
   }
 
-  val KEY_START = object : SvelteJSBlockLazyElementType("KEY_START") {
-    override val noTokensErrorMessage = "expression expected"
-
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
-      builder.advanceLexer() // JSTokenTypes.SHARP
-      SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
-      builder.advanceLexer() // SvelteTokenTypes.KEY_KEYWORD
-
-      parser.expressionParser.parseExpression()
-    }
-  }
-
   val THEN_CLAUSE = object : SvelteJSBlockLazyElementType("THEN_CLAUSE") {
     override val noTokensErrorMessage = "expression expected"
 
@@ -136,6 +124,18 @@ object SvelteTagElementTypes {
       builder.advanceLexer() // SvelteTokenTypes.CATCH_KEYWORD
 
       parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+    }
+  }
+
+  val KEY_START = object : SvelteJSBlockLazyElementType("KEY_START") {
+    override val noTokensErrorMessage = "expression expected"
+
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+      builder.advanceLexer() // JSTokenTypes.SHARP
+      SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
+      builder.advanceLexer() // SvelteTokenTypes.KEY_KEYWORD
+
+      parser.expressionParser.parseExpression()
     }
   }
 

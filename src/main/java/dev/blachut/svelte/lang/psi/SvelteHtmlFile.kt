@@ -56,11 +56,11 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
       return true
     }
     else if (parentScript != null) {
-      // place is inside instance script, process module script if available
+      // place is inside instance script, process module script
       return processScriptDeclarations(processor, state, lastParent, place, moduleScript)
     }
     else {
-      // place is inside template expression, process instance and then module script if available
+      // place is inside template expression, process instance and then module script
       return processScriptDeclarations(processor, state, lastParent, place, instanceScript) &&
              processScriptDeclarations(processor, state, lastParent, place, moduleScript)
     }

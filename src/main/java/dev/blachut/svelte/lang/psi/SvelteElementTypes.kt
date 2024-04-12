@@ -65,7 +65,8 @@ object SvelteElementTypes {
       SvelteTagElementTypes.IF_END,
       SvelteTagElementTypes.EACH_END,
       SvelteTagElementTypes.AWAIT_END,
-      SvelteTagElementTypes.KEY_END -> SvelteEndTag(node)
+      SvelteTagElementTypes.KEY_END,
+      -> SvelteEndTag(node)
 
       else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")
     }

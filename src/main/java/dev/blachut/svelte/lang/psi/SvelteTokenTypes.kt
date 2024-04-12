@@ -59,6 +59,6 @@ object SvelteTokenTypes {
     KEY_KEYWORD,
     HTML_KEYWORD,
     DEBUG_KEYWORD,
-    CONST_KEYWORD
+    CONST_KEYWORD,
   )
 }
