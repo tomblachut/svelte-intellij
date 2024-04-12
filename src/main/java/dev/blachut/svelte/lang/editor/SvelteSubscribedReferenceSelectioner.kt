@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.psi.isDollarPrefixedName
 
 class SvelteSubscribedReferenceSelectioner : ExtendWordSelectionHandlerBase() {
@@ -32,5 +33,5 @@ class SvelteSubscribedReferenceSelectioner : ExtendWordSelectionHandlerBase() {
 }
 
 internal fun isSvelteSubscribedReferenceIdentifier(e: PsiElement): Boolean {
-  return e.elementType == JSTokenTypes.IDENTIFIER && isDollarPrefixedName(e.text)
+  return isSvelteContext(e) && e.elementType == JSTokenTypes.IDENTIFIER && isDollarPrefixedName(e.text)
 }
