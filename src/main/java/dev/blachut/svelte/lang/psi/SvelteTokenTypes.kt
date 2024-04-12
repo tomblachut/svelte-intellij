@@ -48,6 +48,9 @@ object SvelteTokenTypes {
   @JvmField
   val CONST_KEYWORD: IElementType = JSTokenTypes.CONST_KEYWORD
 
+  @JvmField
+  val SNIPPET_KEYWORD = JSKeywordElementType("snippet")
+
   val KEYWORDS = TokenSet.create(
     IF_KEYWORD,
     ELSE_KEYWORD,
@@ -60,5 +63,6 @@ object SvelteTokenTypes {
     HTML_KEYWORD,
     DEBUG_KEYWORD,
     CONST_KEYWORD,
+    SNIPPET_KEYWORD,
   )
 }

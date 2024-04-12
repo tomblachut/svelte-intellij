@@ -47,6 +47,7 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
   fun testBlockEachAssets() = doTest()
   fun testBlockIfElseIf() = doTest()
   fun testBlockKey() = doTest()
+  fun testBlockSnippet() = doTest()
   fun testBlockWhitespace() = doTest()
 
   fun testExpression() = doTest()

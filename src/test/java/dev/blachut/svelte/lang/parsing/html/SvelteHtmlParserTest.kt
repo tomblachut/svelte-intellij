@@ -77,6 +77,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testBlockEachAssets() = doTest()
   fun testBlockIfElseIf() = doTest()
   fun testBlockKey() = doTest()
+  fun testBlockSnippet() = doTest()
   fun testBlockNesting() = doTest()
   fun testBlockWhitespace() = doTest()
 

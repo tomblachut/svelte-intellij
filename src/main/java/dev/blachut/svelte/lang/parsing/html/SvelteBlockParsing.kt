@@ -16,6 +16,7 @@ object SvelteBlockParsing {
       SvelteTagElementTypes.EACH_START -> EACH_BLOCK_DEFINITION
       SvelteTagElementTypes.AWAIT_START -> AWAIT_BLOCK_DEFINITION
       SvelteTagElementTypes.KEY_START -> KEY_BLOCK_DEFINITION
+      SvelteTagElementTypes.SNIPPET_START -> SNIPPET_BLOCK_DEFINITION
       else -> throw IllegalArgumentException("Expected start tag token")
     }
 
@@ -58,6 +59,14 @@ object SvelteBlockParsing {
     innerTagToBranchTokens = mapOf(),
     endTag = SvelteTagElementTypes.KEY_END,
     missingEndTagMessage = SvelteBundle.message("svelte.parsing.key.is.not.closed")
+  )
+
+  private val SNIPPET_BLOCK_DEFINITION = BlockParsingDefinition(
+    blockToken = SvelteElementTypes.SNIPPET_BLOCK,
+    primaryBranchToken = SvelteElementTypes.SNIPPET_PRIMARY_BRANCH,
+    innerTagToBranchTokens = mapOf(),
+    endTag = SvelteTagElementTypes.SNIPPET_END,
+    missingEndTagMessage = SvelteBundle.message("svelte.parsing.snippet.is.not.closed")
   )
 }
 

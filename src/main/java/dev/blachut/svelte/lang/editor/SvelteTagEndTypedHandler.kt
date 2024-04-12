@@ -61,6 +61,7 @@ class SvelteTagEndTypedHandler : TypedHandlerDelegate() {
       SvelteTagElementTypes.EACH_START -> prefix + "each" + suffix
       SvelteTagElementTypes.AWAIT_START -> prefix + "await" + suffix
       SvelteTagElementTypes.KEY_START -> prefix + "key" + suffix
+      SvelteTagElementTypes.SNIPPET_START -> prefix + "snippet" + suffix
       else -> return
     }
 

@@ -30,6 +30,7 @@ object SvelteTagParsing {
         SvelteTokenTypes.EACH_KEYWORD -> SvelteTagElementTypes.EACH_START
         SvelteTokenTypes.AWAIT_KEYWORD -> SvelteTagElementTypes.AWAIT_START
         SvelteTokenTypes.KEY_KEYWORD -> SvelteTagElementTypes.KEY_START
+        SvelteTokenTypes.SNIPPET_KEYWORD -> SvelteTagElementTypes.SNIPPET_START
         else -> null
       }
       if (token != null) return finishTag(builder, marker, token)
@@ -53,6 +54,7 @@ object SvelteTagParsing {
         SvelteTokenTypes.EACH_KEYWORD -> SvelteTagElementTypes.EACH_END
         SvelteTokenTypes.AWAIT_KEYWORD -> SvelteTagElementTypes.AWAIT_END
         SvelteTokenTypes.KEY_KEYWORD -> SvelteTagElementTypes.KEY_END
+        SvelteTokenTypes.SNIPPET_KEYWORD -> SvelteTagElementTypes.SNIPPET_END
         else -> null
       }
       if (token != null) return finishTag(builder, marker, token)

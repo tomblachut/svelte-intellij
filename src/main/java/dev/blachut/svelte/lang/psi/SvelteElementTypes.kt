@@ -22,6 +22,9 @@ object SvelteElementTypes {
   val KEY_BLOCK = SvelteElementType("KEY_BLOCK")
   val KEY_PRIMARY_BRANCH = SvelteElementType("KEY_PRIMARY_BRANCH")
 
+  val SNIPPET_BLOCK = SvelteElementType("SNIPPET_BLOCK")
+  val SNIPPET_PRIMARY_BRANCH = SvelteElementType("SNIPPET_PRIMARY_BRANCH")
+
   val FRAGMENT = SvelteElementType("FRAGMENT")
 
   // TODO remove this element
@@ -36,6 +39,7 @@ object SvelteElementTypes {
     AWAIT_THEN_BRANCH,
     AWAIT_CATCH_BRANCH,
     KEY_PRIMARY_BRANCH,
+    SNIPPET_PRIMARY_BRANCH,
   )
 
   fun createElement(node: ASTNode): PsiElement {
@@ -56,6 +60,9 @@ object SvelteElementTypes {
       KEY_BLOCK -> SvelteKeyBlock(node)
       KEY_PRIMARY_BRANCH -> SvelteKeyPrimaryBranch(node)
 
+      SNIPPET_BLOCK -> SvelteSnippetBlock(node)
+      SNIPPET_PRIMARY_BRANCH -> SvelteSnippetPrimaryBranch(node)
+
       FRAGMENT -> SvelteFragment(node)
 
       ATTRIBUTE_EXPRESSION -> SveltePsiElement(node)
@@ -66,6 +73,7 @@ object SvelteElementTypes {
       SvelteTagElementTypes.EACH_END,
       SvelteTagElementTypes.AWAIT_END,
       SvelteTagElementTypes.KEY_END,
+      SvelteTagElementTypes.SNIPPET_END
       -> SvelteEndTag(node)
 
       else -> throw IllegalArgumentException("Unknown element type: ${node.elementType}")

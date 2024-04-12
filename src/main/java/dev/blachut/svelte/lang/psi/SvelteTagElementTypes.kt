@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
+import com.intellij.lang.javascript.parsing.FunctionParser
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.SvelteBundle
@@ -139,16 +140,36 @@ object SvelteTagElementTypes {
     }
   }
 
+  val SNIPPET_START = object : SvelteJSBlockLazyElementType("SNIPPET_START") {
+    override val noTokensErrorMessage = "expression expected"
+
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+      builder.advanceLexer() // JSTokenTypes.SHARP
+      SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
+      builder.advanceLexer() // SvelteTokenTypes.SNIPPET_KEYWORD
+
+      try {
+        builder.putUserData(FunctionParser.methodsEmptinessKey, FunctionParser.MethodEmptiness.ALWAYS)
+        val mark = builder.mark()
+        parser.functionParser.parseFunctionNoMarker(FunctionParser.Context.SOURCE_ELEMENT, mark)
+      }
+      finally {
+        builder.putUserData(FunctionParser.methodsEmptinessKey, null)
+      }
+    }
+  }
+
   val TAG_DEPENDENT_EXPRESSION = SvelteJSElementType("TAG_DEPENDENT_EXPRESSION")
 
   val IF_END = SvelteJSElementType("IF_END")
   val EACH_END = SvelteJSElementType("EACH_END")
   val AWAIT_END = SvelteJSElementType("AWAIT_END")
   val KEY_END = SvelteJSElementType("KEY_END")
+  val SNIPPET_END = SvelteJSElementType("SNIPPET_END")
 
-  val START_TAGS = TokenSet.create(IF_START, EACH_START, AWAIT_START, KEY_START)
+  val START_TAGS = TokenSet.create(IF_START, EACH_START, AWAIT_START, KEY_START, SNIPPET_START)
   val INNER_TAGS = TokenSet.create(ELSE_CLAUSE, THEN_CLAUSE, CATCH_CLAUSE)
-  val END_TAGS = TokenSet.create(IF_END, EACH_END, AWAIT_END, KEY_END)
+  val END_TAGS = TokenSet.create(IF_END, EACH_END, AWAIT_END, KEY_END, SNIPPET_END)
   val INITIAL_TAGS = TokenSet.orSet(START_TAGS, INNER_TAGS)
   val TAIL_TAGS = TokenSet.orSet(INNER_TAGS, END_TAGS)
 }
