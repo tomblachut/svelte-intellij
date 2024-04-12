@@ -10,7 +10,7 @@ import dev.blachut.svelte.lang.psi.isDollarPrefixedName
 
 class SvelteSubscribedReferenceSelectioner : ExtendWordSelectionHandlerBase() {
   override fun canSelect(e: PsiElement): Boolean {
-    return e.elementType == JSTokenTypes.IDENTIFIER && isDollarPrefixedName(e.text)
+    return isSvelteSubscribedReferenceIdentifier(e)
   }
 
   override fun select(
@@ -29,4 +29,8 @@ class SvelteSubscribedReferenceSelectioner : ExtendWordSelectionHandlerBase() {
   override fun getMinimalTextRangeLength(element: PsiElement, text: CharSequence, cursorOffset: Int): Int {
     return element.textLength - 1
   }
+}
+
+internal fun isSvelteSubscribedReferenceIdentifier(e: PsiElement): Boolean {
+  return e.elementType == JSTokenTypes.IDENTIFIER && isDollarPrefixedName(e.text)
 }
