@@ -29,7 +29,7 @@ object SvelteJSLazyElementTypes {
   }
 
   /**
-   * Text, html and debug expressions + const
+   * Text expressions + html, debug & render + const
    */
   val CONTENT_EXPRESSION = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
     override val noTokensErrorMessage = "Expression expected"
@@ -101,6 +101,10 @@ object SvelteJSLazyElementTypes {
         builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
         builder.advanceLexer()
       }
+      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "render") {
+        builder.remapCurrentToken(SvelteTokenTypes.RENDER_KEYWORD)
+        builder.advanceLexer()
+      }
       else if (builder.tokenType === SvelteTokenTypes.CONST_KEYWORD) {
         constMode = true
         builder.advanceLexer()
@@ -108,7 +112,7 @@ object SvelteJSLazyElementTypes {
       else {
         val errorMarker = builder.mark()
         builder.advanceLexer()
-        errorMarker.error(SvelteBundle.message("svelte.parsing.error.expected.html.debug.or.const"))
+        errorMarker.error(SvelteBundle.message("svelte.parsing.error.expected.html.debug.render.const"))
       }
     }
     else if (unexpectedTokens.contains(builder.tokenType)) {
@@ -137,6 +141,10 @@ object SvelteJSLazyElementTypes {
       }
       else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
         builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
+        builder.advanceLexer()
+      }
+      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "render") {
+        builder.remapCurrentToken(SvelteTokenTypes.RENDER_KEYWORD)
         builder.advanceLexer()
       }
       else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "const") {

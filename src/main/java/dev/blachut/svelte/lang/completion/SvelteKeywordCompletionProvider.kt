@@ -18,7 +18,7 @@ import icons.SvelteIcons
 class SvelteKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
   private val symbolTokens = setOf(JSTokenTypes.SHARP, JSTokenTypes.COLON, JSTokenTypes.DIV, JSTokenTypes.AT)
   private val completions = listOf("#if", "#each", "#await", "#key", "#snippet", ":else", ":then", ":catch",
-                                   "@const", "@html", "@debug")
+                                   "@const", "@render", "@html", "@debug")
 
   override fun addCompletions(
     parameters: CompletionParameters,

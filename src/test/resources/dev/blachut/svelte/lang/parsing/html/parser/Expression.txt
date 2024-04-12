@@ -69,6 +69,69 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
+      PsiElement(JS:RENDER_KEYWORD)('render')
+      PsiWhiteSpace(' ')
+      JSCallExpression
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('foo')
+        JSArgumentList
+          PsiElement(JS:LPAR)('(')
+          PsiElement(JS:RPAR)(')')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:RENDER_KEYWORD)('render')
+      PsiWhiteSpace(' ')
+      JSCallExpression
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('foo')
+        PsiWhiteSpace(' ')
+        JSArgumentList
+          PsiElement(JS:LPAR)('(')
+          PsiElement(JS:RPAR)(')')
+      PsiWhiteSpace(' ')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:RENDER_KEYWORD)('render')
+      PsiWhiteSpace(' ')
+      JSCallExpression
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('foo')
+        JSArgumentList
+          PsiElement(JS:LPAR)('(')
+          JSLiteralExpression
+            PsiElement(JS:NUMERIC_LITERAL)('1')
+          PsiElement(JS:COMMA)(',')
+          PsiWhiteSpace(' ')
+          JSObjectLiteralExpression
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:RBRACE)('}')
+          PsiElement(JS:RPAR)(')')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
+      PsiElement(JS:RENDER_KEYWORD)('render')
+      PsiWhiteSpace(' ')
+      JSCallExpression
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('foo')
+        PsiElement(JS:ELVIS)('?.')
+        JSArgumentList
+          PsiElement(JS:LPAR)('(')
+          PsiElement(JS:RPAR)(')')
+      PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n')
+    SvelteJS: CONTENT_EXPRESSION
+      PsiElement(JS:LBRACE)('{')
+      PsiElement(JS:AT)('@')
       PsiElement(JS:CONST_KEYWORD)('const')
       PsiWhiteSpace(' ')
       JSVarStatement
@@ -137,7 +200,7 @@ SvelteHtmlFile: Expression.svelte
     SvelteJS: CONTENT_EXPRESSION
       PsiElement(JS:LBRACE)('{')
       PsiElement(JS:AT)('@')
-      PsiErrorElement:Expected html, debug or const
+      PsiErrorElement:Expected html, debug, render or const
         PsiElement(JS:IDENTIFIER)('unknown')
       PsiWhiteSpace(' ')
       JSReferenceExpression
