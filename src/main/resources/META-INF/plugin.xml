@@ -35,7 +35,7 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
-    <registryKey defaultValue="0.16.2" description="Svelte service version for downloading" restartRequired="true" key="svelte.language.server.default.version"/>
+    <registryKey defaultValue="0.16.7" description="Svelte service version for downloading" restartRequired="true" key="svelte.language.server.default.version"/>
     <registryKey defaultValue="0.3.37" description="Svelte TypeScript plugin version for downloading" restartRequired="true" key="svelte.typescript.plugin.default.version"/>
 
     <fileType name="Svelte" extensions="svelte" language="SvelteHTML"
