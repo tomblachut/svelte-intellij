@@ -24,20 +24,24 @@ sealed class SvelteBranch(node: ASTNode) : SveltePsiElement(node), JSElement {
     place: PsiElement
   ): Boolean {
     if (lastParent != null && (lastParent != tag || place.contextOfType<SvelteTagDependentExpression>() != null)) {
-      var result = true
-      tag.acceptChildren(object : JSDestructuringVisitor() {
-        override fun visitJSParameter(node: JSParameter) {
-          if (result && !processor.execute(node, ResolveState.initial())) {
-            result = false
-          }
-        }
-
-        override fun visitJSVariable(node: JSVariable) {}
-      })
-      return result
+      return visitParameters(tag, processor)
     }
 
     return true
+  }
+
+  protected fun visitParameters(container: PsiElement, processor: PsiScopeProcessor): Boolean {
+    var result = true
+    container.acceptChildren(object : JSDestructuringVisitor() {
+      override fun visitJSParameter(node: JSParameter) {
+        if (result && !processor.execute(node, ResolveState.initial())) {
+          result = false
+        }
+      }
+
+      override fun visitJSVariable(node: JSVariable) {}
+    })
+    return result
   }
 }
 

@@ -211,7 +211,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
       <div>{<caret>}</div>
     """.trimIndent())
     val items = myFixture.completeBasic()
-    hasElements(items, "#if", "#each", "#await", "@html", "@debug", "@const")
+    hasElements(items, "#if", "#each", "#await", "#snippet", "@html", "@debug", "@render", "@const")
   }
 
   fun testKeywords2() {
@@ -243,6 +243,15 @@ class SvelteCompletionTest : BasePlatformTestCase() {
       {/if}
     """.trimIndent())
     hasElements(myFixture.completeBasic(), "true", "false")
+  }
+
+  fun testSnippetParameterUsage() {
+    myFixture.configureByText("Hello.svelte", """
+      {#snippet figure(one, two)}
+        <img src={<caret>} alt="image" />
+      {/snippet}
+    """.trimIndent())
+    hasElements(myFixture.completeBasic(), "one", "two")
   }
 
   fun testDirectivesOnElement() {
