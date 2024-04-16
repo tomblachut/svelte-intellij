@@ -20,19 +20,19 @@ class SvelteServiceTestSuite
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-    // Parsing
+  // Parsing
   SvelteHtmlRegressionParsingTest::class,
   SvelteHighlightingLexerTest::class,
   SvelteHtmlParserTest::class,
   SvelteDirectiveLexerTest::class,
   SvelteDirectiveParserTest::class,
-    // Editing
+  // Editing
   SvelteFormatterTest::class,
   SvelteBraceTypedTest::class,
   SvelteCommenterTest::class,
   SvelteEditorTest::class,
   SvelteEmmetTest::class,
-    // Code insight
+  // Code insight
   SvelteAutoPopupTest::class,
   SvelteCompletionTest::class,
   SvelteHighlightingTest::class,
@@ -48,7 +48,12 @@ class SvelteServiceTestSuite
   SvelteCreateFunctionTest::class,
   SvelteCreateImportTest::class,
   SvelteKitTest::class,
-    // Service
+)
+class SvelteAggregatorTestSuite
+
+@RunWith(Suite::class)
+@Suite.SuiteClasses(
+  SvelteAggregatorTestSuite::class,
   SvelteServiceTestSuite::class,
 )
 class SvelteTestSuite
