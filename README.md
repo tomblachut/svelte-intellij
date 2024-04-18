@@ -42,7 +42,7 @@ Works in JavaScript-enabled JetBrains IDEs. Information about version compatibil
 
 Contributions are very much welcome!
 
-IntelliJ Platform runs on JVM, yet Kotlin feels a lot like TypeScript. [IntelliJ Platform SDK documentation](https://jetbrains.org/intellij/sdk/docs/intro/welcome.html) is a good starting point.
+IntelliJ Platform runs on JVM, yet Kotlin feels a lot like TypeScript. [IntelliJ Platform SDK documentation](https://plugins.jetbrains.com/docs/intellij/) is a good starting point.
 
 ### Building and running the plugin
 
