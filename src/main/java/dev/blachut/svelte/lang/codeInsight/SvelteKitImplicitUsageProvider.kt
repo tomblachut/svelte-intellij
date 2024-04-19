@@ -1,7 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider
-import com.intellij.lang.ecmascript6.psi.ES6ExportDefaultAssignment
 import com.intellij.lang.javascript.psi.JSProperty
 import com.intellij.lang.javascript.psi.JSPsiElementBase
 import com.intellij.lang.javascript.psi.JSVariable
@@ -15,12 +14,9 @@ class SvelteKitImplicitUsageProvider : ImplicitUsageProvider {
   private val kitPageFiles = setOf("+page", "+layout", "+page.server", "+layout.server", "+server")
   private val kitHookFunctions = setOf("handle", "handleFetch", "handleError")
   private val kitHookFiles = setOf("hooks.server", "hooks.client")
-  private val kitConfigFiles = setOf("svelte.config", "vite.config")
 
   override fun isImplicitUsage(element: PsiElement): Boolean {
     if (!isSvelteProjectContext(element)) return false
-
-    if (isSvelteConfig(element)) return true
 
     if (element !is JSPsiElementBase) return false
     return isSvelteKitRouteExport(element)
@@ -41,11 +37,6 @@ class SvelteKitImplicitUsageProvider : ImplicitUsageProvider {
   private fun isSvelteKitHookFunction(element: JSPsiElementBase): Boolean {
     return element.name in kitHookFunctions && element.isExported
            && element.containingFile?.virtualFile?.nameWithoutExtension in kitHookFiles
-  }
-
-  private fun isSvelteConfig(element: PsiElement): Boolean {
-    return element is ES6ExportDefaultAssignment
-           && element.containingFile?.virtualFile?.nameWithoutExtension in kitConfigFiles
   }
 
   private fun isSvelteKitSnapshotObjectProperty(element: JSPsiElementBase): Boolean {
