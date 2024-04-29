@@ -12,14 +12,6 @@ import org.junit.runners.Suite
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-  SvelteServiceTest::class,
-  SvelteServiceCompletionTest::class,
-  SvelteServiceDocumentationTest::class,
-)
-class SvelteServiceTestSuite
-
-@RunWith(Suite::class)
-@Suite.SuiteClasses(
   // Parsing
   SvelteHtmlRegressionParsingTest::class,
   SvelteHighlightingLexerTest::class,
@@ -50,6 +42,14 @@ class SvelteServiceTestSuite
   SvelteKitTest::class,
 )
 class SvelteAggregatorTestSuite
+
+@RunWith(Suite::class)
+@Suite.SuiteClasses(
+  SvelteServiceTest::class,
+  SvelteServiceCompletionTest::class,
+  SvelteServiceDocumentationTest::class,
+)
+class SvelteServiceTestSuite
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
