@@ -27,9 +27,9 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
   override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
     val project = psi.project
     val lexer = SvelteJSExpressionLexer(assumeExternalBraces)
-    val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, lexer, language, chameleon.chars)
+    val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, lexer, SvelteJSLanguage.INSTANCE, chameleon.chars)
     val startTime = System.nanoTime()
-    val parser = JSLanguageUtil.createJSParser(language, builder)
+    val parser = JSLanguageUtil.createJSParser(SvelteJSLanguage.INSTANCE, builder)
 
     val rootMarker = builder.mark()
 
