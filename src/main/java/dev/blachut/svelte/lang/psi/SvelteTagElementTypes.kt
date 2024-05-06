@@ -7,6 +7,7 @@ import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.parsing.html.SvelteTagParsing
+import dev.blachut.svelte.lang.parsing.js.markupContextKey
 
 object SvelteTagElementTypes {
   val IF_START = object : SvelteJSBlockLazyElementType("IF_START") {
@@ -149,12 +150,14 @@ object SvelteTagElementTypes {
       builder.advanceLexer() // SvelteTokenTypes.SNIPPET_KEYWORD
 
       try {
+        builder.putUserData(markupContextKey, true)
         builder.putUserData(FunctionParser.methodsEmptinessKey, FunctionParser.MethodEmptiness.ALWAYS)
         val mark = builder.mark()
         parser.functionParser.parseFunctionNoMarker(FunctionParser.Context.SOURCE_ELEMENT, mark)
       }
       finally {
         builder.putUserData(FunctionParser.methodsEmptinessKey, null)
+        builder.putUserData(markupContextKey, null)
       }
     }
   }

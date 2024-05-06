@@ -8,6 +8,7 @@ import com.intellij.lang.ecmascript6.parsing.ES6StatementParser
 import com.intellij.lang.javascript.JSElementTypes
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JSPsiTypeParser
+import com.intellij.openapi.util.Key
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
@@ -25,6 +26,16 @@ class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES
         return super.getCurrentBinarySignPriority(allowIn, advance)
       }
     }
+    myFunctionParser = object : ES6FunctionParser<SvelteJSParser>(this) {
+      override fun getParameterType(): IElementType {
+        if (builder.getUserData(markupContextKey) == true) {
+          return SvelteJSElementTypes.PARAMETER
+        }
+        else {
+          return super.getParameterType()
+        }
+      }
+    }
   }
 
   override fun buildTokenElement(type: IElementType) {
@@ -40,3 +51,5 @@ class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES
     )
   }
 }
+
+val markupContextKey = Key.create<Any>("markupContextKey")

@@ -13,7 +13,7 @@ SvelteHtmlFile: BlockSnippet.svelte
             PsiElement(JS:IDENTIFIER)('figure')
             JSParameterList
               PsiElement(JS:LPAR)('(')
-              JSParameter
+              SvelteJSParameter
                 PsiElement(JS:IDENTIFIER)('image')
               PsiElement(JS:RPAR)(')')
           PsiElement(JS:RBRACE)('}')
@@ -46,7 +46,7 @@ SvelteHtmlFile: BlockSnippet.svelte
             PsiWhiteSpace(' ')
             JSParameterList
               PsiElement(JS:LPAR)('(')
-              JSParameter
+              SvelteJSParameter
                 PsiElement(JS:IDENTIFIER)('image')
               PsiElement(JS:RPAR)(')')
           PsiWhiteSpace(' ')
