@@ -2,7 +2,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.index.JSSymbolUtil
-import com.intellij.lang.javascript.psi.JSLabeledStatement
 import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
@@ -12,7 +11,6 @@ import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.lang.javascript.psi.stubs.JSImplicitElement
 import com.intellij.lang.javascript.psi.stubs.impl.JSImplicitElementImpl
 import com.intellij.psi.ResolveResult
-import com.intellij.psi.util.parentOfType
 
 class SvelteJSReferenceExpressionResolver(
   referenceExpression: JSReferenceExpressionImpl,
@@ -29,26 +27,11 @@ class SvelteJSReferenceExpressionResolver(
 
     val referencedName = myReferencedName
     if (expression.qualifier != null || referencedName == null) return ResolveResult.EMPTY_ARRAY
-
     val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
     val localProcessor = createLocalResolveProcessor(sink)
-    JSReferenceExpressionImpl.doProcessLocalDeclarations(
-      myRef,
-      myQualifier,
-      localProcessor,
-      false,
-      false,
-      null
-    )
-    val jsElement = localProcessor.result ?: return ResolveResult.EMPTY_ARRAY
-
-    val labeledStatement = jsElement.parentOfType<JSLabeledStatement>()
-    if (labeledStatement != null && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
-      return localProcessor.resultsAsResolveResults
-    }
-
-    return ResolveResult.EMPTY_ARRAY
+    return SvelteReactiveDeclarationsUtil.resolveReactiveDeclarationsCommon(myRef, myQualifier, localProcessor)
   }
+
 
   private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
     return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
