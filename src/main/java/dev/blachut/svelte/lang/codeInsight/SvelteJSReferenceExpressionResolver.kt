@@ -20,32 +20,34 @@ class SvelteJSReferenceExpressionResolver(
 ) :
   JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
   override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-    val resolveImplicits = resolveImplicits(expression)
-    if (resolveImplicits.isNotEmpty()) return resolveImplicits
+    val resolvedImplicits = resolveImplicits(expression)
+    if (resolvedImplicits.isNotEmpty()) return resolvedImplicits
 
-    val resolved = super.resolve(expression, incompleteCode)
+    // sometimes reactive declaration could've been already returned here, the proof was lost to time
+    val resolvedBasicOrStore = super.resolve(expression, incompleteCode)
+    if (resolvedBasicOrStore.isNotEmpty()) return resolvedBasicOrStore
 
     val referencedName = myReferencedName
-    if (resolved.isEmpty() && expression.qualifier == null && referencedName != null) {
-      val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
-      val localProcessor = createLocalResolveProcessor(sink)
-      JSReferenceExpressionImpl.doProcessLocalDeclarations(
-        myRef,
-        myQualifier,
-        localProcessor,
-        false,
-        false,
-        null
-      )
-      val jsElement = localProcessor.result ?: return resolved
+    if (expression.qualifier != null || referencedName == null) return ResolveResult.EMPTY_ARRAY
 
-      val labeledStatement = jsElement.parentOfType<JSLabeledStatement>()
-      if (labeledStatement != null && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
-        return localProcessor.resultsAsResolveResults
-      }
+    val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
+    val localProcessor = createLocalResolveProcessor(sink)
+    JSReferenceExpressionImpl.doProcessLocalDeclarations(
+      myRef,
+      myQualifier,
+      localProcessor,
+      false,
+      false,
+      null
+    )
+    val jsElement = localProcessor.result ?: return ResolveResult.EMPTY_ARRAY
+
+    val labeledStatement = jsElement.parentOfType<JSLabeledStatement>()
+    if (labeledStatement != null && labeledStatement.label == SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
+      return localProcessor.resultsAsResolveResults
     }
 
-    return resolved
+    return ResolveResult.EMPTY_ARRAY
   }
 
   private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
