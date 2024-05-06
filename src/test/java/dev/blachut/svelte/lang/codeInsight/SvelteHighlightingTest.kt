@@ -25,7 +25,6 @@ import com.sixrr.inspectjs.validity.UnreachableCodeJSInspection
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
 
 class SvelteHighlightingTest : BasePlatformTestCase() {
-
   override fun setUp() {
     super.setUp()
     myFixture.enableInspections(*configureDefaultLocalInspectionTools().toTypedArray())
@@ -306,6 +305,26 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       {#await promise11 then value11}
         <p>the value is {value11}</p>
       {/await}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testSnippet() {
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        figure<error descr="Invalid number of arguments, expected 1..2">()</error>;
+      </script>
+      
+      {#snippet figure(image, unused = true)}
+        <img src={image.src} alt={image.caption} />
+      {/snippet}
+      
+      {#snippet <warning descr="Unused function another">another</warning>()}<div></div>{/snippet}
+      
+      <button>
+        {@render figure({})}
+        {@render figure<weak_warning descr="Invalid number of arguments, expected 1..2">()</weak_warning>}
+      </button>
     """.trimIndent())
     myFixture.testHighlighting()
   }

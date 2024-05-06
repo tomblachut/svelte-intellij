@@ -9,7 +9,11 @@ import com.intellij.psi.util.PsiTreeUtil
 
 class SvelteSnippetPrimaryBranch(node: ASTNode) : SveltePrimaryBranch(node) {
   override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
-    val parameterList = PsiTreeUtil.findChildOfType(tag, JSFunction::class.java)?.parameterList ?: return true
+    val function = PsiTreeUtil.findChildOfType(tag, JSFunction::class.java) ?: return true
+    if (!processor.execute(function, state)) {
+      return false
+    }
+    val parameterList = function.parameterList ?: return true
     return visitParameters(parameterList, processor)
   }
 }

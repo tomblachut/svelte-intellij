@@ -9,7 +9,7 @@ abstract class SvelteBlock(node: ASTNode, keyword: String) : SveltePsiElement(no
   val startTag: SvelteTag get() = primaryBranch.tag
   val endTag: SvelteTag? get() = lastChild as? SvelteTag
 
-  private val primaryBranch get() = firstChild as SveltePrimaryBranch
+  val primaryBranch get() = firstChild as SveltePrimaryBranch
 
   val presentation: String = "{#$keyword}"
 }

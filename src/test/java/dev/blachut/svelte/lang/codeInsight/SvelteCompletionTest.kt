@@ -5,6 +5,8 @@ import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class SvelteCompletionTest : BasePlatformTestCase() {
+  private val props = "${'$'}props" // to trick Kotlin
+
   fun testScriptKeywordsJS() {
     myFixture.configureByText("Component.svelte", "<script><caret></script>")
     val items = myFixture.completeBasic()
@@ -252,6 +254,42 @@ class SvelteCompletionTest : BasePlatformTestCase() {
       {/snippet}
     """.trimIndent())
     hasElements(myFixture.completeBasic(), "one", "two")
+  }
+
+  fun testSnippetRender() {
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        import type { Snippet } from 'svelte';
+      
+        let { children }: { children: Snippet } = $props();
+      </script>
+      
+      {#snippet figure(image)}
+        <img src={image.src} alt={image.caption} />
+      {/snippet}
+      
+      <button>
+        {@render <caret>}
+      </button>
+    """.trimIndent())
+    hasElements(myFixture.completeBasic(), "children", "figure")
+  }
+
+  fun testSnippetFromScript() {
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        import type { Snippet } from 'svelte';
+      
+        let { children }: { children: Snippet } = $props();
+        
+        <caret>
+      </script>
+      
+      {#snippet figure(image)}
+        <img src={image.src} alt={image.caption} />
+      {/snippet}
+    """.trimIndent())
+    hasElements(myFixture.completeBasic(), "children", "figure")
   }
 
   fun testDirectivesOnElement() {

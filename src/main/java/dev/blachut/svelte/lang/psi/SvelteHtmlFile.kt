@@ -8,9 +8,11 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.impl.source.html.HtmlFileImpl
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlDocument
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteHtmlFileElementType
+import dev.blachut.svelte.lang.psi.blocks.SvelteSnippetBlock
 
 fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
   return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
@@ -47,7 +49,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
     } as XmlTag?
 
   override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {
-    document ?: return true
+    val document = document ?: return true
 
     // TODO ScriptSupportUtil.processDeclarations caches found script tags
     val parentScript = findAncestorScript(place)
@@ -56,12 +58,14 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
       return true
     }
     else if (parentScript != null) {
-      // place is inside instance script, process module script
-      return processScriptDeclarations(processor, state, lastParent, place, moduleScript)
+      // place is inside instance script, and its declarations were already processed, process template declarations, then module script
+      return processTopLevelTemplateDeclarations(processor, state, lastParent, place, document) &&
+             processScriptDeclarations(processor, state, lastParent, place, moduleScript)
     }
     else {
-      // place is inside template expression, process instance and then module script
-      return processScriptDeclarations(processor, state, lastParent, place, instanceScript) &&
+      // place is inside template expression, process template declarations, then instance and then module script
+      return processTopLevelTemplateDeclarations(processor, state, lastParent, place, document) &&
+             processScriptDeclarations(processor, state, lastParent, place, instanceScript) &&
              processScriptDeclarations(processor, state, lastParent, place, moduleScript)
     }
   }
@@ -74,6 +78,21 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
     script: PsiElement?
   ): Boolean {
     return getJsEmbeddedContent(script)?.processDeclarations(processor, state, lastParent, place) ?: true
+  }
+
+  private fun processTopLevelTemplateDeclarations(
+    processor: PsiScopeProcessor,
+    state: ResolveState,
+    lastParent: PsiElement?,
+    place: PsiElement,
+    document: XmlDocument,
+  ): Boolean {
+    for (element in document.children) {
+      if (element is SvelteSnippetBlock) {
+        element.processDeclarations(processor, state, lastParent, place)
+      }
+    }
+    return true
   }
 
   override fun toString(): String {
