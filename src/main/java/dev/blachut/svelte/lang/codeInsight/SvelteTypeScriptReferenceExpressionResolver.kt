@@ -10,7 +10,7 @@ import dev.blachut.svelte.lang.codeInsight.SvelteJSReferenceExpressionResolver.C
 
 class SvelteTypeScriptReferenceExpressionResolver(
   referenceExpression: JSReferenceExpressionImpl,
-  ignorePerformanceLimits: Boolean
+  ignorePerformanceLimits: Boolean,
 ) : TypeScriptReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
   override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
     val resolvedImplicits = resolveImplicits(expression)

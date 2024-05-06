@@ -14,9 +14,8 @@ import com.intellij.psi.ResolveResult
 
 class SvelteJSReferenceExpressionResolver(
   referenceExpression: JSReferenceExpressionImpl,
-  ignorePerformanceLimits: Boolean
-) :
-  JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
+  ignorePerformanceLimits: Boolean,
+) : JSReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
   override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
     val resolvedImplicits = resolveImplicits(expression)
     if (resolvedImplicits.isNotEmpty()) return resolvedImplicits
@@ -31,7 +30,6 @@ class SvelteJSReferenceExpressionResolver(
     val localProcessor = createLocalResolveProcessor(sink)
     return SvelteReactiveDeclarationsUtil.resolveReactiveDeclarationsCommon(myRef, myQualifier, localProcessor)
   }
-
 
   private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
     return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
