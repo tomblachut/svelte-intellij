@@ -12,5 +12,22 @@
         "svelte"
       ]
     }
+  },
+  "contributions": {
+    "js": {
+      "additional-root-directories": [
+        {
+          "name": "routes"
+        }
+      ],
+      "additional-leaf-files": [
+        {
+          "name": "+page"
+        },
+        {
+          "name": "+page.server"
+        }
+      ]
+    }
   }
 }

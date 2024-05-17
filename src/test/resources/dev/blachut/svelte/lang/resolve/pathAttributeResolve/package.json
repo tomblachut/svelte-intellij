@@ -1,0 +1,6 @@
+{
+  "name": "svelte-test",
+  "dependencies": {
+    "svelte": "*"
+  }
+}
