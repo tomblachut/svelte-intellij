@@ -105,7 +105,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.configureByText("Test.svelte", """
       <script lang="ts">
         let id = "hello";
-        ${'$'}: renamedId = id;
+        $: renamedId = id;
       </script>
       
       <input id={id}>
@@ -373,16 +373,17 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   }
 
   fun testStoreShorthandAssignment() {
+    val store = "\$store" // to trick Kotlin
     myFixture.configureByText("Foo.svelte", """
       <script>
-        import { writable } from 'svelte/store';
+        import { writable } from "svelte/store";
         const store = writable();
-        console.log(${"$"}store); // TODO required before fixing JSUnusedAssignment inspection
-        ${"$"}store = 1;
-        console.log(${"$"}store);
+        console.log($store); // TODO required before fixing JSUnusedAssignment inspection
+        $store = 1;
+        console.log($store);
         <error>store</error> = writable();
       </script>
-      {${"$"}store}
+      {$store}
     """.trimIndent())
     myFixture.testHighlighting()
   }
@@ -432,8 +433,8 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testReactiveLabelKeywordJS() {
     myFixture.configureByText("Foo.svelte", """
       <script>
-        <info descr="reactive">${'$'}</info>: {
-          break <info descr="reactive">${'$'}</info>;
+        <info descr="reactive">$</info>: {
+          break <info descr="reactive">$</info>;
         }
         
         <info descr="label">unrelated</info>: 1;
@@ -445,8 +446,8 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testReactiveLabelKeywordTS() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        <info descr="reactive">${'$'}</info>: {
-          break <info descr="reactive">${'$'}</info>;
+        <info descr="reactive">$</info>: {
+          break <info descr="reactive">$</info>;
         }
         
         <info descr="label">unrelated</info>: 1;
@@ -460,7 +461,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       <script lang="ts">
         let init = { foo: true };
 
-        ${'$'}: {
+        $: {
             init = { foo: true };
         }
 
@@ -481,7 +482,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         let test: number = 0;
         user0.number; // todo report "user0 is null"
 
-        ${'$'}: if (someOtherVar) {
+        $: if (someOtherVar) {
           if (user) {
             test = user.number;
             user.number.toFixed();
@@ -495,8 +496,8 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testReactiveDeclarationReferenceJS() { // WEB-59293 + WEB-63611
     myFixture.configureByText("Foo.svelte", """
       <script>
-        ${'$'}: doubled = 2;
-        ${'$'}: quadrupled = doubled * 2;
+        $: doubled = 2;
+        $: quadrupled = doubled * 2;
         
         <error descr="Unresolved variable or type reallyUnresolved">reallyUnresolved</error>;
 
@@ -514,8 +515,8 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testReactiveDeclarationReferenceTS() { // WEB-59293 + WEB-63611
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        ${'$'}: doubled = 2;
-        ${'$'}: quadrupled = doubled * 2;
+        $: doubled = 2;
+        $: quadrupled = doubled * 2;
         
         <error descr="Unresolved variable or type reallyUnresolved">reallyUnresolved</error>;
         
@@ -533,7 +534,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testReactiveDeclarationDestructuredJS() {
     myFixture.configureByText("Foo.svelte", """
       <script>
-        ${'$'}: ({ foo1 } = { foo1: 1 });
+        $: ({ foo1 } = { foo1: 1 });
         <warning>dollar</warning>: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
         ({ <error descr="Unresolved variable or type foo3">foo3</error> } = { foo3: 1 });
       
@@ -551,7 +552,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testReactiveDeclarationDestructuredTS() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        ${'$'}: ({ foo1 } = { foo1: 1 });
+        $: ({ foo1 } = { foo1: 1 });
         <warning>dollar</warning>: ({ <error descr="Unresolved variable or type foo2">foo2</error> } = { foo2: 1 });
         ({ <error descr="Unresolved variable or type foo3">foo3</error> } = { foo3: 1 });
       

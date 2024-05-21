@@ -43,7 +43,7 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
                 <script lang="ts">
                     import {count} from "./hel";
 
-                    ${"$"}: ${"$"}count && console.log('changed');
+                    $: ${"$"}count && console.log('changed');
                 </script>
                 <title>test</title>
                 """.trimIndent()

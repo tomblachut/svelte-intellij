@@ -5,7 +5,7 @@ import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class SvelteCompletionTest : BasePlatformTestCase() {
-  private val props = "${'$'}props" // to trick Kotlin
+  private val props = "\$props" // to trick Kotlin
 
   fun testScriptKeywordsJS() {
     myFixture.configureByText("Component.svelte", "<script><caret></script>")

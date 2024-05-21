@@ -204,7 +204,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
       <script>
-        ${'$'}: ({ foo1 } = { foo1: 1 });
+        $: ({ foo1 } = { foo1: 1 });
       
         foo1;
         <error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>;
@@ -222,7 +222,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        ${'$'}: ({ foo1 } = { foo1: 1 });
+        $: ({ foo1 } = { foo1: 1 });
       
         foo1;
         <error descr="Svelte: Cannot find name 'foo2'.">foo2</error>;
@@ -240,7 +240,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
       <script>
-        ${'$'}: [foo1] = [1];
+        $: [foo1] = [1];
       
         foo1;
         <error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>;
@@ -258,7 +258,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        ${'$'}: [foo1] = [1];
+        $: [foo1] = [1];
       
         foo1;
         <error descr="Svelte: Cannot find name 'foo2'.">foo2</error>;
@@ -286,7 +286,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         export let init: TransactionInit;
       
         let sourceAccount: Account | undefined;
-        ${'$'}: ({ sourceAccount } = init);
+        $: ({ sourceAccount } = init);
       </script>
       
       {sourceAccount}
@@ -395,7 +395,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     // todo hide internal errors for destructured reactive declaration references
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
-        ${'$'}: ({ foo } = { foo: 1 });
+        $: ({ foo } = { foo: 1 });
       </script>
       
       <p>Foo: {<caret>foo}</p>
