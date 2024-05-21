@@ -379,6 +379,99 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testStoreLocalEvaluationJS() = doTestWithLangFromTestNameSuffix(storeLocalEvaluation)
+
+  fun testStoreLocalEvaluationTS() = doTestWithLangFromTestNameSuffix(storeLocalEvaluation)
+
+  private val storeLocalEvaluation = SvelteTestScenario { langExt, langWarning ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("helpers.ts", """
+      import type { Readable } from "svelte/store";
+      
+      export function acceptNumber(x: number): number {
+        return x;
+      }
+      
+      export function acceptStore<T>(x: Readable<T>): Readable<T> {
+        return x;
+      }
+    """.trimIndent())
+    val count = "\$count" // to trick Kotlin
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        import { writable } from 'svelte/store';
+        import { acceptNumber, acceptStore } from "./helpers";
+      
+        const count = writable(5);
+      
+        acceptNumber(<$langWarning>count</$langWarning>);
+        acceptStore(count);
+        acceptNumber($count);
+        acceptStore(<$langWarning>$count</$langWarning>);
+        acceptNumber({ <error>$count</error> }.$count); // todo should be resolved, hidden by LSP
+      
+        count.<$langWarning>toFixed</$langWarning>();
+        $count.toFixed();
+      </script>
+      
+      <section>{acceptNumber(<weak_warning>count</weak_warning>)}</section>
+      <section>{acceptStore(count)}</section>
+      <section>{acceptNumber($count)}</section>
+      <section>{acceptStore(<weak_warning>$count</weak_warning>)}</section>
+      <section>{acceptNumber({ <error>$count</error> }.$count)}</section>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testStoreImportedEvaluationJS() = doTestWithLangFromTestNameSuffix(storeImportedEvaluation)
+
+  fun testStoreImportedEvaluationTS() = doTestWithLangFromTestNameSuffix(storeImportedEvaluation)
+
+  private val storeImportedEvaluation = SvelteTestScenario { langExt, langWarning ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("helpers.ts", """
+      import type { Readable } from "svelte/store";
+      import { writable } from "svelte/store";
+
+      export const count = writable(5);
+                  
+      export function acceptNumber(x: number): number {
+        return x;
+      }
+      
+      export function acceptStore<T>(x: Readable<T>): Readable<T> {
+        return x;
+      }
+    """.trimIndent())
+    val count = "\$count" // to trick Kotlin
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt" context="module">
+        import { acceptNumber, acceptStore, count } from "./helpers";
+
+        count.set(5);
+        console.log($count.toFixed()); // bug, todo prevent resolve, has error from LSP
+      </script>
+      
+      <script lang="$langExt">
+        acceptNumber(<$langWarning>count</$langWarning>);
+        acceptStore(count);
+        acceptNumber($count);
+        acceptStore(<$langWarning>$count</$langWarning>);
+        acceptNumber({ <error>$count</error> }.$count); // todo should be resolved, hidden by LSP
+      
+        count.<$langWarning>toFixed</$langWarning>();
+        $count.toFixed();
+      </script>
+      
+      <section>{acceptNumber(<weak_warning>count</weak_warning>)}</section>
+      <section>{acceptStore(count)}</section>
+      <section>{acceptNumber($count)}</section>
+      <section>{acceptStore(<weak_warning>$count</weak_warning>)}</section>
+      <section>{acceptNumber({ <error>$count</error> }.$count)}</section>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testStoreLocalHighlightUsagesJS() = doTestWithLangFromTestNameSuffix(storeLocalHighlightUsages)
 
   fun testStoreLocalHighlightUsagesTS() = doTestWithLangFromTestNameSuffix(storeLocalHighlightUsages)
