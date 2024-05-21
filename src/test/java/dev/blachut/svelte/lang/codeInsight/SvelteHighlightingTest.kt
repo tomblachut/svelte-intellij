@@ -6,6 +6,7 @@ import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.htmlInspections.*
 import com.intellij.htmltools.codeInspection.htmlInspections.HtmlRequiredAltAttributeInspection
 import com.intellij.htmltools.codeInspection.htmlInspections.HtmlRequiredTitleElementInspection
+import com.intellij.lang.javascript.JSTestUtils
 import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
 import com.intellij.lang.javascript.inspection.JSSuspiciousTypeGuardInspection
 import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
@@ -376,6 +377,63 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     </select>
     """.trimIndent())
     myFixture.testHighlighting()
+  }
+
+  fun testStoreLocalHighlightUsagesJS() = doTestWithLangFromTestNameSuffix(storeLocalHighlightUsages)
+
+  fun testStoreLocalHighlightUsagesTS() = doTestWithLangFromTestNameSuffix(storeLocalHighlightUsages)
+
+  private val storeLocalHighlightUsages = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    val count = "\$count" // to trick Kotlin
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        import { writable } from "svelte/store";
+      
+        const <highlight><caret>count</highlight> = writable(5);
+      
+        <highlight>count</highlight>.set(5);
+        console.log($<highlight>count</highlight>.toFixed());
+        
+        $: $<highlight>count</highlight>.toFixed();
+        
+	      console.log({ $count }); // the highlight is missing, todo fix
+      </script>
+
+      <main>{$<highlight>count</highlight>}</main>
+      <section>{<highlight>count</highlight>}</section>
+    """.trimIndent())
+    JSTestUtils.checkHighlightUsages(myFixture, false)
+  }
+
+  fun testStoreImportedHighlightUsagesJS() = doTestWithLangFromTestNameSuffix(storeImportedHighlightUsages)
+
+  fun testStoreImportedHighlightUsagesTS() = doTestWithLangFromTestNameSuffix(storeImportedHighlightUsages)
+
+  private val storeImportedHighlightUsages = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("stores.$langExt", """
+      import { writable } from "svelte/store";
+    
+      export const count = writable(5);
+    """.trimIndent())
+    val count = "\$count" // to trick Kotlin
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        import { <highlight>count</highlight> } from "./stores";
+      
+        <highlight>count</highlight>.set(5);
+        console.log($<highlight><caret>count</highlight>.toFixed());
+        
+        $: $<highlight>count</highlight>.toFixed();
+        
+	      console.log({ $count }); // the highlight is missing, todo fix
+      </script>
+
+      <main>{$<highlight>count</highlight>}</main>
+      <section>{<highlight>count</highlight>}</section>
+    """.trimIndent())
+    JSTestUtils.checkHighlightUsages(myFixture, false)
   }
 
   fun testStoreShorthandAssignmentJS() = doTestWithLangFromTestNameSuffix(storeShorthandAssignment)
