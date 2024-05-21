@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang
 
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.lang.javascript.BaseJSCompletionTestCase
+import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.testFramework.fixtures.IdeaTestExecutionPolicy
 
@@ -67,4 +68,35 @@ internal fun Array<LookupElement>.checkCompletionContains(vararg variants: Strin
 
 internal fun Array<LookupElement>.checkCompletionExcludes(vararg variants: String) {
   BaseJSCompletionTestCase.checkNoCompletion(this, *variants)
+}
+
+enum class SvelteTestScriptLang(val langExt: String, val langWarning: String) {
+  JS("js", "weak_warning"),
+  TS("ts", "error")
+}
+
+fun interface SvelteTestScenario {
+  fun perform(langExt: String, langWarning: String)
+
+  fun perform(lang: SvelteTestScriptLang) {
+    perform(lang.langExt, lang.langWarning)
+  }
+
+  fun perform(testName: String) {
+    val lang = getScriptLangFromTestNameSuffix(testName)
+    perform(lang)
+  }
+}
+
+internal fun UsefulTestCase.doTestWithLangFromTestNameSuffix(testScenarioFactory: SvelteTestScenario) {
+  val testName = UsefulTestCase.getTestName(name, false)
+  testScenarioFactory.perform(testName)
+}
+
+private fun getScriptLangFromTestNameSuffix(testName: String): SvelteTestScriptLang {
+  val value = SvelteTestScriptLang.entries.find { testName.endsWith(it.name) }
+  if (value == null) {
+    throw IllegalArgumentException("Test name doesn't end with one of ${SvelteTestScriptLang.entries.joinToString(", ")}")
+  }
+  return value
 }

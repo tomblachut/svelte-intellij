@@ -22,9 +22,15 @@ import com.sixrr.inspectjs.confusing.CommaExpressionJSInspection
 import com.sixrr.inspectjs.confusing.PointlessBooleanExpressionJSInspection
 import com.sixrr.inspectjs.control.UnnecessaryLabelJSInspection
 import com.sixrr.inspectjs.validity.UnreachableCodeJSInspection
+import dev.blachut.svelte.lang.SvelteTestScenario
+import dev.blachut.svelte.lang.configureBundledSvelte
+import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
 
 class SvelteHighlightingTest : BasePlatformTestCase() {
+  override fun getTestDataPath(): String = getSvelteTestDataPath()
+
   override fun setUp() {
     super.setUp()
     myFixture.enableInspections(*configureDefaultLocalInspectionTools().toTypedArray())
@@ -372,10 +378,15 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testStoreShorthandAssignment() {
+  fun testStoreShorthandAssignmentJS() = doTestWithLangFromTestNameSuffix(storeShorthandAssignment)
+
+  fun testStoreShorthandAssignmentTS() = doTestWithLangFromTestNameSuffix(storeShorthandAssignment)
+
+  private val storeShorthandAssignment = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
     val store = "\$store" // to trick Kotlin
     myFixture.configureByText("Foo.svelte", """
-      <script>
+      <script lang="$langExt">
         import { writable } from "svelte/store";
         const store = writable();
         console.log($store); // TODO required before fixing JSUnusedAssignment inspection
