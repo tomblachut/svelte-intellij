@@ -24,6 +24,7 @@ import org.junit.runners.Suite
   SvelteCommenterTest::class,
   SvelteEditorTest::class,
   SvelteEmmetTest::class,
+  SvelteSelectWordTest::class,
   // Code insight
   SvelteAutoPopupTest::class,
   SvelteCompletionTest::class,
