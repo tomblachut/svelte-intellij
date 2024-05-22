@@ -3,8 +3,14 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import dev.blachut.svelte.lang.SvelteTestScenario
+import dev.blachut.svelte.lang.configureBundledSvelte
+import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
+import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteCompletionTest : BasePlatformTestCase() {
+  override fun getTestDataPath(): String = getSvelteTestDataPath()
+
   private val props = "\$props" // to trick Kotlin
 
   fun testScriptKeywordsJS() {
@@ -164,6 +170,54 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     val items = myFixture.completeBasic()
     hasElements(items, "slot", "hello11")
     noElements(items, "hello11NotAvailable", "hello22NotAvailable", "hello22")
+  }
+
+  fun testAfterDollarJS() = doTestWithLangFromTestNameSuffix(storeAfterDollar)
+
+  fun testAfterDollarTS() = doTestWithLangFromTestNameSuffix(storeAfterDollar)
+
+  private val storeAfterDollar = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("stores.$langExt", """
+      import { writable } from "svelte/store";
+      export const count = writable(5);
+    """.trimIndent())
+    val count = "\$count" // to trick Kotlin
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        import { count } from "./stores";
+      </script>
+
+      <section>{$<caret>}</section>
+    """.trimIndent())
+    val items = myFixture.completeBasic()
+    hasElements(items, "count")
+    @Suppress("RemoveSingleExpressionStringTemplate")
+    noElements(items, "$count")
+  }
+
+  fun testWithoutDollarJS() = doTestWithLangFromTestNameSuffix(storeWithoutDollar)
+
+  fun testWithoutDollarTS() = doTestWithLangFromTestNameSuffix(storeWithoutDollar)
+
+  private val storeWithoutDollar = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("stores.$langExt", """
+      import { writable } from "svelte/store";
+      export const count = writable(5);
+    """.trimIndent())
+    val count = "\$count" // to trick Kotlin
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        import { count } from "./stores";
+      </script>
+
+      <section>{<caret>}</section>
+    """.trimIndent())
+    val items = myFixture.completeBasic()
+    hasElements(items, "count")
+    @Suppress("RemoveSingleExpressionStringTemplate")
+    noElements(items, "$count")
   }
 
   fun testReactiveStatement() {
