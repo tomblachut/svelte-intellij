@@ -32,6 +32,7 @@ import org.junit.runners.Suite
   SvelteRenameTest::class,
   SvelteResolveTest::class,
   SvelteNavigationTest::class,
+  SvelteFindUsagesTest::class,
   SvelteBreadcrumbsTest::class,
 
   SvelteTypeScriptCompletionTest::class,
