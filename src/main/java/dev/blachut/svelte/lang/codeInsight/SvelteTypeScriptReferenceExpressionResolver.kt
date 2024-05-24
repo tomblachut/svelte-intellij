@@ -6,7 +6,6 @@ import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
 import com.intellij.lang.javascript.psi.resolve.ResolveResultSink
 import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.psi.ResolveResult
-import dev.blachut.svelte.lang.codeInsight.SvelteJSReferenceExpressionResolver.Companion.resolveImplicits
 
 class SvelteTypeScriptReferenceExpressionResolver(
   referenceExpression: JSReferenceExpressionImpl,
