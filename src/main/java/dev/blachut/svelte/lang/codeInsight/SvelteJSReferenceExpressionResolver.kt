@@ -19,14 +19,22 @@ class SvelteJSReferenceExpressionResolver(
     val resolvedBasicOrStore = super.resolve(expression, incompleteCode)
     if (resolvedBasicOrStore.isNotEmpty()) return resolvedBasicOrStore
 
+    val resolvedReactiveDeclaration = resolveReactiveDeclarations(expression, incompleteCode)
+    if (resolvedReactiveDeclaration.isNotEmpty()) return resolvedReactiveDeclaration
+
+    return ResolveResult.EMPTY_ARRAY
+  }
+
+  private fun resolveReactiveDeclarations(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
     val referencedName = myReferencedName
     if (expression.qualifier != null || referencedName == null) return ResolveResult.EMPTY_ARRAY
+
     val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
-    val localProcessor = createLocalResolveProcessor(sink)
+    val localProcessor = createReactiveDeclarationsProcessor(sink)
     return SvelteReactiveDeclarationsUtil.resolveReactiveDeclarationsCommon(myRef, myQualifier, localProcessor)
   }
 
-  private fun createLocalResolveProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
+  private fun createReactiveDeclarationsProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
     return SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(myReferencedName, myRef, sink)
   }
 }
