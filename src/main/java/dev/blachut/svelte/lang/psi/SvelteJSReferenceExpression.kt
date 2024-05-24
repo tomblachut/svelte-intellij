@@ -8,7 +8,7 @@ import com.intellij.refactoring.rename.FragmentaryPsiReference
 
 class SvelteJSReferenceExpression(elementType: IElementType) : JSReferenceExpressionImpl(elementType), FragmentaryPsiReference {
   val isSubscribedReference: Boolean
-    get() = qualifier == null && super.getReferencedName()?.let(::isDollarPrefixedName) ?: false
+    get() = qualifier == null && super.getReferencedName()?.let(::isSingleDollarPrefixedName) ?: false
 
   override fun isReadOnlyFragment(): Boolean {
     return false
@@ -21,12 +21,12 @@ class SvelteJSReferenceExpression(elementType: IElementType) : JSReferenceExpres
   @Deprecated("Deprecated in Java")
   override fun getReferencedName(): String? {
     val name = super.getReferencedName()
-    return if (name != null && qualifier == null && isDollarPrefixedName(name)) name.substring(1) else name
+    return if (name != null && qualifier == null && isSingleDollarPrefixedName(name)) name.substring(1) else name
   }
 
   override fun getCanonicalText(): String {
     val name = super.getCanonicalText()
-    return if (isDollarPrefixedName(name)) name.substring(1) else name
+    return if (isSingleDollarPrefixedName(name)) name.substring(1) else name
   }
 
   override fun getRangeInElement(): TextRange {
@@ -40,6 +40,6 @@ class SvelteJSReferenceExpression(elementType: IElementType) : JSReferenceExpres
   }
 }
 
-fun isDollarPrefixedName(name: String): Boolean {
+fun isSingleDollarPrefixedName(name: String): Boolean {
   return name.length > 1 && name[0] == '$' && name[1] != '$'
 }
