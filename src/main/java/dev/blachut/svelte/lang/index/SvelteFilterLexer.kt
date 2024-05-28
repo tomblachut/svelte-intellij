@@ -31,7 +31,7 @@ class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, originalLexer: L
       if (IDENTIFIERS.contains(tokenType)) {
         val subscribedStore = isDollarPrefixedName(tokenText)
         val start = if (subscribedStore) 1 else 0
-        val length = if (subscribedStore) tokenText.length - tokenText.length else tokenText.length
+        val length = if (subscribedStore) tokenText.length - 1 else tokenText.length
         addOccurrenceInToken(UsageSearchContext.IN_CODE.toInt(), start, length)
       }
       // TODO support directives, refer to Vue plugin
