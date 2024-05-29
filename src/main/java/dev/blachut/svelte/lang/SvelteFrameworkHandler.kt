@@ -27,7 +27,7 @@ class SvelteFrameworkHandler : FrameworkIndexingHandler() {
         evaluator.addType(storeContentType)
         return true
       }
-      catch (e: Exception) {
+      catch (_: Exception) {
       }
     }
     return false
