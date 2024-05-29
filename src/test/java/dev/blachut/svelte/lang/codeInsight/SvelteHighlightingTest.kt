@@ -379,11 +379,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testStoreLocalEvaluationJS() = doTestWithLangFromTestNameSuffix(storeLocalEvaluation)
+  fun testStoreEvaluationLocalJS() = doTestWithLangFromTestNameSuffix(storeEvaluationLocal)
 
-  fun testStoreLocalEvaluationTS() = doTestWithLangFromTestNameSuffix(storeLocalEvaluation)
+  fun testStoreEvaluationLocalTS() = doTestWithLangFromTestNameSuffix(storeEvaluationLocal)
 
-  private val storeLocalEvaluation = SvelteTestScenario { langExt, langWarning ->
+  private val storeEvaluationLocal = SvelteTestScenario { langExt, langWarning ->
     myFixture.configureBundledSvelte()
     myFixture.configureByText("helpers.ts", """
       import type { Readable } from "svelte/store";
@@ -404,30 +404,36 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       
         const count = writable(5);
       
-        acceptNumber(<$langWarning>count</$langWarning>);
+        acceptNumber(<$langWarning descr="Argument type Writable<number> is not assignable to parameter type number">count</$langWarning>);
         acceptStore(count);
         acceptNumber($count);
-        acceptStore(<$langWarning>$count</$langWarning>);
-        acceptNumber({ <error>$count</error> }.$count); // todo should be resolved, hidden by LSP
+        acceptStore(<$langWarning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</$langWarning>);
+        
+	      // noinspection JSCheckFunctionSignatures // todo there's an eval bug only in JS
+        acceptNumber({ $count: $count }.$count);
+        acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count); // todo should be resolved, hidden by LSP
       
-        count.<$langWarning>toFixed</$langWarning>();
+        count.<$langWarning descr="Unresolved function or method toFixed()">toFixed</$langWarning>();
         $count.toFixed();
       </script>
       
-      <section>{acceptNumber(<weak_warning>count</weak_warning>)}</section>
-      <section>{acceptStore(count)}</section>
-      <section>{acceptNumber($count)}</section>
-      <section>{acceptStore(<weak_warning>$count</weak_warning>)}</section>
-      <section>{acceptNumber({ <error>$count</error> }.$count)}</section>
+      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">count</weak_warning>)}</div>
+      <div>{acceptStore(count)}</div>
+      <div>{acceptNumber($count)}</div>
+      <div>{acceptStore(<weak_warning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</weak_warning>)}</div>
+      
+      <!-- todo prod IDE evaluates argument to `any | Writable<number>`, which is also wrong, but hides the below error -->
+      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">{ $count: $count }.$count</weak_warning>)}</div>
+      <div>{acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count)}</div>
     """.trimIndent())
     myFixture.testHighlighting()
   }
 
-  fun testStoreImportedEvaluationJS() = doTestWithLangFromTestNameSuffix(storeImportedEvaluation)
+  fun testStoreEvaluationImportedJS() = doTestWithLangFromTestNameSuffix(storeEvaluationImported)
 
-  fun testStoreImportedEvaluationTS() = doTestWithLangFromTestNameSuffix(storeImportedEvaluation)
+  fun testStoreEvaluationImportedTS() = doTestWithLangFromTestNameSuffix(storeEvaluationImported)
 
-  private val storeImportedEvaluation = SvelteTestScenario { langExt, langWarning ->
+  private val storeEvaluationImported = SvelteTestScenario { langExt, langWarning ->
     myFixture.configureBundledSvelte()
     myFixture.configureByText("helpers.ts", """
       import type { Readable } from "svelte/store";
@@ -453,30 +459,36 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       </script>
       
       <script lang="$langExt">
-        acceptNumber(<$langWarning>count</$langWarning>);
+        acceptNumber(<$langWarning descr="Argument type Writable<number> is not assignable to parameter type number">count</$langWarning>);
         acceptStore(count);
         acceptNumber($count);
-        acceptStore(<$langWarning>$count</$langWarning>);
-        acceptNumber({ <error>$count</error> }.$count); // todo should be resolved, hidden by LSP
+        acceptStore(<$langWarning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</$langWarning>);
+        
+	      // noinspection JSCheckFunctionSignatures // todo there's an eval bug only in JS
+        acceptNumber({ $count: $count }.$count);
+        acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count); // todo should be resolved, hidden by LSP
       
-        count.<$langWarning>toFixed</$langWarning>();
+        count.<$langWarning descr="Unresolved function or method toFixed()">toFixed</$langWarning>();
         $count.toFixed();
       </script>
       
-      <section>{acceptNumber(<weak_warning>count</weak_warning>)}</section>
-      <section>{acceptStore(count)}</section>
-      <section>{acceptNumber($count)}</section>
-      <section>{acceptStore(<weak_warning>$count</weak_warning>)}</section>
-      <section>{acceptNumber({ <error>$count</error> }.$count)}</section>
+      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">count</weak_warning>)}</div>
+      <div>{acceptStore(count)}</div>
+      <div>{acceptNumber($count)}</div>
+      <div>{acceptStore(<weak_warning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</weak_warning>)}</div>
+      
+      <!-- todo prod IDE evaluates argument to `any | Writable<number>`, which is also wrong, but hides the below error -->
+      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">{ $count: $count }.$count</weak_warning>)}</div>
+      <div>{acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count)}</div>
     """.trimIndent())
     myFixture.testHighlighting()
   }
 
-  fun testStoreLocalHighlightUsagesJS() = doTestWithLangFromTestNameSuffix(storeLocalHighlightUsages)
+  fun testStoreHighlightUsagesLocalJS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesLocal)
 
-  fun testStoreLocalHighlightUsagesTS() = doTestWithLangFromTestNameSuffix(storeLocalHighlightUsages)
+  fun testStoreHighlightUsagesLocalTS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesLocal)
 
-  private val storeLocalHighlightUsages = SvelteTestScenario { langExt, _ ->
+  private val storeHighlightUsagesLocal = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
     val count = "\$count" // to trick Kotlin
     myFixture.configureByText("Foo.svelte", """
@@ -493,17 +505,17 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 	      console.log({ $count }); // the highlight is missing, todo fix
       </script>
 
-      <main>{$<highlight>count</highlight>}</main>
-      <section>{<highlight>count</highlight>}</section>
+      <div>{$<highlight>count</highlight>}</div>
+      <div>{<highlight>count</highlight>}</div>
     """.trimIndent())
     JSTestUtils.checkHighlightUsages(myFixture, false)
   }
 
-  fun testStoreImportedHighlightUsagesJS() = doTestWithLangFromTestNameSuffix(storeImportedHighlightUsages)
+  fun testStoreHighlightUsagesImportedJS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesImported)
 
-  fun testStoreImportedHighlightUsagesTS() = doTestWithLangFromTestNameSuffix(storeImportedHighlightUsages)
+  fun testStoreHighlightUsagesImportedTS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesImported)
 
-  private val storeImportedHighlightUsages = SvelteTestScenario { langExt, _ ->
+  private val storeHighlightUsagesImported = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
     myFixture.configureByText("stores.$langExt", """
       import { writable } from "svelte/store";
@@ -523,8 +535,8 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 	      console.log({ $count }); // the highlight is missing, todo fix
       </script>
 
-      <main>{$<highlight>count</highlight>}</main>
-      <section>{<highlight>count</highlight>}</section>
+      <div>{$<highlight>count</highlight>}</div>
+      <div>{<highlight>count</highlight>}</div>
     """.trimIndent())
     JSTestUtils.checkHighlightUsages(myFixture, false)
   }
