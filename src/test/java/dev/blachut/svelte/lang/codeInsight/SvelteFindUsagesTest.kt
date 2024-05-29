@@ -1,7 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.JSAbstractFindUsagesTest
-import com.intellij.lang.javascript.JSTestUtils
 import com.intellij.testFramework.UsefulTestCase
 import dev.blachut.svelte.lang.SvelteTestScenario
 import dev.blachut.svelte.lang.configureBundledSvelte
