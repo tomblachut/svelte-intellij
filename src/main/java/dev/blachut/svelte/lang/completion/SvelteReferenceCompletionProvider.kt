@@ -5,6 +5,7 @@ import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.lang.javascript.completion.JSCompletionUtil
 import com.intellij.lang.javascript.completion.JSReferenceCompletionProvider
+import com.intellij.lang.javascript.completion.JSReferenceCompletionUtil
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
 import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
@@ -34,14 +35,16 @@ class SvelteReferenceCompletionProvider : CompletionProvider<CompletionParameter
     calcReactiveVariants(referenceExpression, parameters, result)
   }
 
-  // based on JSReferenceCompletionUtil.calcDefaultVariants
+  /**
+   * Based on [JSReferenceCompletionUtil.calcDefaultVariants]
+   */
   private fun calcReactiveVariants(expression: JSReferenceExpression, parameters: CompletionParameters, resultSet: CompletionResultSet) {
     val parent = expression.parent
     if (JSResolveUtil.isSelfReference(parent, expression)) {
       return  // Prevent Rulezz to appear
     }
     val sink = CompletionResultSink(expression, resultSet.prefixMatcher, emptySet(), !parameters.isExtendedCompletion, false)
-    // custom processor is crucial for reactive declaration completions. Would be best to make JS core customisable.
+    // the custom processor is crucial for reactive declaration completions, would be best to make JS core customizable
     val localProcessor = SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(sink.name, sink.place!!, sink)
     JSReferenceExpressionImpl.doProcessLocalDeclarations(expression, null, localProcessor, false, true, null)
     val results = sink.resultsAsObjects
