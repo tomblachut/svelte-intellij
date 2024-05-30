@@ -47,7 +47,7 @@ class SvelteCompletionContributor : CompletionContributor() {
     extend(
       CompletionType.BASIC,
       referencePattern,
-      SvelteReactiveDeclarationsCompletionProvider()
+      SvelteReferenceCompletionProvider()
     )
   }
 }

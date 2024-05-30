@@ -15,7 +15,10 @@ import com.intellij.util.ProcessingContext
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.psi.SvelteJSEmbeddedContentImpl
 
-class SvelteReactiveDeclarationsCompletionProvider : CompletionProvider<CompletionParameters>() {
+/**
+ * Provides completions of reactive declarations
+ */
+class SvelteReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
   override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
     val parent = parameters.position.parent
     assert(parent is JSReferenceExpression)
