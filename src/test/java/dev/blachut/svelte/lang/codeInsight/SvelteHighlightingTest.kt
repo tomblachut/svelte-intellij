@@ -488,6 +488,9 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 
   fun testStoreHighlightUsagesLocalTS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesLocal)
 
+  /**
+   * @see [SvelteFindUsagesTest]
+   */
   private val storeHighlightUsagesLocal = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
     val count = "\$count" // to trick Kotlin
@@ -515,6 +518,9 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 
   fun testStoreHighlightUsagesImportedTS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesImported)
 
+  /**
+   * @see [SvelteFindUsagesTest]
+   */
   private val storeHighlightUsagesImported = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
     myFixture.configureByText("stores.$langExt", """
@@ -539,6 +545,35 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       <div>{<highlight>count</highlight>}</div>
     """.trimIndent())
     JSTestUtils.checkHighlightUsages(myFixture, false)
+  }
+
+  fun testStoreUnusedImportsJS() = doTestWithLangFromTestNameSuffix(storeUnusedImports)
+
+  fun testStoreUnusedImportsTS() = doTestWithLangFromTestNameSuffix(storeUnusedImports)
+
+  private val storeUnusedImports = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("stores.$langExt", """
+      import { writable } from "svelte/store";
+    
+      export const count = writable(5);
+    """.trimIndent())
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        import {
+          <warning>count</warning>,
+          count as aliasedCount,
+          count as aliasedCountInScript,
+          count as aliasedCountNoDollar,
+        } from './stores';
+      
+        ${'$'}aliasedCountInScript;
+      </script>
+      
+      <div>{${'$'}aliasedCount}</div>
+      <div>{aliasedCountNoDollar}</div>
+    """.trimIndent())
+    myFixture.testHighlighting()
   }
 
   fun testStoreShorthandAssignmentJS() = doTestWithLangFromTestNameSuffix(storeShorthandAssignment)
