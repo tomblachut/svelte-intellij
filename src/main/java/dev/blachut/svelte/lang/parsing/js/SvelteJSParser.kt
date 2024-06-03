@@ -12,7 +12,7 @@ import com.intellij.openapi.util.Key
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
-import dev.blachut.svelte.lang.psi.isSingleDollarPrefixedName
+import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
 
 class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>,
   ES6FunctionParser<*>, JSPsiTypeParser<*>>(SvelteJSLanguage.INSTANCE, builder) {

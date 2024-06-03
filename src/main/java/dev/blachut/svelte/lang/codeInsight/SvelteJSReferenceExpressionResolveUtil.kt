@@ -22,3 +22,7 @@ internal fun resolveImplicits(expression: JSReferenceExpression): Array<ResolveR
   }
   return emptyArray()
 }
+
+internal fun isSingleDollarPrefixedName(name: String): Boolean {
+  return name.length > 1 && name[0] == '$' && name[1] != '$'
+}

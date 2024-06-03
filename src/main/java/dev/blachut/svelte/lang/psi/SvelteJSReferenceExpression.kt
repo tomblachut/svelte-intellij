@@ -5,6 +5,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.refactoring.rename.FragmentaryPsiReference
+import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
 
 class SvelteJSReferenceExpression(elementType: IElementType) : JSReferenceExpressionImpl(elementType), FragmentaryPsiReference {
   val isSubscribedReference: Boolean
@@ -38,8 +39,4 @@ class SvelteJSReferenceExpression(elementType: IElementType) : JSReferenceExpres
     val correctedName = if (isSubscribedReference) "\$$newElementName" else newElementName
     return super.handleElementRename(correctedName)
   }
-}
-
-fun isSingleDollarPrefixedName(name: String): Boolean {
-  return name.length > 1 && name[0] == '$' && name[1] != '$'
 }
