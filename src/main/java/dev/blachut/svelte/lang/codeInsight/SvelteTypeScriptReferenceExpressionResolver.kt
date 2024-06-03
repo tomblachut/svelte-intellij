@@ -7,34 +7,19 @@ import com.intellij.lang.javascript.psi.resolve.ResolveResultSink
 import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.psi.ResolveResult
 
-class SvelteTypeScriptReferenceExpressionResolver(
-  referenceExpression: JSReferenceExpressionImpl,
-  ignorePerformanceLimits: Boolean,
-) : TypeScriptReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
+class SvelteTypeScriptReferenceExpressionResolver(referenceExpression: JSReferenceExpressionImpl, ignorePerformanceLimits: Boolean)
+  : TypeScriptReferenceExpressionResolver(referenceExpression, ignorePerformanceLimits) {
   override fun resolve(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-    val resolvedImplicits = resolveImplicits(expression)
-    if (resolvedImplicits.isNotEmpty()) return resolvedImplicits
-
-    // sometimes reactive declaration could've been already returned here, the proof was lost to time
-    val resolvedBasicOrStore = super.resolve(expression, incompleteCode)
-    if (resolvedBasicOrStore.isNotEmpty()) return resolvedBasicOrStore
-
-    val resolvedReactiveDeclaration = resolveReactiveDeclarations(expression, incompleteCode)
-    if (resolvedReactiveDeclaration.isNotEmpty()) return resolvedReactiveDeclaration
-
-    return ResolveResult.EMPTY_ARRAY
+    return inner.resolve(expression, incompleteCode)
   }
 
-  private fun resolveReactiveDeclarations(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
-    val referencedName = myReferencedName
-    if (expression.qualifier != null || referencedName == null) return ResolveResult.EMPTY_ARRAY
+  private val inner = object : SvelteInnerReferenceExpressionResolver(myRef, myReferencedName, myQualifier) {
+    override fun resolveBasic(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
+      return super@SvelteTypeScriptReferenceExpressionResolver.resolve(expression, incompleteCode)
+    }
 
-    val sink = ResolveResultSink(myRef, referencedName, false, incompleteCode)
-    val localProcessor = createReactiveDeclarationsProcessor(sink)
-    return SvelteReactiveDeclarationsUtil.resolveReactiveDeclarationsCommon(myRef, myQualifier, localProcessor)
-  }
-
-  private fun createReactiveDeclarationsProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
-    return SvelteReactiveDeclarationsUtil.SvelteTypeScriptResolveProcessor(sink, myContainingFile, myRef)
+    override fun createReactiveDeclarationsProcessor(sink: ResolveResultSink): SinkResolveProcessor<ResolveResultSink> {
+      return SvelteReactiveDeclarationsUtil.SvelteTypeScriptResolveProcessor(sink, myContainingFile, myRef)
+    }
   }
 }
