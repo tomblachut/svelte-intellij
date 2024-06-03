@@ -379,6 +379,77 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testRunesCommonJS() = doTestWithLangFromTestNameSuffix(runesCommon)
+
+  fun testRunesCommonTS() = doTestWithLangFromTestNameSuffix(runesCommon)
+
+  private val runesCommon = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("Foo.svelte", """
+      <!--suppress TypeScriptValidateTypes TODO a test-only problem, remove suppression -->
+      <script lang="$langExt">
+        let { bindableProp = $bindable('fallback') } = $props();
+      
+        const count = $state(3);
+        const doubleCount = $derived(count * 2);
+      
+        function onclick() {
+          // noinspection JSUnresolvedReference TODO snapshot doesn't resolve in JS yet, shouldn't be needed
+          console.log($state.snapshot(count));
+        }
+
+        $effect(() => {
+          doubleCount;
+          console.log("doubleCount was changed");
+        });
+      </script>
+      
+      {bindableProp}
+      {doubleCount}
+      
+      <button onclick={onclick}>Log</button>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRuneHostJS() = doTestWithLangFromTestNameSuffix(runeHost)
+
+  fun testRuneHostTS() = doTestWithLangFromTestNameSuffix(runeHost)
+
+  private val runeHost = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:options customElement="my-element" />
+      
+      <script lang="$langExt">
+        function greet(greeting) {
+          $host().dispatchEvent(
+            new CustomEvent('greeting', { detail: greeting })
+          );
+        }
+      </script>
+      
+      <button onclick={() => greet('hello')}>say hello</button>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRuneUnknownJS() = doTestWithLangFromTestNameSuffix(runeUnknown)
+
+  fun testRuneUnknownTS() = doTestWithLangFromTestNameSuffix(runeUnknown)
+
+  private val runeUnknown = SvelteTestScenario { langExt, _ ->
+    myFixture.configureBundledSvelte()
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        const problem = <error descr="Unresolved function or method ${"$"}stateTypo()">${"$"}stateTypo</error>()
+      </script>
+      
+      {problem}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testStoreEvaluationLocalJS() = doTestWithLangFromTestNameSuffix(storeEvaluationLocal)
 
   fun testStoreEvaluationLocalTS() = doTestWithLangFromTestNameSuffix(storeEvaluationLocal)
@@ -409,10 +480,10 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         acceptNumber($count);
         acceptStore(<$langWarning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</$langWarning>);
         
-	      // noinspection JSCheckFunctionSignatures // todo there's an eval bug only in JS
         acceptNumber({ $count: $count }.$count);
-        acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count); // todo should be resolved, hidden by LSP
-      
+        // noinspection TypeScriptValidateTypes // todo IDE shows a type mismatch, but only in TS, hidden by LSP
+        acceptNumber({ $count }.$count);
+
         count.<$langWarning descr="Unresolved function or method toFixed()">toFixed</$langWarning>();
         $count.toFixed();
       </script>
@@ -422,9 +493,9 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       <div>{acceptNumber($count)}</div>
       <div>{acceptStore(<weak_warning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</weak_warning>)}</div>
       
-      <!-- todo prod IDE evaluates argument to `any | Writable<number>`, which is also wrong, but hides the below error -->
-      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">{ $count: $count }.$count</weak_warning>)}</div>
-      <div>{acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count)}</div>
+      <div>{acceptNumber({ $count: $count }.$count)}</div>
+      <!--suppress TypeScriptValidateTypes // todo IDE shows a type mismatch, but only in TS, hidden by LSP -->
+      <div>{acceptNumber({ $count }.$count)}</div>
     """.trimIndent())
     myFixture.testHighlighting()
   }
@@ -464,9 +535,9 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         acceptNumber($count);
         acceptStore(<$langWarning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</$langWarning>);
         
-	      // noinspection JSCheckFunctionSignatures // todo there's an eval bug only in JS
         acceptNumber({ $count: $count }.$count);
-        acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count); // todo should be resolved, hidden by LSP
+        // noinspection TypeScriptValidateTypes // todo IDE shows a type mismatch, but only in TS, hidden by LSP
+        acceptNumber({ $count }.$count);
       
         count.<$langWarning descr="Unresolved function or method toFixed()">toFixed</$langWarning>();
         $count.toFixed();
@@ -477,9 +548,9 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       <div>{acceptNumber($count)}</div>
       <div>{acceptStore(<weak_warning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</weak_warning>)}</div>
       
-      <!-- todo prod IDE evaluates argument to `any | Writable<number>`, which is also wrong, but hides the below error -->
-      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">{ $count: $count }.$count</weak_warning>)}</div>
-      <div>{acceptNumber({ <error descr="Unresolved variable or type $count">$count</error> }.$count)}</div>
+      <div>{acceptNumber({ $count: $count }.$count)}</div>
+      <!--suppress TypeScriptValidateTypes // todo IDE shows a type mismatch, but only in TS, hidden by LSP -->
+      <div>{acceptNumber({ $count }.$count)}</div>
     """.trimIndent())
     myFixture.testHighlighting()
   }
@@ -501,14 +572,14 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         const <highlight><caret>count</highlight> = writable(5);
       
         <highlight>count</highlight>.set(5);
-        console.log($<highlight>count</highlight>.toFixed());
+        console.log(<highlight>$count</highlight>.toFixed());
         
-        $: $<highlight>count</highlight>.toFixed();
+        $: <highlight>$count</highlight>.toFixed();
         
 	      console.log({ $count }); // the highlight is missing, todo fix
       </script>
 
-      <div>{$<highlight>count</highlight>}</div>
+      <div>{<highlight>$count</highlight>}</div>
       <div>{<highlight>count</highlight>}</div>
     """.trimIndent())
     JSTestUtils.checkHighlightUsages(myFixture, false)
@@ -534,14 +605,14 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         import { <highlight>count</highlight> } from "./stores";
       
         <highlight>count</highlight>.set(5);
-        console.log($<highlight><caret>count</highlight>.toFixed());
+        console.log(<highlight>$<caret>count</highlight>.toFixed());
         
-        $: $<highlight>count</highlight>.toFixed();
+        $: <highlight>$count</highlight>.toFixed();
         
 	      console.log({ $count }); // the highlight is missing, todo fix
       </script>
 
-      <div>{$<highlight>count</highlight>}</div>
+      <div>{<highlight>$count</highlight>}</div>
       <div>{<highlight>count</highlight>}</div>
     """.trimIndent())
     JSTestUtils.checkHighlightUsages(myFixture, false)
@@ -565,6 +636,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
           count as aliasedCount,
           count as aliasedCountInScript,
           count as aliasedCountNoDollar,
+          <warning>count as aliasedCountAsShorthandProperty</warning>, // todo should be no warning
         } from './stores';
       
         ${'$'}aliasedCountInScript;
@@ -572,6 +644,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       
       <div>{${'$'}aliasedCount}</div>
       <div>{aliasedCountNoDollar}</div>
+      <div>{{ ${'$'}aliasedCountAsShorthandProperty }.${'$'}aliasedCountAsShorthandProperty}</div>
     """.trimIndent())
     myFixture.testHighlighting()
   }

@@ -75,11 +75,11 @@ enum class SvelteTestScriptLang(val langExt: String, val langWarning: String) {
   TS("ts", "error")
 }
 
-fun interface SvelteTestScenario {
-  fun perform(langExt: String, langWarning: String)
+internal fun interface SvelteTestScenario {
+  fun SvelteTestHelperContext.perform(langExt: String, langWarning: String)
 
   fun perform(lang: SvelteTestScriptLang) {
-    perform(lang.langExt, lang.langWarning)
+    SvelteTestHelperContext.perform(lang.langExt, lang.langWarning)
   }
 
   fun perform(testName: String) {
@@ -99,4 +99,14 @@ private fun getScriptLangFromTestNameSuffix(testName: String): SvelteTestScriptL
     throw IllegalArgumentException("Test name doesn't end with one of ${SvelteTestScriptLang.entries.joinToString(", ")}")
   }
   return value
+}
+
+@Suppress("ConstPropertyName")
+internal object SvelteTestHelperContext {
+  const val props = "\$props" // to trick Kotlin
+  const val bindable = "\$bindable" // to trick Kotlin
+  const val state = "\$state" // to trick Kotlin
+  const val derived = "\$derived" // to trick Kotlin
+  const val effect = "\$effect" // to trick Kotlin
+  const val host = "\$host" // to trick Kotlin
 }

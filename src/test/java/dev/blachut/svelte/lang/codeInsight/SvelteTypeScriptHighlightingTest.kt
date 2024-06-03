@@ -32,7 +32,7 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testSimpleImport() {
+  fun testStoreImport() {
     myFixture.configureByText("hello.ts", "export const count = 1")
     myFixture.configureByText("Usage.svelte", """
     <script lang="ts">

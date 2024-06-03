@@ -14,6 +14,8 @@ import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
+import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
+import dev.blachut.svelte.lang.codeInsight.removeSingleDollarPrefixUnchecked
 import dev.blachut.svelte.lang.psi.SvelteJSEmbeddedContentImpl
 
 /**
@@ -32,22 +34,27 @@ class SvelteReferenceCompletionProvider : CompletionProvider<CompletionParameter
       return
     }
 
-    calcReactiveVariants(referenceExpression, parameters, result)
+    calcDollarVariants(referenceExpression, parameters, result)
   }
 
   /**
-   * Based on [JSReferenceCompletionUtil.calcDefaultVariants]
+   * Based on [JSReferenceCompletionUtil.calcDefaultVariants]. Handles both Svelte store subscriptions & reactive declarations.
    */
-  private fun calcReactiveVariants(expression: JSReferenceExpression, parameters: CompletionParameters, resultSet: CompletionResultSet) {
+  private fun calcDollarVariants(expression: JSReferenceExpression, parameters: CompletionParameters, resultSet: CompletionResultSet) {
+    @Suppress("NAME_SHADOWING") var resultSet = resultSet
     val parent = expression.parent
     if (JSResolveUtil.isSelfReference(parent, expression)) {
       return  // Prevent Rulezz to appear
+    }
+    val defaultPrefix = resultSet.prefixMatcher.prefix
+    if (isSingleDollarPrefixedName(defaultPrefix) || defaultPrefix == "$") { // disallow $$prefix but allow just a $
+      resultSet = resultSet.withPrefixMatcher(removeSingleDollarPrefixUnchecked(defaultPrefix))
     }
     val sink = CompletionResultSink(expression, resultSet.prefixMatcher, emptySet(), !parameters.isExtendedCompletion, false)
     // the custom processor is crucial for reactive declaration completions, would be best to make JS core customizable
     val localProcessor = SvelteReactiveDeclarationsUtil.SvelteSinkResolveProcessor(sink.name, sink.place!!, sink)
     JSReferenceExpressionImpl.doProcessLocalDeclarations(expression, null, localProcessor, false, true, null)
-    val results = sink.resultsAsObjects
+    val results = sink.resultsAsObjects // here we get lookup elements without a dollar, LSP prepends dollars, it may be a problem
     if (results.isNotEmpty()) {
       // results will contain everything in scope, later LookupElement duplicates from JS core get merged
       JSCompletionUtil.pushVariants(results, emptySet(), resultSet)

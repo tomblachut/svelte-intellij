@@ -15,7 +15,7 @@ class SvelteFrameworkHandler : FrameworkIndexingHandler() {
     result: PsiElement
   ): Boolean {
     val expression = context.processedExpression
-    if (result is JSVariable && expression is SvelteJSReferenceExpression && expression.isSubscribedReference) {
+    if (result is JSVariable && expression is SvelteJSReferenceExpression && expression.isStoreSubscription()) {
       try {
         val storeType = result.jsType?.asRecordType() ?: return false
         val subscribeMethod =

@@ -41,7 +41,7 @@ class SvelteInspectionSuppressor : InspectionSuppressor {
     }
     if (inspectionId.equalsName<JSConstantReassignmentInspection>()) {
       val parent = element.parent
-      if (parent is SvelteJSReferenceExpression && parent.isSubscribedReference) {
+      if (parent is SvelteJSReferenceExpression && parent.isStoreSubscription()) {
         // TODO check if store is writable
         return true
       }

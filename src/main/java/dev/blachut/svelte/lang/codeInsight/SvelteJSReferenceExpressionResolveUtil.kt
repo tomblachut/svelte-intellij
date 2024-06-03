@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.javascript.dialects.JSDialectSpecificHandlersFactory
 import com.intellij.lang.javascript.index.JSSymbolUtil
 import com.intellij.lang.javascript.psi.JSExpression
 import com.intellij.lang.javascript.psi.JSReferenceExpression
@@ -21,12 +22,31 @@ abstract class SvelteInnerReferenceExpressionResolver(
     val resolvedImplicits = resolveImplicits(expression)
     if (resolvedImplicits.isNotEmpty()) return resolvedImplicits
 
+    val resolvedStore = resolveLocalStore(expression, incompleteCode)
+    if (resolvedStore.isNotEmpty()) return resolvedStore
+
     // sometimes reactive declaration could've been already returned here, the proof was lost to time
-    val resolvedBasicOrStore = resolveBasic(expression, incompleteCode)
-    if (resolvedBasicOrStore.isNotEmpty()) return resolvedBasicOrStore
+    val resolvedBasic = resolveBasic(expression, incompleteCode)
+    if (resolvedBasic.isNotEmpty()) return resolvedBasic
 
     val resolvedReactiveDeclaration = resolveReactiveDeclarations(expression, incompleteCode)
     if (resolvedReactiveDeclaration.isNotEmpty()) return resolvedReactiveDeclaration
+
+    return ResolveResult.EMPTY_ARRAY
+  }
+
+  /**
+   * Finds locally defined and imported stores, skips auto-imports, since these can be shadowed by globally available runes.
+   */
+  private fun resolveLocalStore(expression: JSReferenceExpressionImpl, incompleteCode: Boolean): Array<ResolveResult> {
+    if (isSingleDollarPrefixedName(myReferencedName) && myQualifier == null) {
+      val storeName = removeSingleDollarPrefixUnchecked(myReferencedName!!)
+
+      val processor = JSDialectSpecificHandlersFactory.forElement(expression).createResolveProcessor(storeName, expression, incompleteCode)
+      JSReferenceExpressionImpl.doProcessLocalDeclarations(expression, null, processor, false, false, null)
+
+      return processor.resultsAsResolveResults
+    }
 
     return ResolveResult.EMPTY_ARRAY
   }
@@ -61,6 +81,10 @@ internal fun resolveImplicits(expression: JSReferenceExpression): Array<ResolveR
   return emptyArray()
 }
 
-internal fun isSingleDollarPrefixedName(name: String): Boolean {
-  return name.length > 1 && name[0] == '$' && name[1] != '$'
+internal fun isSingleDollarPrefixedName(name: String?): Boolean {
+  return name != null && name.length > 1 && name[0] == '$' && name[1] != '$'
+}
+
+internal fun removeSingleDollarPrefixUnchecked(name: String): String {
+  return name.substring(1)
 }
