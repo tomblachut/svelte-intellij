@@ -39,4 +39,6 @@ class SvelteBreadcrumbsProvider : BreadcrumbsProvider {
     element as XmlTag
     return XmlLanguageBreadcrumbsInfoProvider.getTooltip(element)
   }
+
+  override fun isShownByDefault(): Boolean = false
 }
