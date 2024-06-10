@@ -1,7 +1,7 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.codeInsight.lookup.Lookup
-import com.intellij.lang.javascript.typescript.service.TypeScriptServiceTestBase
+import com.intellij.lang.typescript.service.TypeScriptServiceTestBase
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import dev.blachut.svelte.lang.checkCompletionContains
