@@ -11,6 +11,7 @@ import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.lang.javascript.psi.stubs.JSImplicitElement
 import com.intellij.lang.javascript.psi.stubs.impl.JSImplicitElementImpl
 import dev.blachut.svelte.lang.parsing.js.isSingleDollarPrefixedName
+import dev.blachut.svelte.lang.parsing.js.removeSingleDollarPrefixUnchecked
 import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.ResolveCache
 
