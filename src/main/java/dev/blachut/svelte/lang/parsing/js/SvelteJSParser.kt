@@ -12,7 +12,6 @@ import com.intellij.openapi.util.Key
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
-import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
 
 class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>,
   ES6FunctionParser<*>, JSPsiTypeParser<*>>(SvelteJSLanguage.INSTANCE, builder) {
@@ -53,3 +52,11 @@ class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES
 }
 
 val markupContextKey = Key.create<Any>("markupContextKey")
+
+internal fun isSingleDollarPrefixedName(name: String?): Boolean {
+  return name != null && name.length > 1 && name[0] == '$' && name[1] != '$'
+}
+
+internal fun removeSingleDollarPrefixUnchecked(name: String): String {
+  return name.substring(1)
+}
