@@ -25,10 +25,7 @@ fun isFileAcceptableForService(file: VirtualFile): Boolean {
  */
 fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
   return isFileAcceptableForService(context) &&
-         TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
-         !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
-         isSvelteServiceEnabledBySettings(project) &&
-         isSvelteProjectContext(project, context) &&
+         isEnabledByContextAndSettings(project, context) &&
          SvelteLspExecutableDownloader.getExecutableOrRefresh(project) != null
 }
 
@@ -36,11 +33,15 @@ fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolea
  * If enabled but not available, will launch a background task that will eventually restart the services
  */
 fun isTypeScriptPluginEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
+  return isEnabledByContextAndSettings(project, context) &&
+         SvelteTypeScriptPluginPackageDownloader.getExecutableOrRefresh(project) != null
+}
+
+private fun isEnabledByContextAndSettings(project: Project, context: VirtualFile): Boolean {
   return TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
          !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
          isSvelteServiceEnabledBySettings(project) &&
-         isSvelteProjectContext(project, context) &&
-         SvelteTypeScriptPluginPackageDownloader.getExecutableOrRefresh(project) != null
+         isSvelteProjectContext(project, context)
 }
 
 private fun isSvelteServiceEnabledBySettings(project: Project): Boolean {
