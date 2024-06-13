@@ -1,8 +1,8 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.javascript.nodejs.util.NodePackageRef
-import com.intellij.lang.typescript.lsp.LspServerDownloader
 import com.intellij.lang.typescript.lsp.LspServerPackageDescriptor
+import com.intellij.lang.typescript.lsp.TSPluginDownloader
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.registry.Registry
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
@@ -16,7 +16,7 @@ private val svelteTypeScriptPluginDescriptor: () -> LspServerPackageDescriptor =
 }
 
 @ApiStatus.Experimental
-object SvelteTypeScriptPluginPackageDownloader : LspServerDownloader(svelteTypeScriptPluginDescriptor()) {
+object SvelteTypeScriptPluginPackageDownloader : TSPluginDownloader(svelteTypeScriptPluginDescriptor()) {
   override fun getSelectedPackageRef(project: Project): NodePackageRef {
     return getSvelteServiceSettings(project).tsPluginPackageRef
   }
