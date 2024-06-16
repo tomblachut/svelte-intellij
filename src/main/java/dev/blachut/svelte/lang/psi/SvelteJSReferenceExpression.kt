@@ -6,8 +6,6 @@ import com.intellij.lang.javascript.psi.resolve.JSReferenceUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.IElementType
-import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
-import dev.blachut.svelte.lang.codeInsight.removeSingleDollarPrefixUnchecked
 
 /**
  *  References with names only starting with a single $ character. They might resolve to either a store, or a rune.

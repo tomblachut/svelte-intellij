@@ -7,7 +7,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import dev.blachut.svelte.lang.isSvelteContext
-import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
+import dev.blachut.svelte.lang.psi.isSingleDollarPrefixedName
 
 class SvelteSubscribedReferenceSelectioner : ExtendWordSelectionHandlerBase() {
   override fun canSelect(e: PsiElement): Boolean {

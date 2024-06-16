@@ -12,6 +12,8 @@ import com.intellij.lang.javascript.psi.stubs.JSImplicitElement
 import com.intellij.lang.javascript.psi.stubs.impl.JSImplicitElementImpl
 import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.ResolveCache
+import dev.blachut.svelte.lang.psi.isSingleDollarPrefixedName
+import dev.blachut.svelte.lang.psi.removeSingleDollarPrefixUnchecked
 
 abstract class SvelteInnerReferenceExpressionResolver(
   private val myRef: JSReferenceExpressionImpl,
@@ -79,12 +81,4 @@ internal fun resolveImplicits(expression: JSReferenceExpression): Array<ResolveR
     }
   }
   return emptyArray()
-}
-
-internal fun isSingleDollarPrefixedName(name: String?): Boolean {
-  return name != null && name.length > 1 && name[0] == '$' && name[1] != '$'
-}
-
-internal fun removeSingleDollarPrefixUnchecked(name: String): String {
-  return name.substring(1)
 }
