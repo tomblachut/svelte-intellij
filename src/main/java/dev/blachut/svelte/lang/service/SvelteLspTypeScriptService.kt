@@ -25,7 +25,7 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
 
-  override fun isAcceptable(file: VirtualFile) = isLspServerEnabledAndAvailable(project, file)
+  override fun isAcceptable(file: VirtualFile) = SvelteServiceSetActivationRule.isLspServerEnabledAndAvailable(project, file)
 
   override fun getNavigationFor(document: Document, sourceElement: PsiElement): Array<PsiElement> {
     val server = getServer() ?: return emptyArray()

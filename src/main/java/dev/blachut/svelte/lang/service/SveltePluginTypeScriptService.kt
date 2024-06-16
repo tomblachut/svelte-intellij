@@ -23,7 +23,7 @@ class SveltePluginTypeScriptService(project: Project) : PluggableTypeScriptServi
     "Svelte + TypeScript" // todo replace with: "${plugin.shortLabel} + TypeScript"
 
   override fun hasDependenciesReady(context: VirtualFile): Boolean {
-    return isTypeScriptPluginEnabledAndAvailable(project, context)
+    return SvelteServiceSetActivationRule.isTypeScriptPluginEnabledAndAvailable(project, context)
   }
 
   override fun getInitialOpenCommands(): MutableMap<JSLanguageServiceSimpleCommand, Consumer<JSLanguageServiceObject>> {

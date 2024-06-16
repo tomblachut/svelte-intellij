@@ -2,7 +2,7 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
-import com.intellij.lang.typescript.library.TypeScriptLibraryProvider
+import com.intellij.lang.typescript.lsp.JSServiceSetActivationRule
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import dev.blachut.svelte.lang.isSvelteContext
@@ -11,39 +11,18 @@ import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 
 
-/**
- * Checks if the file is local and of the correct file type.
- */
-fun isFileAcceptableForLspServer(file: VirtualFile): Boolean {
-  if (!TypeScriptLanguageServiceUtil.IS_VALID_FILE_FOR_SERVICE.value(file)) return false
+object SvelteServiceSetActivationRule : JSServiceSetActivationRule(SvelteLspExecutableDownloader, SvelteTypeScriptPluginPackageDownloader) {
+  override fun isFileAcceptableForLspServer(file: VirtualFile): Boolean {
+    if (!TypeScriptLanguageServiceUtil.IS_VALID_FILE_FOR_SERVICE.value(file)) return false
 
-  return isSvelteContext(file)
-}
+    return isSvelteContext(file)
+  }
 
-/**
- * If enabled but not available, will launch a background task that will eventually restart the services
- */
-fun isLspServerEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
-  return isFileAcceptableForLspServer(context) &&
-         isEnabledByContextAndSettings(project, context) &&
-         SvelteLspExecutableDownloader.getExecutableOrRefresh(project) != null
-}
+  override fun isServiceSetProjectContext(project: Project, context: VirtualFile): Boolean {
+    return isSvelteProjectContext(project, context)
+  }
 
-/**
- * If enabled but not available, will launch a background task that will eventually restart the services
- */
-fun isTypeScriptPluginEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
-  return isEnabledByContextAndSettings(project, context) &&
-         SvelteTypeScriptPluginPackageDownloader.getExecutableOrRefresh(project) != null
-}
-
-private fun isEnabledByContextAndSettings(project: Project, context: VirtualFile): Boolean {
-  return TypeScriptLanguageServiceUtil.isServiceEnabled(project) &&
-         !TypeScriptLibraryProvider.isLibraryOrBundledLibraryFile(project, context) &&
-         isSvelteServiceEnabledBySettings(project) &&
-         isSvelteProjectContext(project, context)
-}
-
-private fun isSvelteServiceEnabledBySettings(project: Project): Boolean {
-  return getSvelteServiceSettings(project).serviceMode == SvelteServiceMode.ENABLED
+  override fun isServiceSetEnabledInSettings(project: Project): Boolean {
+    return getSvelteServiceSettings(project).serviceMode == SvelteServiceMode.ENABLED
+  }
 }
