@@ -20,7 +20,7 @@ import com.intellij.util.containers.ContainerUtil
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
-import dev.blachut.svelte.lang.parsing.js.isSingleDollarPrefixedName
+import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
 import kotlin.experimental.or
 
 class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, originalLexer: Lexer) :

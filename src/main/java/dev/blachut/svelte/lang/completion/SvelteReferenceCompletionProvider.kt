@@ -14,8 +14,8 @@ import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
-import dev.blachut.svelte.lang.parsing.js.isSingleDollarPrefixedName
-import dev.blachut.svelte.lang.parsing.js.removeSingleDollarPrefixUnchecked
+import dev.blachut.svelte.lang.codeInsight.isSingleDollarPrefixedName
+import dev.blachut.svelte.lang.codeInsight.removeSingleDollarPrefixUnchecked
 import dev.blachut.svelte.lang.psi.SvelteJSEmbeddedContentImpl
 
 /**
