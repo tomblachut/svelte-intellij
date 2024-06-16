@@ -12,9 +12,9 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 
 
 /**
- * Checks if file is local and of the correct file type.
+ * Checks if the file is local and of the correct file type.
  */
-fun isFileAcceptableForService(file: VirtualFile): Boolean {
+fun isFileAcceptableForLspServer(file: VirtualFile): Boolean {
   if (!TypeScriptLanguageServiceUtil.IS_VALID_FILE_FOR_SERVICE.value(file)) return false
 
   return isSvelteContext(file)
@@ -23,8 +23,8 @@ fun isFileAcceptableForService(file: VirtualFile): Boolean {
 /**
  * If enabled but not available, will launch a background task that will eventually restart the services
  */
-fun isServiceEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
-  return isFileAcceptableForService(context) &&
+fun isLspServerEnabledAndAvailable(project: Project, context: VirtualFile): Boolean {
+  return isFileAcceptableForLspServer(context) &&
          isEnabledByContextAndSettings(project, context) &&
          SvelteLspExecutableDownloader.getExecutableOrRefresh(project) != null
 }
