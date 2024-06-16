@@ -14,17 +14,13 @@ import dev.blachut.svelte.lang.service.settings.SvelteServiceConfigurable
 import icons.SvelteIcons
 import java.util.function.Consumer
 
-private val plugin = DownloadableTypeScriptServicePlugin("Svelte", SvelteTypeScriptPluginPackageDownloader)
+private val plugin = DownloadableTypeScriptServicePlugin("Svelte", SvelteServiceSetActivationRule)
 
 class SveltePluginTypeScriptService(project: Project) : PluggableTypeScriptService(project, plugin) {
   override fun getProcessName(): String =
     // can't use instance fields here when legacy JSAsyncLanguageServiceBase.myToolWindowManager is not null
     // and JSAsyncLanguageServiceBase.createDefaultReporter calls getProcessName() during <init>
     "Svelte + TypeScript" // todo replace with: "${plugin.shortLabel} + TypeScript"
-
-  override fun hasDependenciesReady(context: VirtualFile): Boolean {
-    return SvelteServiceSetActivationRule.isTypeScriptPluginEnabledAndAvailable(project, context)
-  }
 
   override fun getInitialOpenCommands(): MutableMap<JSLanguageServiceSimpleCommand, Consumer<JSLanguageServiceObject>> {
     val initialCommands = super.getInitialOpenCommands()
