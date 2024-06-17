@@ -43,9 +43,7 @@ class SvelteLspServerSupportProvider : LspServerSupportProvider {
 /**
  * @see SvelteLspTypeScriptService
  */
-class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, SvelteLspExecutableDownloader, "Svelte") {
-  override fun isSupportedFile(file: VirtualFile): Boolean = SvelteServiceSetActivationRule.isFileAcceptableForLspServer(file)
-
+class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, SvelteServiceSetActivationRule, "Svelte") {
   override val lsp4jServerClass: Class<out LanguageServer> = SvelteLsp4jServer::class.java
 }
 
