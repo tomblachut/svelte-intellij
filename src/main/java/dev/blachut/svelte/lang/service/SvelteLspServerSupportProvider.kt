@@ -17,10 +17,10 @@ import org.eclipse.lsp4j.jsonrpc.services.JsonNotification
 import org.eclipse.lsp4j.services.LanguageServer
 import org.jetbrains.annotations.ApiStatus
 
-private val svelteLspServerPackageDescriptor: () -> LspServerPackageDescriptor = {
-  LspServerPackageDescriptor("svelte-language-server",
-                             Registry.stringValue("svelte.language.server.default.version"),
-                             "/bin/server.js")
+private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor("svelte-language-server",
+                                                                             "0.16.9",
+                                                                             "/bin/server.js") {
+  override val defaultVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
 }
 
 /**
@@ -50,7 +50,7 @@ internal interface SvelteLsp4jServer : JSFrameworkLsp4jServer {
 }
 
 @ApiStatus.Experimental
-object SvelteLspExecutableDownloader : LspServerDownloader(svelteLspServerPackageDescriptor()) {
+object SvelteLspExecutableDownloader : LspServerDownloader(SvelteLspServerPackageDescriptor) {
   override fun getSelectedPackageRef(project: Project): NodePackageRef {
     return getSvelteServiceSettings(project).lspServerPackageRef
   }

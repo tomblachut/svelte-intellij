@@ -9,14 +9,14 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.jetbrains.annotations.ApiStatus
 
 
-private val svelteTypeScriptPluginDescriptor: () -> LspServerPackageDescriptor = {
-  LspServerPackageDescriptor("typescript-svelte-plugin",
-                             Registry.stringValue("svelte.typescript.plugin.default.version"),
-                             "")
+private object SvelteTypeScriptPluginDescriptor : LspServerPackageDescriptor("typescript-svelte-plugin",
+                                                                             "0.3.38",
+                                                                             "") {
+  override val defaultVersion: String get() = Registry.stringValue("svelte.typescript.plugin.default.version")
 }
 
 @ApiStatus.Experimental
-object SvelteTypeScriptPluginPackageDownloader : TSPluginDownloader(svelteTypeScriptPluginDescriptor()) {
+object SvelteTypeScriptPluginPackageDownloader : TSPluginDownloader(SvelteTypeScriptPluginDescriptor) {
   override fun getSelectedPackageRef(project: Project): NodePackageRef {
     return getSvelteServiceSettings(project).tsPluginPackageRef
   }
