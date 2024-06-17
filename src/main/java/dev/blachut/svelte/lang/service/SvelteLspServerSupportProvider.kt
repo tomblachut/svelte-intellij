@@ -2,10 +2,7 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.javascript.nodejs.util.NodePackageRef
-import com.intellij.lang.typescript.lsp.JSFrameworkLsp4jServer
-import com.intellij.lang.typescript.lsp.JSFrameworkLspServerDescriptor
-import com.intellij.lang.typescript.lsp.LspServerDownloader
-import com.intellij.lang.typescript.lsp.LspServerPackageDescriptor
+import com.intellij.lang.typescript.lsp.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.registry.Registry
 import com.intellij.openapi.vfs.VirtualFile
@@ -37,7 +34,7 @@ class SvelteLspServerSupportProvider : LspServerSupportProvider {
   }
 
   override fun createLspServerWidgetItem(lspServer: LspServer, currentFile: VirtualFile?): LspServerWidgetItem =
-    LspServerWidgetItem(lspServer, currentFile, SvelteIcons.Original, SvelteServiceConfigurable::class.java)
+    JSLspServerWidgetItem(lspServer, currentFile, SvelteIcons.Original, SvelteServiceConfigurable::class.java)
 }
 
 /**
