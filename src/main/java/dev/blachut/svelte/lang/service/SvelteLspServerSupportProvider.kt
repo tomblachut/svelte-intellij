@@ -34,7 +34,7 @@ class SvelteLspServerSupportProvider : LspServerSupportProvider {
   }
 
   override fun createLspServerWidgetItem(lspServer: LspServer, currentFile: VirtualFile?): LspServerWidgetItem =
-    JSLspServerWidgetItem(lspServer, currentFile, SvelteIcons.Original, SvelteServiceConfigurable::class.java)
+    JSLspServerWidgetItem(lspServer, currentFile, SvelteIcons.Original, SvelteIcons.Desaturated, SvelteServiceConfigurable::class.java)
 }
 
 /**
