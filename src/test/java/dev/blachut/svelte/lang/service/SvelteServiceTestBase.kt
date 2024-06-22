@@ -1,6 +1,6 @@
 package dev.blachut.svelte.lang.service
 
-import com.intellij.javascript.debugger.com.intellij.lang.javascript.service.BaseLspTypeScriptServiceTest
+import com.intellij.lang.javascript.service.BaseLspTypeScriptServiceTest
 import com.intellij.lang.javascript.library.typings.TypeScriptExternalDefinitionsRegistry
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.library.download.TypeScriptDefinitionFilesDirectory
