@@ -18,11 +18,11 @@ object SvelteServiceSetActivationRule : JSServiceSetActivationRule(SvelteLspExec
     return isSvelteContext(file)
   }
 
-  override fun isServiceSetProjectContext(project: Project, context: VirtualFile): Boolean {
+  override fun isProjectContext(project: Project, context: VirtualFile): Boolean {
     return isSvelteProjectContext(project, context)
   }
 
-  override fun isServiceSetEnabledInSettings(project: Project): Boolean {
+  override fun isEnabledInSettings(project: Project): Boolean {
     return getSvelteServiceSettings(project).serviceMode == SvelteServiceMode.ENABLED
   }
 }
