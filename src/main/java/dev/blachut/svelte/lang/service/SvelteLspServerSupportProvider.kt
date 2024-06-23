@@ -18,7 +18,7 @@ import org.eclipse.lsp4j.services.LanguageServer
 import org.jetbrains.annotations.ApiStatus
 
 private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor("svelte-language-server",
-                                                                             "0.16.9",
+                                                                             "0.16.11",
                                                                              "/bin/server.js") {
   override val defaultVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
 }
