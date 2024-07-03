@@ -5,13 +5,10 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.lang.javascript.modules.JSImportModulesSuggester
 import com.intellij.lang.javascript.modules.JSSimpleModuleReferenceInfo
-import com.intellij.lang.javascript.modules.ModuleReferenceInfo
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiElementVisitor
-import com.intellij.psi.ResolveResult
-import com.intellij.psi.XmlElementVisitor
+import com.intellij.psi.*
 import com.intellij.psi.xml.XmlTag
+import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.isSvelteComponentTag
 
 class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
@@ -40,4 +37,7 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
       }
     }
   }
+
+  override fun isAvailableForFile(file: PsiFile): Boolean =
+    file.language == SvelteHTMLLanguage.INSTANCE
 }
