@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.javascript.pasteAndWaitJSImports
 import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.blachut.svelte.lang.getSvelteTestDataPath
@@ -22,7 +23,7 @@ class SvelteCopyPasteTest : BasePlatformTestCase() {
         myFixture.configureFromTempProjectFile("Source.svelte")
         myFixture.performEditorAction(IdeActions.ACTION_EDITOR_COPY)
         myFixture.configureFromTempProjectFile("Destination.svelte")
-        myFixture.performEditorAction(IdeActions.ACTION_EDITOR_PASTE)
+        myFixture.pasteAndWaitJSImports()
         myFixture.checkResultByFile(getTestName(true) + "/Destination_after.svelte")
     }
     //endregion

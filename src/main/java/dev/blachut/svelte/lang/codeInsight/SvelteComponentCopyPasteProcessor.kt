@@ -105,9 +105,7 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
                                      destinationModule: PsiElement,
                                      imports: Collection<com.intellij.openapi.util.Pair<ES6ImportPsiUtil.CreateImportExportInfo, PsiElement>>,
                                      pasteContextLanguage: Language) {
-    WriteAction.run<RuntimeException> {
-      ES6CreateImportUtil.addRequiredImports(destinationModule, pasteContextLanguage, imports)
-    }
+    ES6CreateImportUtil.addRequiredImports(destinationModule, pasteContextLanguage, imports)
   }
 
   class SvelteComponentImportsTransferableData(list: ArrayList<ImportedElement>) : ES6ImportsTransferableDataBase(list) {

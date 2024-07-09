@@ -73,8 +73,7 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
                                      destinationModule: PsiElement,
                                      imports: Collection<Pair<ES6ImportPsiUtil.CreateImportExportInfo, PsiElement>>,
                                      pasteContextLanguage: Language) {
-    if (imports.isEmpty()) return
-    WriteAction.run<RuntimeException> {
+    if (imports.isNotEmpty()) {
       ES6CreateImportUtil.addRequiredImports(destinationModule, SvelteJSLanguage.INSTANCE, imports)
     }
   }
