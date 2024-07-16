@@ -118,7 +118,6 @@
 
     <breadcrumbsInfoProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteBreadcrumbsProvider"/>
 
-    <!--suppress PluginXmlValidity -->
     <lang.inspectionSuppressor language="JavaScript"
                                implementationClass="dev.blachut.svelte.lang.compatibility.SvelteInspectionSuppressor"/>
 
