@@ -85,6 +85,7 @@
 
     <idIndexer filetype="Svelte" implementationClass="dev.blachut.svelte.lang.index.SvelteIdIndexer"/>
     <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
+    <psi.referenceContributor language="SvelteHTML" implementation="dev.blachut.svelte.lang.codeInsight.SveltePathReferenceContributor"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteKitImplicitUsageProvider"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteConfigImplicitUsageProvider"/>
 
