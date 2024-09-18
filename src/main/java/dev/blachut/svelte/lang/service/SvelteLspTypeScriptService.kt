@@ -2,19 +2,13 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.codeInsight.completion.CompletionParameters
-import com.intellij.lang.javascript.documentation.JSDocumentationUtils
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.lsp.BaseLspTypeScriptService
-import com.intellij.openapi.editor.Document
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.platform.lsp.util.getOffsetInDocument
-import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 
 /**
@@ -27,26 +21,7 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
 
   override fun isAcceptable(file: VirtualFile) = SvelteServiceSetActivationRule.isLspServerEnabledAndAvailable(project, file)
 
-  override fun getNavigationFor(document: Document, sourceElement: PsiElement): Array<PsiElement> {
-    val server = getServer() ?: return emptyArray()
-    val file = FileDocumentManager.getInstance().getFile(document) ?: return emptyArray()
-    val raw = server.requestExecutor.getElementDefinitions(file, sourceElement.textOffset)
-
-    return raw.mapNotNull { locationLink ->
-      val targetFile = server.descriptor.findFileByUri(locationLink.targetUri) ?: return@mapNotNull null
-      val targetPsiFile = PsiManager.getInstance(project).findFile(targetFile) ?: return@mapNotNull null
-      val targetDocument = PsiDocumentManager.getInstance(project).getDocument(targetPsiFile) ?: return@mapNotNull null
-      val offset = getOffsetInDocument(targetDocument, locationLink.targetSelectionRange.start)
-      if (offset != null) {
-        val leaf = targetPsiFile.findElementAt(offset)
-        if (leaf == sourceElement) return@mapNotNull null // discard self referencing LocationLinks, otherwise GTDU is confused
-        JSDocumentationUtils.getOriginalElementOrParentIfLeaf(leaf)
-      }
-      else {
-        targetPsiFile
-      }
-    }.toTypedArray()
-  }
+  override fun isServiceNavigationEnabled(): Boolean = true
 
   override fun getCompletionMergeStrategy(parameters: CompletionParameters,
                                           file: PsiFile,
