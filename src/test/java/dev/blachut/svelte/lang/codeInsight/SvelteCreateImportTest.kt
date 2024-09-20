@@ -164,14 +164,14 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
     override fun testScriptMissingWithAdjacentModuleScript() {
         doTest(
             """
-                <script context="module">
+                <script module>
                     let existingVariable = 5;
                 </script>
 
                 {exported$caret}
             """.trimIndent(),
             """
-                <script context="module">
+                <script module>
                     let existingVariable = 5;
                 </script>
                 <script>
@@ -186,7 +186,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
     override fun testInsideModuleScriptWithAdjacentInstanceScript() {
         doTest(
             """
-                <script context="module">
+                <script module>
                     exported$caret
                 </script>
                 <script>
@@ -194,7 +194,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
                 </script>
             """.trimIndent(),
             """
-                <script context="module">
+                <script module>
                     $createdStatement
 
                     exported

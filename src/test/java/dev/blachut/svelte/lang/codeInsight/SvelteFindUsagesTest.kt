@@ -20,7 +20,7 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
     myFixture.configureBundledSvelte()
     val count = "\$count" // to trick Kotlin
     myFixture.configureByText("Foo.svelte", """
-      <script lang="$langExt" context="module">
+      <script lang="$langExt" module>
         import { count } from "./stores";
 
         count.set(5);

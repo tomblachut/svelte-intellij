@@ -19,10 +19,11 @@ fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
 }
 
 fun isModuleScript(tag: XmlTag?): Boolean {
-  return tag != null && HtmlUtil.isScriptTag(tag) && hasModuleContextAttribute(tag)
+  return tag != null && HtmlUtil.isScriptTag(tag) && hasModuleAttribute(tag)
 }
 
-fun hasModuleContextAttribute(tag: XmlTag) = tag.getAttributeValue("context") == "module"
+fun hasModuleAttribute(tag: XmlTag) = tag.getAttribute("module") != null // Svelte 5
+                                       || tag.getAttributeValue("context") == "module" // Svelte 3-4
 
 fun findAncestorScript(place: PsiElement): XmlTag? {
   // TODO optimize for XmlTag, or only walk up from JSElements?
@@ -37,7 +38,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
 
   val moduleScript
     get() = document?.children?.find {
-      it is XmlTag && HtmlUtil.isScriptTag(it) && hasModuleContextAttribute(it)
+      it is XmlTag && HtmlUtil.isScriptTag(it) && hasModuleAttribute(it)
     } as XmlTag?
 
   // By convention instanceScript is placed after module script
@@ -45,7 +46,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
   // ambiguous scripts should then be highlighted by appropriate inspection
   val instanceScript
     get() = document?.children?.findLast {
-      it is XmlTag && HtmlUtil.isScriptTag(it) && it.getAttributeValue("context") == null
+      it is XmlTag && HtmlUtil.isScriptTag(it) && !hasModuleAttribute(it)
     } as XmlTag?
 
   override fun processDeclarations(processor: PsiScopeProcessor, state: ResolveState, lastParent: PsiElement?, place: PsiElement): Boolean {

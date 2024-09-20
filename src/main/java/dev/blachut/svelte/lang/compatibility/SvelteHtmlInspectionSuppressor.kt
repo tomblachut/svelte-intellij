@@ -24,7 +24,7 @@ import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isSvelteContext
 
 class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
-  private val scriptAttributes = listOf("context", "generics")
+  private val scriptAttributes = listOf("context", "generics", "module")
   private val styleAttributes = listOf("src", "global")
   private val legacyAAttributes = listOf("sapper:noscroll", "sapper:prefetch") // not descriptors, since we don't want completions
 
