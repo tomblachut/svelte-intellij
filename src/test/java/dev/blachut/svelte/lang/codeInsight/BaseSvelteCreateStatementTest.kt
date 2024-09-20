@@ -123,13 +123,13 @@ $createdStatement$optionalLine
 
     override fun testScriptMissingWithAdjacentModuleScript() {
         doTest("""
-            <script context="module">
+            <script module>
                 let existingVariable = 5;
             </script>
 
             {unresolved$caret$afterCaret}
         """.trimIndent(), """
-            <script context="module">
+            <script module>
                 let existingVariable = 5;
             </script>
             <script>

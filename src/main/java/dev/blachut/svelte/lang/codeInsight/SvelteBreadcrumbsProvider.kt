@@ -9,7 +9,7 @@ import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
-import dev.blachut.svelte.lang.psi.hasModuleContextAttribute
+import dev.blachut.svelte.lang.psi.hasModuleAttribute
 
 class SvelteBreadcrumbsProvider : BreadcrumbsProvider {
   override fun getLanguages(): Array<Language> = arrayOf(SvelteHTMLLanguage.INSTANCE)
@@ -27,7 +27,7 @@ class SvelteBreadcrumbsProvider : BreadcrumbsProvider {
       return element.name
     }
     if (element.name == "script") {
-      return if (hasModuleContextAttribute(element)) "module script" else "script";
+      return if (hasModuleAttribute(element)) "script module" else "script";
     }
     return HtmlUtil.getTagPresentation(element)
   }
