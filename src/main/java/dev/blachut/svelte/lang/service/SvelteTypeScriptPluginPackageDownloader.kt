@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus
 
 
 private object SvelteTypeScriptPluginDescriptor : LspServerPackageDescriptor("typescript-svelte-plugin",
-                                                                             "0.3.39",
+                                                                             "0.3.41",
                                                                              "") {
   override val defaultVersion: String get() = Registry.stringValue("svelte.typescript.plugin.default.version")
 }
