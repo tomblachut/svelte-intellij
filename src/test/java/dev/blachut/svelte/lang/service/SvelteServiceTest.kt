@@ -49,7 +49,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     // Would be good to actually completely hide this annotation, but then I'm not sure how to still verify the above.
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Hello.svelte", """
-      <script lang="ts"><EOLError descr="Svelte: [svelte-preprocess] Encountered type error"></EOLError>
+      <script lang="ts">
         let hello = "hello"<error descr="Svelte: ',' expected."><error descr="Newline or semicolon expected">w</error>rong</error>;
         console.log(hello);
       </script>
@@ -60,11 +60,12 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testStyleLangNoCrash() {
-    // Svelte LS will print long error "Cannot find module 'sass'" with require stack.
+    // Previously, Svelte LS would print long error "Cannot find module 'sass'" with require stack.
     // Description is not important, in 2023.3 the LS crashed instead of showing any errors.
+    // Now Svelte LS has better warning, and it depends on the Svelte version in the project.
     myFixture.addFileToProject("tsconfig.json", tsconfig)
     myFixture.configureByText("Hello.svelte", """
-      <style lang="scss"><EOLError></EOLError>
+      <style lang="scss">
         div {
           color: red;
         }
