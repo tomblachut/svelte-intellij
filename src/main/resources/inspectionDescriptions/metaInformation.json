@@ -1,0 +1,8 @@
+{
+  "inspections": [
+    {
+      "id": "SvelteUnresolvedComponent",
+      "codeQualityCategory": "Sanity"
+    }
+  ]
+}
