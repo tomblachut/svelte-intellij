@@ -23,9 +23,11 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
 
   override fun isServiceNavigationEnabled(): Boolean = true
 
-  override fun getCompletionMergeStrategy(parameters: CompletionParameters,
-                                          file: PsiFile,
-                                          context: PsiElement): TypeScriptService.CompletionMergeStrategy {
+  override fun getCompletionMergeStrategy(
+    parameters: CompletionParameters,
+    file: PsiFile,
+    context: PsiElement,
+  ): TypeScriptService.CompletionMergeStrategy {
     if (context.parent is SvelteHtmlAttribute) {
       return TypeScriptService.CompletionMergeStrategy.MERGE
     }
