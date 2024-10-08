@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.bind
+import com.intellij.ui.dsl.builder.bindSelected
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.service.SvelteLspExecutableDownloader
 import dev.blachut.svelte.lang.service.SvelteTypeScriptPluginPackageDownloader
@@ -40,6 +41,12 @@ class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedConfigurable
         }
       }.apply {
         bind(settings::serviceMode)
+      }
+
+      separator()
+
+      row {
+        checkBox(SvelteBundle.message("svelte.service.configurable.service.a11y")).bindSelected(settings::showA11yWarnings)
       }
     }
   }

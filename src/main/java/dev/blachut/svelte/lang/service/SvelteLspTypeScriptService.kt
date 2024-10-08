@@ -5,11 +5,16 @@ import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.lsp.BaseLspTypeScriptService
+import com.intellij.lang.typescript.lsp.LspAnnotationError
+import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilteringStrategy
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.platform.lsp.impl.highlighting.DiagnosticAndQuickFixes
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
+import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
+import org.eclipse.lsp4j.Diagnostic
 
 /**
  * @see SvelteLspServerSupportProvider
@@ -36,5 +41,19 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
 
     val isJavaScript = false // this might be too strict
     return TypeScriptLanguageServiceUtil.getMergeStrategyForPosition(context, isJavaScript)
+  }
+
+  override fun createAnnotationError(diagnosticAndQuickFixes: DiagnosticAndQuickFixes, virtualFile: VirtualFile): LspAnnotationError {
+    val filteringStrategy = SvelteLspAnnotationErrorFilteringStrategy(project)
+    return LspAnnotationError(project, diagnosticAndQuickFixes, virtualFile.canonicalPath, prefix, filteringStrategy)
+  }
+}
+
+class SvelteLspAnnotationErrorFilteringStrategy(project: Project) : LspAnnotationErrorFilteringStrategy(project) {
+  private val showA11yWarnings = getSvelteServiceSettings(project).showA11yWarnings
+
+  override fun isProblemEnabled(diagnostic: Diagnostic): Boolean {
+    if (!showA11yWarnings && diagnostic.code?.left?.startsWith("a11y") == true) return false
+    return super.isProblemEnabled(diagnostic)
   }
 }

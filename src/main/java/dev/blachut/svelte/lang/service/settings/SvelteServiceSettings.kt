@@ -40,12 +40,16 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
       state.tsPluginPackageName = refText
       if (changed) restartTypeScriptServicesAsync(project)
     }
+
+  var showA11yWarnings by state::showA11yWarnings
 }
 
 class SvelteServiceState : BaseState() {
   var innerServiceMode by enum(SvelteServiceMode.ENABLED)
   var lspServerPackageName by string(defaultPackageKey)
   var tsPluginPackageName by string(defaultPackageKey)
+
+  var showA11yWarnings by property(true)
 }
 
 enum class SvelteServiceMode {
