@@ -26,8 +26,12 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
       result.addElement(createLookupElement("lang=\"ts\"", 100))
     }
 
+    if (xmlTag.name == SCRIPT_TAG_NAME && xmlTag.getAttribute("module") == null) {
+      result.addElement(createLookupElement(text = "module", priority = 90))
+    }
+
     if (xmlTag.name == SCRIPT_TAG_NAME && xmlTag.getAttribute("context") == null) {
-      result.addElement(createLookupElement("context=\"module\"", 90))
+      result.addElement(createLookupElement(text = "context=\"module\"", priority = -1, deprecated = true))
     }
 
     // TODO refactor into proper descriptors
@@ -63,10 +67,11 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
     }
   }
 
-  private fun createLookupElement(text: String, priority: Int? = null): LookupElement {
+  private fun createLookupElement(text: String, priority: Int? = null, deprecated: Boolean = false): LookupElement {
     return LookupElementBuilder
       .create(text)
       .withIcon(SvelteIcons.Gray)
+      .withStrikeoutness(deprecated)
       .let {
         if (priority != null) {
           PrioritizedLookupElement.withPriority(it, priority.toDouble())
