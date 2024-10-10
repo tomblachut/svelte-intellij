@@ -43,10 +43,7 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
     return TypeScriptLanguageServiceUtil.getMergeStrategyForPosition(context, isJavaScript)
   }
 
-  override fun createAnnotationError(diagnosticAndQuickFixes: DiagnosticAndQuickFixes, virtualFile: VirtualFile): LspAnnotationError {
-    val filteringStrategy = SvelteLspAnnotationErrorFilteringStrategy(project)
-    return LspAnnotationError(project, diagnosticAndQuickFixes, virtualFile.canonicalPath, prefix, filteringStrategy)
-  }
+  override fun createAnnotationErrorFilteringStrategy() = SvelteLspAnnotationErrorFilteringStrategy(project)
 }
 
 class SvelteLspAnnotationErrorFilteringStrategy(project: Project) : LspAnnotationErrorFilteringStrategy(project) {
