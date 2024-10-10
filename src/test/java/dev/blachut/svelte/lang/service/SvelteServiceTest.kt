@@ -4,6 +4,7 @@ package dev.blachut.svelte.lang.service
 import com.intellij.lang.javascript.JSNavigationTest
 import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.mock.MockDocument
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.platform.lsp.tests.checkLspHighlighting
@@ -11,6 +12,7 @@ import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import com.intellij.testFramework.ExpectedHighlightingData
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
+import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import junit.framework.TestCase
 import org.junit.Test
 
@@ -528,6 +530,44 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       let foo = new Foo({target: document}); // js
       foo.<caret>exposedStuff
     """.trimIndent())
+  }
+
+  @Test
+  fun testA11yWarningsEnabled() {
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+      	const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
+        console.log(expectError);
+      </script>
+      
+      <warning descr="Svelte: A11y: visible, non-interactive elements with an on:click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as <button type=\"button\"> or <a> might be more appropriate. See https://svelte.dev/docs/accessibility-warnings#a11y-click-events-have-key-events for more details."><div role="button" tabindex="0" on:click={() => alert("hello")}>
+        Hello
+      </div</warning>>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+  }
+
+  @Test
+  fun testA11yWarningsDisabled() {
+    val settings = getSvelteServiceSettings(project)
+    settings.showA11yWarnings = false
+    disposeOnTearDown(Disposable { settings.showA11yWarnings = true })
+
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+      	const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
+        console.log(expectError);
+      </script>
+      
+      <div role="button" tabindex="0" on:click={() => alert("hello")}>
+      	Hello
+      </div>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
   }
 
   private fun checkTypeScriptServiceResolve(fileName: String, text: String) {
