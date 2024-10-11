@@ -5,11 +5,9 @@ import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.lsp.BaseLspTypeScriptService
-import com.intellij.lang.typescript.lsp.LspAnnotationError
-import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilteringStrategy
+import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilter
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.platform.lsp.impl.highlighting.DiagnosticAndQuickFixes
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
@@ -43,10 +41,10 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
     return TypeScriptLanguageServiceUtil.getMergeStrategyForPosition(context, isJavaScript)
   }
 
-  override fun createAnnotationErrorFilteringStrategy() = SvelteLspAnnotationErrorFilteringStrategy(project)
+  override fun createAnnotationErrorFilter() = SvelteLspAnnotationErrorFilter(project)
 }
 
-class SvelteLspAnnotationErrorFilteringStrategy(project: Project) : LspAnnotationErrorFilteringStrategy(project) {
+class SvelteLspAnnotationErrorFilter(project: Project) : LspAnnotationErrorFilter(project) {
   private val showA11yWarnings = getSvelteServiceSettings(project).showA11yWarnings
 
   override fun isProblemEnabled(diagnostic: Diagnostic): Boolean {
