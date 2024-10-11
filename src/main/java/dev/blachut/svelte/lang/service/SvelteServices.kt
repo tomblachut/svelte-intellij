@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.javascript.nodejs.util.NodePackageRef
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
+import com.intellij.lang.typescript.lsp.DownloadableVersion
 import com.intellij.lang.typescript.lsp.JSServiceSetActivationRule
 import com.intellij.lang.typescript.lsp.LspServerLoader
 import com.intellij.lang.typescript.lsp.LspServerPackageDescriptor
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.ApiStatus
 
 private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
   "svelte-language-server",
-  "0.17.1",
+  DownloadableVersion.of("0.17.1"),
   "/bin/server.js"
 ) {
   override val registryVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
@@ -34,7 +35,7 @@ object SvelteLspServerLoader : LspServerLoader(SvelteLspServerPackageDescriptor)
 
 private object SvelteTSPluginPackageDescriptor : LspServerPackageDescriptor(
   "typescript-svelte-plugin",
-  "0.3.42",
+  DownloadableVersion.of("0.3.42"),
   ""
 ) {
   override val registryVersion: String get() = Registry.stringValue("svelte.typescript.plugin.default.version")
