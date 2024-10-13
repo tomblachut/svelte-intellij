@@ -1,7 +1,6 @@
 package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.PsiBuilder
-import com.intellij.lang.javascript.JSElementTypes
 import com.intellij.lang.javascript.JSStubElementTypes
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
@@ -73,7 +72,7 @@ object SvelteJSLazyElementTypes {
         builder.advanceLexer()
         parseAtModifiersError(builder)
         parser.expressionParser.parseAssignmentExpression(false)
-        marker.done(JSElementTypes.SPREAD_EXPRESSION)
+        marker.done(JSStubElementTypes.SPREAD_EXPRESSION)
       }
       else {
         parser.expressionParser.parseAssignmentExpression(false)
