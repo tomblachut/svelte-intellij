@@ -17,9 +17,11 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.jetbrains.annotations.ApiStatus
 
 
-private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor("svelte-language-server",
-                                                                             "0.17.1",
-                                                                             "/bin/server.js") {
+private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
+  "svelte-language-server",
+  "0.17.1",
+  "/bin/server.js"
+) {
   override val defaultVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
 }
 
@@ -30,9 +32,11 @@ object SvelteLspExecutableDownloader : LspServerDownloader(SvelteLspServerPackag
   }
 }
 
-private object SvelteTypeScriptPluginDescriptor : LspServerPackageDescriptor("typescript-svelte-plugin",
-                                                                             "0.3.42",
-                                                                             "") {
+private object SvelteTypeScriptPluginDescriptor : LspServerPackageDescriptor(
+  "typescript-svelte-plugin",
+  "0.3.42",
+  ""
+) {
   override val defaultVersion: String get() = Registry.stringValue("svelte.typescript.plugin.default.version")
 }
 
