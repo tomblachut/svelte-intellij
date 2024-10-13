@@ -51,7 +51,7 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
     }
     serviceSettings.serviceMode = SvelteServiceMode.ENABLED
 
-    ensureServerDownloaded(SvelteLspExecutableDownloader)
+    ensureServerDownloaded(SvelteLspServerLoader)
 
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
   }

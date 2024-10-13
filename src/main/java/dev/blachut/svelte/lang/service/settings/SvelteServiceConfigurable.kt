@@ -10,8 +10,8 @@ import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.bind
 import com.intellij.ui.dsl.builder.bindSelected
 import dev.blachut.svelte.lang.SvelteBundle
-import dev.blachut.svelte.lang.service.SvelteLspExecutableDownloader
-import dev.blachut.svelte.lang.service.SvelteTypeScriptPluginPackageDownloader
+import dev.blachut.svelte.lang.service.SvelteLspServerLoader
+import dev.blachut.svelte.lang.service.SvelteTSPluginLoader
 
 class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedConfigurable.Simple(), Configurable {
   private val settings = getSvelteServiceSettings(project)
@@ -19,13 +19,13 @@ class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedConfigurable
   override fun Panel.createContent() {
     group(SvelteBundle.message("svelte.service.configurable.service.group")) {
       row(SvelteBundle.message("svelte.service.configurable.service.languageServerPackage")) {
-        cell(SvelteLspExecutableDownloader.createNodePackageField(project))
+        cell(SvelteLspServerLoader.createNodePackageField(project))
           .align(AlignX.FILL)
           .bind(settings::lspServerPackageRef)
       }
 
       row(SvelteBundle.message("svelte.service.configurable.service.tsPluginPackage")) {
-        cell(SvelteTypeScriptPluginPackageDownloader.createNodePackageField(project))
+        cell(SvelteTSPluginLoader.createNodePackageField(project))
           .align(AlignX.FILL)
           .bind(settings::tsPluginPackageRef)
       }
