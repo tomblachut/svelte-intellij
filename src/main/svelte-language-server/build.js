@@ -22,13 +22,13 @@ require('esbuild').build({
     },
     outdir: '.',
     bundle: true,
-    external: ['prettier', 'prettier-plugin-svelte'],
+    external: ['typescript', 'prettier', 'prettier-plugin-svelte'],
     format: 'cjs',
     platform: 'node',
     target: 'es2015',
     define: {'process.env.NODE_ENV': '"production"'},
     sourcemap: "linked",
-    minify: true,
+    minify: process.argv.includes('--minify'),
     metafile: process.argv.includes('--metafile'),
     plugins: [
         {
