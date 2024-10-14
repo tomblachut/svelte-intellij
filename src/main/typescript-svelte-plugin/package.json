@@ -1,0 +1,13 @@
+{
+  "name": "typescript-svelte-plugin",
+  "version": "0.3.42",
+  "private": true,
+  "main": "dist/src/index.js",
+  "devDependencies": {
+    "typescript-svelte-plugin": "0.3.42",
+    "esbuild": "^0.20.0"
+  },
+  "scripts": {
+    "build": "node build"
+  }
+}

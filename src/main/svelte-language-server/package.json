@@ -1,0 +1,12 @@
+{
+  "name": "svelte-language-server",
+  "version": "0.17.2",
+  "private": true,
+  "devDependencies": {
+    "svelte-language-server": "0.17.2",
+    "esbuild": "^0.20.0"
+  },
+  "scripts": {
+    "build": "node build"
+  }
+}
