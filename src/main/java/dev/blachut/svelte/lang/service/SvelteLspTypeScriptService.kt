@@ -24,6 +24,8 @@ class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(pr
 
   override fun isAcceptable(file: VirtualFile) = SvelteServiceSetActivationRule.isLspServerEnabledAndAvailable(project, file)
 
+  override fun isServiceFallbackResolveEnabled(): Boolean  = true
+
   override fun isServiceNavigationEnabled(): Boolean = true
 
   override fun getCompletionMergeStrategy(

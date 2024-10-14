@@ -40,6 +40,8 @@ class SveltePluginTypeScriptService(project: Project) : PluggableTypeScriptServi
     result[ConfigurePluginRequest(arguments)] = Consumer {}
   }
 
+  override fun isServiceFallbackResolveEnabled(): Boolean = true
+
   override fun createWidgetItem(currentFile: VirtualFile?): LanguageServiceWidgetItem =
     TypeScriptServiceWidgetItem(this, currentFile, SvelteIcons.Original, SvelteIcons.Desaturated, SvelteServiceConfigurable::class.java)
 }
