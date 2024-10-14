@@ -20,7 +20,7 @@ import org.jetbrains.annotations.ApiStatus
 
 private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
   "svelte-language-server",
-  PackageVersion.downloadable("0.17.1"),
+  PackageVersion.downloadable("0.17.2"),
   "/bin/server.js"
 ) {
   override val registryVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
