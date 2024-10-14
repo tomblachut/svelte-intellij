@@ -22,7 +22,7 @@ private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
   "0.17.1",
   "/bin/server.js"
 ) {
-  override val defaultVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
+  override val registryVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
 }
 
 @ApiStatus.Experimental
@@ -37,7 +37,7 @@ private object SvelteTSPluginPackageDescriptor : LspServerPackageDescriptor(
   "0.3.42",
   ""
 ) {
-  override val defaultVersion: String get() = Registry.stringValue("svelte.typescript.plugin.default.version")
+  override val registryVersion: String get() = Registry.stringValue("svelte.typescript.plugin.default.version")
 }
 
 @ApiStatus.Experimental
