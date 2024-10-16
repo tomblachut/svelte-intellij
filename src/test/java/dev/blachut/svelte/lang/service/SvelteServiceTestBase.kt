@@ -13,7 +13,7 @@ import dev.blachut.svelte.lang.svelteKitPackageJson
 
 abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
   // compilerOptions taken from SvelteKit app
-  protected val tsconfig = """
+  private val tsconfig = """
     {
       "compilerOptions": {
         "allowJs": true,
@@ -54,6 +54,16 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
     ensureServerDownloaded(SvelteLspServerLoader)
 
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
+    performNpmInstallForPackageJson("package.json") // svelte-language-server imports typescript
+  }
+
+  protected fun addTypeScriptCommonFiles() {
+    myFixture.addFileToProject("ambient.d.ts", """
+      /// <reference types="svelte" />
+      
+      declare function __sveltets_2_invalidate<T>(getValue: () => T): T;
+    """.trimIndent())
+    myFixture.addFileToProject("tsconfig.json", tsconfig)
   }
 
   protected fun assertCorrectService() {
@@ -83,7 +93,7 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
       myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
     }
     else {
-      myFixture.addFileToProject("tsconfig.json", tsconfig)
+      addTypeScriptCommonFiles()
       myFixture.configureByFile(getTestName(false) + "." + extension)
     }
   }

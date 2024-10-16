@@ -24,7 +24,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testServiceWorks() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
         let <error descr="Svelte: Type 'number' is not assignable to type 'string'.">local</error>: string = 1;
@@ -49,9 +49,9 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     // This test checks if we properly process Diagnostics without code.
     // It's important because exceptions in our highlighting are swallowed but appear to affect performance.
     // Would be good to actually completely hide this annotation, but then I'm not sure how to still verify the above.
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
-      <script lang="ts">
+      <script lang="ts"><EOLError descr="Svelte: [svelte-preprocess] Encountered type error"></EOLError>
         let hello = "hello"<error descr="Svelte: ',' expected."><error descr="Newline or semicolon expected">w</error>rong</error>;
         console.log(hello);
       </script>
@@ -62,12 +62,11 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testStyleLangNoCrash() {
-    // Previously, Svelte LS would print long error "Cannot find module 'sass'" with require stack.
+    // Svelte LS will print long error "Cannot find module 'sass'" with require stack.
     // Description is not important, in 2023.3 the LS crashed instead of showing any errors.
-    // Now Svelte LS has better warning, and it depends on the Svelte version in the project.
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
-      <style lang="scss">
+      <style lang="scss"><EOLError></EOLError>
         div {
           color: red;
         }
@@ -79,7 +78,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testNotificationsForTSFileChanges() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("helper.ts", "") // empty file will trigger "not a module" error
     val helperDocument = myFixture.editor.document
     myFixture.configureByText("Hello.svelte", """
@@ -115,7 +114,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testTypeCheckingForProps() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.addFileToProject("Child.svelte", """
       <script lang="ts">
         export let numA: number = 1;
@@ -147,7 +146,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testTypeNarrowing() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
         type SuccessModel = {
@@ -181,7 +180,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testTypesFromSeparateScriptTags() { // WEB-54516
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script context="module" lang="ts">
         export interface User {
@@ -204,7 +203,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testReactiveDeclarationDestructuredObjectJS() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script>
         $: ({ foo1 } = { foo1: 1 });
@@ -222,7 +221,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testReactiveDeclarationDestructuredObjectTS() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
         $: ({ foo1 } = { foo1: 1 });
@@ -240,7 +239,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testReactiveDeclarationDestructuredArrayJS() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script>
         $: [foo1] = [1];
@@ -258,7 +257,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testReactiveDeclarationDestructuredArrayTS() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
         $: [foo1] = [1];
@@ -276,7 +275,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testDestructuredAssignmentAssignability() { // WEB-60202
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
         class Account {
@@ -300,7 +299,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testImportFromModuleScriptJS() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.addFileToProject("Helper.svelte", """
       <script context="module">
         export class Inner {
@@ -323,7 +322,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testImportFromModuleScriptTS() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.addFileToProject("Helper.svelte", """
       <script context="module" lang="ts">
         export class Inner {
@@ -354,7 +353,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testFunctionDeclarationGTDU() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
         function <caret>handleClick() {
@@ -374,7 +373,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testFunctionReferenceGTDU() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
         function handleClick() {
@@ -394,7 +393,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testReactiveDeclarationReferenceGTDU() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     // todo hide internal errors for destructured reactive declaration references
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
@@ -411,8 +410,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testTypeScriptPluginWorks() {
-    performNpmInstallForPackageJson("package.json") // required by typescript-plugin-svelte
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
         export let prop1 = 5;
@@ -465,8 +463,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
   fun testTypeScriptPluginWorksWithLegacyToolWindow() {
     RegistryManager.getInstance().get("ts.tool.window.show").setValue(true, testRootDisposable)
 
-    performNpmInstallForPackageJson("package.json") // required by typescript-plugin-svelte
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
         export let prop1 = 5;
@@ -489,8 +486,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testTypeScriptServiceResolve() {
-    performNpmInstallForPackageJson("package.json") // required by typescript-plugin-svelte
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.addFileToProject("randomFile.ts", """
       export async function run() {
         return {
@@ -534,7 +530,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testA11yWarningsEnabled() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
       	const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
@@ -555,7 +551,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     settings.showA11yWarnings = false
     disposeOnTearDown(Disposable { settings.showA11yWarnings = true })
 
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
       	const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
