@@ -35,6 +35,7 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+    <registryKey defaultValue="false" description="Use bundled Svelte services" key="svelte.language.server.bundled.enabled"/>
     <registryKey defaultValue="" description="Svelte service version for downloading" key="svelte.language.server.default.version"/>
     <registryKey defaultValue="" description="Svelte TypeScript plugin version for downloading" key="svelte.typescript.plugin.default.version"/>
 
