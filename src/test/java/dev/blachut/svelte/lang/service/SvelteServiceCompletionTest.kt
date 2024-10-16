@@ -20,7 +20,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
 
   @Test
   fun testEventSnippet() {
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
     myFixture.configureByText("Usage.svelte", """
       <button :blu<caret> />
     """.trimIndent())
@@ -40,7 +40,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
 
   @Test
   fun testPropertiesOnNullableReferences() { // WEB-63103
-    myFixture.addFileToProject("tsconfig.json", tsconfig)
+    addTypeScriptCommonFiles()
 
     myFixture.addFileToProject("api.ts", """
       declare const uniqueSymbol: unique symbol;
