@@ -20,7 +20,9 @@ import org.jetbrains.annotations.ApiStatus
 
 private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
   "svelte-language-server",
-  PackageVersion.bundled<SvelteLspServerPackageDescriptor>("0.17.2", "svelte", "src/main/svelte-language-server"),
+  PackageVersion.bundled<SvelteLspServerPackageDescriptor>("0.17.2", "svelte", "src/main/svelte-language-server") {
+    Registry.`is`("svelte.language.server.bundled.enabled")
+  },
   "/bin/server.js"
 ) {
   override val registryVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
@@ -35,7 +37,9 @@ object SvelteLspServerLoader : LspServerLoader(SvelteLspServerPackageDescriptor)
 
 private object SvelteTSPluginPackageDescriptor : LspServerPackageDescriptor(
   "typescript-svelte-plugin",
-  PackageVersion.bundled<SvelteLspServerPackageDescriptor>("0.3.42", "svelte", "src/main/typescript-svelte-plugin"),
+  PackageVersion.bundled<SvelteLspServerPackageDescriptor>("0.3.42", "svelte", "src/main/typescript-svelte-plugin") {
+    Registry.`is`("svelte.language.server.bundled.enabled")
+  },
   "" // the relative path must remain empty because TSPlugin is expected to resolve to the whole package directory
 ) {
   override val registryVersion: String get() = Registry.stringValue("svelte.typescript.plugin.default.version")
