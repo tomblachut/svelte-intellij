@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.library.typings.TypeScriptExternalDefinition
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.library.download.TypeScriptDefinitionFilesDirectory
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.registry.RegistryManager
 import dev.blachut.svelte.lang.copyBundledSvelteKit
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
@@ -51,6 +52,7 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
     }
     serviceSettings.serviceMode = SvelteServiceMode.ENABLED
 
+    RegistryManager.getInstance().get("svelte.language.server.bundled.enabled").setValue(true, testRootDisposable)
     ensureServerDownloaded(SvelteLspServerLoader)
 
     myFixture.addFileToProject("package.json", svelteKitPackageJson)

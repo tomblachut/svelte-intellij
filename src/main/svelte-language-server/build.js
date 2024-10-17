@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const esbuild = require('esbuild');
 
 // .js is here, so it's easier to Find in Files
 const packageRelativePath = "bin/server.js"
@@ -16,7 +17,11 @@ if (ownPackageJson.version !== theirPackageJson.version) {
     throw new Error(`Make sure that the version in package.json matches the version of official server distribution (${theirPackageJson.version})`);
 }
 
-require('esbuild').build({
+const runtimeDependencies = [
+  `svelte2tsx`
+];
+
+esbuild.build({
     entryPoints: {
         [packageRelativePath]: `./node_modules/${languageServerPackage}/${packageRelativePath}`,
     },
@@ -44,3 +49,9 @@ require('esbuild').build({
         },
     ],
 });
+
+fs.rmSync('./bin/node_modules/', {recursive: true, force: true});
+
+for (const dependency of runtimeDependencies) {
+  fs.cpSync(`./node_modules/${dependency}`, `./bin/node_modules/${dependency}`, {recursive: true});
+}
