@@ -15,7 +15,8 @@ internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServi
   private val lspService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SvelteLspTypeScriptServiceWrapper>() }
   private val tsService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SveltePluginTypeScriptServiceWrapper>() }
 
-  override fun getAllServices(): List<JSLanguageService> = listOf(lspService.service, tsService.service)
+  override val allServices: List<JSLanguageService>
+    get() = listOf(lspService.service, tsService.service)
 
   override fun getService(file: VirtualFile): JSLanguageService? = allServices.firstOrNull { it.isAcceptable(file) }
 
