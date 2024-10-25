@@ -1,6 +1,7 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service.settings
 
+import com.intellij.lang.typescript.lsp.NestedReadWriteProperty
 import com.intellij.lang.typescript.lsp.createPackageRef
 import com.intellij.lang.typescript.lsp.defaultPackageKey
 import com.intellij.lang.typescript.lsp.extractRefText
@@ -41,7 +42,7 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
       if (changed) restartTypeScriptServicesAsync(project)
     }
 
-  var showA11yWarnings by state::showA11yWarnings
+  var showA11yWarnings by NestedReadWriteProperty({ state }, SvelteServiceState::showA11yWarnings)
 }
 
 class SvelteServiceState : BaseState() {
