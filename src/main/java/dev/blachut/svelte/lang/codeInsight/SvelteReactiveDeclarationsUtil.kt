@@ -57,7 +57,7 @@ object SvelteReactiveDeclarationsUtil {
   }
 
   class SvelteTypeScriptResolveProcessor<T : ResultSink>(sink: T, containingFile: PsiFile, place: PsiElement) :
-    TypeScriptResolveProcessor<ResolveResultSink>(sink, containingFile, place) {
+    TypeScriptResolveProcessor<T>(sink, containingFile, place) {
     override fun executeAcceptedElement(element: PsiElement, state: ResolveState): Boolean {
       return super.executeAcceptedElement(element, state) && executeAcceptedReactiveDeclaration(element, state)
     }
