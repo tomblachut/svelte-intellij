@@ -36,7 +36,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <!-- todo remove duplicate internal warning -->
-      {acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'."><weak_warning descr="Argument type boolean is not assignable to parameter type number">true</weak_warning></error>)}
+      {acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'.">true</error>)}
       
       <input <warning descr="Svelte: A11y: Avoid using autofocus">autofocus</warning>>
     """.trimIndent())
@@ -209,11 +209,11 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         $: ({ foo1 } = { foo1: 1 });
       
         foo1;
-        <error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>;
+        <error descr="Svelte: Cannot find name 'foo2'.">foo2</error>;
       </script>
       
       <p>{foo1}</p>
-      <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
+      <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
@@ -231,7 +231,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <p>{foo1}</p>
-      <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
+      <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
@@ -309,7 +309,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.configureByText("Foo.svelte", """
       <script>
-        import { Inner, Inner as Renamed, <error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?"><weak_warning descr="Cannot resolve symbol 'Wrong'">Wrong</weak_warning></error> } from "./Helper.svelte";
+        import { Inner, Inner as Renamed, <error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?">Wrong</error> } from "./Helper.svelte";
       
         new Inner;
         new Renamed;
@@ -424,7 +424,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       import Foo from "./Foo.svelte";
 
       new Foo({props: {<error descr="TS2322: Type 'string' is not assignable to type 'number'.">prop1</error>: "foo"}});
-      let <error descr="TS2322: Type 'number' is not assignable to type 'typeof Foo__SvelteComponent_'.">foo</error>: typeof Foo = 5;
+      let <error descr="TS2322: Type 'number' is not assignable to type 'typeof SvelteComponent'.">foo</error>: typeof Foo = 5;
       console.log(foo);
     """.trimIndent())
     myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
