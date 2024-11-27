@@ -1,7 +1,5 @@
 ### auto-generated section `build intellij.svelte` start
-load("@rules_jvm//:jvm.bzl", "jvm_resources")
-load("@rules_jvm//:rules.bzl", "jvm_library")
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_test")
+load("@rules_jvm//:jvm.bzl", "jvm_library", "jvm_resources", "jvm_test")
 
 jvm_resources(
   name = "svelte_resources",
@@ -13,11 +11,10 @@ jvm_library(
   name = "svelte",
   module_name = "intellij.svelte",
   visibility = ["//visibility:public"],
-  srcs = glob(["src/main/java/**/*.kt", "src/main/java/**/*.java", "src/main/gen/**/*.kt", "src/main/gen/**/*.java"], allow_empty = True, exclude = ["**/module-info.java"]),
-  javac_opts = "@rules_jvm//:j17",
-  kotlinc_opts = "@rules_jvm//:k17",
+  srcs = glob(["src/main/java/**/*.kt", "src/main/java/**/*.java", "src/main/gen/**/*.kt", "src/main/gen/**/*.java"], allow_empty = True),
   deps = [
     "@community//platform/platform-api:ide",
+    "@community//platform/ide-core-impl",
     "@lib//:kotlin-stdlib",
     "@community//xml/xml-psi-api:psi",
     "@community//platform/lang-api:lang",
@@ -57,15 +54,14 @@ jvm_library(
   runtime_deps = [":svelte_resources"]
 )
 
-kt_jvm_test(
-  name = "svelte_test",
+jvm_library(
+  name = "svelte_test_lib",
   visibility = ["//visibility:public"],
-  srcs = glob(["src/test/java/**/*.kt", "src/test/java/**/*.java"], allow_empty = True, exclude = ["**/module-info.java"]),
-  javac_opts = "@rules_jvm//:j17",
-  kotlinc_opts = "@rules_jvm//:k17",
+  srcs = glob(["src/test/java/**/*.kt", "src/test/java/**/*.java"], allow_empty = True),
   associates = [":svelte"],
   deps = [
     "@community//platform/platform-api:ide",
+    "@community//platform/ide-core-impl",
     "@lib//:kotlin-stdlib",
     "@community//xml/xml-psi-api:psi",
     "@community//platform/lang-api:lang",
@@ -78,15 +74,18 @@ kt_jvm_test(
     "//plugins/JavaScriptLanguage:javascript-impl",
     "//plugins/JavaScriptDebugger:javascript-debugger",
     "//plugins/JavaScriptDebugger/sdk/debugger-ui:javascript-debugger-ui",
+    "//plugins/JavaScriptDebugger/sdk/debugger-ui:javascript-debugger-ui_test_lib",
     "//CSS/css-psi-impl:css-psi",
     "@community//platform/xdebugger-api:debugger",
     "@community//xml/impl",
     "@community//spellchecker",
+    "@community//spellchecker:spellchecker_test_lib",
     "//CSS/css-analysis-impl:css-analysis",
     "//CSS/css-api:css",
     "@community//platform/built-in-server:builtInServer-impl",
     "//webcore/impl:webide-impl",
     "//contrib/prettierJS",
+    "//contrib/prettierJS:prettierJS_test_lib",
     "@lib//:jackson",
     "@lib//:jackson-databind",
     "@lib//:commons-compress",
@@ -97,30 +96,38 @@ kt_jvm_test(
     "@lib//:caffeine",
     "//plugins/JavaScriptLanguage/web-platform:javascript-web",
     "@community//platform/testFramework",
-    "@community//platform/testFramework:testFramework_test",
+    "@community//platform/testFramework:testFramework_test_lib",
     "//plugins/JavaScriptLanguage:javascript",
     "//plugins/JavaScriptLanguage/testFramework-JavaScript:javascript-testFramework",
     "@community//plugins/copyright",
-    "@community//plugins/copyright:copyright_test",
-    "//plugins/JavaScriptLanguage:javascript-tests_test",
+    "@community//plugins/copyright:copyright_test_lib",
+    "//plugins/JavaScriptLanguage:javascript-tests_test_lib",
     "//plugins/sass",
-    "//plugins/sass:sass_test",
+    "//plugins/sass:sass_test_lib",
     "//plugins/Jade:jade",
-    "//plugins/Jade:jade_test",
+    "//plugins/Jade:jade_test_lib",
     "//contrib/postcss",
-    "//contrib/postcss:postcss_test",
+    "//contrib/postcss:postcss_test_lib",
     "//plugins/stylus",
-    "//plugins/stylus:stylus_test",
-    "@community//xml/tests:tests_test",
+    "//plugins/stylus:stylus_test_lib",
+    "@community//xml/tests:tests_test_lib",
     "//platform/lsp/testFramework",
     "@lib//:fastutil-min",
     "//platform/lsp-impl",
+    "//platform/lsp-impl:lsp-impl_test_lib",
     "@ultimate_lib//:eclipse_lsp4j",
     "@ultimate_lib//:eclipse_lsp4j_jsonrpc",
     "//plugins/vitejs",
-    "//plugins/vitejs:vitejs_test",
+    "//plugins/vitejs:vitejs_test_lib",
     "@community//platform/webSymbols",
+    "@community//platform/webSymbols:webSymbols_test_lib",
+    "//plugins/JavaScriptLanguage/web-platform:javascript-web-tests_test_lib",
   ],
   runtime_deps = [":svelte_resources"]
+)
+
+jvm_test(
+  name = "svelte_test",
+  runtime_deps = [":svelte_test_lib"]
 )
 ### auto-generated section `build intellij.svelte` end
