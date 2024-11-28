@@ -336,7 +336,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        import { Inner, Inner as Renamed, <error descr="Cannot resolve symbol 'Wrong'"><error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?">Wrong</error></error>, type Foo } from "./Helper.svelte";
+        import { Inner, Inner as Renamed, <error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?">Wrong</error>, type Foo } from "./Helper.svelte";
       
         new Inner;
         new Renamed;
