@@ -6,7 +6,7 @@ import com.intellij.lang.html.HtmlParsing
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
-import com.intellij.xml.psi.XmlPsiBundle
+import com.intellij.xml.parsing.XmlParserBundle
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
@@ -152,7 +152,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         if (tt === XmlTokenType.XML_BAD_CHARACTER) {
           val error = mark()
           advance()
-          error.error(XmlPsiBundle.message("xml.parsing.unescaped.ampersand.or.nonterminated.character.entity.reference"))
+          error.error(XmlParserBundle.message("xml.parsing.unescaped.ampersand.or.nonterminated.character.entity.reference"))
         }
         else if (tt === XmlTokenType.XML_ENTITY_REF_TOKEN) {
           parseReference()
@@ -169,7 +169,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
         advance()
       }
       else {
-        error(XmlPsiBundle.message("xml.parsing.unclosed.attribute.value"))
+        error(XmlParserBundle.message("xml.parsing.unclosed.attribute.value"))
       }
     }
     else {
