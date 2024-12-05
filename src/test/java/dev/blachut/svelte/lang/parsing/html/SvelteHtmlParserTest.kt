@@ -5,6 +5,7 @@ import com.intellij.javascript.JSHtmlEmbeddedContentSupport
 import com.intellij.lang.LanguageASTFactory
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.css.CSSParserDefinition
+import com.intellij.lang.javascript.JSElementTypeServiceHelper
 import com.intellij.lang.javascript.JavascriptParserDefinition
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.lang.xml.XmlASTFactory
@@ -54,6 +55,8 @@ class SvelteHtmlParserTest : ParsingTestCase(
     HtmlEmbeddedContentSupport.register(application, testRootDisposable,
                                         CssHtmlEmbeddedContentSupport::class.java, JSHtmlEmbeddedContentSupport::class.java,
                                         SvelteHtmlEmbeddedContentSupport::class.java)
+
+    JSElementTypeServiceHelper.registerJSElementTypeServices(application, testRootDisposable)
 
     //        registerExtensionPoint(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProvider::class.java)
     //        registerExtension(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProviderImpl())

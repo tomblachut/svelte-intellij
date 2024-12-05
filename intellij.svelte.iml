@@ -62,5 +62,6 @@
     <orderEntry type="library" name="eclipse.lsp4j.jsonrpc" level="project" />
     <orderEntry type="module" module-name="intellij.vitejs" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.webSymbols" />
+    <orderEntry type="module" module-name="intellij.javascript.web.tests" scope="TEST" />
   </component>
 </module>
