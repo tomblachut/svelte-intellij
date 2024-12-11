@@ -15,7 +15,7 @@ import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
 class SvelteFileIncludeProvider : JSFrameworkFileIncludeProvider(SvelteHtmlFileType) {
   override fun getIncludeInfos(content: FileContent): Array<FileIncludeInfo> {
-    if (!ES6FileIncludeProvider.checkTextHasFromKeyword(content)) return emptyArray()
+    if (!ES6FileIncludeProvider.checkTextHasImportKeyword(content)) return emptyArray()
 
     val psiFile = content.psiFile as SvelteHtmlFile
     val importDeclarations = processScriptTag(psiFile.moduleScript) +
