@@ -14,10 +14,14 @@ import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 import dev.blachut.svelte.lang.psi.isSingleDollarPrefixedName
 
-class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>,
-  ES6FunctionParser<*>, JSPsiTypeParser<*>>(SvelteJSLanguage.INSTANCE, builder) {
-  init {
-    myExpressionParser = object : ES6ExpressionParser<SvelteJSParser>(this) {
+class SvelteJSParser(
+  builder: PsiBuilder,
+) : ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>, ES6FunctionParser<*>, JSPsiTypeParser<*>>(
+  SvelteJSLanguage.INSTANCE,
+  builder,
+) {
+  override val expressionParser: ES6ExpressionParser<*> =
+    object : ES6ExpressionParser<SvelteJSParser>(this) {
       override fun getCurrentBinarySignPriority(allowIn: Boolean, advance: Boolean): Int {
         if (this.builder.tokenType === JSTokenTypes.AS_KEYWORD) {
           return -1
@@ -26,7 +30,9 @@ class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES
         return super.getCurrentBinarySignPriority(allowIn, advance)
       }
     }
-    myFunctionParser = object : ES6FunctionParser<SvelteJSParser>(this) {
+
+  override val functionParser: ES6FunctionParser<*> =
+    object : ES6FunctionParser<SvelteJSParser>(this) {
       override fun getParameterType(): IElementType {
         if (builder.getUserData(markupContextKey) == true) {
           return SvelteJSElementTypes.PARAMETER
@@ -36,7 +42,6 @@ class SvelteJSParser(builder: PsiBuilder) : ES6Parser<ES6ExpressionParser<*>, ES
         }
       }
     }
-  }
 
   override fun buildTokenElement(type: IElementType) {
     // there are too many places that uses element type JSElementTypes.REFERENCE_EXPRESSION,
