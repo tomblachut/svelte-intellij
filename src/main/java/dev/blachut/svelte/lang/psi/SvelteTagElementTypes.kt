@@ -13,7 +13,7 @@ object SvelteTagElementTypes {
   val IF_START = object : SvelteJSBlockLazyElementType("IF_START") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.SHARP
       SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
       builder.advanceLexer() // SvelteTokenTypes.IF_KEYWORD
@@ -25,7 +25,7 @@ object SvelteTagElementTypes {
   val ELSE_CLAUSE = object : SvelteJSBlockLazyElementType("ELSE_CLAUSE") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.COLON
       SvelteTagParsing.parseNotAllowedWhitespace(builder, ":")
       builder.advanceLexer() // SvelteTokenTypes.ELSE_KEYWORD
@@ -40,7 +40,7 @@ object SvelteTagElementTypes {
   val EACH_START = object : SvelteJSBlockLazyElementType("EACH_START") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.SHARP
       SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
       builder.remapCurrentToken(SvelteTokenTypes.EACH_KEYWORD) // todo might be okay to remove all those remapCurrentToken
@@ -82,7 +82,7 @@ object SvelteTagElementTypes {
   val AWAIT_START = object : SvelteJSBlockLazyElementType("AWAIT_START") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.SHARP
       SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
       builder.advanceLexer() // SvelteTokenTypes.AWAIT_KEYWORD
@@ -106,7 +106,7 @@ object SvelteTagElementTypes {
   val THEN_CLAUSE = object : SvelteJSBlockLazyElementType("THEN_CLAUSE") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.COLON
       SvelteTagParsing.parseNotAllowedWhitespace(builder, ":")
       builder.remapCurrentToken(SvelteTokenTypes.THEN_KEYWORD)
@@ -120,7 +120,7 @@ object SvelteTagElementTypes {
   val CATCH_CLAUSE = object : SvelteJSBlockLazyElementType("CATCH_CLAUSE") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.COLON
       SvelteTagParsing.parseNotAllowedWhitespace(builder, ":")
       builder.advanceLexer() // SvelteTokenTypes.CATCH_KEYWORD
@@ -132,7 +132,7 @@ object SvelteTagElementTypes {
   val KEY_START = object : SvelteJSBlockLazyElementType("KEY_START") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.SHARP
       SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
       builder.advanceLexer() // SvelteTokenTypes.KEY_KEYWORD
@@ -144,7 +144,7 @@ object SvelteTagElementTypes {
   val SNIPPET_START = object : SvelteJSBlockLazyElementType("SNIPPET_START") {
     override val noTokensErrorMessage = "expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       builder.advanceLexer() // JSTokenTypes.SHARP
       SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
       builder.advanceLexer() // SvelteTokenTypes.SNIPPET_KEYWORD

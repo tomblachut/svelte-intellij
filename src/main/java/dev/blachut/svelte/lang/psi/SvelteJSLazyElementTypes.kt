@@ -12,7 +12,7 @@ object SvelteJSLazyElementTypes {
   val ATTRIBUTE_PARAMETER = object : SvelteJSLazyElementType("ATTRIBUTE_PARAMETER") {
     override val noTokensErrorMessage = "Parameter expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       parseAtModifiersError(builder)
       parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
     }
@@ -21,7 +21,7 @@ object SvelteJSLazyElementTypes {
   val ATTRIBUTE_EXPRESSION = object : SvelteJSLazyElementType("ATTRIBUTE_EXPRESSION") {
     override val noTokensErrorMessage = "Expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       parseAtModifiersError(builder)
       parser.expressionParser.parseExpression()
     }
@@ -34,7 +34,7 @@ object SvelteJSLazyElementTypes {
     override val noTokensErrorMessage = "Expression expected"
     override val assumeExternalBraces = false // for now trailing { and } belong to this token
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       if (parseAtModifiers(builder)) {
         parseSvelteDeclaringAssignmentExpression(builder, parser)
       }
@@ -43,7 +43,7 @@ object SvelteJSLazyElementTypes {
       }
     }
 
-    private fun parseSvelteDeclaringAssignmentExpression(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    private fun parseSvelteDeclaringAssignmentExpression(builder: PsiBuilder, parser: JavaScriptParser) {
       val expr: PsiBuilder.Marker = builder.mark()
 
       var openedPar = false
@@ -65,7 +65,7 @@ object SvelteJSLazyElementTypes {
   val SPREAD_OR_SHORTHAND = object : SvelteJSLazyElementType("SPREAD_OR_SHORTHAND") {
     override val noTokensErrorMessage = "Shorthand attribute or spread expression expected"
 
-    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>) {
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
       parseAtModifiersError(builder)
       if (builder.tokenType === JSTokenTypes.DOT_DOT_DOT) {
         val marker = builder.mark()

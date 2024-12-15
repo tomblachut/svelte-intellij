@@ -55,11 +55,11 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
     rootMarker.done(this)
 
     val result = builder.treeBuilt.firstChildNode
-    ParsingDiagnostics.registerParse(builder, getLanguage(), System.nanoTime() - startTime);
+    ParsingDiagnostics.registerParse(builder, language, System.nanoTime() - startTime)
     return result
   }
 
-  protected abstract fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser<*, *, *, *>)
+  protected abstract fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser)
 
   private fun ensureEof(builder: PsiBuilder) {
     if (!builder.eof()) {

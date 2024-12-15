@@ -17,7 +17,7 @@ class SvelteJSParserDefinition : ECMA6ParserDefinition() {
     return FILE
   }
 
-  override fun createJSParser(builder: PsiBuilder): JavaScriptParser<*, *, *, *> {
+  override fun createJSParser(builder: PsiBuilder): JavaScriptParser {
     return SvelteJSParser(builder)
   }
 

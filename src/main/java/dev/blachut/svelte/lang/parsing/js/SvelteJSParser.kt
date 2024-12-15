@@ -4,10 +4,8 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.lang.ecmascript6.parsing.ES6ExpressionParser
 import com.intellij.lang.ecmascript6.parsing.ES6FunctionParser
 import com.intellij.lang.ecmascript6.parsing.ES6Parser
-import com.intellij.lang.ecmascript6.parsing.ES6StatementParser
 import com.intellij.lang.javascript.JSElementTypes
 import com.intellij.lang.javascript.JSTokenTypes
-import com.intellij.lang.javascript.parsing.JSPsiTypeParser
 import com.intellij.openapi.util.Key
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
@@ -16,7 +14,7 @@ import dev.blachut.svelte.lang.psi.isSingleDollarPrefixedName
 
 class SvelteJSParser(
   builder: PsiBuilder,
-) : ES6Parser<ES6ExpressionParser<*>, ES6StatementParser<*>, ES6FunctionParser<*>, JSPsiTypeParser<*>>(
+) : ES6Parser(
   SvelteJSLanguage.INSTANCE,
   builder,
 ) {

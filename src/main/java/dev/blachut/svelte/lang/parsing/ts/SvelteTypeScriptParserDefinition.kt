@@ -14,7 +14,7 @@ class SvelteTypeScriptParserDefinition : TypeScriptParserDefinition() {
     return FILE
   }
 
-  override fun createJSParser(builder: PsiBuilder): JavaScriptParser<*, *, *, *> {
+  override fun createJSParser(builder: PsiBuilder): JavaScriptParser {
     return SvelteTypeScriptParser(builder)
   }
 }
