@@ -4,10 +4,9 @@ package dev.blachut.svelte.lang.service
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
-import com.intellij.lang.typescript.lsp.BaseLspTypeScriptService
+import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
 import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilter
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
@@ -18,11 +17,10 @@ import org.eclipse.lsp4j.Diagnostic
  * @see SvelteLspServerSupportProvider
  * @see SvelteLspServerDescriptor
  */
-class SvelteLspTypeScriptService(project: Project) : BaseLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java) {
+class SvelteLspTypeScriptService(project: Project)
+  : JSFrameworkLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java, SvelteServiceSetActivationRule) {
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
-
-  override fun isAcceptable(file: VirtualFile) = SvelteServiceSetActivationRule.isLspServerEnabledAndAvailable(project, file)
 
   override fun isServiceFallbackResolveEnabled(): Boolean  = true
 
