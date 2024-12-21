@@ -20,7 +20,7 @@ import org.eclipse.lsp4j.TextDocumentContentChangeEvent
 
 internal data class SvelteLspDidChangeTsOrJsFileParams(val uri: String, val changes: List<TextDocumentContentChangeEvent>)
 
-private val workaroundFileTypes = setOf(JavaScriptFileType, TypeScriptFileType.INSTANCE)
+private val workaroundFileTypes = setOf(JavaScriptFileType, TypeScriptFileType)
 
 internal class SvelteLspCustomDocumentListener : DocumentListener {
   override fun beforeDocumentChange(event: DocumentEvent) {
