@@ -29,7 +29,7 @@ class SvelteCommentProvider : MultipleLangCommentProvider {
     lineStartLanguage: Language,
     lineEndLanguage: Language
   ): Commenter? {
-    if (lineStartLanguage.isKindOf(JavascriptLanguage.INSTANCE)) {
+    if (lineStartLanguage.isKindOf(JavascriptLanguage)) {
       val startElement = file.findElementAt(editor.caretModel.offset)
 
       val jsMode = startElement?.contextOfType(
