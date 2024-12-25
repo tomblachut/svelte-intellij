@@ -19,7 +19,7 @@ class SvelteJSParser(
   builder,
 ) {
   override val expressionParser: ES6ExpressionParser<*> =
-    object : ES6ExpressionParser<SvelteJSParser>(this) {
+    object : ES6ExpressionParser<SvelteJSParser>(this@SvelteJSParser) {
       override fun getCurrentBinarySignPriority(allowIn: Boolean, advance: Boolean): Int {
         if (this.builder.tokenType === JSTokenTypes.AS_KEYWORD) {
           return -1
@@ -30,7 +30,7 @@ class SvelteJSParser(
     }
 
   override val functionParser: ES6FunctionParser<*> =
-    object : ES6FunctionParser<SvelteJSParser>(this) {
+    object : ES6FunctionParser<SvelteJSParser>(this@SvelteJSParser) {
       override fun getParameterType(): IElementType {
         if (builder.getUserData(markupContextKey) == true) {
           return SvelteJSElementTypes.PARAMETER
