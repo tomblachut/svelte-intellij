@@ -11,7 +11,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
-object SvelteTagParsing {
+internal object SvelteTagParsing {
   fun parseNotAllowedWhitespace(builder: PsiBuilder, @NlsSafe precedingSymbol: String) {
     if (builder.isTokenAfterWhiteSpace()) {
       builder.error(SvelteBundle.message("svelte.parsing.error.whitespace.not.allowed.after.with", precedingSymbol))
