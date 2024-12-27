@@ -23,7 +23,7 @@ import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 import dev.blachut.svelte.lang.psi.isSingleDollarPrefixedName
 import kotlin.experimental.or
 
-class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, originalLexer: Lexer) :
+internal class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, originalLexer: Lexer) :
   BaseFilterLexer(originalLexer, occurrenceConsumer) {
   override fun advance() {
     val tokenType = myDelegate.tokenType
