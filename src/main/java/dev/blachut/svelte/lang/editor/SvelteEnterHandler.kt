@@ -19,7 +19,7 @@ import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
  *
  * Based on Handlebars plugin
  */
-class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
+internal class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
   /**
    * if we are between start and end tags, we ensure the caret ends up in the "logical" place on Enter.
    * i.e. "{#if x}<caret>{/if}" becomes the following on Enter:
