@@ -12,7 +12,7 @@ import com.intellij.util.ProcessingContext
 import com.intellij.xml.util.HtmlUtil
 import java.util.*
 
-class SvelteAttributeValueCompletionProvider : CompletionProvider<CompletionParameters>() {
+internal class SvelteAttributeValueCompletionProvider : CompletionProvider<CompletionParameters>() {
   private val scriptLanguages = scriptLanguages()
   private val styleLanguages = styleLanguages()
 
