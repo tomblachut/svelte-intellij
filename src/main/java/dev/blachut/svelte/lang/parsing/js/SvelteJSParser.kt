@@ -31,14 +31,13 @@ class SvelteJSParser(
 
   override val functionParser: ES6FunctionParser<*> =
     object : ES6FunctionParser<SvelteJSParser>(this@SvelteJSParser) {
-      override fun getParameterType(): IElementType {
-        if (builder.getUserData(markupContextKey) == true) {
-          return SvelteJSElementTypes.PARAMETER
+      override val parameterType: IElementType
+        get() = if (builder.getUserData(markupContextKey) == true) {
+          SvelteJSElementTypes.PARAMETER
         }
         else {
-          return super.getParameterType()
+          super.parameterType
         }
-      }
     }
 
   override fun buildTokenElement(type: IElementType) {
