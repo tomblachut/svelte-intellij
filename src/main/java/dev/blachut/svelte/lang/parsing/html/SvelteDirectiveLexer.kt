@@ -6,7 +6,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlTokenType
 import kotlin.math.min
 
-class SvelteDirectiveLexer : LexerBase() {
+internal class SvelteDirectiveLexer : LexerBase() {
   private var myBuffer: CharSequence = ""
 
   private var myEndOffset = 0
