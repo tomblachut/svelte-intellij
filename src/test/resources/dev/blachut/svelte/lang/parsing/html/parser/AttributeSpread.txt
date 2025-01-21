@@ -57,7 +57,7 @@ SvelteHtmlFile: AttributeSpread.svelte
               PsiElement(JS:DOT_DOT_DOT)('...')
               JSObjectLiteralExpression
                 PsiElement(JS:LBRACE)('{')
-                ES6Property
+                JSProperty
                   JSReferenceExpression
                     PsiElement(JS:IDENTIFIER)('technically')
                 PsiElement(JS:COMMA)(',')

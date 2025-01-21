@@ -72,7 +72,7 @@ SvelteHtmlFile: AttributeUnquoted.svelte
             SvelteJS: ATTRIBUTE_EXPRESSION
               JSObjectLiteralExpression
                 PsiElement(JS:LBRACE)('{')
-                ES6Property
+                JSProperty
                   JSReferenceExpression
                     PsiElement(JS:IDENTIFIER)('option')
                 PsiElement(JS:COMMA)(',')
