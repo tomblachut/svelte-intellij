@@ -1,8 +1,10 @@
 package dev.blachut.svelte.lang.parsing.html
 
+import com.intellij.css.testFramework.CssElementTypeServiceHelper.registerCssElementTypeServices
 import com.intellij.html.embedding.HtmlEmbeddedContentSupport
 import com.intellij.javascript.JSHtmlEmbeddedContentSupport
 import com.intellij.lang.LanguageASTFactory
+import com.intellij.lang.ParserDefinition
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.css.CSSParserDefinition
 import com.intellij.lang.javascript.JSElementTypeServiceHelper.registerJSElementTypeServices
@@ -68,6 +70,11 @@ class SvelteHtmlParserTest : ParsingTestCase(
     //        )
 
     //        registerExtensionPoint(FrameworkIndexingHandler.EP_NAME, FrameworkIndexingHandlerEP::class.java)
+  }
+
+  override fun configureFromParserDefinition(definition: ParserDefinition, extension: String?) {
+    registerCssElementTypeServices(application, testRootDisposable)
+    super.configureFromParserDefinition(definition, extension)
   }
 
   fun testAttributeQuoted() = doTest()
