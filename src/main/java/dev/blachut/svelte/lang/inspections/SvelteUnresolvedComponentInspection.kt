@@ -8,10 +8,14 @@ import com.intellij.lang.javascript.modules.JSSimpleModuleReferenceInfo
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.xml.XmlTag
+import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.isSvelteComponentTag
+import org.jetbrains.annotations.Nls
 
 class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
+  override fun getDisplayName(): @Nls(capitalization = Nls.Capitalization.Sentence) String = SvelteBundle.message("svelte.inspection.unresolved.component.display.name")
+
   override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
     return object : XmlElementVisitor() {
       override fun visitXmlTag(tag: XmlTag) {
