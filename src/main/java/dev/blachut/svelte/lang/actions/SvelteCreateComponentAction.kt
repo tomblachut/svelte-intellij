@@ -13,7 +13,6 @@ import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.hasSvelteFiles
-import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.isSvelteProjectContext
 import icons.SvelteIcons
 

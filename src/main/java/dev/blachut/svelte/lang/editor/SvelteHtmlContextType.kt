@@ -3,12 +3,10 @@ package dev.blachut.svelte.lang.editor
 import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateContextType
 import com.intellij.codeInsight.template.XmlContextType
-import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.psi.util.PsiUtilCore
 import dev.blachut.svelte.lang.SvelteBundle
-import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteHtmlFileType
 
 class SvelteHtmlContextType : TemplateContextType(SvelteBundle.message("svelte.context.html")) {

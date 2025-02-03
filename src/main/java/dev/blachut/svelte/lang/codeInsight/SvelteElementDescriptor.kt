@@ -8,7 +8,6 @@ import com.intellij.xml.XmlElementDescriptor
 import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.impl.dtd.BaseXmlElementDescriptorImpl
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
-import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
 class SvelteElementDescriptor(private val myTag: SvelteHtmlTag) : BaseXmlElementDescriptorImpl(), XmlCustomElementDescriptor {

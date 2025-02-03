@@ -1,7 +1,6 @@
 package dev.blachut.svelte.lang.psi.blocks
 
 import com.intellij.lang.ASTNode
-import com.intellij.lang.javascript.psi.JSDefinitionExpression
 import com.intellij.lang.javascript.psi.JSRecursiveWalkingElementVisitor
 import com.intellij.lang.javascript.psi.JSVarStatement
 import com.intellij.psi.PsiElement
