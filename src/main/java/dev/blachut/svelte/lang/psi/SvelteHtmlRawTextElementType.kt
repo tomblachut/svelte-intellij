@@ -4,7 +4,6 @@ package dev.blachut.svelte.lang.psi
 import com.intellij.html.embedding.HtmlCustomEmbeddedContentTokenType
 import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiBuilder
-import com.intellij.lang.PsiBuilder.Marker
 import com.intellij.lexer.Lexer
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.html.HtmlRawTextImpl
