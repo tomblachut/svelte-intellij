@@ -113,6 +113,7 @@ jvm_library(
     "@community//platform/code-style-impl:codeStyle-impl",
     "@lib//:caffeine",
     "//plugins/JavaScriptLanguage/web-platform:javascript-web",
+    "@community//platform/usageView",
     "@community//platform/testFramework",
     "@community//platform/testFramework:testFramework_test_lib",
     "//plugins/JavaScriptLanguage:javascript-testFramework",
