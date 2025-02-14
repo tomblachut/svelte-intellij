@@ -16,7 +16,7 @@ import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 
 class SvelteHTMLParserDefinition : HTMLParserDefinition() {
-  override fun createLexer(project: Project): Lexer {
+  override fun createLexer(project: Project?): Lexer {
     return SvelteHtmlLexer(false)
   }
 
