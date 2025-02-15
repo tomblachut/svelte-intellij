@@ -5,7 +5,7 @@ import com.intellij.javascript.JSHtmlEmbeddedContentSupport
 import com.intellij.lang.LanguageASTFactory
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.css.CSSParserDefinition
-import com.intellij.lang.javascript.JSElementTypeServiceHelper
+import com.intellij.lang.javascript.JSElementTypeServiceHelper.registerJSElementTypeServices
 import com.intellij.lang.javascript.JavascriptParserDefinition
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.lang.xml.XmlASTFactory
@@ -15,6 +15,7 @@ import com.intellij.psi.css.CssHtmlEmbeddedContentSupport
 import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
 import com.intellij.testFramework.ParsingTestCase
+import com.intellij.xml.XmlElementTypeServiceHelper.registerXmlElementTypeServices
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
@@ -56,7 +57,8 @@ class SvelteHtmlParserTest : ParsingTestCase(
                                         CssHtmlEmbeddedContentSupport::class.java, JSHtmlEmbeddedContentSupport::class.java,
                                         SvelteHtmlEmbeddedContentSupport::class.java)
 
-    JSElementTypeServiceHelper.registerJSElementTypeServices(application, testRootDisposable)
+    registerXmlElementTypeServices(application, testRootDisposable)
+    registerJSElementTypeServices(application, testRootDisposable)
 
     //        registerExtensionPoint(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProvider::class.java)
     //        registerExtension(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProviderImpl())
