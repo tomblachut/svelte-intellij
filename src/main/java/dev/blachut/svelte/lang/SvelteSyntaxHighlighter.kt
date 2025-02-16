@@ -15,7 +15,7 @@ internal class SvelteSyntaxHighlighter : HtmlFileHighlighter() {
     return SvelteHtmlLexer(true)
   }
 
-  override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
+  override fun getTokenHighlights(tokenType: IElementType): Array<out TextAttributesKey> {
     return when (tokenType) {
       SvelteTokenTypes.START_MUSTACHE,
       SvelteTokenTypes.END_MUSTACHE,
