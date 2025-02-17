@@ -15,7 +15,7 @@ import com.intellij.psi.css.CssHtmlEmbeddedContentSupport
 import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
 import com.intellij.testFramework.ParsingTestCase
-import com.intellij.xml.XmlElementTypeServiceHelper.registerXmlElementTypeServices
+import com.intellij.xml.testFramework.XmlElementTypeServiceHelper.registerXmlElementTypeServices
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
