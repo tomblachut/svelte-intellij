@@ -7,6 +7,12 @@ jvm_resources(
   strip_prefix = "src/main/resources"
 )
 
+jvm_resources(
+  name = "svelte_test_resources",
+  files = glob(["src/test/resources/**/*"]),
+  strip_prefix = "src/test/resources"
+)
+
 jvm_library(
   name = "svelte",
   module_name = "intellij.svelte",
@@ -141,7 +147,10 @@ jvm_library(
     "//plugins/JavaScriptLanguage/web-platform:javascript-web-tests_test_lib",
     "@community//xml/testFramework",
   ],
-  runtime_deps = [":svelte_resources"]
+  runtime_deps = [
+    ":svelte_resources",
+    ":svelte_test_resources",
+  ]
 )
 
 jvm_test(
