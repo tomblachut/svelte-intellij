@@ -146,6 +146,8 @@ jvm_library(
     "@community//platform/webSymbols",
     "//plugins/JavaScriptLanguage/web-platform:javascript-web-tests_test_lib",
     "@community//xml/testFramework",
+    "//CSS/frontback/css-psi-impl:css-frontback-psi",
+    "//CSS/testFramework:css-testFramework",
   ],
   runtime_deps = [
     ":svelte_resources",
