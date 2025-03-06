@@ -37,4 +37,6 @@ class SveltePluginTypeScriptService(project: Project) : PluggableTypeScriptServi
 
   override fun createWidgetItem(currentFile: VirtualFile?): LanguageServiceWidgetItem =
     TypeScriptServiceWidgetItem(this, currentFile, SvelteIcons.Original, SvelteIcons.Desaturated, SvelteServiceConfigurable::class.java)
+
+  override fun isTypeEvaluationEnabled(): Boolean = false
 }
