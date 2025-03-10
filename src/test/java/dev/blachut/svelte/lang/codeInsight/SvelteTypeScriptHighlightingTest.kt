@@ -74,7 +74,7 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
 
   fun testViteAlias() {
     val root = myFixture.copyDirectoryToProject(basePath + "/" + getTestName(true), "")
-    createAndSetViteConfig(project, testRootDisposable, "aliasPath", "src", null, root.path)
+    createAndSetViteConfig(project, testRootDisposable, "aliasPath", "dir", null, root.path)
     myFixture.configureFromTempProjectFile(getTestName(false) + ".svelte")
     myFixture.testHighlighting()
     TestCase.assertNotNull(myFixture.findSingleIntention("Insert 'import Other from \"aliasPath/Other.svelte\"'"))
