@@ -1,7 +1,6 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate
-import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler
@@ -19,7 +18,7 @@ import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
  *
  * Based on Handlebars plugin
  */
-internal class SvelteEnterHandler : EnterHandlerDelegateAdapter() {
+internal class SvelteEnterHandler : EnterHandlerDelegate {
   /**
    * if we are between start and end tags, we ensure the caret ends up in the "logical" place on Enter.
    * i.e. "{#if x}<caret>{/if}" becomes the following on Enter:
