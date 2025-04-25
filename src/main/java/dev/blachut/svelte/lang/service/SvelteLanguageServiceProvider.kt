@@ -1,6 +1,6 @@
 package dev.blachut.svelte.lang.service
 
-import com.intellij.lang.javascript.service.JSLanguageServiceProvider
+import com.intellij.lang.typescript.languageService.TypeScriptServiceProvider
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.openapi.Disposable
@@ -11,14 +11,12 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFile
 import dev.blachut.svelte.lang.isSvelteContext
 
-internal class SvelteLanguageServiceProvider(project: Project) : JSLanguageServiceProvider {
+internal class SvelteLanguageServiceProvider(project: Project) : TypeScriptServiceProvider() {
   private val lspService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SvelteLspTypeScriptServiceWrapper>() }
   private val tsService by lazy(LazyThreadSafetyMode.PUBLICATION) { project.service<SveltePluginTypeScriptServiceWrapper>() }
 
   override val allServices: List<TypeScriptService>
     get() = listOf(lspService.service, tsService.service)
-
-  override fun getService(file: VirtualFile): TypeScriptService? = allServices.firstOrNull { it.isAcceptable(file) }
 
   override fun isHighlightingCandidate(file: VirtualFile): Boolean {
     return TypeScriptLanguageServiceUtil.isJavaScriptOrTypeScriptFileType(file.fileType)
