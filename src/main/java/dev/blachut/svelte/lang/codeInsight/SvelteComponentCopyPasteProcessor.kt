@@ -29,6 +29,7 @@ import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 import java.awt.datatransfer.DataFlavor
+import java.util.concurrent.Future
 import kotlin.Pair
 import com.intellij.openapi.util.Pair as OpenApiPair
 
@@ -97,8 +98,8 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
     return result
   }
 
-  override fun createTransferableData(importedElements: ArrayList<ImportedElement>): SvelteComponentImportsTransferableData =
-    SvelteComponentImportsTransferableData(importedElements)
+  override fun createTransferableData(importedElementsFuture: Future<List<ImportedElement>>): SvelteComponentImportsTransferableData =
+    SvelteComponentImportsTransferableData(importedElementsFuture)
 
   override fun insertRequiredImports(pasteContext: PsiElement,
                                      data: SvelteComponentImportsTransferableData,
@@ -108,7 +109,7 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
     ES6CreateImportUtil.addRequiredImports(destinationModule, pasteContextLanguage, imports)
   }
 
-  class SvelteComponentImportsTransferableData(list: ArrayList<ImportedElement>) : ES6ImportsTransferableDataBase(list) {
+  class SvelteComponentImportsTransferableData(importedElementsFuture: Future<List<ImportedElement>>) : ES6ImportsTransferableDataBase(importedElementsFuture) {
     override fun getFlavor(): DataFlavor {
       return SVELTE_COMPONENT_IMPORTS_FLAVOR
     }
