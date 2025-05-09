@@ -24,8 +24,8 @@ import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 import dev.blachut.svelte.lang.codeInsight.SvelteTemplateExpressionsCopyPasteProcessor.SvelteTemplateExpressionsImportsTransferableData
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
+import kotlinx.coroutines.Deferred
 import java.awt.datatransfer.DataFlavor
-import java.util.concurrent.Future
 
 class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteTemplateExpressionsImportsTransferableData>() {
 
@@ -59,8 +59,8 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
     return result || parent.parents(true).any { it is JSEmbeddedContentImpl }
   }
 
-  override fun createTransferableData(importedElementsFuture: Future<List<ImportedElement>>): SvelteTemplateExpressionsImportsTransferableData =
-    SvelteTemplateExpressionsImportsTransferableData(importedElementsFuture)
+  override fun createTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>): SvelteTemplateExpressionsImportsTransferableData =
+    SvelteTemplateExpressionsImportsTransferableData(importedElementsDeferred)
 
   override fun getExportScope(file: PsiFile, caret: Int): PsiElement? =
     super.getExportScope(file, caret)
@@ -79,7 +79,7 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
     }
   }
 
-  class SvelteTemplateExpressionsImportsTransferableData(importedElementsFuture: Future<List<ImportedElement>>) : ES6ImportsTransferableDataBase(importedElementsFuture) {
+  class SvelteTemplateExpressionsImportsTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>) : ES6ImportsTransferableDataBase(importedElementsDeferred) {
     override fun getFlavor(): DataFlavor {
       return SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR
     }
