@@ -19,6 +19,7 @@ jvm_library(
   visibility = ["//visibility:public"],
   srcs = glob(["src/main/java/**/*.kt", "src/main/java/**/*.java", "src/main/gen/**/*.kt", "src/main/gen/**/*.java"], allow_empty = True),
   deps = [
+    "@community//platform/editor-ui-api:editor-ui",
     "@community//platform/platform-api:ide",
     "@community//platform/ide-core-impl",
     "@lib//:kotlin-stdlib",
@@ -49,7 +50,6 @@ jvm_library(
     "//CSS:css",
     "@community//platform/built-in-server:builtInServer-impl",
     "//webcore/impl",
-    "//contrib/prettierJS",
     "@lib//:jackson",
     "@lib//:jackson-databind",
     "@lib//:commons-compress",
@@ -74,6 +74,7 @@ jvm_library(
   srcs = glob(["src/test/java/**/*.kt", "src/test/java/**/*.java"], allow_empty = True),
   associates = [":svelte"],
   deps = [
+    "@community//platform/editor-ui-api:editor-ui",
     "@community//platform/platform-api:ide",
     "@community//platform/ide-core-impl",
     "@lib//:kotlin-stdlib",
@@ -108,8 +109,6 @@ jvm_library(
     "//CSS:css",
     "@community//platform/built-in-server:builtInServer-impl",
     "//webcore/impl",
-    "//contrib/prettierJS",
-    "//contrib/prettierJS:prettierJS_test_lib",
     "@lib//:jackson",
     "@lib//:jackson-databind",
     "@lib//:commons-compress",
