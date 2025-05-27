@@ -1,4 +1,4 @@
-<idea-plugin url="https://github.com/tomblachut/svelte-intellij">
+<idea-plugin allow-bundled-update="true">
   <id>dev.blachut.svelte.lang</id>
   <name>Svelte</name>
   <category>JavaScript Frameworks and Tools</category>
