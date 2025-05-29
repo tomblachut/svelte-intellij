@@ -8,8 +8,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
-import com.intellij.webSymbols.context.PolyContext
-import com.intellij.webSymbols.context.PolyContext.Companion.KIND_FRAMEWORK
+import com.intellij.polySymbols.context.PolyContext
+import com.intellij.polySymbols.context.PolyContext.Companion.KIND_FRAMEWORK
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
