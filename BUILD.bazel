@@ -64,7 +64,7 @@ jvm_library(
     "//platform/lsp-impl",
     "@ultimate_lib//:eclipse-lsp4j",
     "@ultimate_lib//:eclipse-lsp4j-jsonrpc",
-    "@community//platform/webSymbols",
+    "@community//platform/polySymbols",
   ],
   runtime_deps = [":svelte_resources"]
 )
@@ -144,7 +144,7 @@ jvm_library(
     "@ultimate_lib//:eclipse-lsp4j-jsonrpc",
     "//plugins/vitejs",
     "//plugins/vitejs:vitejs_test_lib",
-    "@community//platform/webSymbols",
+    "@community//platform/polySymbols",
     "//plugins/JavaScriptLanguage/web-platform:javascript-web-tests_test_lib",
     "@community//xml/testFramework",
     "//CSS/frontback/css-psi-impl:css-frontback-psi",
