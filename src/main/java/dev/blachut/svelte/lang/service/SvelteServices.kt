@@ -3,11 +3,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.javascript.nodejs.util.NodePackageRef
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
-import com.intellij.lang.typescript.lsp.JSServiceSetActivationRule
-import com.intellij.lang.typescript.lsp.LspServerLoader
-import com.intellij.lang.typescript.lsp.LspServerPackageDescriptor
-import com.intellij.lang.typescript.lsp.PackageVersion
-import com.intellij.lang.typescript.lsp.TSPluginLoader
+import com.intellij.lang.typescript.lsp.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.registry.Registry
 import com.intellij.openapi.vfs.VirtualFile
@@ -52,13 +48,17 @@ object SvelteTSPluginLoader : TSPluginLoader(SvelteTSPluginPackageDescriptor) {
   }
 }
 
-object SvelteServiceSetActivationRule : JSServiceSetActivationRule(SvelteLspServerLoader, SvelteTSPluginLoader) {
-  override fun isFileAcceptableForLspServer(file: VirtualFile): Boolean {
+object SvelteTSPluginActivationRule : TSPluginActivationRule(SvelteTSPluginLoader, SvelteActivationHelper)
+
+object SvelteLspServerActivationRule : LspServerActivationRule(SvelteLspServerLoader, SvelteActivationHelper) {
+  override fun isFileAcceptable(file: VirtualFile): Boolean {
     if (!TypeScriptLanguageServiceUtil.IS_VALID_FILE_FOR_SERVICE.value(file)) return false
 
     return isSvelteContext(file)
   }
+}
 
+private object SvelteActivationHelper : ServiceActivationHelper {
   override fun isProjectContext(project: Project, context: VirtualFile): Boolean {
     return isSvelteProjectContext(project, context)
   }

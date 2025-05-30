@@ -12,7 +12,7 @@ import com.intellij.platform.lang.lsWidget.LanguageServiceWidgetItem
 import dev.blachut.svelte.lang.service.settings.SvelteServiceConfigurable
 import icons.SvelteIcons
 
-private val plugin = DownloadableTypeScriptServicePlugin("Svelte", SvelteServiceSetActivationRule)
+private val plugin = DownloadableTypeScriptServicePlugin("Svelte", SvelteTSPluginActivationRule)
 
 class SveltePluginTypeScriptService(project: Project) : PluggableTypeScriptService(project, plugin) {
   override fun getProcessName(): String =

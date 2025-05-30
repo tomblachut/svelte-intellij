@@ -18,7 +18,7 @@ import org.eclipse.lsp4j.Diagnostic
  * @see SvelteLspServerDescriptor
  */
 class SvelteLspTypeScriptService(project: Project)
-  : JSFrameworkLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java, SvelteServiceSetActivationRule) {
+  : JSFrameworkLspTypeScriptService(project, SvelteLspServerSupportProvider::class.java, SvelteLspServerActivationRule) {
   override val name = "Svelte LSP"
   override val prefix = "Svelte"
 
