@@ -8,6 +8,7 @@
   <depends>com.intellij.modules.xml</depends>
   <depends>JavaScript</depends>
   <depends>com.intellij.css</depends>
+  <depends>com.intellij.modules.spellchecker</depends>
   <depends optional="true" config-file="svelte-js-debugger.xml">JavaScriptDebugger</depends>
 
   <description><![CDATA[
