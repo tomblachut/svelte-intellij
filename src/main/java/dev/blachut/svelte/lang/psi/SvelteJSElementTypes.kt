@@ -2,8 +2,6 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.javascript.JSCompositeElementType
-import com.intellij.lang.javascript.psi.stubs.JSEmbeddedContentStub
-import com.intellij.lang.javascript.psi.stubs.JSParameterStub
 import com.intellij.lang.javascript.types.*
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
@@ -15,16 +13,14 @@ object SvelteJSElementTypes {
 
   val CONST_TAG_VARIABLE: JSVariableElementType = object : JSVariableElementType("CONST_TAG_VARIABLE") {
     override fun construct(node: ASTNode): PsiElement = SvelteJSConstTagVariable(node)
-    override fun shouldCreateStub(node: ASTNode): Boolean = false
 
-    override fun getExternalId(): String = "Svelte$debugName"
+    override fun toString(): String = "Svelte$debugName"
   }
 
   val PARAMETER = object : JSParameterElementType("EMBEDDED_PARAMETER") {
     override fun construct(node: ASTNode) = SvelteJSParameter(node)
-    override fun createPsi(stub: JSParameterStub) = SvelteJSParameter(stub, this)
 
-    override fun getExternalId(): String = "Svelte$debugName"
+    override fun toString(): String = "Svelte$debugName"
   }
 
   val REFERENCE_EXPRESSION: IElementType = object : JSCompositeElementType("SVELTE_JS_REFERENCE_EXPRESSION"), JSExpressionElementType {
@@ -38,7 +34,6 @@ object SvelteJSElementTypes {
     override fun toModule() = this
 
     override fun construct(node: ASTNode) = SvelteJSEmbeddedContentImpl(node)
-    override fun createPsi(stub: JSEmbeddedContentStub) = SvelteJSEmbeddedContentImpl(stub, this)
   }
 
   val EMBEDDED_CONTENT_MODULE_TS = object : TypeScriptEmbeddedContentElementType(SvelteTypeScriptLanguage.INSTANCE, "MOD_SVELTE_TS_") {
@@ -46,6 +41,5 @@ object SvelteJSElementTypes {
     override fun toModule() = this
 
     override fun construct(node: ASTNode) = SvelteJSEmbeddedContentImpl(node)
-    override fun createPsi(stub: JSEmbeddedContentStub) = SvelteJSEmbeddedContentImpl(stub, this)
   }
 }

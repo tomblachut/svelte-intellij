@@ -2,13 +2,9 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.javascript.JSStubElementTypes
-import com.intellij.lang.javascript.psi.JSDefinitionExpression
-import com.intellij.lang.javascript.psi.JSElementVisitor
-import com.intellij.lang.javascript.psi.JSExpressionStatement
-import com.intellij.lang.javascript.psi.JSLabeledStatement
+import com.intellij.lang.javascript.psi.*
 import com.intellij.lang.javascript.psi.impl.JSEmbeddedContentImpl
 import com.intellij.lang.javascript.psi.stubs.JSEmbeddedContentStub
-import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.PsiScopeProcessor
@@ -16,7 +12,7 @@ import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
 class SvelteJSEmbeddedContentImpl : JSEmbeddedContentImpl {
   constructor(node: ASTNode) : super(node)
-  constructor(stub: JSEmbeddedContentStub, type: JSEmbeddedContentElementType) : super(stub, type)
+  constructor(stub: JSEmbeddedContentStub, type: JSElementType<JSEmbeddedContent>) : super(stub, type)
 
   override fun processDeclarations(
     processor: PsiScopeProcessor,
