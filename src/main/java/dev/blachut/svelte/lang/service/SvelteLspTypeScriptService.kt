@@ -4,6 +4,7 @@ package dev.blachut.svelte.lang.service
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
+import com.intellij.lang.typescript.lsp.JSFrameworkLspAnnotationErrorFilter
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
 import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilter
 import com.intellij.openapi.project.Project
@@ -41,10 +42,10 @@ class SvelteLspTypeScriptService(project: Project)
     return TypeScriptLanguageServiceUtil.getMergeStrategyForPosition(context, isJavaScript)
   }
 
-  override fun createAnnotationErrorFilter() = SvelteLspAnnotationErrorFilter(project)
+  override fun createAnnotationErrorFilter(): LspAnnotationErrorFilter = SvelteLspAnnotationErrorFilter(project)
 }
 
-class SvelteLspAnnotationErrorFilter(project: Project) : LspAnnotationErrorFilter(project) {
+private class SvelteLspAnnotationErrorFilter(project: Project) : JSFrameworkLspAnnotationErrorFilter(project) {
   private val showA11yWarnings = getSvelteServiceSettings(project).showA11yWarnings
 
   override fun isProblemEnabled(diagnostic: Diagnostic): Boolean {
