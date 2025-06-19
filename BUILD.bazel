@@ -21,6 +21,7 @@ jvm_library(
   srcs = glob(["src/main/java/**/*.kt", "src/main/java/**/*.java", "src/main/gen/**/*.kt", "src/main/gen/**/*.java"], allow_empty = True),
   deps = [
     "@community//platform/analysis-api:analysis",
+    "@community//platform/code-style-api:codeStyle",
     "@community//platform/editor-ui-api:editor-ui",
     "@community//platform/platform-api:ide",
     "@community//platform/ide-core-impl",
@@ -79,6 +80,7 @@ jvm_library(
   associates = [":svelte"],
   deps = [
     "@community//platform/analysis-api:analysis",
+    "@community//platform/code-style-api:codeStyle",
     "@community//platform/editor-ui-api:editor-ui",
     "@community//platform/platform-api:ide",
     "@community//platform/ide-core-impl",
