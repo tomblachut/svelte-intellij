@@ -52,7 +52,6 @@
                            implementationClass="dev.blachut.svelte.lang.parsing.html.SvelteHTMLParserDefinition"/>
     <lang.ast.factory language="SvelteHTML"
                       implementationClass="dev.blachut.svelte.lang.parsing.html.SvelteHtmlASTFactory"/>
-    <stubElementTypeHolder class="dev.blachut.svelte.lang.psi.SvelteJSElementTypes"/>
     <stubElementRegistryExtension implementation="dev.blachut.svelte.lang.stubs.SvelteStubRegistryExtension"/>
     <lang.braceMatcher language="SvelteHTML"
                        implementationClass="dev.blachut.svelte.lang.editor.SvelteBraceMatcher"/>
