@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.index
 
 import com.intellij.lang.Language
 import com.intellij.lang.html.HTMLLanguage
+import com.intellij.lang.javascript.JSElementTypes
 import com.intellij.lang.javascript.JSKeywordSets
 import com.intellij.lang.javascript.JSLexerUtil
 import com.intellij.lang.javascript.JSTokenTypes
@@ -87,7 +88,7 @@ internal class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, origina
     )
 
     private val COMMENTS = orSet(
-      JSTokenTypes.COMMENTS,
+      JSElementTypes.COMMENTS,
       create(XmlTokenType.XML_COMMENT_CHARACTERS)
     )
 

@@ -1,6 +1,6 @@
 package dev.blachut.svelte.lang.psi
 
-import com.intellij.lang.javascript.JSStubElementTypes
+import com.intellij.lang.javascript.JSElementTypes
 import com.intellij.lang.javascript.psi.JSNamedElement
 import com.intellij.lang.javascript.psi.JSParameter
 import com.intellij.lang.javascript.psi.JSVariable
@@ -72,7 +72,7 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
 
     val jsNode = SPREAD_OR_SHORTHAND_FINDER.findChild(firstChildNode) ?: return ""
 
-    return if (jsNode.firstChildNode.elementType === JSStubElementTypes.SPREAD_EXPRESSION) {
+    return if (jsNode.firstChildNode.elementType === JSElementTypes.SPREAD_EXPRESSION) {
       "<spread>"
     }
     else {

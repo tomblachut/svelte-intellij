@@ -1,7 +1,7 @@
 package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.lang.javascript.JSStubElementTypes
+import com.intellij.lang.javascript.JSElementTypes
 import com.intellij.lang.javascript.psi.*
 import com.intellij.lang.javascript.psi.impl.JSEmbeddedContentImpl
 import com.intellij.lang.javascript.psi.stubs.JSEmbeddedContentStub
@@ -39,7 +39,7 @@ class SvelteJSEmbeddedContentImpl : JSEmbeddedContentImpl {
           val expression = (labeledStatement.statement as JSExpressionStatement).expression ?: return
 
           val definition =
-            expression.node.findChildByType(JSStubElementTypes.DEFINITION_EXPRESSION)?.psi as JSDefinitionExpression?
+            expression.node.findChildByType(JSElementTypes.DEFINITION_EXPRESSION)?.psi as JSDefinitionExpression?
             ?: return
 
           if (!processor.execute(definition, ResolveState.initial())) {
