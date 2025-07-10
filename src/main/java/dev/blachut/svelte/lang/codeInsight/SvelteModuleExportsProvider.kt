@@ -11,7 +11,7 @@ class SvelteModuleExportsProvider : JSModuleExportsProvider {
     return true
   }
 
-  override fun getAdditionalScopes(scope: PsiElement): Collection<PsiElement> {
+  override fun getAdditionalScopes(scope: PsiElement, visited: MutableCollection<PsiElement>): Collection<PsiElement> {
     if (scope !is SvelteHtmlFile) return emptyList()
 
     return listOfNotNull(getJsEmbeddedContent(scope.moduleScript))
