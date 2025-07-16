@@ -92,8 +92,9 @@ class SvelteEditorTest : BasePlatformTestCase() {
   fun testFoldingEditorFold() {
     try {
       // some plugins contribute additional builders for XMLLanguage.INSTANCE,
-      // that leads to (buggy) usage of CompositeFoldingBuilder: XML uses CompositeFoldingBuilder, but Svelte does not
-      // let's encode this problem in tests
+      // that leads to XML using CompositeFoldingBuilder, which we mock here;
+      // with the addition of LSP Folding support, Svelte started to also use CompositeFoldingBuilder,
+      // which actually fixes bugs around CompositeFoldingBuilder interop with multi-language trees.
       LanguageFolding.INSTANCE.addExplicitExtension(XMLLanguage.INSTANCE, fakeFoldingBuilder)
       doTestFolding()
     }
