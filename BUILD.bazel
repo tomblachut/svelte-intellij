@@ -1,6 +1,5 @@
 ### auto-generated section `build intellij.svelte` start
-load("@community//build:tests-options.bzl", "jps_test")
-load("@rules_jvm//:jvm.bzl", "jvm_library", "jvm_resources", "jvm_test")
+load("@rules_jvm//:jvm.bzl", "jvm_library", "jvm_resources")
 
 jvm_resources(
   name = "svelte_resources",
@@ -156,9 +155,13 @@ jvm_library(
     ":svelte_test_resources",
   ]
 )
+### auto-generated section `build intellij.svelte` end
+
+### auto-generated section `test intellij.svelte` start
+load("@community//build:tests-options.bzl", "jps_test")
 
 jps_test(
   name = "svelte_test",
   runtime_deps = [":svelte_test_lib"]
 )
-### auto-generated section `build intellij.svelte` end
+### auto-generated section `test intellij.svelte` end
