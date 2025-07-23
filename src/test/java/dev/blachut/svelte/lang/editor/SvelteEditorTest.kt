@@ -7,7 +7,6 @@ import com.intellij.lang.folding.LanguageFolding
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.openapi.editor.Document
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import org.jetbrains.annotations.NotNull
 
@@ -32,25 +31,22 @@ class SvelteEditorTest : BasePlatformTestCase() {
   fun testEnterBetweenSvelteTags() {
     myFixture.configureByText("Foo.svelte", "{#if test}<caret>{/if}")
     myFixture.type('\n')
-    myFixture.checkResult(
-      """
-                {#if test}
-                    <caret>
-                {/if}
-                """.trimIndent()
+    myFixture.checkResult("""
+      {#if test}
+          <caret>
+      {/if}
+    """.trimIndent()
     )
   }
 
   fun testEnterBetweenHtmlTags() {
     myFixture.configureByText("Foo.svelte", "<div><caret></div>")
     myFixture.type('\n')
-    myFixture.checkResult(
-      """
-                <div>
-                    <caret>
-                </div>
-                """.trimIndent()
-    )
+    myFixture.checkResult("""
+      <div>
+          <caret>
+      </div>
+    """.trimIndent())
   }
 
   fun testCompleteSvelteTag() {
