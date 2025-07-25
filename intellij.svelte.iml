@@ -20,7 +20,7 @@
     <orderEntry type="module" module-name="intellij.platform.ide.core.impl" />
     <orderEntry type="library" name="kotlin-stdlib" level="project" />
     <orderEntry type="module" module-name="intellij.platform.ide.impl" />
-    <orderEntry type="module" module-name="intellij.css.frontback" />
+    <orderEntry type="module" module-name="intellij.css.common" />
     <orderEntry type="module" module-name="intellij.platform.indexing" />
     <orderEntry type="module" module-name="intellij.platform.projectModel" />
     <orderEntry type="module" module-name="intellij.xml.parser" />
@@ -75,7 +75,7 @@
     <orderEntry type="module" module-name="intellij.platform.polySymbols" />
     <orderEntry type="module" module-name="intellij.javascript.web.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.testFramework" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.css.frontback.psi" scope="TEST" />
+    <orderEntry type="module" module-name="intellij.css.common.psi" scope="TEST" />
     <orderEntry type="module" module-name="intellij.css.testFramework" scope="TEST" />
   </component>
 </module>
