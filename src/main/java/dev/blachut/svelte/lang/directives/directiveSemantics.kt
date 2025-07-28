@@ -9,7 +9,7 @@ import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
 import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
-import com.intellij.psi.css.impl.util.table.CssDescriptorsUtil
+import com.intellij.psi.css.impl.util.table.CssDescriptorsUtilCore
 import com.intellij.psi.css.resolve.HtmlCssClassOrIdReference
 import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl
 import com.intellij.psi.impl.source.resolve.ResolveCache
@@ -121,7 +121,7 @@ class ScopeAndClassReference(attribute: SvelteHtmlAttribute, rangeInElement: Tex
                             getClassReference(attribute, rangeInElement)), attribute)
 
 fun getClassReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange): PsiReference {
-  val descriptorProvider = CssDescriptorsUtil.findDescriptorProvider(attribute)!!
+  val descriptorProvider = CssDescriptorsUtilCore.findDescriptorProvider(attribute)!!
   return descriptorProvider.getStyleReference(attribute, rangeInElement.startOffset, rangeInElement.endOffset, true)
 }
 
@@ -132,7 +132,7 @@ fun getClassCompletions(attribute: SvelteHtmlAttribute, parameters: CompletionPa
 
   if (reference == null) {
     val rangeInElement = attribute.directive!!.specifiers[0].rangeInName
-    val descriptorProvider = CssDescriptorsUtil.findDescriptorProvider(attribute)!!
+    val descriptorProvider = CssDescriptorsUtilCore.findDescriptorProvider(attribute)!!
     reference = descriptorProvider.getStyleReference(
       attribute,
       rangeInElement.startOffset,
