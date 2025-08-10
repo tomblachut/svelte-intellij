@@ -76,5 +76,6 @@
     <orderEntry type="module" module-name="intellij.css.common.psi" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass.backend" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass" scope="TEST" />
+    <orderEntry type="module" module-name="intellij.sass.common" scope="TEST" />
   </component>
 </module>

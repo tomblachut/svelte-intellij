@@ -145,6 +145,7 @@ jvm_library(
     "//plugins/css/common/psi",
     "//plugins/sass/backend",
     "//plugins/sass",
+    "//plugins/sass/common",
   ],
   runtime_deps = [
     ":svelte_resources",
