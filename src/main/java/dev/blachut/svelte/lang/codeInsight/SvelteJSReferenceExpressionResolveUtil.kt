@@ -1,10 +1,10 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.javascript.dialects.JSDialectSpecificHandlersFactory
 import com.intellij.lang.javascript.index.JSSymbolUtil
 import com.intellij.lang.javascript.psi.JSExpression
 import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl
+import com.intellij.lang.javascript.psi.resolve.JSReferenceExpressionResolver
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.lang.javascript.psi.resolve.ResolveResultSink
 import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
@@ -44,7 +44,7 @@ abstract class SvelteInnerReferenceExpressionResolver(
     if (isSingleDollarPrefixedName(myReferencedName) && myQualifier == null) {
       val storeName = removeSingleDollarPrefixUnchecked(myReferencedName!!)
 
-      val processor = JSDialectSpecificHandlersFactory.forElement(expression).createResolveProcessor(storeName, expression, incompleteCode)
+      val processor = JSReferenceExpressionResolver.createResolveProcessor(storeName, expression, incompleteCode)
       JSReferenceExpressionImpl.doProcessLocalDeclarations(expression, null, processor, false, false, null)
 
       return processor.resultsAsResolveResults
