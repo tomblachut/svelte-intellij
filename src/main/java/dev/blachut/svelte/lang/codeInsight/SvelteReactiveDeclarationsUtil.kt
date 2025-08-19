@@ -67,7 +67,7 @@ object SvelteReactiveDeclarationsUtil {
     if (element is JSDefinitionExpression) {
       val labeledStatement = element.parentOfType<JSLabeledStatement>()
       if (labeledStatement != null && labeledStatement.label == REACTIVE_LABEL) {
-        return resultSink.addResult(element, state, placeTopParent)
+        return getResultSink().addResult(element, state, placeTopParent)
       }
     }
 
