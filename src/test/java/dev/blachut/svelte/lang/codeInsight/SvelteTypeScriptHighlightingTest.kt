@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.vite.createAndSetViteConfig
 import dev.blachut.svelte.lang.getSvelteTestDataPath
-import junit.framework.TestCase
 
 class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
   override fun getTestDataPath(): String = getSvelteTestDataPath()
@@ -63,7 +62,7 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
     myFixture.copyDirectoryToProject(basePath + "/" + getTestName(true), "")
     myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
     myFixture.testHighlighting()
-    TestCase.assertNotNull(myFixture.findSingleIntention("Insert 'import Counter from \"\$lib/Counter.svelte\"'"))
+    assertNotNull(myFixture.findSingleIntention("Insert 'import Counter from \"\$lib/Counter.svelte\"'"))
   }
 
   fun testTsOverSvelte() {
@@ -77,7 +76,15 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
     createAndSetViteConfig(project, testRootDisposable, "aliasPath", "dir", null, root.path)
     myFixture.configureFromTempProjectFile(getTestName(false) + ".svelte")
     myFixture.testHighlighting()
-    TestCase.assertNotNull(myFixture.findSingleIntention("Insert 'import Other from \"aliasPath/Other.svelte\"'"))
+    assertNotNull(myFixture.findSingleIntention("Insert 'import Other from \"aliasPath/Other.svelte\"'"))
+  }
+
+  fun testViteAliasWithExtension() {
+    val root = myFixture.copyDirectoryToProject(basePath + "/" + getTestName(true), "")
+    createAndSetViteConfig(project, testRootDisposable, "aliasPath", "dir", listOf(".svelte"), root.path)
+    myFixture.configureFromTempProjectFile(getTestName(false) + ".svelte")
+    myFixture.testHighlighting()
+    assertNotNull(myFixture.findSingleIntention("Insert 'import Other from \"aliasPath/Other.svelte\"'"))
   }
 
 }
