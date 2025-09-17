@@ -6,6 +6,7 @@
 
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.xml</depends>
+  <depends>com.intellij.modules.ultimate</depends>
   <depends>JavaScript</depends>
   <depends>com.intellij.css</depends>
   <depends>com.intellij.modules.spellchecker</depends>
