@@ -24,10 +24,10 @@ private class SvelteStubRegistryExtension : StubRegistryExtension {
       SvelteParameterStubSerializer(),
 
       SvelteEmbeddedContentModuleStubFactory { EMBEDDED_CONTENT_MODULE },
-      JSEmbeddedContentStubSerializer(EMBEDDED_CONTENT_MODULE),
+      JSEmbeddedContentStubSerializer { EMBEDDED_CONTENT_MODULE },
 
       SvelteEmbeddedContentModuleStubFactory { EMBEDDED_CONTENT_MODULE_TS },
-      JSEmbeddedContentStubSerializer(EMBEDDED_CONTENT_MODULE_TS),
+      JSEmbeddedContentStubSerializer { EMBEDDED_CONTENT_MODULE_TS },
     ).forEach(registry::register)
   }
 }
