@@ -8,7 +8,7 @@ import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.PARAMETER
 
-class SvelteParameterStubSerializer : JSStubSerializer<JSParameterStub, JSParameter>(PARAMETER) {
+internal class SvelteParameterStubSerializer : JSStubSerializer<JSParameterStub, JSParameter>({ PARAMETER }) {
   override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): JSParameterStub =
     JSParameterStubImpl(dataStream, parentStub, elementType)
 }
