@@ -10,7 +10,7 @@ import dev.blachut.svelte.lang.parsing.ts.SVELTETS_FILE
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE_TS
 
-class SvelteStubRegistryExtension : StubRegistryExtension {
+private class SvelteStubRegistryExtension : StubRegistryExtension {
   override fun register(registry: StubRegistry) {
     listOf(
       SVELTEJS_FILE,
@@ -23,10 +23,10 @@ class SvelteStubRegistryExtension : StubRegistryExtension {
       SvelteParameterStubFactory(),
       SvelteParameterStubSerializer(),
 
-      SvelteEmbeddedContentModuleStubFactory(EMBEDDED_CONTENT_MODULE),
+      SvelteEmbeddedContentModuleStubFactory { EMBEDDED_CONTENT_MODULE },
       JSEmbeddedContentStubSerializer(EMBEDDED_CONTENT_MODULE),
 
-      SvelteEmbeddedContentModuleStubFactory(EMBEDDED_CONTENT_MODULE_TS),
+      SvelteEmbeddedContentModuleStubFactory { EMBEDDED_CONTENT_MODULE_TS },
       JSEmbeddedContentStubSerializer(EMBEDDED_CONTENT_MODULE_TS),
     ).forEach(registry::register)
   }
