@@ -9,7 +9,7 @@ import com.intellij.psi.stubs.StubElement
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.PARAMETER
 import dev.blachut.svelte.lang.psi.SvelteJSParameter
 
-class SvelteParameterStubFactory : JSStubFactory<JSParameterStub, JSParameter>(PARAMETER) {
+internal class SvelteParameterStubFactory : JSStubFactory<JSParameterStub, JSParameter>(PARAMETER) {
   override fun createStub(psi: JSParameter, parentStub: StubElement<out PsiElement>?): JSParameterStub =
     JSParameterStubImpl(psi, parentStub, elementType, 0)
 

@@ -8,7 +8,7 @@ import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 
-object SvelteJSElementTypes {
+internal object SvelteJSElementTypes {
   const val STUB_VERSION = 2
 
   val CONST_TAG_VARIABLE: JSVariableElementType = object : JSVariableElementType("CONST_TAG_VARIABLE") {
