@@ -147,10 +147,7 @@ jvm_library(
     "//plugins/sass",
     "//plugins/sass/common",
   ],
-  runtime_deps = [
-    ":svelte_resources",
-    ":svelte_test_resources",
-  ]
+  runtime_deps = [":svelte_test_resources"]
 )
 ### auto-generated section `build intellij.svelte` end
 
