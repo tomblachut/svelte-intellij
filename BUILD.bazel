@@ -1,15 +1,15 @@
 ### auto-generated section `build intellij.svelte` start
-load("@rules_jvm//:jvm.bzl", "jvm_library", "jvm_resources")
+load("@rules_jvm//:jvm.bzl", "jvm_library", "resourcegroup")
 
-jvm_resources(
+resourcegroup(
   name = "svelte_resources",
-  files = glob(["src/main/resources/**/*"]),
+  srcs = glob(["src/main/resources/**/*"]),
   strip_prefix = "src/main/resources"
 )
 
-jvm_resources(
+resourcegroup(
   name = "svelte_test_resources",
-  files = glob(["src/test/resources/**/*"]),
+  srcs = glob(["src/test/resources/**/*"]),
   strip_prefix = "src/test/resources"
 )
 
@@ -18,6 +18,7 @@ jvm_library(
   module_name = "intellij.svelte",
   visibility = ["//visibility:public"],
   srcs = glob(["src/main/java/**/*.kt", "src/main/java/**/*.java", "src/main/java/**/*.form", "src/main/gen/**/*.kt", "src/main/gen/**/*.java"], allow_empty = True),
+  resources = [":svelte_resources"],
   deps = [
     "@community//platform/analysis-api:analysis",
     "@community//platform/code-style-api:codeStyle",
@@ -64,14 +65,14 @@ jvm_library(
     "@ultimate_lib//:eclipse-lsp4j",
     "@ultimate_lib//:eclipse-lsp4j-jsonrpc",
     "@community//platform/polySymbols",
-  ],
-  runtime_deps = [":svelte_resources"]
+  ]
 )
 
 jvm_library(
   name = "svelte_test_lib",
   visibility = ["//visibility:public"],
   srcs = glob(["src/test/java/**/*.kt", "src/test/java/**/*.java", "src/test/java/**/*.form"], allow_empty = True),
+  resources = [":svelte_test_resources"],
   associates = [":svelte"],
   deps = [
     "@community//platform/analysis-api:analysis",
@@ -146,8 +147,7 @@ jvm_library(
     "//plugins/sass/backend",
     "//plugins/sass",
     "//plugins/sass/common",
-  ],
-  runtime_deps = [":svelte_test_resources"]
+  ]
 )
 ### auto-generated section `build intellij.svelte` end
 
