@@ -65,7 +65,7 @@
     <orderEntry type="module" module-name="intellij.stylus" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.lsp.testFramework" scope="TEST" />
-    <orderEntry type="library" name="fastutil-min" level="project" />
+    <orderEntry type="module" module-name="intellij.libraries.fastutil" />
     <orderEntry type="module" module-name="intellij.platform.lsp.impl" />
     <orderEntry type="library" name="eclipse.lsp4j" level="project" />
     <orderEntry type="library" name="eclipse.lsp4j.jsonrpc" level="project" />
