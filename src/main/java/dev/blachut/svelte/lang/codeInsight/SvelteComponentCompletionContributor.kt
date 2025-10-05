@@ -6,6 +6,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.javascript.completion.JSImportCompletionUtil
 import com.intellij.lang.javascript.dialects.JSHandlersFactory
 import com.intellij.lang.javascript.frameworks.jsx.JSXComponentCompletionContributor
+import com.intellij.lang.javascript.modules.imports.JSAutoImportSupport
 import com.intellij.lang.javascript.modules.imports.JSImportCandidate
 import com.intellij.lang.javascript.modules.imports.providers.ES6ExportedCandidatesProviderBase
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
@@ -71,6 +72,7 @@ class SvelteComponentCompletionContributor : CompletionContributor() {
   }
 
   private fun addExportedComponents(result: CompletionResultSet, tag: XmlTag, localNames: Set<String?>) {
+    val autoImportSupport = JSAutoImportSupport.getInstance(tag.project)
     val prefixMatcher = result.prefixMatcher
     val info = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
     val providers = JSImportCandidatesProvider.getProviders(info)
@@ -80,7 +82,7 @@ class SvelteComponentCompletionContributor : CompletionContributor() {
     JSImportCompletionUtil.processExportedElements(tag, providers, keyFilter) { candidates, name ->
       val importCandidate = if (candidates.size == 1) candidates.firstOrNull() else null
       val element = importCandidate?.element
-      val lookup = createLookup(name, importCandidate, element, JSImportCompletionUtil.TAG_IMPORT_INSERT_HANDLER)
+      val lookup = createLookup(name, importCandidate, element, autoImportSupport.getTagImportInsertHandler(importCandidate))
       result.addElement(lookup)
       true
     }
