@@ -715,27 +715,27 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testReactiveLabelKeywordJS() {
     myFixture.configureByText("Foo.svelte", """
       <script>
-        <info descr="reactive">$</info>: {
-          break <info descr="reactive">$</info>;
+        <symbolName descr="reactive">$</symbolName>: {
+          break <symbolName descr="reactive">$</symbolName>;
         }
         
-        <info descr="label">unrelated</info>: 1;
+        <symbolName descr="label">unrelated</symbolName>: 1;
       </script>
     """.trimIndent())
-    myFixture.testHighlighting(false, true, false)
+    myFixture.testFile("Foo.svelte").checkSymbolNames().test()
   }
 
   fun testReactiveLabelKeywordTS() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
-        <info descr="reactive">$</info>: {
-          break <info descr="reactive">$</info>;
+        <symbolName descr="reactive">$</symbolName>: {
+          break <symbolName descr="reactive">$</symbolName>;
         }
         
-        <info descr="label">unrelated</info>: 1;
+        <symbolName descr="label">unrelated</symbolName>: 1;
       </script>
     """.trimIndent())
-    myFixture.testHighlighting(false, true, false)
+    myFixture.testFile("Foo.svelte").checkSymbolNames().test()
   }
 
   fun testNoRedundancyFromReactiveStatement() {

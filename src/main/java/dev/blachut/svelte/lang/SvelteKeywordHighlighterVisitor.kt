@@ -49,7 +49,7 @@ class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptK
       val identifier = node.node.findChildByType(JSTokenTypes.IDENTIFIER)
         ?.psi
       if (identifier != null) {
-        lineMarker(identifier, myHighlighter.getMappedKey(JSHighlighter.JS_KEYWORD), "reactive", myHolder)
+        lineMarker(identifier, myHighlighter.getMappedKey(JSHighlighter.JS_KEYWORD), "reactive")
         return true
       }
     }
