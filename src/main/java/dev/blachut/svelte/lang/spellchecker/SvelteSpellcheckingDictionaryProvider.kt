@@ -4,5 +4,5 @@ package dev.blachut.svelte.lang.spellchecker
 import com.intellij.spellchecker.BundledDictionaryProvider
 
 class SvelteSpellcheckingDictionaryProvider : BundledDictionaryProvider {
-  override fun getBundledDictionaries(): Array<String> = arrayOf("svelte.dic")
+  override fun getBundledDictionaries(): Array<String> = arrayOf("/dictionaries/svelte.dic")
 }
