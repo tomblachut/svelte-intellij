@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.codeInsight.daemon.impl.analysis.HtmlUnknownTargetInspection
 import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspection
 import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
@@ -375,6 +376,13 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         </option>
       {/each}
     </select>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testNoErrorForUnresolvedPathAttribute() {
+    myFixture.configureByText("Foo.svelte", """
+      <a href="/notexisting">Test</a>
     """.trimIndent())
     myFixture.testHighlighting()
   }
@@ -1301,6 +1309,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       l.add(JSSuspiciousTypeGuardInspection())
       l.add(JSObjectNullOrUndefinedInspection())
       l.add(SvelteUnresolvedComponentInspection())
+      l.add(HtmlUnknownTargetInspection())
       return l
     }
   }
