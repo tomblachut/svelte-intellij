@@ -4,8 +4,7 @@ import com.intellij.lang.javascript.JSAbstractRenameTest
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteRenameTest : JSAbstractRenameTest() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath() + "/" + basePath
-  override fun getBasePath(): String = "dev/blachut/svelte/lang/codeInsight/rename"
+  override fun getTestDataPath(): String = getSvelteTestDataPath() + "/dev/blachut/svelte/lang/codeInsight/rename"
 
   fun testStoreSubscriptionJS() {
     val name = getTestName(false)
