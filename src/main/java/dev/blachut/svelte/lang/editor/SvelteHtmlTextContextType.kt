@@ -10,7 +10,7 @@ import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.psi.blocks.SvelteFragment
 
-class SvelteHtmlTextContextType : TemplateContextType(SvelteBundle.message("svelte.context.html.text")) {
+private class SvelteHtmlTextContextType : TemplateContextType(SvelteBundle.message("svelte.context.html.text")) {
   override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
     val file = templateActionContext.file
     val offset = templateActionContext.startOffset

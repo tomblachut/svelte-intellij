@@ -3,4 +3,4 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.hints.JSComponentUsageProvider
 
-class SvelteComponentUsageProvider : JSComponentUsageProvider
+private class SvelteComponentUsageProvider : JSComponentUsageProvider

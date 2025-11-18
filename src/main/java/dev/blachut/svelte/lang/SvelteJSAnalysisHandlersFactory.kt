@@ -15,7 +15,7 @@ import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.codeInsight.SvelteJSReferenceChecker
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
-class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
+private class SvelteJSAnalysisHandlersFactory : ES6AnalysisHandlersFactory() {
   override fun getReferenceChecker(reporter: JSProblemReporter<*>): JSReferenceChecker {
     return SvelteJSReferenceChecker(reporter)
   }

@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 /**
  * Needed for (erroneous) nesting of more than {{}}, eg. {{{}}} so the user can easily delete after error.
  */
-class SvelteBraceBackspaceHandler : BackspaceHandlerDelegate() {
+private class SvelteBraceBackspaceHandler : BackspaceHandlerDelegate() {
   override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {
     if ((c == '{') && CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
       val nextOffset = editor.caretModel.offset

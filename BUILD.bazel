@@ -65,6 +65,7 @@ jvm_library(
     "@ultimate_lib//:eclipse-lsp4j",
     "@ultimate_lib//:eclipse-lsp4j-jsonrpc",
     "@community//platform/polySymbols",
+    "@community//xml/xml-analysis-api:analysis",
   ]
 )
 
@@ -147,6 +148,7 @@ jvm_library(
     "//plugins/sass/backend",
     "//plugins/sass",
     "//plugins/sass/common",
+    "@community//xml/xml-analysis-api:analysis",
   ]
 )
 ### auto-generated section `build intellij.svelte` end

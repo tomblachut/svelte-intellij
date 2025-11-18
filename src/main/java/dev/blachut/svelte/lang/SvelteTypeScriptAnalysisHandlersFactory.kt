@@ -12,7 +12,7 @@ import com.intellij.lang.javascript.validation.JSKeywordHighlighterVisitor
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
-class SvelteTypeScriptAnalysisHandlersFactory : TypeScriptAnalysisHandlersFactory() {
+private class SvelteTypeScriptAnalysisHandlersFactory : TypeScriptAnalysisHandlersFactory() {
 
   override fun createKeywordHighlighterVisitor(
     holder: HighlightInfoHolder,

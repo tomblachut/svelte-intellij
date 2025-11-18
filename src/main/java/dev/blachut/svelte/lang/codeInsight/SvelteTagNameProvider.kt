@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.codeInsight.completion.*
+import com.intellij.codeInsight.completion.PrioritizedLookupElement
+import com.intellij.codeInsight.completion.XmlTagInsertHandler
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.xml.XmlTag
@@ -10,11 +11,11 @@ import icons.SvelteIcons
 
 // Vue plugin uses 100, it's ok for now
 const val highPriority = 100.0
-const val mediumPriority = 50.0
+private const val mediumPriority = 50.0
 
 // TODO Merge with svelteBareTagLookupElements
 // TODO Use XmlTagInsertHandler
-val svelteNamespaceTagLookupElements = svelteTagNames.map {
+private val svelteNamespaceTagLookupElements = svelteTagNames.map {
   LookupElementBuilder.create(sveltePrefix + it).withIcon(SvelteIcons.Gray)
 }
 
@@ -24,7 +25,7 @@ val slotLookupElement: LookupElementBuilder = LookupElementBuilder.create("slot"
 /**
  * When user auto completes after writing colon in "svelte", editor will produce i.e. "svelte:svelte:self".
  */
-val svelteBareTagLookupElements = svelteTagNames.map {
+private val svelteBareTagLookupElements = svelteTagNames.map {
   val lookupElement = LookupElementBuilder.create(it).withIcon(SvelteIcons.Gray)
   PrioritizedLookupElement.withPriority(lookupElement, mediumPriority)
 }
@@ -34,7 +35,7 @@ val svelteBareTagLookupElements = svelteTagNames.map {
  *
  * For components, see [SvelteComponentCompletionContributor] due to performance reasons.
  */
-class SvelteTagNameProvider : XmlTagNameProvider {
+private class SvelteTagNameProvider : XmlTagNameProvider {
   override fun addTagNameVariants(resultElements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {
     if (tag !is SvelteHtmlTag) return
 

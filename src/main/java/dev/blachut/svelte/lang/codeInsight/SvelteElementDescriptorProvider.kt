@@ -6,14 +6,14 @@ import com.intellij.xml.XmlElementDescriptor
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
-const val svelteNamespace = "svelte"
-const val sveltePrefix = "$svelteNamespace:"
-val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "options", "fragment", "element")
+internal const val svelteNamespace = "svelte"
+internal const val sveltePrefix = "$svelteNamespace:"
+internal val svelteTagNames = arrayOf("self", "component", "window", "body", "head", "options", "fragment", "element")
 
 /**
  * Enables, among others, navigation from tag to component file
  */
-class SvelteElementDescriptorProvider : XmlElementDescriptorProvider {
+private class SvelteElementDescriptorProvider : XmlElementDescriptorProvider {
   override fun getDescriptor(tag: XmlTag): XmlElementDescriptor? {
     if (tag !is SvelteHtmlTag) return null
 

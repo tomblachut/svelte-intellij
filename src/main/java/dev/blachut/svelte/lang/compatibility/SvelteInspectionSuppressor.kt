@@ -29,7 +29,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSReferenceExpression
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 import dev.blachut.svelte.lang.service.settings.tryRecheckResolveResults
 
-class SvelteInspectionSuppressor : InspectionSuppressor {
+private class SvelteInspectionSuppressor : InspectionSuppressor {
   override fun isSuppressedFor(element: PsiElement, inspectionId: String): Boolean {
     if (element.containingFile !is SvelteHtmlFile) return false
 

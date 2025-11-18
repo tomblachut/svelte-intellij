@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.codeInsight.SvelteAddImportExecutor
 import dev.blachut.svelte.lang.codeInsight.SvelteImportPlaceInfo
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
-fun createSvelteImportFactories(): List<JSImportExecutorFactory> {
+private fun createSvelteImportFactories(): List<JSImportExecutorFactory> {
   return listOf(object : JSImportExecutorFactory {
     override fun createExecutor(place: PsiElement): JSAddImportExecutor {
       return SvelteAddImportExecutor(place)
@@ -20,7 +20,7 @@ fun createSvelteImportFactories(): List<JSImportExecutorFactory> {
   })
 }
 
-class SvelteHtmlHandlersFactory : ES6HandlersFactory() {
+private class SvelteHtmlHandlersFactory : ES6HandlersFactory() {
   override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
     return createSvelteImportFactories()
   }
@@ -33,13 +33,13 @@ class SvelteHtmlHandlersFactory : ES6HandlersFactory() {
   }
 }
 
-class SvelteJSHandlersFactory : ES6HandlersFactory() {
+private class SvelteJSHandlersFactory : ES6HandlersFactory() {
   override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
     return createSvelteImportFactories()
   }
 }
 
-class SvelteTSHandlersFactory : TypeScriptHandlersFactory() {
+private class SvelteTSHandlersFactory : TypeScriptHandlersFactory() {
   override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
     return createSvelteImportFactories()
   }

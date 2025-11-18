@@ -14,11 +14,10 @@ import icons.SvelteIcons
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification
 import org.eclipse.lsp4j.services.LanguageServer
 
-
 /**
  * @see SvelteLspTypeScriptService
  */
-class SvelteLspServerSupportProvider : JSFrameworkLspServerSupportProvider(SvelteLspServerActivationRule) {
+internal class SvelteLspServerSupportProvider : JSFrameworkLspServerSupportProvider(SvelteLspServerActivationRule) {
   override fun createLspServerDescriptor(project: Project): JSFrameworkLspServerDescriptor = SvelteLspServerDescriptor(project)
 
   override fun createLspServerWidgetItem(lspServer: LspServer, currentFile: VirtualFile?): LspServerWidgetItem =
@@ -28,7 +27,7 @@ class SvelteLspServerSupportProvider : JSFrameworkLspServerSupportProvider(Svelt
 /**
  * @see SvelteLspTypeScriptService
  */
-class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, SvelteLspServerActivationRule, "Svelte") {
+internal class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, SvelteLspServerActivationRule, "Svelte") {
   override val lsp4jServerClass: Class<out LanguageServer> = SvelteLsp4jServer::class.java
 }
 

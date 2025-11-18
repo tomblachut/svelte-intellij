@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.getJsEmbeddedContent
 
-class SvelteModuleExportsProvider : JSModuleExportsProvider {
+private class SvelteModuleExportsProvider : JSModuleExportsProvider {
   override fun processExports(scope: PsiElement, processor: JSModuleElementsProcessor, weak: Boolean): Boolean {
     return true
   }

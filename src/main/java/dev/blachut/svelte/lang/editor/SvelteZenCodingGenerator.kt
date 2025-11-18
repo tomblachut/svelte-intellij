@@ -15,7 +15,7 @@ import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.isSvelteContext
 import kotlin.math.min
 
-class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
+private class SvelteZenCodingGenerator : XmlZenCodingGeneratorImpl() {
   private val simpleKeys = setOf("if", "await", "key", "snippet") // todo snippet here is not entirely correct
   private val simpleTemplate = { key: String -> "{#$key \$EXPRESSION\$}\$END\${/$key}" }
   private val eachTemplate = "{#each \$EXPRESSION\$ as \$PARAMS\$}\$END\${/each}"

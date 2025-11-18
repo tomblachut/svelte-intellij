@@ -77,5 +77,6 @@
     <orderEntry type="module" module-name="intellij.sass.backend" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass.common" scope="TEST" />
+    <orderEntry type="module" module-name="intellij.xml.analysis" />
   </component>
 </module>

@@ -22,7 +22,7 @@ internal data class SvelteLspDidChangeTsOrJsFileParams(val uri: String, val chan
 
 private val workaroundFileTypes = setOf(JavaScriptFileType, TypeScriptFileType)
 
-internal class SvelteLspCustomDocumentListener : DocumentListener {
+private class SvelteLspCustomDocumentListener : DocumentListener {
   override fun beforeDocumentChange(event: DocumentEvent) {
     val virtualFile = LspDidChangeUtil.getFileToHandle(event) ?: return
     if (virtualFile.fileType !in workaroundFileTypes) return
