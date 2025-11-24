@@ -8,12 +8,11 @@ import com.intellij.codeInspection.htmlInspections.*
 import com.intellij.htmltools.codeInspection.htmlInspections.HtmlRequiredAltAttributeInspection
 import com.intellij.htmltools.codeInspection.htmlInspections.HtmlRequiredTitleElementInspection
 import com.intellij.lang.javascript.JSTestUtils
-import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
-import com.intellij.lang.javascript.inspection.JSSuspiciousTypeGuardInspection
-import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
+import com.intellij.lang.javascript.inspections.JSObjectNullOrUndefinedInspection
+import com.intellij.lang.javascript.inspections.JSSuspiciousTypeGuardInspection
+import com.intellij.lang.javascript.inspections.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.*
-import com.intellij.lang.javascript.modules.TypeScriptCheckImportInspection
-import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInspection
+import com.intellij.lang.typescript.inspections.TypeScriptMissingConfigOptionInspection
 import com.intellij.lang.typescript.inspections.*
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.xml.util.CheckEmptyTagInspection

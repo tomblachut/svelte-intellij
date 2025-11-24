@@ -2,15 +2,15 @@ package dev.blachut.svelte.lang.compatibility
 
 import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.codeInspection.SuppressQuickFix
-import com.intellij.lang.javascript.inspection.JSObjectNullOrUndefinedInspection
-import com.intellij.lang.javascript.inspection.JSUnusedAssignmentInspection
+import com.intellij.lang.javascript.inspections.JSObjectNullOrUndefinedInspection
+import com.intellij.lang.javascript.inspections.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
 import com.intellij.lang.javascript.inspections.JSUndeclaredVariableInspection
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
-import com.intellij.lang.javascript.modules.TypeScriptCheckImportInspection
+import com.intellij.lang.javascript.inspections.TypeScriptCheckImportInspection
 import com.intellij.lang.javascript.psi.*
 import com.intellij.lang.javascript.psi.ecma6.impl.JSXXmlLiteralExpressionImpl
-import com.intellij.lang.typescript.inspection.TypeScriptMissingConfigOptionInspection
+import com.intellij.lang.typescript.inspections.TypeScriptMissingConfigOptionInspection
 import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
