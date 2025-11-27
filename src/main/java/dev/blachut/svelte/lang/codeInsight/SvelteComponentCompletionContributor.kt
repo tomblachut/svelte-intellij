@@ -6,7 +6,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.javascript.completion.JSImportCompletionUtil
 import com.intellij.lang.javascript.dialects.JSHandlersFactory
 import com.intellij.lang.javascript.frameworks.jsx.JSXComponentCompletionContributor
-import com.intellij.lang.javascript.modules.imports.JSAutoImportSupport
+import com.intellij.lang.javascript.modules.imports.JSCompletionInsertHandlerFactory
 import com.intellij.lang.javascript.modules.imports.JSImportCandidate
 import com.intellij.lang.javascript.modules.imports.providers.ES6ExportedCandidatesProviderBase
 import com.intellij.lang.javascript.modules.imports.providers.JSImportCandidatesProvider
@@ -72,7 +72,7 @@ class SvelteComponentCompletionContributor : CompletionContributor() {
   }
 
   private fun addExportedComponents(result: CompletionResultSet, tag: XmlTag, localNames: Set<String?>) {
-    val autoImportSupport = JSAutoImportSupport.getInstance(tag.project)
+    val autoImportSupport = JSCompletionInsertHandlerFactory.getInstance()
     val prefixMatcher = result.prefixMatcher
     val info = JSHandlersFactory.forElement(tag).createImportPlaceInfo(tag)
     val providers = JSImportCandidatesProvider.getProviders(info)

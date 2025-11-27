@@ -8,7 +8,7 @@ import com.intellij.lang.javascript.highlighting.JSHighlighter
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSLabeledStatement
 import com.intellij.lang.javascript.psi.JSStatementWithLabelReference
-import com.intellij.lang.javascript.validation.TypeScriptKeywordHighlighterVisitor
+import com.intellij.lang.javascript.highlighting.TypeScriptKeywordHighlighterVisitor
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement

@@ -8,9 +8,9 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.lang.javascript.ecmascript6.TypeScriptUtil
 import com.intellij.lang.javascript.highlighting.JSHighlightDescriptor
 import com.intellij.lang.javascript.highlighting.JSHighlighter
+import com.intellij.lang.javascript.highlighting.JSSemanticHighlightVisitor
 import com.intellij.lang.javascript.highlighting.JSSemanticHighlightingVisitor
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
-import com.intellij.lang.javascript.validation.JSAnnotatingVisitor
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
@@ -27,7 +27,7 @@ class SvelteDirectiveAnnotator : Annotator {
   override fun annotate(element: PsiElement, holder: AnnotationHolder) {
     if (element !is XmlAttribute) return
 
-    val highlighter = JSAnnotatingVisitor.getHighlighter(element)
+    val highlighter = JSSemanticHighlightVisitor.getHighlighterForElement(element)
 
     for (ref in element.references) {
       val attrKey = when (ref) {
