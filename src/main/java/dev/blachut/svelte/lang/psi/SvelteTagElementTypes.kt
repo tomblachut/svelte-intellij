@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
-import com.intellij.lang.javascript.parsing.FunctionParser
+import com.intellij.lang.javascript.parsing.JSFunctionParser
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.SvelteBundle
@@ -151,12 +151,12 @@ object SvelteTagElementTypes {
 
       try {
         builder.putUserData(markupContextKey, true)
-        builder.putUserData(FunctionParser.methodsEmptinessKey, FunctionParser.MethodEmptiness.ALWAYS)
+        builder.putUserData(JSFunctionParser.methodsEmptinessKey, JSFunctionParser.MethodEmptiness.ALWAYS)
         val mark = builder.mark()
-        parser.functionParser.parseFunctionNoMarker(FunctionParser.Context.SOURCE_ELEMENT, mark)
+        parser.functionParser.parseFunctionNoMarker(JSFunctionParser.Context.SOURCE_ELEMENT, mark)
       }
       finally {
-        builder.putUserData(FunctionParser.methodsEmptinessKey, null)
+        builder.putUserData(JSFunctionParser.methodsEmptinessKey, null)
         builder.putUserData(markupContextKey, null)
       }
     }
