@@ -78,5 +78,6 @@
     <orderEntry type="module" module-name="intellij.sass" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass.common" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.analysis" />
+    <orderEntry type="module" module-name="intellij.xml.emmet" />
   </component>
 </module>
