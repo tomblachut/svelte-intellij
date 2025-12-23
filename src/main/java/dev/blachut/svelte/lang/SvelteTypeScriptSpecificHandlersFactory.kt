@@ -9,7 +9,7 @@ import com.intellij.psi.impl.source.resolve.ResolveCache
 import dev.blachut.svelte.lang.codeInsight.SvelteStubBasedScopeHandler
 import dev.blachut.svelte.lang.codeInsight.SvelteTypeScriptReferenceExpressionResolver
 
-private class SvelteTypeScriptSpecificHandlersFactory : TypeScriptSpecificHandlersFactory() {
+internal class SvelteTypeScriptSpecificHandlersFactory : TypeScriptSpecificHandlersFactory() {
   override fun createReferenceExpressionResolver(
     referenceExpression: JSReferenceExpressionImpl,
     ignorePerformanceLimits: Boolean

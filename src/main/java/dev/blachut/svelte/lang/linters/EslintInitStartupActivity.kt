@@ -8,7 +8,7 @@ import com.intellij.openapi.startup.ProjectActivity
 import com.intellij.openapi.util.registry.RegistryManager
 import java.util.*
 
-private class EslintInitStartupActivity : ProjectActivity {
+internal class EslintInitStartupActivity : ProjectActivity {
   override suspend fun execute(project: Project) {
     val key = "eslint.additional.file.extensions"
     runOnceForApp("svelte.init.key") {

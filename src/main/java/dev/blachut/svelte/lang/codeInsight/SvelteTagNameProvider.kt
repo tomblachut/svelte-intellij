@@ -35,7 +35,7 @@ private val svelteBareTagLookupElements = svelteTagNames.map {
  *
  * For components, see [SvelteComponentCompletionContributor] due to performance reasons.
  */
-private class SvelteTagNameProvider : XmlTagNameProvider {
+internal class SvelteTagNameProvider : XmlTagNameProvider {
   override fun addTagNameVariants(resultElements: MutableList<LookupElement>, tag: XmlTag, namespacePrefix: String) {
     if (tag !is SvelteHtmlTag) return
 

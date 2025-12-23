@@ -13,7 +13,7 @@ internal val svelteTagNames = arrayOf("self", "component", "window", "body", "he
 /**
  * Enables, among others, navigation from tag to component file
  */
-private class SvelteElementDescriptorProvider : XmlElementDescriptorProvider {
+internal class SvelteElementDescriptorProvider : XmlElementDescriptorProvider {
   override fun getDescriptor(tag: XmlTag): XmlElementDescriptor? {
     if (tag !is SvelteHtmlTag) return null
 

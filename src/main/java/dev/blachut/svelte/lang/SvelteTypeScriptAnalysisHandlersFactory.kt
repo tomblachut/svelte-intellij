@@ -9,7 +9,7 @@ import com.intellij.lang.javascript.validation.JSAnnotatingVisitor
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 
-private class SvelteTypeScriptAnalysisHandlersFactory : TypeScriptAnalysisHandlersFactory() {
+internal class SvelteTypeScriptAnalysisHandlersFactory : TypeScriptAnalysisHandlersFactory() {
 
   override fun createAnnotatingVisitor(psiElement: PsiElement, holder: AnnotationHolder): JSAnnotatingVisitor {
     return object : TypeScriptAnnotatingVisitor(psiElement, holder) {

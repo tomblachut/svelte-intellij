@@ -11,7 +11,7 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 /**
  * Required for class directive CSS references to work
  */
-private class SvelteAttributeValueProvider : HtmlAttributeValueProvider() {
+internal class SvelteAttributeValueProvider : HtmlAttributeValueProvider() {
   override fun getCustomAttributeValues(tag: XmlTag, attributeName: String): String? {
     if (tag !is SvelteHtmlTag) return null
     if (!HtmlUtil.CLASS_ATTRIBUTE_NAME.equals(attributeName, ignoreCase = true)) return null

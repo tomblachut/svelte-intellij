@@ -25,7 +25,7 @@ import dev.blachut.svelte.lang.psi.SvelteTokenTypes
  * Handler for custom plugin actions on chars typed by the user.
  * See [SvelteEnterHandler] for custom actions on Enter.
  */
-private class SvelteBraceTypedHandler : TypedHandlerDelegate() {
+internal class SvelteBraceTypedHandler : TypedHandlerDelegate() {
   override fun beforeCharTyped(c: Char, project: Project, editor: Editor, file: PsiFile, fileType: FileType): Result {
     if (c != '{' || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
       return Result.CONTINUE

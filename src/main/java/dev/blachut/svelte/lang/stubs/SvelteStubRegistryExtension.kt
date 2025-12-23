@@ -10,7 +10,7 @@ import dev.blachut.svelte.lang.parsing.ts.SVELTETS_FILE
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE_TS
 
-private class SvelteStubRegistryExtension : StubRegistryExtension {
+internal class SvelteStubRegistryExtension : StubRegistryExtension {
   override fun register(registry: StubRegistry) {
     listOf(
       SVELTEJS_FILE,

@@ -20,7 +20,7 @@ private fun createSvelteImportFactories(): List<JSImportExecutorFactory> {
   })
 }
 
-private class SvelteHtmlHandlersFactory : ES6HandlersFactory() {
+internal class SvelteHtmlHandlersFactory : ES6HandlersFactory() {
   override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
     return createSvelteImportFactories()
   }
@@ -33,13 +33,13 @@ private class SvelteHtmlHandlersFactory : ES6HandlersFactory() {
   }
 }
 
-private class SvelteJSHandlersFactory : ES6HandlersFactory() {
+internal class SvelteJSHandlersFactory : ES6HandlersFactory() {
   override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
     return createSvelteImportFactories()
   }
 }
 
-private class SvelteTSHandlersFactory : TypeScriptHandlersFactory() {
+internal class SvelteTSHandlersFactory : TypeScriptHandlersFactory() {
   override fun createImportFactories(place: PsiElement): List<JSImportExecutorFactory> {
     return createSvelteImportFactories()
   }

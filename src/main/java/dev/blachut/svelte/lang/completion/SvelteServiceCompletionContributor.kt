@@ -6,4 +6,4 @@ import dev.blachut.svelte.lang.SvelteHTMLLanguage
 /**
  * Required to rebind [TypeScriptServiceCompletionContributor] to [SvelteHTMLLanguage] contexts
  */
-private class SvelteServiceCompletionContributor : TypeScriptServiceCompletionContributor()
+internal class SvelteServiceCompletionContributor : TypeScriptServiceCompletionContributor()
