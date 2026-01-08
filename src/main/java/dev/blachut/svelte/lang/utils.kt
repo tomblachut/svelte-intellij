@@ -6,10 +6,10 @@ import com.intellij.javascript.web.hasFilesOfType
 import com.intellij.lang.PsiBuilder
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.polySymbols.context.PolyContext
+import com.intellij.polySymbols.framework.PolySymbolFramework.Companion.KIND_FRAMEWORK
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
-import com.intellij.polySymbols.context.PolyContext
-import com.intellij.polySymbols.context.PolyContext.Companion.KIND_FRAMEWORK
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
