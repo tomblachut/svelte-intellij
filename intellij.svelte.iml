@@ -79,6 +79,6 @@
     <orderEntry type="module" module-name="intellij.sass.common" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.analysis" />
     <orderEntry type="module" module-name="intellij.xml.emmet" />
-    <orderEntry type="module" module-name="intellij.javascript.ultimate" />
+    <orderEntry type="module" module-name="intellij.javascript.codeinsight" />
   </component>
 </module>

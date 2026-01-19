@@ -67,7 +67,7 @@ jvm_library(
     "@community//platform/polySymbols",
     "@community//xml/xml-analysis-api:analysis",
     "@community//xml/emmet",
-    "//plugins/JavaScriptLanguage/javascript-ultimate",
+    "//plugins/JavaScriptLanguage/javascript-codeinsight",
   ]
 )
 
@@ -152,7 +152,7 @@ jvm_library(
     "//plugins/sass/common",
     "@community//xml/xml-analysis-api:analysis",
     "@community//xml/emmet",
-    "//plugins/JavaScriptLanguage/javascript-ultimate",
+    "//plugins/JavaScriptLanguage/javascript-codeinsight",
   ]
 )
 ### auto-generated section `build intellij.svelte` end
