@@ -68,6 +68,7 @@ jvm_library(
     "@community//xml/xml-analysis-api:analysis",
     "@community//xml/emmet",
     "//plugins/JavaScriptLanguage/javascript-codeinsight",
+    "//plugins/JavaScriptLanguage/javascript-ultimate",
   ]
 )
 
@@ -153,6 +154,7 @@ jvm_library(
     "@community//xml/xml-analysis-api:analysis",
     "@community//xml/emmet",
     "//plugins/JavaScriptLanguage/javascript-codeinsight",
+    "//plugins/JavaScriptLanguage/javascript-ultimate",
   ]
 )
 ### auto-generated section `build intellij.svelte` end

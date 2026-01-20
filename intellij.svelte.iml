@@ -80,5 +80,6 @@
     <orderEntry type="module" module-name="intellij.xml.analysis" />
     <orderEntry type="module" module-name="intellij.xml.emmet" />
     <orderEntry type="module" module-name="intellij.javascript.codeinsight" />
+    <orderEntry type="module" module-name="intellij.javascript.ultimate" />
   </component>
 </module>
