@@ -6,7 +6,7 @@ import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
 import com.intellij.openapi.util.registry.RegistryManager
-import java.util.*
+import java.util.MissingResourceException
 
 internal class EslintInitStartupActivity : ProjectActivity {
   override suspend fun execute(project: Project) {

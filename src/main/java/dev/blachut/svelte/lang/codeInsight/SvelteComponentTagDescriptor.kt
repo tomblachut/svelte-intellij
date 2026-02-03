@@ -12,7 +12,6 @@ import com.intellij.xml.XmlNSDescriptor
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 import org.jetbrains.annotations.NonNls
-import java.util.*
 
 /**
  * TODO Consider using BaseXmlElementDescriptorImpl, there are cache implementations there

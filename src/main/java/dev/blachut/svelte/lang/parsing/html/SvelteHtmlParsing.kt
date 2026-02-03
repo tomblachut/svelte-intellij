@@ -11,7 +11,11 @@ import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
-import dev.blachut.svelte.lang.psi.*
+import dev.blachut.svelte.lang.psi.SvelteElementTypes
+import dev.blachut.svelte.lang.psi.SvelteHtmlElementTypes
+import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 

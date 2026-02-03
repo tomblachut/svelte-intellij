@@ -2,7 +2,12 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.javascript.JSElementTypes
-import com.intellij.lang.javascript.psi.*
+import com.intellij.lang.javascript.psi.JSDefinitionExpression
+import com.intellij.lang.javascript.psi.JSElementType
+import com.intellij.lang.javascript.psi.JSElementVisitor
+import com.intellij.lang.javascript.psi.JSEmbeddedContent
+import com.intellij.lang.javascript.psi.JSExpressionStatement
+import com.intellij.lang.javascript.psi.JSLabeledStatement
 import com.intellij.lang.javascript.psi.impl.JSEmbeddedContentImpl
 import com.intellij.lang.javascript.psi.stubs.JSEmbeddedContentStub
 import com.intellij.psi.PsiElement

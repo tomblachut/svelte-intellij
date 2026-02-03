@@ -3,7 +3,22 @@ package dev.blachut.svelte.lang.psi
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
-import dev.blachut.svelte.lang.psi.blocks.*
+import dev.blachut.svelte.lang.psi.blocks.SvelteAwaitBlock
+import dev.blachut.svelte.lang.psi.blocks.SvelteAwaitCatchBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteAwaitPrimaryBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteAwaitThenBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteEachBlock
+import dev.blachut.svelte.lang.psi.blocks.SvelteEachElseBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteEachPrimaryBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteFragment
+import dev.blachut.svelte.lang.psi.blocks.SvelteIfBlock
+import dev.blachut.svelte.lang.psi.blocks.SvelteIfElseBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteIfPrimaryBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteKeyBlock
+import dev.blachut.svelte.lang.psi.blocks.SvelteKeyPrimaryBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteSnippetBlock
+import dev.blachut.svelte.lang.psi.blocks.SvelteSnippetPrimaryBranch
+import dev.blachut.svelte.lang.psi.blocks.SvelteTagDependentExpression
 
 object SvelteElementTypes {
   val IF_BLOCK = SvelteElementType("IF_BLOCK")

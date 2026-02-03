@@ -1,6 +1,12 @@
 package dev.blachut.svelte.lang.format
 
-import com.intellij.formatting.*
+import com.intellij.formatting.ASTBlock
+import com.intellij.formatting.Block
+import com.intellij.formatting.FormattingContext
+import com.intellij.formatting.Indent
+import com.intellij.formatting.Spacing
+import com.intellij.formatting.Wrap
+import com.intellij.formatting.WrapType
 import com.intellij.lang.ASTNode
 import com.intellij.lang.LanguageFormatting
 import com.intellij.lang.javascript.JSTokenTypes

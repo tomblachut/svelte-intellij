@@ -6,7 +6,10 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.lang.javascript.modules.JSImportModulesSuggester
 import com.intellij.lang.javascript.modules.JSSimpleModuleReferenceInfo
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.*
+import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiFile
+import com.intellij.psi.ResolveResult
+import com.intellij.psi.XmlElementVisitor
 import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.SvelteHTMLLanguage

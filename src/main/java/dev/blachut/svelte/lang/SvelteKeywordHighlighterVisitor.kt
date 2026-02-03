@@ -5,10 +5,10 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.highlighting.JSHighlighter
+import com.intellij.lang.javascript.highlighting.TypeScriptKeywordHighlighterVisitor
 import com.intellij.lang.javascript.psi.JSElement
 import com.intellij.lang.javascript.psi.JSLabeledStatement
 import com.intellij.lang.javascript.psi.JSStatementWithLabelReference
-import com.intellij.lang.javascript.highlighting.TypeScriptKeywordHighlighterVisitor
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -16,7 +16,11 @@ import com.intellij.psi.util.startOffset
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexer
-import dev.blachut.svelte.lang.psi.*
+import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
+import dev.blachut.svelte.lang.psi.SvelteInitialTag
+import dev.blachut.svelte.lang.psi.SvelteJSLazyPsiElement
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
+import dev.blachut.svelte.lang.psi.SvelteVisitor
 
 class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptKeywordHighlighterVisitor(holder), SvelteVisitor {
   override fun visitInitialTag(tag: SvelteInitialTag) {

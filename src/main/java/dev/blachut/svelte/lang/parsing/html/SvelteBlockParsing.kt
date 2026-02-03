@@ -6,7 +6,11 @@ import com.intellij.lang.html.HtmlParsing
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteBundle
-import dev.blachut.svelte.lang.psi.*
+import dev.blachut.svelte.lang.psi.SvelteElementType
+import dev.blachut.svelte.lang.psi.SvelteElementTypes
+import dev.blachut.svelte.lang.psi.SvelteJSBlockLazyElementType
+import dev.blachut.svelte.lang.psi.SvelteJSElementType
+import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import org.jetbrains.annotations.Nls
 
 object SvelteBlockParsing {

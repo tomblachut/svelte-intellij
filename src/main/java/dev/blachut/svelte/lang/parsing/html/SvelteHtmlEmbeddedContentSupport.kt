@@ -1,11 +1,18 @@
 package dev.blachut.svelte.lang.parsing.html
 
-import com.intellij.html.embedding.*
+import com.intellij.html.embedding.HtmlEmbeddedContentProvider
+import com.intellij.html.embedding.HtmlEmbeddedContentSupport
+import com.intellij.html.embedding.HtmlEmbedmentInfo
+import com.intellij.html.embedding.HtmlLanguageEmbedmentInfo
+import com.intellij.html.embedding.HtmlTokenEmbeddedContentProvider
 import com.intellij.lang.Language
 import com.intellij.lang.css.CSSLanguage
 import com.intellij.lang.javascript.JavaScriptHighlightingLexer
 import com.intellij.lang.javascript.dialects.JSLanguageLevel
-import com.intellij.lexer.*
+import com.intellij.lexer.BaseHtmlLexer
+import com.intellij.lexer.HtmlRawTextTagContentProvider
+import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
+import com.intellij.lexer.Lexer
 import com.intellij.psi.tree.IElementType
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.SvelteJSLanguage

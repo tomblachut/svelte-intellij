@@ -8,7 +8,11 @@ import com.intellij.lang.javascript.psi.resolve.CompletionResultSink
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
 import com.intellij.lang.javascript.psi.resolve.SinkResolveProcessor
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.*
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiPolyVariantReferenceBase
+import com.intellij.psi.PsiReference
+import com.intellij.psi.PsiReferenceBase
+import com.intellij.psi.ResolveResult
 import com.intellij.psi.css.impl.util.table.CssDescriptorsUtilCore
 import com.intellij.psi.css.resolve.HtmlCssClassOrIdReference
 import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl

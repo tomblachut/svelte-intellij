@@ -10,7 +10,7 @@ import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
 import com.intellij.xml.util.HtmlUtil
-import java.util.*
+import java.util.Locale
 
 internal class SvelteAttributeValueCompletionProvider : CompletionProvider<CompletionParameters>() {
   private val scriptLanguages = scriptLanguages()

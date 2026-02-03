@@ -2,7 +2,11 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.javascript.JSCompositeElementType
-import com.intellij.lang.javascript.types.*
+import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
+import com.intellij.lang.javascript.types.JSExpressionElementType
+import com.intellij.lang.javascript.types.JSParameterElementType
+import com.intellij.lang.javascript.types.JSVariableElementType
+import com.intellij.lang.javascript.types.TypeScriptEmbeddedContentElementType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage

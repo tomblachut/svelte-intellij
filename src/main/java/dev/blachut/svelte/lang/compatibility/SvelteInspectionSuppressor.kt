@@ -2,13 +2,20 @@ package dev.blachut.svelte.lang.compatibility
 
 import com.intellij.codeInspection.InspectionSuppressor
 import com.intellij.codeInspection.SuppressQuickFix
-import com.intellij.lang.javascript.inspections.JSObjectNullOrUndefinedInspection
-import com.intellij.lang.javascript.inspections.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.JSConstantReassignmentInspection
+import com.intellij.lang.javascript.inspections.JSObjectNullOrUndefinedInspection
 import com.intellij.lang.javascript.inspections.JSUndeclaredVariableInspection
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
+import com.intellij.lang.javascript.inspections.JSUnusedAssignmentInspection
 import com.intellij.lang.javascript.inspections.TypeScriptCheckImportInspection
-import com.intellij.lang.javascript.psi.*
+import com.intellij.lang.javascript.psi.JSArrayLiteralExpression
+import com.intellij.lang.javascript.psi.JSAssignmentExpression
+import com.intellij.lang.javascript.psi.JSEmbeddedContent
+import com.intellij.lang.javascript.psi.JSLabeledStatement
+import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
+import com.intellij.lang.javascript.psi.JSPsiReferenceElement
+import com.intellij.lang.javascript.psi.JSReferenceExpression
+import com.intellij.lang.javascript.psi.JSStatement
 import com.intellij.lang.javascript.psi.ecma6.impl.JSXXmlLiteralExpressionImpl
 import com.intellij.lang.typescript.inspections.TypeScriptMissingConfigOptionInspection
 import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection

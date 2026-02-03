@@ -2,8 +2,18 @@
 package dev.blachut.svelte.lang.service.settings
 
 import com.intellij.javascript.nodejs.util.NodePackageRef
-import com.intellij.lang.typescript.lsp.*
-import com.intellij.openapi.components.*
+import com.intellij.lang.typescript.lsp.NestedReadWriteProperty
+import com.intellij.lang.typescript.lsp.createPackageRef
+import com.intellij.lang.typescript.lsp.defaultPackageKey
+import com.intellij.lang.typescript.lsp.extractRefText
+import com.intellij.lang.typescript.lsp.restartTypeScriptServicesAsync
+import com.intellij.openapi.components.BaseState
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.SimplePersistentStateComponent
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.StoragePathMacros
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import dev.blachut.svelte.lang.service.SvelteLspServerLoader
 import dev.blachut.svelte.lang.service.SvelteTSPluginLoader
