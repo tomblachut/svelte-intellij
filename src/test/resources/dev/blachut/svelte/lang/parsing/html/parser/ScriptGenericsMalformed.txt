@@ -1,0 +1,44 @@
+SvelteHtmlFile: ScriptGenericsMalformed.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: generics
+        XmlToken:XML_NAME('generics')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          ASTWrapperPsiElement(SVELTE_GENERICS_EMBEDDED)
+            SvelteGenericsExpressionContent(SvelteTS)
+              TypeScriptTypeParameterList
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T')
+                PsiElement(JS:COMMA)(',')
+                PsiErrorElement:Type expected
+                  <empty list>
+                PsiElement(JS:COMMA)(',')
+                PsiErrorElement:Type expected
+                  <empty list>
+                PsiElement(JS:COMMA)(',')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('U')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        PsiComment(JS:END_OF_LINE_COMMENT)('// Malformed generics - should show errors but not crash')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')

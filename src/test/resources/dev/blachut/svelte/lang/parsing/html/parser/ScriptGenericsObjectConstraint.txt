@@ -1,0 +1,104 @@
+SvelteHtmlFile: ScriptGenericsObjectConstraint.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: generics
+        XmlToken:XML_NAME('generics')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          ASTWrapperPsiElement(SVELTE_GENERICS_EMBEDDED)
+            SvelteGenericsExpressionContent(SvelteTS)
+              TypeScriptTypeParameterList
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T')
+                  PsiWhiteSpace(' ')
+                  PsiElement(JS:EXTENDS_KEYWORD)('extends')
+                  PsiWhiteSpace(' ')
+                  TypeScriptTypeParameterConstraint
+                    TypeScriptObjectType
+                      PsiElement(JS:LBRACE)('{')
+                      PsiWhiteSpace(' ')
+                      TypeScriptPropertySignature
+                        PsiElement(JS:IDENTIFIER)('text')
+                        PsiElement(JS:COLON)(':')
+                        PsiWhiteSpace(' ')
+                        TypeScriptSingleType
+                          JSReferenceExpression
+                            PsiElement(JS:STRING_KEYWORD)('string')
+                      PsiWhiteSpace(' ')
+                      PsiElement(JS:RBRACE)('}')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n    ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          JSDestructuringElement
+            JSDestructuringObject
+              PsiElement(JS:LBRACE)('{')
+              PsiWhiteSpace(' ')
+              JSDestructuringShorthandedProperty
+                JSVariable
+                  PsiElement(JS:IDENTIFIER)('value')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:RBRACE)('}')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptObjectType
+              PsiElement(JS:LBRACE)('{')
+              PsiWhiteSpace(' ')
+              TypeScriptPropertySignature
+                PsiElement(JS:IDENTIFIER)('value')
+                PsiElement(JS:COLON)(':')
+                PsiWhiteSpace(' ')
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:RBRACE)('}')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSCallExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('$props')
+              JSArgumentList
+                PsiElement(JS:LPAR)('(')
+                PsiElement(JS:RPAR)(')')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteHtmlTag: p
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('p')
+      XmlToken:XML_TAG_END('>')
+      SvelteJS: CONTENT_EXPRESSION
+        PsiElement(JS:LBRACE)('{')
+        JSReferenceExpression
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('value')
+          PsiElement(JS:DOT)('.')
+          PsiElement(JS:IDENTIFIER)('text')
+        PsiElement(JS:RBRACE)('}')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('p')
+      XmlToken:XML_TAG_END('>')

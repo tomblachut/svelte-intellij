@@ -20,4 +20,9 @@ class SvelteRenameTest : JSAbstractRenameTest() {
     val name = getTestName(false)
     doTestForFilesWithCheckAll("betterCount", "$name.ts", "${name}JS.svelte", "${name}TS.svelte")
   }
+
+  fun testRenameGeneric() {
+    val name = getTestName(false)
+    doTestForFilesWithCheckAll("Entity", "$name.svelte")
+  }
 }

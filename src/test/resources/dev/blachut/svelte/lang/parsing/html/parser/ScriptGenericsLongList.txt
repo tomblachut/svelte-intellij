@@ -1,0 +1,141 @@
+SvelteHtmlFile: ScriptGenericsLongList.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: generics
+        XmlToken:XML_NAME('generics')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          ASTWrapperPsiElement(SVELTE_GENERICS_EMBEDDED)
+            SvelteGenericsExpressionContent(SvelteTS)
+              TypeScriptTypeParameterList
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T1')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T2')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T3')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T4')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T5')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T6')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T7')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T8')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T9')
+                PsiElement(JS:COMMA)(',')
+                PsiWhiteSpace(' ')
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T10')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          JSVariable
+            PsiElement(JS:IDENTIFIER)('values')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptTupleType
+              PsiElement(JS:LBRACKET)('[')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T1')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T2')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T3')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T4')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T5')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T6')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T7')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T8')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T9')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              TypeScriptTupleMember
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T10')
+              PsiElement(JS:RBRACKET)(']')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')

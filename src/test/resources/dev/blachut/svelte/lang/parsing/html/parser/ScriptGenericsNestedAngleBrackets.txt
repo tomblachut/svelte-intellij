@@ -1,0 +1,80 @@
+SvelteHtmlFile: ScriptGenericsNestedAngleBrackets.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: generics
+        XmlToken:XML_NAME('generics')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          ASTWrapperPsiElement(SVELTE_GENERICS_EMBEDDED)
+            SvelteGenericsExpressionContent(SvelteTS)
+              TypeScriptTypeParameterList
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T')
+                  PsiWhiteSpace(' ')
+                  PsiElement(JS:EXTENDS_KEYWORD)('extends')
+                  PsiWhiteSpace(' ')
+                  TypeScriptTypeParameterConstraint
+                    TypeScriptSingleType
+                      JSReferenceExpression
+                        PsiElement(JS:IDENTIFIER)('Map')
+                      TypeScriptTypeArgumentList
+                        PsiElement(JS:LT)('<')
+                        TypeScriptSingleType
+                          JSReferenceExpression
+                            PsiElement(JS:STRING_KEYWORD)('string')
+                        PsiElement(JS:COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        TypeScriptSingleType
+                          JSReferenceExpression
+                            PsiElement(JS:IDENTIFIER)('Array')
+                          TypeScriptTypeArgumentList
+                            PsiElement(JS:LT)('<')
+                            TypeScriptSingleType
+                              JSReferenceExpression
+                                PsiElement(JS:IDENTIFIER)('Set')
+                              TypeScriptTypeArgumentList
+                                PsiElement(JS:LT)('<')
+                                TypeScriptSingleType
+                                  JSReferenceExpression
+                                    PsiElement(JS:NUMBER_KEYWORD)('number')
+                                PsiElement(JS:GT)('>')
+                            PsiElement(JS:GT)('>')
+                        PsiElement(JS:GT)('>')
+                PsiErrorElement:, expected
+                  <empty list>
+                PsiElement(JS:GT)('>')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          JSVariable
+            PsiElement(JS:IDENTIFIER)('data')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptSingleType
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('T')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')

@@ -462,6 +462,21 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  fun testGenericType() {
+    myFixture.configureByText("Test.svelte", """
+      <script lang="ts" generics="Generic extends string">
+        function process(item: Gene<caret>
+      </script>
+    """.trimIndent())
+    myFixture.completeBasic()
+    myFixture.type('\t')
+    myFixture.checkResult("""
+      <script lang="ts" generics="Generic extends string">
+        function process(item: Generic
+      </script>
+    """.trimIndent())
+  }
+
   private fun checkElements(items: Array<LookupElement>, expected: Boolean, vararg variants: String) {
     val toCheck = setOf(*variants)
     val matched = mutableSetOf<String>()

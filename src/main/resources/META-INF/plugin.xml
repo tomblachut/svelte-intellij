@@ -109,6 +109,34 @@
                      enabledByDefault="true" level="ERROR"
                      implementationClass="dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection"
                      key="svelte.inspection.unresolved.component.display.name"/>
+    <localInspection groupKey="svelte.name"
+                     shortName="SvelteGenericsRequiresTypeScript"
+                     language="SvelteHTML"
+                     bundle="messages.SvelteBundle"
+                     enabledByDefault="true" level="ERROR"
+                     implementationClass="dev.blachut.svelte.lang.inspections.SvelteGenericsRequiresTypeScriptInspection"
+                     key="svelte.inspection.generics.requires.typescript.display.name"/>
+    <localInspection groupKey="svelte.name"
+                     shortName="SvelteGenericsOnInstanceScriptOnly"
+                     language="SvelteHTML"
+                     bundle="messages.SvelteBundle"
+                     enabledByDefault="true" level="ERROR"
+                     implementationClass="dev.blachut.svelte.lang.inspections.SvelteGenericsOnInstanceScriptOnlyInspection"
+                     key="svelte.inspection.generics.instance.script.only.display.name"/>
+    <localInspection groupKey="svelte.name"
+                     shortName="SvelteMultipleGenericsScripts"
+                     language="SvelteHTML"
+                     bundle="messages.SvelteBundle"
+                     enabledByDefault="true" level="ERROR"
+                     implementationClass="dev.blachut.svelte.lang.inspections.SvelteMultipleGenericsScriptsInspection"
+                     key="svelte.inspection.multiple.generics.scripts.display.name"/>
+    <localInspection groupKey="svelte.name"
+                     shortName="SvelteEmptyGenerics"
+                     language="SvelteHTML"
+                     bundle="messages.SvelteBundle"
+                     enabledByDefault="true" level="WEAK WARNING"
+                     implementationClass="dev.blachut.svelte.lang.inspections.SvelteEmptyGenericsInspection"
+                     key="svelte.inspection.empty.generics.display.name"/>
     <css.embeddedCssProvider implementation="dev.blachut.svelte.lang.css.SvelteEmbeddedCssProvider"/>
     <css.inclusionContext implementation="dev.blachut.svelte.lang.css.SvelteCssInclusionContext"/>
     <css.classOrIdUsagesProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteCssUsagesProvider"/>

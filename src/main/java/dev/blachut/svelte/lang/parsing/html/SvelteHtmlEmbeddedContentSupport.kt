@@ -30,6 +30,7 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
 
   override fun createEmbeddedContentProviders(lexer: BaseHtmlLexer): List<HtmlEmbeddedContentProvider> =
     listOf(
+      SvelteGenericsAttributeEmbeddedContentProvider(lexer),
       SvelteHtmlContentProvider(lexer),
       SvelteHtmlRawTextTagContentProvider(lexer),
       HtmlTokenEmbeddedContentProvider(

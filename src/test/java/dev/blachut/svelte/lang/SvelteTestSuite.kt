@@ -8,6 +8,7 @@ import dev.blachut.svelte.lang.codeInsight.SvelteCreateFunctionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateImportTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateVariableTest
 import dev.blachut.svelte.lang.codeInsight.SvelteFindUsagesTest
+import dev.blachut.svelte.lang.codeInsight.SvelteGenericsInspectionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
 import dev.blachut.svelte.lang.codeInsight.SvelteKitTest
 import dev.blachut.svelte.lang.codeInsight.SvelteNavigationTest
@@ -56,6 +57,7 @@ import org.junit.runners.Suite
   SvelteNavigationTest::class,
   SvelteFindUsagesTest::class,
   SvelteBreadcrumbsTest::class,
+  SvelteGenericsInspectionTest::class,
 
   SvelteTypeScriptCompletionTest::class,
   SvelteTypeScriptHighlightingTest::class,

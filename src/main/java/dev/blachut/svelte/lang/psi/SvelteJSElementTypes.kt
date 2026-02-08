@@ -13,7 +13,7 @@ import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 
 internal object SvelteJSElementTypes {
-  const val STUB_VERSION = 2
+  const val STUB_VERSION = 3
 
   val CONST_TAG_VARIABLE: JSVariableElementType = object : JSVariableElementType("CONST_TAG_VARIABLE") {
     override fun construct(node: ASTNode): PsiElement = SvelteJSConstTagVariable(node)
@@ -46,4 +46,23 @@ internal object SvelteJSElementTypes {
 
     override fun construct(node: ASTNode) = SvelteJSEmbeddedContentImpl(node)
   }
+
+  /**
+   * Element type for the type parameter list from the generics attribute.
+   * Example: `<script lang="ts" generics="T extends { text: string }">`
+   */
+  @JvmField
+  val SCRIPT_GENERICS_TYPE_PARAMETER_LIST: SvelteScriptGenericsTypeParameterListElementType =
+    SvelteScriptGenericsTypeParameterListElementType()
+
+  /**
+   * Element type for the embedded content inside generics attribute.
+   * Wraps the type parameter list to provide proper PSI structure.
+   */
+  @JvmField
+  val GENERICS_EXPRESSION_CONTENT: SvelteGenericsExpressionContentElementType =
+    SvelteGenericsExpressionContentElementType(
+      "GENERICS_EXPRESSION_CONTENT",
+      SvelteTypeScriptLanguage.INSTANCE
+    )
 }

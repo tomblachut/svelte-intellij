@@ -28,6 +28,13 @@ internal class SvelteStubRegistryExtension : StubRegistryExtension {
 
       SvelteEmbeddedContentModuleStubFactory { EMBEDDED_CONTENT_MODULE_TS },
       JSEmbeddedContentStubSerializer { EMBEDDED_CONTENT_MODULE_TS },
+
+      // Generics attribute stubs
+      SvelteGenericsTypeParameterListStubFactory(),
+      SvelteGenericsTypeParameterListStubSerializer(),
+
+      SvelteGenericsExpressionContentStubFactory(),
+      SvelteGenericsExpressionContentStubSerializer(),
     ).forEach(registry::register)
   }
 }

@@ -1,0 +1,208 @@
+SvelteHtmlFile: ScriptGenerics.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: generics
+        XmlToken:XML_NAME('generics')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          ASTWrapperPsiElement(SVELTE_GENERICS_EMBEDDED)
+            SvelteGenericsExpressionContent(SvelteTS)
+              TypeScriptTypeParameterList
+                TypeScriptTypeParameter
+                  PsiElement(JS:IDENTIFIER)('T')
+                  PsiWhiteSpace(' ')
+                  PsiElement(JS:EXTENDS_KEYWORD)('extends')
+                  PsiWhiteSpace(' ')
+                  TypeScriptTypeParameterConstraint
+                    TypeScriptSingleType
+                      JSReferenceExpression
+                        PsiElement(JS:IDENTIFIER)('BaseItem')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        JSAttributeList
+          <empty list>
+        JSExpressionStatement
+          JSReferenceExpression
+            PsiElement(JS:INTERFACE_KEYWORD)('interface')
+          PsiErrorElement:Newline or semicolon expected
+            <empty list>
+        PsiWhiteSpace(' ')
+        JSExpressionStatement
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('Props')
+          PsiErrorElement:Newline or semicolon expected
+            <empty list>
+        PsiWhiteSpace(' ')
+        JSBlockStatement
+          PsiElement(JS:LBRACE)('{')
+          PsiWhiteSpace('\n    ')
+          JSLabeledStatement
+            PsiElement(JS:IDENTIFIER)('items')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            JSExpressionStatement
+              JSIndexedPropertyAccessExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('T')
+                PsiElement(JS:LBRACKET)('[')
+                PsiErrorElement:Expression expected
+                  <empty list>
+                PsiElement(JS:RBRACKET)(']')
+              PsiElement(JS:SEMICOLON)(';')
+          PsiWhiteSpace('\n    ')
+          JSExpressionStatement
+            JSCallExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('select')
+              JSArgumentList
+                PsiElement(JS:LPAR)('(')
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('item')
+                PsiErrorElement:, or ) expected
+                  <empty list>
+          PsiElement(JS:COLON)(':')
+          PsiWhiteSpace(' ')
+          JSExpressionStatement
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('T')
+            PsiErrorElement:Newline or semicolon expected
+              <empty list>
+          PsiElement(JS:RPAR)(')')
+          PsiErrorElement:Statement expected
+            <empty list>
+          PsiElement(JS:COLON)(':')
+          PsiWhiteSpace(' ')
+          JSExpressionStatement
+            JSPrefixExpression
+              PsiElement(JS:VOID_KEYWORD)('void')
+              PsiErrorElement:Expression expected
+                <empty list>
+            PsiElement(JS:SEMICOLON)(';')
+          PsiWhiteSpace('\n  ')
+          PsiElement(JS:RBRACE)('}')
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          JSDestructuringElement
+            JSDestructuringObject
+              PsiElement(JS:LBRACE)('{')
+              PsiWhiteSpace(' ')
+              JSDestructuringShorthandedProperty
+                JSVariable
+                  PsiElement(JS:IDENTIFIER)('items')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              JSDestructuringShorthandedProperty
+                JSVariable
+                  PsiElement(JS:IDENTIFIER)('select')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:RBRACE)('}')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptSingleType
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('Props')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSCallExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('$props')
+              JSArgumentList
+                PsiElement(JS:LPAR)('(')
+                PsiElement(JS:RPAR)(')')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteEachBlock
+      SvelteEachPrimaryBranch
+        SvelteInitialTag(EACH_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:EACH_KEYWORD)('each')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('items')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:AS_KEYWORD)('as')
+          PsiWhiteSpace(' ')
+          SvelteJSParameter
+            PsiElement(JS:IDENTIFIER)('item')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: button
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('button')
+            PsiWhiteSpace(' ')
+            SvelteHtmlAttribute: onclick
+              XmlToken:XML_NAME('onclick')
+              XmlToken:XML_EQ('=')
+              PsiElement(XML_ATTRIBUTE_VALUE)
+                SveltePsiElement
+                  PsiElement(START_MUSTACHE)('{')
+                  SvelteJS: ATTRIBUTE_EXPRESSION
+                    JSFunctionExpression
+                      JSAttributeList
+                        <empty list>
+                      JSParameterList
+                        PsiElement(JS:LPAR)('(')
+                        PsiElement(JS:RPAR)(')')
+                      PsiWhiteSpace(' ')
+                      PsiElement(JS:EQGT)('=>')
+                      PsiWhiteSpace(' ')
+                      JSCallExpression
+                        JSReferenceExpression
+                          PsiElement(JS:IDENTIFIER)('select')
+                        JSArgumentList
+                          PsiElement(JS:LPAR)('(')
+                          JSReferenceExpression
+                            PsiElement(JS:IDENTIFIER)('item')
+                          PsiElement(JS:RPAR)(')')
+                  PsiElement(END_MUSTACHE)('}')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              PsiWhiteSpace('\n    ')
+            SvelteJS: CONTENT_EXPRESSION
+              PsiElement(JS:LBRACE)('{')
+              JSReferenceExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('item')
+                PsiElement(JS:DOT)('.')
+                PsiElement(JS:IDENTIFIER)('text')
+              PsiElement(JS:RBRACE)('}')
+            XmlText
+              PsiWhiteSpace('\n  ')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('button')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(EACH_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:EACH_KEYWORD)('each')
+        PsiElement(JS:RBRACE)('}')

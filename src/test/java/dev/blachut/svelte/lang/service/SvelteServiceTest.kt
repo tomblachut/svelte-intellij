@@ -540,6 +540,113 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     assertCorrectService()
   }
 
+  @Test
+  fun testGenericGoToDeclaration() {
+    addTypeScriptCommonFiles()
+
+    myFixture.configureByText("TestComponent.svelte", """
+      <script lang="ts" generics="T extends string">
+        export let value: <caret>T;
+      </script>
+      {value}
+    """.trimIndent())
+
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    JSNavigationTest.doTestGTDU(myFixture, false)
+  }
+
+  fun testGenericFindUsages() {
+    addTypeScriptCommonFiles()
+
+    myFixture.configureByText("TestComponent.svelte", """
+      <script lang="ts" generics="<caret>T extends string">
+        export let value: T;
+      </script>
+      {value}
+    """.trimIndent())
+
+    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    assertCorrectService()
+
+    JSNavigationTest.doTestGTDU(myFixture, true)
+  }
+
+  fun testFindUsagesFromTypeParameterDeclaration() {
+    addTypeScriptCommonFiles()
+
+    myFixture.configureByText("TestComponent.svelte", """
+      <script lang="ts" generics="<caret>T extends string">
+        export let value: T;
+        function process(item: T): T {
+          return item;
+        }
+      </script>
+    """.trimIndent())
+
+    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    assertCorrectService()
+
+    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+
+    // Should find: value: T, item: T, return type: T
+    assertTrue("Expected at least 3 usages of T", usages.size >= 3)
+
+    // Verify usages are in expected contexts
+    val usageTexts = usages.map { it.element?.text }
+    assertTrue("Should find usage in 'value: T'", usageTexts.any { it == "T" })
+  }
+
+  fun testFindUsagesFromUsageSite() {
+    addTypeScriptCommonFiles()
+
+    myFixture.configureByText("TestComponent.svelte", """
+      <script lang="ts" generics="T extends string">
+        export let value: <caret>T;
+        function process(item: T): T {
+          return item;
+        }
+      </script>
+    """.trimIndent())
+
+    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    assertCorrectService()
+
+    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+
+    // Should resolve from usage back to declaration and find all usages
+    assertTrue("Should find all usages from usage site", usages.size >= 3)
+  }
+
+  fun testFindUsagesMultipleTypeParameters() {
+    addTypeScriptCommonFiles()
+
+    myFixture.configureByText("TestComponent.svelte", """
+      <script lang="ts" generics="T extends string, <caret>U extends number">
+        export let first: T;
+        export let second: U;
+        function combine(a: T, b: U): [T, U] {
+          return [a, b];
+        }
+      </script>
+    """.trimIndent())
+
+    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    assertCorrectService()
+
+    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+
+    // Should find only U usages, not T usages
+    assertTrue("Should find usages of U", usages.size >= 2)
+
+    // Verify U is found but not T
+    val usageParents = usages.mapNotNull { it.element?.parent?.parent?.text }
+    assertTrue("Should find 'second: U'", usageParents.any { it.contains("second") })
+    assertTrue("Should find 'b: U'", usageParents.any { it.contains("b:") })
+  }
+
+
   private fun checkTypeScriptServiceResolve(fileName: String, text: String) {
     myFixture.configureByText(fileName, text)
     myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol

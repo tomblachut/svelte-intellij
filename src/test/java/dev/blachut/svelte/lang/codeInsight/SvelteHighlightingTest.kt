@@ -174,7 +174,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   fun testGenerics() {
     myFixture.configureByText("Test.svelte", """
       <script lang="ts" generics="Todo extends string">
-        export let something: <error descr="Unresolved type Todo">Todo</error>;
+        export let something: Todo;
       </script>
       
       {something}
