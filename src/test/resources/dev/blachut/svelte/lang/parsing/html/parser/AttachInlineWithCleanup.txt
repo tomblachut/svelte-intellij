@@ -1,0 +1,78 @@
+SvelteHtmlFile: AttachInlineWithCleanup.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace('\n\t')
+      SvelteHtmlAttribute: 
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: ATTACH_EXPRESSION
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:ATTACH_KEYWORD)('attach')
+            PsiWhiteSpace(' ')
+            JSFunctionExpression
+              JSAttributeList
+                <empty list>
+              JSParameterList
+                PsiElement(JS:LPAR)('(')
+                JSParameter
+                  PsiElement(JS:IDENTIFIER)('node')
+                PsiElement(JS:RPAR)(')')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:EQGT)('=>')
+              PsiWhiteSpace(' ')
+              JSBlockStatement
+                PsiElement(JS:LBRACE)('{')
+                PsiWhiteSpace('\n\t\t')
+                JSExpressionStatement
+                  JSAssignmentExpression
+                    JSDefinitionExpression
+                      JSReferenceExpression
+                        JSReferenceExpression
+                          PsiElement(JS:IDENTIFIER)('node')
+                        PsiElement(JS:DOT)('.')
+                        PsiElement(JS:IDENTIFIER)('textContent')
+                    PsiWhiteSpace(' ')
+                    PsiElement(JS:EQ)('=')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:STRING_LITERAL)('"Hello"')
+                PsiWhiteSpace('\n\t\t')
+                JSReturnStatement
+                  PsiElement(JS:RETURN_KEYWORD)('return')
+                  PsiWhiteSpace(' ')
+                  JSFunctionExpression
+                    JSAttributeList
+                      <empty list>
+                    JSParameterList
+                      PsiElement(JS:LPAR)('(')
+                      PsiElement(JS:RPAR)(')')
+                    PsiWhiteSpace(' ')
+                    PsiElement(JS:EQGT)('=>')
+                    PsiWhiteSpace(' ')
+                    JSCallExpression
+                      JSReferenceExpression
+                        JSReferenceExpression
+                          PsiElement(JS:IDENTIFIER)('console')
+                        PsiElement(JS:DOT)('.')
+                        PsiElement(JS:IDENTIFIER)('log')
+                      JSArgumentList
+                        PsiElement(JS:LPAR)('(')
+                        JSLiteralExpression
+                          PsiElement(JS:STRING_LITERAL)('"cleanup"')
+                        PsiElement(JS:RPAR)(')')
+                PsiWhiteSpace('\n\t')
+                PsiElement(JS:RBRACE)('}')
+          PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace('\n')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n\t')
+        XmlToken:XML_DATA_CHARACTERS('content')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')

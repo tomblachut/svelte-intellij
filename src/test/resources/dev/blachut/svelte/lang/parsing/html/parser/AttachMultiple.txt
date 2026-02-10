@@ -1,0 +1,33 @@
+SvelteHtmlFile: AttachMultiple.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: 
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: ATTACH_EXPRESSION
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:ATTACH_KEYWORD)('attach')
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('handler1')
+          PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: 
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: ATTACH_EXPRESSION
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:ATTACH_KEYWORD)('attach')
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('handler2')
+          PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')

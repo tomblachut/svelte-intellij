@@ -487,6 +487,52 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  fun testAttachCompletionInCurlyBraces() {
+    myFixture.configureByText("Component.svelte", "<div {<caret>}></div>")
+    val items = myFixture.completeBasic()
+    hasElements(items, "@attach")
+  }
+
+  fun testAttachCompletionAfterAt() {
+    myFixture.configureByText("Component.svelte", "<div {@<caret>}></div>")
+    val items = myFixture.completeBasic()
+    hasElements(items, "@attach")
+  }
+
+  fun testAttachCompletionWithPartialKeyword() {
+    myFixture.configureByText("Component.svelte", "<div {@att<caret>}></div>")
+    myFixture.completeBasic()
+    myFixture.checkResult("<div {@attach <caret>}></div>")
+  }
+
+  fun testAttachCompletionNotInScript() {
+    myFixture.configureByText("Component.svelte", """
+      <script>
+        const x = {<caret>};
+      </script>
+    """.trimIndent())
+    val items = myFixture.completeBasic()
+    noElements(items, "@attach")
+  }
+
+  fun testAttachCompletionNotInRegularAttribute() {
+    myFixture.configureByText("Component.svelte", """<div class="<caret>"></div>""")
+    val items = myFixture.completeBasic()
+    noElements(items, "@attach")
+  }
+
+  fun testAttachCompletionWithOtherAttributes() {
+    myFixture.configureByText("Component.svelte", """<div class="test" {<caret>}></div>""")
+    val items = myFixture.completeBasic()
+    hasElements(items, "@attach")
+  }
+
+  fun testAttachCompletionMultiple() {
+    myFixture.configureByText("Component.svelte", """<div {@attach first} {<caret>}></div>""")
+    val items = myFixture.completeBasic()
+    hasElements(items, "@attach")
+  }
+
   private fun checkElements(items: Array<LookupElement>, expected: Boolean, vararg variants: String) {
     val toCheck = setOf(*variants)
     val matched = mutableSetOf<String>()

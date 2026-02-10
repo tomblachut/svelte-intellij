@@ -80,6 +80,16 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testAttributeSpread() = doTest()
   fun testAttributeUnquoted() = doTest()
 
+  fun testAttachSimple() = doTest()
+  fun testAttachWithParams() = doTest()
+  fun testAttachInline() = doTest()
+  fun testAttachMultiple() = doTest()
+  fun testAttachConditional() = doTest()
+  fun testAttachWithSpread() = doTest()
+  fun testAttachErrorRecovery() = doTest()
+  fun testAttachTernary() = doTest()
+  fun testAttachInlineWithCleanup() = doTest()
+
   fun testBlockAwaitCatch() = doTest()
   fun testBlockAwaitThenThenThen() = doTest()
   fun testBlockEachAmbiguousAs() = doTest()
