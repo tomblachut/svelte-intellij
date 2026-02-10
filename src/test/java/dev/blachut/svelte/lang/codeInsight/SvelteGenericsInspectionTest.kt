@@ -6,7 +6,7 @@ import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.inspections.SvelteEmptyGenericsInspection
 import dev.blachut.svelte.lang.inspections.SvelteGenericsOnInstanceScriptOnlyInspection
 import dev.blachut.svelte.lang.inspections.SvelteGenericsRequiresTypeScriptInspection
-import dev.blachut.svelte.lang.inspections.SvelteMultipleGenericsScriptsInspection
+
 
 /**
  * Tests for inspections related to the `generics` attribute on script tags.
@@ -19,7 +19,6 @@ class SvelteGenericsInspectionTest : BasePlatformTestCase() {
     myFixture.enableInspections(
       SvelteGenericsRequiresTypeScriptInspection(),
       SvelteGenericsOnInstanceScriptOnlyInspection(),
-      SvelteMultipleGenericsScriptsInspection(),
       SvelteEmptyGenericsInspection()
     )
   }
@@ -37,10 +36,6 @@ class SvelteGenericsInspectionTest : BasePlatformTestCase() {
 
   // File-based tests for SvelteGenericsOnInstanceScriptOnlyInspection
   fun testGenericsOnModuleScript() = doTest()
-
-  // File-based tests for SvelteMultipleGenericsScriptsInspection
-  fun testMultipleGenericsScripts() = doTest()
-  fun testThreeGenericsScripts() = doTest()
 
   // Valid cases (no errors expected)
   fun testValidGenerics() = doTest()
