@@ -16,7 +16,7 @@ internal class SvelteStubRegistryExtension : StubRegistryExtension {
       SVELTEJS_FILE,
       SVELTETS_FILE,
     ).forEach {
-      registry.registerStubSerializer(it, JSFileStubSerializer(it.language))
+      registry.registerStubSerializer(it, JSFileStubSerializer(it))
     }
 
     listOf(
