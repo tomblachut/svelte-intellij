@@ -9,7 +9,7 @@ import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 
 object SvelteJSLazyElementTypes {
-  val ATTRIBUTE_PARAMETER = object : SvelteJSLazyElementType("ATTRIBUTE_PARAMETER") {
+  val ATTRIBUTE_PARAMETER: SvelteJSLazyElementType = object : SvelteJSLazyElementType("ATTRIBUTE_PARAMETER") {
     override val noTokensErrorMessage = "Parameter expected"
 
     override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -18,7 +18,7 @@ object SvelteJSLazyElementTypes {
     }
   }
 
-  val ATTRIBUTE_EXPRESSION = object : SvelteJSLazyElementType("ATTRIBUTE_EXPRESSION") {
+  val ATTRIBUTE_EXPRESSION: SvelteJSLazyElementType = object : SvelteJSLazyElementType("ATTRIBUTE_EXPRESSION") {
     override val noTokensErrorMessage = "Expression expected"
 
     override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -30,7 +30,7 @@ object SvelteJSLazyElementTypes {
   /**
    * Text expressions + html, debug & render + const
    */
-  val CONTENT_EXPRESSION = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
+  val CONTENT_EXPRESSION: SvelteJSLazyElementType = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
     override val noTokensErrorMessage = "Expression expected"
     override val assumeExternalBraces = false // for now trailing { and } belong to this token
 
@@ -62,7 +62,7 @@ object SvelteJSLazyElementTypes {
     }
   }
 
-  val SPREAD_OR_SHORTHAND = object : SvelteJSLazyElementType("SPREAD_OR_SHORTHAND") {
+  val SPREAD_OR_SHORTHAND: SvelteJSLazyElementType = object : SvelteJSLazyElementType("SPREAD_OR_SHORTHAND") {
     override val noTokensErrorMessage = "Shorthand attribute or spread expression expected"
 
     override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -77,6 +77,35 @@ object SvelteJSLazyElementTypes {
       else {
         parser.expressionParser.parseAssignmentExpression(false)
       }
+    }
+  }
+
+  val ATTACH_EXPRESSION: SvelteJSLazyElementType = object : SvelteJSLazyElementType("ATTACH_EXPRESSION") {
+    override val noTokensErrorMessage = "Attachment expression expected"
+
+    override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
+      // Handle @attach keyword
+      if (builder.tokenType === JSTokenTypes.AT) {
+        builder.advanceLexer()
+
+        if (builder.isTokenAfterWhiteSpace()) {
+          builder.error(SvelteBundle.message("svelte.parsing.error.whitespace.not.allowed.after"))
+        }
+
+        if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "attach") {
+          builder.remapCurrentToken(SvelteTokenTypes.ATTACH_KEYWORD)
+          builder.advanceLexer()
+        }
+        else {
+          val errorMarker = builder.mark()
+          builder.advanceLexer()
+          errorMarker.error(SvelteBundle.message("svelte.parsing.error.expected.attach"))
+        }
+      }
+
+      // Parse the expression (function reference, call expression, conditional, etc.)
+      // Use parseAssignmentExpression to support conditionals like: enabled && myAttachment
+      parser.expressionParser.parseAssignmentExpression(false)
     }
   }
 
@@ -148,6 +177,10 @@ object SvelteJSLazyElementTypes {
       }
       else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "const") {
         builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD)
+        builder.advanceLexer()
+      }
+      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "attach") {
+        builder.remapCurrentToken(SvelteTokenTypes.ATTACH_KEYWORD)
         builder.advanceLexer()
       }
 

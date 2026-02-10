@@ -7,13 +7,13 @@ import com.intellij.psi.tree.TokenSet
 
 object SvelteTokenTypes {
   @JvmField
-  val CODE_FRAGMENT = SvelteElementType("CODE_FRAGMENT")
+  val CODE_FRAGMENT: IElementType = SvelteElementType("CODE_FRAGMENT")
 
   @JvmField
-  val START_MUSTACHE = SvelteElementType("START_MUSTACHE")
+  val START_MUSTACHE: IElementType = SvelteElementType("START_MUSTACHE")
 
   @JvmField
-  val END_MUSTACHE = SvelteElementType("END_MUSTACHE")
+  val END_MUSTACHE: IElementType = SvelteElementType("END_MUSTACHE")
 
   @JvmField
   val IF_KEYWORD: IElementType = JSTokenTypes.IF_KEYWORD
@@ -31,7 +31,7 @@ object SvelteTokenTypes {
   val AWAIT_KEYWORD: IElementType = JSTokenTypes.AWAIT_KEYWORD
 
   @JvmField
-  val THEN_KEYWORD = JSKeywordElementType("then")
+  val THEN_KEYWORD: IElementType = JSKeywordElementType("then")
 
   @JvmField
   val CATCH_KEYWORD: IElementType = JSTokenTypes.CATCH_KEYWORD
@@ -40,21 +40,24 @@ object SvelteTokenTypes {
   val KEY_KEYWORD: IElementType = JSKeywordElementType("key")
 
   @JvmField
-  val HTML_KEYWORD = JSKeywordElementType("html")
+  val HTML_KEYWORD: IElementType = JSKeywordElementType("html")
 
   @JvmField
-  val DEBUG_KEYWORD = JSKeywordElementType("debug")
+  val DEBUG_KEYWORD: IElementType = JSKeywordElementType("debug")
 
   @JvmField
   val CONST_KEYWORD: IElementType = JSTokenTypes.CONST_KEYWORD
 
   @JvmField
-  val SNIPPET_KEYWORD = JSKeywordElementType("snippet")
+  val SNIPPET_KEYWORD: IElementType = JSKeywordElementType("snippet")
 
   @JvmField
-  val RENDER_KEYWORD = JSKeywordElementType("render")
+  val RENDER_KEYWORD: IElementType = JSKeywordElementType("render")
 
-  val KEYWORDS = TokenSet.create(
+  @JvmField
+  val ATTACH_KEYWORD: IElementType = JSKeywordElementType("attach")
+
+  val KEYWORDS: TokenSet = TokenSet.create(
     IF_KEYWORD,
     ELSE_KEYWORD,
     EACH_KEYWORD,
@@ -68,5 +71,6 @@ object SvelteTokenTypes {
     CONST_KEYWORD,
     SNIPPET_KEYWORD,
     RENDER_KEYWORD,
+    ATTACH_KEYWORD,
   )
 }

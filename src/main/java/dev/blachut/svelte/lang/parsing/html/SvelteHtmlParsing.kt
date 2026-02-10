@@ -120,8 +120,33 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
   override fun parseCustomTagHeaderContent() {
     val att = mark()
-    parseAttributeExpression(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
+    val elementType = if (isAttachExpression()) {
+      SvelteJSLazyElementTypes.ATTACH_EXPRESSION
+    }
+    else {
+      SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND
+    }
+    parseAttributeExpression(elementType)
     att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)
+  }
+
+  /**
+   * Lookahead to detect {@attach pattern.
+   * Returns true if the content after { starts with @attach
+   */
+  private fun isAttachExpression(): Boolean {
+    // Current token is START_MUSTACHE ({)
+    // Look at the CODE_FRAGMENT token to check if it starts with @attach
+    if (builder.lookAhead(1) === SvelteTokenTypes.CODE_FRAGMENT) {
+      // Get the text of the CODE_FRAGMENT token
+      val start = builder.rawTokenTypeStart(1)
+      val end = builder.rawTokenTypeStart(2)
+      if (end > start) {
+        val fragmentText = builder.originalText.subSequence(start, end).toString().trimStart()
+        return fragmentText.startsWith("@attach")
+      }
+    }
+    return false
   }
 
   override fun parseAttribute() {

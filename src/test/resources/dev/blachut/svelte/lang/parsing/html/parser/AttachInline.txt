@@ -1,0 +1,57 @@
+SvelteHtmlFile: AttachInline.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: canvas
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('canvas')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: 
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: ATTACH_EXPRESSION
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:ATTACH_KEYWORD)('attach')
+            JSFunctionExpression
+              JSAttributeList
+                <empty list>
+              JSParameterList
+                PsiElement(JS:LPAR)('(')
+                JSParameter
+                  PsiElement(JS:IDENTIFIER)('canvas')
+                PsiElement(JS:RPAR)(')')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:EQGT)('=>')
+              PsiWhiteSpace(' ')
+              JSBlockStatement
+                PsiElement(JS:LBRACE)('{')
+                PsiWhiteSpace('\n  ')
+                JSVarStatement
+                  JSAttributeList
+                    <empty list>
+                  PsiElement(JS:CONST_KEYWORD)('const')
+                  PsiWhiteSpace(' ')
+                  JSVariable
+                    PsiElement(JS:IDENTIFIER)('ctx')
+                    PsiWhiteSpace(' ')
+                    PsiElement(JS:EQ)('=')
+                    PsiWhiteSpace(' ')
+                    JSCallExpression
+                      JSReferenceExpression
+                        JSReferenceExpression
+                          PsiElement(JS:IDENTIFIER)('canvas')
+                        PsiElement(JS:DOT)('.')
+                        PsiElement(JS:IDENTIFIER)('getContext')
+                      JSArgumentList
+                        PsiElement(JS:LPAR)('(')
+                        JSLiteralExpression
+                          PsiElement(JS:STRING_LITERAL)(''2d'')
+                        PsiElement(JS:RPAR)(')')
+                  PsiElement(JS:SEMICOLON)(';')
+                PsiWhiteSpace('\n  ')
+                PsiElement(JS:RBRACE)('}')
+          PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('canvas')
+      XmlToken:XML_TAG_END('>')

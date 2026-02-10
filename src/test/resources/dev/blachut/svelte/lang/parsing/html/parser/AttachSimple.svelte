@@ -1,0 +1,1 @@
+<div {@attach myAttachment}></div>
