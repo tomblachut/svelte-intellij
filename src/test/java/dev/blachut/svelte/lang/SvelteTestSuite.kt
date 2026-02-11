@@ -31,9 +31,11 @@ import dev.blachut.svelte.lang.service.SvelteNsUsagesServiceTest
 import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
 import dev.blachut.svelte.lang.service.SvelteServiceDocumentationTest
 import dev.blachut.svelte.lang.service.SvelteServiceTest
+import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
+@Ignore("Manual only")
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
   // Parsing
@@ -69,6 +71,7 @@ import org.junit.runners.Suite
 )
 class SvelteAggregatorTestSuite
 
+@Ignore("Manual only")
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
   SvelteServiceTest::class,
@@ -79,6 +82,7 @@ class SvelteAggregatorTestSuite
 )
 class SvelteServiceTestSuite
 
+@Ignore("Manual only")
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
   SvelteAggregatorTestSuite::class,
