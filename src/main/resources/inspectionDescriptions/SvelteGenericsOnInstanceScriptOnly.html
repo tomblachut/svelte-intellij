@@ -1,0 +1,14 @@
+<html lang="en">
+<body>
+Reports <code>generics</code> attributes on module scripts (<code>context="module"</code>).
+<p>The <code>generics</code> attribute is only allowed on instance scripts, not module scripts.</p>
+<p>Example of invalid code:</p>
+<pre><code>&lt;script context="module" generics="T"&gt;
+  // Error: generics not allowed on module scripts
+&lt;/script&gt;</code></pre>
+<p>Example of valid code:</p>
+<pre><code>&lt;script lang="ts" generics="T"&gt;
+  // OK: instance script with generics
+&lt;/script&gt;</code></pre>
+</body>
+</html>

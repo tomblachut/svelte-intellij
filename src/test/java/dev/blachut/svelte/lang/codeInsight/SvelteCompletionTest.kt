@@ -35,6 +35,16 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(myFixture.completeBasic(), """context="module"""")
   }
 
+  fun testGenericsAttribute() {
+    myFixture.configureByText("foo.svelte", "<script g<caret>></script>")
+    hasElements(myFixture.completeBasic(), """generics="T"""")
+  }
+
+  fun testExistGenericsAttribute() {
+    myFixture.configureByText("foo.svelte", """<script generics="T" g<caret>></script>""")
+    noElements(myFixture.completeBasic(), """generics="T"""")
+  }
+
   fun testStyleLang() {
     myFixture.configureByText("foo.svelte", """<style lang="<caret>"></style>""")
     hasElements(myFixture.completeBasic(), "css")

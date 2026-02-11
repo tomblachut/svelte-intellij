@@ -1,0 +1,13 @@
+<html lang="en">
+<body>
+Reports empty or whitespace-only <code>generics</code> attributes on script tags.
+<p>Example of invalid code:</p>
+<pre><code>&lt;script lang="ts" generics=""&gt;
+  export let value;
+&lt;/script&gt;</code></pre>
+<p>Example of valid code:</p>
+<pre><code>&lt;script lang="ts" generics="T"&gt;
+  export let value: T;
+&lt;/script&gt;</code></pre>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<html lang="en">
+<body>
+Reports <code>generics</code> attributes on script tags without TypeScript (<code>lang="ts"</code>).
+<p>The <code>generics</code> attribute requires TypeScript to be enabled on the script tag.</p>
+<p>Example of invalid code:</p>
+<pre><code>&lt;script generics="T extends string"&gt;
+  // Error: generics requires TypeScript
+&lt;/script&gt;</code></pre>
+<p>Example of valid code:</p>
+<pre><code>&lt;script lang="ts" generics="T extends string"&gt;
+  // OK: TypeScript is enabled
+&lt;/script&gt;</code></pre>
+</body>
+</html>

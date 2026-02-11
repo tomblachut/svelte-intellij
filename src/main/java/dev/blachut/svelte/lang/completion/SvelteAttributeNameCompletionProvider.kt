@@ -42,6 +42,10 @@ class SvelteAttributeNameCompletionProvider : CompletionProvider<CompletionParam
       result.addElement(createLookupElement(text = "context=\"module\"", priority = -1, deprecated = true))
     }
 
+    if (xmlTag.name == SCRIPT_TAG_NAME && xmlTag.getAttribute("generics") == null) {
+      result.addElement(createLookupElement(text = "generics=\"T\"", priority = 80))
+    }
+
     // TODO refactor into proper descriptors
     if (xmlTag.name == STYLE_TAG_NAME && xmlTag.getAttribute("global") == null) {
       result.addElement(createLookupElement("global"))
