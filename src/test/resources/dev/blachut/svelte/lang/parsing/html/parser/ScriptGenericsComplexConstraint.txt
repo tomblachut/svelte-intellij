@@ -69,7 +69,7 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
           XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
       XmlToken:XML_TAG_END('>')
       SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
-        PsiWhiteSpace('\n    ')
+        PsiWhiteSpace('\n  ')
         JSVarStatement
           JSAttributeList
             <empty list>
@@ -78,11 +78,9 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
           JSDestructuringElement
             JSDestructuringObject
               PsiElement(JS:LBRACE)('{')
-              PsiWhiteSpace(' ')
               JSDestructuringShorthandedProperty
                 JSVariable
                   PsiElement(JS:IDENTIFIER)('items')
-              PsiWhiteSpace(' ')
               PsiElement(JS:RBRACE)('}')
             PsiElement(JS:COLON)(':')
             PsiWhiteSpace(' ')
@@ -130,7 +128,7 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
           XmlText
-            PsiWhiteSpace('\n    ')
+            PsiWhiteSpace('\n  ')
           SvelteHtmlTag: p
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('p')

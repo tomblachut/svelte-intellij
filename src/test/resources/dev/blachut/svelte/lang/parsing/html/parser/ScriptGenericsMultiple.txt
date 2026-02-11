@@ -102,7 +102,7 @@ SvelteHtmlFile: ScriptGenericsMultiple.svelte
             PsiElement(JS:SEMICOLON)(';')
           PsiWhiteSpace('\n  ')
           PsiElement(JS:RBRACE)('}')
-        PsiWhiteSpace('\n  ')
+        PsiWhiteSpace('\n\n  ')
         JSVarStatement
           JSAttributeList
             <empty list>
@@ -111,7 +111,6 @@ SvelteHtmlFile: ScriptGenericsMultiple.svelte
           JSDestructuringElement
             JSDestructuringObject
               PsiElement(JS:LBRACE)('{')
-              PsiWhiteSpace(' ')
               JSDestructuringShorthandedProperty
                 JSVariable
                   PsiElement(JS:IDENTIFIER)('clearable')
@@ -120,7 +119,6 @@ SvelteHtmlFile: ScriptGenericsMultiple.svelte
               JSDestructuringShorthandedProperty
                 JSVariable
                   PsiElement(JS:IDENTIFIER)('value')
-              PsiWhiteSpace(' ')
               PsiElement(JS:RBRACE)('}')
             PsiElement(JS:COLON)(':')
             PsiWhiteSpace(' ')

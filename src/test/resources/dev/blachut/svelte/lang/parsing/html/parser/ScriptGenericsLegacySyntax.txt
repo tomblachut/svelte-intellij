@@ -27,7 +27,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
           XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
       XmlToken:XML_TAG_END('>')
       SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
-        PsiWhiteSpace('\n    ')
+        PsiWhiteSpace('\n  ')
         JSVarStatement
           JSAttributeList
             PsiElement(JS:EXPORT_KEYWORD)('export')
@@ -45,7 +45,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
               PsiElement(JS:LBRACKET)('[')
               PsiElement(JS:RBRACKET)(']')
           PsiElement(JS:SEMICOLON)(';')
-        PsiWhiteSpace('\n    ')
+        PsiWhiteSpace('\n  ')
         JSVarStatement
           JSAttributeList
             PsiElement(JS:EXPORT_KEYWORD)('export')
@@ -84,7 +84,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
       XmlToken:XML_NAME('ul')
       XmlToken:XML_TAG_END('>')
       XmlText
-        PsiWhiteSpace('\n    ')
+        PsiWhiteSpace('\n  ')
       SvelteEachBlock
         SvelteEachPrimaryBranch
           SvelteInitialTag(EACH_START)
@@ -102,7 +102,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
             PsiElement(JS:RBRACE)('}')
           SvelteFragment
             XmlText
-              PsiWhiteSpace('\n        ')
+              PsiWhiteSpace('\n    ')
             SvelteHtmlTag: li
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('li')
@@ -125,7 +125,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
               XmlToken:XML_NAME('li')
               XmlToken:XML_TAG_END('>')
             XmlText
-              PsiWhiteSpace('\n    ')
+              PsiWhiteSpace('\n  ')
         SvelteEndTag(EACH_END)
           PsiElement(JS:LBRACE)('{')
           PsiElement(JS:DIV)('/')

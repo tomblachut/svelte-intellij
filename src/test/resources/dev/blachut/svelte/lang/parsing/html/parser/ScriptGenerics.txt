@@ -65,7 +65,7 @@ SvelteHtmlFile: ScriptGenerics.svelte
                   <empty list>
                 PsiElement(JS:RBRACKET)(']')
               PsiElement(JS:SEMICOLON)(';')
-          PsiWhiteSpace('\n    ')
+          PsiWhiteSpace('\n\n    ')
           JSExpressionStatement
             JSCallExpression
               JSReferenceExpression
@@ -96,7 +96,7 @@ SvelteHtmlFile: ScriptGenerics.svelte
             PsiElement(JS:SEMICOLON)(';')
           PsiWhiteSpace('\n  ')
           PsiElement(JS:RBRACE)('}')
-        PsiWhiteSpace('\n  ')
+        PsiWhiteSpace('\n\n  ')
         JSVarStatement
           JSAttributeList
             <empty list>
@@ -105,7 +105,6 @@ SvelteHtmlFile: ScriptGenerics.svelte
           JSDestructuringElement
             JSDestructuringObject
               PsiElement(JS:LBRACE)('{')
-              PsiWhiteSpace(' ')
               JSDestructuringShorthandedProperty
                 JSVariable
                   PsiElement(JS:IDENTIFIER)('items')
@@ -114,7 +113,6 @@ SvelteHtmlFile: ScriptGenerics.svelte
               JSDestructuringShorthandedProperty
                 JSVariable
                   PsiElement(JS:IDENTIFIER)('select')
-              PsiWhiteSpace(' ')
               PsiElement(JS:RBRACE)('}')
             PsiElement(JS:COLON)(':')
             PsiWhiteSpace(' ')
