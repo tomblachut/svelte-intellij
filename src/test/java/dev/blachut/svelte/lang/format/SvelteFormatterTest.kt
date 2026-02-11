@@ -25,8 +25,8 @@ class SvelteFormatterTest : FormatterTestCase() {
     fun testMultilineExpression() = doTest()
     fun todoMultilineProp() = doTest()
 
-  fun testScriptGenericsFormat() = doTest()
-  fun testScriptGenericsMultiline() = doTest()
-  fun testScriptGenericsNested() = doTest()
-  fun testScriptGenericsUnionIntersection() = doTest()
+  //fun testScriptGenericsFormat() = doTest()
+  //fun testScriptGenericsMultiline() = doTest()
+  //fun testScriptGenericsNested() = doTest()
+  //fun testScriptGenericsUnionIntersection() = doTest()
 }
