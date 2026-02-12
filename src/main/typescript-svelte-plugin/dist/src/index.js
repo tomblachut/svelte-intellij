@@ -70,6 +70,7 @@ var require_utils = __commonJS({
     exports2.hasNodeModule = hasNodeModule;
     exports2.isSvelteProject = isSvelteProject;
     exports2.importSvelteCompiler = importSvelteCompiler;
+    exports2.getProjectParsedCommandLine = getProjectParsedCommandLine;
     var path_12 = require("path");
     function isSvelteFilePath(filePath) {
       return filePath.endsWith(".svelte");
@@ -238,6 +239,13 @@ var require_utils = __commonJS({
       }
     }
     function isSvelteProject(project) {
+      var _a;
+      if ((_a = project.isSolution) == null ? void 0 : _a.call(project)) {
+        const parsedCommandLine = getProjectParsedCommandLine(project);
+        if ((parsedCommandLine == null ? void 0 : parsedCommandLine.fileNames.length) === 0) {
+          return false;
+        }
+      }
       const projectDirectory = getProjectDirectory(project);
       if (projectDirectory) {
         return hasNodeModule(projectDirectory, "svelte");
@@ -269,6 +277,12 @@ var require_utils = __commonJS({
       } catch (e) {
       }
     }
+    function getProjectParsedCommandLine(project) {
+      var _a;
+      const configPath = getConfigPathForProject(project);
+      const parsedCommandLine = (_a = project.getParsedCommandLine) == null ? void 0 : _a.call(project, configPath);
+      return parsedCommandLine;
+    }
   }
 });
 
@@ -279,6 +293,7 @@ var require_call_hierarchy = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.decorateCallHierarchy = decorateCallHierarchy;
     var utils_12 = require_utils();
+    var svelte2tsx_12 = require("svelte2tsx");
     var ENSURE_COMPONENT_HELPER = "__sveltets_2_ensureComponent";
     function decorateCallHierarchy(ls, snapshotManager, typescript) {
       const provideCallHierarchyIncomingCalls = ls.provideCallHierarchyIncomingCalls;
@@ -318,7 +333,7 @@ var require_call_hierarchy = __commonJS({
         const sourceFile = program == null ? void 0 : program.getSourceFile(fileName);
         const renderFunctionOffset = isComponentModulePosition(fileName, position) && sourceFile ? (_b = (_a = sourceFile.statements.find((statement) => {
           var _a2;
-          return typescript.isFunctionDeclaration(statement) && ((_a2 = statement.name) == null ? void 0 : _a2.getText()) === "render";
+          return typescript.isFunctionDeclaration(statement) && ((_a2 = statement.name) == null ? void 0 : _a2.getText()) === svelte2tsx_12.internalHelpers.renderName;
         })) == null ? void 0 : _a.name) == null ? void 0 : _b.getStart() : -1;
         const offset = renderFunctionOffset != null && renderFunctionOffset >= 0 ? renderFunctionOffset : position;
         const snapshot = snapshotManager.get(fileName);
@@ -373,7 +388,7 @@ var require_call_hierarchy = __commonJS({
         if ((0, utils_12.isGeneratedSvelteComponentName)(item.name)) {
           return toComponentCallHierarchyItem(snapshot, item.file);
         }
-        if (item.name === "render") {
+        if (item.name === svelte2tsx_12.internalHelpers.renderName) {
           const end = item.selectionSpan.start + item.selectionSpan.length;
           const renderFunction = sourceFile.statements.find((statement) => statement.getStart() <= item.selectionSpan.start && statement.getEnd() >= end);
           if (!renderFunction || !sourceFile.statements.includes(renderFunction)) {
@@ -475,7 +490,7 @@ var require_sveltekit = __commonJS({
     exports2.isKitRouteExportAllowedIn = isKitRouteExportAllowedIn;
     exports2.getVirtualLS = getVirtualLS;
     var utils_12 = require_utils();
-    var svelte2tsx_1 = require("svelte2tsx");
+    var svelte2tsx_12 = require("svelte2tsx");
     var cache = /* @__PURE__ */ new WeakMap();
     function createApiExport(name) {
       return {
@@ -981,6 +996,7 @@ var require_sveltekit = __commonJS({
           ) : void 0;
           this.getPackageJsonAutoImportProvider = originalLanguageServiceHost.getPackageJsonAutoImportProvider ? () => originalLanguageServiceHost.getPackageJsonAutoImportProvider() : void 0;
           this.getModuleResolutionCache = originalLanguageServiceHost.getModuleResolutionCache ? () => originalLanguageServiceHost.getModuleResolutionCache() : void 0;
+          this.useSourceOfProjectReferenceRedirect = originalLanguageServiceHost.useSourceOfProjectReferenceRedirect ? () => originalLanguageServiceHost.useSourceOfProjectReferenceRedirect() : void 0;
         }
         log() {
         }
@@ -1025,7 +1041,7 @@ var require_sveltekit = __commonJS({
           return this.files[fileName];
         }
         upsertKitFile(fileName) {
-          const result = svelte2tsx_1.internalHelpers.upsertKitFile(ts, fileName, kitFilesSettings, () => {
+          const result = svelte2tsx_12.internalHelpers.upsertKitFile(ts, fileName, kitFilesSettings, () => {
             var _a;
             return (_a = info.languageService.getProgram()) == null ? void 0 : _a.getSourceFile(fileName);
           });
@@ -1073,8 +1089,8 @@ var require_sveltekit = __commonJS({
         return {
           languageService: proxy.languageService,
           addedCode: result.addedCode,
-          toVirtualPos: (pos) => svelte2tsx_1.internalHelpers.toVirtualPos(pos, result.addedCode),
-          toOriginalPos: (pos) => svelte2tsx_1.internalHelpers.toOriginalPos(pos, result.addedCode)
+          toVirtualPos: (pos) => svelte2tsx_12.internalHelpers.toVirtualPos(pos, result.addedCode),
+          toOriginalPos: (pos) => svelte2tsx_12.internalHelpers.toOriginalPos(pos, result.addedCode)
         };
       }
     }
@@ -1334,7 +1350,7 @@ var require_diagnostics = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.decorateDiagnostics = decorateDiagnostics;
     var path_12 = __importDefault(require("path"));
-    var svelte2tsx_1 = require("svelte2tsx");
+    var svelte2tsx_12 = require("svelte2tsx");
     var utils_12 = require_utils();
     var sveltekit_1 = require_sveltekit();
     function decorateDiagnostics(ls, info, typescript, logger) {
@@ -1417,7 +1433,7 @@ var require_diagnostics = __commonJS({
         const basename = path_12.default.basename(fileName);
         const validExports = Object.keys(sveltekit_1.kitExports).filter((key) => (0, sveltekit_1.isKitRouteExportAllowedIn)(basename, sveltekit_1.kitExports[key]));
         if (source && basename.startsWith("+")) {
-          const exports3 = svelte2tsx_1.internalHelpers.findExports(
+          const exports3 = svelte2tsx_12.internalHelpers.findExports(
             ts,
             source,
             /* irrelevant */
@@ -1545,14 +1561,14 @@ var require_hover = __commonJS({
     var sveltekit_1 = require_sveltekit();
     function decorateHover(ls, info, ts, logger) {
       const getQuickInfoAtPosition = ls.getQuickInfoAtPosition;
-      ls.getQuickInfoAtPosition = (fileName, position) => {
+      ls.getQuickInfoAtPosition = (fileName, position, ...rest) => {
         var _a, _b;
         const result = (0, sveltekit_1.getVirtualLS)(fileName, info, ts);
         if (!result)
-          return getQuickInfoAtPosition(fileName, position);
+          return getQuickInfoAtPosition(fileName, position, ...rest);
         const { languageService, toOriginalPos, toVirtualPos } = result;
         const virtualPos = toVirtualPos(position);
-        const quickInfo = languageService.getQuickInfoAtPosition(fileName, virtualPos);
+        const quickInfo = languageService.getQuickInfoAtPosition(fileName, virtualPos, ...rest);
         if (!quickInfo)
           return quickInfo;
         const source = (_a = languageService.getProgram()) == null ? void 0 : _a.getSourceFile(fileName);
@@ -1749,19 +1765,23 @@ var require_navigate_to_items = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.decorateNavigateToItems = decorateNavigateToItems;
     var utils_12 = require_utils();
+    var svelte2tsx_12 = require("svelte2tsx");
     function decorateNavigateToItems(ls, snapshotManager) {
       const getNavigateToItems = ls.getNavigateToItems;
-      ls.getNavigateToItems = (searchValue, maxResultCount, fileName, excludeDtsFiles) => {
-        const navigationToItems = getNavigateToItems(searchValue, maxResultCount, fileName, excludeDtsFiles);
+      ls.getNavigateToItems = (...args) => {
+        const navigationToItems = getNavigateToItems(...args);
         return navigationToItems.map((item) => {
-          var _a;
           if (!(0, utils_12.isSvelteFilePath)(item.fileName)) {
             return item;
           }
-          if (item.name.startsWith("__sveltets_") || item.name === "render" && !item.containerName) {
+          if (item.name.startsWith("__sveltets_") || item.name === svelte2tsx_12.internalHelpers.renderName || item.name.startsWith("$$")) {
             return;
           }
-          let textSpan = (_a = snapshotManager.get(item.fileName)) == null ? void 0 : _a.getOriginalTextSpan(item.textSpan);
+          const snapshot = snapshotManager.get(item.fileName);
+          if (!snapshot || !(0, utils_12.isNoTextSpanInGeneratedCode)(snapshot.getText(), item.textSpan)) {
+            return;
+          }
+          let textSpan = snapshot.getOriginalTextSpan(item.textSpan);
           if (!textSpan) {
             if ((0, utils_12.isGeneratedSvelteComponentName)(item.name)) {
               textSpan = { start: 0, length: 1 };
@@ -1769,11 +1789,19 @@ var require_navigate_to_items = __commonJS({
               return;
             }
           }
+          const containerName = item.containerName === svelte2tsx_12.internalHelpers.renderName || !item.containerName ? isInScript(textSpan.start, snapshot.getOriginalText()) ? "script" : "" : item.containerName;
           return __spreadProps(__spreadValues({}, item), {
+            containerName,
             textSpan
           });
         }).filter(utils_12.isNotNullOrUndefined);
       };
+    }
+    function isInScript(offset, originalText) {
+      const text = originalText.slice(0, offset);
+      const lastScriptTag = text.lastIndexOf("<script");
+      const lastCloseTag = text.lastIndexOf("</script>");
+      return lastScriptTag > lastCloseTag;
     }
   }
 });
@@ -2280,14 +2308,57 @@ var require_module_loader = __commonJS({
 var require_sourcemap_codec_umd = __commonJS({
   "node_modules/@jridgewell/sourcemap-codec/dist/sourcemap-codec.umd.js"(exports2, module2) {
     (function(global, factory) {
-      typeof exports2 === "object" && typeof module2 !== "undefined" ? factory(exports2) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.sourcemapCodec = {}));
-    })(exports2, function(exports3) {
+      if (typeof exports2 === "object" && typeof module2 !== "undefined") {
+        factory(module2);
+        module2.exports = def(module2);
+      } else if (typeof define === "function" && define.amd) {
+        define(["module"], function(mod) {
+          factory.apply(this, arguments);
+          mod.exports = def(mod);
+        });
+      } else {
+        const mod = { exports: {} };
+        factory(mod);
+        global = typeof globalThis !== "undefined" ? globalThis : global || self;
+        global.sourcemapCodec = def(mod);
+      }
+      function def(m) {
+        return "default" in m.exports ? m.exports.default : m.exports;
+      }
+    })(exports2, function(module3) {
       "use strict";
-      const comma = ",".charCodeAt(0);
-      const semicolon = ";".charCodeAt(0);
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-      const intToChar = new Uint8Array(64);
-      const charToInt = new Uint8Array(128);
+      var __defProp2 = Object.defineProperty;
+      var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+      var __getOwnPropNames2 = Object.getOwnPropertyNames;
+      var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+      var __export = (target, all) => {
+        for (var name in all)
+          __defProp2(target, name, { get: all[name], enumerable: true });
+      };
+      var __copyProps2 = (to, from, except, desc) => {
+        if (from && typeof from === "object" || typeof from === "function") {
+          for (let key of __getOwnPropNames2(from))
+            if (!__hasOwnProp2.call(to, key) && key !== except)
+              __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+        }
+        return to;
+      };
+      var __toCommonJS = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+      var sourcemap_codec_exports = {};
+      __export(sourcemap_codec_exports, {
+        decode: () => decode,
+        decodeGeneratedRanges: () => decodeGeneratedRanges,
+        decodeOriginalScopes: () => decodeOriginalScopes,
+        encode: () => encode,
+        encodeGeneratedRanges: () => encodeGeneratedRanges,
+        encodeOriginalScopes: () => encodeOriginalScopes
+      });
+      module3.exports = __toCommonJS(sourcemap_codec_exports);
+      var comma = ",".charCodeAt(0);
+      var semicolon = ";".charCodeAt(0);
+      var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+      var intToChar = new Uint8Array(64);
+      var charToInt = new Uint8Array(128);
       for (let i = 0; i < chars.length; i++) {
         const c = chars.charCodeAt(i);
         intToChar[i] = c;
@@ -2327,8 +2398,8 @@ var require_sourcemap_codec_umd = __commonJS({
           return false;
         return reader.peek() !== comma;
       }
-      const bufLength = 1024 * 16;
-      const td = typeof TextDecoder !== "undefined" ? /* @__PURE__ */ new TextDecoder() : typeof Buffer !== "undefined" ? {
+      var bufLength = 1024 * 16;
+      var td = typeof TextDecoder !== "undefined" ? /* @__PURE__ */ new TextDecoder() : typeof Buffer !== "undefined" ? {
         decode(buf) {
           const out = Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength);
           return out.toString();
@@ -2342,7 +2413,7 @@ var require_sourcemap_codec_umd = __commonJS({
           return out;
         }
       };
-      class StringWriter {
+      var StringWriter = class {
         constructor() {
           this.pos = 0;
           this.out = "";
@@ -2360,8 +2431,8 @@ var require_sourcemap_codec_umd = __commonJS({
           const { buffer, out, pos } = this;
           return pos > 0 ? out + td.decode(buffer.subarray(0, pos)) : out;
         }
-      }
-      class StringReader {
+      };
+      var StringReader = class {
         constructor(buffer) {
           this.pos = 0;
           this.buffer = buffer;
@@ -2377,8 +2448,8 @@ var require_sourcemap_codec_umd = __commonJS({
           const idx = buffer.indexOf(char, pos);
           return idx === -1 ? buffer.length : idx;
         }
-      }
-      const EMPTY = [];
+      };
+      var EMPTY = [];
       function decodeOriginalScopes(input) {
         const { length } = input;
         const reader = new StringReader(input);
@@ -2480,7 +2551,10 @@ var require_sourcemap_codec_umd = __commonJS({
             let range;
             if (hasDefinition) {
               const defSourcesIndex = decodeInteger(reader, definitionSourcesIndex);
-              definitionScopeIndex = decodeInteger(reader, definitionSourcesIndex === defSourcesIndex ? definitionScopeIndex : 0);
+              definitionScopeIndex = decodeInteger(
+                reader,
+                definitionSourcesIndex === defSourcesIndex ? definitionScopeIndex : 0
+              );
               definitionSourcesIndex = defSourcesIndex;
               range = [genLine, genColumn, 0, 0, defSourcesIndex, definitionScopeIndex];
             } else {
@@ -2493,7 +2567,10 @@ var require_sourcemap_codec_umd = __commonJS({
               callsiteSourcesIndex = decodeInteger(reader, callsiteSourcesIndex);
               const sameSource = prevCsi === callsiteSourcesIndex;
               callsiteLine = decodeInteger(reader, sameSource ? callsiteLine : 0);
-              callsiteColumn = decodeInteger(reader, sameSource && prevLine === callsiteLine ? callsiteColumn : 0);
+              callsiteColumn = decodeInteger(
+                reader,
+                sameSource && prevLine === callsiteLine ? callsiteColumn : 0
+              );
               callsite = [callsiteSourcesIndex, callsiteLine, callsiteColumn];
             }
             range.callsite = callsite;
@@ -2539,7 +2616,15 @@ var require_sourcemap_codec_umd = __commonJS({
       }
       function _encodeGeneratedRanges(ranges, index, writer, state) {
         const range = ranges[index];
-        const { 0: startLine, 1: startColumn, 2: endLine, 3: endColumn, isScope, callsite, bindings } = range;
+        const {
+          0: startLine,
+          1: startColumn,
+          2: endLine,
+          3: endColumn,
+          isScope,
+          callsite,
+          bindings
+        } = range;
         if (state[0] < startLine) {
           catchupLine(writer, state[0], startLine);
           state[0] = startLine;
@@ -2689,13 +2774,6 @@ var require_sourcemap_codec_umd = __commonJS({
         }
         return writer.flush();
       }
-      exports3.decode = decode;
-      exports3.decodeGeneratedRanges = decodeGeneratedRanges;
-      exports3.decodeOriginalScopes = decodeOriginalScopes;
-      exports3.encode = encode;
-      exports3.encodeGeneratedRanges = encodeGeneratedRanges;
-      exports3.encodeOriginalScopes = encodeOriginalScopes;
-      Object.defineProperty(exports3, "__esModule", { value: true });
     });
   }
 });
@@ -2809,7 +2887,7 @@ var require_svelte_snapshots = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SvelteSnapshotManager = exports2.SvelteSnapshot = void 0;
-    var svelte2tsx_1 = require("svelte2tsx");
+    var svelte2tsx_12 = require("svelte2tsx");
     var source_mapper_1 = require_source_mapper();
     var utils_12 = require_utils();
     var SvelteSnapshot = class {
@@ -3010,8 +3088,8 @@ var require_svelte_snapshots = __commonJS({
         this.logger = logger;
         this.configManager = configManager;
         this.svelteCompiler = svelteCompiler;
-        this.snapshots = /* @__PURE__ */ new Map();
-        this.patchProjectServiceReadFile();
+        this.patchProjectService();
+        this.snapshots = this.projectService[snapshots];
       }
       get(fileName) {
         return this.snapshots.get(this.projectService.toCanonicalFileName(fileName));
@@ -3040,77 +3118,74 @@ var require_svelte_snapshots = __commonJS({
         this.snapshots.set(canonicalFilePath, snapshot);
         return snapshot;
       }
-      patchProjectServiceReadFile() {
-        if (!this.projectService.host[onReadSvelteFile]) {
-          this.logger.log("patching projectService host readFile");
-          this.projectService.host[onReadSvelteFile] = [];
-          const readFile = this.projectService.host.readFile;
-          this.projectService.host.readFile = (path, encoding) => {
-            var _a, _b;
-            if (!this.configManager.getConfig().enable) {
-              return readFile(path, encoding);
-            }
-            const normalizedPath = path.replace(/\\/g, "/");
-            if (normalizedPath.endsWith("node_modules/svelte/types/runtime/ambient.d.ts")) {
-              return "";
-            } else if (normalizedPath.endsWith("svelte2tsx/svelte-jsx.d.ts")) {
-              const originalText = readFile(path) || "";
-              const toReplace = '/// <reference lib="dom" />';
-              return originalText.replace(toReplace, " ".repeat(toReplace.length));
-            } else if (normalizedPath.endsWith("svelte2tsx/svelte-shims.d.ts")) {
-              let originalText = readFile(path) || "";
-              if (!originalText.includes("// -- start svelte-ls-remove --")) {
-                return originalText;
-              }
-              const startIdx = originalText.indexOf("// -- start svelte-ls-remove --");
-              const endIdx = originalText.indexOf("// -- end svelte-ls-remove --");
-              originalText = originalText.substring(0, startIdx) + " ".repeat(endIdx - startIdx) + originalText.substring(endIdx);
-              return originalText;
-            } else if ((0, utils_12.isSvelteFilePath)(path)) {
-              this.logger.debug("Read Svelte file:", path);
-              const svelteCode = readFile(path) || "";
-              const isTsFile = true;
-              let code;
-              let mapper;
-              try {
-                const result = (0, svelte2tsx_1.svelte2tsx)(svelteCode, {
-                  filename: path.split("/").pop(),
-                  isTsFile,
-                  mode: "ts",
-                  typingsNamespace: this.svelteOptions.namespace,
-                  // Don't search for compiler from current path - could be a different one from which we have loaded the svelte2tsx globals
-                  parse: (_a = this.svelteCompiler) == null ? void 0 : _a.parse,
-                  version: (_b = this.svelteCompiler) == null ? void 0 : _b.VERSION
-                });
-                code = result.code;
-                mapper = new source_mapper_1.SourceMapper(result.map.mappings);
-                this.logger.log("Successfully read Svelte file contents of", path);
-              } catch (e) {
-                this.logger.log("Error loading Svelte file:", path, " Using fallback.");
-                this.logger.debug("Error:", e);
-                code = "export default class extends Svelte2TsxComponent<any,any,any> {}";
-                mapper = new source_mapper_1.SourceMapper("");
-              }
-              this.projectService.host[onReadSvelteFile].forEach((listener) => listener(path, svelteCode, isTsFile, mapper));
-              return code;
-            } else {
-              return readFile(path, encoding);
-            }
-          };
-        }
-        this.projectService.host[onReadSvelteFile].push((path, svelteCode, isTsFile, mapper) => {
-          const canonicalFilePath = this.projectService.toCanonicalFileName(path);
-          const existingSnapshot = this.snapshots.get(canonicalFilePath);
-          if (existingSnapshot) {
-            existingSnapshot.update(svelteCode, mapper);
-          } else {
-            this.snapshots.set(canonicalFilePath, new SvelteSnapshot(this.typescript, path, svelteCode, mapper, this.logger, isTsFile));
+      patchProjectService() {
+        if (this.projectService[snapshots])
+          return;
+        this.logger.log("patching projectService");
+        this.snapshots = this.projectService[snapshots] = /* @__PURE__ */ new Map();
+        const readFile = this.projectService.host.readFile;
+        this.projectService.host.readFile = (path, encoding) => {
+          var _a, _b;
+          if (!this.configManager.getConfig().enable) {
+            return readFile(path, encoding);
           }
-        });
+          const normalizedPath = path.replace(/\\/g, "/");
+          if (normalizedPath.endsWith("node_modules/svelte/types/runtime/ambient.d.ts")) {
+            return "";
+          } else if (normalizedPath.endsWith("svelte2tsx/svelte-jsx.d.ts")) {
+            const originalText = readFile(path) || "";
+            const toReplace = '/// <reference lib="dom" />';
+            return originalText.replace(toReplace, " ".repeat(toReplace.length));
+          } else if (normalizedPath.endsWith("svelte2tsx/svelte-shims.d.ts")) {
+            let originalText = readFile(path) || "";
+            if (!originalText.includes("// -- start svelte-ls-remove --")) {
+              return originalText;
+            }
+            const startIdx = originalText.indexOf("// -- start svelte-ls-remove --");
+            const endIdx = originalText.indexOf("// -- end svelte-ls-remove --");
+            originalText = originalText.substring(0, startIdx) + " ".repeat(endIdx - startIdx) + originalText.substring(endIdx);
+            return originalText;
+          } else if ((0, utils_12.isSvelteFilePath)(path)) {
+            this.logger.debug("Read Svelte file:", path);
+            const svelteCode = readFile(path) || "";
+            const isTsFile = true;
+            let code;
+            let mapper;
+            try {
+              const result = (0, svelte2tsx_12.svelte2tsx)(svelteCode, {
+                filename: path.split("/").pop(),
+                isTsFile,
+                mode: "ts",
+                typingsNamespace: this.svelteOptions.namespace,
+                // Don't search for compiler from current path - could be a different one from which we have loaded the svelte2tsx globals
+                parse: (_a = this.svelteCompiler) == null ? void 0 : _a.parse,
+                version: (_b = this.svelteCompiler) == null ? void 0 : _b.VERSION
+              });
+              code = result.code;
+              mapper = new source_mapper_1.SourceMapper(result.map.mappings);
+              this.logger.log("Successfully read Svelte file contents of", path);
+            } catch (e) {
+              this.logger.log("Error loading Svelte file:", path, " Using fallback.");
+              this.logger.debug("Error:", e);
+              code = "export default class extends Svelte2TsxComponent<any,any,any> {}";
+              mapper = new source_mapper_1.SourceMapper("");
+            }
+            const canonicalFilePath = this.projectService.toCanonicalFileName(path);
+            const existingSnapshot = this.snapshots.get(canonicalFilePath);
+            if (existingSnapshot) {
+              existingSnapshot.update(svelteCode, mapper);
+            } else {
+              this.snapshots.set(canonicalFilePath, new SvelteSnapshot(this.typescript, path, svelteCode, mapper, this.logger, isTsFile));
+            }
+            return code;
+          } else {
+            return readFile(path, encoding);
+          }
+        };
       }
     };
     exports2.SvelteSnapshotManager = SvelteSnapshotManager;
-    var onReadSvelteFile = Symbol("sveltePluginPatchSymbol");
+    var snapshots = Symbol("sveltePluginPatchSymbol");
   }
 });
 
@@ -3305,12 +3380,13 @@ var svelte_snapshots_1 = require_svelte_snapshots();
 var config_manager_1 = require_config_manager();
 var project_svelte_files_1 = require_project_svelte_files();
 var utils_1 = require_utils();
+var svelte2tsx_1 = require("svelte2tsx");
 function init(modules) {
   const configManager = new config_manager_1.ConfigManager();
   let resolvedSvelteTsxFiles;
   const isSvelteProjectCache = /* @__PURE__ */ new Map();
   function create(info) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c;
     const logger = new logger_1.Logger(info.project.projectService.logger);
     if (!((_a = info.config) == null ? void 0 : _a.assumeIsSvelteProject) && !isSvelteProjectWithCache(info.project)) {
       logger.log("Detected that this is not a Svelte project, abort patching TypeScript");
@@ -3328,7 +3404,7 @@ function init(modules) {
       logger.log("Svelte plugin disabled");
       logger.log(info.config);
     }
-    const parsedCommandLine = (_d = (_c = info.languageServiceHost).getParsedCommandLine) == null ? void 0 : _d.call(_c, (0, utils_1.getConfigPathForProject)(info.project));
+    const parsedCommandLine = (0, utils_1.getProjectParsedCommandLine)(info.project);
     const getScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
     info.languageServiceHost.getScriptSnapshot = (fileName) => {
       const normalizedPath = fileName.replace(/\\/g, "/");
@@ -3367,7 +3443,7 @@ function init(modules) {
       }
       return getScriptSnapshot(fileName);
     };
-    const svelteOptions = ((_e = parsedCommandLine == null ? void 0 : parsedCommandLine.raw) == null ? void 0 : _e.svelteOptions) || { namespace: "svelteHTML" };
+    const svelteOptions = ((_c = parsedCommandLine == null ? void 0 : parsedCommandLine.raw) == null ? void 0 : _c.svelteOptions) || { namespace: "svelteHTML" };
     logger.log("svelteOptions:", svelteOptions);
     logger.debug(parsedCommandLine == null ? void 0 : parsedCommandLine.wildcardDirectories);
     const snapshotManager = new svelte_snapshots_1.SvelteSnapshotManager(modules.typescript, info.project.projectService, svelteOptions, logger, configManager, (0, utils_1.importSvelteCompiler)((0, utils_1.getProjectDirectory)(info.project)));
@@ -3406,18 +3482,11 @@ function init(modules) {
       return resolvedSvelteTsxFiles;
     }
     const svelteTsPath = (0, path_1.dirname)(require.resolve("svelte2tsx"));
-    const sveltePath = require.resolve("svelte/compiler", configFilePath ? { paths: [configFilePath] } : void 0);
-    const VERSION = require(sveltePath).VERSION;
-    const isSvelte3 = VERSION.split(".")[0] === "3";
-    const svelteHtmlDeclaration = isSvelte3 ? void 0 : (0, path_1.join)((0, path_1.dirname)(sveltePath), "svelte-html.d.ts");
-    const svelteHtmlFallbackIfNotExist = svelteHtmlDeclaration && modules.typescript.sys.fileExists(svelteHtmlDeclaration) ? svelteHtmlDeclaration : "./svelte-jsx-v4.d.ts";
-    const svelteTsxFiles = (isSvelte3 ? ["./svelte-shims.d.ts", "./svelte-jsx.d.ts", "./svelte-native-jsx.d.ts"] : [
-      "./svelte-shims-v4.d.ts",
-      svelteHtmlFallbackIfNotExist,
-      "./svelte-native-jsx.d.ts"
-    ]).map((f) => modules.typescript.sys.resolvePath((0, path_1.resolve)(svelteTsPath, f)));
-    resolvedSvelteTsxFiles = svelteTsxFiles;
-    return svelteTsxFiles;
+    const svelteCompilerPath = require.resolve("svelte/compiler", configFilePath ? { paths: [configFilePath] } : void 0);
+    const sveltePath = (0, path_1.dirname)(require.resolve("svelte/package.json", configFilePath ? { paths: [configFilePath] } : void 0));
+    const VERSION = require(svelteCompilerPath).VERSION;
+    resolvedSvelteTsxFiles = svelte2tsx_1.internalHelpers.get_global_types(modules.typescript.sys, VERSION.split(".")[0] === "3", sveltePath, svelteTsPath, configFilePath);
+    return resolvedSvelteTsxFiles;
   }
   function isSvelteProjectWithCache(project) {
     const cached = isSvelteProjectCache.get(project.getProjectName());
