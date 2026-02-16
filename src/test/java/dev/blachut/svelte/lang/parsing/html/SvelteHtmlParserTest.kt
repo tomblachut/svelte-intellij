@@ -95,6 +95,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testBlockEachAmbiguousAs() = doTest()
   fun testBlockEachAsAsAsAs() = doTest()
   fun testBlockEachAssets() = doTest()
+  fun testBlockEachWithoutAs() = doTest()
   fun testBlockIfElseIf() = doTest()
   fun testBlockKey() = doTest()
   fun testBlockSnippet() = doTest()
