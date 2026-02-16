@@ -1114,6 +1114,27 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testEachWithoutAsClause() {
+    myFixture.configureByText("EachWithoutAs.svelte", """
+      <script>
+        const array = [1, 2, 3];
+      </script>
+
+      {#each array}
+        <p>No item reference</p>
+      {/each}
+
+      {#each array, i}
+        <p>Index: {i}</p>
+      {/each}
+
+      {#each { length: 10 }, i}
+        <p>Repeated 10 times, index: {i}</p>
+      {/each}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testHeadTag() {
     myFixture.configureByText("head.svelte", """
       <script>

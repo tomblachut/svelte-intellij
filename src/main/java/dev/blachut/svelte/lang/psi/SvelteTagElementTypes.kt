@@ -46,16 +46,12 @@ object SvelteTagElementTypes {
       builder.remapCurrentToken(SvelteTokenTypes.EACH_KEYWORD) // todo might be okay to remove all those remapCurrentToken
       builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake EACH_KEYWORD
 
-      parser.expressionParser.parseExpression()
+      parser.expressionParser.parseAssignmentExpression(false)
 
       if (builder.tokenType === SvelteTokenTypes.AS_KEYWORD) {
         builder.advanceLexer()
+        parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
       }
-      else {
-        builder.error(SvelteBundle.message("svelte.parsing.error.as.expected"))
-      }
-
-      parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
 
       if (builder.tokenType === JSTokenTypes.COMMA) {
         builder.advanceLexer()

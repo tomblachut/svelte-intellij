@@ -133,6 +133,26 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertNull(variable)
   }
 
+  fun testEachWithoutAsClauseIndexResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script>
+                const array = [1, 2, 3];
+            </script>
+
+            {#each array, i}
+                <p>Index: {<caret>i}</p>
+            {/each}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+    TestCase.assertEquals(variable?.text, "i")
+  }
+
   fun testAHrefIndexResolve() {
     doPathResolveTest("+page.svelte")
   }
