@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSAbstractDocumentationTest
+import com.intellij.lang.javascript.service.JSLanguageServiceUtil
 import com.intellij.lang.typescript.documentation.TypeScriptDocumentationTargetProvider
 import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.platform.backend.documentation.PsiDocumentationTargetProvider
@@ -20,6 +21,8 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
 
     PsiDocumentationTargetProvider.EP_NAME.point
       .registerExtension(TypeScriptDocumentationTargetProvider(), testRootDisposable)
+
+    JSLanguageServiceUtil.setTimeout(10_000, testRootDisposable)
   }
 
   @Test
