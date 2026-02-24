@@ -40,7 +40,7 @@ SvelteHtmlFile: ScriptGenericsDefault.svelte
             <empty list>
           PsiElement(JS:LET_KEYWORD)('let')
           PsiWhiteSpace(' ')
-          JSVariable
+          TypeScriptVariable
             PsiElement(JS:IDENTIFIER)('value')
             PsiElement(JS:COLON)(':')
             PsiWhiteSpace(' ')
@@ -50,22 +50,18 @@ SvelteHtmlFile: ScriptGenericsDefault.svelte
             PsiWhiteSpace(' ')
             PsiElement(JS:EQ)('=')
             PsiWhiteSpace(' ')
-            JSLiteralExpression
-              PsiElement(JS:STRING_LITERAL)('''')
-          PsiErrorElement:Newline or semicolon expected
-            <empty list>
-        PsiWhiteSpace(' ')
-        JSExpressionStatement
-          JSReferenceExpression
-            PsiElement(JS:AS_KEYWORD)('as')
-          PsiErrorElement:Newline or semicolon expected
-            <empty list>
-        PsiWhiteSpace(' ')
-        JSExpressionStatement
-          JSReferenceExpression
-            PsiElement(JS:IDENTIFIER)('T')
+            TypeScriptAsExpression
+              JSLiteralExpression
+                PsiElement(JS:STRING_LITERAL)('''')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('T')
           PsiElement(JS:SEMICOLON)(';')
         PsiWhiteSpace('\n')
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('script')
       XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

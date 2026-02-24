@@ -23,7 +23,9 @@ class SvelteAttachCompletionProvider : CompletionProvider<CompletionParameters>(
   ) {
     val expression = parameters.position.parents(false).find {
       it.elementType == SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND ||
-      it.elementType == SvelteJSLazyElementTypes.ATTACH_EXPRESSION
+      it.elementType == SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND_TS ||
+      it.elementType == SvelteJSLazyElementTypes.ATTACH_EXPRESSION ||
+      it.elementType == SvelteJSLazyElementTypes.ATTACH_EXPRESSION_TS
     } ?: return
 
     if (expression.firstChild.siblings().any { SvelteTokenTypes.KEYWORDS.contains(it.elementType) }) {

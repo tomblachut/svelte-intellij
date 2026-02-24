@@ -30,18 +30,17 @@ class SvelteCompletionContributor : CompletionContributor() {
       SvelteKeywordCompletionProvider()
     )
     // Completion for {@attach} in attribute position
-    extend(
-      CompletionType.BASIC,
-      psiElement(JSTokenTypes.IDENTIFIER)
-        .withAncestor(2, psiElement(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)).inFile(psiFile(SvelteHtmlFile::class.java)),
-      SvelteAttachCompletionProvider()
-    )
-    extend(
-      CompletionType.BASIC,
-      psiElement(JSTokenTypes.IDENTIFIER)
-        .withAncestor(2, psiElement(SvelteJSLazyElementTypes.ATTACH_EXPRESSION)).inFile(psiFile(SvelteHtmlFile::class.java)),
-      SvelteAttachCompletionProvider()
-    )
+    for (elementType in listOf(
+      SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND, SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND_TS,
+      SvelteJSLazyElementTypes.ATTACH_EXPRESSION, SvelteJSLazyElementTypes.ATTACH_EXPRESSION_TS,
+    )) {
+      extend(
+        CompletionType.BASIC,
+        psiElement(JSTokenTypes.IDENTIFIER)
+          .withAncestor(2, psiElement(elementType)).inFile(psiFile(SvelteHtmlFile::class.java)),
+        SvelteAttachCompletionProvider()
+      )
+    }
     extend(
       CompletionType.BASIC,
       REFERENCE_EXPRESSION_PATTERN.inFile(psiFile(SvelteHtmlFile::class.java)),

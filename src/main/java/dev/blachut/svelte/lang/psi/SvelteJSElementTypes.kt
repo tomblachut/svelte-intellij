@@ -7,10 +7,14 @@ import com.intellij.lang.javascript.types.JSExpressionElementType
 import com.intellij.lang.javascript.types.JSParameterElementType
 import com.intellij.lang.javascript.types.JSVariableElementType
 import com.intellij.lang.javascript.types.TypeScriptEmbeddedContentElementType
+import com.intellij.lang.javascript.types.TypeScriptVariableElementType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteJSLanguage
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
+import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.CONST_TAG_VARIABLE
+import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.CONST_TAG_VARIABLE_TS
 
 internal object SvelteJSElementTypes {
   const val STUB_VERSION = 3
@@ -20,6 +24,24 @@ internal object SvelteJSElementTypes {
 
     override fun toString(): String = "Svelte$debugName"
   }
+
+  /**
+   * TypeScript-aware variant of [CONST_TAG_VARIABLE] for `{@const ...}` declarations.
+   * Supports TypeScript type annotations like `{@const foo: Type = expr}`.
+   */
+  val CONST_TAG_VARIABLE_TS: TypeScriptVariableElementType = object : TypeScriptVariableElementType("CONST_TAG_VARIABLE_TS") {
+    override fun construct(node: ASTNode): PsiElement = SvelteTSConstTagVariable(node)
+
+    override fun toString(): String = "Svelte$debugName"
+  }
+
+  /**
+   * Returns the appropriate const tag variable element type based on the language mode.
+   * @param langMode The detected language mode (from `<script lang="...">`)
+   * @return [CONST_TAG_VARIABLE] for JavaScript, [CONST_TAG_VARIABLE_TS] for TypeScript
+   */
+  fun getConstTagVariable(langMode: SvelteLangMode): IElementType =
+    if (langMode == SvelteLangMode.HAS_TS) CONST_TAG_VARIABLE_TS else CONST_TAG_VARIABLE
 
   val PARAMETER = object : JSParameterElementType("EMBEDDED_PARAMETER") {
     override fun construct(node: ASTNode) = SvelteJSParameter(node)

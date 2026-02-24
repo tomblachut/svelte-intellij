@@ -37,3 +37,4 @@ SvelteHtmlFile: test.html
         XmlToken:XML_COMMENT_CHARACTERS('endif')
         XmlToken:CONDITIONAL_COMMENT_END(']')
         XmlToken:XML_COMMENT_END('-->')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

@@ -5,3 +5,4 @@ SvelteHtmlFile: test.html
       XmlToken:XML_COMMENT_END('-->')
     PsiElement(XML_PROLOG)
       <empty list>
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

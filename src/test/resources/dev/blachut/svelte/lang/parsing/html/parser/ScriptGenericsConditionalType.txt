@@ -63,7 +63,7 @@ SvelteHtmlFile: ScriptGenericsConditionalType.svelte
             <empty list>
           PsiElement(JS:LET_KEYWORD)('let')
           PsiWhiteSpace(' ')
-          JSVariable
+          TypeScriptVariable
             PsiElement(JS:IDENTIFIER)('value')
             PsiElement(JS:COLON)(':')
             PsiWhiteSpace(' ')
@@ -75,3 +75,4 @@ SvelteHtmlFile: ScriptGenericsConditionalType.svelte
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('script')
       XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

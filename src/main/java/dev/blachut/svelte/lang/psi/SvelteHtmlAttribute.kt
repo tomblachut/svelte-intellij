@@ -112,7 +112,7 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
   }
 
   companion object {
-    val SPREAD_OR_SHORTHAND_FINDER: RoleFinder = DefaultRoleFinder(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND)
+    val SPREAD_OR_SHORTHAND_FINDER: RoleFinder = DefaultRoleFinder(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND, SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND_TS)
 
     fun calcDirective(attribute: SvelteHtmlAttribute): SvelteDirectiveUtil.Directive? {
       return CachedValuesManager.getCachedValue(attribute) {

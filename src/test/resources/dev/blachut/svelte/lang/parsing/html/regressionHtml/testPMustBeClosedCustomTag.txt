@@ -20,3 +20,4 @@ SvelteHtmlFile: test.html
       XmlToken:XML_NAME('my-component')
       XmlToken:XML_TAG_END('>')
     PsiWhiteSpace('\n')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

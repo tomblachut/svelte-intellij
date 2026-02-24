@@ -8,16 +8,45 @@ import com.intellij.psi.xml.XmlElementType
 import com.intellij.psi.xml.XmlTokenType
 import com.intellij.xml.parsing.XmlParserBundle
 import dev.blachut.svelte.lang.SvelteBundle
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
+import dev.blachut.svelte.lang.getSvelteLangMode
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.SvelteLangModeMarkerElementType
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
+
+  override fun shouldContinueMainLoop(): Boolean {
+    return super.shouldContinueMainLoop() && token() !is SvelteLangModeMarkerElementType
+  }
+
+  override fun parseDocument() {
+    super.parseDocument()
+    // Consume the lang mode marker token (zero-length, placed at EOF by SvelteParsingLexer)
+    if (token() is SvelteLangModeMarkerElementType) {
+      advance()
+    }
+  }
+
+  private val langMode: SvelteLangMode
+    get() = builder.getSvelteLangMode()
+
+  private fun getExpressionElementType(baseType: IElementType): IElementType {
+    return when (baseType) {
+        SvelteJSLazyElementTypes.ATTRIBUTE_PARAMETER -> SvelteJSLazyElementTypes.getAttributeParameter(langMode)
+        SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION -> SvelteJSLazyElementTypes.getAttributeExpression(langMode)
+        SvelteJSLazyElementTypes.CONTENT_EXPRESSION -> SvelteJSLazyElementTypes.getContentExpression(langMode)
+        SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND -> SvelteJSLazyElementTypes.getSpreadOrShorthand(langMode)
+        SvelteJSLazyElementTypes.ATTACH_EXPRESSION -> SvelteJSLazyElementTypes.getAttachExpression(langMode)
+        else -> baseType
+    }
+  }
 
   private fun parseSvelteTag() {
     assert(token() === SvelteTokenTypes.START_MUSTACHE)
@@ -120,13 +149,13 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
   override fun parseCustomTagHeaderContent() {
     val att = mark()
-    val elementType = if (isAttachExpression()) {
+    val baseType = if (isAttachExpression()) {
       SvelteJSLazyElementTypes.ATTACH_EXPRESSION
     }
     else {
       SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND
     }
-    parseAttributeExpression(elementType)
+    parseAttributeExpression(getExpressionElementType(baseType))
     att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)
   }
 
@@ -158,7 +187,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     advance()
     if (token() === XmlTokenType.XML_EQ) {
       advance()
-      parseAttributeValue(SvelteDirectiveUtil.chooseValueElementType(attributeName!!))
+      parseAttributeValue(getExpressionElementType(SvelteDirectiveUtil.chooseValueElementType(attributeName!!, langMode)))
     }
 
     att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)

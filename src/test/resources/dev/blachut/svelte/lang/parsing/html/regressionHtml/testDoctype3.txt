@@ -44,3 +44,4 @@ SvelteHtmlFile: test.html
         XmlToken:XML_BAD_CHARACTER(')')
         XmlToken:XML_DOCTYPE_END('>')
     XmlToken:XML_DATA_CHARACTERS(']>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

@@ -4,10 +4,12 @@ package dev.blachut.svelte.lang
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.javascript.ecmascript6.TypeScriptAnalysisHandlersFactory
 import com.intellij.lang.javascript.ecmascript6.TypeScriptAnnotatingVisitor
+import com.intellij.lang.javascript.psi.JSFunction
 import com.intellij.lang.javascript.psi.JSLabeledStatement
 import com.intellij.lang.javascript.validation.JSAnnotatingVisitor
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
+import dev.blachut.svelte.lang.psi.SvelteInitialTag
 
 internal class SvelteTypeScriptAnalysisHandlersFactory : TypeScriptAnalysisHandlersFactory() {
 
@@ -17,6 +19,13 @@ internal class SvelteTypeScriptAnalysisHandlersFactory : TypeScriptAnalysisHandl
         if (node.label != SvelteReactiveDeclarationsUtil.REACTIVE_LABEL) {
           super.visitJSLabeledStatement(node)
         }
+      }
+
+      override fun visitJSFunctionDeclaration(node: JSFunction) {
+        // Svelte snippet declarations ({#snippet name(params)}) are parsed as functions without a body.
+        // Skip TS validation that would report "Function implementation is missing".
+        if (node.parent is SvelteInitialTag) return
+        super.visitJSFunctionDeclaration(node)
       }
     }
   }

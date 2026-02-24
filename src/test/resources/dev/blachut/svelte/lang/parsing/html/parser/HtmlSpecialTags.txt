@@ -64,3 +64,4 @@ SvelteHtmlFile: HtmlSpecialTags.svelte
           PsiElement(JS:DIV)('/')
           PsiElement(JS:IF_KEYWORD)('if')
           PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

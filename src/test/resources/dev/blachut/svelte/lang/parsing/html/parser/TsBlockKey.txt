@@ -1,0 +1,98 @@
+SvelteHtmlFile: TsBlockKey.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          TypeScriptVariable
+            PsiElement(JS:IDENTIFIER)('value')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptUnionOrIntersectionType
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:STRING_KEYWORD)('string')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:OR)('|')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:NUMBER_KEYWORD)('number')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:STRING_LITERAL)(''test'')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteKeyBlock
+      SvelteKeyPrimaryBranch
+        SvelteInitialTag(KEY_START_TS)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:KEY_KEYWORD)('key')
+          PsiWhiteSpace(' ')
+          JSParenthesizedExpression
+            PsiElement(JS:LPAR)('(')
+            TypeScriptAsExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('value')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              TypeScriptUnionOrIntersectionType
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:STRING_KEYWORD)('string')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:OR)('|')
+                PsiWhiteSpace(' ')
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:NUMBER_KEYWORD)('number')
+            PsiElement(JS:RPAR)(')')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: div
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('div')
+            XmlToken:XML_TAG_END('>')
+            SvelteJS: CONTENT_EXPRESSION_TS
+              PsiElement(JS:LBRACE)('{')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('value')
+              PsiElement(JS:RBRACE)('}')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('div')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(KEY_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:KEY_KEYWORD)('key')
+        PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

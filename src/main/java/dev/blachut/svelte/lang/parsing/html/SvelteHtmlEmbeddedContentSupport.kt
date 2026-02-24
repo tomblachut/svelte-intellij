@@ -49,11 +49,19 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
       CSSLanguage.INSTANCE.dialects.firstOrNull { it.id.equals(styleLang, ignoreCase = true) }
       ?: super.styleLanguage(styleLang)
 
-    override fun scriptEmbedmentInfo(mimeType: String?): HtmlEmbedmentInfo =
-      if (isTSLangValue(mimeType))
+    override fun scriptEmbedmentInfo(mimeType: String?): HtmlEmbedmentInfo {
+      // Detect and store lang mode for expressions
+      // If any script has lang="ts", the file is considered TypeScript
+      val htmlLexer = lexer as? SvelteHtmlLexer
+      if (htmlLexer != null && htmlLexer.lexedLangMode != dev.blachut.svelte.lang.SvelteLangMode.HAS_TS) {
+        htmlLexer.lexedLangMode = dev.blachut.svelte.lang.SvelteLangMode.fromAttrValue(mimeType)
+      }
+
+      return if (isTSLangValue(mimeType))
         HtmlLanguageEmbedmentInfo(SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE_TS, SvelteTypeScriptLanguage.INSTANCE)
       else
         HtmlLanguageEmbedmentInfo(SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE, SvelteJSLanguage.INSTANCE)
+    }
   }
 
   class SvelteHtmlRawTextTagContentProvider(lexer: BaseHtmlLexer) : HtmlRawTextTagContentProvider(lexer) {

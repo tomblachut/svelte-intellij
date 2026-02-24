@@ -53,7 +53,7 @@ SvelteHtmlFile: ScriptGenericsObjectConstraint.svelte
             JSDestructuringObject
               PsiElement(JS:LBRACE)('{')
               JSDestructuringShorthandedProperty
-                JSVariable
+                TypeScriptVariable
                   PsiElement(JS:IDENTIFIER)('value')
               PsiElement(JS:RBRACE)('}')
             PsiElement(JS:COLON)(':')
@@ -74,7 +74,7 @@ SvelteHtmlFile: ScriptGenericsObjectConstraint.svelte
             PsiElement(JS:EQ)('=')
             PsiWhiteSpace(' ')
             JSCallExpression
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('$props')
               JSArgumentList
                 PsiElement(JS:LPAR)('(')
@@ -89,7 +89,7 @@ SvelteHtmlFile: ScriptGenericsObjectConstraint.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('p')
       XmlToken:XML_TAG_END('>')
-      SvelteJS: CONTENT_EXPRESSION
+      SvelteJS: CONTENT_EXPRESSION_TS
         PsiElement(JS:LBRACE)('{')
         JSReferenceExpression
           JSReferenceExpression
@@ -100,3 +100,4 @@ SvelteHtmlFile: ScriptGenericsObjectConstraint.svelte
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('p')
       XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

@@ -11,6 +11,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlDocument
 import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.parsing.html.SvelteHtmlFileElementType
 import dev.blachut.svelte.lang.psi.blocks.SvelteSnippetBlock
 
@@ -35,6 +36,16 @@ fun findAncestorScript(place: PsiElement): XmlTag? {
 
 class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHtmlFileElementType.FILE), JSModuleStatusOwner {
   override fun getModuleStatus(): JSModuleStatusOwner.ModuleStatus = JSModuleStatusOwner.ModuleStatus.ES6
+
+  val langMode: SvelteLangMode
+    get() {
+      // Read from AST marker token (last child is the marker)
+      val astMarker = node.lastChildNode?.elementType
+      return if (astMarker is SvelteLangModeMarkerElementType)
+        astMarker.langMode
+      else
+        SvelteLangMode.DEFAULT
+    }
 
   val moduleScript
     get() = document?.children?.find {

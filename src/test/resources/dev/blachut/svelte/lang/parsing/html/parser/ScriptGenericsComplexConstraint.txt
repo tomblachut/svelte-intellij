@@ -79,7 +79,7 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
             JSDestructuringObject
               PsiElement(JS:LBRACE)('{')
               JSDestructuringShorthandedProperty
-                JSVariable
+                TypeScriptVariable
                   PsiElement(JS:IDENTIFIER)('items')
               PsiElement(JS:RBRACE)('}')
             PsiElement(JS:COLON)(':')
@@ -100,7 +100,7 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
             PsiElement(JS:EQ)('=')
             PsiWhiteSpace(' ')
             JSCallExpression
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('$props')
               JSArgumentList
                 PsiElement(JS:LPAR)('(')
@@ -113,7 +113,7 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
     PsiWhiteSpace('\n\n')
     SvelteEachBlock
       SvelteEachPrimaryBranch
-        SvelteInitialTag(EACH_START)
+        SvelteInitialTag(EACH_START_TS)
           PsiElement(JS:LBRACE)('{')
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
@@ -133,7 +133,7 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
             XmlToken:XML_START_TAG_START('<')
             XmlToken:XML_NAME('p')
             XmlToken:XML_TAG_END('>')
-            SvelteJS: CONTENT_EXPRESSION
+            SvelteJS: CONTENT_EXPRESSION_TS
               PsiElement(JS:LBRACE)('{')
               JSReferenceExpression
                 JSReferenceExpression
@@ -144,7 +144,7 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
             XmlText
               XmlToken:XML_DATA_CHARACTERS(':')
               PsiWhiteSpace(' ')
-            SvelteJS: CONTENT_EXPRESSION
+            SvelteJS: CONTENT_EXPRESSION_TS
               PsiElement(JS:LBRACE)('{')
               JSReferenceExpression
                 JSReferenceExpression
@@ -162,3 +162,4 @@ SvelteHtmlFile: ScriptGenericsComplexConstraint.svelte
         PsiElement(JS:DIV)('/')
         PsiElement(JS:EACH_KEYWORD)('each')
         PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

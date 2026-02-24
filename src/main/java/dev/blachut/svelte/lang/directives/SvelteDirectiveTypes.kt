@@ -14,7 +14,7 @@ object SvelteDirectiveTypes {
     shorthandCompletionFactory = ::getPropCompletions,
     longhandReferenceFactory = ::PropReference,
     longhandCompletionFactory = ::getPropCompletions,
-    valueElementType = SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION // TODO only variable references
+    valueElementTypeFactory = SvelteJSLazyElementTypes::getAttributeExpression // Supports TypeScript
   )
   val ON = DirectiveType(
     prefix = "on",
@@ -67,7 +67,7 @@ object SvelteDirectiveTypes {
     prefix = "let",
     target = DirectiveTarget.BOTH,
     targetValidator = { isSvelteComponentTag(it.name) || it.getAttributeValue("slot") != null },
-    valueElementType = SvelteJSLazyElementTypes.ATTRIBUTE_PARAMETER,
+    valueElementTypeFactory = SvelteJSLazyElementTypes::getAttributeParameter,
     shorthandReferenceFactory = ::ShorthandLetReference,
     shorthandCompletionFactory = null,
     longhandReferenceFactory = null,

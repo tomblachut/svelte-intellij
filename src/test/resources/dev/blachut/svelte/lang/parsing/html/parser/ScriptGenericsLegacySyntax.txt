@@ -34,7 +34,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:LET_KEYWORD)('let')
           PsiWhiteSpace(' ')
-          JSVariable
+          TypeScriptVariable
             PsiElement(JS:IDENTIFIER)('items')
             PsiElement(JS:COLON)(':')
             PsiWhiteSpace(' ')
@@ -52,14 +52,16 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
           PsiWhiteSpace(' ')
           PsiElement(JS:LET_KEYWORD)('let')
           PsiWhiteSpace(' ')
-          JSVariable
+          TypeScriptVariable
             PsiElement(JS:IDENTIFIER)('renderItem')
             PsiElement(JS:COLON)(':')
             PsiWhiteSpace(' ')
-            FlowJSFunctionType
-              JSParameterList
+            TypeScriptFunctionType
+              TypeScriptParameterList
                 PsiElement(JS:LPAR)('(')
-                JSParameter
+                TypeScriptParameter
+                  JSAttributeList
+                    <empty list>
                   PsiElement(JS:IDENTIFIER)('item')
                   PsiElement(JS:COLON)(':')
                   PsiWhiteSpace(' ')
@@ -87,7 +89,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
         PsiWhiteSpace('\n  ')
       SvelteEachBlock
         SvelteEachPrimaryBranch
-          SvelteInitialTag(EACH_START)
+          SvelteInitialTag(EACH_START_TS)
             PsiElement(JS:LBRACE)('{')
             PsiElement(JS:SHARP)('#')
             PsiElement(JS:EACH_KEYWORD)('each')
@@ -107,7 +109,7 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
               XmlToken:XML_START_TAG_START('<')
               XmlToken:XML_NAME('li')
               XmlToken:XML_TAG_END('>')
-              SvelteJS: CONTENT_EXPRESSION
+              SvelteJS: CONTENT_EXPRESSION_TS
                 PsiElement(JS:LBRACE)('{')
                 PsiElement(JS:AT)('@')
                 PsiElement(JS:HTML_KEYWORD)('html')
@@ -136,3 +138,4 @@ SvelteHtmlFile: ScriptGenericsLegacySyntax.svelte
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('ul')
       XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

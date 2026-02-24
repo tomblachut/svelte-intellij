@@ -3,17 +3,21 @@ package dev.blachut.svelte.lang.psi
 import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiBuilderFactory
-import com.intellij.lang.javascript.JSLanguageUtil
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.psi.ParsingDiagnostics
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.ILazyParseableElementType
-import dev.blachut.svelte.lang.SvelteJSLanguage
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.parsing.html.SvelteJSExpressionLexer
+import dev.blachut.svelte.lang.parsing.html.SvelteTSExpressionLexer
+import dev.blachut.svelte.lang.parsing.js.SvelteJSParser
+import dev.blachut.svelte.lang.parsing.js.SvelteTSParser
 
-// TODO Merge SvelteJSBlockLazyElementType & SvelteJSLazyElementType
-abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElementType(debugName, SvelteJSLanguage.INSTANCE) {
+abstract class SvelteJSLazyElementType(
+  debugName: String,
+  private val langMode: SvelteLangMode = SvelteLangMode.NO_TS
+) : ILazyParseableElementType(debugName, langMode.exprLang) {
   protected abstract val noTokensErrorMessage: String
   protected open val excessTokensErrorMessage = "Unexpected token"
 
@@ -26,10 +30,19 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
 
   override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
     val project = psi.project
-    val lexer = SvelteJSExpressionLexer(assumeExternalBraces)
-    val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, lexer, SvelteJSLanguage.INSTANCE, chameleon.chars)
+    val lexer = when (langMode) {
+      SvelteLangMode.HAS_TS -> SvelteTSExpressionLexer(assumeExternalBraces)
+      else -> SvelteJSExpressionLexer(assumeExternalBraces)
+    }
+    val builder = PsiBuilderFactory.getInstance().createBuilder(project, chameleon, lexer, langMode.exprLang, chameleon.chars)
     val startTime = System.nanoTime()
-    val parser = JSLanguageUtil.createJSParser(SvelteJSLanguage.INSTANCE, builder)
+
+    setupBuilderContext(builder)
+
+    val parser = when (langMode) {
+      SvelteLangMode.HAS_TS -> SvelteTSParser(builder)
+      else -> SvelteJSParser(builder)
+    }
 
     val rootMarker = builder.mark()
 
@@ -43,9 +56,7 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
       }
       parseTokens(builder, parser)
       if (!assumeExternalBraces) {
-        if (builder.tokenType == SvelteTokenTypes.END_MUSTACHE) {
-          builder.remapCurrentToken(JSTokenTypes.RBRACE)
-        }
+        remapClosingBrace(builder)
         builder.advanceLexer()
       }
 
@@ -59,9 +70,17 @@ abstract class SvelteJSLazyElementType(debugName: String) : ILazyParseableElemen
     return result
   }
 
+  protected open fun setupBuilderContext(builder: PsiBuilder) {}
+
+  protected open fun remapClosingBrace(builder: PsiBuilder) {
+    if (builder.tokenType == SvelteTokenTypes.END_MUSTACHE) {
+      builder.remapCurrentToken(JSTokenTypes.RBRACE)
+    }
+  }
+
   protected abstract fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser)
 
-  private fun ensureEof(builder: PsiBuilder) {
+  protected open fun ensureEof(builder: PsiBuilder) {
     if (!builder.eof()) {
       builder.error(excessTokensErrorMessage)
       // todo merge back into SvelteTagParsing.finishTag

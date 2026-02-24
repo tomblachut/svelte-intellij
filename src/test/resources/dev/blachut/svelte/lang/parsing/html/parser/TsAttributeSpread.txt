@@ -1,0 +1,141 @@
+SvelteHtmlFile: TsAttributeSpread.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        TypeScriptInterface
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:INTERFACE_KEYWORD)('interface')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:IDENTIFIER)('Props')
+          PsiWhiteSpace(' ')
+          TypeScriptObjectType
+            PsiElement(JS:LBRACE)('{')
+            PsiWhiteSpace('\n    ')
+            TypeScriptPropertySignature
+              PsiElement(JS:IDENTIFIER)('class')
+              PsiElement(JS:COLON)(':')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:STRING_KEYWORD)('string')
+            PsiElement(JS:SEMICOLON)(';')
+            PsiWhiteSpace('\n    ')
+            TypeScriptPropertySignature
+              PsiElement(JS:IDENTIFIER)('disabled')
+              PsiElement(JS:COLON)(':')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:BOOLEAN_KEYWORD)('boolean')
+            PsiElement(JS:SEMICOLON)(';')
+            PsiWhiteSpace('\n  ')
+            PsiElement(JS:RBRACE)('}')
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          TypeScriptVariable
+            PsiElement(JS:IDENTIFIER)('props')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptSingleType
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('Props')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSObjectLiteralExpression
+              PsiElement(JS:LBRACE)('{')
+              PsiWhiteSpace(' ')
+              JSProperty
+                PsiElement(JS:IDENTIFIER)('class')
+                PsiElement(JS:COLON)(':')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:STRING_LITERAL)(''btn'')
+              PsiElement(JS:COMMA)(',')
+              PsiWhiteSpace(' ')
+              JSProperty
+                PsiElement(JS:IDENTIFIER)('disabled')
+                PsiElement(JS:COLON)(':')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:FALSE_KEYWORD)('false')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:RBRACE)('}')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteHtmlTag: button
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('button')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: 
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: SPREAD_OR_SHORTHAND_TS
+            JSSpreadExpression
+              PsiElement(JS:DOT_DOT_DOT)('...')
+              JSParenthesizedExpression
+                PsiElement(JS:LPAR)('(')
+                TypeScriptAsExpression
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('props')
+                  PsiWhiteSpace(' ')
+                  PsiElement(JS:AS_KEYWORD)('as')
+                  PsiWhiteSpace(' ')
+                  TypeScriptSingleType
+                    JSReferenceExpression
+                      PsiElement(JS:IDENTIFIER)('Props')
+                PsiElement(JS:RPAR)(')')
+          PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('Click')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('button')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: input
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('input')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: 
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: SPREAD_OR_SHORTHAND_TS
+            JSSpreadExpression
+              PsiElement(JS:DOT_DOT_DOT)('...')
+              TypeScriptSatisfiesExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('props')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:SATISFIES_KEYWORD)('satisfies')
+                PsiWhiteSpace(' ')
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('Props')
+          PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      XmlToken:XML_EMPTY_ELEMENT_END('/>')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

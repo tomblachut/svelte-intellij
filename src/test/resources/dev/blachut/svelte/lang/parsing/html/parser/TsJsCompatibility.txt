@@ -1,0 +1,112 @@
+SvelteHtmlFile: TsJsCompatibility.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_JS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          JSVariable
+            PsiElement(JS:IDENTIFIER)('count')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('0')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          JSVariable
+            PsiElement(JS:IDENTIFIER)('message')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:STRING_LITERAL)(''Hello'')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+      SvelteJS: CONTENT_EXPRESSION
+        PsiElement(JS:LBRACE)('{')
+        JSReferenceExpression
+          PsiElement(JS:IDENTIFIER)('count')
+        PsiElement(JS:RBRACE)('}')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: button
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('button')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: class
+        XmlToken:XML_NAME('class')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('message')
+            PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('Click')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('button')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSBinaryExpression
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('count')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:GT)('>')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:NUMERIC_LITERAL)('0')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: p
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              XmlToken:XML_DATA_CHARACTERS('Positive')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

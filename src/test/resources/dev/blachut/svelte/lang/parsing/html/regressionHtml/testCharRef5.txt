@@ -15,3 +15,4 @@ SvelteHtmlFile: test.html
           XmlToken:XML_CHAR_ENTITY_REF('&#123;')
           XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
       XmlToken:XML_EMPTY_ELEMENT_END('/>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')
