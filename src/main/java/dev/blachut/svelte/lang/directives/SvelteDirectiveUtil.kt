@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.directives
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.tree.IElementType
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 
@@ -19,11 +20,11 @@ object SvelteDirectiveUtil {
       .map { it.prefix + DIRECTIVE_SEPARATOR }
   }
 
-  fun chooseValueElementType(attributeName: String): IElementType {
+  fun chooseValueElementType(attributeName: String, langMode: SvelteLangMode): IElementType {
     // TODO generify
     return when (attributeName.startsWith(SvelteDirectiveTypes.LET.delimitedPrefix, true)) {
-      true -> SvelteDirectiveTypes.LET.valueElementType
-      false -> SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION
+      true -> SvelteDirectiveTypes.LET.getValueElementType(langMode)
+      false -> SvelteJSLazyElementTypes.getAttributeExpression(langMode)
     }
   }
 

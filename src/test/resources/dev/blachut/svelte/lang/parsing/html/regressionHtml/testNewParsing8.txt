@@ -14,3 +14,4 @@ SvelteHtmlFile: test.html
           XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('blah')
           XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
       XmlToken:XML_EMPTY_ELEMENT_END('/>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

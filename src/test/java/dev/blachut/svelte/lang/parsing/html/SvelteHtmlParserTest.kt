@@ -20,6 +20,7 @@ import com.intellij.xml.testFramework.XmlElementTypeServiceHelper.registerXmlEle
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
+import dev.blachut.svelte.lang.parsing.ts.SvelteTypeScriptParserDefinition
 import org.jetbrains.plugins.scss.SCSSLanguage
 import org.jetbrains.plugins.scss.ScssTokenTypesProvider
 import org.jetbrains.plugins.scss.parser.SCSSParserDefinition
@@ -30,6 +31,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   "svelte",
   SvelteHTMLParserDefinition(),
   SvelteJSParserDefinition(),
+  SvelteTypeScriptParserDefinition(),
   JavascriptParserDefinition(),
   CSSParserDefinition(),
   SCSSParserDefinition()
@@ -147,6 +149,26 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testScriptGenericsMultipleDefaults() = doTest()
 
   fun testStoreReferences() = doTest()
+
+  // TypeScript in markup tests
+  fun testTsLangModeDetection() = doTest()
+  fun testTsContentExpression() = doTest()
+  fun testTsAttributeExpression() = doTest()
+  fun testTsAttributeSpread() = doTest()
+  fun testTsBlockIf() = doTest()
+  fun testTsBlockEach() = doTest()
+  fun testTsBlockAwait() = doTest()
+  fun testTsBlockKey() = doTest()
+  fun testTsBlockSnippet() = doTest()
+  fun testTsSnippetParameterTypes() = doTest()
+  fun testTsSnippetWithConstAndNonNull() = doTest()
+  fun testTsConstTag() = doTest()
+  fun testTsJsCompatibility() = doTest()
+  fun testTsMixedScripts() = doTest()
+  fun testTsDirectiveBind() = doTest()
+  fun testTsBlockIfTopLevelAs() = doTest()
+  fun testTsMarkupExpressions() = doTest()
+  fun testTsComprehensive() = doTest()
 
   fun testStyleTagDefault() = doTest()
   fun testStyleTagScss() = doTest()

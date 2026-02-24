@@ -6,10 +6,36 @@ import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.lang.javascript.parsing.JavaScriptParserBase
 import dev.blachut.svelte.lang.SvelteBundle
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
+import dev.blachut.svelte.lang.langModePair
 
 object SvelteJSLazyElementTypes {
-  val ATTRIBUTE_PARAMETER: SvelteJSLazyElementType = object : SvelteJSLazyElementType("ATTRIBUTE_PARAMETER") {
+  private val attributeParameterPair = langModePair(::createAttributeParameter)
+  private val attributeExpressionPair = langModePair(::createAttributeExpression)
+  private val contentExpressionPair = langModePair(::createContentExpression)
+  private val spreadOrShorthandPair = langModePair(::createSpreadOrShorthand)
+  private val attachExpressionPair = langModePair(::createAttachExpression)
+
+  val ATTRIBUTE_PARAMETER: SvelteJSLazyElementType = attributeParameterPair.js
+  val ATTRIBUTE_EXPRESSION = attributeExpressionPair.js
+  val CONTENT_EXPRESSION = contentExpressionPair.js
+  val SPREAD_OR_SHORTHAND = spreadOrShorthandPair.js
+  val ATTACH_EXPRESSION = attachExpressionPair.js
+
+  val ATTRIBUTE_PARAMETER_TS = attributeParameterPair.ts
+  val ATTRIBUTE_EXPRESSION_TS = attributeExpressionPair.ts
+  val CONTENT_EXPRESSION_TS = contentExpressionPair.ts
+  val SPREAD_OR_SHORTHAND_TS = spreadOrShorthandPair.ts
+  val ATTACH_EXPRESSION_TS = attachExpressionPair.ts
+
+  fun getAttributeParameter(langMode: SvelteLangMode): SvelteJSLazyElementType = attributeParameterPair[langMode]
+  fun getAttributeExpression(langMode: SvelteLangMode): SvelteJSLazyElementType = attributeExpressionPair[langMode]
+  fun getContentExpression(langMode: SvelteLangMode): SvelteJSLazyElementType = contentExpressionPair[langMode]
+  fun getSpreadOrShorthand(langMode: SvelteLangMode): SvelteJSLazyElementType = spreadOrShorthandPair[langMode]
+  fun getAttachExpression(langMode: SvelteLangMode): SvelteJSLazyElementType = attachExpressionPair[langMode]
+
+  private fun createAttributeParameter(langMode: SvelteLangMode) = object : SvelteJSLazyElementType(langMode.toElementTypeName("ATTRIBUTE_PARAMETER"), langMode) {
     override val noTokensErrorMessage = "Parameter expected"
 
     override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -18,7 +44,7 @@ object SvelteJSLazyElementTypes {
     }
   }
 
-  val ATTRIBUTE_EXPRESSION: SvelteJSLazyElementType = object : SvelteJSLazyElementType("ATTRIBUTE_EXPRESSION") {
+  private fun createAttributeExpression(langMode: SvelteLangMode) = object : SvelteJSLazyElementType(langMode.toElementTypeName("ATTRIBUTE_EXPRESSION"), langMode) {
     override val noTokensErrorMessage = "Expression expected"
 
     override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -27,10 +53,8 @@ object SvelteJSLazyElementTypes {
     }
   }
 
-  /**
-   * Text expressions + html, debug & render + const
-   */
-  val CONTENT_EXPRESSION: SvelteJSLazyElementType = object : SvelteJSLazyElementType("CONTENT_EXPRESSION") {
+  /** Text expressions + html, debug & render + const */
+  private fun createContentExpression(langMode: SvelteLangMode) = object : SvelteJSLazyElementType(langMode.toElementTypeName("CONTENT_EXPRESSION"), langMode) {
     override val noTokensErrorMessage = "Expression expected"
     override val assumeExternalBraces = false // for now trailing { and } belong to this token
 
@@ -52,7 +76,8 @@ object SvelteJSLazyElementTypes {
         builder.advanceLexer()
       }
 
-      parser.statementParser.parseVarDeclaration(SvelteJSElementTypes.CONST_TAG_VARIABLE, false, false)
+      val allowTypeDeclaration = langMode == SvelteLangMode.HAS_TS
+      parser.statementParser.parseVarDeclaration(SvelteJSElementTypes.getConstTagVariable(langMode), allowTypeDeclaration, false)
 
       if (openedPar) {
         JavaScriptParserBase.checkMatches(builder, JSTokenTypes.RPAR, "javascript.parser.message.expected.rparen")
@@ -62,7 +87,7 @@ object SvelteJSLazyElementTypes {
     }
   }
 
-  val SPREAD_OR_SHORTHAND: SvelteJSLazyElementType = object : SvelteJSLazyElementType("SPREAD_OR_SHORTHAND") {
+  private fun createSpreadOrShorthand(langMode: SvelteLangMode) = object : SvelteJSLazyElementType(langMode.toElementTypeName("SPREAD_OR_SHORTHAND"), langMode) {
     override val noTokensErrorMessage = "Shorthand attribute or spread expression expected"
 
     override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -80,7 +105,7 @@ object SvelteJSLazyElementTypes {
     }
   }
 
-  val ATTACH_EXPRESSION: SvelteJSLazyElementType = object : SvelteJSLazyElementType("ATTACH_EXPRESSION") {
+  private fun createAttachExpression(langMode: SvelteLangMode) = object : SvelteJSLazyElementType(langMode.toElementTypeName("ATTACH_EXPRESSION"), langMode) {
     override val noTokensErrorMessage = "Attachment expression expected"
 
     override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -104,10 +129,31 @@ object SvelteJSLazyElementTypes {
       }
 
       // Parse the expression (function reference, call expression, conditional, etc.)
-      // Use parseAssignmentExpression to support conditionals like: enabled && myAttachment
       parser.expressionParser.parseAssignmentExpression(false)
     }
   }
+
+  /**
+   * Remaps the current identifier token to its Svelte keyword type.
+   * @return `CONST` if the current token is the `const` keyword, `OTHER` for other recognized keywords, `NONE` if not recognized
+   */
+  private fun remapAtKeyword(builder: PsiBuilder): AtKeywordResult {
+    if (builder.tokenType === JSTokenTypes.IDENTIFIER) {
+      when (builder.tokenText) {
+        "html" -> { builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD); builder.advanceLexer(); return AtKeywordResult.OTHER }
+        "debug" -> { builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD); builder.advanceLexer(); return AtKeywordResult.OTHER }
+        "render" -> { builder.remapCurrentToken(SvelteTokenTypes.RENDER_KEYWORD); builder.advanceLexer(); return AtKeywordResult.OTHER }
+        "const" -> { builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD); builder.advanceLexer(); return AtKeywordResult.CONST }
+      }
+    }
+    else if (builder.tokenType === SvelteTokenTypes.CONST_KEYWORD) {
+      builder.advanceLexer()
+      return AtKeywordResult.CONST
+    }
+    return AtKeywordResult.NONE
+  }
+
+  private enum class AtKeywordResult { NONE, CONST, OTHER }
 
   private fun parseAtModifiers(builder: PsiBuilder): Boolean {
     val unexpectedTokens = setOf(JSTokenTypes.SHARP, JSTokenTypes.COLON, JSTokenTypes.DIV)
@@ -121,26 +167,14 @@ object SvelteJSLazyElementTypes {
         builder.error(SvelteBundle.message("svelte.parsing.error.whitespace.not.allowed.after"))
       }
 
-      if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
-        builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
-        builder.advanceLexer()
-      }
-      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
-        builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
-        builder.advanceLexer()
-      }
-      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "render") {
-        builder.remapCurrentToken(SvelteTokenTypes.RENDER_KEYWORD)
-        builder.advanceLexer()
-      }
-      else if (builder.tokenType === SvelteTokenTypes.CONST_KEYWORD) {
-        constMode = true
-        builder.advanceLexer()
-      }
-      else {
-        val errorMarker = builder.mark()
-        builder.advanceLexer()
-        errorMarker.error(SvelteBundle.message("svelte.parsing.error.expected.html.debug.render.const"))
+      when (remapAtKeyword(builder)) {
+        AtKeywordResult.CONST -> constMode = true
+        AtKeywordResult.OTHER -> {}
+        AtKeywordResult.NONE -> {
+          val errorMarker = builder.mark()
+          builder.advanceLexer()
+          errorMarker.error(SvelteBundle.message("svelte.parsing.error.expected.html.debug.render.const"))
+        }
       }
     }
     else if (unexpectedTokens.contains(builder.tokenType)) {
@@ -161,29 +195,7 @@ object SvelteJSLazyElementTypes {
     if (builder.tokenType === JSTokenTypes.AT) {
       val errorMarker = builder.mark()
       builder.advanceLexer()
-
-      // copied from parseAtModifiers above
-      if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "html") {
-        builder.remapCurrentToken(SvelteTokenTypes.HTML_KEYWORD)
-        builder.advanceLexer()
-      }
-      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "debug") {
-        builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD)
-        builder.advanceLexer()
-      }
-      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "render") {
-        builder.remapCurrentToken(SvelteTokenTypes.RENDER_KEYWORD)
-        builder.advanceLexer()
-      }
-      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "const") {
-        builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD)
-        builder.advanceLexer()
-      }
-      else if (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == "attach") {
-        builder.remapCurrentToken(SvelteTokenTypes.ATTACH_KEYWORD)
-        builder.advanceLexer()
-      }
-
+      remapAtKeyword(builder)
       errorMarker.error(SvelteBundle.message("svelte.parsing.error.modifiers.are.not.allowed.here"))
     }
   }

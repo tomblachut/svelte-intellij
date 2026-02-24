@@ -6,10 +6,13 @@ import com.intellij.lexer.HtmlLexer
 import com.intellij.lexer.HtmlRawTextTagContentProvider
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
 import com.intellij.psi.tree.TokenSet
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteHtmlLexer(highlightMode: Boolean) : HtmlLexer(SvelteHtmlBaseLexer(), false, highlightMode) {
+
+  var lexedLangMode: SvelteLangMode = SvelteLangMode.PENDING
 
   override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
     if (isHighlighting) {

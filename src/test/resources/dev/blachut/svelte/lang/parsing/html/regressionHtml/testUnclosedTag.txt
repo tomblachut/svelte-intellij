@@ -10,3 +10,4 @@ SvelteHtmlFile: test.xml
         XmlToken:XML_DATA_CHARACTERS('xxx')
       PsiErrorElement:Element a is not closed
         <empty list>
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

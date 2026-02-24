@@ -67,3 +67,4 @@ SvelteHtmlFile: HtmlMissingEndTags.svelte
           PsiElement(JS:RBRACE)('}')
       PsiErrorElement:Element article is not closed
         <empty list>
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

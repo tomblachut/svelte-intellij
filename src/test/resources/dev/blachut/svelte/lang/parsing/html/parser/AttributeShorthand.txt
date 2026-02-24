@@ -40,3 +40,4 @@ SvelteHtmlFile: AttributeShorthand.svelte
       XmlToken:XML_END_TAG_START('</')
       XmlToken:XML_NAME('div')
       XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

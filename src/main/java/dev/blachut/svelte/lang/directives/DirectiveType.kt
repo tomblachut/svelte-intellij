@@ -6,6 +6,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlTag
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 
@@ -19,10 +20,28 @@ open class DirectiveType(
   val shorthandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
   val longhandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference)?,
   val longhandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
-  val valueElementType: IElementType = SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION,
+  val valueElementTypeFactory: ((SvelteLangMode) -> IElementType)? = null,
   val uniquenessSelector: Unit = Unit, // TODO
 ) {
   val delimitedPrefix: String get() = prefix + SvelteDirectiveUtil.DIRECTIVE_SEPARATOR
+
+  /**
+   * Returns the appropriate element type for this directive's value based on the detected language mode.
+   * If no factory is provided, defaults to JavaScript attribute expression.
+   */
+  fun getValueElementType(langMode: SvelteLangMode): IElementType =
+    valueElementTypeFactory?.invoke(langMode) ?: SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION
+
+  /**
+   * Deprecated: Use [getValueElementType] with language mode instead.
+   * This property always returns the JavaScript variant and does not support TypeScript.
+   */
+  @Deprecated(
+    "Use getValueElementType(langMode) instead to support TypeScript in directive values",
+    ReplaceWith("getValueElementType(SvelteLangMode.NO_TS)")
+  )
+  val valueElementType: IElementType
+    get() = getValueElementType(SvelteLangMode.NO_TS)
 
   override fun toString(): String {
     return prefix

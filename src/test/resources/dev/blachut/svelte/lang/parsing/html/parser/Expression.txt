@@ -206,3 +206,4 @@ SvelteHtmlFile: Expression.svelte
       JSReferenceExpression
         PsiElement(JS:IDENTIFIER)('x')
       PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

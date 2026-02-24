@@ -51,3 +51,4 @@ SvelteHtmlFile: StoreReferences.svelte
       JSReferenceExpression
         PsiElement(JS:IDENTIFIER)('$$props')
       PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

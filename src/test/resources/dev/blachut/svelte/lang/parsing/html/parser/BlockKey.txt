@@ -19,3 +19,4 @@ SvelteHtmlFile: BlockKey.svelte
         PsiElement(JS:DIV)('/')
         PsiElement(JS:KEY_KEYWORD)('key')
         PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

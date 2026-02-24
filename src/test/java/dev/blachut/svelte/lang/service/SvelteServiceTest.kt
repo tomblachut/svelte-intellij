@@ -230,7 +230,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <p>{foo1}</p>
-      <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
+      <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
@@ -266,7 +266,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
       
       <p>{foo1}</p>
-      <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
+      <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()

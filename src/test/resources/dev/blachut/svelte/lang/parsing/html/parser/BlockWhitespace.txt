@@ -90,3 +90,4 @@ SvelteHtmlFile: BlockWhitespace.svelte
         PsiElement(JS:IF_KEYWORD)('if')
         PsiElement(CODE_FRAGMENT)(' ')
         PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

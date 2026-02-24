@@ -487,6 +487,101 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  // TypeScript in markup completion tests
+  fun testTsGenericCompletion() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts" generics="T extends { name: string; age: number }">
+                export let item: T;
+            </script>
+
+            <div>{item.<caret>}</div>
+            """.trimIndent()
+    )
+    val items = myFixture.completeBasic()
+    hasElements(items, "name", "age")
+  }
+
+  fun testTsInterfacePropertyCompletion() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface User {
+                    name: string;
+                    email: string;
+                    age: number;
+                }
+                let user: User = { name: 'Alice', email: 'alice@example.com', age: 30 };
+            </script>
+
+            <div>{user.<caret>}</div>
+            """.trimIndent()
+    )
+    val items = myFixture.completeBasic()
+    hasElements(items, "name", "email", "age")
+  }
+
+  fun testTsEachBlockItemCompletion() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface Item {
+                    id: number;
+                    name: string;
+                    description: string;
+                }
+                let items: Item[] = [{ id: 1, name: 'A', description: 'First' }];
+            </script>
+
+            {#each items as item}
+                <div>{item.<caret>}</div>
+            {/each}
+            """.trimIndent()
+    )
+    val items = myFixture.completeBasic()
+    hasElements(items, "id", "name", "description")
+  }
+
+  fun testTsAwaitBlockValueCompletion() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface ApiResponse {
+                    data: string;
+                    status: number;
+                }
+                let promise: Promise<ApiResponse> = Promise.resolve({ data: 'test', status: 200 });
+            </script>
+
+            {#await promise then response}
+                <div>{response.<caret>}</div>
+            {/await}
+            """.trimIndent()
+    )
+    val items = myFixture.completeBasic()
+    hasElements(items, "data", "status")
+  }
+
+  fun testTsSnippetParameterCompletion() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface User {
+                    name: string;
+                    email: string;
+                    age: number;
+                }
+            </script>
+
+            {#snippet userCard(user: User)}
+                <div>{user.<caret>}</div>
+            {/snippet}
+            """.trimIndent()
+    )
+    val items = myFixture.completeBasic()
+    hasElements(items, "name", "email", "age")
+  }
+
   fun testAttachCompletionInCurlyBraces() {
     myFixture.configureByText("Component.svelte", "<div {<caret>}></div>")
     val items = myFixture.completeBasic()
@@ -532,7 +627,6 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     val items = myFixture.completeBasic()
     hasElements(items, "@attach")
   }
-
   private fun checkElements(items: Array<LookupElement>, expected: Boolean, vararg variants: String) {
     val toCheck = setOf(*variants)
     val matched = mutableSetOf<String>()

@@ -185,6 +185,107 @@ class SvelteResolveTest : BasePlatformTestCase() {
     doPathResolveTest("component.svelte")
   }
 
+  // TypeScript in markup resolution tests
+  fun testTsGenericResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts" generics="T extends { name: string }">
+                export let item: T;
+            </script>
+
+            <div>{<caret>item.name}</div>
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+    TestCase.assertEquals("item: T", variable?.text)
+  }
+
+  fun testTsTypeAssertionResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface User {
+                    name: string;
+                }
+                let user: User = { name: 'Alice' };
+            </script>
+
+            <div>{(<caret>user as User).name}</div>
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+  }
+
+  fun testTsEachBlockResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface Item { id: number; name: string; }
+                let items: Item[] = [{ id: 1, name: 'A' }];
+            </script>
+
+            {#each items as item}
+                <div>{<caret>item.name}</div>
+            {/each}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+    TestCase.assertEquals(variable?.text, "item")
+  }
+
+  fun testTsAwaitBlockResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface User { name: string; }
+                let promise: Promise<User> = Promise.resolve({ name: 'Alice' });
+            </script>
+
+            {#await promise then user}
+                <div>{<caret>user.name}</div>
+            {/await}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+    TestCase.assertEquals(variable?.text, "user")
+  }
+
+  fun testTsSnippetParameterResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts">
+                interface User { name: string; age: number; }
+            </script>
+
+            {#snippet userCard(user: User)}
+                <div>{<caret>user.name}</div>
+            {/snippet}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+    TestCase.assertEquals("user: User", variable?.text)
+  }
+
   private fun doPathResolveTest(destination: String? = null) {
     checkResolveToDestination(destination, myFixture, getTestName(false), "svelte")
   }

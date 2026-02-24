@@ -35,67 +35,49 @@ SvelteHtmlFile: ScriptGenerics.svelte
       XmlToken:XML_TAG_END('>')
       SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
         PsiWhiteSpace('\n  ')
-        JSAttributeList
-          <empty list>
-        JSExpressionStatement
-          JSReferenceExpression
-            PsiElement(JS:INTERFACE_KEYWORD)('interface')
-          PsiErrorElement:Newline or semicolon expected
+        TypeScriptInterface
+          JSAttributeList
             <empty list>
-        PsiWhiteSpace(' ')
-        JSExpressionStatement
-          JSReferenceExpression
-            PsiElement(JS:IDENTIFIER)('Props')
-          PsiErrorElement:Newline or semicolon expected
-            <empty list>
-        PsiWhiteSpace(' ')
-        JSBlockStatement
-          PsiElement(JS:LBRACE)('{')
-          PsiWhiteSpace('\n    ')
-          JSLabeledStatement
-            PsiElement(JS:IDENTIFIER)('items')
-            PsiElement(JS:COLON)(':')
-            PsiWhiteSpace(' ')
-            JSExpressionStatement
-              JSIndexedPropertyAccessExpression
-                JSReferenceExpression
-                  PsiElement(JS:IDENTIFIER)('T')
+          PsiElement(JS:INTERFACE_KEYWORD)('interface')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:IDENTIFIER)('Props')
+          PsiWhiteSpace(' ')
+          TypeScriptObjectType
+            PsiElement(JS:LBRACE)('{')
+            PsiWhiteSpace('\n    ')
+            TypeScriptPropertySignature
+              PsiElement(JS:IDENTIFIER)('items')
+              PsiElement(JS:COLON)(':')
+              PsiWhiteSpace(' ')
+              TypeScriptArrayType
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('T')
                 PsiElement(JS:LBRACKET)('[')
-                PsiErrorElement:Expression expected
-                  <empty list>
                 PsiElement(JS:RBRACKET)(']')
-              PsiElement(JS:SEMICOLON)(';')
-          PsiWhiteSpace('\n\n    ')
-          JSExpressionStatement
-            JSCallExpression
-              JSReferenceExpression
-                PsiElement(JS:IDENTIFIER)('select')
-              JSArgumentList
-                PsiElement(JS:LPAR)('(')
-                JSReferenceExpression
-                  PsiElement(JS:IDENTIFIER)('item')
-                PsiErrorElement:, or ) expected
-                  <empty list>
-          PsiElement(JS:COLON)(':')
-          PsiWhiteSpace(' ')
-          JSExpressionStatement
-            JSReferenceExpression
-              PsiElement(JS:IDENTIFIER)('T')
-            PsiErrorElement:Newline or semicolon expected
-              <empty list>
-          PsiElement(JS:RPAR)(')')
-          PsiErrorElement:Statement expected
-            <empty list>
-          PsiElement(JS:COLON)(':')
-          PsiWhiteSpace(' ')
-          JSExpressionStatement
-            JSPrefixExpression
-              PsiElement(JS:VOID_KEYWORD)('void')
-              PsiErrorElement:Expression expected
-                <empty list>
             PsiElement(JS:SEMICOLON)(';')
-          PsiWhiteSpace('\n  ')
-          PsiElement(JS:RBRACE)('}')
+            PsiWhiteSpace('\n\n    ')
+            TypeScriptFunctionSignature
+              PsiElement(JS:IDENTIFIER)('select')
+              TypeScriptParameterList
+                PsiElement(JS:LPAR)('(')
+                TypeScriptParameter
+                  JSAttributeList
+                    <empty list>
+                  PsiElement(JS:IDENTIFIER)('item')
+                  PsiElement(JS:COLON)(':')
+                  PsiWhiteSpace(' ')
+                  TypeScriptSingleType
+                    JSReferenceExpression
+                      PsiElement(JS:IDENTIFIER)('T')
+                PsiElement(JS:RPAR)(')')
+              PsiElement(JS:COLON)(':')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                PsiElement(JS:VOID_KEYWORD)('void')
+            PsiElement(JS:SEMICOLON)(';')
+            PsiWhiteSpace('\n  ')
+            PsiElement(JS:RBRACE)('}')
         PsiWhiteSpace('\n\n  ')
         JSVarStatement
           JSAttributeList
@@ -106,12 +88,12 @@ SvelteHtmlFile: ScriptGenerics.svelte
             JSDestructuringObject
               PsiElement(JS:LBRACE)('{')
               JSDestructuringShorthandedProperty
-                JSVariable
+                TypeScriptVariable
                   PsiElement(JS:IDENTIFIER)('items')
               PsiElement(JS:COMMA)(',')
               PsiWhiteSpace(' ')
               JSDestructuringShorthandedProperty
-                JSVariable
+                TypeScriptVariable
                   PsiElement(JS:IDENTIFIER)('select')
               PsiElement(JS:RBRACE)('}')
             PsiElement(JS:COLON)(':')
@@ -123,7 +105,7 @@ SvelteHtmlFile: ScriptGenerics.svelte
             PsiElement(JS:EQ)('=')
             PsiWhiteSpace(' ')
             JSCallExpression
-              JSReferenceExpression
+              SvelteJSReferenceExpression
                 PsiElement(JS:IDENTIFIER)('$props')
               JSArgumentList
                 PsiElement(JS:LPAR)('(')
@@ -136,7 +118,7 @@ SvelteHtmlFile: ScriptGenerics.svelte
     PsiWhiteSpace('\n\n')
     SvelteEachBlock
       SvelteEachPrimaryBranch
-        SvelteInitialTag(EACH_START)
+        SvelteInitialTag(EACH_START_TS)
           PsiElement(JS:LBRACE)('{')
           PsiElement(JS:SHARP)('#')
           PsiElement(JS:EACH_KEYWORD)('each')
@@ -162,11 +144,11 @@ SvelteHtmlFile: ScriptGenerics.svelte
               PsiElement(XML_ATTRIBUTE_VALUE)
                 SveltePsiElement
                   PsiElement(START_MUSTACHE)('{')
-                  SvelteJS: ATTRIBUTE_EXPRESSION
-                    JSFunctionExpression
+                  SvelteJS: ATTRIBUTE_EXPRESSION_TS
+                    TypeScriptFunctionExpression
                       JSAttributeList
                         <empty list>
-                      JSParameterList
+                      TypeScriptParameterList
                         PsiElement(JS:LPAR)('(')
                         PsiElement(JS:RPAR)(')')
                       PsiWhiteSpace(' ')
@@ -184,7 +166,7 @@ SvelteHtmlFile: ScriptGenerics.svelte
             XmlToken:XML_TAG_END('>')
             XmlText
               PsiWhiteSpace('\n    ')
-            SvelteJS: CONTENT_EXPRESSION
+            SvelteJS: CONTENT_EXPRESSION_TS
               PsiElement(JS:LBRACE)('{')
               JSReferenceExpression
                 JSReferenceExpression
@@ -204,3 +186,4 @@ SvelteHtmlFile: ScriptGenerics.svelte
         PsiElement(JS:DIV)('/')
         PsiElement(JS:EACH_KEYWORD)('each')
         PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

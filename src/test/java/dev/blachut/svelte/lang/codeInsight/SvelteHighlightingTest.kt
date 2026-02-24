@@ -361,8 +361,57 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       
       <button>
         {@render figure({})}
-        {@render figure<weak_warning descr="Invalid number of arguments, expected 1..2">()</weak_warning>}
+        {@render figure<error descr="Invalid number of arguments, expected 1..2">()</error>}
       </button>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testSnippetWithConstAndNonNull() {
+    myFixture.configureByText("Hello.svelte", """
+      <script lang="ts">
+        interface Item {
+          id: number;
+          name: string;
+        }
+
+        const maybeItem: Item | null = { id: 1, name: "first" };
+      </script>
+
+      {#snippet interfaceRef(item: Item)}
+        {@const <warning descr="Unused constant constNonNull">constNonNull</warning>: Item = maybeItem!}
+        <p>{item.name}</p>
+      {/snippet}
+
+      {@render interfaceRef({ id: 1, name: "test" })}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testTypeScriptAsAssertionInBlocks() {
+    myFixture.configureByText("TypeScriptAs.svelte", """
+      <script lang="ts">
+        interface Item { name: string; }
+        let value: unknown = 'hello';
+        let promiseValue: Promise<Item> = Promise.resolve({ name: 'test' });
+      </script>
+
+      <!-- TypeScript 'as' assertion works in {#if} without parens -->
+      {#if value as string}
+        <p>{value.length}</p>
+      {/if}
+
+      <!-- TypeScript 'as' assertion works in {#await} with parens -->
+      {#await (promiseValue as Promise<Item>)}
+        <p>loading</p>
+      {:then result}
+        <p>{result.name}</p>
+      {/await}
+
+      <!-- {#await} shorthand uses 'then' keyword, not 'as' -->
+      {#await promiseValue then result}
+        <p>{result.name}</p>
+      {/await}
     """.trimIndent())
     myFixture.testHighlighting()
   }
@@ -526,11 +575,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         $count.toFixed();
       </script>
       
-      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">count</weak_warning>)}</div>
+      <div>{acceptNumber(<$langWarning descr="Argument type Writable<number> is not assignable to parameter type number">count</$langWarning>)}</div>
       <div>{acceptStore(count)}</div>
       <div>{acceptNumber($count)}</div>
-      <div>{acceptStore(<weak_warning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</weak_warning>)}</div>
-      
+      <div>{acceptStore(<$langWarning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</$langWarning>)}</div>
+
       <div>{acceptNumber({ $count: $count }.$count)}</div>
       <!--suppress TypeScriptValidateTypes // todo IDE shows a type mismatch, but only in TS, hidden by LSP -->
       <div>{acceptNumber({ $count }.$count)}</div>
@@ -581,11 +630,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         $count.toFixed();
       </script>
       
-      <div>{acceptNumber(<weak_warning descr="Argument type Writable<number> is not assignable to parameter type number">count</weak_warning>)}</div>
+      <div>{acceptNumber(<$langWarning descr="Argument type Writable<number> is not assignable to parameter type number">count</$langWarning>)}</div>
       <div>{acceptStore(count)}</div>
       <div>{acceptNumber($count)}</div>
-      <div>{acceptStore(<weak_warning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</weak_warning>)}</div>
-      
+      <div>{acceptStore(<$langWarning descr="Argument type number is not assignable to parameter type Readable<unknown>">$count</$langWarning>)}</div>
+
       <div>{acceptNumber({ $count: $count }.$count)}</div>
       <!--suppress TypeScriptValidateTypes // todo IDE shows a type mismatch, but only in TS, hidden by LSP -->
       <div>{acceptNumber({ $count }.$count)}</div>

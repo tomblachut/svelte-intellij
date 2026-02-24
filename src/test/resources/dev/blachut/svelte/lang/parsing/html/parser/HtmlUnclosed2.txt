@@ -24,3 +24,4 @@ SvelteHtmlFile: HtmlUnclosed2.svelte
           <empty list>
       PsiErrorElement:Element div is not closed
         <empty list>
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

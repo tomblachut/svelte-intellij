@@ -32,26 +32,31 @@ class SvelteJSParser(
   override val functionParser: ES6FunctionParser<*> =
     object : ES6FunctionParser<SvelteJSParser>(this@SvelteJSParser) {
       override val parameterType: IElementType
-        get() = if (builder.getUserData(markupContextKey) == true) {
-          SvelteJSElementTypes.PARAMETER
-        }
-        else {
-          super.parameterType
-        }
+        get() = svelteParameterType(builder) ?: super.parameterType
     }
 
   override fun buildTokenElement(type: IElementType) {
-    // there are too many places that uses element type JSElementTypes.REFERENCE_EXPRESSION,
-    // so use the new one only for the specific references
-    return super.buildTokenElement(
-      if (type === JSElementTypes.REFERENCE_EXPRESSION && isSingleDollarPrefixedName(builder.tokenText!!)) {
-        SvelteJSElementTypes.REFERENCE_EXPRESSION
-      }
-      else {
-        type
-      }
-    )
+    return super.buildTokenElement(svelteBuildTokenElementType(type, builder))
   }
 }
 
-val markupContextKey = Key.create<Any>("markupContextKey")
+val markupContextKey: Key<in Any> = Key.create("markupContextKey")
+val blockContextKey: Key<in Any> = Key.create("blockContextKey")
+
+/**
+ * Context key to indicate we're in a block that uses 'as' for Svelte binding syntax.
+ * This includes {#each}, {#await}, {:then}, {:catch} blocks.
+ * When this is true, top-level 'as' should be treated as Svelte syntax, not TypeScript assertions.
+ */
+val blockWithAsBindingKey: Key<in Any> = Key.create("blockWithAsBindingKey")
+
+internal fun svelteParameterType(builder: PsiBuilder): IElementType? =
+  if (builder.getUserData(markupContextKey) == true) SvelteJSElementTypes.PARAMETER else null
+
+internal fun svelteBuildTokenElementType(type: IElementType, builder: PsiBuilder): IElementType =
+  if (type === JSElementTypes.REFERENCE_EXPRESSION && isSingleDollarPrefixedName(builder.tokenText!!)) {
+    SvelteJSElementTypes.REFERENCE_EXPRESSION
+  }
+  else {
+    type
+  }

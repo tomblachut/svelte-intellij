@@ -1,0 +1,321 @@
+SvelteHtmlFile: TsBlockIfTopLevelAs.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          TypeScriptVariable
+            PsiElement(JS:IDENTIFIER)('value')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptSingleType
+              PsiElement(JS:UNKNOWN_KEYWORD)('unknown')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSLiteralExpression
+              PsiElement(JS:STRING_LITERAL)(''hello'')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n  ')
+        TypeScriptInterface
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:INTERFACE_KEYWORD)('interface')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:IDENTIFIER)('Item')
+          PsiWhiteSpace(' ')
+          TypeScriptObjectType
+            PsiElement(JS:LBRACE)('{')
+            PsiWhiteSpace(' ')
+            TypeScriptPropertySignature
+              PsiElement(JS:IDENTIFIER)('name')
+              PsiElement(JS:COLON)(':')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:STRING_KEYWORD)('string')
+            PsiElement(JS:SEMICOLON)(';')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:RBRACE)('}')
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:LET_KEYWORD)('let')
+          PsiWhiteSpace(' ')
+          TypeScriptVariable
+            PsiElement(JS:IDENTIFIER)('promiseValue')
+            PsiElement(JS:COLON)(':')
+            PsiWhiteSpace(' ')
+            TypeScriptSingleType
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('Promise')
+              TypeScriptTypeArgumentList
+                PsiElement(JS:LT)('<')
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:IDENTIFIER)('Item')
+                PsiElement(JS:GT)('>')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            JSCallExpression
+              JSReferenceExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('Promise')
+                PsiElement(JS:DOT)('.')
+                PsiElement(JS:IDENTIFIER)('resolve')
+              JSArgumentList
+                PsiElement(JS:LPAR)('(')
+                JSObjectLiteralExpression
+                  PsiElement(JS:LBRACE)('{')
+                  PsiWhiteSpace(' ')
+                  JSProperty
+                    PsiElement(JS:IDENTIFIER)('name')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:STRING_LITERAL)(''test'')
+                  PsiWhiteSpace(' ')
+                  PsiElement(JS:RBRACE)('}')
+                PsiElement(JS:RPAR)(')')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    XmlText
+      PsiElement(XML_COMMENT)
+        XmlToken:XML_COMMENT_START('<!--')
+        XmlToken:XML_COMMENT_CHARACTERS(' top-level 'as' in {#if} works as TypeScript type assertion ')
+        XmlToken:XML_COMMENT_END('-->')
+    PsiWhiteSpace('\n')
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START_TS)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          TypeScriptAsExpression
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:AS_KEYWORD)('as')
+            PsiWhiteSpace(' ')
+            TypeScriptSingleType
+              JSReferenceExpression
+                PsiElement(JS:STRING_KEYWORD)('string')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: p
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              XmlToken:XML_DATA_CHARACTERS('if-top-level-as-assertion')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n\n')
+    XmlText
+      PsiElement(XML_COMMENT)
+        XmlToken:XML_COMMENT_START('<!--')
+        XmlToken:XML_COMMENT_CHARACTERS(' 'as' inside parens must work as TypeScript assertion ')
+        XmlToken:XML_COMMENT_END('-->')
+    PsiWhiteSpace('\n')
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START_TS)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSParenthesizedExpression
+            PsiElement(JS:LPAR)('(')
+            TypeScriptAsExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('value')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:STRING_KEYWORD)('string')
+            PsiElement(JS:RPAR)(')')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: p
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              XmlToken:XML_DATA_CHARACTERS('parens-assertion-works')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n\n')
+    XmlText
+      PsiElement(XML_COMMENT)
+        XmlToken:XML_COMMENT_START('<!--')
+        XmlToken:XML_COMMENT_CHARACTERS(' TS assertion in {#await} expression works with parens ')
+        XmlToken:XML_COMMENT_END('-->')
+    PsiWhiteSpace('\n')
+    SvelteAwaitBlock
+      SvelteAwaitPrimaryBranch
+        SvelteInitialTag(AWAIT_START_TS)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:AWAIT_KEYWORD)('await')
+          PsiWhiteSpace(' ')
+          JSParenthesizedExpression
+            PsiElement(JS:LPAR)('(')
+            TypeScriptAsExpression
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('promiseValue')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:AS_KEYWORD)('as')
+              PsiWhiteSpace(' ')
+              TypeScriptSingleType
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('Promise')
+                TypeScriptTypeArgumentList
+                  PsiElement(JS:LT)('<')
+                  TypeScriptSingleType
+                    JSReferenceExpression
+                      PsiElement(JS:IDENTIFIER)('Item')
+                  PsiElement(JS:GT)('>')
+            PsiElement(JS:RPAR)(')')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: p
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+            XmlText
+              XmlToken:XML_DATA_CHARACTERS('loading')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteAwaitThenBranch
+        SvelteInitialTag(THEN_CLAUSE_TS)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:COLON)(':')
+          PsiElement(JS:THEN_KEYWORD)('then')
+          PsiWhiteSpace(' ')
+          SvelteJSParameter
+            PsiElement(JS:IDENTIFIER)('result')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: p
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+            SvelteJS: CONTENT_EXPRESSION_TS
+              PsiElement(JS:LBRACE)('{')
+              JSReferenceExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('result')
+                PsiElement(JS:DOT)('.')
+                PsiElement(JS:IDENTIFIER)('name')
+              PsiElement(JS:RBRACE)('}')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(AWAIT_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:AWAIT_KEYWORD)('await')
+        PsiElement(JS:RBRACE)('}')
+    PsiWhiteSpace('\n\n')
+    XmlText
+      PsiElement(XML_COMMENT)
+        XmlToken:XML_COMMENT_START('<!--')
+        XmlToken:XML_COMMENT_CHARACTERS(' {#await} with inline 'then' uses 'then' keyword, not 'as' ')
+        XmlToken:XML_COMMENT_END('-->')
+    PsiWhiteSpace('\n')
+    SvelteAwaitBlock
+      SvelteAwaitPrimaryBranch
+        SvelteInitialTag(AWAIT_START_TS)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:AWAIT_KEYWORD)('await')
+          PsiWhiteSpace(' ')
+          JSReferenceExpression
+            PsiElement(JS:IDENTIFIER)('promiseValue')
+          PsiWhiteSpace(' ')
+          PsiElement(JS:THEN_KEYWORD)('then')
+          PsiWhiteSpace(' ')
+          SvelteJSParameter
+            PsiElement(JS:IDENTIFIER)('result')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          XmlText
+            PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: p
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+            SvelteJS: CONTENT_EXPRESSION_TS
+              PsiElement(JS:LBRACE)('{')
+              JSReferenceExpression
+                JSReferenceExpression
+                  PsiElement(JS:IDENTIFIER)('result')
+                PsiElement(JS:DOT)('.')
+                PsiElement(JS:IDENTIFIER)('name')
+              PsiElement(JS:RBRACE)('}')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('p')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(AWAIT_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:AWAIT_KEYWORD)('await')
+        PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')

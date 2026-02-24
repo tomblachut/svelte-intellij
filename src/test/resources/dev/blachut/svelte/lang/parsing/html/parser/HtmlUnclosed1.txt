@@ -16,3 +16,4 @@ SvelteHtmlFile: HtmlUnclosed1.svelte
           <empty list>
       PsiErrorElement:{#if} is not closed
         <empty list>
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')
