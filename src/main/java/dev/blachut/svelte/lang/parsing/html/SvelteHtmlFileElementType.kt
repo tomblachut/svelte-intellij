@@ -22,17 +22,8 @@ class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte f
     val project = psi.project
     val chars = chameleon.chars
 
-    // Pre-lex the file to detect the language mode (looking for <script lang="ts">)
-    // This is necessary because expressions need to know the lang mode before they're parsed,
-    // but the mode is determined by scanning <script> tags which may appear anywhere in the file.
-    val preLexer = SvelteParsingLexer(SvelteHtmlLexer(false))
-    preLexer.start(chars, 0, chars.length, 0)
-    while (preLexer.tokenType != null) {
-      preLexer.advance()
-    }
-    val langMode = preLexer.lexedLangMode
-
-    // Now create a fresh lexer for actual parsing
+    // PsiBuilderFactory.createBuilder fully lexes the file (calls lexer.start() + advances all tokens).
+    // After this call, the lexer has detected the language mode by scanning <script lang="ts"> tags.
     val lexer = SvelteParsingLexer(SvelteHtmlLexer(false))
     val builder = PsiBuilderFactory.getInstance().createBuilder(
       project, chameleon, lexer, SvelteHTMLLanguage.INSTANCE, chars
@@ -40,11 +31,10 @@ class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte f
 
     val startTime = System.nanoTime()
 
-    // Store the detected language mode for use during parsing
+    val langMode = lexer.lexedLangMode
     builder.putUserData(SVELTE_LANG_MODE_KEY, langMode)
     psi.putUserData(SVELTE_LANG_MODE_KEY, langMode)
 
-    // Parse using our builder that has the lang mode set
     val parser = LanguageParserDefinitions.INSTANCE.forLanguage(SvelteHTMLLanguage.INSTANCE)!!.createParser(project)
     val node = parser.parse(this, builder)
 
