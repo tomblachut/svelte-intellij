@@ -144,6 +144,7 @@ object SvelteJSLazyElementTypes {
         "debug" -> { builder.remapCurrentToken(SvelteTokenTypes.DEBUG_KEYWORD); builder.advanceLexer(); return AtKeywordResult.OTHER }
         "render" -> { builder.remapCurrentToken(SvelteTokenTypes.RENDER_KEYWORD); builder.advanceLexer(); return AtKeywordResult.OTHER }
         "const" -> { builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD); builder.advanceLexer(); return AtKeywordResult.CONST }
+        "attach" -> { builder.remapCurrentToken(SvelteTokenTypes.ATTACH_KEYWORD); builder.advanceLexer(); return AtKeywordResult.OTHER }
       }
     }
     else if (builder.tokenType === SvelteTokenTypes.CONST_KEYWORD) {

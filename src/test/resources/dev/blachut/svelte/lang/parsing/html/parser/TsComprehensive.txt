@@ -1456,7 +1456,7 @@ SvelteHtmlFile: TsComprehensive.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('div')
       PsiWhiteSpace(' ')
-      SvelteHtmlAttribute: 
+      SvelteHtmlAttribute: <spread>
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND_TS
@@ -1492,7 +1492,7 @@ SvelteHtmlFile: TsComprehensive.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('div')
       PsiWhiteSpace(' ')
-      SvelteHtmlAttribute: 
+      SvelteHtmlAttribute: <spread>
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND_TS
@@ -1540,7 +1540,7 @@ SvelteHtmlFile: TsComprehensive.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('div')
       PsiWhiteSpace(' ')
-      SvelteHtmlAttribute: 
+      SvelteHtmlAttribute: <spread>
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND_TS
@@ -1558,7 +1558,7 @@ SvelteHtmlFile: TsComprehensive.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('div')
       PsiWhiteSpace(' ')
-      SvelteHtmlAttribute: 
+      SvelteHtmlAttribute: <spread>
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND_TS
@@ -1597,7 +1597,7 @@ SvelteHtmlFile: TsComprehensive.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('div')
       PsiWhiteSpace(' ')
-      SvelteHtmlAttribute: 
+      SvelteHtmlAttribute: <spread>
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND_TS
