@@ -90,7 +90,7 @@ SvelteHtmlFile: TsAttributeSpread.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('button')
       PsiWhiteSpace(' ')
-      SvelteHtmlAttribute: 
+      SvelteHtmlAttribute: <spread>
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND_TS
@@ -120,7 +120,7 @@ SvelteHtmlFile: TsAttributeSpread.svelte
       XmlToken:XML_START_TAG_START('<')
       XmlToken:XML_NAME('input')
       PsiWhiteSpace(' ')
-      SvelteHtmlAttribute: 
+      SvelteHtmlAttribute: <spread>
         SveltePsiElement
           PsiElement(START_MUSTACHE)('{')
           SvelteJS: SPREAD_OR_SHORTHAND_TS
