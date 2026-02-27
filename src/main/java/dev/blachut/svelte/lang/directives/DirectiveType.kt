@@ -32,17 +32,6 @@ open class DirectiveType(
   fun getValueElementType(langMode: SvelteLangMode): IElementType =
     valueElementTypeFactory?.invoke(langMode) ?: SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION
 
-  /**
-   * Deprecated: Use [getValueElementType] with language mode instead.
-   * This property always returns the JavaScript variant and does not support TypeScript.
-   */
-  @Deprecated(
-    "Use getValueElementType(langMode) instead to support TypeScript in directive values",
-    ReplaceWith("getValueElementType(SvelteLangMode.NO_TS)")
-  )
-  val valueElementType: IElementType
-    get() = getValueElementType(SvelteLangMode.NO_TS)
-
   override fun toString(): String {
     return prefix
   }
