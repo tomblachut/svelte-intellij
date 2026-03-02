@@ -22,23 +22,23 @@ object SvelteTagElementTypes {
   private val keyStartPair = langModePair(::createKeyStart)
   private val snippetStartPair = langModePair(::createSnippetStart)
 
-  val IF_START = ifStartPair.js
-  val ELSE_CLAUSE = elseClausePair.js
-  val EACH_START = eachStartPair.js
-  val AWAIT_START = awaitStartPair.js
-  val THEN_CLAUSE = thenClausePair.js
-  val CATCH_CLAUSE = catchClausePair.js
-  val KEY_START = keyStartPair.js
-  val SNIPPET_START = snippetStartPair.js
+  val IF_START: SvelteJSBlockLazyElementType = ifStartPair.js
+  val ELSE_CLAUSE: SvelteJSBlockLazyElementType = elseClausePair.js
+  val EACH_START: SvelteJSBlockLazyElementType = eachStartPair.js
+  val AWAIT_START: SvelteJSBlockLazyElementType = awaitStartPair.js
+  val THEN_CLAUSE: SvelteJSBlockLazyElementType = thenClausePair.js
+  val CATCH_CLAUSE: SvelteJSBlockLazyElementType = catchClausePair.js
+  val KEY_START: SvelteJSBlockLazyElementType = keyStartPair.js
+  val SNIPPET_START: SvelteJSBlockLazyElementType = snippetStartPair.js
 
-  val IF_START_TS = ifStartPair.ts
-  val ELSE_CLAUSE_TS = elseClausePair.ts
-  val EACH_START_TS = eachStartPair.ts
-  val AWAIT_START_TS = awaitStartPair.ts
-  val THEN_CLAUSE_TS = thenClausePair.ts
-  val CATCH_CLAUSE_TS = catchClausePair.ts
-  val KEY_START_TS = keyStartPair.ts
-  val SNIPPET_START_TS = snippetStartPair.ts
+  val IF_START_TS: SvelteJSBlockLazyElementType = ifStartPair.ts
+  val ELSE_CLAUSE_TS: SvelteJSBlockLazyElementType = elseClausePair.ts
+  val EACH_START_TS: SvelteJSBlockLazyElementType = eachStartPair.ts
+  val AWAIT_START_TS: SvelteJSBlockLazyElementType = awaitStartPair.ts
+  val THEN_CLAUSE_TS: SvelteJSBlockLazyElementType = thenClausePair.ts
+  val CATCH_CLAUSE_TS: SvelteJSBlockLazyElementType = catchClausePair.ts
+  val KEY_START_TS: SvelteJSBlockLazyElementType = keyStartPair.ts
+  val SNIPPET_START_TS: SvelteJSBlockLazyElementType = snippetStartPair.ts
 
   fun getIfStart(langMode: SvelteLangMode): IElementType = ifStartPair[langMode]
   fun getElseClause(langMode: SvelteLangMode): IElementType = elseClausePair[langMode]
