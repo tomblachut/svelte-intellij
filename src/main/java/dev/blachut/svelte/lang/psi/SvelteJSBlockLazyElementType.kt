@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiBuilder
+import com.intellij.lang.javascript.JSTokenTypes
 import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.parsing.js.blockContextKey
 import dev.blachut.svelte.lang.parsing.js.blockWithAsBindingKey
@@ -32,7 +33,7 @@ abstract class SvelteJSBlockLazyElementType(
   }
 
   override fun remapClosingBrace(builder: PsiBuilder) {
-    builder.remapCurrentToken(com.intellij.lang.javascript.JSTokenTypes.RBRACE)
+    builder.remapCurrentToken(JSTokenTypes.RBRACE)
   }
 
   override fun ensureEof(builder: PsiBuilder) {

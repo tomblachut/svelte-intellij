@@ -16,6 +16,7 @@ import com.intellij.lexer.Lexer
 import com.intellij.psi.tree.IElementType
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.SvelteJSLanguage
+import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 import dev.blachut.svelte.lang.isTSLangValue
 import dev.blachut.svelte.lang.psi.SvelteHtmlRawTextElementType
@@ -53,8 +54,8 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
       // Detect and store lang mode for expressions
       // If any script has lang="ts", the file is considered TypeScript
       val htmlLexer = lexer as? SvelteHtmlLexer
-      if (htmlLexer != null && htmlLexer.lexedLangMode != dev.blachut.svelte.lang.SvelteLangMode.HAS_TS) {
-        htmlLexer.lexedLangMode = dev.blachut.svelte.lang.SvelteLangMode.fromAttrValue(mimeType)
+      if (htmlLexer != null && htmlLexer.lexedLangMode != SvelteLangMode.HAS_TS) {
+        htmlLexer.lexedLangMode = SvelteLangMode.fromAttrValue(mimeType)
       }
 
       return if (isTSLangValue(mimeType))
