@@ -2,6 +2,7 @@
 package dev.blachut.svelte.lang.service.settings
 
 import com.intellij.lang.typescript.lsp.bind
+import com.intellij.lang.typescript.lsp.createNodePackageField
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.UiDslUnnamedConfigurable
 import com.intellij.openapi.project.Project
@@ -23,13 +24,13 @@ internal class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedCon
   override fun Panel.createContent() {
     group(SvelteBundle.message("svelte.service.configurable.service.group")) {
       row(SvelteBundle.message("svelte.service.configurable.service.languageServerPackage")) {
-        cell(SvelteLspServerLoader.createNodePackageField(project))
+        cell(createNodePackageField(project, SvelteLspServerLoader.packageDescriptor))
           .align(AlignX.FILL)
           .bind(settings::lspServerPackageRef)
       }
 
       row(SvelteBundle.message("svelte.service.configurable.service.tsPluginPackage")) {
-        cell(SvelteTSPluginLoader.createNodePackageField(project))
+        cell(createNodePackageField(project, SvelteTSPluginLoader.packageDescriptor))
           .align(AlignX.FILL)
           .bind(settings::tsPluginPackageRef)
       }
