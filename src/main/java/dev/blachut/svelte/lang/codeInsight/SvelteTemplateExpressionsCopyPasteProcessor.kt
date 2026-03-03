@@ -69,17 +69,21 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
         file as? SvelteHtmlFile ?: return@compute null)
     }
 
-  override fun insertRequiredImports(pasteContext: PsiElement,
-                                     data: SvelteTemplateExpressionsImportsTransferableData,
-                                     destinationModule: PsiElement,
-                                     imports: Collection<Pair<ES6ImportPsiUtil.CreateImportExportInfo, PsiElement>>,
-                                     pasteContextLanguage: Language) {
-    if (imports.isNotEmpty()) {
-      ES6CreateImportUtil.addRequiredImports(destinationModule, SvelteJSLanguage.INSTANCE, imports)
-    }
-  }
+  override fun prepareInsertingRequiredImports(
+    pasteContext: PsiElement,
+    data: SvelteTemplateExpressionsImportsTransferableData,
+    destinationModule: PsiElement,
+    imports: List<ImportedElement>,
+    resolvedImports: Collection<Pair<ES6ImportPsiUtil.CreateImportExportInfo, PsiElement>>,
+    pasteContextLanguage: Language,
+  ): () -> Unit =
+    ES6CreateImportUtil.createExecutorsAddingRequiredImports(destinationModule, SvelteJSLanguage.INSTANCE, resolvedImports)
+      .let { executors ->
+        { executors.forEach { it.execute() } }
+      }
 
-  class SvelteTemplateExpressionsImportsTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>) : ES6ImportsTransferableDataBase(importedElementsDeferred) {
+  class SvelteTemplateExpressionsImportsTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>) :
+    ES6ImportsTransferableDataBase(importedElementsDeferred) {
     override fun getFlavor(): DataFlavor {
       return SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR
     }
@@ -87,4 +91,5 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
 
 }
 
-private val SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR = DataFlavor(SvelteTemplateExpressionsImportsTransferableData::class.java, "svelte es6 imports")
+private val SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR =
+  DataFlavor(SvelteTemplateExpressionsImportsTransferableData::class.java, "svelte es6 imports")
