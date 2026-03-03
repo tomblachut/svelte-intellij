@@ -13,7 +13,7 @@ import com.intellij.psi.formatter.xml.XmlFormattingPolicy
 import com.intellij.psi.formatter.xml.XmlTagBlock
 import com.intellij.psi.impl.source.SourceTreeToPsiMap
 import com.intellij.psi.xml.XmlTag
-import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes.CONTENT_EXPRESSION
+import dev.blachut.svelte.lang.psi.ContentExpressionType
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 class SvelteXmlBlock(
@@ -32,7 +32,7 @@ class SvelteXmlBlock(
     alignment: Alignment?,
     indent: Indent?
   ): ASTNode? {
-    if (child.elementType === CONTENT_EXPRESSION) {
+    if (child.elementType is ContentExpressionType) {
       result.add(SvelteExpressionBlock(child, indent, wrap, myXmlFormattingPolicy))
       return child
     }
@@ -122,7 +122,7 @@ abstract class SvelteXmlTagBlockBase(
     alignment: Alignment?,
     indent: Indent?
   ): ASTNode? {
-    if (child.elementType === CONTENT_EXPRESSION) {
+    if (child.elementType is ContentExpressionType) {
       result.add(SvelteExpressionBlock(child, indent, wrap, myXmlFormattingPolicy))
       return child
     }

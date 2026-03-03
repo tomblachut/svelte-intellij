@@ -11,7 +11,6 @@ import com.intellij.psi.PsiReferenceService
 import com.intellij.psi.ResolveState
 import com.intellij.psi.impl.source.xml.XmlAttributeImpl
 import com.intellij.psi.scope.PsiScopeProcessor
-import com.intellij.psi.tree.DefaultRoleFinder
 import com.intellij.psi.tree.RoleFinder
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
@@ -112,7 +111,14 @@ class SvelteHtmlAttribute : XmlAttributeImpl(SvelteHtmlElementTypes.SVELTE_HTML_
   }
 
   companion object {
-    val SPREAD_OR_SHORTHAND_FINDER: RoleFinder = DefaultRoleFinder(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND, SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND_TS)
+    val SPREAD_OR_SHORTHAND_FINDER: RoleFinder = RoleFinder { parent ->
+      var current = parent.firstChildNode
+      while (current != null) {
+        if (current.elementType is SpreadOrShorthandType) return@RoleFinder current
+        current = current.treeNext
+      }
+      null
+    }
 
     fun calcDirective(attribute: SvelteHtmlAttribute): SvelteDirectiveUtil.Directive? {
       return CachedValuesManager.getCachedValue(attribute) {

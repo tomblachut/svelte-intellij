@@ -7,7 +7,11 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import dev.blachut.svelte.lang.isSvelteContext
-import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
+import dev.blachut.svelte.lang.psi.AwaitStartType
+import dev.blachut.svelte.lang.psi.EachStartType
+import dev.blachut.svelte.lang.psi.IfStartType
+import dev.blachut.svelte.lang.psi.KeyStartType
+import dev.blachut.svelte.lang.psi.SnippetStartType
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 /**
@@ -57,11 +61,11 @@ class SvelteTagEndTypedHandler : TypedHandlerDelegate() {
     val suffix = if (beforeEndBrace) "" else "}"
 
     val matchingTag = when (block.startTag.type) {
-      SvelteTagElementTypes.IF_START -> prefix + "if" + suffix
-      SvelteTagElementTypes.EACH_START -> prefix + "each" + suffix
-      SvelteTagElementTypes.AWAIT_START -> prefix + "await" + suffix
-      SvelteTagElementTypes.KEY_START -> prefix + "key" + suffix
-      SvelteTagElementTypes.SNIPPET_START -> prefix + "snippet" + suffix
+      is IfStartType -> prefix + "if" + suffix
+      is EachStartType -> prefix + "each" + suffix
+      is AwaitStartType -> prefix + "await" + suffix
+      is KeyStartType -> prefix + "key" + suffix
+      is SnippetStartType -> prefix + "snippet" + suffix
       else -> return
     }
 

@@ -11,7 +11,8 @@ import com.intellij.psi.util.parents
 import com.intellij.psi.util.prevLeaf
 import com.intellij.psi.util.siblings
 import com.intellij.util.ProcessingContext
-import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.AttachExpressionType
+import dev.blachut.svelte.lang.psi.SpreadOrShorthandType
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 import icons.SvelteIcons
 
@@ -22,10 +23,7 @@ class SvelteAttachCompletionProvider : CompletionProvider<CompletionParameters>(
     result: CompletionResultSet,
   ) {
     val expression = parameters.position.parents(false).find {
-      it.elementType == SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND ||
-      it.elementType == SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND_TS ||
-      it.elementType == SvelteJSLazyElementTypes.ATTACH_EXPRESSION ||
-      it.elementType == SvelteJSLazyElementTypes.ATTACH_EXPRESSION_TS
+      it.elementType is SpreadOrShorthandType || it.elementType is AttachExpressionType
     } ?: return
 
     if (expression.firstChild.siblings().any { SvelteTokenTypes.KEYWORDS.contains(it.elementType) }) {

@@ -3,25 +3,29 @@ package dev.blachut.svelte.lang.psi
 import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
+import com.intellij.util.CharTable
 import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.parsing.js.blockContextKey
 import dev.blachut.svelte.lang.parsing.js.blockWithAsBindingKey
 
-abstract class SvelteJSBlockLazyElementType(
+/**
+ * Base class for Svelte block element types ({#if}, {#each}, {:else}, etc.).
+ * Blocks include their own braces and may use 'as' for Svelte binding syntax.
+ */
+abstract class SvelteBlockElementType(
   debugName: String,
-  langMode: SvelteLangMode = SvelteLangMode.NO_TS
-) : SvelteJSLazyElementType(debugName, langMode) {
+  langMode: SvelteLangMode = SvelteLangMode.NO_TS,
+) : SvelteExpressionElementType(debugName, langMode) {
+
   override val assumeExternalBraces: Boolean = false
 
   /**
-   * Indicates whether this block uses 'as' for Svelte binding syntax.
-   * When true, top-level 'as' in TypeScript mode should be treated as Svelte syntax, not type assertions.
-   * This applies to {#each}, {#await}, {:then}, {:catch} blocks.
+   * When true, top-level 'as' in TypeScript mode is treated as Svelte syntax, not type assertions.
+   * Applies to {#each}, {#await}, {:then}, {:catch} blocks.
    */
   protected open val usesAsBinding: Boolean = false
 
-  override fun createNode(text: CharSequence?): ASTNode? {
-    text ?: return null
+  override fun parse(text: CharSequence, table: CharTable): ASTNode {
     return SvelteInitialTag(this, text)
   }
 

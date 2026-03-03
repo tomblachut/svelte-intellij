@@ -30,8 +30,8 @@ import com.sixrr.inspectjs.control.UnnecessaryLabelJSInspection
 import com.sixrr.inspectjs.validity.BadExpressionStatementJSInspection
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
 import dev.blachut.svelte.lang.equalsName
+import dev.blachut.svelte.lang.psi.ContentExpressionType
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
-import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSReferenceExpression
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 import dev.blachut.svelte.lang.service.settings.tryRecheckResolveResults
@@ -56,7 +56,7 @@ internal class SvelteInspectionSuppressor : InspectionSuppressor {
     if (inspectionId.equalsName<CommaExpressionJSInspection>()) {
       val parent = element.parents(false).first { it is JSEmbeddedContent || it is JSStatement }
       if (parent is JSEmbeddedContent &&
-          parent.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION &&
+          parent.elementType is ContentExpressionType &&
           parent.children.any { it.node.elementType == SvelteTokenTypes.DEBUG_KEYWORD }) {
         return true
       }
