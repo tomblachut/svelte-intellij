@@ -1,7 +1,7 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service
 
-import com.intellij.javascript.nodejs.util.NodePackageRef
+import com.intellij.javascript.nodejs.util.NodePackage
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.lsp.LspServerActivationRule
 import com.intellij.lang.typescript.lsp.LspServerLoader
@@ -32,8 +32,8 @@ private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
 
 @ApiStatus.Experimental
 object SvelteLspServerLoader : LspServerLoader(SvelteLspServerPackageDescriptor) {
-  override fun getSelectedPackageRef(project: Project): NodePackageRef {
-    return getSvelteServiceSettings(project).lspServerPackageRef
+  override fun getSelectedPackage(project: Project): NodePackage? {
+    return getSvelteServiceSettings(project).lspServerPackageRef.constantPackage
   }
 }
 
@@ -49,8 +49,8 @@ private object SvelteTSPluginPackageDescriptor : LspServerPackageDescriptor(
 
 @ApiStatus.Experimental
 object SvelteTSPluginLoader : TSPluginLoader(SvelteTSPluginPackageDescriptor) {
-  override fun getSelectedPackageRef(project: Project): NodePackageRef {
-    return getSvelteServiceSettings(project).tsPluginPackageRef
+  override fun getSelectedPackage(project: Project): NodePackage? {
+    return getSvelteServiceSettings(project).tsPluginPackageRef.constantPackage
   }
 }
 
