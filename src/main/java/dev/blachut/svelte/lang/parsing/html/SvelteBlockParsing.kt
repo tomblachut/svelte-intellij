@@ -6,20 +6,28 @@ import com.intellij.lang.html.HtmlParsing
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.SvelteBundle
+import dev.blachut.svelte.lang.psi.AwaitStartType
+import dev.blachut.svelte.lang.psi.CatchClauseType
+import dev.blachut.svelte.lang.psi.EachStartType
+import dev.blachut.svelte.lang.psi.ElseClauseType
+import dev.blachut.svelte.lang.psi.IfStartType
+import dev.blachut.svelte.lang.psi.KeyStartType
+import dev.blachut.svelte.lang.psi.SnippetStartType
 import dev.blachut.svelte.lang.psi.SvelteElementType
 import dev.blachut.svelte.lang.psi.SvelteElementTypes
 import dev.blachut.svelte.lang.psi.SvelteJSElementType
 import dev.blachut.svelte.lang.psi.SvelteTagElementTypes
+import dev.blachut.svelte.lang.psi.ThenClauseType
 import org.jetbrains.annotations.Nls
 
 object SvelteBlockParsing {
   fun startBlock(tagToken: IElementType, tagMarker: Marker, fragmentMarker: Marker): SvelteBlock {
-    val parsingDefinition = when (getBaseType(tagToken)) {
-      SvelteTagElementTypes.IF_START -> IF_BLOCK_DEFINITION
-      SvelteTagElementTypes.EACH_START -> EACH_BLOCK_DEFINITION
-      SvelteTagElementTypes.AWAIT_START -> AWAIT_BLOCK_DEFINITION
-      SvelteTagElementTypes.KEY_START -> KEY_BLOCK_DEFINITION
-      SvelteTagElementTypes.SNIPPET_START -> SNIPPET_BLOCK_DEFINITION
+    val parsingDefinition = when (tagToken) {
+      is IfStartType -> IF_BLOCK_DEFINITION
+      is EachStartType -> EACH_BLOCK_DEFINITION
+      is AwaitStartType -> AWAIT_BLOCK_DEFINITION
+      is KeyStartType -> KEY_BLOCK_DEFINITION
+      is SnippetStartType -> SNIPPET_BLOCK_DEFINITION
       else -> throw IllegalArgumentException("Expected start tag token")
     }
 
@@ -32,9 +40,7 @@ object SvelteBlockParsing {
   private val IF_BLOCK_DEFINITION = BlockParsingDefinition(
     blockToken = SvelteElementTypes.IF_BLOCK,
     primaryBranchToken = SvelteElementTypes.IF_TRUE_BRANCH,
-    innerTagToBranchTokens = mapOf(
-      SvelteTagElementTypes.ELSE_CLAUSE to SvelteElementTypes.IF_ELSE_BRANCH
-    ),
+    getBranchToken = { tag -> if (tag is ElseClauseType) SvelteElementTypes.IF_ELSE_BRANCH else null },
     endTag = SvelteTagElementTypes.IF_END,
     missingEndTagMessage = SvelteBundle.message("svelte.parsing.if.is.not.closed")
   )
@@ -42,9 +48,7 @@ object SvelteBlockParsing {
   private val EACH_BLOCK_DEFINITION = BlockParsingDefinition(
     blockToken = SvelteElementTypes.EACH_BLOCK,
     primaryBranchToken = SvelteElementTypes.EACH_LOOP_BRANCH,
-    innerTagToBranchTokens = mapOf(
-      SvelteTagElementTypes.ELSE_CLAUSE to SvelteElementTypes.EACH_ELSE_BRANCH
-    ),
+    getBranchToken = { tag -> if (tag is ElseClauseType) SvelteElementTypes.EACH_ELSE_BRANCH else null },
     endTag = SvelteTagElementTypes.EACH_END,
     missingEndTagMessage = SvelteBundle.message("svelte.parsing.each.is.not.closed")
   )
@@ -52,10 +56,13 @@ object SvelteBlockParsing {
   private val AWAIT_BLOCK_DEFINITION = BlockParsingDefinition(
     blockToken = SvelteElementTypes.AWAIT_BLOCK,
     primaryBranchToken = SvelteElementTypes.AWAIT_MAIN_BRANCH,
-    innerTagToBranchTokens = mapOf(
-      SvelteTagElementTypes.THEN_CLAUSE to SvelteElementTypes.AWAIT_THEN_BRANCH,
-      SvelteTagElementTypes.CATCH_CLAUSE to SvelteElementTypes.AWAIT_CATCH_BRANCH
-    ),
+    getBranchToken = { tag ->
+      when (tag) {
+        is ThenClauseType -> SvelteElementTypes.AWAIT_THEN_BRANCH
+        is CatchClauseType -> SvelteElementTypes.AWAIT_CATCH_BRANCH
+        else -> null
+      }
+    },
     endTag = SvelteTagElementTypes.AWAIT_END,
     missingEndTagMessage = SvelteBundle.message("svelte.parsing.await.is.not.closed")
   )
@@ -63,27 +70,15 @@ object SvelteBlockParsing {
   private val KEY_BLOCK_DEFINITION = BlockParsingDefinition(
     blockToken = SvelteElementTypes.KEY_BLOCK,
     primaryBranchToken = SvelteElementTypes.KEY_PRIMARY_BRANCH,
-    innerTagToBranchTokens = mapOf(),
+    getBranchToken = { null },
     endTag = SvelteTagElementTypes.KEY_END,
     missingEndTagMessage = SvelteBundle.message("svelte.parsing.key.is.not.closed")
   )
 
-  fun getBaseType(token: IElementType): IElementType = when (token) {
-    SvelteTagElementTypes.IF_START_TS -> SvelteTagElementTypes.IF_START
-    SvelteTagElementTypes.ELSE_CLAUSE_TS -> SvelteTagElementTypes.ELSE_CLAUSE
-    SvelteTagElementTypes.EACH_START_TS -> SvelteTagElementTypes.EACH_START
-    SvelteTagElementTypes.AWAIT_START_TS -> SvelteTagElementTypes.AWAIT_START
-    SvelteTagElementTypes.THEN_CLAUSE_TS -> SvelteTagElementTypes.THEN_CLAUSE
-    SvelteTagElementTypes.CATCH_CLAUSE_TS -> SvelteTagElementTypes.CATCH_CLAUSE
-    SvelteTagElementTypes.KEY_START_TS -> SvelteTagElementTypes.KEY_START
-    SvelteTagElementTypes.SNIPPET_START_TS -> SvelteTagElementTypes.SNIPPET_START
-    else -> token
-  }
-
   private val SNIPPET_BLOCK_DEFINITION = BlockParsingDefinition(
     blockToken = SvelteElementTypes.SNIPPET_BLOCK,
     primaryBranchToken = SvelteElementTypes.SNIPPET_PRIMARY_BRANCH,
-    innerTagToBranchTokens = mapOf(),
+    getBranchToken = { null },
     endTag = SvelteTagElementTypes.SNIPPET_END,
     missingEndTagMessage = SvelteBundle.message("svelte.parsing.snippet.is.not.closed")
   )
@@ -97,14 +92,14 @@ data class SvelteBlock(
 ) : HtmlParsing.HtmlParserStackItem {
   private var lastInnerElement = parsingDefinition.primaryBranchToken
 
-  fun isMatchingInnerTag(token: IElementType) = parsingDefinition.innerTagToBranchTokens.containsKey(SvelteBlockParsing.getBaseType(token))
+  fun isMatchingInnerTag(token: IElementType) = parsingDefinition.getBranchToken(token) != null
 
   fun isMatchingEndTag(token: IElementType) = token === parsingDefinition.endTag
 
   fun handleInnerTag(token: IElementType, resultMarker: Marker, nextFragmentMarker: Marker) {
     fragmentMarker.doneBefore(SvelteElementTypes.FRAGMENT, resultMarker)
     innerMarker.doneBefore(lastInnerElement, resultMarker)
-    lastInnerElement = parsingDefinition.innerTagToBranchTokens[SvelteBlockParsing.getBaseType(token)]
+    lastInnerElement = parsingDefinition.getBranchToken(token)
                        ?: throw IllegalArgumentException("Expected matching inner clause")
     innerMarker = resultMarker.precede()
     fragmentMarker = nextFragmentMarker
@@ -135,7 +130,7 @@ data class SvelteBlock(
 data class BlockParsingDefinition(
   val blockToken: SvelteElementType,
   val primaryBranchToken: SvelteElementType,
-  val innerTagToBranchTokens: Map<IElementType, SvelteElementType>,
+  val getBranchToken: (IElementType) -> SvelteElementType?,
   val endTag: SvelteJSElementType,
   @Nls @NlsContexts.ParsingError val missingEndTagMessage: String
 )

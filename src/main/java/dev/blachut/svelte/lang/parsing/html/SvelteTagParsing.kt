@@ -3,8 +3,8 @@ package dev.blachut.svelte.lang.parsing.html
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.openapi.util.NlsSafe
+import com.intellij.psi.tree.ICustomParsingType
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.tree.ILazyParseableElementType
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.getSvelteLangMode
 import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
@@ -79,7 +79,7 @@ internal object SvelteTagParsing {
       builder.error(SvelteBundle.message("svelte.parsing.error.missing"))
     }
 
-    if (endToken is ILazyParseableElementType) {
+    if (endToken is ICustomParsingType) {
       marker.collapse(endToken)
     }
     else {

@@ -11,7 +11,7 @@ import com.intellij.psi.util.parents
 import com.intellij.psi.util.prevLeaf
 import com.intellij.psi.util.siblings
 import com.intellij.util.ProcessingContext
-import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.ContentExpressionType
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 import icons.SvelteIcons
 
@@ -26,7 +26,7 @@ class SvelteKeywordCompletionProvider : CompletionProvider<CompletionParameters>
     result: CompletionResultSet,
   ) {
     val expression =
-      parameters.position.parents(false).find { it.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION }!!
+      parameters.position.parents(false).find { it.elementType is ContentExpressionType }!!
     if (expression.firstChild.siblings().any { SvelteTokenTypes.KEYWORDS.contains(it.elementType) }) {
       return
     }

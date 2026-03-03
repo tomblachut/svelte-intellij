@@ -12,9 +12,9 @@ import com.intellij.psi.util.parentOfType
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.isScriptOrStyleTag
 import dev.blachut.svelte.lang.isSvelteContext
+import dev.blachut.svelte.lang.psi.ContentExpressionType
 import dev.blachut.svelte.lang.psi.SvelteHtmlElementTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
-import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
 
 class SvelteAutoPopupHandler : TypedHandlerDelegate() {
   private val attributeExpectedChars =
@@ -41,7 +41,7 @@ class SvelteAutoPopupHandler : TypedHandlerDelegate() {
       return handle(project, editor)
     }
 
-    if (element.parent.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION) {
+    if (element.parent.elementType is ContentExpressionType) {
       if (charTyped == '#' || charTyped == '@') {
         return handle(project, editor)
       }

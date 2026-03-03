@@ -67,11 +67,3 @@ val SVELTE_LANG_MODE_KEY: Key<SvelteLangMode> = Key.create("svelte.lang.mode")
  */
 fun PsiBuilder.getSvelteLangMode(): SvelteLangMode =
   getUserData(SVELTE_LANG_MODE_KEY) ?: SvelteLangMode.DEFAULT
-
-/** Holds a JS/TS variant pair of the same element, selected by [SvelteLangMode]. */
-class LangModePair<T>(val js: T, val ts: T) {
-  operator fun get(langMode: SvelteLangMode): T = if (langMode == SvelteLangMode.HAS_TS) ts else js
-}
-
-internal fun <T> langModePair(factory: (SvelteLangMode) -> T): LangModePair<T> =
-  LangModePair(factory(SvelteLangMode.NO_TS), factory(SvelteLangMode.HAS_TS))

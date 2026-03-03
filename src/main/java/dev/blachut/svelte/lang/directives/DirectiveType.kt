@@ -30,7 +30,7 @@ open class DirectiveType(
    * If no factory is provided, defaults to JavaScript attribute expression.
    */
   fun getValueElementType(langMode: SvelteLangMode): IElementType =
-    valueElementTypeFactory?.invoke(langMode) ?: SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION
+    valueElementTypeFactory?.invoke(langMode) ?: SvelteJSLazyElementTypes.getAttributeExpression(langMode)
 
   override fun toString(): String {
     return prefix

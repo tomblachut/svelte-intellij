@@ -37,17 +37,6 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
   private val langMode: SvelteLangMode
     get() = builder.getSvelteLangMode()
 
-  private fun getExpressionElementType(baseType: IElementType): IElementType {
-    return when (baseType) {
-        SvelteJSLazyElementTypes.ATTRIBUTE_PARAMETER -> SvelteJSLazyElementTypes.getAttributeParameter(langMode)
-        SvelteJSLazyElementTypes.ATTRIBUTE_EXPRESSION -> SvelteJSLazyElementTypes.getAttributeExpression(langMode)
-        SvelteJSLazyElementTypes.CONTENT_EXPRESSION -> SvelteJSLazyElementTypes.getContentExpression(langMode)
-        SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND -> SvelteJSLazyElementTypes.getSpreadOrShorthand(langMode)
-        SvelteJSLazyElementTypes.ATTACH_EXPRESSION -> SvelteJSLazyElementTypes.getAttachExpression(langMode)
-        else -> baseType
-    }
-  }
-
   private fun parseSvelteTag() {
     assert(token() === SvelteTokenTypes.START_MUSTACHE)
     val (tagToken, tagMarker) = SvelteTagParsing.parseTag(builder)
@@ -149,13 +138,13 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
 
   override fun parseCustomTagHeaderContent() {
     val att = mark()
-    val baseType = if (isAttachExpression()) {
-      SvelteJSLazyElementTypes.ATTACH_EXPRESSION
+    val elementType = if (isAttachExpression()) {
+      SvelteJSLazyElementTypes.getAttachExpression(langMode)
     }
     else {
-      SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND
+      SvelteJSLazyElementTypes.getSpreadOrShorthand(langMode)
     }
-    parseAttributeExpression(getExpressionElementType(baseType))
+    parseAttributeExpression(elementType)
     att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)
   }
 
@@ -187,7 +176,7 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
     advance()
     if (token() === XmlTokenType.XML_EQ) {
       advance()
-      parseAttributeValue(getExpressionElementType(SvelteDirectiveUtil.chooseValueElementType(attributeName!!, langMode)))
+      parseAttributeValue(SvelteDirectiveUtil.chooseValueElementType(attributeName!!, langMode))
     }
 
     att.done(SvelteHtmlElementTypes.SVELTE_HTML_ATTRIBUTE)

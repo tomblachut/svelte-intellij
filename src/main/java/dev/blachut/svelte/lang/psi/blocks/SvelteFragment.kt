@@ -10,7 +10,7 @@ import com.intellij.psi.search.PsiElementProcessor
 import com.intellij.psi.util.elementType
 import com.intellij.psi.xml.XmlElement
 import com.intellij.xml.util.XmlPsiUtil
-import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
+import dev.blachut.svelte.lang.psi.ContentExpressionType
 import dev.blachut.svelte.lang.psi.SveltePsiElement
 
 class SvelteFragment(node: ASTNode) : SveltePsiElement(node), XmlElement {
@@ -31,7 +31,7 @@ internal fun XmlElement.processConstTagDeclarations(processor: PsiScopeProcessor
                                                     lastParent: PsiElement?,
                                                     place: PsiElement): Boolean {
   for (element in children) {
-    if (element.elementType == SvelteJSLazyElementTypes.CONTENT_EXPRESSION) {
+    if (element.elementType is ContentExpressionType) {
       val visitor = object : JSRecursiveWalkingElementVisitor() {
         var result = true
 
