@@ -101,13 +101,18 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
   override fun createTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>): SvelteComponentImportsTransferableData =
     SvelteComponentImportsTransferableData(importedElementsDeferred)
 
-  override fun insertRequiredImports(pasteContext: PsiElement,
-                                     data: SvelteComponentImportsTransferableData,
-                                     destinationModule: PsiElement,
-                                     imports: Collection<com.intellij.openapi.util.Pair<ES6ImportPsiUtil.CreateImportExportInfo, PsiElement>>,
-                                     pasteContextLanguage: Language) {
-    ES6CreateImportUtil.addRequiredImports(destinationModule, pasteContextLanguage, imports)
-  }
+  override fun prepareInsertingRequiredImports(
+    pasteContext: PsiElement,
+    data: SvelteComponentImportsTransferableData,
+    destinationModule: PsiElement,
+    imports: List<ImportedElement>,
+    resolvedImports: Collection<OpenApiPair<ES6ImportPsiUtil.CreateImportExportInfo, PsiElement>>,
+    pasteContextLanguage: Language
+  ): () -> Unit =
+    ES6CreateImportUtil.createExecutorsAddingRequiredImports(destinationModule, pasteContextLanguage, resolvedImports)
+      .let { executors ->
+        { executors.forEach { it.execute() } }
+      }
 
   class SvelteComponentImportsTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>) : ES6ImportsTransferableDataBase(importedElementsDeferred) {
     override fun getFlavor(): DataFlavor {
