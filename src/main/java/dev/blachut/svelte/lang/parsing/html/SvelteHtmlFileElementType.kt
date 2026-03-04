@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.SVELTE_LANG_MODE_KEY
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 
-// based on HtmlFileElementType and VueFileElementType
+// based on HtmlFileElementType
 class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte file", SvelteHTMLLanguage.INSTANCE) {
   override fun getStubVersion(): Int {
     return HtmlLanguageStubVersionUtil.getHtmlStubVersion() + SvelteJSElementTypes.STUB_VERSION + 1 // +1 for lang mode support
