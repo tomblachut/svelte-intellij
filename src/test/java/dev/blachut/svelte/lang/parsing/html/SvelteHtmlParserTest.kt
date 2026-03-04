@@ -190,5 +190,31 @@ class SvelteHtmlParserTest : ParsingTestCase(
     doReparseTest("<script>$: foo = 2;</scrip\n", "<script>$: foo = 2;</script><div\n")
   }
 
+  fun testLangReparseJsToTs() {
+    val jsText = """
+      <script lang="js">
+        let count = 0;
+      </script>
+
+      {#if count > 0}
+        <p>{count}</p>
+      {/if}
+    """.trimIndent()
+    doReparseTest(jsText, jsText.replace("js", "ts"))
+  }
+
+  fun testLangReparseTsToJs() {
+    val tsText = """
+      <script lang="ts">
+        let count: number = 0;
+      </script>
+
+      {#if count > 0}
+        <p>{count}</p>
+      {/if}
+    """.trimIndent()
+    doReparseTest(tsText, tsText.replace("ts", "js"))
+  }
+
   private fun doTest() = doTest(true)
 }
