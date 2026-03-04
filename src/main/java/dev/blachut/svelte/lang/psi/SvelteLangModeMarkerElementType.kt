@@ -10,8 +10,6 @@ import dev.blachut.svelte.lang.SvelteLangMode
 /**
  * Zero-length marker token emitted at the end of lexing to encode the detected language mode.
  * This allows the parser to know whether to use JS or TS for expressions.
- *
- * @see org.jetbrains.vuejs.lang.html.lexer.VueLangModeMarkerElementType
  */
 class SvelteLangModeMarkerElementType(
   val langMode: SvelteLangMode,
