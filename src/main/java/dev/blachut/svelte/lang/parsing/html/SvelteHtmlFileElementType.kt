@@ -44,6 +44,6 @@ class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte f
   }
 
   companion object {
-    val FILE = SvelteHtmlFileElementType()
+    val FILE: SvelteHtmlFileElementType = SvelteHtmlFileElementType()
   }
 }

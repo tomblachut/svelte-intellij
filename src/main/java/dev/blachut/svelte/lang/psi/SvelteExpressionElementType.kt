@@ -28,7 +28,7 @@ import dev.blachut.svelte.lang.parsing.js.SvelteTSParser
  * per (kind, langMode) pair, not per occurrence. Consumers use `is` checks on the concrete
  * subclass to match both JS and TS variants.
  *
- * Modeled after [SvelteGenericsEmbeddedContentTokenType] and Vue's `VueEmbeddedContentTokenType`.
+ * Reference: [SvelteGenericsEmbeddedContentTokenType]
  */
 abstract class SvelteExpressionElementType(
   debugName: String,
@@ -40,7 +40,7 @@ abstract class SvelteExpressionElementType(
   ILightLazyParseableElementType {
 
   protected abstract val noTokensErrorMessage: String
-  protected open val excessTokensErrorMessage = "Unexpected token"
+  protected open val excessTokensErrorMessage: String = "Unexpected token"
   protected open val assumeExternalBraces: Boolean = true
 
   // ICustomParsingType — called by PsiBuilder when a collapsed token is materialized

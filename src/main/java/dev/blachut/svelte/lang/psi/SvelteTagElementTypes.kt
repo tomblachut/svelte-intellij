@@ -21,7 +21,7 @@ sealed interface BlockInnerType
 // region Named block element types
 
 class IfStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("IF_START"), langMode), BlockStartType {
-  override val noTokensErrorMessage = "expression expected"
+  override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.SHARP
@@ -33,7 +33,7 @@ class IfStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.to
 }
 
 class ElseClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("ELSE_CLAUSE"), langMode), BlockInnerType {
-  override val noTokensErrorMessage = "expression expected"
+  override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.COLON
@@ -48,8 +48,8 @@ class ElseClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
 }
 
 class EachStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("EACH_START"), langMode), BlockStartType {
-  override val noTokensErrorMessage = "expression expected"
-  override val usesAsBinding = true
+  override val noTokensErrorMessage: String = "expression expected"
+  override val usesAsBinding: Boolean = true
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.SHARP
@@ -87,7 +87,7 @@ class EachStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.
 }
 
 class AwaitStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("AWAIT_START"), langMode), BlockStartType {
-  override val noTokensErrorMessage = "expression expected"
+  override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.SHARP
@@ -111,8 +111,8 @@ class AwaitStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
 }
 
 class ThenClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("THEN_CLAUSE"), langMode), BlockInnerType {
-  override val noTokensErrorMessage = "expression expected"
-  override val usesAsBinding = true
+  override val noTokensErrorMessage: String = "expression expected"
+  override val usesAsBinding: Boolean = true
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.COLON
@@ -126,8 +126,8 @@ class ThenClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
 }
 
 class CatchClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("CATCH_CLAUSE"), langMode), BlockInnerType {
-  override val noTokensErrorMessage = "expression expected"
-  override val usesAsBinding = true
+  override val noTokensErrorMessage: String = "expression expected"
+  override val usesAsBinding: Boolean = true
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.COLON
@@ -139,7 +139,7 @@ class CatchClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMod
 }
 
 class KeyStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("KEY_START"), langMode), BlockStartType {
-  override val noTokensErrorMessage = "expression expected"
+  override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.SHARP
@@ -151,7 +151,7 @@ class KeyStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.t
 }
 
 class SnippetStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("SNIPPET_START"), langMode), BlockStartType {
-  override val noTokensErrorMessage = "expression expected"
+  override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.SHARP
@@ -174,23 +174,23 @@ class SnippetStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMo
 // endregion
 
 object SvelteTagElementTypes {
-  @JvmField val IF_START = IfStartType(SvelteLangMode.NO_TS)
-  @JvmField val ELSE_CLAUSE = ElseClauseType(SvelteLangMode.NO_TS)
-  @JvmField val EACH_START = EachStartType(SvelteLangMode.NO_TS)
-  @JvmField val AWAIT_START = AwaitStartType(SvelteLangMode.NO_TS)
-  @JvmField val THEN_CLAUSE = ThenClauseType(SvelteLangMode.NO_TS)
-  @JvmField val CATCH_CLAUSE = CatchClauseType(SvelteLangMode.NO_TS)
-  @JvmField val KEY_START = KeyStartType(SvelteLangMode.NO_TS)
-  @JvmField val SNIPPET_START = SnippetStartType(SvelteLangMode.NO_TS)
+  @JvmField val IF_START: IfStartType = IfStartType(SvelteLangMode.NO_TS)
+  @JvmField val ELSE_CLAUSE: ElseClauseType = ElseClauseType(SvelteLangMode.NO_TS)
+  @JvmField val EACH_START: EachStartType = EachStartType(SvelteLangMode.NO_TS)
+  @JvmField val AWAIT_START: AwaitStartType = AwaitStartType(SvelteLangMode.NO_TS)
+  @JvmField val THEN_CLAUSE: ThenClauseType = ThenClauseType(SvelteLangMode.NO_TS)
+  @JvmField val CATCH_CLAUSE: CatchClauseType = CatchClauseType(SvelteLangMode.NO_TS)
+  @JvmField val KEY_START: KeyStartType = KeyStartType(SvelteLangMode.NO_TS)
+  @JvmField val SNIPPET_START: SnippetStartType = SnippetStartType(SvelteLangMode.NO_TS)
 
-  @JvmField val IF_START_TS = IfStartType(SvelteLangMode.HAS_TS)
-  @JvmField val ELSE_CLAUSE_TS = ElseClauseType(SvelteLangMode.HAS_TS)
-  @JvmField val EACH_START_TS = EachStartType(SvelteLangMode.HAS_TS)
-  @JvmField val AWAIT_START_TS = AwaitStartType(SvelteLangMode.HAS_TS)
-  @JvmField val THEN_CLAUSE_TS = ThenClauseType(SvelteLangMode.HAS_TS)
-  @JvmField val CATCH_CLAUSE_TS = CatchClauseType(SvelteLangMode.HAS_TS)
-  @JvmField val KEY_START_TS = KeyStartType(SvelteLangMode.HAS_TS)
-  @JvmField val SNIPPET_START_TS = SnippetStartType(SvelteLangMode.HAS_TS)
+  @JvmField val IF_START_TS: IfStartType = IfStartType(SvelteLangMode.HAS_TS)
+  @JvmField val ELSE_CLAUSE_TS: ElseClauseType = ElseClauseType(SvelteLangMode.HAS_TS)
+  @JvmField val EACH_START_TS: EachStartType = EachStartType(SvelteLangMode.HAS_TS)
+  @JvmField val AWAIT_START_TS: AwaitStartType = AwaitStartType(SvelteLangMode.HAS_TS)
+  @JvmField val THEN_CLAUSE_TS: ThenClauseType = ThenClauseType(SvelteLangMode.HAS_TS)
+  @JvmField val CATCH_CLAUSE_TS: CatchClauseType = CatchClauseType(SvelteLangMode.HAS_TS)
+  @JvmField val KEY_START_TS: KeyStartType = KeyStartType(SvelteLangMode.HAS_TS)
+  @JvmField val SNIPPET_START_TS: SnippetStartType = SnippetStartType(SvelteLangMode.HAS_TS)
 
   fun getIfStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) IF_START_TS else IF_START
   fun getElseClause(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) ELSE_CLAUSE_TS else ELSE_CLAUSE
@@ -201,17 +201,17 @@ object SvelteTagElementTypes {
   fun getKeyStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) KEY_START_TS else KEY_START
   fun getSnippetStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) SNIPPET_START_TS else SNIPPET_START
 
-  val TAG_DEPENDENT_EXPRESSION = SvelteJSElementType("TAG_DEPENDENT_EXPRESSION")
+  val TAG_DEPENDENT_EXPRESSION: SvelteJSElementType = SvelteJSElementType("TAG_DEPENDENT_EXPRESSION")
 
-  val IF_END = SvelteJSElementType("IF_END")
-  val EACH_END = SvelteJSElementType("EACH_END")
-  val AWAIT_END = SvelteJSElementType("AWAIT_END")
-  val KEY_END = SvelteJSElementType("KEY_END")
-  val SNIPPET_END = SvelteJSElementType("SNIPPET_END")
+  val IF_END: SvelteJSElementType = SvelteJSElementType("IF_END")
+  val EACH_END: SvelteJSElementType = SvelteJSElementType("EACH_END")
+  val AWAIT_END: SvelteJSElementType = SvelteJSElementType("AWAIT_END")
+  val KEY_END: SvelteJSElementType = SvelteJSElementType("KEY_END")
+  val SNIPPET_END: SvelteJSElementType = SvelteJSElementType("SNIPPET_END")
 
-  val START_TAGS = TokenSet.forAllMatching { it is BlockStartType }
-  val INNER_TAGS = TokenSet.forAllMatching { it is BlockInnerType }
-  val END_TAGS = TokenSet.create(IF_END, EACH_END, AWAIT_END, KEY_END, SNIPPET_END)
-  val INITIAL_TAGS = TokenSet.forAllMatching { it is BlockStartType || it is BlockInnerType }
-  val TAIL_TAGS = TokenSet.forAllMatching { it is BlockInnerType || END_TAGS.contains(it) }
+  val START_TAGS: TokenSet = TokenSet.forAllMatching { it is BlockStartType }
+  val INNER_TAGS: TokenSet = TokenSet.forAllMatching { it is BlockInnerType }
+  val END_TAGS: TokenSet = TokenSet.create(IF_END, EACH_END, AWAIT_END, KEY_END, SNIPPET_END)
+  val INITIAL_TAGS: TokenSet = TokenSet.forAllMatching { it is BlockStartType || it is BlockInnerType }
+  val TAIL_TAGS: TokenSet = TokenSet.forAllMatching { it is BlockInnerType || END_TAGS.contains(it) }
 }

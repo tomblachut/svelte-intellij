@@ -13,7 +13,7 @@ import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 // region Named expression element types — use `is` checks to match both JS and TS variants
 
 class AttributeParameterType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTRIBUTE_PARAMETER"), langMode) {
-  override val noTokensErrorMessage = "Parameter expected"
+  override val noTokensErrorMessage: String = "Parameter expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     parseAtModifiersError(builder)
@@ -23,12 +23,12 @@ class AttributeParameterType(langMode: SvelteLangMode) : SvelteExpressionElement
   companion object {
     private val JS = AttributeParameterType(SvelteLangMode.NO_TS)
     private val TS = AttributeParameterType(SvelteLangMode.HAS_TS)
-    fun get(langMode: SvelteLangMode) = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+    fun get(langMode: SvelteLangMode): AttributeParameterType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
   }
 }
 
 class AttributeExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTRIBUTE_EXPRESSION"), langMode) {
-  override val noTokensErrorMessage = "Expression expected"
+  override val noTokensErrorMessage: String = "Expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     parseAtModifiersError(builder)
@@ -38,14 +38,14 @@ class AttributeExpressionType(langMode: SvelteLangMode) : SvelteExpressionElemen
   companion object {
     private val JS = AttributeExpressionType(SvelteLangMode.NO_TS)
     private val TS = AttributeExpressionType(SvelteLangMode.HAS_TS)
-    fun get(langMode: SvelteLangMode) = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+    fun get(langMode: SvelteLangMode): AttributeExpressionType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
   }
 }
 
 /** Text expressions + html, debug & render + const */
 class ContentExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("CONTENT_EXPRESSION"), langMode) {
-  override val noTokensErrorMessage = "Expression expected"
-  override val assumeExternalBraces = false
+  override val noTokensErrorMessage: String = "Expression expected"
+  override val assumeExternalBraces: Boolean = false
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     if (parseAtModifiers(builder)) {
@@ -78,12 +78,12 @@ class ContentExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementT
   companion object {
     private val JS = ContentExpressionType(SvelteLangMode.NO_TS)
     private val TS = ContentExpressionType(SvelteLangMode.HAS_TS)
-    fun get(langMode: SvelteLangMode) = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+    fun get(langMode: SvelteLangMode): ContentExpressionType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
   }
 }
 
 class SpreadOrShorthandType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("SPREAD_OR_SHORTHAND"), langMode) {
-  override val noTokensErrorMessage = "Shorthand attribute or spread expression expected"
+  override val noTokensErrorMessage: String = "Shorthand attribute or spread expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     parseAtModifiersError(builder)
@@ -102,12 +102,12 @@ class SpreadOrShorthandType(langMode: SvelteLangMode) : SvelteExpressionElementT
   companion object {
     private val JS = SpreadOrShorthandType(SvelteLangMode.NO_TS)
     private val TS = SpreadOrShorthandType(SvelteLangMode.HAS_TS)
-    fun get(langMode: SvelteLangMode) = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+    fun get(langMode: SvelteLangMode): SpreadOrShorthandType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
   }
 }
 
 class AttachExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTACH_EXPRESSION"), langMode) {
-  override val noTokensErrorMessage = "Attachment expression expected"
+  override val noTokensErrorMessage: String = "Attachment expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     if (builder.tokenType === JSTokenTypes.AT) {
@@ -134,22 +134,22 @@ class AttachExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementTy
   companion object {
     private val JS = AttachExpressionType(SvelteLangMode.NO_TS)
     private val TS = AttachExpressionType(SvelteLangMode.HAS_TS)
-    fun get(langMode: SvelteLangMode) = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+    fun get(langMode: SvelteLangMode): AttachExpressionType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
   }
 }
 
 // endregion
 
 object SvelteJSLazyElementTypes {
-  fun getAttributeParameter(langMode: SvelteLangMode) = AttributeParameterType.get(langMode)
-  fun getAttributeExpression(langMode: SvelteLangMode) = AttributeExpressionType.get(langMode)
-  fun getContentExpression(langMode: SvelteLangMode) = ContentExpressionType.get(langMode)
-  fun getSpreadOrShorthand(langMode: SvelteLangMode) = SpreadOrShorthandType.get(langMode)
-  fun getAttachExpression(langMode: SvelteLangMode) = AttachExpressionType.get(langMode)
+  fun getAttributeParameter(langMode: SvelteLangMode): AttributeParameterType = AttributeParameterType.get(langMode)
+  fun getAttributeExpression(langMode: SvelteLangMode): AttributeExpressionType = AttributeExpressionType.get(langMode)
+  fun getContentExpression(langMode: SvelteLangMode): ContentExpressionType = ContentExpressionType.get(langMode)
+  fun getSpreadOrShorthand(langMode: SvelteLangMode): SpreadOrShorthandType = SpreadOrShorthandType.get(langMode)
+  fun getAttachExpression(langMode: SvelteLangMode): AttachExpressionType = AttachExpressionType.get(langMode)
 
-  @JvmField val CONTENT_EXPRESSION_SET = TokenSet.forAllMatching { it is ContentExpressionType }
-  @JvmField val SPREAD_OR_SHORTHAND_SET = TokenSet.forAllMatching { it is SpreadOrShorthandType }
-  @JvmField val ATTACH_EXPRESSION_SET = TokenSet.forAllMatching { it is AttachExpressionType }
+  @JvmField val CONTENT_EXPRESSION_SET: TokenSet = TokenSet.forAllMatching { it is ContentExpressionType }
+  @JvmField val SPREAD_OR_SHORTHAND_SET: TokenSet = TokenSet.forAllMatching { it is SpreadOrShorthandType }
+  @JvmField val ATTACH_EXPRESSION_SET: TokenSet = TokenSet.forAllMatching { it is AttachExpressionType }
 }
 
 // region Shared parsing helpers
