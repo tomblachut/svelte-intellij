@@ -44,9 +44,16 @@ val markupContextKey: Key<in Any> = Key.create("markupContextKey")
 val blockContextKey: Key<in Any> = Key.create("blockContextKey")
 
 /**
- * Context key to indicate we're in a block that uses 'as' for Svelte binding syntax.
- * This includes {#each}, {#await}, {:then}, {:catch} blocks.
- * When this is true, top-level 'as' should be treated as Svelte syntax, not TypeScript assertions.
+ * Context key for blocks that use 'as' for Svelte binding syntax ({#each}, {:then}, {:catch}).
+ * Disambiguates 'as' between Svelte binding and TypeScript type assertion:
+ *
+ * ```svelte
+ * {#each (items as Item[]) as item}
+ *         ^^^^^^^^^^^^^^^^            — TS assertion (inside parens → allowed)
+ *                           ^^^^^^^^  — Svelte binding (top level → blocked by this key)
+ *
+ * {#if (value as boolean)}            — TS assertion (no binding key set → always allowed)
+ * ```
  */
 val blockWithAsBindingKey: Key<in Any> = Key.create("blockWithAsBindingKey")
 

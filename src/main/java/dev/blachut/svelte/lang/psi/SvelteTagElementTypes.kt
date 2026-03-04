@@ -49,7 +49,11 @@ class ElseClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
 
 class EachStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("EACH_START"), langMode), BlockStartType {
   override val noTokensErrorMessage: String = "expression expected"
-  override val usesAsBinding: Boolean = true
+
+  override fun setupBuilderContext(builder: PsiBuilder) {
+    super.setupBuilderContext(builder)
+    setupAsBindingContext(builder)
+  }
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.SHARP
@@ -112,7 +116,11 @@ class AwaitStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
 
 class ThenClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("THEN_CLAUSE"), langMode), BlockInnerType {
   override val noTokensErrorMessage: String = "expression expected"
-  override val usesAsBinding: Boolean = true
+
+  override fun setupBuilderContext(builder: PsiBuilder) {
+    super.setupBuilderContext(builder)
+    setupAsBindingContext(builder)
+  }
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.COLON
@@ -127,7 +135,11 @@ class ThenClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
 
 class CatchClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("CATCH_CLAUSE"), langMode), BlockInnerType {
   override val noTokensErrorMessage: String = "expression expected"
-  override val usesAsBinding: Boolean = true
+
+  override fun setupBuilderContext(builder: PsiBuilder) {
+    super.setupBuilderContext(builder)
+    setupAsBindingContext(builder)
+  }
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.COLON

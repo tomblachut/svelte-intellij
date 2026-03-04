@@ -19,21 +19,21 @@ abstract class SvelteBlockElementType(
 
   override val assumeExternalBraces: Boolean = false
 
-  /**
-   * When true, top-level 'as' in TypeScript mode is treated as Svelte syntax, not type assertions.
-   * Applies to {#each}, {#await}, {:then}, {:catch} blocks.
-   */
-  protected open val usesAsBinding: Boolean = false
-
   override fun parse(text: CharSequence, table: CharTable): ASTNode {
     return SvelteInitialTag(this, text)
   }
 
   override fun setupBuilderContext(builder: PsiBuilder) {
     builder.putUserData(blockContextKey, true)
-    if (usesAsBinding) {
-      builder.putUserData(blockWithAsBindingKey, true)
-    }
+  }
+
+  /**
+   * Sets [blockWithAsBindingKey] so that [dev.blachut.svelte.lang.parsing.js.SvelteTSParser]
+   * treats top-level 'as' as Svelte binding syntax, not TypeScript type assertion.
+   * Call from [setupBuilderContext] in block types that use 'as' ({#each}, {:then}, {:catch}).
+   */
+  protected fun setupAsBindingContext(builder: PsiBuilder) {
+    builder.putUserData(blockWithAsBindingKey, true)
   }
 
   override fun remapClosingBrace(builder: PsiBuilder) {
