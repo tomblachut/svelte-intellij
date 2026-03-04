@@ -43,7 +43,7 @@ internal object SvelteJSElementTypes {
   fun getConstTagVariable(langMode: SvelteLangMode): IElementType =
     if (langMode == SvelteLangMode.HAS_TS) CONST_TAG_VARIABLE_TS else CONST_TAG_VARIABLE
 
-  val PARAMETER = object : JSParameterElementType("EMBEDDED_PARAMETER") {
+  val PARAMETER: JSParameterElementType = object : JSParameterElementType("EMBEDDED_PARAMETER") {
     override fun construct(node: ASTNode) = SvelteJSParameter(node)
 
     override fun toString(): String = "Svelte$debugName"
@@ -55,14 +55,14 @@ internal object SvelteJSElementTypes {
     override fun toString(): String = "Svelte" + super.toString()
   }
 
-  val EMBEDDED_CONTENT_MODULE = object : JSEmbeddedContentElementType(SvelteJSLanguage.INSTANCE, "MOD_SVELTE_JS_") {
+  val EMBEDDED_CONTENT_MODULE: JSEmbeddedContentElementType = object : JSEmbeddedContentElementType(SvelteJSLanguage.INSTANCE, "MOD_SVELTE_JS_") {
     override fun isModule() = true
     override fun toModule() = this
 
     override fun construct(node: ASTNode) = SvelteJSEmbeddedContentImpl(node)
   }
 
-  val EMBEDDED_CONTENT_MODULE_TS = object : TypeScriptEmbeddedContentElementType(SvelteTypeScriptLanguage.INSTANCE, "MOD_SVELTE_TS_") {
+  val EMBEDDED_CONTENT_MODULE_TS: TypeScriptEmbeddedContentElementType = object : TypeScriptEmbeddedContentElementType(SvelteTypeScriptLanguage.INSTANCE, "MOD_SVELTE_TS_") {
     override fun isModule() = true
     override fun toModule() = this
 

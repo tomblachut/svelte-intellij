@@ -23,8 +23,8 @@ fun isModuleScript(tag: XmlTag?): Boolean {
   return tag != null && HtmlUtil.isScriptTag(tag) && hasModuleAttribute(tag)
 }
 
-fun hasModuleAttribute(tag: XmlTag) = tag.getAttribute("module") != null // Svelte 5
-                                       || tag.getAttributeValue("context") == "module" // Svelte 3-4
+fun hasModuleAttribute(tag: XmlTag): Boolean = tag.getAttribute("module") != null // Svelte 5
+                                               || tag.getAttributeValue("context") == "module" // Svelte 3-4
 
 fun findAncestorScript(place: PsiElement): XmlTag? {
   // TODO optimize for XmlTag, or only walk up from JSElements?
@@ -47,7 +47,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
         SvelteLangMode.DEFAULT
     }
 
-  val moduleScript
+  val moduleScript: XmlTag?
     get() = document?.children?.find {
       it is XmlTag && HtmlUtil.isScriptTag(it) && hasModuleAttribute(it)
     } as XmlTag?
@@ -55,7 +55,7 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
   // By convention instanceScript is placed after module script
   // so it makes sense to resolve last script in case of ambiguity from missing context attribute
   // ambiguous scripts should then be highlighted by appropriate inspection
-  val instanceScript
+  val instanceScript: XmlTag?
     get() = document?.children?.findLast {
       it is XmlTag && HtmlUtil.isScriptTag(it) && !hasModuleAttribute(it)
     } as XmlTag?
