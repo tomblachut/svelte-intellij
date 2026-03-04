@@ -169,6 +169,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testTsBlockIfTopLevelAs() = doTest()
   fun testTsMarkupExpressions() = doTest()
   fun testTsComprehensive() = doTest()
+  fun testTsAttachSimple() = doTest()
 
   fun testStyleTagDefault() = doTest()
   fun testStyleTagScss() = doTest()
