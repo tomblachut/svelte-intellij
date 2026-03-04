@@ -1,0 +1,74 @@
+SvelteHtmlFile: TsAttachSimple.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: script
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('script')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: lang
+        XmlToken:XML_NAME('lang')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('ts')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJSEmbeddedContent:JS:MOD_SVELTE_TS_EMBEDDED_CONTENT
+        PsiWhiteSpace('\n  ')
+        JSVarStatement
+          JSAttributeList
+            <empty list>
+          PsiElement(JS:CONST_KEYWORD)('const')
+          PsiWhiteSpace(' ')
+          TypeScriptVariable
+            PsiElement(JS:IDENTIFIER)('myAttachment')
+            PsiWhiteSpace(' ')
+            PsiElement(JS:EQ)('=')
+            PsiWhiteSpace(' ')
+            TypeScriptFunctionExpression
+              JSAttributeList
+                <empty list>
+              TypeScriptParameterList
+                PsiElement(JS:LPAR)('(')
+                TypeScriptParameter
+                  JSAttributeList
+                    <empty list>
+                  PsiElement(JS:IDENTIFIER)('node')
+                  PsiElement(JS:COLON)(':')
+                  PsiWhiteSpace(' ')
+                  TypeScriptSingleType
+                    JSReferenceExpression
+                      PsiElement(JS:IDENTIFIER)('HTMLElement')
+                PsiElement(JS:RPAR)(')')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:EQGT)('=>')
+              PsiWhiteSpace(' ')
+              JSBlockStatement
+                PsiElement(JS:LBRACE)('{')
+                PsiElement(JS:RBRACE)('}')
+          PsiElement(JS:SEMICOLON)(';')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('script')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: 
+        SveltePsiElement
+          PsiElement(START_MUSTACHE)('{')
+          SvelteJS: ATTACH_EXPRESSION_TS
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:ATTACH_KEYWORD)('attach')
+            PsiWhiteSpace(' ')
+            JSReferenceExpression
+              PsiElement(JS:IDENTIFIER)('myAttachment')
+          PsiElement(END_MUSTACHE)('}')
+      XmlToken:XML_TAG_END('>')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_HAS_TS)('')
