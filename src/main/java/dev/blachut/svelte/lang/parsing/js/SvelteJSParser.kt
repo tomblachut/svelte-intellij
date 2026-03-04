@@ -41,7 +41,6 @@ class SvelteJSParser(
 }
 
 val markupContextKey: Key<in Any> = Key.create("markupContextKey")
-val blockContextKey: Key<in Any> = Key.create("blockContextKey")
 
 /**
  * Context key for blocks that use 'as' for Svelte binding syntax ({#each}, {:then}, {:catch}).
