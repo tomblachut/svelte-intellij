@@ -5,7 +5,6 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.util.CharTable
 import dev.blachut.svelte.lang.SvelteLangMode
-import dev.blachut.svelte.lang.parsing.js.blockContextKey
 import dev.blachut.svelte.lang.parsing.js.blockWithAsBindingKey
 
 /**
@@ -21,10 +20,6 @@ abstract class SvelteBlockElementType(
 
   override fun parse(text: CharSequence, table: CharTable): ASTNode {
     return SvelteInitialTag(this, text)
-  }
-
-  override fun setupBuilderContext(builder: PsiBuilder) {
-    builder.putUserData(blockContextKey, true)
   }
 
   /**
