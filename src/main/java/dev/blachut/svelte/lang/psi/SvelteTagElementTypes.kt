@@ -20,7 +20,7 @@ sealed interface BlockInnerType
 
 // region Named block element types
 
-class IfStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("IF_START"), langMode), BlockStartType {
+class IfStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("IF_START"), langMode), BlockStartType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -32,7 +32,7 @@ class IfStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.to
   }
 }
 
-class ElseClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("ELSE_CLAUSE"), langMode), BlockInnerType {
+class ElseClauseType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("ELSE_CLAUSE"), langMode), BlockInnerType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -47,7 +47,7 @@ class ElseClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
   }
 }
 
-class EachStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("EACH_START"), langMode), BlockStartType {
+class EachStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("EACH_START"), langMode), BlockStartType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun setupBuilderContext(builder: PsiBuilder) {
@@ -90,7 +90,7 @@ class EachStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.
   }
 }
 
-class AwaitStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("AWAIT_START"), langMode), BlockStartType {
+class AwaitStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("AWAIT_START"), langMode), BlockStartType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -114,7 +114,7 @@ class AwaitStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
   }
 }
 
-class ThenClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("THEN_CLAUSE"), langMode), BlockInnerType {
+class ThenClauseType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("THEN_CLAUSE"), langMode), BlockInnerType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun setupBuilderContext(builder: PsiBuilder) {
@@ -133,7 +133,7 @@ class ThenClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode
   }
 }
 
-class CatchClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("CATCH_CLAUSE"), langMode), BlockInnerType {
+class CatchClauseType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("CATCH_CLAUSE"), langMode), BlockInnerType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun setupBuilderContext(builder: PsiBuilder) {
@@ -150,7 +150,7 @@ class CatchClauseType(langMode: SvelteLangMode) : SvelteBlockElementType(langMod
   }
 }
 
-class KeyStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("KEY_START"), langMode), BlockStartType {
+class KeyStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("KEY_START"), langMode), BlockStartType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -162,7 +162,7 @@ class KeyStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.t
   }
 }
 
-class SnippetStartType(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("SNIPPET_START"), langMode), BlockStartType {
+class SnippetStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("SNIPPET_START"), langMode), BlockStartType {
   override val noTokensErrorMessage: String = "expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {

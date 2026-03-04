@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.isTokenAfterWhiteSpace
 
 // region Named expression element types — use `is` checks to match both JS and TS variants
 
-class AttributeParameterType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTRIBUTE_PARAMETER"), langMode) {
+class AttributeParameterType internal constructor(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTRIBUTE_PARAMETER"), langMode) {
   override val noTokensErrorMessage: String = "Parameter expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -27,7 +27,7 @@ class AttributeParameterType(langMode: SvelteLangMode) : SvelteExpressionElement
   }
 }
 
-class AttributeExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTRIBUTE_EXPRESSION"), langMode) {
+class AttributeExpressionType internal constructor(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTRIBUTE_EXPRESSION"), langMode) {
   override val noTokensErrorMessage: String = "Expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -43,7 +43,7 @@ class AttributeExpressionType(langMode: SvelteLangMode) : SvelteExpressionElemen
 }
 
 /** Text expressions + html, debug & render + const */
-class ContentExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("CONTENT_EXPRESSION"), langMode) {
+class ContentExpressionType internal constructor(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("CONTENT_EXPRESSION"), langMode) {
   override val noTokensErrorMessage: String = "Expression expected"
   override val assumeExternalBraces: Boolean = false
 
@@ -82,7 +82,7 @@ class ContentExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementT
   }
 }
 
-class SpreadOrShorthandType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("SPREAD_OR_SHORTHAND"), langMode) {
+class SpreadOrShorthandType internal constructor(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("SPREAD_OR_SHORTHAND"), langMode) {
   override val noTokensErrorMessage: String = "Shorthand attribute or spread expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
@@ -106,7 +106,7 @@ class SpreadOrShorthandType(langMode: SvelteLangMode) : SvelteExpressionElementT
   }
 }
 
-class AttachExpressionType(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTACH_EXPRESSION"), langMode) {
+class AttachExpressionType internal constructor(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("ATTACH_EXPRESSION"), langMode) {
   override val noTokensErrorMessage: String = "Attachment expression expected"
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
