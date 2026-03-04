@@ -11,10 +11,10 @@ import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.parsing.html.SvelteTagParsing
 import dev.blachut.svelte.lang.parsing.js.markupContextKey
 
-// region Sealed interfaces for `is` checks on block type groups
+// region interfaces for `is` checks on block type groups
 
-sealed interface BlockStartType
-sealed interface BlockInnerType
+interface BlockStartType
+interface BlockInnerType
 
 // endregion
 
