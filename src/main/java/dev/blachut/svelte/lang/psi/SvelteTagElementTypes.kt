@@ -30,6 +30,12 @@ class IfStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockEl
 
     parser.expressionParser.parseExpression()
   }
+
+  companion object {
+    private val JS = IfStartType(SvelteLangMode.NO_TS)
+    private val TS = IfStartType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): IfStartType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+  }
 }
 
 class ElseClauseType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("ELSE_CLAUSE"), langMode), BlockInnerType {
@@ -44,6 +50,12 @@ class ElseClauseType internal constructor(langMode: SvelteLangMode) : SvelteBloc
       builder.advanceLexer()
       parser.expressionParser.parseExpression()
     }
+  }
+
+  companion object {
+    private val JS = ElseClauseType(SvelteLangMode.NO_TS)
+    private val TS = ElseClauseType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): ElseClauseType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
   }
 }
 
@@ -88,6 +100,12 @@ class EachStartType internal constructor(langMode: SvelteLangMode) : SvelteBlock
       keyExpressionMarker.done(SvelteTagElementTypes.TAG_DEPENDENT_EXPRESSION)
     }
   }
+
+  companion object {
+    private val JS = EachStartType(SvelteLangMode.NO_TS)
+    private val TS = EachStartType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): EachStartType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+  }
 }
 
 class AwaitStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("AWAIT_START"), langMode), BlockStartType {
@@ -112,6 +130,12 @@ class AwaitStartType internal constructor(langMode: SvelteLangMode) : SvelteBloc
       parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
     }
   }
+
+  companion object {
+    private val JS = AwaitStartType(SvelteLangMode.NO_TS)
+    private val TS = AwaitStartType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): AwaitStartType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+  }
 }
 
 class ThenClauseType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("THEN_CLAUSE"), langMode), BlockInnerType {
@@ -131,6 +155,12 @@ class ThenClauseType internal constructor(langMode: SvelteLangMode) : SvelteBloc
     // TODO Check weird RBRACE placement
     parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
   }
+
+  companion object {
+    private val JS = ThenClauseType(SvelteLangMode.NO_TS)
+    private val TS = ThenClauseType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): ThenClauseType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+  }
 }
 
 class CatchClauseType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("CATCH_CLAUSE"), langMode), BlockInnerType {
@@ -148,6 +178,12 @@ class CatchClauseType internal constructor(langMode: SvelteLangMode) : SvelteBlo
 
     parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
   }
+
+  companion object {
+    private val JS = CatchClauseType(SvelteLangMode.NO_TS)
+    private val TS = CatchClauseType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): CatchClauseType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+  }
 }
 
 class KeyStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("KEY_START"), langMode), BlockStartType {
@@ -159,6 +195,12 @@ class KeyStartType internal constructor(langMode: SvelteLangMode) : SvelteBlockE
     builder.advanceLexer() // SvelteTokenTypes.KEY_KEYWORD
 
     parser.expressionParser.parseExpression()
+  }
+
+  companion object {
+    private val JS = KeyStartType(SvelteLangMode.NO_TS)
+    private val TS = KeyStartType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): KeyStartType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
   }
 }
 
@@ -181,37 +223,25 @@ class SnippetStartType internal constructor(langMode: SvelteLangMode) : SvelteBl
       builder.putUserData(markupContextKey, null)
     }
   }
+
+  companion object {
+    private val JS = SnippetStartType(SvelteLangMode.NO_TS)
+    private val TS = SnippetStartType(SvelteLangMode.HAS_TS)
+    fun get(langMode: SvelteLangMode): SnippetStartType = if (langMode == SvelteLangMode.HAS_TS) TS else JS
+  }
 }
 
 // endregion
 
 object SvelteTagElementTypes {
-  @JvmField val IF_START: IfStartType = IfStartType(SvelteLangMode.NO_TS)
-  @JvmField val ELSE_CLAUSE: ElseClauseType = ElseClauseType(SvelteLangMode.NO_TS)
-  @JvmField val EACH_START: EachStartType = EachStartType(SvelteLangMode.NO_TS)
-  @JvmField val AWAIT_START: AwaitStartType = AwaitStartType(SvelteLangMode.NO_TS)
-  @JvmField val THEN_CLAUSE: ThenClauseType = ThenClauseType(SvelteLangMode.NO_TS)
-  @JvmField val CATCH_CLAUSE: CatchClauseType = CatchClauseType(SvelteLangMode.NO_TS)
-  @JvmField val KEY_START: KeyStartType = KeyStartType(SvelteLangMode.NO_TS)
-  @JvmField val SNIPPET_START: SnippetStartType = SnippetStartType(SvelteLangMode.NO_TS)
-
-  @JvmField val IF_START_TS: IfStartType = IfStartType(SvelteLangMode.HAS_TS)
-  @JvmField val ELSE_CLAUSE_TS: ElseClauseType = ElseClauseType(SvelteLangMode.HAS_TS)
-  @JvmField val EACH_START_TS: EachStartType = EachStartType(SvelteLangMode.HAS_TS)
-  @JvmField val AWAIT_START_TS: AwaitStartType = AwaitStartType(SvelteLangMode.HAS_TS)
-  @JvmField val THEN_CLAUSE_TS: ThenClauseType = ThenClauseType(SvelteLangMode.HAS_TS)
-  @JvmField val CATCH_CLAUSE_TS: CatchClauseType = CatchClauseType(SvelteLangMode.HAS_TS)
-  @JvmField val KEY_START_TS: KeyStartType = KeyStartType(SvelteLangMode.HAS_TS)
-  @JvmField val SNIPPET_START_TS: SnippetStartType = SnippetStartType(SvelteLangMode.HAS_TS)
-
-  fun getIfStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) IF_START_TS else IF_START
-  fun getElseClause(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) ELSE_CLAUSE_TS else ELSE_CLAUSE
-  fun getEachStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) EACH_START_TS else EACH_START
-  fun getAwaitStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) AWAIT_START_TS else AWAIT_START
-  fun getThenClause(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) THEN_CLAUSE_TS else THEN_CLAUSE
-  fun getCatchClause(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) CATCH_CLAUSE_TS else CATCH_CLAUSE
-  fun getKeyStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) KEY_START_TS else KEY_START
-  fun getSnippetStart(langMode: SvelteLangMode): IElementType = if (langMode == SvelteLangMode.HAS_TS) SNIPPET_START_TS else SNIPPET_START
+  fun getIfStart(langMode: SvelteLangMode): IElementType = IfStartType.get(langMode)
+  fun getElseClause(langMode: SvelteLangMode): IElementType = ElseClauseType.get(langMode)
+  fun getEachStart(langMode: SvelteLangMode): IElementType = EachStartType.get(langMode)
+  fun getAwaitStart(langMode: SvelteLangMode): IElementType = AwaitStartType.get(langMode)
+  fun getThenClause(langMode: SvelteLangMode): IElementType = ThenClauseType.get(langMode)
+  fun getCatchClause(langMode: SvelteLangMode): IElementType = CatchClauseType.get(langMode)
+  fun getKeyStart(langMode: SvelteLangMode): IElementType = KeyStartType.get(langMode)
+  fun getSnippetStart(langMode: SvelteLangMode): IElementType = SnippetStartType.get(langMode)
 
   val TAG_DEPENDENT_EXPRESSION: SvelteJSElementType = SvelteJSElementType("TAG_DEPENDENT_EXPRESSION")
 
