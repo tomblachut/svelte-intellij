@@ -256,4 +256,35 @@ object SvelteTagElementTypes {
   val END_TAGS: TokenSet = TokenSet.create(IF_END, EACH_END, AWAIT_END, KEY_END, SNIPPET_END)
   val INITIAL_TAGS: TokenSet = TokenSet.forAllMatching { it is BlockStartType || it is BlockInnerType }
   val TAIL_TAGS: TokenSet = TokenSet.forAllMatching { it is BlockInnerType || END_TAGS.contains(it) }
+
+  // region Backward-compatible aliases for external consumers (returns JS variant)
+  // Migration guide:
+  // - For equality checks: replace `type == IF_START` with `type is IfStartType`
+  // - For group checks: use `type is BlockStartType` or `type in START_TAGS` for all start tags
+  // - For lang-aware code: use getIfStart(langMode) to get the correct JS or TS variant
+
+  @Deprecated("Use `is IfStartType` check, `in START_TAGS`, or getIfStart(langMode)", ReplaceWith("getIfStart(langMode)"))
+  @JvmField val IF_START: IfStartType = IfStartType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is ElseClauseType` check, `in INNER_TAGS`, or getElseClause(langMode)", ReplaceWith("getElseClause(langMode)"))
+  @JvmField val ELSE_CLAUSE: ElseClauseType = ElseClauseType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is EachStartType` check, `in START_TAGS`, or getEachStart(langMode)", ReplaceWith("getEachStart(langMode)"))
+  @JvmField val EACH_START: EachStartType = EachStartType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is AwaitStartType` check, `in START_TAGS`, or getAwaitStart(langMode)", ReplaceWith("getAwaitStart(langMode)"))
+  @JvmField val AWAIT_START: AwaitStartType = AwaitStartType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is ThenClauseType` check, `in INNER_TAGS`, or getThenClause(langMode)", ReplaceWith("getThenClause(langMode)"))
+  @JvmField val AWAIT_THEN: ThenClauseType = ThenClauseType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is CatchClauseType` check, `in INNER_TAGS`, or getCatchClause(langMode)", ReplaceWith("getCatchClause(langMode)"))
+  @JvmField val AWAIT_CATCH: CatchClauseType = CatchClauseType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is KeyStartType` check, `in START_TAGS`, or getKeyStart(langMode)", ReplaceWith("getKeyStart(langMode)"))
+  @JvmField val KEY_START: KeyStartType = KeyStartType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is SnippetStartType` check, `in START_TAGS`, or getSnippetStart(langMode)", ReplaceWith("getSnippetStart(langMode)"))
+  @JvmField val SNIPPET_START: SnippetStartType = SnippetStartType.get(SvelteLangMode.NO_TS)
+  // endregion
 }

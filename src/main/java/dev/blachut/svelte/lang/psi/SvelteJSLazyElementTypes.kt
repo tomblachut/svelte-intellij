@@ -150,6 +150,28 @@ object SvelteJSLazyElementTypes {
   @JvmField val CONTENT_EXPRESSION_SET: TokenSet = TokenSet.forAllMatching { it is ContentExpressionType }
   @JvmField val SPREAD_OR_SHORTHAND_SET: TokenSet = TokenSet.forAllMatching { it is SpreadOrShorthandType }
   @JvmField val ATTACH_EXPRESSION_SET: TokenSet = TokenSet.forAllMatching { it is AttachExpressionType }
+
+  // region Backward-compatible aliases for external consumers (returns JS variant)
+  // Migration guide:
+  // - For equality checks: replace `type == CONTENT_EXPRESSION` with `type is ContentExpressionType`
+  // - For TokenSet membership: use predefined sets like CONTENT_EXPRESSION_SET, or START_TAGS/INNER_TAGS/END_TAGS
+  // - For lang-aware code: use getContentExpression(langMode) to get the correct JS or TS variant
+
+  @Deprecated("Use `is AttributeParameterType` check or getAttributeParameter(langMode)", ReplaceWith("getAttributeParameter(langMode)"))
+  @JvmField val ATTRIBUTE_PARAMETER: AttributeParameterType = AttributeParameterType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is AttributeExpressionType` check or getAttributeExpression(langMode)", ReplaceWith("getAttributeExpression(langMode)"))
+  @JvmField val ATTRIBUTE_EXPRESSION: AttributeExpressionType = AttributeExpressionType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is ContentExpressionType` check, CONTENT_EXPRESSION_SET, or getContentExpression(langMode)", ReplaceWith("getContentExpression(langMode)"))
+  @JvmField val CONTENT_EXPRESSION: ContentExpressionType = ContentExpressionType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is SpreadOrShorthandType` check, SPREAD_OR_SHORTHAND_SET, or getSpreadOrShorthand(langMode)", ReplaceWith("getSpreadOrShorthand(langMode)"))
+  @JvmField val SPREAD_OR_SHORTHAND: SpreadOrShorthandType = SpreadOrShorthandType.get(SvelteLangMode.NO_TS)
+
+  @Deprecated("Use `is AttachExpressionType` check, ATTACH_EXPRESSION_SET, or getAttachExpression(langMode)", ReplaceWith("getAttachExpression(langMode)"))
+  @JvmField val ATTACH_EXPRESSION: AttachExpressionType = AttachExpressionType.get(SvelteLangMode.NO_TS)
+  // endregion
 }
 
 // region Shared parsing helpers
