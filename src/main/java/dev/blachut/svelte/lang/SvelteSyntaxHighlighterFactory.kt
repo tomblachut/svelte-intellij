@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile
 
 class SvelteSyntaxHighlighterFactory : SyntaxHighlighterFactory() {
   override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter {
-    return SvelteSyntaxHighlighter()
+    val langMode = SvelteLangMode.getLatestKnownLang(project, virtualFile)
+    return SvelteSyntaxHighlighter(langMode)
   }
 }

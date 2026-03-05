@@ -10,9 +10,12 @@ import com.intellij.psi.tree.IElementType
 import dev.blachut.svelte.lang.parsing.html.SvelteHtmlLexer
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
-internal class SvelteSyntaxHighlighter : HtmlFileHighlighter() {
+internal class SvelteSyntaxHighlighter(
+  private val langMode: SvelteLangMode = SvelteLangMode.DEFAULT,
+) : HtmlFileHighlighter() {
+
   override fun getHighlightingLexer(): Lexer {
-    return SvelteHtmlLexer(true)
+    return SvelteHtmlLexer(true, langMode)
   }
 
   override fun getTokenHighlights(tokenType: IElementType): Array<out TextAttributesKey> {
