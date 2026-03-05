@@ -19,6 +19,9 @@ import com.intellij.psi.util.parentOfTypes
 import com.intellij.psi.util.parents
 import com.intellij.psi.xml.XmlDocument
 import com.intellij.psi.xml.XmlTag
+import com.intellij.util.concurrency.annotations.RequiresBackgroundThread
+import com.intellij.util.concurrency.annotations.RequiresEdt
+import com.intellij.util.concurrency.annotations.RequiresReadLock
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 import dev.blachut.svelte.lang.codeInsight.SvelteTemplateExpressionsCopyPasteProcessor.SvelteTemplateExpressionsImportsTransferableData
@@ -32,6 +35,7 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
   override val dataFlavor: DataFlavor
     get() = SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR
 
+  @RequiresEdt
   override fun isAcceptableCopyContext(file: PsiFile, contextElements: List<PsiElement>): Boolean {
     val settings = JSApplicationSettings.getInstance()
     if (file !is SvelteHtmlFile) return false
@@ -41,11 +45,13 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
            || (!isTS && settings.isUseJavaScriptAutoImport)
   }
 
+  @RequiresEdt
   override fun isAcceptablePasteContext(context: PsiElement): Boolean =
     context.containingFile is SvelteHtmlFile
     && context.parentOfTypes(JSExecutionScope::class, XmlTag::class, XmlDocument::class, withSelf = true)
       .let { it !is JSExecutionScope && it != null }
 
+  @RequiresEdt
   override fun hasUnsupportedContentInCopyContext(parent: PsiElement, textRange: TextRange): Boolean {
     var result = false
     parent.accept(object : JSRecursiveWalkingElementVisitor() {
@@ -59,9 +65,11 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
     return result || parent.parents(true).any { it is JSEmbeddedContentImpl }
   }
 
+  @RequiresEdt
   override fun createTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>): SvelteTemplateExpressionsImportsTransferableData =
     SvelteTemplateExpressionsImportsTransferableData(importedElementsDeferred)
 
+  @RequiresEdt
   override fun getExportScope(file: PsiFile, caret: Int): PsiElement? =
     super.getExportScope(file, caret)
     ?: WriteAction.compute<PsiElement, Throwable> {
@@ -69,6 +77,8 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
         file as? SvelteHtmlFile ?: return@compute null)
     }
 
+  @RequiresReadLock
+  @RequiresBackgroundThread
   override fun prepareInsertingRequiredImports(
     pasteContext: PsiElement,
     data: SvelteTemplateExpressionsImportsTransferableData,

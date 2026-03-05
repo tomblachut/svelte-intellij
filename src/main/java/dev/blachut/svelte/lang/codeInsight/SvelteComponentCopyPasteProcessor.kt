@@ -22,6 +22,10 @@ import com.intellij.psi.XmlRecursiveElementWalkingVisitor
 import com.intellij.psi.util.parentOfTypes
 import com.intellij.psi.xml.XmlDocument
 import com.intellij.psi.xml.XmlTag
+import com.intellij.util.concurrency.ThreadingAssertions
+import com.intellij.util.concurrency.annotations.RequiresBackgroundThread
+import com.intellij.util.concurrency.annotations.RequiresEdt
+import com.intellij.util.concurrency.annotations.RequiresReadLock
 import com.intellij.xml.util.XmlTagUtil
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 import dev.blachut.svelte.lang.codeInsight.SvelteComponentCopyPasteProcessor.SvelteComponentImportsTransferableData
@@ -47,6 +51,7 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
            || (!isTS && settings.isUseJavaScriptAutoImport)
   }
 
+  @RequiresEdt
   override fun isAcceptablePasteContext(context: PsiElement): Boolean =
     context.containingFile is SvelteHtmlFile
     && context.parentOfTypes(JSExecutionScope::class, XmlTag::class, XmlDocument::class, withSelf = true)
@@ -71,7 +76,11 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
       prepareInstanceScriptContent(file as? SvelteHtmlFile ?: return@compute null)
     }
 
+  @RequiresReadLock
+  @RequiresBackgroundThread
   override fun processTextRanges(textRanges: List<Pair<PsiElement, TextRange>>): Set<ImportedElement> {
+    ThreadingAssertions.assertReadAccess()
+    ThreadingAssertions.assertBackgroundThread()
     val textRangesOnly = textRanges.map { it.second }
     val result = mutableSetOf<ImportedElement>()
 
@@ -98,9 +107,12 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
     return result
   }
 
+  @RequiresEdt
   override fun createTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>): SvelteComponentImportsTransferableData =
     SvelteComponentImportsTransferableData(importedElementsDeferred)
 
+  @RequiresReadLock
+  @RequiresBackgroundThread
   override fun prepareInsertingRequiredImports(
     pasteContext: PsiElement,
     data: SvelteComponentImportsTransferableData,
