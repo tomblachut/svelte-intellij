@@ -5,17 +5,15 @@ import com.intellij.lang.LanguageParserDefinitions
 import com.intellij.lang.PsiBuilderFactory
 import com.intellij.psi.ParsingDiagnostics
 import com.intellij.psi.PsiElement
-import com.intellij.psi.stubs.PsiFileStub
-import com.intellij.psi.tree.IStubFileElementType
-import com.intellij.xml.HtmlLanguageStubVersionUtil
+import com.intellij.psi.tree.IFileElementType
 import dev.blachut.svelte.lang.SVELTE_LANG_MODE_KEY
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
-import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
 
-// based on HtmlFileElementType
-class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte file", SvelteHTMLLanguage.INSTANCE) {
-  override fun getStubVersion(): Int {
-    return HtmlLanguageStubVersionUtil.getHtmlStubVersion() + SvelteJSElementTypes.STUB_VERSION + 1 // +1 for lang mode support
+// based on VueFileElementType
+class SvelteHtmlFileElementType : IFileElementType("svelte file", SvelteHTMLLanguage.INSTANCE) {
+
+  override fun toString(): String {
+    return "$language:${super.toString()}"
   }
 
   override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
@@ -44,6 +42,7 @@ class SvelteHtmlFileElementType : IStubFileElementType<PsiFileStub<*>>("svelte f
   }
 
   companion object {
+    @JvmStatic
     val FILE: SvelteHtmlFileElementType = SvelteHtmlFileElementType()
   }
 }

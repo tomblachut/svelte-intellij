@@ -10,9 +10,12 @@ import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
-class SvelteHtmlLexer(highlightMode: Boolean) : HtmlLexer(SvelteHtmlBaseLexer(), false, highlightMode) {
+class SvelteHtmlLexer(
+  highlightMode: Boolean,
+  val langMode: SvelteLangMode = SvelteLangMode.PENDING,
+) : HtmlLexer(SvelteHtmlBaseLexer(), false, highlightMode) {
 
-  var lexedLangMode: SvelteLangMode = SvelteLangMode.PENDING
+  var lexedLangMode: SvelteLangMode = langMode
 
   override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
     if (isHighlighting) {

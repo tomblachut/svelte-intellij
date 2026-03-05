@@ -7,8 +7,6 @@ import com.intellij.html.embedding.HtmlLanguageEmbedmentInfo
 import com.intellij.html.embedding.HtmlTokenEmbeddedContentProvider
 import com.intellij.lang.Language
 import com.intellij.lang.css.CSSLanguage
-import com.intellij.lang.javascript.JavaScriptHighlightingLexer
-import com.intellij.lang.javascript.dialects.JSLanguageLevel
 import com.intellij.lexer.BaseHtmlLexer
 import com.intellij.lexer.HtmlRawTextTagContentProvider
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
@@ -37,7 +35,14 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
       HtmlTokenEmbeddedContentProvider(
         lexer,
         SvelteTokenTypes.CODE_FRAGMENT,
-        { JavaScriptHighlightingLexer(JSLanguageLevel.ES6.dialect.optionHolder) }
+        {
+          val svelteHtmlLexer = lexer as? SvelteHtmlLexer
+          // Use pre-set langMode if available (from stub), otherwise use detected lexedLangMode
+          val effectiveLangMode = svelteHtmlLexer?.langMode?.takeIf { it != SvelteLangMode.PENDING }
+                                  ?: svelteHtmlLexer?.lexedLangMode
+                                  ?: SvelteLangMode.DEFAULT
+          effectiveLangMode.createExprHighlightingLexer()
+        }
       )
     )
 
