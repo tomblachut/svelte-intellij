@@ -274,10 +274,10 @@ object SvelteTagElementTypes {
   @JvmField val AWAIT_START: AwaitStartType = AwaitStartType.get(SvelteLangMode.NO_TS)
 
   @Deprecated("Use `is ThenClauseType` check, `in INNER_TAGS`, or getThenClause(langMode)", ReplaceWith("getThenClause(langMode)"))
-  @JvmField val AWAIT_THEN: ThenClauseType = ThenClauseType.get(SvelteLangMode.NO_TS)
+  @JvmField val THEN_CLAUSE: ThenClauseType = ThenClauseType.get(SvelteLangMode.NO_TS)
 
   @Deprecated("Use `is CatchClauseType` check, `in INNER_TAGS`, or getCatchClause(langMode)", ReplaceWith("getCatchClause(langMode)"))
-  @JvmField val AWAIT_CATCH: CatchClauseType = CatchClauseType.get(SvelteLangMode.NO_TS)
+  @JvmField val CATCH_CLAUSE: CatchClauseType = CatchClauseType.get(SvelteLangMode.NO_TS)
 
   @Deprecated("Use `is KeyStartType` check, `in START_TAGS`, or getKeyStart(langMode)", ReplaceWith("getKeyStart(langMode)"))
   @JvmField val KEY_START: KeyStartType = KeyStartType.get(SvelteLangMode.NO_TS)
