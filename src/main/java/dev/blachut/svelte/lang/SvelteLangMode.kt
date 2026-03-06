@@ -18,7 +18,9 @@ import dev.blachut.svelte.lang.psi.SvelteLangModeMarkerElementType
  * Determines the language mode for markup expressions in a Svelte file.
  *
  * If **any** `<script>` tag has `lang="ts"` or `lang="typescript"`, the entire file uses
- * TypeScript mode for all markup expressions. Once detected, TypeScript mode is sticky.
+ * TypeScript mode for all markup expressions. Within a single lexing pass, once TypeScript
+ * mode is detected it applies to all subsequent expressions. The mode is re-evaluated
+ * on each reparse, so adding or removing `lang="ts"` takes effect immediately.
  *
  * Example: `<script lang="ts">` makes `{#if (count as number) > 0}` parse as TypeScript.
  *
