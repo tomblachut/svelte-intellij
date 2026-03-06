@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang
 
+import com.intellij.lang.javascript.JSTestUtils
 import com.intellij.psi.PsiManager
 import com.intellij.psi.stubs.StubTreeLoader
 import com.intellij.psi.stubs.StubUpdatingIndex
@@ -145,5 +146,125 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     assertEquals(SvelteLangMode.NO_TS, SvelteLangMode.fromAttrValue("unknown"))
   }
 
+  // region Multiple script tags tests
 
+  fun testMultipleScriptsModuleJsInstanceTs() {
+    val file = myFixture.configureByText("Test.svelte", """
+      <script context="module">
+        export const MODULE_CONST = 'module';
+      </script>
+
+      <script lang="ts">
+        let count: number = 0;
+      </script>
+
+      {#if count > 0}
+        <p>Yes</p>
+      {/if}
+    """.trimIndent())
+
+    val svelteFile = file as SvelteHtmlFile
+    assertEquals("Any TS script should make the whole file TS", SvelteLangMode.HAS_TS, svelteFile.langMode)
+  }
+
+  fun testMultipleScriptsModuleTsInstanceJs() {
+    val file = myFixture.configureByText("Test.svelte", """
+      <script context="module" lang="ts">
+        export const MODULE_CONST: string = 'module';
+      </script>
+
+      <script>
+        let count = 0;
+      </script>
+
+      {#if count > 0}
+        <p>Yes</p>
+      {/if}
+    """.trimIndent())
+
+    val svelteFile = file as SvelteHtmlFile
+    assertEquals("Any TS script should make the whole file TS", SvelteLangMode.HAS_TS, svelteFile.langMode)
+  }
+
+  fun testMultipleScriptsBothJs() {
+    val file = myFixture.configureByText("Test.svelte", """
+      <script context="module">
+        export const MODULE_CONST = 'module';
+      </script>
+
+      <script>
+        let count = 0;
+      </script>
+
+      {#if count > 0}
+        <p>Yes</p>
+      {/if}
+    """.trimIndent())
+
+    val svelteFile = file as SvelteHtmlFile
+    assertEquals("Two JS scripts should stay NO_TS", SvelteLangMode.NO_TS, svelteFile.langMode)
+  }
+
+  fun testMultipleScriptsBothTs() {
+    val file = myFixture.configureByText("Test.svelte", """
+      <script context="module" lang="ts">
+        export const MODULE_CONST: string = 'module';
+      </script>
+
+      <script lang="ts">
+        let count: number = 0;
+      </script>
+
+      {#if count > 0}
+        <p>Yes</p>
+      {/if}
+    """.trimIndent())
+
+    val svelteFile = file as SvelteHtmlFile
+    assertEquals(SvelteLangMode.HAS_TS, svelteFile.langMode)
+  }
+
+  // endregion
+
+  // region Highlighting transition tests
+
+  fun testKeywordHighlightingInJavaScriptMode() {
+    val file = myFixture.configureByText("Test.svelte", """
+      <script>
+        let <symbolName descr="identifiers//local variable">items</symbolName> = [];
+      </script>
+
+      {#each <symbolName descr="identifiers//local variable">items</symbolName> <info descr="null">as</info> <symbolName descr="identifiers//parameter">item</symbolName>}
+        <p>{<symbolName descr="identifiers//parameter">item</symbolName>}</p>
+      {/each}
+    """.trimIndent())
+
+    val svelteFile = file as SvelteHtmlFile
+    assertEquals(SvelteLangMode.NO_TS, svelteFile.langMode)
+
+    JSTestUtils.checkHighlightingWithSymbolNames(myFixture, false, false, true)
+  }
+
+  fun testKeywordHighlightingInTypeScriptMode() {
+    // Use `satisfies` - a TypeScript-only keyword - to verify TS highlighting works in markup expressions
+    val file = myFixture.configureByText("Test.svelte", """
+      <script lang="ts">
+        <info descr="null">type</info> <symbolName descr="types//type alias">Item</symbolName> = { <symbolName descr="TypeScript property signature">name</symbolName>: <info descr="null">string</info> };
+        let <symbolName descr="identifiers//local variable">items</symbolName>: <symbolName descr="types//type alias">Item</symbolName>[] = [];
+      </script>
+
+      {#each <symbolName descr="identifiers//local variable">items</symbolName> <info descr="null">as</info> <symbolName descr="identifiers//parameter">item</symbolName>}
+        {#if <symbolName descr="identifiers//parameter">item</symbolName> <info descr="null">satisfies</info> <symbolName descr="types//type alias">Item</symbolName>}
+          <p>{<symbolName descr="identifiers//parameter">item</symbolName>.<symbolName descr="instance field">name</symbolName>}</p>
+        {/if}
+      {/each}
+    """.trimIndent())
+
+    val svelteFile = file as SvelteHtmlFile
+    assertEquals(SvelteLangMode.HAS_TS, svelteFile.langMode)
+
+    JSTestUtils.checkHighlightingWithSymbolNames(myFixture, false, false, true)
+  }
+
+  // endregion
 }
