@@ -1,9 +1,11 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.psi.PsiManager
+import com.intellij.psi.stubs.StubTreeLoader
 import com.intellij.psi.stubs.StubUpdatingIndex
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.util.indexing.FileBasedIndex
+import dev.blachut.svelte.lang.psi.SvelteFileStub
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 
 /**
@@ -78,10 +80,15 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     // Ensure stubs are built
     FileBasedIndex.getInstance().ensureUpToDate(StubUpdatingIndex.INDEX_ID, project, null)
 
-    // Get file via PsiManager (should use stub if available)
-    val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as SvelteHtmlFile
+    // Verify stub is actually created and contains correct lang mode
+    val stubTree = StubTreeLoader.getInstance().readFromVFile(project, virtualFile)
+    assertNotNull("Stub tree should be created for Svelte file", stubTree)
+    val fileStub = stubTree!!.root as? SvelteFileStub
+    assertNotNull("Root stub should be SvelteFileStub", fileStub)
+    assertEquals(SvelteLangMode.HAS_TS, fileStub!!.langMode)
 
-    // Verify lang mode is correctly retrieved (either from stub or AST)
+    // Also verify PSI file retrieves the same value
+    val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as SvelteHtmlFile
     assertEquals(SvelteLangMode.HAS_TS, psiFile.langMode)
   }
 
@@ -94,6 +101,14 @@ class SvelteLangModeTest : BasePlatformTestCase() {
 
     FileBasedIndex.getInstance().ensureUpToDate(StubUpdatingIndex.INDEX_ID, project, null)
 
+    // Verify stub is actually created and contains correct lang mode
+    val stubTree = StubTreeLoader.getInstance().readFromVFile(project, virtualFile)
+    assertNotNull("Stub tree should be created for Svelte file", stubTree)
+    val fileStub = stubTree!!.root as? SvelteFileStub
+    assertNotNull("Root stub should be SvelteFileStub", fileStub)
+    assertEquals(SvelteLangMode.NO_TS, fileStub!!.langMode)
+
+    // Also verify PSI file retrieves the same value
     val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as SvelteHtmlFile
     assertEquals(SvelteLangMode.NO_TS, psiFile.langMode)
   }
