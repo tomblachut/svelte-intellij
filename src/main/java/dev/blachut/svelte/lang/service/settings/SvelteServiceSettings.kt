@@ -1,11 +1,10 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service.settings
 
-import com.intellij.javascript.nodejs.util.NodePackageRef
+import com.intellij.javascript.nodejs.util.NodePackage
 import com.intellij.lang.typescript.lsp.NestedReadWriteProperty
-import com.intellij.lang.typescript.lsp.createPackageRef
 import com.intellij.lang.typescript.lsp.defaultPackageKey
-import com.intellij.lang.typescript.lsp.extractRefText
+import com.intellij.lang.typescript.lsp.createPackage
 import com.intellij.lang.typescript.lsp.restartTypeScriptServicesAsync
 import com.intellij.openapi.components.BaseState
 import com.intellij.openapi.components.Service
@@ -31,21 +30,21 @@ class SvelteServiceSettings(val project: Project) : SimplePersistentStateCompone
       if (changed) restartTypeScriptServicesAsync(project)
     }
 
-  var lspServerPackageRef: NodePackageRef
-    get() = createPackageRef(state.lspServerPackageName, SvelteLspServerLoader.packageDescriptor.serverPackage)
+  var lspServerPackage: NodePackage
+    get() = createPackage(state.lspServerPackageName, SvelteLspServerLoader.packageDescriptor.serverPackage)
     set(value) {
-      val refText = extractRefText(value)
-      val changed = state.lspServerPackageName != refText
-      state.lspServerPackageName = refText
+      val path = value.systemDependentPath
+      val changed = state.lspServerPackageName != path
+      state.lspServerPackageName = path
       if (changed) restartTypeScriptServicesAsync(project)
     }
 
-  var tsPluginPackageRef: NodePackageRef
-    get() = createPackageRef(state.tsPluginPackageName, SvelteTSPluginLoader.packageDescriptor.serverPackage)
+  var tsPluginPackage: NodePackage
+    get() = createPackage(state.tsPluginPackageName, SvelteTSPluginLoader.packageDescriptor.serverPackage)
     set(value) {
-      val refText = extractRefText(value)
-      val changed = state.tsPluginPackageName != refText
-      state.tsPluginPackageName = refText
+      val path = value.systemDependentPath
+      val changed = state.tsPluginPackageName != path
+      state.tsPluginPackageName = path
       if (changed) restartTypeScriptServicesAsync(project)
     }
 

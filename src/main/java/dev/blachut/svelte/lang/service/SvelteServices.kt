@@ -32,8 +32,8 @@ private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
 
 @ApiStatus.Experimental
 object SvelteLspServerLoader : LspServerLoader(SvelteLspServerPackageDescriptor) {
-  override fun getSelectedPackage(project: Project): NodePackage? {
-    return getSvelteServiceSettings(project).lspServerPackageRef.constantPackage
+  override fun getSelectedPackage(project: Project): NodePackage {
+    return getSvelteServiceSettings(project).lspServerPackage
   }
 }
 
@@ -49,8 +49,8 @@ private object SvelteTSPluginPackageDescriptor : LspServerPackageDescriptor(
 
 @ApiStatus.Experimental
 object SvelteTSPluginLoader : TSPluginLoader(SvelteTSPluginPackageDescriptor) {
-  override fun getSelectedPackage(project: Project): NodePackage? {
-    return getSvelteServiceSettings(project).tsPluginPackageRef.constantPackage
+  override fun getSelectedPackage(project: Project): NodePackage {
+    return getSvelteServiceSettings(project).tsPluginPackage
   }
 }
 

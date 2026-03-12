@@ -1,7 +1,7 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service.settings
 
-import com.intellij.lang.typescript.lsp.bind
+import com.intellij.lang.typescript.lsp.bindPackage
 import com.intellij.lang.typescript.lsp.createNodePackageField
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.UiDslUnnamedConfigurable
@@ -26,13 +26,13 @@ internal class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedCon
       row(SvelteBundle.message("svelte.service.configurable.service.languageServerPackage")) {
         cell(createNodePackageField(project, SvelteLspServerLoader.packageDescriptor))
           .align(AlignX.FILL)
-          .bind(settings::lspServerPackageRef)
+          .bindPackage(settings::lspServerPackage)
       }
 
       row(SvelteBundle.message("svelte.service.configurable.service.tsPluginPackage")) {
         cell(createNodePackageField(project, SvelteTSPluginLoader.packageDescriptor))
           .align(AlignX.FILL)
-          .bind(settings::tsPluginPackageRef)
+          .bindPackage(settings::tsPluginPackage)
       }
 
       lateinit var radioButtonDisabled: Cell<JBRadioButton>
