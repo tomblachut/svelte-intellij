@@ -40,6 +40,7 @@
     <registryKey defaultValue="false" description="Use bundled Svelte services" key="svelte.language.server.bundled.enabled"/>
     <registryKey defaultValue="" description="Svelte service version for downloading" key="svelte.language.server.default.version"/>
     <registryKey defaultValue="" description="Svelte TypeScript plugin version for downloading" key="svelte.typescript.plugin.default.version"/>
+    <registryKey defaultValue="false" description="Enable Svelte service-powered type engine by default" key="svelte.service.powered.type.engine.enabled.by.default"/>
 
     <fileType name="Svelte" extensions="svelte" language="SvelteHTML"
               implementationClass="dev.blachut.svelte.lang.SvelteHtmlFileType" fieldName="INSTANCE"/>
@@ -92,6 +93,7 @@
     <psi.referenceContributor language="SvelteHTML" implementation="dev.blachut.svelte.lang.codeInsight.SveltePathReferenceContributor"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteKitImplicitUsageProvider"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteConfigImplicitUsageProvider"/>
+    <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentPropsImplicitUsageProvider"/>
 
     <include.provider implementation="dev.blachut.svelte.lang.index.SvelteFileIncludeProvider"/>
 

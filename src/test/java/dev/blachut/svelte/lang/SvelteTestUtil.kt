@@ -36,6 +36,7 @@ internal val svelteKitPackageJson = """
   }
 """.trimIndent()
 
+
 fun getRelativeSvelteTestDataPath(): String {
   return "/plugins$SVELTE_TEST_DATA_PATH"
 }

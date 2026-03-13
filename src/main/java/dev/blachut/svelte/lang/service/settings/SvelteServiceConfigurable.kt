@@ -1,6 +1,7 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service.settings
 
+import com.intellij.lang.javascript.JavaScriptBundle
 import com.intellij.lang.typescript.lsp.bind
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.UiDslUnnamedConfigurable
@@ -55,6 +56,18 @@ internal class SvelteServiceConfigurable(val project: Project) : UiDslUnnamedCon
         checkBox(SvelteBundle.message("svelte.service.configurable.service.a11y"))
           .bindSelected(settings::showA11yWarnings)
       }.enabledIf(radioButtonDisabled.selected.not())
+
+      row {
+        checkBox(JavaScriptBundle.message("typescript.compiler.configurable.options.use.servicePoweredTypeEngine"))
+          .applyToComponent {
+            toolTipText = SvelteBundle.message("svelte.service.configurable.service.spte.comment")
+          }
+          .enabledIf(radioButtonDisabled.selected.not())
+          .bindSelected(
+            { settings.useTypesFromServer },
+            { settings.useServicePoweredTypesManualOverride = it }
+          )
+      }
     }
   }
 
