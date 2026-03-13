@@ -1,0 +1,19 @@
+{
+  "name": "ws-typescript-svelte-plugin",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "typescript": "5.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.7",
+    "esbuild": "^0.20.0"
+  },
+  "scripts": {
+    "build:clean": "npm run clean && npm run build",
+    "clean": "rm -rf ../../../gen-resources/typescript-svelte-plugin",
+    "build": "node build.js",
+    "build:debug": "node build.js --debug"
+  }
+}
