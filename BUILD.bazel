@@ -7,12 +7,6 @@ resourcegroup(
   strip_prefix = "src/main/resources"
 )
 
-resourcegroup(
-  name = "svelte_test_resources",
-  srcs = glob(["src/test/resources/**/*"]),
-  strip_prefix = "src/test/resources"
-)
-
 jvm_library(
   name = "svelte",
   module_name = "intellij.svelte",
@@ -75,10 +69,128 @@ jvm_library(
 
 jvm_library(
   name = "svelte_test_lib",
+  module_name = "intellij.svelte",
+  visibility = ["//visibility:public"],
+  srcs = glob([], allow_empty = True),
+  runtime_deps = [
+    ":svelte",
+    "@community//platform/analysis-api:analysis_test_lib",
+    "@community//platform/code-style-api:codeStyle_test_lib",
+    "@community//platform/editor-ui-api:editor-ui_test_lib",
+    "@community//platform/platform-api:ide_test_lib",
+    "@community//platform/ide-core-impl:ide-core-impl_test_lib",
+    "@community//platform/platform-impl:ide-impl_test_lib",
+    "//plugins/css/common:common_test_lib",
+    "@community//platform/indexing-api:indexing_test_lib",
+    "@community//platform/projectModel-api:projectModel_test_lib",
+    "@community//xml/xml-parser:parser_test_lib",
+    "@community//plugins/htmltools:html-tools",
+    "@community//plugins/htmltools:html-tools_test_lib",
+    "@community//platform/indexing-impl:indexing-impl_test_lib",
+    "//plugins/JavaScriptLanguage/javascript-parser:javascript-parser_test_lib",
+    "@community//xml/xml-psi-api:psi_test_lib",
+    "@community//platform/lang-api:lang_test_lib",
+    "@community//platform/lang-impl:lang-impl_test_lib",
+    "@community//xml/xml-psi-impl:psi-impl_test_lib",
+    "@community//platform/core-impl:core-impl_test_lib",
+    "@community//platform/core-api:core_test_lib",
+    "@community//platform/analysis-impl:analysis-impl_test_lib",
+    "//plugins/JavaScriptLanguage/javascript-psi-impl:javascript-psi-impl_test_lib",
+    "//plugins/JavaScriptLanguage:javascript-backend_test_lib",
+    "//plugins/JavaScriptDebugger/backend:backend_test_lib",
+    "//plugins/JavaScriptDebugger/debugger-ui:javascript-debugger-ui_test_lib",
+    "//plugins/css/psi:psi_test_lib",
+    "@community//platform/xdebugger-api:debugger_test_lib",
+    "@community//xml/impl:impl_test_lib",
+    "@community//spellchecker:spellchecker_test_lib",
+    "//plugins/css/codeinsight/analysis:analysis_test_lib",
+    "@community//platform/built-in-server:builtInServer-impl_test_lib",
+    "//webcore/impl:impl_test_lib",
+    "@community//libraries/jackson/jackson:jackson_test_lib",
+    "@community//libraries/jackson/databind:databind_test_lib",
+    "@community//libraries/commons/compress:compress_test_lib",
+    "@community//libraries/stream:stream_test_lib",
+    "@community//libraries/gson:gson_test_lib",
+    "@community//platform/core-ui:core-ui_test_lib",
+    "@community//platform/code-style-impl:codeStyle-impl_test_lib",
+    "@community//libraries/caffeine:caffeine_test_lib",
+    "//plugins/JavaScriptLanguage/web-platform:javascript-web_test_lib",
+    "@community//platform/usageView",
+    "@community//platform/usageView:usageView_test_lib",
+    "@community//platform/testFramework",
+    "@community//platform/testFramework:testFramework_test_lib",
+    "//plugins/JavaScriptLanguage:javascript-testFramework",
+    "//plugins/JavaScriptLanguage:javascript-testFramework_test_lib",
+    "@community//plugins/copyright",
+    "@community//plugins/copyright:copyright_test_lib",
+    "//plugins/JavaScriptLanguage:javascript-tests",
+    "//plugins/JavaScriptLanguage:javascript-tests_test_lib",
+    "//plugins/sass/plugin",
+    "//plugins/sass/plugin:plugin_test_lib",
+    "//contrib/jade",
+    "//contrib/jade:jade_test_lib",
+    "//contrib/postcss",
+    "//contrib/postcss:postcss_test_lib",
+    "//plugins/stylus",
+    "//plugins/stylus:stylus_test_lib",
+    "@community//xml/tests",
+    "@community//xml/tests:tests_test_lib",
+    "//platform/lsp/testFramework",
+    "//platform/lsp/testFramework:testFramework_test_lib",
+    "@community//libraries/fastutil:fastutil_test_lib",
+    "//platform/lsp-impl:lsp-impl_test_lib",
+    "//plugins/vitejs",
+    "//plugins/vitejs:vitejs_test_lib",
+    "@community//platform/polySymbols:polySymbols_test_lib",
+    "//plugins/JavaScriptLanguage/web-platform:javascript-web-tests",
+    "//plugins/JavaScriptLanguage/web-platform:javascript-web-tests_test_lib",
+    "@community//xml/testFramework",
+    "@community//xml/testFramework:testFramework_test_lib",
+    "//plugins/css/common/psi",
+    "//plugins/css/common/psi:psi_test_lib",
+    "//plugins/sass/backend",
+    "//plugins/sass/backend:backend_test_lib",
+    "//plugins/sass",
+    "//plugins/sass:sass_test_lib",
+    "//plugins/sass/common",
+    "//plugins/sass/common:common_test_lib",
+    "@community//xml/xml-analysis-api:analysis_test_lib",
+    "@community//xml/emmet:emmet_test_lib",
+    "//plugins/JavaScriptLanguage/javascript-codeinsight:javascript-codeinsight_test_lib",
+    "//plugins/JavaScriptLanguage/javascript-ultimate:javascript-ultimate_test_lib",
+    "@community//libraries/kotlinx/collections-immutable:libraries-kotlinx-collections-immutable_test_lib",
+  ]
+)
+### auto-generated section `build intellij.svelte` end
+
+### auto-generated section `iml intellij.svelte` start
+exports_files([
+  "intellij.svelte.iml",
+], visibility = ["//visibility:public"])
+### auto-generated section `iml intellij.svelte` end
+
+### auto-generated section `build intellij.svelte.tests` start
+resourcegroup(
+  name = "svelte-tests_test_resources",
+  srcs = glob(["src/test/resources/**/*"]),
+  strip_prefix = "src/test/resources"
+)
+
+jvm_library(
+  name = "svelte-tests",
+  visibility = ["//visibility:public"],
+  srcs = glob([], allow_empty = True)
+)
+
+jvm_library(
+  name = "svelte-tests_test_lib",
   visibility = ["//visibility:public"],
   srcs = glob(["src/test/java/**/*.kt", "src/test/java/**/*.java", "src/test/java/**/*.form"], allow_empty = True),
-  resources = [":svelte_test_resources"],
-  associates = [":svelte"],
+  resources = [":svelte-tests_test_resources"],
+  associates = [
+    "//plugins/svelte",
+    "//plugins/svelte:svelte_test_lib",
+  ],
   deps = [
     "@community//platform/analysis-api:analysis",
     "@community//platform/analysis-api:analysis_test_lib",
@@ -213,25 +325,28 @@ jvm_library(
     "//plugins/JavaScriptLanguage/javascript-ultimate:javascript-ultimate_test_lib",
     "@community//libraries/kotlinx/collections-immutable:libraries-kotlinx-collections-immutable",
     "@community//libraries/kotlinx/collections-immutable:libraries-kotlinx-collections-immutable_test_lib",
+    "//plugins/vitejs:vitejs-tests",
+    "//plugins/vitejs:vitejs-tests_test_lib",
   ],
   runtime_deps = [
+    ":svelte-tests",
     "@community//platform/ide-core-impl:ide-core-impl_test_lib",
     "@community//platform/platform-impl:ide-impl_test_lib",
   ]
 )
-### auto-generated section `build intellij.svelte` end
+### auto-generated section `build intellij.svelte.tests` end
 
-### auto-generated section `iml intellij.svelte` start
+### auto-generated section `iml intellij.svelte.tests` start
 exports_files([
-  "intellij.svelte.iml",
+  "intellij.svelte.tests.iml",
 ], visibility = ["//visibility:public"])
-### auto-generated section `iml intellij.svelte` end
+### auto-generated section `iml intellij.svelte.tests` end
 
-### auto-generated section `test intellij.svelte` start
+### auto-generated section `test intellij.svelte.tests` start
 load("@community//build:tests-options.bzl", "jps_test")
 
 jps_test(
-  name = "svelte_test",
-  runtime_deps = [":svelte_test_lib"]
+  name = "svelte-tests_test",
+  runtime_deps = [":svelte-tests_test_lib"]
 )
-### auto-generated section `test intellij.svelte` end
+### auto-generated section `test intellij.svelte.tests` end
