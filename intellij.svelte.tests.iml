@@ -80,6 +80,7 @@
     <orderEntry type="module" module-name="intellij.javascript.ultimate" scope="TEST" />
     <orderEntry type="module" module-name="intellij.libraries.kotlinx.collections.immutable" scope="TEST" />
     <orderEntry type="module" module-name="intellij.svelte" scope="TEST" />
+    <orderEntry type="module" module-name="intellij.vitejs.tests" scope="TEST" />
   </component>
   <component name="TestModuleProperties" production-module="intellij.svelte" />
 </module>
