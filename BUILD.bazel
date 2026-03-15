@@ -221,6 +221,12 @@ jvm_library(
 )
 ### auto-generated section `build intellij.svelte` end
 
+### auto-generated section `iml intellij.svelte` start
+exports_files([
+  "intellij.svelte.iml",
+], visibility = ["//visibility:public"])
+### auto-generated section `iml intellij.svelte` end
+
 ### auto-generated section `test intellij.svelte` start
 load("@community//build:tests-options.bzl", "jps_test")
 
