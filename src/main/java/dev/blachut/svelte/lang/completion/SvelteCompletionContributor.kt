@@ -7,6 +7,7 @@ import com.intellij.lang.javascript.completion.JSPatternBasedCompletionContribut
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.patterns.PlatformPatterns.psiFile
 import com.intellij.patterns.XmlPatterns
+import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteJSLazyElementTypes
@@ -30,17 +31,14 @@ class SvelteCompletionContributor : CompletionContributor() {
       SvelteKeywordCompletionProvider()
     )
     // Completion for {@attach} in attribute position
-    for (tokenSet in listOf(
-      SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND_SET,
-      SvelteJSLazyElementTypes.ATTACH_EXPRESSION_SET,
-    )) {
-      extend(
-        CompletionType.BASIC,
-        psiElement(JSTokenTypes.IDENTIFIER)
-          .withAncestor(2, psiElement().withElementType(tokenSet)).inFile(psiFile(SvelteHtmlFile::class.java)),
-        SvelteAttachCompletionProvider()
-      )
-    }
+    extend(
+      CompletionType.BASIC,
+      psiElement(JSTokenTypes.IDENTIFIER)
+        .withAncestor(2, psiElement().withElementType(
+          TokenSet.orSet(SvelteJSLazyElementTypes.SPREAD_OR_SHORTHAND_SET, SvelteJSLazyElementTypes.ATTACH_EXPRESSION_SET)
+        )).inFile(psiFile(SvelteHtmlFile::class.java)),
+      SvelteAttachCompletionProvider()
+    )
     extend(
       CompletionType.BASIC,
       REFERENCE_EXPRESSION_PATTERN.inFile(psiFile(SvelteHtmlFile::class.java)),
