@@ -37,14 +37,8 @@ fun findAncestorScript(place: PsiElement): XmlTag? {
 class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider, SvelteHtmlFileElementType.FILE), JSModuleStatusOwner {
   override fun getModuleStatus(): JSModuleStatusOwner.ModuleStatus = JSModuleStatusOwner.ModuleStatus.ES6
 
-  override fun getStub(): SvelteFileStub? = super.getStub() as? SvelteFileStub
-
   val langMode: SvelteLangMode
     get() {
-      // Try stub first (faster, doesn't require AST)
-      stub?.let { return it.langMode }
-
-      // Fall back to AST marker token (last child is the marker)
       val astMarker = node.lastChildNode?.elementType
       return if (astMarker is SvelteLangModeMarkerElementType)
         astMarker.langMode
