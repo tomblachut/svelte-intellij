@@ -20,12 +20,8 @@ class SvelteTSParser(
     object : TypeScriptExpressionParser(this@SvelteTSParser) {
       override fun parseParenthesizedExpression() {
         parenDepth++
-        try {
-          super.parseParenthesizedExpression()
-        }
-        finally {
-          parenDepth--
-        }
+        super.parseParenthesizedExpression()
+        parenDepth--
       }
 
       override fun getCurrentBinarySignPriority(allowIn: Boolean, advance: Boolean): Int {
