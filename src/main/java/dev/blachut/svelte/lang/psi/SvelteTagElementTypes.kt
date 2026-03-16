@@ -10,6 +10,7 @@ import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.parsing.html.SvelteTagParsing
 import dev.blachut.svelte.lang.parsing.js.markupContextKey
+import dev.blachut.svelte.lang.parsing.js.svelteAsBindingOffsetKey
 
 // region interfaces for `is` checks on block type groups
 
@@ -60,16 +61,16 @@ class ElseClauseType private constructor(langMode: SvelteLangMode) : SvelteBlock
 class EachStartType private constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("EACH_START"), langMode), BlockStartType {
   override val noTokensErrorMessage: String = "expression expected"
 
-  override fun setupBuilderContext(builder: PsiBuilder) {
-    super.setupBuilderContext(builder)
-    setupAsBindingContext(builder)
-  }
-
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.SHARP
     SvelteTagParsing.parseNotAllowedWhitespace(builder, "#")
     builder.remapCurrentToken(SvelteTokenTypes.EACH_KEYWORD) // todo might be okay to remove all those remapCurrentToken
     builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake EACH_KEYWORD
+
+    // Pre-scan to find the last top-level 'as' keyword (Svelte binding separator).
+    // This matches the Svelte compiler's strategy: parse greedily, then peel back
+    // the last TSAsExpression. All earlier 'as' are allowed as TS type assertions.
+    prescanLastAsBinding(builder)
 
     parser.expressionParser.parseAssignmentExpression(false)
 
@@ -96,6 +97,35 @@ class EachStartType private constructor(langMode: SvelteLangMode) : SvelteBlockE
         builder.error(SvelteBundle.message("svelte.parsing.error.expected.closing.brace"))
       }
       keyExpressionMarker.done(SvelteTagElementTypes.TAG_DEPENDENT_EXPRESSION)
+    }
+  }
+
+  /**
+   * Pre-scans tokens to find the last `AS_KEYWORD` at bracket depth 0.
+   * Stores its offset in [svelteAsBindingOffsetKey] so that [dev.blachut.svelte.lang.parsing.js.SvelteTSParser]
+   * blocks only that specific `as` as the Svelte binding separator.
+   *
+   * All three bracket types are tracked because `as` can appear after the binding `as` inside:
+   * - `()` — key expression: `{#each items as item, i (item as Item)}`
+   * - `{}` — destructuring default: `{#each items as { name = val as string }}`
+   * - `[]` — array destructuring default: `{#each items as [a = val as T]}`
+   */
+  private fun prescanLastAsBinding(builder: PsiBuilder) {
+    val scanMarker = builder.mark()
+    var lastAsOffset: Int? = null
+    var depth = 0
+    while (!builder.eof()) {
+      when (builder.tokenType) {
+        JSTokenTypes.LPAR, JSTokenTypes.LBRACKET, JSTokenTypes.LBRACE -> depth++
+        JSTokenTypes.RPAR, JSTokenTypes.RBRACKET, JSTokenTypes.RBRACE -> depth--
+        JSTokenTypes.AS_KEYWORD -> if (depth == 0) lastAsOffset = builder.currentOffset
+      }
+      builder.advanceLexer()
+    }
+    scanMarker.rollbackTo()
+
+    if (lastAsOffset != null) {
+      builder.putUserData(svelteAsBindingOffsetKey, lastAsOffset)
     }
   }
 
@@ -139,11 +169,6 @@ class AwaitStartType private constructor(langMode: SvelteLangMode) : SvelteBlock
 class ThenClauseType private constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("THEN_CLAUSE"), langMode), BlockInnerType {
   override val noTokensErrorMessage: String = "expression expected"
 
-  override fun setupBuilderContext(builder: PsiBuilder) {
-    super.setupBuilderContext(builder)
-    setupAsBindingContext(builder)
-  }
-
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.COLON
     SvelteTagParsing.parseNotAllowedWhitespace(builder, ":")
@@ -163,11 +188,6 @@ class ThenClauseType private constructor(langMode: SvelteLangMode) : SvelteBlock
 
 class CatchClauseType private constructor(langMode: SvelteLangMode) : SvelteBlockElementType(langMode.toElementTypeName("CATCH_CLAUSE"), langMode), BlockInnerType {
   override val noTokensErrorMessage: String = "expression expected"
-
-  override fun setupBuilderContext(builder: PsiBuilder) {
-    super.setupBuilderContext(builder)
-    setupAsBindingContext(builder)
-  }
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     builder.advanceLexer() // JSTokenTypes.COLON

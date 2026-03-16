@@ -43,18 +43,22 @@ class SvelteJSParser(
 val markupContextKey: Key<in Any> = Key.create("markupContextKey")
 
 /**
- * Context key for blocks that use 'as' for Svelte binding syntax ({#each}, {:then}, {:catch}).
- * Disambiguates 'as' between Svelte binding and TypeScript type assertion:
+ * Offset of the Svelte `as` binding keyword in `{#each}` blocks.
+ *
+ * Set by [dev.blachut.svelte.lang.psi.EachStartType.parseTokens] after pre-scanning
+ * the token stream to find the **last** top-level `as` keyword (matching the Svelte compiler's
+ * greedy-parse-then-peel-back strategy).
+ *
+ * [SvelteTSParser] blocks `as` only at this specific offset, allowing earlier `as` keywords
+ * to be consumed as TypeScript type assertions:
  *
  * ```svelte
- * {#each (items as Item[]) as item}
- *         ^^^^^^^^^^^^^^^^            — TS assertion (inside parens → allowed)
- *                           ^^^^^^^^  — Svelte binding (top level → blocked by this key)
- *
- * {#if (value as boolean)}            — TS assertion (no binding key set → always allowed)
+ * {#each items as Item[] as item}
+ *               ^^^^^^^^^^^         — TS assertion (before the last 'as' → allowed)
+ *                            ^^^^   — Svelte binding (last 'as' → blocked)
  * ```
  */
-val blockWithAsBindingKey: Key<in Any> = Key.create("blockWithAsBindingKey")
+val svelteAsBindingOffsetKey: Key<Int> = Key.create("svelteAsBindingOffset")
 
 internal fun svelteParameterType(builder: PsiBuilder): IElementType? =
   if (builder.getUserData(markupContextKey) == true) SvelteJSElementTypes.PARAMETER else null

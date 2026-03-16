@@ -5,7 +5,6 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.util.CharTable
 import dev.blachut.svelte.lang.SvelteLangMode
-import dev.blachut.svelte.lang.parsing.js.blockWithAsBindingKey
 
 /**
  * Base class for Svelte block element types ({#if}, {#each}, {:else}, etc.).
@@ -20,15 +19,6 @@ abstract class SvelteBlockElementType(
 
   override fun parse(text: CharSequence, table: CharTable): ASTNode {
     return SvelteInitialTag(this, text)
-  }
-
-  /**
-   * Sets [blockWithAsBindingKey] so that [dev.blachut.svelte.lang.parsing.js.SvelteTSParser]
-   * treats top-level 'as' as Svelte binding syntax, not TypeScript type assertion.
-   * Call from [setupBuilderContext] in block types that use 'as' ({#each}, {:then}, {:catch}).
-   */
-  protected fun setupAsBindingContext(builder: PsiBuilder) {
-    builder.putUserData(blockWithAsBindingKey, true)
   }
 
   override fun remapClosingBrace(builder: PsiBuilder) {

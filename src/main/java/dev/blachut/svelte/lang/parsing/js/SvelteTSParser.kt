@@ -25,11 +25,14 @@ class SvelteTSParser(
       }
 
       override fun getCurrentBinarySignPriority(allowIn: Boolean, advance: Boolean): Int {
-        // In blocks with 'as' binding ({#each}, {#await}), treat top-level 'as' as Svelte syntax.
-        // Parenthesized 'as' still works as TS type assertion: {#each (items as Item[]) as item}
-        if (builder.getUserData(blockWithAsBindingKey) == true &&
+        // In {#each} blocks, block 'as' only at the last top-level position (Svelte binding).
+        // Earlier 'as' keywords are allowed as TS type assertions:
+        //   {#each items as Item[] as item}  →  expr = items as Item[], binding = item
+        val asBindingOffset = builder.getUserData(svelteAsBindingOffsetKey)
+        if (asBindingOffset != null &&
             builder.tokenType === JSTokenTypes.AS_KEYWORD &&
-            parenDepth == 0) {
+            parenDepth == 0 &&
+            builder.currentOffset == asBindingOffset) {
           return -1
         }
 

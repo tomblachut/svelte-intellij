@@ -166,6 +166,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testTsJsCompatibility() = doTest()
   fun testTsMixedScripts() = doTest()
   fun testTsDirectiveBind() = doTest()
+  fun testTsBlockEachTopLevelAs() = doTest()
   fun testTsBlockIfTopLevelAs() = doTest()
   fun testTsMarkupExpressions() = doTest()
   fun testTsComprehensive() = doTest()
