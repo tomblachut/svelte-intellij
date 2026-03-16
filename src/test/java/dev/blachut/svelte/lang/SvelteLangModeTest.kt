@@ -1,12 +1,8 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.lang.javascript.JSTestUtils
-import com.intellij.psi.PsiManager
-import com.intellij.psi.stubs.StubTreeLoader
-import com.intellij.psi.stubs.StubUpdatingIndex
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.intellij.util.indexing.FileBasedIndex
-import dev.blachut.svelte.lang.psi.SvelteFileStub
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 
 /**
@@ -64,54 +60,6 @@ class SvelteLangModeTest : BasePlatformTestCase() {
 
     val svelteFile = file as SvelteHtmlFile
     assertEquals(SvelteLangMode.NO_TS, svelteFile.langMode)
-  }
-
-  fun testLangModeStubPersistence() {
-    // Create and parse a TypeScript file
-    val virtualFile = myFixture.addFileToProject("TypeScriptFile.svelte", """
-      <script lang="ts">
-        let count: number = 0;
-      </script>
-
-      {#if count > 0}
-        <p>Yes</p>
-      {/if}
-    """.trimIndent()).virtualFile
-
-    // Ensure stubs are built
-    FileBasedIndex.getInstance().ensureUpToDate(StubUpdatingIndex.INDEX_ID, project, null)
-
-    // Verify stub is actually created and contains correct lang mode
-    val stubTree = StubTreeLoader.getInstance().readFromVFile(project, virtualFile)
-    assertNotNull("Stub tree should be created for Svelte file", stubTree)
-    val fileStub = stubTree!!.root as? SvelteFileStub
-    assertNotNull("Root stub should be SvelteFileStub", fileStub)
-    assertEquals(SvelteLangMode.HAS_TS, fileStub!!.langMode)
-
-    // Also verify PSI file retrieves the same value
-    val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as SvelteHtmlFile
-    assertEquals(SvelteLangMode.HAS_TS, psiFile.langMode)
-  }
-
-  fun testLangModeStubPersistenceJavaScript() {
-    val virtualFile = myFixture.addFileToProject("JavaScriptFile.svelte", """
-      <script>
-        let count = 0;
-      </script>
-    """.trimIndent()).virtualFile
-
-    FileBasedIndex.getInstance().ensureUpToDate(StubUpdatingIndex.INDEX_ID, project, null)
-
-    // Verify stub is actually created and contains correct lang mode
-    val stubTree = StubTreeLoader.getInstance().readFromVFile(project, virtualFile)
-    assertNotNull("Stub tree should be created for Svelte file", stubTree)
-    val fileStub = stubTree!!.root as? SvelteFileStub
-    assertNotNull("Root stub should be SvelteFileStub", fileStub)
-    assertEquals(SvelteLangMode.NO_TS, fileStub!!.langMode)
-
-    // Also verify PSI file retrieves the same value
-    val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as SvelteHtmlFile
-    assertEquals(SvelteLangMode.NO_TS, psiFile.langMode)
   }
 
   fun testGetLatestKnownLangFromProjectAndFile() {
@@ -222,6 +170,57 @@ class SvelteLangModeTest : BasePlatformTestCase() {
 
     val svelteFile = file as SvelteHtmlFile
     assertEquals(SvelteLangMode.HAS_TS, svelteFile.langMode)
+  }
+
+  // endregion
+
+  // region Reparse on lang attribute change
+
+  fun testLangModeChangesFromJsToTsOnTyping() {
+    myFixture.configureByText("Test.svelte", """
+      <script lang="<caret>js">
+        let count = 0;
+      </script>
+
+      {#if count > 0}
+        <p>Yes</p>
+      {/if}
+    """.trimIndent())
+
+    assertEquals(SvelteLangMode.NO_TS, (myFixture.file as SvelteHtmlFile).langMode)
+
+    // Select "js" and replace with "ts" — avoids broken intermediate HTML from unmatched quotes
+    myFixture.editor.selectionModel.setSelection(
+      myFixture.caretOffset,
+      myFixture.caretOffset + 2
+    )
+    myFixture.type("ts")
+    PsiDocumentManager.getInstance(project).commitAllDocuments()
+
+    assertEquals(SvelteLangMode.HAS_TS, (myFixture.file as SvelteHtmlFile).langMode)
+  }
+
+  fun testLangModeChangesFromTsToJsOnTyping() {
+    myFixture.configureByText("Test.svelte", """
+      <script lang="<caret>ts">
+        let count = 0;
+      </script>
+
+      {#if count > 0}
+        <p>Yes</p>
+      {/if}
+    """.trimIndent())
+
+    assertEquals(SvelteLangMode.HAS_TS, (myFixture.file as SvelteHtmlFile).langMode)
+
+    myFixture.editor.selectionModel.setSelection(
+      myFixture.caretOffset,
+      myFixture.caretOffset + 2
+    )
+    myFixture.type("js")
+    PsiDocumentManager.getInstance(project).commitAllDocuments()
+
+    assertEquals(SvelteLangMode.NO_TS, (myFixture.file as SvelteHtmlFile).langMode)
   }
 
   // endregion
