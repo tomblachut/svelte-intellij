@@ -5,7 +5,6 @@ import com.intellij.lang.javascript.stubs.serializers.JSEmbeddedContentStubSeria
 import com.intellij.lang.javascript.stubs.serializers.JSFileStubSerializer
 import com.intellij.psi.stubs.StubRegistry
 import com.intellij.psi.stubs.StubRegistryExtension
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlFileElementType
 import dev.blachut.svelte.lang.parsing.js.SVELTEJS_FILE
 import dev.blachut.svelte.lang.parsing.ts.SVELTETS_FILE
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE
@@ -13,9 +12,6 @@ import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.EMBEDDED_CONTENT_MODULE_
 
 internal class SvelteStubRegistryExtension : StubRegistryExtension {
   override fun register(registry: StubRegistry) {
-    // File stub serializer for lang mode persistence (SvelteLanguageStubDefinition handles stub building)
-    registry.registerStubSerializer(SvelteHtmlFileElementType.FILE, SvelteFileStubSerializer())
-
     listOf(
       SVELTEJS_FILE,
       SVELTETS_FILE,
