@@ -5,6 +5,7 @@ import com.intellij.lang.typescript.documentation.TypeScriptDocumentationTargetP
 import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.platform.backend.documentation.PsiDocumentationTargetProvider
 import com.intellij.platform.lsp.tests.waitUntilFileOpenedByLspServer
+import com.intellij.polySymbols.testFramework.checkDocumentationAtCaret
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
 
@@ -55,8 +56,20 @@ class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
     val quickNavigateText = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
     JSAbstractDocumentationTest.checkExpected(quickNavigateText, "$testFileAbsolutePathWithoutExtension.nav.expected.html")
 
-    val doc = JSAbstractDocumentationTest.getQuickDocumentationText(myFixture) ?: "No documentation found."
-    JSAbstractDocumentationTest.checkExpected(doc, "$testFileAbsolutePathWithoutExtension.doc.expected.html")
+    if (directory) {
+      val savedTestDataPath = myFixture.testDataPath
+      myFixture.testDataPath = testDataPath + "/" + getTestName(false)
+      try {
+        myFixture.checkDocumentationAtCaret()
+      }
+      finally {
+        myFixture.testDataPath = savedTestDataPath
+      }
+    }
+    else {
+      val doc = JSAbstractDocumentationTest.getQuickDocumentationText(myFixture) ?: "No documentation found."
+      JSAbstractDocumentationTest.checkExpected(doc, "$testFileAbsolutePathWithoutExtension.doc.expected.html")
+    }
   }
 
   private val testFileAbsolutePathWithoutExtension
