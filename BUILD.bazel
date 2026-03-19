@@ -178,6 +178,7 @@ resourcegroup(
 
 jvm_library(
   name = "svelte-tests",
+  module_name = "intellij.svelte.tests",
   visibility = ["//visibility:public"],
   srcs = glob([], allow_empty = True)
 )
