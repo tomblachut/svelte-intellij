@@ -295,7 +295,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         {#each cats as cat}
           <li><a target="_blank" href="https://www.youtube.com/watch?v={cat.id}">
             {cat.name}
-            {cat.<weak_warning>unknownName</weak_warning>}
+            {cat.unknownName}
           </a></li>
         {/each}
       </ul>
