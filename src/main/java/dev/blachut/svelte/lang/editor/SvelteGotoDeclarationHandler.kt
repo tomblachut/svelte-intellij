@@ -23,6 +23,6 @@ class SvelteGotoDeclarationHandler : GotoDeclarationHandler {
       return null
     }
     val project = editor.project ?: return null
-    return getNavigationFromService(project, sourceElement, editor)
+    return getNavigationFromService(project, sourceElement, editor, offset - sourceElement.textOffset)
   }
 }

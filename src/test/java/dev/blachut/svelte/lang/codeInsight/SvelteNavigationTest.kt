@@ -41,6 +41,21 @@ class SvelteNavigationTest : BasePlatformTestCase() {
         // can be combined with to test e.g. component props JSTestUtils.getGotoDeclarationTarget(myFixture, expectedTargetFile)
     }
 
+    fun testNamespacedComponentNamespaceNavigation() {
+        myFixture.configureByText("Example.svelte", """
+            <script>
+                import * as Forms from "./forms";
+            </script>
+
+            <For<caret>ms.Input />
+        """.trimIndent())
+
+        val prevCaretOffset = myFixture.caretOffset
+        myFixture.performEditorAction(IdeActions.ACTION_GOTO_DECLARATION)
+        // Navigation goes to the Forms import binding in the same file, so caret should move.
+        TestCase.assertNotSame(prevCaretOffset, myFixture.caretOffset)
+    }
+
     private fun CodeInsightTestFixture.configureWidgetFile(): PsiFile {
         return configureByText("Widget.svelte", """
             <script>
