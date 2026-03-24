@@ -88,11 +88,31 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   }
 
   fun testNamespacedComponent() {
-    // TODO Support namespaced components WEB-61636
     myFixture.configureByText("Usage.svelte", """
       <<error descr="Cannot resolve symbol 'Unresolved'"><error descr="Unresolved Svelte component">Unresolved</error></error> test="" />
-      <Also.Unresolved test="" />
-      <Also.Unresolved test="" />
+      <Also.<error descr="Cannot resolve symbol 'Also.Unresolved'">Unresolved</error> test="" />
+      <Also.<error descr="Cannot resolve symbol 'Also.Unresolved'">Unresolved</error> test="" />
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testNamespacedComponentImportNotUnused() {
+    myFixture.configureByText("Button.svelte", "<button><slot /></button>")
+    myFixture.configureByText("Card.svelte", "<div class=\"card\"><slot /></div>")
+    myFixture.addFileToProject("lib/UI.ts", """
+      import Button from '../Button.svelte';
+      import Card from '../Card.svelte';
+      export default { Button, Card };
+    """.trimIndent())
+    myFixture.configureByText("Unused.svelte", "<div>unused</div>")
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import UI from './lib/UI';
+        <warning descr="Unused import Unused from './Unused.svelte';">import Unused from './Unused.svelte';</warning>
+      </script>
+      <UI.Card title="Welcome">
+        <UI.Button variant="primary">Click me</UI.Button>
+      </UI.Card>
     """.trimIndent())
     myFixture.testHighlighting()
   }

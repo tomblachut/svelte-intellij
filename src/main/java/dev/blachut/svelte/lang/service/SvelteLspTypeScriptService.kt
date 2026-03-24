@@ -7,9 +7,12 @@ import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageS
 import com.intellij.lang.typescript.lsp.JSFrameworkLspAnnotationErrorFilter
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
 import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilter
+import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.xml.XmlTokenType
+import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.eclipse.lsp4j.Diagnostic
@@ -26,6 +29,30 @@ class SvelteLspTypeScriptService(project: Project)
   override fun isServiceFallbackResolveEnabled(): Boolean  = true
 
   override fun isServiceNavigationEnabled(): Boolean = true
+
+  /**
+   * Skip LSP navigation for namespaced component tag names (e.g. `Forms.Input`) when called
+   * from [com.intellij.lang.typescript.TypeScriptServiceGotoDeclarationHandler].
+   * This prevents whole-token hover underline.
+   *
+   * Navigation for these is handled by per-segment references which call
+   * [getNavigationForNamespacedComponent] directly, bypassing this method.
+   */
+  override fun getNavigationFor(document: Document, sourceElement: PsiElement, offsetInSourceElement: Int): Array<PsiElement> {
+    if (sourceElement.node.elementType == XmlTokenType.XML_NAME && isSvelteNamespacedComponentTag(sourceElement.text)) {
+      return emptyArray()
+    }
+    return super.getNavigationFor(document, sourceElement, offsetInSourceElement)
+  }
+
+  /**
+   * Direct LSP navigation for namespaced component segments, bypassing [getNavigationFor] override.
+   * Called from [dev.blachut.svelte.lang.codeInsight.SvelteTagNameReference] and
+   * [dev.blachut.svelte.lang.psi.SvelteNamespacePrefixReference].
+   */
+  fun getNavigationForNamespacedComponent(document: Document, sourceElement: PsiElement, offsetInSourceElement: Int): Array<PsiElement> {
+    return super.getNavigationFor(document, sourceElement, offsetInSourceElement)
+  }
 
   override fun getCompletionMergeStrategy(
     parameters: CompletionParameters,
