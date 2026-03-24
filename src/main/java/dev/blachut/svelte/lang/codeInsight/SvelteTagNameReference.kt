@@ -2,9 +2,14 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
-import com.intellij.lang.javascript.psi.resolve.JSResolveResult
+import com.intellij.lang.javascript.psi.JSElement
+import com.intellij.lang.javascript.psi.JSProperty
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil
+import com.intellij.lang.typescript.compiler.TypeScriptServiceHolder
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiPolyVariantReference
 import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.ResolveCache
@@ -12,22 +17,59 @@ import com.intellij.psi.impl.source.xml.TagNameReference
 import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
+import dev.blachut.svelte.lang.service.SvelteLspTypeScriptService
 
 class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
   TagNameReference(nameElement, startTagFlag), PsiPolyVariantReference {
 
   override fun resolve(): PsiElement? {
     val results = this.multiResolve(false)
-    return if (results.isNotEmpty()) results[0].element else null
+    val result = if (results.isNotEmpty()) results[0].element else null
+    // For namespaced tags, reject results that don't match the last segment.
+    // resolvePsi falls back to the namespace import when the full walk fails —
+    // using that would cause rename to target the wrong element.
+    val tag = tagElement
+    if (tag != null && result != null && isSvelteNamespacedComponentTag(tag.name)) {
+      val lastSegment = tag.name.substringAfterLast('.')
+      val elementName = (result as? JSElement)?.name ?: (result as? PsiFile)?.virtualFile?.nameWithoutExtension
+      if (elementName != null && elementName != lastSegment) return null
+    }
+    return result
+  }
+
+  override fun getPrefixIndex(name: String): Int = name.lastIndexOf('.')
+
+  override fun prependNamespacePrefix(newElementName: String, namespacePrefix: String): String {
+    return if (namespacePrefix.isNotEmpty()) "$namespacePrefix.$newElementName" else newElementName
+  }
+
+  override fun isReferenceTo(element: PsiElement): Boolean {
+    val tag = tagElement ?: return false
+    val tagName = tag.name
+    if (isSvelteNamespacedComponentTag(tagName)) {
+      val lastSegment = tagName.substringAfterLast('.')
+      val elementName = (element as? JSElement)?.name
+                        ?: (element as? PsiFile)?.virtualFile?.nameWithoutExtension
+      if (elementName != null && elementName != lastSegment) return false
+    }
+    if (super.isReferenceTo(element)) return true
+    // For shorthand properties like `{ Button }` in `export default { Button }`,
+    // resolve() returns JSProperty but Find Usages target may be the ES6ImportedBinding.
+    val resolved = resolve()
+    if (resolved is JSProperty) {
+      val value = resolved.value
+      if (value is JSReferenceExpression) {
+        val target = value.resolve()
+        if (target != null && element.manager.areElementsEquivalent(target, element)) return true
+      }
+    }
+    return false
   }
 
   override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
     val resolver = ResolveCache.PolyVariantResolver<SvelteTagNameReference> { ref, incomplete ->
-      val place = ref.tagElement ?: return@PolyVariantResolver emptyArray()
-      val referenceName = place.name
-      // TODO Support namespaced components WEB-61636
-      if (isSvelteNamespacedComponentTag(referenceName)) return@PolyVariantResolver arrayOf(JSResolveResult(place))
-      SvelteReactiveDeclarationsUtil.processLocalDeclarations(place, referenceName, incomplete)
+      val tag = ref.tagElement ?: return@PolyVariantResolver emptyArray()
+      SvelteComponentResolution.resolveTagOrComponent(tag, incomplete)
     }
 
     return JSResolveUtil.resolve(element.containingFile, this, resolver, incompleteCode)
@@ -35,6 +77,7 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
 
   companion object {
     fun resolveComponentFile(tag: SvelteHtmlTag): SvelteHtmlFile? {
+      if (isSvelteNamespacedComponentTag(tag.name)) return null
       val import = tag.reference?.resolve()
       if (import is ES6ImportedBinding && !import.isNamespaceImport) {
         val componentFile = import.findReferencedElements().firstOrNull()
@@ -47,4 +90,16 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
       return null
     }
   }
+}
+
+internal fun getNamespacedComponentNavigation(
+  project: com.intellij.openapi.project.Project,
+  sourceElement: PsiElement,
+  offsetInSourceElement: Int,
+): Array<PsiElement> {
+  val virtualFile = sourceElement.containingFile?.virtualFile ?: return PsiElement.EMPTY_ARRAY
+  val service = TypeScriptServiceHolder.getForFile(project, virtualFile) ?: return PsiElement.EMPTY_ARRAY
+  if (service !is SvelteLspTypeScriptService) return PsiElement.EMPTY_ARRAY
+  val document = PsiDocumentManager.getInstance(project).getDocument(sourceElement.containingFile) ?: return PsiElement.EMPTY_ARRAY
+  return service.getNavigationForNamespacedComponent(document, sourceElement, offsetInSourceElement)
 }

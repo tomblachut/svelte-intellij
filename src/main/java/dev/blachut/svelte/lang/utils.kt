@@ -31,7 +31,6 @@ fun isSvelteProjectContext(project: Project, context: VirtualFile): Boolean {
 }
 
 fun isSvelteComponentTag(tagName: CharSequence): Boolean {
-  // TODO Support namespaced components WEB-61636
   return tagName.isNotEmpty() && tagName[0].isUpperCase()
 }
 

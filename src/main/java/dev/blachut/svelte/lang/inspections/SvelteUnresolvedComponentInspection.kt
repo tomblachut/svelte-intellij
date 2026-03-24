@@ -14,6 +14,7 @@ import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.isSvelteComponentTag
+import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
 import org.jetbrains.annotations.Nls
 
 class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
@@ -26,6 +27,7 @@ class SvelteUnresolvedComponentInspection : LocalInspectionTool() {
 
         val componentName = tag.name
         if (!isSvelteComponentTag(componentName)) return
+        if (isSvelteNamespacedComponentTag(componentName)) return // LSP handles diagnostics for namespaced components
         if (tag.reference?.resolve() != null) return
 
         val range = TextRange(1, tag.name.length + 1)
