@@ -19,6 +19,7 @@ jvm_library(
     "@community//platform/editor-ui-api:editor-ui",
     "@community//platform/platform-api:ide",
     "@community//platform/ide-core-impl",
+    "@community//platform/ide-core",
     "@lib//:kotlin-stdlib",
     "@community//platform/platform-impl:ide-impl",
     "//plugins/css/common",
@@ -79,6 +80,7 @@ jvm_library(
     "@community//platform/editor-ui-api:editor-ui_test_lib",
     "@community//platform/platform-api:ide_test_lib",
     "@community//platform/ide-core-impl:ide-core-impl_test_lib",
+    "@community//platform/ide-core:ide-core_test_lib",
     "@community//platform/platform-impl:ide-impl_test_lib",
     "//plugins/css/common:common_test_lib",
     "@community//platform/indexing-api:indexing_test_lib",
@@ -202,6 +204,7 @@ jvm_library(
     "@community//platform/platform-api:ide",
     "@community//platform/platform-api:ide_test_lib",
     "@community//platform/ide-core-impl",
+    "@community//platform/ide-core",
     "@lib//:kotlin-stdlib",
     "@community//platform/platform-impl:ide-impl",
     "//plugins/css/common",
@@ -334,6 +337,7 @@ jvm_library(
   runtime_deps = [
     ":svelte-tests",
     "@community//platform/ide-core-impl:ide-core-impl_test_lib",
+    "@community//platform/ide-core:ide-core_test_lib",
     "@community//platform/platform-impl:ide-impl_test_lib",
   ]
 )
