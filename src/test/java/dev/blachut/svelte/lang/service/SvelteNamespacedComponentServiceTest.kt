@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.javascript.testFramework.web.fileUsages
 import com.intellij.javascript.testFramework.web.usagesAtCaret
+import com.intellij.openapi.ui.TestDialogManager
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import junit.framework.TestCase
 import org.junit.Test
@@ -391,6 +392,76 @@ class SvelteNamespacedComponentServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
+  }
+
+  @Test
+  fun testRenameInNestedNs() {
+    // Rename "Card" inside Nesting: { Button, Card } from <Components.Nesting.Card>
+    // should rename the nested property and its template usages,
+    // but NOT touch <Components.Button> (top-level sibling) or <Button> (direct import)
+    addTypeScriptCommonFiles()
+    myFixture.addFileToProject("lib/UI.ts", """
+      import Button from '../Button.svelte';
+      import Card from '../Card.svelte';
+      export default {
+        Nesting: {
+          Button,
+          Card,
+        },
+        Button,
+      };
+    """.trimIndent())
+
+    myFixture.configureByText("Button.svelte", "<button><slot /></button>")
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    myFixture.addFileToProject("Card.svelte", "<div class=\"card\"><slot /></div>")
+
+    myFixture.configureByText("Consumer.svelte", """
+      <script lang="ts">
+        import Components from './lib/UI';
+        import Button from './Button.svelte';
+      </script>
+      <Components.Nesting.Card />
+      <Components.Nesting.Button prop="nested" />
+      <Components.Button prop="top level" />
+      <Button prop="direct import" />
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    // Place caret on "Card," in the Nesting property of UI.ts — a unique shorthand property
+    myFixture.configureFromTempProjectFile("lib/UI.ts")
+    val nestingBlock = myFixture.file.text.indexOf("Nesting:")
+    val nestedCard = myFixture.file.text.indexOf("Card,", nestingBlock)
+    myFixture.editor.caretModel.moveToOffset(nestedCard)
+    myFixture.doHighlighting()
+    assertCorrectServiceForTsFile()
+
+    // Select PROPERTY (index 1) in the shorthand property rename dialog
+    // to rename only the property key, not the imported variable
+    TestDialogManager.setTestDialog({ 1 }, testRootDisposable)
+    myFixture.renameElementAtCaret("Panel")
+
+    // Check UI.ts: nested Card renamed to Panel, other properties unchanged
+    val uiText = myFixture.file.text
+    assertTrue("Expected 'Panel' in Nesting block, got:\n$uiText",
+      uiText.contains("Panel"))
+    assertTrue("Expected 'Button' still present, got:\n$uiText",
+      uiText.contains("Button"))
+
+    // Check Consumer.svelte
+    myFixture.configureFromTempProjectFile("Consumer.svelte")
+    val consumerText = myFixture.file.text
+    assertTrue("Expected <Components.Nesting.Panel>, got:\n$consumerText",
+      consumerText.contains("<Components.Nesting.Panel"))
+    assertTrue("Expected <Components.Nesting.Button> unchanged, got:\n$consumerText",
+      consumerText.contains("<Components.Nesting.Button"))
+    assertTrue("Expected <Components.Button> unchanged, got:\n$consumerText",
+      consumerText.contains("<Components.Button"))
+    assertTrue("Expected <Button> direct import unchanged, got:\n$consumerText",
+      consumerText.contains("<Button prop=\"direct import\""))
   }
 
   @Test
