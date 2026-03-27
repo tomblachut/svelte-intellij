@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.javascript.testFramework.web.fileUsages
 import com.intellij.javascript.testFramework.web.usagesAtCaret
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.ui.TestDialogManager
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import junit.framework.TestCase
@@ -462,6 +463,61 @@ class SvelteNamespacedComponentServiceTest : SvelteServiceTestBase() {
       consumerText.contains("<Components.Button"))
     assertTrue("Expected <Button> direct import unchanged, got:\n$consumerText",
       consumerText.contains("<Button prop=\"direct import\""))
+  }
+
+  @Test
+  fun testRenameFromNsUsage() {
+    // Rename "Card" from template usage <Components.Nesting.Card> → <Components.Nesting.Panel>
+    addTypeScriptCommonFiles()
+    myFixture.addFileToProject("lib/UI.ts", """
+      import Button from '../Button.svelte';
+      import Card from '../Card.svelte';
+      export default {
+        Nesting: {
+          Button,
+          Card,
+        },
+      };
+    """.trimIndent())
+
+    myFixture.configureByText("Button.svelte", "<button><slot /></button>")
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    myFixture.addFileToProject("Card.svelte", "<div class=\"card\"><slot /></div>")
+
+    myFixture.configureByText("Consumer.svelte", """
+      <script lang="ts">
+        import Components from './lib/UI';
+      </script>
+      <Components.Nesting.Card />
+      <Components.Nesting.Button prop="nested" />
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    // Place caret on "Card" (last segment) in <Components.Nesting.Card>
+    val tagText = "Nesting.Card"
+    val tagOffset = myFixture.file.text.indexOf(tagText)
+    myFixture.editor.caretModel.moveToOffset(tagOffset + "Nesting.".length)
+
+    // Select PROPERTY (index 1) in the shorthand property rename dialog
+    TestDialogManager.setTestDialog({ 1 }, testRootDisposable)
+    myFixture.renameElementAtCaret("Panel")
+
+    // Check Consumer.svelte
+    val consumerText = myFixture.file.text
+    assertTrue("Expected <Components.Nesting.Panel>, got:\n$consumerText",
+      consumerText.contains("<Components.Nesting.Panel"))
+    assertTrue("Expected <Components.Nesting.Button> unchanged, got:\n$consumerText",
+      consumerText.contains("<Components.Nesting.Button"))
+
+    // Check UI.ts: nested Card renamed to Panel
+    FileDocumentManager.getInstance().saveAllDocuments()
+    myFixture.configureFromTempProjectFile("lib/UI.ts")
+    val uiText = myFixture.file.text
+    assertTrue("Expected 'Panel' in Nesting block, got:\n$uiText",
+      uiText.contains("Panel"))
   }
 
   @Test

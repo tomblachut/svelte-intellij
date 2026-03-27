@@ -1,6 +1,8 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.ecmascript6.resolve.ES6PsiUtil
+import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
+import com.intellij.lang.javascript.psi.JSProperty
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementResolveResult
@@ -47,6 +49,17 @@ object SvelteComponentResolution {
     for (i in 1..upToIndex) {
       val expanded = ES6PsiUtil.expandElements(context, currentElements)
       if (expanded.isEmpty()) return emptyList()
+
+      // Prefer direct JSProperty.value lookup for inline object literals.
+      // Returns the actual JSProperty (renameable), unlike the synthetic
+      // JSLocalImplicitElementImpl that getLocalElements may return via resolveFromType.
+      val fromProperties = expanded.mapNotNull {
+        ((it as? JSProperty)?.value as? JSObjectLiteralExpression)?.findProperty(segments[i])
+      }
+      if (fromProperties.isNotEmpty()) {
+        currentElements = fromProperties
+        continue
+      }
 
       val members = ES6PsiUtil.createResolver(context).getLocalElements(segments[i], expanded)
       if (members.isEmpty()) return emptyList()
