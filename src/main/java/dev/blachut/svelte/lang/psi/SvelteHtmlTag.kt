@@ -84,15 +84,6 @@ class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTa
     return "SvelteHtmlTag: $name"
   }
 
-  /**
-   * Custom delegate that treats `.` as a namespace prefix separator for namespaced component tags (e.g. `Forms.Input`).
-   * This mirrors how JSX handles member expression tags via
-   * [com.intellij.lang.javascript.frameworks.jsx.JSXTagNameReference.getPrefixIndex] and
-   * [com.intellij.lang.javascript.psi.ecma6.impl.JSXXmlLiteralExpressionImpl] delegate.
-   *
-   * The prefix segment (`Forms`) gets its own reference that resolves to the namespace import binding,
-   * while the [com.intellij.psi.impl.source.xml.TagNameReference] covers the local name (`Input`).
-   */
   private inner class SvelteHtmlTagDelegate : HtmlTagDelegate(this@SvelteHtmlTag) {
     override fun getNamespacePrefix(name: String): String {
       if (isSvelteNamespacedComponentTag(name)) {
@@ -102,10 +93,6 @@ class SvelteHtmlTag : XmlTagImpl(SvelteHtmlElementTypes.SVELTE_HTML_TAG), HtmlTa
       return super.getNamespacePrefix(name)
     }
 
-    /**
-     * Creates references for each namespace prefix segment (e.g. `Forms` and `Button` in `Forms.Button.Label`).
-     * Each reference resolves independently via [SvelteComponentResolution.resolveSegments].
-     */
     override fun createPrefixReferences(
       startTagName: ASTNode,
       prefix: String,
