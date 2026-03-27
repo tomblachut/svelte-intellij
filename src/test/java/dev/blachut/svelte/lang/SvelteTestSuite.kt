@@ -27,6 +27,8 @@ import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveParserTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHighlightingLexerTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHtmlParserTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHtmlRegressionParsingTest
+import dev.blachut.svelte.lang.service.SvelteNsRenameServiceTest
+import dev.blachut.svelte.lang.service.SvelteNsUsagesServiceTest
 import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
 import dev.blachut.svelte.lang.service.SvelteServiceDocumentationTest
 import dev.blachut.svelte.lang.service.SvelteServiceTest
@@ -74,6 +76,8 @@ class SvelteAggregatorTestSuite
   SvelteServiceTest::class,
   SvelteServiceCompletionTest::class,
   SvelteServiceDocumentationTest::class,
+  SvelteNsUsagesServiceTest::class,
+  SvelteNsRenameServiceTest::class,
 )
 class SvelteServiceTestSuite
 
