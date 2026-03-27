@@ -101,9 +101,9 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
         import Button from './Button.svelte';
       </script>
       <Components.Nesting.Card />
-      <Components.Nesting.Button prop="nested" />
-      <Components.Button prop="top level" />
-      <Button prop="direct import" />
+      <Components.Nesting.Button />
+      <Components.Button />
+      <Button />
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
@@ -133,7 +133,7 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
     assertTrue("Expected <Components.Button> unchanged, got:\n$consumerText",
       consumerText.contains("<Components.Button"))
     assertTrue("Expected <Button> direct import unchanged, got:\n$consumerText",
-      consumerText.contains("<Button prop=\"direct import\""))
+      consumerText.contains("<Button />"))
   }
 
   @Test
@@ -162,7 +162,7 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
         import Components from './lib/UI';
       </script>
       <Components.Nesting.Card />
-      <Components.Nesting.Button prop="nested" />
+      <Components.Nesting.Button />
     """.trimIndent())
     myFixture.checkLspHighlighting()
     assertCorrectService()
