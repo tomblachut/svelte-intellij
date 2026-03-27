@@ -287,7 +287,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertEquals("user: User", variable?.text)
   }
 
-  fun testNamespacedComponentNamespaceSegmentResolves() {
+  fun testNsSegmentResolves() {
     myFixture.configureByText(
       "Example.svelte", """
             <script>
@@ -305,7 +305,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertEquals("Forms", (resolved as ES6ImportedBinding).name)
   }
 
-  fun testNamespacedComponentComponentSegmentResolvesToNamespace() {
+  fun testNsComponentSegmentResolves() {
     myFixture.configureByText(
       "Example.svelte", """
             <script>
@@ -323,7 +323,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertTrue("Expected ES6ImportedBinding", resolved is ES6ImportedBinding)
   }
 
-  fun testNamespacedComponentAllReferencesPresent() {
+  fun testNsAllRefsPresent() {
     myFixture.configureByText(
       "Example.svelte", """
             <script>
@@ -352,7 +352,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertNotNull("Expected a reference covering 'Input', refs: $refInfo", componentRef)
   }
 
-  fun testNamespacedComponentFindUsagesFromNamespace() {
+  fun testNsUsagesFromImport() {
     myFixture.configureByText(
       "Example.svelte", """
             <script>
@@ -367,7 +367,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertTrue("Expected at least 2 template usages of Forms", usages.size >= 2)
   }
 
-  fun testNamespacedComponentFindUsagesFromTag() {
+  fun testNsUsagesFromTag() {
     myFixture.configureByText(
       "Example.svelte", """
             <script>
@@ -386,7 +386,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertTrue("Expected at least 2 usages of Forms from tag position, got ${usages.size}", usages.size >= 2)
   }
 
-  fun testNamespacedComponentFindUsagesOfComponentFile() {
+  fun testNsFileUsages() {
     // Set up the component file and module structure
     val buttonComponent = myFixture.configureByText(
       "Button.svelte", """
@@ -426,7 +426,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     )
   }
 
-  fun testNamespacedComponentFindUsagesFromComponentShowsTemplateUsage() {
+  fun testNsTemplateUsage() {
     // Button.svelte — the component we'll search usages for
     myFixture.configureByText("Button.svelte", """
       <script>
@@ -472,7 +472,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     )
   }
 
-  fun testNamespacedComponentUnresolvedNamespaceReturnsNull() {
+  fun testNsUnresolvedReturnsNull() {
     myFixture.configureByText(
       "Example.svelte", """
             <script>

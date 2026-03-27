@@ -24,17 +24,7 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
 
   override fun resolve(): PsiElement? {
     val results = this.multiResolve(false)
-    val result = if (results.isNotEmpty()) results[0].element else null
-    // For namespaced tags, reject results that don't match the last segment.
-    // resolvePsi falls back to the namespace import when the full walk fails —
-    // using that would cause rename to target the wrong element.
-    val tag = tagElement
-    if (tag != null && result != null && isSvelteNamespacedComponentTag(tag.name)) {
-      val lastSegment = tag.name.substringAfterLast('.')
-      val elementName = (result as? JSElement)?.name ?: (result as? PsiFile)?.virtualFile?.nameWithoutExtension
-      if (elementName != null && elementName != lastSegment) return null
-    }
-    return result
+    return if (results.isNotEmpty()) results[0].element else null
   }
 
   override fun getPrefixIndex(name: String): Int = name.lastIndexOf('.')
