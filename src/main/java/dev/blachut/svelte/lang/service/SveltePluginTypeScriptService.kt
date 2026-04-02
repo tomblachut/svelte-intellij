@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.service
 
-import com.intellij.javascript.typeEngine.JSServicePoweredTypeEngineUsageContext
 import com.intellij.lang.javascript.service.protocol.JSLanguageServiceSimpleCommand
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.TypeScriptServiceEvaluationSupport
@@ -13,9 +12,6 @@ import com.intellij.lang.typescript.compiler.languageService.protocol.commands.C
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lang.lsWidget.LanguageServiceWidgetItem
-import com.intellij.psi.PsiFile
-import dev.blachut.svelte.lang.SvelteJSLanguage
-import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
 import dev.blachut.svelte.lang.service.settings.SvelteServiceConfigurable
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import icons.SvelteIcons
@@ -57,27 +53,17 @@ class SveltePluginTypeScriptService(project: Project) : PluggableTypeScriptServi
   override fun createWidgetItem(currentFile: VirtualFile?): LanguageServiceWidgetItem =
     TypeScriptServiceWidgetItem(this, currentFile, SvelteIcons.Original, SvelteIcons.Desaturated, SvelteServiceConfigurable::class.java)
 
-  override fun supportsInjectedFile(file: PsiFile): Boolean {
-    return file.language is SvelteJSLanguage || file.language is SvelteTypeScriptLanguage
-  }
-
   override fun isTypeEvaluationEnabled(): Boolean =
     getSvelteServiceSettings(project).useTypesFromServer
 
   override val typeEvaluationSupport: TypeScriptServiceEvaluationSupport =
     SvelteCompilerServiceEvaluationSupport(project)
 
-  /**
-   * Custom evaluation support for Svelte that enables service-powered type engine.
-   * Similar to VueCompilerServiceEvaluationSupport and Angular2CompilerServiceEvaluationSupport.
-   */
   private inner class SvelteCompilerServiceEvaluationSupport(
     project: Project,
   ) : TypeScriptCompilerServiceEvaluationSupport(project) {
 
     override val service: TypeScriptService
       get() = this@SveltePluginTypeScriptService
-
-    override fun isEnabledInUsageContext(usageContext: JSServicePoweredTypeEngineUsageContext): Boolean = true
   }
 }
