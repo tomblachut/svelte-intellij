@@ -3,19 +3,60 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JSTestUtils
 import com.intellij.lang.javascript.psi.JSVariable
+import com.intellij.lang.typescript.tsc.TypeScriptServiceGetElementTypeTest
+import com.intellij.lang.typescript.tsc.TypeScriptServiceTestMixin
 import com.intellij.lang.typescript.tsc.types.TypeScriptCompilerObjectTypeImpl
+import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.registry.RegistryManager
+import dev.blachut.svelte.lang.SvelteTestModule
+import dev.blachut.svelte.lang.configureSvelteDependencies
+import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
+import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.junit.Test
 
-class SvelteTypeScriptServiceGetElementTypeTest : SvelteServiceTestBase() {
+class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTypeTest() {
 
-  override fun setUp() {
-    super.setUp()
-    addTypeScriptCommonFiles()
-    SvelteGetElementTypeTestUtil.setUpSPTE(myFixture, project, testRootDisposable)
+  override fun setUpTypeScriptService() {
+    // Enable bundled typescript-svelte-plugin (required for SveltePluginTypeScriptService to start)
+    RegistryManager.getInstance().get("svelte.language.server.bundled.enabled").setValue(true, testRootDisposable)
+
+    // Enable Svelte service mode
+    val serviceSettings = getSvelteServiceSettings(project)
+    val oldMode = serviceSettings.serviceMode
+    serviceSettings.serviceMode = SvelteServiceMode.ENABLED
+    Disposer.register(testRootDisposable) { serviceSettings.serviceMode = oldMode }
+
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5)
+    TypeScriptServiceTestMixin.setUpTypeScriptService(myFixture) {
+      it is SveltePluginTypeScriptService
+    }
+    TypeScriptServiceTestMixin.setUseTypesFromServer(true, project, testRootDisposable)
   }
 
   @Test
   fun testCompletePropsSvelte() {
+    // Match the tsconfig used in SvelteServiceTestBase.addTypeScriptCommonFiles()
+    myFixture.addFileToProject("tsconfig.json", """
+      {
+        "compilerOptions": {
+          "allowJs": true,
+          "checkJs": true,
+          "strict": true,
+          "esModuleInterop": true,
+          "resolveJsonModule": true,
+          "skipLibCheck": true
+        },
+        "include": ["**/*.js", "**/*.ts", "**/*.d.ts", "**/*.svelte"]
+      }
+    """.trimIndent())
+
+    // Ambient declarations used in the original working test
+    myFixture.addFileToProject("ambient.d.ts", """
+      /// <reference types="svelte" />
+
+      declare function __sveltets_2_invalidate<T>(getValue: () => T): T;
+    """.trimIndent())
+
     myFixture.addFileToProject("Button.svelte", """
       <script lang="ts">
         export let label: string;
@@ -29,7 +70,8 @@ class SvelteTypeScriptServiceGetElementTypeTest : SvelteServiceTestBase() {
     """.trimIndent())
 
     val element = JSTestUtils.findElementByText(myFixture, "btn", JSVariable::class.java)
-    val type = SvelteGetElementTypeTestUtil.calculateTypeAndVerifyDeclarations(element)
+    val type = calculateType(element)
+    assertNotNull("Type should not be null", type)
     assertInstanceOf(type, TypeScriptCompilerObjectTypeImpl::class.java)
   }
 }

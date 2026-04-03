@@ -8,16 +8,6 @@ import com.intellij.testFramework.fixtures.IdeaTestExecutionPolicy
 
 private const val SVELTE_TEST_DATA_PATH = "/svelte/src/test/resources"
 
-// todo sync with solutions from Vue plugin
-internal val svelteMinimalPackageJson = """
-  {
-    "devDependencies": {
-      "svelte": "*"
-    },
-    "type": "module"
-  }
-""".trimIndent()
-
 internal val svelteKitPackageJson = """
   {
     "name": "svelte-test",
@@ -45,17 +35,12 @@ fun getSvelteTestDataPath(): String {
   return "${IdeaTestExecutionPolicy.getHomePathWithPolicy()}/plugins$SVELTE_TEST_DATA_PATH"
 }
 
-internal fun CodeInsightTestFixture.copyBundledNpmPackage(packageName: String) {
-  copyDirectoryToProject("dev/blachut/svelte/lang/_npm/$packageName", "node_modules/$packageName")
-}
-
 internal fun CodeInsightTestFixture.configureBundledSvelte() {
-  copyBundledNpmPackage("svelte")
-  configureByText("package.json", svelteMinimalPackageJson)
+  configureSvelteDependencies(SvelteTestModule.SVELTE_5)
 }
 
 internal fun CodeInsightTestFixture.copyBundledSvelteKit() {
-  copyBundledNpmPackage("@sveltejs/kit")
+  configureSvelteDependencies(SvelteTestModule.SVELTE_KIT_1)
 }
 
 internal fun CodeInsightTestFixture.checkCompletionContains(vararg variants: String) {
