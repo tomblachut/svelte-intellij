@@ -186,6 +186,7 @@
 
     <polySymbols.webTypes source="web-types/svelte@3.0.0.web-types.json" enableByDefault="true"/>
     <codeInsight.codeVisionSettingsPreviewLanguage language="SvelteHTML" modelId="component.usage"/>
+    <projectSettings service="dev.blachut.svelte.lang.service.settings.SvelteServiceSettings"/>
   </extensions>
   <extensions defaultExtensionNs="JavaScript">
     <languageServiceProvider order="first" implementation="dev.blachut.svelte.lang.service.SvelteLanguageServiceProvider"/>
