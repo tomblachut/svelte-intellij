@@ -1,5 +1,5 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
-package dev.blachut.svelte.lang.service
+package dev.blachut.svelte.lang.tsc
 
 import com.intellij.javascript.types.TSType
 import com.intellij.lang.javascript.JSTestUtils
@@ -15,6 +15,7 @@ import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.psi.PsiElement
 import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.configureSvelteDependencies
+import dev.blachut.svelte.lang.service.SveltePluginTypeScriptService
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.junit.Test

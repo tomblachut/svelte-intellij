@@ -32,7 +32,6 @@ import dev.blachut.svelte.lang.service.SvelteNsUsagesServiceTest
 import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
 import dev.blachut.svelte.lang.service.SvelteServiceDocumentationTest
 import dev.blachut.svelte.lang.service.SvelteServiceTest
-import dev.blachut.svelte.lang.service.SvelteTypeScriptServiceGetElementTypeTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -79,7 +78,6 @@ class SvelteAggregatorTestSuite
   SvelteServiceDocumentationTest::class,
   SvelteNsUsagesServiceTest::class,
   SvelteNsRenameServiceTest::class,
-  SvelteTypeScriptServiceGetElementTypeTest::class,
 )
 class SvelteServiceTestSuite
 
