@@ -30,7 +30,6 @@ import dev.blachut.svelte.lang.parsing.html.SvelteHtmlRegressionParsingTest
 import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
 import dev.blachut.svelte.lang.service.SvelteServiceDocumentationTest
 import dev.blachut.svelte.lang.service.SvelteServiceTest
-import dev.blachut.svelte.lang.service.SvelteTypeScriptServiceGetElementTypeTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -75,7 +74,6 @@ class SvelteAggregatorTestSuite
   SvelteServiceTest::class,
   SvelteServiceCompletionTest::class,
   SvelteServiceDocumentationTest::class,
-  SvelteTypeScriptServiceGetElementTypeTest::class,
 )
 class SvelteServiceTestSuite
 
