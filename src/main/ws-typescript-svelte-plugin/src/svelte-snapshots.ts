@@ -1,15 +1,10 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 import type ts from "typescript/lib/tsserverlibrary"
+import type {Position} from "tsc-ide-plugin/protocol"
 
 declare const DEBUG_SNAPSHOTS: boolean
 
-/**
- * Position in line/character format
- */
-export interface Position {
-  line: number
-  character: number
-}
+export type {Position}
 
 /**
  * Interface for the SourceMapper from typescript-svelte-plugin.
