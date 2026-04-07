@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2015",
-    "module": "commonjs",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "lib": ["ES2015"],
     "outDir": "./dist",
     "rootDir": "./src",
@@ -10,7 +11,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "moduleResolution": "node"
+    "types": ["tsc-ide-plugin/typescript", "node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

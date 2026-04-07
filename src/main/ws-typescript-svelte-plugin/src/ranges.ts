@@ -1,26 +1,14 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 import type ts from "typescript/lib/tsserverlibrary"
-import type {Position, SvelteSnapshotManager} from "./svelte-snapshots"
+import type {ReverseMapper} from "tsc-ide-plugin/ide-get-element-type"
+import type {Position, Range} from "tsc-ide-plugin/protocol"
+import type {SvelteSnapshotManager} from "./svelte-snapshots"
 
 type TypeScript = typeof ts
 type Logger = ts.server.Logger
 
+export type {ReverseMapper}
 export type SimpleRange = [startOffset: number, endOffset: number]
-
-interface Range {
-  start: Position
-  end: Position
-}
-
-interface ReverseMapping {
-  fileName: string
-  sourceRange: Range
-}
-
-type ReverseMapper = (
-  sourceFile: ts.SourceFile,
-  generatedRange: Range,
-) => ReverseMapping | undefined
 
 export function isSvelteFile(fileName: string): boolean {
   return fileName.endsWith(".svelte")

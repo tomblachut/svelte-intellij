@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "main": "index.js",
+  "workspaces": [
+    "../../../../JavaScriptLanguage/resources/tscplugin"
+  ],
   "dependencies": {
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "tsc-ide-plugin": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "22.19.7",

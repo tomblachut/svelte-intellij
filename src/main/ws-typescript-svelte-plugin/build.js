@@ -16,7 +16,7 @@ esbuild.buildSync({
   target: 'es2015',
   outfile: path.join(outDir, 'index.js'),
   format: 'cjs',
-  external: ['typescript'],
+  external: ['typescript', 'tsc-ide-plugin'],
   minify: !debug,
   define: { 'DEBUG_SNAPSHOTS': debug ? 'true' : 'false' },
 });
