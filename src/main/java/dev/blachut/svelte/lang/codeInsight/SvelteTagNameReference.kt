@@ -15,8 +15,6 @@ import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.xml.TagNameReference
 import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
-import dev.blachut.svelte.lang.psi.SvelteHtmlFile
-import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 import dev.blachut.svelte.lang.service.SvelteLspTypeScriptService
 
 class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
@@ -44,14 +42,23 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
     }
     if (super.isReferenceTo(element)) return true
     // For shorthand properties like `{ Button }` in `export default { Button }`,
-    // resolve() returns JSProperty but Find Usages target may be the ES6ImportedBinding.
+    // resolve() returns JSProperty but Find Usages target may be the ES6ImportedBinding
+    // or the component PsiFile itself.
     val resolved = resolve()
     if (resolved is JSProperty) {
       val value = resolved.value
       if (value is JSReferenceExpression) {
         val target = value.resolve()
         if (target != null && element.manager.areElementsEquivalent(target, element)) return true
+        if (target is ES6ImportedBinding) {
+          if (target.findReferencedElements().any { element.manager.areElementsEquivalent(it, element) }) return true
+        }
       }
+    }
+    // For re-exports like `export { default as Button } from './Button.svelte'`,
+    // resolve() returns ES6ImportedBinding — follow to referenced component file.
+    if (resolved is ES6ImportedBinding) {
+      if (resolved.findReferencedElements().any { element.manager.areElementsEquivalent(it, element) }) return true
     }
     return false
   }
@@ -63,22 +70,6 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
     }
 
     return JSResolveUtil.resolve(element.containingFile, this, resolver, incompleteCode)
-  }
-
-  companion object {
-    fun resolveComponentFile(tag: SvelteHtmlTag): SvelteHtmlFile? {
-      if (isSvelteNamespacedComponentTag(tag.name)) return null
-      val import = tag.reference?.resolve()
-      if (import is ES6ImportedBinding && !import.isNamespaceImport) {
-        val componentFile = import.findReferencedElements().firstOrNull()
-
-        if (componentFile is SvelteHtmlFile) {
-          return componentFile
-        }
-      }
-
-      return null
-    }
   }
 }
 
