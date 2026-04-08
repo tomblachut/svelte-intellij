@@ -31,18 +31,6 @@ class SvelteComponentTagDescriptor(private val myName: String, private val myTag
   override fun getDeclaration(): SvelteHtmlTag = myTag
 
   override fun getAttributesDescriptors(context: XmlTag?): Array<XmlAttributeDescriptor> {
-    if (context == null) {
-      return XmlAttributeDescriptor.EMPTY
-    }
-
-    val componentFile = SvelteTagNameReference.resolveComponentFile(myTag)
-    if (componentFile != null) {
-      val props = SveltePropsProvider.getComponentProps(componentFile.viewProvider)
-      if (props != null) {
-        return knownAttributeDescriptors + props.map { AnyXmlAttributeDescriptor(it) }
-      }
-    }
-
     return knownAttributeDescriptors
   }
 
