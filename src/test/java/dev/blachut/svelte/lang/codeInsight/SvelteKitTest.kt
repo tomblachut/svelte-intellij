@@ -72,14 +72,43 @@ class SvelteKitTest : BasePlatformTestCase() {
       export async function load(event: any) {
         return { url: event.url };
       }
-      
+
       export async function <warning>_load</warning>(event: any) {
         return { url: event.url };
       }
-      
+
       async function <warning>loadNonExported</warning>(event: any) {
         return { url: event.url };
       }
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testSvelteKitUniversalHooks() {
+    myFixture.addFileToProject("package.json", svelteKitPackageJson)
+    myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)
+    myFixture.enableInspections(JSUnusedGlobalSymbolsInspection::class.java)
+
+    myFixture.configureByText("hooks.ts", """
+      export function reroute({ url }: any) { return url.pathname; }
+      export function transport() { return {}; }
+      export function <warning descr="Unused function notAHook">notAHook</warning>() {}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testSvelteKitServerHooks() {
+    myFixture.addFileToProject("package.json", svelteKitPackageJson)
+    myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)
+    myFixture.enableInspections(JSUnusedGlobalSymbolsInspection::class.java)
+
+    myFixture.configureByText("hooks.server.ts", """
+      export function handle({ event, resolve }: any) { return resolve(event); }
+      export function handleFetch({ request, fetch }: any) { return fetch(request); }
+      export function handleError({ error }: any) { console.error(error); }
+      export function handleValidationError({ message }: any) { return { message }; }
+      export function init() { console.log('server init'); }
+      export function <warning descr="Unused function notAHook">notAHook</warning>() {}
     """.trimIndent())
     myFixture.testHighlighting()
   }
