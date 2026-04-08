@@ -8,8 +8,10 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
 import com.intellij.psi.search.*
 import com.intellij.psi.search.searches.ReferencesSearch
+import com.intellij.psi.xml.XmlTag
 import com.intellij.util.Processor
 import dev.blachut.svelte.lang.SvelteHtmlFileType
+import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
 import kotlin.experimental.or
 
 class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>(true) {
@@ -54,7 +56,8 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
       searchScope,
       UsageSearchContext.IN_FOREIGN_LANGUAGES,
       true,
-      element
+      element,
+      NamespacedComponentResultProcessor(element)
     )
   }
 
@@ -64,5 +67,17 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
       is JSElement -> element.name?.takeIf { it.isNotEmpty() && it[0].isUpperCase() }
       else -> null
     }
+  }
+}
+
+private class NamespacedComponentResultProcessor(
+  target: PsiElement,
+) : RequestResultProcessor(target) {
+  private val delegate = SingleTargetRequestResultProcessor(target)
+
+  override fun processTextOccurrence(element: PsiElement, offsetInElement: Int, consumer: Processor<in PsiReference>): Boolean {
+    if (element !is XmlTag) return true
+    if (!isSvelteNamespacedComponentTag(element.name)) return true
+    return delegate.processTextOccurrence(element, offsetInElement, consumer)
   }
 }
