@@ -1396,6 +1396,23 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testStylePropOnComponentNotCss() {
+    myFixture.configureByText("StyledComponent.svelte", """
+      <script>
+        export let style = '';
+      </script>
+      <div style={style}></div>
+    """.trimIndent())
+    myFixture.configureByText("Usage.svelte", """
+      <script>
+        import StyledComponent from "./StyledComponent.svelte";
+      </script>
+      <StyledComponent style="comet" />
+      <div style="color: red"></div>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testCssSelectorOnSvelteElement() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
