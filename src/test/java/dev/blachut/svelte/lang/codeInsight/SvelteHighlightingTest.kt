@@ -4,6 +4,7 @@ import com.intellij.codeInsight.daemon.impl.analysis.HtmlUnknownTargetInspection
 import com.intellij.codeInsight.daemon.impl.analysis.XmlUnboundNsPrefixInspection
 import com.intellij.codeInspection.InspectionProfileEntry
 import com.intellij.codeInspection.LocalInspectionTool
+import com.intellij.psi.css.inspections.CssUnusedSymbolInspection
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownBooleanAttributeInspection
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownTagInspection
@@ -1391,6 +1392,24 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       const x: Foo = {bar: 42};
       
       console.log(x);
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testCssSelectorOnSvelteElement() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let tag = 'div';
+      </script>
+      <div class="regular-class"></div>
+      <svelte:element this={tag} class="used-class" id="used-id"></svelte:element>
+      <style>
+        .regular-class { color: green; }
+        .used-class { color: red; }
+        #used-id { color: blue; }
+        <warning descr="Selector unused-class is never used">.unused-class</warning> { color: yellow; }
+      </style>
     """.trimIndent())
     myFixture.testHighlighting()
   }
