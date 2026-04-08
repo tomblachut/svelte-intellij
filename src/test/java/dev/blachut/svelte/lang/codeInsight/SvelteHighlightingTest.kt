@@ -408,6 +408,29 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testSnippetAsComponentPropNotUnused() {
+    myFixture.configureByText("SnippetComponent.svelte", "<div></div>")
+    myFixture.configureByText("Usage.svelte", """
+      <script>
+        import SnippetComponent from "./SnippetComponent.svelte";
+      </script>
+      <SnippetComponent>
+        {#snippet title()}<h1>Hello</h1>{/snippet}
+        {#snippet body()}<p>World</p>{/snippet}
+      </SnippetComponent>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedSnippetAtRootStillWarned() {
+    myFixture.configureByText("Foo.svelte", """
+      {#snippet <warning descr="Unused function unused">unused</warning>()}<div></div>{/snippet}
+      {#snippet used()}<div></div>{/snippet}
+      {@render used()}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testTypeScriptAsAssertionInBlocks() {
     myFixture.configureByText("TypeScriptAs.svelte", """
       <script lang="ts">
