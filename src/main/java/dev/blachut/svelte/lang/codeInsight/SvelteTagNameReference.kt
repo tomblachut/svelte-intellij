@@ -15,6 +15,8 @@ import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.xml.TagNameReference
 import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
+import dev.blachut.svelte.lang.psi.SvelteHtmlFile
+import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 import dev.blachut.svelte.lang.service.SvelteLspTypeScriptService
 
 class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
@@ -70,6 +72,22 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
     }
 
     return JSResolveUtil.resolve(element.containingFile, this, resolver, incompleteCode)
+  }
+
+  companion object {
+    fun resolveComponentFile(tag: SvelteHtmlTag): SvelteHtmlFile? {
+      if (isSvelteNamespacedComponentTag(tag.name)) return null
+      val import = tag.reference?.resolve()
+      if (import is ES6ImportedBinding && !import.isNamespaceImport) {
+        val componentFile = import.findReferencedElements().firstOrNull()
+
+        if (componentFile is SvelteHtmlFile) {
+          return componentFile
+        }
+      }
+
+      return null
+    }
   }
 }
 
