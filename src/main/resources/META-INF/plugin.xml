@@ -94,6 +94,7 @@
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteKitImplicitUsageProvider"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteConfigImplicitUsageProvider"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentPropsImplicitUsageProvider"/>
+    <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteSnippetImplicitUsageProvider"/>
 
     <include.provider implementation="dev.blachut.svelte.lang.index.SvelteFileIncludeProvider"/>
 
