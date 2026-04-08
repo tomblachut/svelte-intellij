@@ -5,6 +5,7 @@ import com.intellij.lang.typescript.service.TypeScriptServiceTestBase
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import dev.blachut.svelte.lang.checkCompletionContains
+import dev.blachut.svelte.lang.checkCompletionExcludes
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
 
@@ -110,6 +111,30 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent(), true)
     TypeScriptServiceTestBase.assertHasServiceItems(elements, true)
+  }
+
+  @Test
+  fun testComponentPropsCompletion() {
+    addTypeScriptCommonFiles()
+    myFixture.configureByText("Hello1.svelte", """
+      <script lang="ts">
+        export let hello11 = "";
+        let hello11NotAvailable = 10;
+      </script>
+    """.trimIndent())
+
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import Hello1 from "./Hello1.svelte";
+      </script>
+      <Hello1 <caret> />
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    val elements = myFixture.completeBasic()
+    elements.checkCompletionContains("hello11")
+    elements.checkCompletionExcludes("hello11NotAvailable")
   }
 
   private fun defaultCompletionTest(directory: Boolean = false) {

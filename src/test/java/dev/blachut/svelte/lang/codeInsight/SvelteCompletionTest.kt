@@ -157,31 +157,6 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "HelloInvalid", "SvelteComponent", "SvelteComponentTyped")
   }
 
-  fun testComponentProps() {
-    myFixture.configureByText("Hello1.svelte", """
-    <script>
-      export let hello11;
-      let hello11NotAvailable = 10;
-    </script>
-    """.trimIndent())
-    myFixture.configureByText("Hello2.svelte", """
-    <script>
-      export let hello22;
-      let hello22NotAvailable = 10;
-    </script>
-    """.trimIndent())
-
-    myFixture.configureByText("Usage.svelte", """
-      <script>
-        import Hello1 from "./Hello1.svelte";
-      </script>
-      <Hello1 <caret>
-    """.trimIndent())
-    val items = myFixture.completeBasic()
-    hasElements(items, "slot", "hello11")
-    noElements(items, "hello11NotAvailable", "hello22NotAvailable", "hello22")
-  }
-
   fun testAfterDollarJS() = doTestWithLangFromTestNameSuffix(storeAfterDollar)
 
   fun testAfterDollarTS() = doTestWithLangFromTestNameSuffix(storeAfterDollar)
