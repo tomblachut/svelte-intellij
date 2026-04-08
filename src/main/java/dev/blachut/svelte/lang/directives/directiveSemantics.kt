@@ -18,12 +18,9 @@ import com.intellij.psi.css.resolve.HtmlCssClassOrIdReference
 import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference
-import dev.blachut.svelte.lang.codeInsight.SveltePropsProvider
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
-import dev.blachut.svelte.lang.codeInsight.SvelteTagNameReference
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
-import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
 class ScopeReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
   PsiPolyVariantReferenceBase<SvelteHtmlAttribute>(attribute, rangeInElement, false) {
@@ -81,15 +78,7 @@ fun getPropCompletions(
   result: CompletionResultSet,
 ) {
   val tag = attribute.parent ?: return
-  if (isSvelteComponentTag(tag.name) && tag is SvelteHtmlTag) {
-    val componentFile = SvelteTagNameReference.resolveComponentFile(tag)
-    if (componentFile != null) {
-      SveltePropsProvider.getComponentProps(componentFile.viewProvider)?.forEach {
-        result.addElement(LookupElementBuilder.create(it))
-      }
-    }
-  }
-  else {
+  if (!isSvelteComponentTag(tag.name)) {
     HtmlNSDescriptorImpl.getCommonAttributeDescriptors(tag)
       .filter { !it.name.startsWith("on") }
       .forEach {

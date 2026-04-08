@@ -6,7 +6,11 @@ import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
-import com.intellij.psi.search.*
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.RequestResultProcessor
+import com.intellij.psi.search.SingleTargetRequestResultProcessor
+import com.intellij.psi.search.UsageSearchContext
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.Processor
