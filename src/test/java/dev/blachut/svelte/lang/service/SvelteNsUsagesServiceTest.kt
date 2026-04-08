@@ -189,6 +189,85 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
   }
 
   @Test
+  fun testReExportFromFile() {
+    addTypeScriptCommonFiles()
+    myFixture.addFileToProject("index.ts", """
+      export { default as Button } from "./Button.svelte";
+    """.trimIndent())
+
+    myFixture.configureByText("Button.svelte", """
+      <script>
+        export let label = "";
+      </script>
+      <button>{label}</button>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    myFixture.configureByText("Example.svelte", """
+      <script lang="ts">
+        import * as UI from "./index";
+      </script>
+      <UI.Button label="Click me" />
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    myFixture.configureFromTempProjectFile("Button.svelte")
+    val usages = myFixture.fileUsages()
+    TestCase.assertTrue(
+      "Expected usage in index.ts, got: $usages",
+      usages.any { it.contains("index.ts") }
+    )
+    TestCase.assertTrue(
+      "Expected template usage <UI.Button> in Example.svelte, got: $usages",
+      usages.any { it.contains("Example.svelte") }
+    )
+  }
+
+  @Test
+  fun testNamespaceReExportFromFile() {
+    addTypeScriptCommonFiles()
+    myFixture.addFileToProject("lib/index.ts", """
+      export { default as Button } from '../Button.svelte';
+      export { default as Card } from '../Card.svelte';
+    """.trimIndent())
+
+    myFixture.configureByText("Button.svelte", """
+      <script>
+        export let variant = "default";
+      </script>
+      <button class={variant}><slot /></button>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    myFixture.addFileToProject("Card.svelte", "<div class=\"card\"><slot /></div>")
+
+    myFixture.configureByText("Consumer.svelte", """
+      <script>
+        import * as UI from './lib/index';
+      </script>
+      <UI.Card>
+        <UI.Button variant="primary">Click me</UI.Button>
+      </UI.Card>
+    """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
+
+    myFixture.configureFromTempProjectFile("Button.svelte")
+    val usages = myFixture.fileUsages()
+    TestCase.assertTrue(
+      "Expected re-export usage in index.ts, got: $usages",
+      usages.any { it.contains("index.ts") }
+    )
+    TestCase.assertTrue(
+      "Expected template usage <UI.Button> in Consumer.svelte, got: $usages",
+      usages.any { it.contains("Consumer.svelte") }
+    )
+  }
+
+  @Test
   fun testFromExport() {
     addTypeScriptCommonFiles()
     myFixture.addFileToProject("UI.ts", """
