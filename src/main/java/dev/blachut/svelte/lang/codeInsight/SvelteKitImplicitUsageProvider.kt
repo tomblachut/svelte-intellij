@@ -12,8 +12,10 @@ import dev.blachut.svelte.lang.psi.SvelteHtmlFile
 
 class SvelteKitImplicitUsageProvider : ImplicitUsageProvider {
   private val kitPageFiles = setOf("+page", "+layout", "+page.server", "+layout.server", "+server")
-  private val kitHookFunctions = setOf("handle", "handleFetch", "handleError")
-  private val kitHookFiles = setOf("hooks.server", "hooks.client")
+  private val kitServerClientHookFunctions = setOf("handle", "handleFetch", "handleError", "handleValidationError", "init")
+  private val kitServerClientHookFiles = setOf("hooks.server", "hooks.client")
+  private val kitUniversalHookFunctions = setOf("reroute", "transport")
+  private val kitUniversalHookFiles = setOf("hooks")
 
   override fun isImplicitUsage(element: PsiElement): Boolean {
     if (!isSvelteProjectContext(element)) return false
@@ -35,8 +37,10 @@ class SvelteKitImplicitUsageProvider : ImplicitUsageProvider {
   }
 
   private fun isSvelteKitHookFunction(element: JSPsiElementBase): Boolean {
-    return element.name in kitHookFunctions && element.isExported
-           && element.containingFile?.virtualFile?.nameWithoutExtension in kitHookFiles
+    if (!element.isExported) return false
+    val fileName = element.containingFile?.virtualFile?.nameWithoutExtension ?: return false
+    return (element.name in kitServerClientHookFunctions && fileName in kitServerClientHookFiles)
+           || (element.name in kitUniversalHookFunctions && fileName in kitUniversalHookFiles)
   }
 
   private fun isSvelteKitSnapshotObjectProperty(element: JSPsiElementBase): Boolean {
