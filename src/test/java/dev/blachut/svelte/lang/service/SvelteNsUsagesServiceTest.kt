@@ -1,9 +1,9 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service
 
-import com.intellij.javascript.testFramework.web.fileUsages
-import com.intellij.javascript.testFramework.web.usagesAtCaret
 import com.intellij.platform.lsp.tests.checkLspHighlighting
+import com.intellij.polySymbols.testFramework.fileUsages
+import com.intellij.polySymbols.testFramework.usagesAtCaret
 import junit.framework.TestCase
 import org.junit.Test
 

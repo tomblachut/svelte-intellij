@@ -5,15 +5,10 @@ import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiReference
-import com.intellij.psi.search.FileTypeIndex
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.LocalSearchScope
-import com.intellij.psi.search.UsageSearchContext
+import com.intellij.psi.search.*
 import com.intellij.psi.search.searches.ReferencesSearch
-import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.xml.XmlTag
+import com.intellij.psi.xml.XmlTokenType
 import com.intellij.util.Processor
 import dev.blachut.svelte.lang.SvelteHtmlFileType
 import dev.blachut.svelte.lang.isSvelteNamespacedComponentTag
@@ -44,38 +39,45 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
     }
 
     // Search for namespaced component usages like <UI.Button> in Svelte templates.
-    // Tag names like "UI.Button" are single XML tokens, so the platform's word index
-    // won't find "Button" inside them. We must scan directly.
+    // The word index already splits "UI.Button" into separate words at the dot boundary
+    // (SvelteFilterLexer.scanWordsInToken + IdTableBuilding.isWordCodePoint treats '.' as non-word).
+    // LowLevelSearchUtil.processTreeUp walks from the leaf XML_NAME token up to the parent
+    // SvelteHtmlTag where SvelteTagNameReference lives, so isReferenceTo() filters correctly.
     val componentName = getComponentName(element) ?: return
 
-    val project = element.project
     val searchScope = when (effectiveSearchScope) {
-      is GlobalSearchScope -> effectiveSearchScope
-      is LocalSearchScope -> GlobalSearchScope.filesScope(project, effectiveSearchScope.virtualFiles.toList())
+      is GlobalSearchScope -> GlobalSearchScope.getScopeRestrictedByFileTypes(effectiveSearchScope, SvelteHtmlFileType)
+      is LocalSearchScope -> effectiveSearchScope
       else -> return
     }
 
-    val psiManager = PsiManager.getInstance(project)
-    for (vFile in FileTypeIndex.getFiles(SvelteHtmlFileType, searchScope)) {
-      val psiFile = psiManager.findFile(vFile) ?: continue
-      PsiTreeUtil.processElements(psiFile, XmlTag::class.java) { tag ->
-        val tagName = tag.name
-        if (isSvelteNamespacedComponentTag(tagName) && tagName.substringAfterLast('.') == componentName) {
-          val tagReference = tag.references.filterIsInstance<SvelteTagNameReference>().firstOrNull()
-          if (tagReference != null) {
-            consumer.process(tagReference)
-          }
-        }
-        true
-      }
-    }
+    queryParameters.optimizer.searchWord(
+      componentName,
+      searchScope,
+      UsageSearchContext.IN_FOREIGN_LANGUAGES,
+      true,
+      element,
+      NamespacedComponentResultProcessor(element)
+    )
   }
 
   private fun getComponentName(element: PsiElement): String? {
     return when (element) {
       is PsiFile -> if (element.name.endsWith(".svelte")) element.virtualFile?.nameWithoutExtension else null
-      is JSElement -> element.name
+      is JSElement -> element.name?.takeIf { it.isNotEmpty() && it[0].isUpperCase() }
       else -> null
     }
+  }
+}
+
+private class NamespacedComponentResultProcessor(
+  target: PsiElement,
+) : RequestResultProcessor(target) {
+  private val delegate = SingleTargetRequestResultProcessor(target)
+
+  override fun processTextOccurrence(element: PsiElement, offsetInElement: Int, consumer: Processor<in PsiReference>): Boolean {
+    if (element.node.elementType != XmlTokenType.XML_NAME) return true
+    if (!isSvelteNamespacedComponentTag(element.text)) return true
+    return delegate.processTextOccurrence(element, offsetInElement, consumer)
   }
 }
