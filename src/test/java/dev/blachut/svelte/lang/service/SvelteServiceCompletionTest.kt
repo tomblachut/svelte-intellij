@@ -116,12 +116,14 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
   @Test
   fun testComponentPropsCompletion() {
     addTypeScriptCommonFiles()
-    myFixture.addFileToProject("Hello1.svelte", """
+    myFixture.configureByText("Hello1.svelte", """
       <script lang="ts">
-        export let hello11 = "";
-        let hello11NotAvailable = 10;
+        export let <warning descr="Svelte: Component has unused export property 'hello11'. If it is for external reference only, please consider using `export const hello11`">hello11 = ""</warning>;
+        let <weak_warning descr="Svelte: 'hello11NotAvailable' is declared but its value is never read.">hello11NotAvailable</weak_warning> = 10;
       </script>
     """.trimIndent())
+    myFixture.checkLspHighlighting()
+    assertCorrectService()
 
     myFixture.configureByText("Usage.svelte", """
       <script lang="ts">
