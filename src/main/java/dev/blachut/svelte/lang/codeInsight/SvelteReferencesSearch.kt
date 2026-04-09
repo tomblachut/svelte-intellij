@@ -6,6 +6,7 @@ import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
+import com.intellij.openapi.progress.ProgressManager
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.RequestResultProcessor
@@ -81,6 +82,7 @@ private class NamespacedComponentResultProcessor(
     if (element !is XmlTag) return true
     if (!isSvelteNamespacedComponentTag(element.name)) return true
     for (ref in element.references) {
+      ProgressManager.checkCanceled()
       if (ref.isReferenceTo(target)) {
         if (!consumer.process(ref)) return false
       }
