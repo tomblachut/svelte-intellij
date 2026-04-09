@@ -116,7 +116,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
   @Test
   fun testComponentPropsCompletion() {
     addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello1.svelte", """
+    myFixture.addFileToProject("Hello1.svelte", """
       <script lang="ts">
         export let hello11 = "";
         let hello11NotAvailable = 10;
