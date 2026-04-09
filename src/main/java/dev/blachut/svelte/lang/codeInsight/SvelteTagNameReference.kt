@@ -43,24 +43,28 @@ class SvelteTagNameReference(nameElement: ASTNode, startTagFlag: Boolean) :
       if (elementName != null && elementName != lastSegment) return false
     }
     if (super.isReferenceTo(element)) return true
-    // For shorthand properties like `{ Button }` in `export default { Button }`,
-    // resolve() returns JSProperty but Find Usages target may be the ES6ImportedBinding
-    // or the component PsiFile itself.
-    val resolved = resolve()
+    // resolve() returns intermediate elements (JSProperty, ES6ImportedBinding) that may
+    // reference the target through import chains of arbitrary depth (e.g., Forms.Button.Label).
+    val resolved = resolve() ?: return false
+    return resolvesToTarget(resolved, element)
+  }
+
+  /**
+   * Follows the import/export chain from [resolved] to check if it ultimately references [target].
+   * Handles: JSProperty → value.resolve() → ES6ImportedBinding → findReferencedElements() → PsiFile.
+   * Recursion depth is bounded by the namespace nesting level (typically 2-3).
+   */
+  private fun resolvesToTarget(resolved: PsiElement, target: PsiElement): Boolean {
+    if (target.manager.areElementsEquivalent(resolved, target)) return true
+    if (resolved is ES6ImportedBinding) {
+      return resolved.findReferencedElements().any { target.manager.areElementsEquivalent(it, target) }
+    }
     if (resolved is JSProperty) {
       val value = resolved.value
       if (value is JSReferenceExpression) {
-        val target = value.resolve()
-        if (target != null && element.manager.areElementsEquivalent(target, element)) return true
-        if (target is ES6ImportedBinding) {
-          if (target.findReferencedElements().any { element.manager.areElementsEquivalent(it, element) }) return true
-        }
+        val next = value.resolve() ?: return false
+        return resolvesToTarget(next, target)
       }
-    }
-    // For re-exports like `export { default as Button } from './Button.svelte'`,
-    // resolve() returns ES6ImportedBinding — follow to referenced component file.
-    if (resolved is ES6ImportedBinding) {
-      if (resolved.findReferencedElements().any { element.manager.areElementsEquivalent(it, element) }) return true
     }
     return false
   }
