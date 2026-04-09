@@ -354,6 +354,46 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testAwaitThenWithoutVariable() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let promise = Promise.resolve(42);
+      </script>
+      {#await promise}
+        Loading...
+      {:then}
+        Loaded
+      {/await}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testAwaitCatchWithoutVariable() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let promise = Promise.resolve(42);
+      </script>
+      {#await promise}
+        Loading...
+      {:catch}
+        Error
+      {/await}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testInlineAwaitThenWithoutVariable() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let promise = Promise.resolve(42);
+      </script>
+      {#await promise then}
+        <p>Loaded</p>
+      {/await}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testShortAwaitPromise() {
     myFixture.configureByText("Foo.svelte", """
       <script>

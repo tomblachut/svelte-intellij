@@ -150,12 +150,18 @@ class AwaitStartType private constructor(langMode: SvelteLangMode) : SvelteBlock
       builder.remapCurrentToken(SvelteTokenTypes.THEN_KEYWORD)
       builder.advanceLexer()
 
-      parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+      // Variable binding is optional: {#await promise then} is valid
+      if (builder.tokenType != null && builder.tokenType != SvelteTokenTypes.END_MUSTACHE) {
+        parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+      }
     }
 
     if (builder.tokenType === SvelteTokenTypes.CATCH_KEYWORD) {
       builder.advanceLexer()
-      parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+      // Variable binding is optional: {#await promise catch} is valid
+      if (builder.tokenType != null && builder.tokenType != SvelteTokenTypes.END_MUSTACHE) {
+        parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+      }
     }
   }
 
@@ -175,8 +181,10 @@ class ThenClauseType private constructor(langMode: SvelteLangMode) : SvelteBlock
     builder.remapCurrentToken(SvelteTokenTypes.THEN_KEYWORD)
     builder.advanceLexer() // JSTokenTypes.IDENTIFIER -- fake THEN_KEYWORD
 
-    // TODO Check weird RBRACE placement
-    parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+    // Variable binding is optional: {:then} and {:then value} are both valid
+    if (builder.tokenType != null && builder.tokenType != SvelteTokenTypes.END_MUSTACHE) {
+      parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+    }
   }
 
   companion object {
@@ -194,7 +202,10 @@ class CatchClauseType private constructor(langMode: SvelteLangMode) : SvelteBloc
     SvelteTagParsing.parseNotAllowedWhitespace(builder, ":")
     builder.advanceLexer() // SvelteTokenTypes.CATCH_KEYWORD
 
-    parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+    // Variable binding is optional: {:catch} and {:catch error} are both valid
+    if (builder.tokenType != null && builder.tokenType != SvelteTokenTypes.END_MUSTACHE) {
+      parser.expressionParser.parseDestructuringElement(SvelteJSElementTypes.PARAMETER, false, false)
+    }
   }
 
   companion object {
