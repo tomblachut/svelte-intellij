@@ -9,7 +9,6 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.RequestResultProcessor
-import com.intellij.psi.search.SingleTargetRequestResultProcessor
 import com.intellij.psi.search.UsageSearchContext
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.xml.XmlTag
@@ -75,13 +74,17 @@ class SvelteReferencesSearch : QueryExecutorBase<PsiReference, ReferencesSearch.
 }
 
 private class NamespacedComponentResultProcessor(
-  target: PsiElement,
+  private val target: PsiElement,
 ) : RequestResultProcessor(target) {
-  private val delegate = SingleTargetRequestResultProcessor(target)
 
   override fun processTextOccurrence(element: PsiElement, offsetInElement: Int, consumer: Processor<in PsiReference>): Boolean {
     if (element !is XmlTag) return true
     if (!isSvelteNamespacedComponentTag(element.name)) return true
-    return delegate.processTextOccurrence(element, offsetInElement, consumer)
+    for (ref in element.references) {
+      if (ref.isReferenceTo(target)) {
+        if (!consumer.process(ref)) return false
+      }
+    }
+    return true
   }
 }
