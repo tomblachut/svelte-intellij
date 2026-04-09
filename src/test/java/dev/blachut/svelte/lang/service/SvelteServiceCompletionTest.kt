@@ -116,21 +116,10 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
   @Test
   fun testComponentPropsCompletion() {
     addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello1.svelte", """
-      <script lang="ts">
-        export let <warning descr="Svelte: Component has unused export property 'hello11'. If it is for external reference only, please consider using `export const hello11`">hello11 = ""</warning>;
-        let <weak_warning descr="Svelte: 'hello11NotAvailable' is declared but its value is never read.">hello11NotAvailable</weak_warning> = 10;
-      </script>
-    """.trimIndent())
-    myFixture.checkLspHighlighting()
-    assertCorrectService()
-
-    myFixture.configureByText("Usage.svelte", """
-      <script lang="ts">
-        import Hello1 from "./Hello1.svelte";
-      </script>
-      <Hello1 <caret> />
-    """.trimIndent())
+    withTestDataPathOverriden {
+      myFixture.copyDirectoryToProject("dev/blachut/svelte/lang/service/completion/ComponentPropsCompletion", "")
+    }
+    myFixture.configureFromTempProjectFile("Usage.svelte")
     myFixture.checkLspHighlighting()
     assertCorrectService()
 
