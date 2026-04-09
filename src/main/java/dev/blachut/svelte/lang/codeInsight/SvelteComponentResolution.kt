@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.ecmascript6.resolve.ES6PsiUtil
 import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
 import com.intellij.lang.javascript.psi.JSProperty
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementResolveResult
@@ -53,9 +54,7 @@ object SvelteComponentResolution {
       // Prefer direct JSProperty.value lookup for inline object literals.
       // Returns the actual JSProperty (renameable), unlike the synthetic
       // JSLocalImplicitElementImpl that getLocalElements may return via resolveFromType.
-      val fromProperties = expanded.mapNotNull {
-        ((it as? JSProperty)?.value as? JSObjectLiteralExpression)?.findProperty(segments[i])
-      }
+      val fromProperties = expanded.mapNotNull { findPropertyInExpanded(context, it, segments[i]) }
       if (fromProperties.isNotEmpty()) {
         currentElements = fromProperties
         continue
@@ -67,6 +66,28 @@ object SvelteComponentResolution {
       currentElements = members
     }
     return currentElements
+  }
+
+  /**
+   * Finds a named property in an expanded element. Handles two cases:
+   * 1. Inline object literal: `export default { Label, Icon }` → JSProperty.value is JSObjectLiteralExpression
+   * 2. Reference to another module: `export default { Button }` where Button is imported →
+   *    JSProperty.value is JSReferenceExpression, follow it to the target module's default export
+   */
+  private fun findPropertyInExpanded(context: PsiElement, element: PsiElement, name: String): JSProperty? {
+    if (element !is JSProperty) return null
+    val value = element.value
+    if (value is JSObjectLiteralExpression) {
+      return value.findProperty(name)
+    }
+    if (value is JSReferenceExpression) {
+      val target = value.resolve() ?: return null
+      val targetExpanded = ES6PsiUtil.expandElements(context, listOf(target))
+      for (exp in targetExpanded) {
+        (exp as? JSObjectLiteralExpression)?.findProperty(name)?.let { return it }
+      }
+    }
+    return null
   }
 
   private fun resolvePsi(tag: XmlTag, tagName: String, incompleteCode: Boolean): Array<ResolveResult> {
