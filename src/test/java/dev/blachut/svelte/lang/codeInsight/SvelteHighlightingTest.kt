@@ -414,6 +414,16 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testDoubleQuotesInAttributeExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let isTrue = true;
+      </script>
+      <div class="something {isTrue ? "a" : "b"}"></div>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testShortAwaitPromise() {
     myFixture.configureByText("Foo.svelte", """
       <script>

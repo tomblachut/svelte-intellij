@@ -78,6 +78,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   }
 
   fun testAttributeQuoted() = doTest()
+  fun testAttributeQuotedExpressionWithQuotes() = doTest()
   fun testAttributeShorthand() = doTest()
   fun testAttributeSpread() = doTest()
   fun testAttributeUnquoted() = doTest()
