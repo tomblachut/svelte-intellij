@@ -93,7 +93,11 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testAttachInlineWithCleanup() = doTest()
 
   fun testBlockAwaitCatch() = doTest()
+  fun testBlockAwaitCatchWithoutVariable() = doTest()
+  fun testBlockAwaitInlineCatchWithoutVariable() = doTest()
+  fun testBlockAwaitInlineThenWithoutVariable() = doTest()
   fun testBlockAwaitThenThenThen() = doTest()
+  fun testBlockAwaitThenWithoutVariable() = doTest()
   fun testBlockEachAmbiguousAs() = doTest()
   fun testBlockEachAsAsAsAs() = doTest()
   fun testBlockEachAssets() = doTest()
