@@ -1,0 +1,56 @@
+SvelteHtmlFile: HtmlEntityInExpression.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: main
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('main')
+      XmlToken:XML_TAG_END('>')
+      SvelteJS: CONTENT_EXPRESSION
+        PsiElement(JS:LBRACE)('{')
+        JSLiteralExpression
+          PsiElement(JS:STRING_LITERAL)('"&auml;"')
+        PsiElement(JS:RBRACE)('}')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('main')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: p
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('p')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_CHAR_ENTITY_REF('&amp;')
+        PsiWhiteSpace(' ')
+        XmlToken:XML_CHAR_ENTITY_REF('&lt;')
+        PsiWhiteSpace(' ')
+        XmlToken:XML_CHAR_ENTITY_REF('&gt;')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('p')
+      XmlToken:XML_TAG_END('>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: title
+        XmlToken:XML_NAME('title')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_CHAR_ENTITY_REF('&quot;')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('hello')
+          XmlToken:XML_CHAR_ENTITY_REF('&quot;')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      SvelteJS: CONTENT_EXPRESSION
+        PsiElement(JS:LBRACE)('{')
+        JSStringTemplateExpression
+          PsiElement(JS:BACKQUOTE)('`')
+          PsiElement(JS:STRING_TEMPLATE_PART)('&nbsp;')
+          PsiElement(JS:BACKQUOTE)('`')
+        PsiElement(JS:RBRACE)('}')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')
