@@ -137,6 +137,10 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testQuoteBalanceScriptComment() = doTest()
   fun testQuoteBalanceUnclosedStringLiteral() = doTest()
 
+  fun testCommentInExpression() = doTest()
+  fun testBlockCommentInExpression() = doTest()
+  fun testEscapedCharInExpression() = doTest()
+
   fun testScriptGenerics() = doTest()
   fun testScriptGenericsMultiple() = doTest()
   fun testScriptGenericsSimple() = doTest()

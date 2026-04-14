@@ -216,7 +216,11 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 }
 
 <SVELTE_INTERPOLATION, ATTRIBUTE_BRACES, ATTRIBUTE_VALUE_BRACES, ATTRIBUTE_VALUE_DQ_BRACES, ATTRIBUTE_VALUE_SQ_BRACES> {
-  {ESCAPED_QUOTES}   { return SvelteTokenTypes.CODE_FRAGMENT; }
+  // JS comments outside strings: consume entirely to avoid quote/brace desync (WEB-68668)
+  "//" [^\n\r]*      { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
+  "/*" ~"*/"         { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
+  // Escaped characters: don't interpret the next char for quote/brace tracking (WEB-74083)
+  "\\".              { return SvelteTokenTypes.CODE_FRAGMENT; }
   {SINGLE_QUOTE}     { toggleQuoteMode(SINGLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
   {DOUBLE_QUOTE}     { toggleQuoteMode(DOUBLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
   {BACKQUOTE}        { toggleQuoteMode(BACKQUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
