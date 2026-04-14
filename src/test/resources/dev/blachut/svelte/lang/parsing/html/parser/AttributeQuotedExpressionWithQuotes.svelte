@@ -1,0 +1,13 @@
+<div class="something {isTrue ? "a" : "b"}"></div>
+<div class='something {isTrue ? 'a' : 'b'}'></div>
+<div class="{isTrue ? "a" : "b"}"></div>
+<div class="{fn({key: "value"})}"></div>
+<div class="something {isTrue ? 'a' : 'b'}"></div>
+<div class="a {x ? "b" : "c"} d {y ? "e" : "f"}"></div>
+<div class="something { "}" }"></div>
+<div class="something { "{" }"></div>
+<div class='something { "}" }'></div>
+<div class="{ '}' }"></div>
+<div class="{ "a\"b" }"></div>
+<div class="{`hello`}"></div>
+<div class="{`a ${x} b`}"></div>
