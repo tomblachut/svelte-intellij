@@ -407,6 +407,13 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testHtmlEntityInExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      <main>{"&auml;"}</main>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testShortAwaitPromise() {
     myFixture.configureByText("Foo.svelte", """
       <script>

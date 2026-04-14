@@ -238,15 +238,17 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   [^]                { return SvelteTokenTypes.CODE_FRAGMENT; }
 }
 
-"&lt;" |
-"&gt;" |
-"&apos;" |
-"&quot;" |
-"&nbsp;" |
-"&amp;" |
-"&#"{DIGIT}+";" |
-"&#"[xX]({DIGIT}|[a-fA-F])+";" { return XmlTokenType.XML_CHAR_ENTITY_REF; }
-"&"{TAG_NAME}";" { return XmlTokenType.XML_ENTITY_REF_TOKEN; }
+<YYINITIAL, ATTRIBUTE_VALUE_DQ, ATTRIBUTE_VALUE_SQ> {
+  "&lt;" |
+  "&gt;" |
+  "&apos;" |
+  "&quot;" |
+  "&nbsp;" |
+  "&amp;" |
+  "&#"{DIGIT}+";" |
+  "&#"[xX]({DIGIT}|[a-fA-F])+";" { return XmlTokenType.XML_CHAR_ENTITY_REF; }
+  "&"{TAG_NAME}";" { return XmlTokenType.XML_ENTITY_REF_TOKEN; }
+}
 
 <YYINITIAL> ([^<{&\$# \n\r\t\f]|(\\\$)|(\\#))* { return XmlTokenType.XML_DATA_CHARACTERS; }
 <YYINITIAL, RAW_CONTENT> [^] { return XmlTokenType.XML_DATA_CHARACTERS; }
