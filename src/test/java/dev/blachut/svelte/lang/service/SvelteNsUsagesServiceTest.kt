@@ -2,8 +2,8 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.platform.lsp.tests.checkLspHighlighting
-import com.intellij.polySymbols.testFramework.fileUsages
-import com.intellij.polySymbols.testFramework.usagesAtCaret
+import com.intellij.javascript.testFramework.web.fileUsages
+import com.intellij.javascript.testFramework.web.usagesAtCaret
 import junit.framework.TestCase
 import org.junit.Test
 
