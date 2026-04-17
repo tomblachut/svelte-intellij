@@ -1,12 +1,12 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service.settings
 
-import com.intellij.javascript.nodejs.util.NodePackage
+import com.intellij.javascript.nodejs.util.NodePackageRef
 import com.intellij.javascript.util.JSLogOnceService
 import com.intellij.lang.typescript.compiler.TypeScriptCompilerSettings
 import com.intellij.lang.typescript.compiler.ui.TypeScriptServiceRestartService
 import com.intellij.lang.typescript.lsp.NestedReadWriteProperty
-import com.intellij.lang.typescript.lsp.createPackage
+import com.intellij.lang.typescript.lsp.createPackageRef
 import com.intellij.lang.typescript.lsp.defaultPackageKey
 import com.intellij.lang.typescript.lsp.extractRefText
 import com.intellij.lang.typescript.lsp.restartTypeScriptServicesAsync
