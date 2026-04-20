@@ -83,7 +83,6 @@ WHITE_SPACE=\s+
 SINGLE_QUOTE="'"
 DOUBLE_QUOTE="\""
 BACKQUOTE="`"
-ESCAPED_QUOTES=\\'|\\\"|\\`
 
 RAW_TAG_NAME=("script" | "style")
 TAG_NAME=({ALPHA}|"_"|":")({ALPHA}|{DIGIT}|"_"|":"|"."|"-")*
@@ -216,10 +215,10 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 }
 
 <SVELTE_INTERPOLATION, ATTRIBUTE_BRACES, ATTRIBUTE_VALUE_BRACES, ATTRIBUTE_VALUE_DQ_BRACES, ATTRIBUTE_VALUE_SQ_BRACES> {
-  // JS comments outside strings: consume entirely to avoid quote/brace desync (WEB-68668)
+  // JS comments outside strings: consume entirely to avoid quote/brace desync
   "//" [^\n\r]*      { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
   "/*" ~"*/"         { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
-  // Escaped characters: don't interpret the next char for quote/brace tracking (WEB-74083)
+  // Escaped characters: don't interpret the next char for quote/brace tracking
   "\\".              { return SvelteTokenTypes.CODE_FRAGMENT; }
   {SINGLE_QUOTE}     { toggleQuoteMode(SINGLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
   {DOUBLE_QUOTE}     { toggleQuoteMode(DOUBLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }

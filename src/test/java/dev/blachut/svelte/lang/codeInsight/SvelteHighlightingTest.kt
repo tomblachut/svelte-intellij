@@ -449,6 +449,26 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testQuoteInJsCommentInRawText() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let name = "world";
+      </script>
+      <title>Hello { name /* with a " quote */ } end</title>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRegexBraceInRawTextExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let items = ['{hello}', '{world}'];
+      </script>
+      <title>{items[0].replace(/\{/g, '(')}</title>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testShortAwaitPromise() {
     myFixture.configureByText("Foo.svelte", """
       <script>
