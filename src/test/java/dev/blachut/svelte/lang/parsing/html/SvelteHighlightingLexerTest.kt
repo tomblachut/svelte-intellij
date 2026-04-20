@@ -56,6 +56,10 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
   fun testBlockCommentInExpression() = doTest()
   fun testEscapedCharInExpression() = doTest()
 
+  fun testCommentInRawTextExpression() = doTest()
+  fun testBlockCommentInRawTextExpression() = doTest()
+  fun testEscapedCharInRawTextExpression() = doTest()
+
   fun testStyleTagScss() = doTest()
   fun testRawText() = doTest()
 
