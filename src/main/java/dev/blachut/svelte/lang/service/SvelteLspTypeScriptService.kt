@@ -2,10 +2,13 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.codeInsight.completion.CompletionParameters
+import com.intellij.codeInsight.intention.IntentionAction
+import com.intellij.lang.javascript.integration.JSAnnotationError
 import com.intellij.lang.typescript.compiler.TypeScriptService
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
 import com.intellij.lang.typescript.lsp.JSFrameworkLspAnnotationErrorFilter
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
+import com.intellij.lang.typescript.lsp.LspAnnotationError
 import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilter
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
@@ -43,6 +46,10 @@ class SvelteLspTypeScriptService(project: Project)
       return emptyArray()
     }
     return super.getNavigationFor(document, sourceElement, offsetInSourceElement)
+  }
+
+  override fun getServiceFixes(file: PsiFile, element: PsiElement?, result: JSAnnotationError): Collection<IntentionAction> {
+    return (result as? LspAnnotationError)?.quickFixes ?: emptyList()
   }
 
   /**
