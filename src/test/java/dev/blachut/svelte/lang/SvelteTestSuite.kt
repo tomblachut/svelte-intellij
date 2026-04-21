@@ -3,6 +3,7 @@ package dev.blachut.svelte.lang
 import dev.blachut.svelte.lang.codeInsight.SvelteAutoPopupTest
 import dev.blachut.svelte.lang.codeInsight.SvelteBreadcrumbsTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCompletionTest
+import dev.blachut.svelte.lang.codeInsight.SvelteComponentAutoImportTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCopyPasteTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateFunctionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateImportTest
@@ -53,6 +54,7 @@ import org.junit.runners.Suite
   // Code insight
   SvelteAutoPopupTest::class,
   SvelteCompletionTest::class,
+  SvelteComponentAutoImportTest::class,
   SvelteHighlightingTest::class,
   SvelteRenameTest::class,
   SvelteResolveTest::class,

@@ -1,0 +1,7 @@
+{
+  "name": "svelte-workspace-auto-import",
+  "packageManager": "yarn@4.9.2",
+  "workspaces": [
+    "apps/*"
+  ]
+}

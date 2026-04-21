@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": [
+    "src/**/*",
+    "../shared/**/*"
+  ]
+}
