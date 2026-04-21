@@ -404,4 +404,74 @@ class SvelteResolveTest : BasePlatformTestCase() {
   private fun doPathResolveTest(destination: String? = null) {
     checkResolveToDestination(destination, myFixture, getTestName(false), "svelte")
   }
+
+  fun testClassReferenceFromSvelteElement() {
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:element this={'div'} class="my-cl<caret>ass"></svelte:element>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+    val resolved = ref.resolve()
+    TestCase.assertNotNull("Class reference on <svelte:element> should resolve to the CSS selector", resolved)
+  }
+
+  fun testIdReferenceFromSvelteElement() {
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:element this={'div'} id="my-i<caret>d"></svelte:element>
+      <style>
+        #my-id { color: blue; }
+      </style>
+    """.trimIndent())
+    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+    val resolved = ref.resolve()
+    TestCase.assertNotNull("Id reference on <svelte:element> should resolve to the CSS selector", resolved)
+  }
+
+  fun testClassReferenceNotCreatedOnRegularDiv() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class="my-cl<caret>ass"></div>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+    val resolved = ref.resolve()
+    TestCase.assertNotNull(
+      "Class reference on a regular <div> must still resolve " +
+      "(via platform provider, not ours) — verifies our filter does not displace platform behavior",
+      resolved,
+    )
+  }
+
+  fun testClassReferenceFromSvelteSelf() {
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:self class="my-cl<caret>ass"></svelte:self>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+    val resolved = ref.resolve()
+    TestCase.assertNotNull("Class reference on <svelte:self> should resolve to the CSS selector (same scoped CSS as <svelte:element>)", resolved)
+  }
+
+  fun testClassReferenceNotCreatedOnSvelteComponent() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let Cmp = null;
+      </script>
+      <svelte:component this={Cmp} class="my-cl<caret>ass"></svelte:component>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    val ref = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNull(
+      "<svelte:component> forwards class to a differently-scoped child component; " +
+      "local .my-class should NOT resolve (scope boundary vs. <svelte:element> / <svelte:self>)",
+      ref,
+    )
+  }
 }

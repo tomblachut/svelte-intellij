@@ -150,4 +150,38 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             {/snippet}
             """.trimIndent())
   }
+
+  fun testRenameClassFromSvelteElement() {
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:element this={'div'} class="my-class"></svelte:element>
+      <style>
+        .my-cl<caret>ass { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.renameElementAtCaret("renamed-class")
+    myFixture.checkResult("""
+      <svelte:element this={'div'} class="renamed-class"></svelte:element>
+      <style>
+        .renamed-class { color: red; }
+      </style>
+    """.trimIndent())
+  }
+
+  fun testRenameClassFromSvelteElementWithMultipleClasses() {
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:element this={'div'} class="my-class other-class"></svelte:element>
+      <style>
+        .my-cl<caret>ass { color: red; }
+        .other-class { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.renameElementAtCaret("renamed-class")
+    myFixture.checkResult("""
+      <svelte:element this={'div'} class="renamed-class other-class"></svelte:element>
+      <style>
+        .renamed-class { color: red; }
+        .other-class { color: blue; }
+      </style>
+    """.trimIndent())
+  }
 }

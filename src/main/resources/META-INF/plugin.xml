@@ -31,6 +31,7 @@
 
   <!-- region Generated dependencies - run `Generate Product Layouts` to regenerate -->
   <dependencies>
+    <module name="intellij.css.backend"/>
     <module name="intellij.javascript.parser"/>
     <module name="intellij.xml.analysis"/>
     <module name="intellij.xml.emmet"/>
@@ -102,6 +103,7 @@
     <idIndexer filetype="Svelte" implementationClass="dev.blachut.svelte.lang.index.SvelteIdIndexer"/>
     <referencesSearch implementation="dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch" order="first"/>
     <psi.referenceContributor language="SvelteHTML" implementation="dev.blachut.svelte.lang.codeInsight.SveltePathReferenceContributor"/>
+    <psi.referenceContributor language="SvelteHTML" implementation="dev.blachut.svelte.lang.codeInsight.SvelteCssReferenceContributor"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteKitImplicitUsageProvider"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteConfigImplicitUsageProvider"/>
     <implicitUsageProvider implementation="dev.blachut.svelte.lang.codeInsight.SvelteComponentPropsImplicitUsageProvider"/>

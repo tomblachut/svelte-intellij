@@ -1,6 +1,8 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.JSAbstractFindUsagesTest
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlTag
 import com.intellij.testFramework.UsefulTestCase
 import dev.blachut.svelte.lang.SvelteTestScenario
 import dev.blachut.svelte.lang.configureBundledSvelte
@@ -50,5 +52,34 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
   private fun doTest() {
     val usages = doFindUsages()
     UsefulTestCase.assertSize(8, usages) // 8 + 1 false positive - 1 false negative
+  }
+
+  fun testFindUsagesOfCssClassIncludesSvelteElement() {
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:element this={'div'} class="my-class"></svelte:element>
+      <style>
+        .my-cl<caret>ass { color: red; }
+      </style>
+    """.trimIndent())
+    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+    val svelteElementUsages = usages.filter { usage ->
+      PsiTreeUtil.getParentOfType(usage.element, XmlTag::class.java)?.name == "svelte:element"
+    }
+    assertEquals("Expected exactly one usage inside <svelte:element>", 1, svelteElementUsages.size)
+  }
+
+  fun testFindUsagesOfCssClassInMultiClassAttribute() {
+    myFixture.configureByText("Foo.svelte", """
+      <svelte:element this={'div'} class="my-class other-class"></svelte:element>
+      <style>
+        .my-cl<caret>ass { color: red; }
+        .other-class { color: blue; }
+      </style>
+    """.trimIndent())
+    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+    val svelteElementUsages = usages.filter { usage ->
+      PsiTreeUtil.getParentOfType(usage.element, XmlTag::class.java)?.name == "svelte:element"
+    }
+    assertEquals("Expected exactly one usage of .my-class (not .other-class)", 1, svelteElementUsages.size)
   }
 }
