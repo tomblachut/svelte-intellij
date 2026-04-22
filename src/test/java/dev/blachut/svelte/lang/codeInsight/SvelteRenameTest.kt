@@ -184,4 +184,20 @@ class SvelteRenameTest : JSAbstractRenameTest() {
       </style>
     """.trimIndent())
   }
+
+  fun testRenameClassFromCssSelectorToExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'my-class'}></div>
+      <style>
+        .my-cl<caret>ass { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.renameElementAtCaret("renamed-class")
+    myFixture.checkResult("""
+      <div class={'renamed-class'}></div>
+      <style>
+        .renamed-class { color: red; }
+      </style>
+    """.trimIndent())
+  }
 }

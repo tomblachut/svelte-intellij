@@ -4,6 +4,10 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.JSTestUtils.checkResolveToDestination
 import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
+import com.intellij.polySymbols.search.PsiSourcedPolySymbol
+import com.intellij.polySymbols.testFramework.multiResolvePolySymbolReference
+import com.intellij.polySymbols.testFramework.resolvePolySymbolReference
+import com.intellij.psi.css.CssClass
 import com.intellij.psi.util.contextOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.blachut.svelte.lang.getSvelteTestDataPath
@@ -472,6 +476,228 @@ class SvelteResolveTest : BasePlatformTestCase() {
       "<svelte:component> forwards class to a differently-scoped child component; " +
       "local .my-class should NOT resolve (scope boundary vs. <svelte:element> / <svelte:self>)",
       ref,
+    )
+  }
+
+  fun testClassReferenceInStringLiteralExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'my-cl<caret>ass'}></div>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'my-cl<caret>ass'")
+  }
+
+  fun testClassReferenceInConditionalExpressionThenBranch() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class={cond ? 'fo<caret>o' : 'bar'}></div>
+      <style>
+        .foo { color: red; }
+        .bar { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+  }
+
+  fun testClassReferenceInConditionalExpressionElseBranch() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class={cond ? 'foo' : 'ba<caret>r'}></div>
+      <style>
+        .foo { color: red; }
+        .bar { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'ba<caret>r'")
+  }
+
+  fun testClassReferenceInArrayLiteralFirstElement() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class={['fo<caret>o', 'bar']}></div>
+      <style>
+        .foo { color: red; }
+        .bar { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+  }
+
+  fun testClassReferenceInArrayLiteralSecondElement() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class={['foo', 'ba<caret>r']}></div>
+      <style>
+        .foo { color: red; }
+        .bar { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'ba<caret>r'")
+  }
+
+  fun testClassReferenceInObjectLiteralInsideArrayLiteral() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class={['base', { ac<caret>tive: cond }]}></div>
+      <style>
+        .base { color: red; }
+        .active { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("ac<caret>tive:")
+  }
+
+  fun testClassReferenceInArrayLiteralInsideConditionalExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class={cond ? ['fo<caret>o'] : []}></div>
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+  }
+
+  fun testClassReferenceInObjectLiteralPropertyKey() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class={{ fo<caret>o: cond }}></div>
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("fo<caret>o:")
+  }
+
+  fun testClassReferenceInExpressionOnSvelteElement() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let t = 'div';</script>
+      <svelte:element this={t} class={'fo<caret>o'}></svelte:element>
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+  }
+
+  fun testClassReferenceInExpressionOnSvelteSelf() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <svelte:self class={{ fo<caret>o: cond }}></svelte:self>
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("fo<caret>o:")
+  }
+
+  fun testClassReferenceInExpressionNotCreatedOnSvelteComponent() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>import Foo from './Foo.svelte';</script>
+      <svelte:component this={Foo} class={'fo<caret>o'}></svelte:component>
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    TestCase.assertTrue(
+      "<svelte:component> is excluded from class expression scope; must not resolve to the .foo CSS rule (got: $symbols)",
+      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+    )
+  }
+
+  fun testClassReferenceInExpressionNotCreatedOnComponentTag() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>import Foo from './Foo.svelte';</script>
+      <Foo class={'fo<caret>o'} />
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    assertTrue(
+      "Component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
+      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+    )
+  }
+
+  fun testClassReferenceInExpressionNotCreatedOnNamespacedComponentTag() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let Forms = { Button: null };</script>
+      <Forms.Button class={{ fo<caret>o: true }} />
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    val symbols = myFixture.multiResolvePolySymbolReference("fo<caret>o:")
+    assertTrue(
+      "Namespaced component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
+      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+    )
+  }
+
+  fun testClassReferenceInExpressionResolvesToNullForUnknownClass() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'unknow<caret>n'}></div>
+      <style>
+        .other { color: red; }
+      </style>
+    """.trimIndent())
+    val symbols = myFixture.multiResolvePolySymbolReference("'unknow<caret>n'")
+    TestCase.assertTrue(
+      "Unknown class must not resolve to a real CSS rule (got: $symbols)",
+      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+    )
+  }
+
+  fun testClassReferenceInExpressionMultiClassLiteralFirst() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'fo<caret>o bar'}></div>
+      <style>
+        .foo { color: red; }
+        .bar { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'fo<caret>o bar'")
+  }
+
+  fun testClassReferenceInExpressionMultiClassLiteralSecond() {
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'foo ba<caret>r'}></div>
+      <style>
+        .foo { color: red; }
+        .bar { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.resolvePolySymbolReference("'foo ba<caret>r'")
+  }
+
+  fun testClassReferenceInExpressionFromFunctionCallNotResolved() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>function cn(s) { return s; }</script>
+      <div class={cn('fo<caret>o')}></div>
+      <style>
+        .foo { color: red; }
+      </style>
+    """.trimIndent())
+    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    TestCase.assertTrue(
+      "Function-call wrapped class strings are out of scope; must not resolve to a real CSS rule (got: $symbols)",
+      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+    )
+  }
+
+  fun testIdReferenceInExpressionIsNotCreated() {
+    myFixture.configureByText("Foo.svelte", """
+      <div id={'fo<caret>o'}></div>
+      <style>
+        #foo { color: red; }
+      </style>
+    """.trimIndent())
+    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    TestCase.assertTrue(
+      "id={...} expressions are out of scope for Tier A (class-only); must not resolve to a real CSS rule (got: $symbols)",
+      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
     )
   }
 }

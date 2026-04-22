@@ -1766,6 +1766,179 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInExpression() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'my-class'}></div>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInMultiClassExpression() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'foo bar'}></div>
+      <style>
+        .foo { color: red; }
+        .bar { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInMixedClassAttribute() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class="base {cond ? 'tern-a' : 'tern-b'} tail {'later'}"></div>
+      <style>
+        .base { color: red; }
+        .tern-a { color: green; }
+        .tern-b { color: blue; }
+        .tail { color: yellow; }
+        .later { color: purple; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInClassDirective() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class:my-class={cond}></div>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInObjectLiteralExpression() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class={{ obj_foo: cond, 'obj-bar': cond }}></div>
+      <style>
+        .obj_foo { color: red; }
+        .obj-bar { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInObjectLiteralOnSvelteSelf() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <svelte:self class={{ self_foo: cond }}></svelte:self>
+      <style>
+        .self_foo { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInTernaryExpression() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>let cond = true;</script>
+      <div class={cond ? 'tern-a' : 'tern-b'}></div>
+      <style>
+        .tern-a { color: red; }
+        .tern-b { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInArrayLiteral() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <div class={['arr-a', 'arr-b']}></div>
+      <style>
+        .arr-a { color: red; }
+        .arr-b { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorFlaggedWhenWrappedInFunctionCall() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>function cn(s) { return s; }</script>
+      <div class={cn('used-elsewhere')}></div>
+      <style>
+        <warning descr="Selector used-elsewhere is never used">.used-elsewhere</warning> { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorNotFlaggedWhenUsedInClassExpressionOnSvelteElement() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>let t = 'div';</script>
+      <svelte:element this={t} class={'my-class'}></svelte:element>
+      <style>
+        .my-class { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorFlaggedWhenNotUsedAnywhere() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <div class={'used-class'}></div>
+      <style>
+        .used-class { color: red; }
+        <warning descr="Selector unused-class is never used">.unused-class</warning> { color: blue; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorFlaggedOnSvelteComponent() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>import Foo from './Foo.svelte';</script>
+      <svelte:component this={Foo} class={'foo'}></svelte:component>
+      <style>
+        <warning descr="Selector foo is never used">.foo</warning> { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorFlaggedOnComponentClassProp() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>import Foo from './Foo.svelte';</script>
+      <Foo class={'foo'} />
+      <style>
+        <warning descr="Selector foo is never used">.foo</warning> { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testUnusedCssSelectorFlaggedOnNamespacedComponentClassProp() {
+    myFixture.enableInspections(CssUnusedSymbolInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <script>let Forms = { Button: null };</script>
+      <Forms.Button class={{ foo: true }} />
+      <style>
+        <warning descr="Selector foo is never used">.foo</warning> { color: red; }
+      </style>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   companion object {
     fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
       val l = mutableListOf<LocalInspectionTool>()

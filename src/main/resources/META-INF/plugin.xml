@@ -35,6 +35,7 @@
     <module name="intellij.css.backend"/>
     <module name="intellij.javascript.analysis.impl"/>
     <module name="intellij.javascript.backend"/>
+    <module name="intellij.javascript.backend.css"/>
     <module name="intellij.javascript.parser"/>
     <module name="intellij.platform.webide.impl"/>
     <module name="intellij.xml.analysis"/>
@@ -55,8 +56,10 @@
   <extensions defaultExtensionNs="com.intellij">
     <registryKey defaultValue="false" description="Use bundled Svelte services" key="svelte.language.server.bundled.enabled"/>
     <registryKey defaultValue="" description="Svelte service version for downloading" key="svelte.language.server.default.version"/>
-    <registryKey defaultValue="" description="Svelte TypeScript plugin version for downloading" key="svelte.typescript.plugin.default.version"/>
-    <registryKey defaultValue="false" description="Enable Svelte service-powered type engine by default" key="svelte.service.powered.type.engine.enabled.by.default"/>
+    <registryKey defaultValue="" description="Svelte TypeScript plugin version for downloading"
+                 key="svelte.typescript.plugin.default.version"/>
+    <registryKey defaultValue="false" description="Enable Svelte service-powered type engine by default"
+                 key="svelte.service.powered.type.engine.enabled.by.default"/>
 
     <fileType name="Svelte" extensions="svelte" language="SvelteHTML"
               implementationClass="dev.blachut.svelte.lang.SvelteHtmlFileType" fieldName="INSTANCE"/>
@@ -188,6 +191,7 @@
     <editorFactoryDocumentListener implementation="dev.blachut.svelte.lang.service.SvelteLspCustomDocumentListener"/>
 
     <polySymbols.webTypes source="web-types/svelte@3.0.0.web-types.json" enableByDefault="true"/>
+    <polySymbols.queryScopeContributor implementation="dev.blachut.svelte.lang.web.SvelteCssClassQueryScopeContributor"/>
     <codeInsight.codeVisionSettingsPreviewLanguage language="SvelteHTML" modelId="component.usage"/>
     <projectSettings service="dev.blachut.svelte.lang.service.settings.SvelteServiceSettings"/>
   </extensions>
@@ -218,9 +222,9 @@
                              implementationClass="dev.blachut.svelte.lang.SvelteTypeScriptAnalysisHandlersFactory"/>
 
     <highlightingHandlersFactory language="SvelteJS"
-                             implementationClass="dev.blachut.svelte.lang.SvelteHighlightingHandlersFactory"/>
+                                 implementationClass="dev.blachut.svelte.lang.SvelteHighlightingHandlersFactory"/>
     <highlightingHandlersFactory language="SvelteTS"
-                             implementationClass="dev.blachut.svelte.lang.SvelteHighlightingHandlersFactory"/>
+                                 implementationClass="dev.blachut.svelte.lang.SvelteHighlightingHandlersFactory"/>
 
     <moduleReferenceContributor implementation="dev.blachut.svelte.lang.codeInsight.SvelteKitModuleReferenceContributor"/>
     <moduleExportsProvider id="svelte" implementation="dev.blachut.svelte.lang.codeInsight.SvelteModuleExportsProvider"/>

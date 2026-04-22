@@ -39,6 +39,7 @@
     <orderEntry type="module" module-name="intellij.javascript.debugger.ui" />
     <orderEntry type="module" module-name="intellij.css.psi" />
     <orderEntry type="module" module-name="intellij.css.backend" />
+    <orderEntry type="module" module-name="intellij.javascript.backend.css" />
     <orderEntry type="module" module-name="intellij.platform.debugger" />
     <orderEntry type="module" module-name="intellij.xml.impl" />
     <orderEntry type="module" module-name="intellij.spellchecker" />
