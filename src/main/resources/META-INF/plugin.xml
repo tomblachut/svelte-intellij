@@ -33,6 +33,7 @@
   <dependencies>
     <module name="intellij.css.backend"/>
     <module name="intellij.javascript.parser"/>
+    <module name="intellij.platform.webide.impl"/>
     <module name="intellij.xml.analysis"/>
     <module name="intellij.xml.emmet"/>
     <module name="intellij.xml.impl"/>
