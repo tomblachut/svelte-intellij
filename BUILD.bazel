@@ -67,6 +67,7 @@ jvm_library(
     "//plugins/JavaScriptLanguage/javascript-codeinsight",
     "//plugins/JavaScriptLanguage/javascript-ultimate",
     "@community//libraries/kotlinx/collections-immutable:libraries-kotlinx-collections-immutable",
+    "//plugins/JavaScriptLanguage/js-analysis-impl:javascript-analysis-impl",
   ]
 )
 
@@ -166,6 +167,7 @@ jvm_library(
     "//plugins/JavaScriptLanguage/javascript-codeinsight:javascript-codeinsight_test_lib",
     "//plugins/JavaScriptLanguage/javascript-ultimate:javascript-ultimate_test_lib",
     "@community//libraries/kotlinx/collections-immutable:libraries-kotlinx-collections-immutable_test_lib",
+    "//plugins/JavaScriptLanguage/js-analysis-impl:javascript-analysis-impl_test_lib",
   ]
 )
 ### auto-generated section `build intellij.svelte` end
@@ -281,6 +283,8 @@ jvm_library(
     "@community//libraries/caffeine:caffeine_test_lib",
     "//plugins/JavaScriptLanguage/web-platform:javascript-web",
     "//plugins/JavaScriptLanguage/web-platform:javascript-web_test_lib",
+    "//plugins/JavaScriptLanguage/js-analysis-impl:javascript-analysis-impl",
+    "//plugins/JavaScriptLanguage/js-analysis-impl:javascript-analysis-impl_test_lib",
     "@community//platform/usageView",
     "@community//platform/usageView:usageView_test_lib",
     "@community//platform/testFramework",
