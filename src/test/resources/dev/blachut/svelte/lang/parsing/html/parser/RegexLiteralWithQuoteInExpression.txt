@@ -1,0 +1,103 @@
+SvelteHtmlFile: RegexLiteralWithQuoteInExpression.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSLiteralExpression
+            PsiElement(JS:TRUE_KEYWORD)('true')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n  ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:AT)('@')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('a')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSCallExpression
+                  JSParenthesizedExpression
+                    PsiElement(JS:LPAR)('(')
+                    JSFunctionExpression
+                      JSAttributeList
+                        <empty list>
+                      JSParameterList
+                        PsiElement(JS:LPAR)('(')
+                        PsiElement(JS:RPAR)(')')
+                      PsiWhiteSpace(' ')
+                      PsiElement(JS:EQGT)('=>')
+                      PsiWhiteSpace(' ')
+                      JSBlockStatement
+                        PsiElement(JS:LBRACE)('{')
+                        PsiWhiteSpace('\n    ')
+                        JSVarStatement
+                          JSAttributeList
+                            <empty list>
+                          PsiElement(JS:CONST_KEYWORD)('const')
+                          PsiWhiteSpace(' ')
+                          JSVariable
+                            PsiElement(JS:IDENTIFIER)('r')
+                            PsiWhiteSpace(' ')
+                            PsiElement(JS:EQ)('=')
+                            PsiWhiteSpace(' ')
+                            JSCallExpression
+                              JSReferenceExpression
+                                JSLiteralExpression
+                                  PsiElement(JS:STRING_LITERAL)(''H"e"l"l"o'')
+                                PsiElement(JS:DOT)('.')
+                                PsiElement(JS:IDENTIFIER)('replace')
+                              JSArgumentList
+                                PsiElement(JS:LPAR)('(')
+                                JSLiteralExpression
+                                  PsiElement(JS:REGEXP_LITERAL)('/"/g')
+                                PsiElement(JS:COMMA)(',')
+                                PsiWhiteSpace(' ')
+                                JSLiteralExpression
+                                  PsiElement(JS:STRING_LITERAL)('""')
+                                PsiElement(JS:RPAR)(')')
+                          PsiElement(JS:SEMICOLON)(';')
+                        PsiWhiteSpace('\n    ')
+                        JSReturnStatement
+                          PsiElement(JS:RETURN_KEYWORD)('return')
+                          PsiWhiteSpace(' ')
+                          JSReferenceExpression
+                            PsiElement(JS:IDENTIFIER)('r')
+                          PsiElement(JS:SEMICOLON)(';')
+                        PsiWhiteSpace('\n  ')
+                        PsiElement(JS:RBRACE)('}')
+                    PsiElement(JS:RPAR)(')')
+                  JSArgumentList
+                    PsiElement(JS:LPAR)('(')
+                    PsiElement(JS:RPAR)(')')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n  ')
+          SvelteHtmlTag: div
+            XmlToken:XML_START_TAG_START('<')
+            XmlToken:XML_NAME('div')
+            XmlToken:XML_TAG_END('>')
+            SvelteJS: CONTENT_EXPRESSION
+              PsiElement(JS:LBRACE)('{')
+              JSReferenceExpression
+                PsiElement(JS:IDENTIFIER)('a')
+              PsiElement(JS:RBRACE)('}')
+            XmlToken:XML_END_TAG_START('</')
+            XmlToken:XML_NAME('div')
+            XmlToken:XML_TAG_END('>')
+          XmlText
+            PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

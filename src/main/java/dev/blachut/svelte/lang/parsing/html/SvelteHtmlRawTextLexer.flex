@@ -6,43 +6,17 @@ import com.intellij.psi.xml.*;
 import com.intellij.psi.TokenType;
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes;
 import com.intellij.lang.javascript.JSTokenTypes;
+import dev.blachut.svelte.lang.parsing.html.SvelteJsBoundaryScanner;
 
 %%
 
 %unicode
 
 %{
-  private static final int NO_QUOTE = 0;
-  private static final int SINGLE_QUOTE = 1;
-  private static final int DOUBLE_QUOTE = 2;
-  private static final int BACKQUOTE = 3;
-
-  public int bracesNestingLevel = 0;
-  public int quoteMode = NO_QUOTE;
-
   public _SvelteHtmlRawTextLexer() {
     this((java.io.Reader)null);
   }
-
-  public final void yybeginNestable(int state) {
-      bracesNestingLevel = 0;
-      quoteMode = NO_QUOTE;
-      yybegin(state);
-  }
-
-  private void toggleQuoteMode(int mode) {
-    if (quoteMode == NO_QUOTE) {
-      quoteMode = mode;
-    } else if (quoteMode == mode) {
-      quoteMode = NO_QUOTE;
-    }
-  }
 %}
-
-%eof{
-  bracesNestingLevel = 0;
-  quoteMode = NO_QUOTE;
-%eof}
 
 %class _SvelteHtmlRawTextLexer
 %public
@@ -62,13 +36,9 @@ WHITE_SPACE_CHARS=[ \n\r\t\f\u2028\u2029\u0085]+
 
 TAG_NAME=({ALPHA}|"_"|":")({ALPHA}|{DIGIT}|"_"|":"|"."|"-")*
 
-SINGLE_QUOTE="'"
-DOUBLE_QUOTE="\""
-BACKQUOTE="`"
-
 %%
 
-<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE; }
+<YYINITIAL> "{" { yybegin(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE; }
 
 <YYINITIAL> {WHITE_SPACE_CHARS} { return XmlTokenType.XML_REAL_WHITE_SPACE; }
 
@@ -95,22 +65,16 @@ BACKQUOTE="`"
 }
 
 <SVELTE_INTERPOLATION> {
-  // JS comments outside strings: consume entirely to avoid quote/brace desync
-  "//" [^\n\r]*      { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
-  "/*" ~"*/"         { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
-  // Escaped characters: don't interpret the next char for quote/brace tracking
-  "\\".              { return SvelteTokenTypes.CODE_FRAGMENT; }
-  {SINGLE_QUOTE}     { toggleQuoteMode(SINGLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
-  {DOUBLE_QUOTE}     { toggleQuoteMode(DOUBLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
-  {BACKQUOTE}        { toggleQuoteMode(BACKQUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
-  "{"                { if (quoteMode == NO_QUOTE) { bracesNestingLevel++; } return SvelteTokenTypes.CODE_FRAGMENT; }
-  "}"                {
-                        if (quoteMode != NO_QUOTE) { return SvelteTokenTypes.CODE_FRAGMENT; }
-                        if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTokenTypes.CODE_FRAGMENT; }
-                        if (yystate() == SVELTE_INTERPOLATION) yybegin(YYINITIAL);
-                        return SvelteTokenTypes.END_MUSTACHE;
-                     }
-  [^]                { return SvelteTokenTypes.CODE_FRAGMENT; }
+  // Match any non-`}` character. Action delegates boundary detection to scanner.
+  [^}] {
+    int boundary = SvelteJsBoundaryScanner.INSTANCE.findUnbalancedRbrace(zzBuffer, zzStartRead, zzEndRead);
+    zzMarkedPos = boundary;
+    return SvelteTokenTypes.CODE_FRAGMENT;
+  }
+  "}" {
+    if (yystate() == SVELTE_INTERPOLATION) yybegin(YYINITIAL);
+    return SvelteTokenTypes.END_MUSTACHE;
+  }
 }
 
 <YYINITIAL> {
