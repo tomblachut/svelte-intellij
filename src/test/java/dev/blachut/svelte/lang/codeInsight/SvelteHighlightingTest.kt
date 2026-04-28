@@ -437,6 +437,79 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testRegexLiteralWithQuoteInExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      {#if true}
+        {@const a = (() => {
+          const r = 'H"e"l"l"o'.replace(/"/g, "");
+          return r;
+        })()}
+        <div>{a}</div>
+      {/if}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRegexInsideStringLiteral() {
+    myFixture.configureByText("Foo.svelte", """
+      <p>{"foo /bar/ baz"}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testDivisionChainNotMisreadAsRegex() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let a = 6, b = 2, c = 1;</script>
+      <p>{a / b / c}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRegexWithCharClassContainingSlash() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let s = 'a/b';</script>
+      <p>{s.replace(/[/]/g, "-")}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRegexWithEscapedDelimiter() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let s = 'a/b';</script>
+      <p>{s.replace(/\//g, "-")}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testLineCommentContainingSlashes() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        function handleClick() { console.log('clicked'); }
+      </script>
+      <button onclick={() => {
+        // call /api/foo/ now
+        handleClick();
+      }}>Click</button>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testMultipleRegexLiteralsOnOneLine() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let s = 'a"b\'c';</script>
+      <p>{s.replace(/"/g, "").replace(/'/g, "")}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRegexInAttributeInterpolation() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let s = 'a"b';</script>
+      <div class={s.replace(/"/g, "")}>X</div>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testRegexBraceInExpression() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -465,6 +538,154 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
         let items = ['{hello}', '{world}'];
       </script>
       <title>{items[0].replace(/\{/g, '(')}</title>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testTemplateLiteralSubstitution() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let name = 'world';</script>
+      <p>{`hello ${'$'}{name} from template`}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testJsxSelfClosingInInterpolation() {
+    myFixture.configureByText("Foo.svelte", """
+      <p>{<<error descr="Missing import statement"><warning descr="Cannot resolve symbol 'Foo'">Foo</warning></error> />}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testJsxWithExpressionContainerInInterpolation() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let value = 1; let nested = 2;</script>
+      <p>{<<error descr="Missing import statement"><warning descr="Cannot resolve symbol 'Foo'">Foo</warning></error> attr={value}>{nested}</<warning descr="Cannot resolve symbol 'Foo'">Foo</warning>>}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testComparisonLessThanIsNotJsx() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let a = 1; let b = 2;</script>
+      <p>{a < b}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testComparisonGreaterThanIsNotJsx() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let a = 1; let b = 2;</script>
+      <p>{a > b}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testEachWithDestructuring() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let items = [{id: 1, name: 'a'}, {id: 2, name: 'b'}];</script>
+      {#each items as item, idx (item.id)}
+        <p>{idx}: {item.name}</p>
+      {/each}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testAwaitThenBlock() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>
+        let promise = Promise.resolve('done');
+      </script>
+      {#await promise then result}
+        <p>{result}</p>
+      {/await}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testSnippetWithArgumentExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      {#snippet <warning descr="Unused function foo">foo</warning>(name, count)}
+        <p>{name} x{count}</p>
+      {/snippet}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRenderWithFunctionCall() {
+    myFixture.configureByText("Foo.svelte", """
+      {#snippet greet(name)}
+        <p>Hi {name}</p>
+      {/snippet}
+      {@render greet('world')}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testConstWithComplexExpression() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let items = [1, 2, 3];</script>
+      {#if items.length > 0}
+        {@const total = items.reduce((sum, n) => sum + n, 0)}
+        <p>Total: {total}</p>
+      {/if}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRawTextTitleWithCommentAndAmpersand() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let x = 1, y = 2;</script>
+      <title>{x /* &amp; comment */ + y}</title>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRawTextTitleWithEscapedQuote() {
+    myFixture.configureByText("Foo.svelte", """
+      <title>{'foo\'bar'}</title>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testRawTextTitleWithTemplateSubstitution() {
+    myFixture.configureByText("Foo.svelte", """
+      <script>let name = 'world';</script>
+      <title>{`hello ${'$'}{name} from template`}</title>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testTsTypeAssertionInInterpolation() {
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">let x: unknown = 42;</script>
+      <p>{x as number}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testTsSatisfiesInInterpolation() {
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">
+        type Color = 'red' | 'blue';
+        let c: Color = 'red';
+      </script>
+      <p>{c satisfies Color}</p>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testTsGenericArrowInInterpolation() {
+    // §2.3 risk validation in full pipeline.
+    // The generic arrow MUST be inside the Svelte interpolation `{...}` so the
+    // SvelteJsBoundaryScanner actually has to handle the leading <T,> token.
+    // Putting it in <script lang="ts"> would route through TS parsing without
+    // exercising the scanner's JSX-vs-comparison heuristic.
+    // If this fails, the dialect-mismatch risk has materialized — escalate per
+    // spec §7 mitigation (plumb SvelteLangMode through to scanner).
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="ts">let x = 42;</script>
+      <p>{(<T,>(v: T): T => v)(x)}</p>
     """.trimIndent())
     myFixture.testHighlighting()
   }

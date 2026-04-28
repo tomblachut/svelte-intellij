@@ -4,7 +4,6 @@ import com.intellij.lexer.FlexAdapter
 import com.intellij.lexer.MergingLexerAdapter
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.xml.XmlTokenType
-import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteHtmlBaseLexer(private val assumeExternalBraces: Boolean = false)
   : MergingLexerAdapter(FlexAdapter(_SvelteHtmlLexer()), TOKENS_TO_MERGE) {
@@ -17,13 +16,10 @@ class SvelteHtmlBaseLexer(private val assumeExternalBraces: Boolean = false)
     super.start(buffer, startOffset, endOffset, correctedState)
   }
 
-  val flexLexer: _SvelteHtmlLexer
-    get() = (original as FlexAdapter).flex as _SvelteHtmlLexer
 }
 
 private val TOKENS_TO_MERGE = TokenSet.create(
   XmlTokenType.XML_COMMENT_CHARACTERS, XmlTokenType.XML_WHITE_SPACE, XmlTokenType.XML_REAL_WHITE_SPACE,
   XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN, XmlTokenType.XML_DATA_CHARACTERS,
-  XmlTokenType.XML_TAG_CHARACTERS,
-  SvelteTokenTypes.CODE_FRAGMENT
+  XmlTokenType.XML_TAG_CHARACTERS
 )

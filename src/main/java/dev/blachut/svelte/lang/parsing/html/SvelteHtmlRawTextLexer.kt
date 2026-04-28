@@ -10,7 +10,7 @@ import com.intellij.psi.xml.XmlTokenType
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 
 class SvelteHtmlRawTextLexer : LayeredLexer(MergingLexerAdapter(FlexAdapter(_SvelteHtmlRawTextLexer()),
-                                                   TokenSet.create(XmlTokenType.XML_DATA_CHARACTERS, SvelteTokenTypes.CODE_FRAGMENT))) {
+                                                   TokenSet.create(XmlTokenType.XML_DATA_CHARACTERS))) {
   init {
     registerLayer(JSFlexAdapter(DialectOptionHolder.JS_WITH_JSX), SvelteTokenTypes.CODE_FRAGMENT)
   }

@@ -6,44 +6,20 @@ import com.intellij.psi.xml.*;
 import com.intellij.psi.TokenType;
 import dev.blachut.svelte.lang.psi.SvelteTokenTypes;
 import com.intellij.lang.javascript.JSTokenTypes;
+import dev.blachut.svelte.lang.parsing.html.SvelteJsBoundaryScanner;
 
 %%
 
 %unicode
 
 %{
-  private static final int NO_QUOTE = 0;
-  private static final int SINGLE_QUOTE = 1;
-  private static final int DOUBLE_QUOTE = 2;
-  private static final int BACKQUOTE = 3;
-
-  public int bracesNestingLevel = 0;
-  public int quoteMode = NO_QUOTE;
   public int rawTag = 0;
 
   public _SvelteHtmlLexer() {
     this((java.io.Reader)null);
   }
-
-  public final void yybeginNestable(int state) {
-      bracesNestingLevel = 0;
-      quoteMode = NO_QUOTE;
-      yybegin(state);
-  }
-
-  private void toggleQuoteMode(int mode) {
-    if (quoteMode == NO_QUOTE) {
-      quoteMode = mode;
-    } else if (quoteMode == mode) {
-      quoteMode = NO_QUOTE;
-    }
-  }
 %}
 
-%eof{
-  bracesNestingLevel = 0;
-  quoteMode = NO_QUOTE;
-%eof}
 
 %class _SvelteHtmlLexer
 %public
@@ -79,10 +55,6 @@ ALPHA=[:letter:]
 DIGIT=[0-9]
 WHITE_SPACE_CHARS=[ \n\r\t\f\u2028\u2029\u0085]+
 WHITE_SPACE=\s+
-
-SINGLE_QUOTE="'"
-DOUBLE_QUOTE="\""
-BACKQUOTE="`"
 
 RAW_TAG_NAME=("script" | "style")
 TAG_NAME=({ALPHA}|"_"|":")({ALPHA}|{DIGIT}|"_"|":"|"."|"-")*
@@ -147,7 +119,7 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   return XmlTokenType.XML_DATA_CHARACTERS;
 }
 
-<YYINITIAL> "{" { yybeginNestable(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE; }
+<YYINITIAL> "{" { yybegin(SVELTE_INTERPOLATION_START); return SvelteTokenTypes.START_MUSTACHE; }
 
 <SVELTE_INTERPOLATION_START> {
   {WHITE_SPACE}      { return TokenType.WHITE_SPACE; }
@@ -183,7 +155,7 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 }
 <BEFORE_TAG_ATTRIBUTES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 <TAG_ATTRIBUTES> {ATTRIBUTE_NAME} { return XmlTokenType.XML_NAME; }
-<TAG_ATTRIBUTES> "{" { yybeginNestable(ATTRIBUTE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
+<TAG_ATTRIBUTES> "{" { yybegin(ATTRIBUTE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <TAG_ATTRIBUTES> "=" { yybegin(ATTRIBUTE_VALUE_START); return XmlTokenType.XML_EQ; }
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, START_TAG_NAME, END_TAG_NAME> [^] { yybegin(YYINITIAL); yypushback(1); break; }
 
@@ -191,51 +163,48 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_START> [^ \n\r\t\f'\"\>{]([^ \n\r\t\f\>{]|(\/[^\>]))* / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_START> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_START> "{" { yybegin(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_START> "\"" { yybegin(ATTRIBUTE_VALUE_DQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 <ATTRIBUTE_VALUE_START> "'" { yybegin(ATTRIBUTE_VALUE_SQ); return XmlTokenType.XML_ATTRIBUTE_VALUE_START_DELIMITER; }
 
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> ([^ \n\r\t\f'\"\>{]|(\/[^\>]))+ / "{" { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
-<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybeginNestable(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
+<ATTRIBUTE_VALUE_AFTER_BRACES> "{" { yybegin(ATTRIBUTE_VALUE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <ATTRIBUTE_VALUE_AFTER_BRACES> {WHITE_SPACE_CHARS} { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_WHITE_SPACE;}
 
 <ATTRIBUTE_VALUE_DQ> {
   "\"" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybeginNestable(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
+  "{" { yybegin(ATTRIBUTE_VALUE_DQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
 <ATTRIBUTE_VALUE_SQ> {
   "'" { yybegin(TAG_ATTRIBUTES); return XmlTokenType.XML_ATTRIBUTE_VALUE_END_DELIMITER; }
-  "{" { yybeginNestable(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
+  "{" { yybegin(ATTRIBUTE_VALUE_SQ_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
   \\\$ { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN; }
   [^] { return XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;}
 }
 
 <SVELTE_INTERPOLATION, ATTRIBUTE_BRACES, ATTRIBUTE_VALUE_BRACES, ATTRIBUTE_VALUE_DQ_BRACES, ATTRIBUTE_VALUE_SQ_BRACES> {
-  // JS comments outside strings: consume entirely to avoid quote/brace desync
-  "//" [^\n\r]*      { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
-  "/*" ~"*/"         { if (quoteMode == NO_QUOTE) return SvelteTokenTypes.CODE_FRAGMENT; yypushback(yylength() - 1); return SvelteTokenTypes.CODE_FRAGMENT; }
-  // Escaped characters: don't interpret the next char for quote/brace tracking
-  "\\".              { return SvelteTokenTypes.CODE_FRAGMENT; }
-  {SINGLE_QUOTE}     { toggleQuoteMode(SINGLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
-  {DOUBLE_QUOTE}     { toggleQuoteMode(DOUBLE_QUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
-  {BACKQUOTE}        { toggleQuoteMode(BACKQUOTE); return SvelteTokenTypes.CODE_FRAGMENT; }
-  "{"                { if (quoteMode == NO_QUOTE) { bracesNestingLevel++; } return SvelteTokenTypes.CODE_FRAGMENT; }
-  "}"                {
-          if (quoteMode != NO_QUOTE) { return SvelteTokenTypes.CODE_FRAGMENT; }
-          if (bracesNestingLevel > 0) { bracesNestingLevel--; return SvelteTokenTypes.CODE_FRAGMENT; }
-
-          if (yystate() == SVELTE_INTERPOLATION) yybegin(YYINITIAL);
-          if (yystate() == ATTRIBUTE_BRACES) yybegin(TAG_ATTRIBUTES);
-          if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
-          if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
-          if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
-          return SvelteTokenTypes.END_MUSTACHE;
-                     }
-  [^]                { return SvelteTokenTypes.CODE_FRAGMENT; }
+  // Match any non-`}` character. The action calls SvelteJsBoundaryScanner to find
+  // the unbalanced `}` that ends the expression, then sets zzMarkedPos to that
+  // offset so a single CODE_FRAGMENT covers the whole expression.
+  [^}] {
+    int boundary = SvelteJsBoundaryScanner.INSTANCE.findUnbalancedRbrace(zzBuffer, zzStartRead, zzEndRead);
+    zzMarkedPos = boundary;
+    return SvelteTokenTypes.CODE_FRAGMENT;
+  }
+  // Closing brace — fires for both empty {} and the unbalanced } returned by scanner.
+  // State branching unchanged.
+  "}" {
+    if (yystate() == SVELTE_INTERPOLATION) yybegin(YYINITIAL);
+    if (yystate() == ATTRIBUTE_BRACES) yybegin(TAG_ATTRIBUTES);
+    if (yystate() == ATTRIBUTE_VALUE_BRACES) yybegin(ATTRIBUTE_VALUE_AFTER_BRACES);
+    if (yystate() == ATTRIBUTE_VALUE_DQ_BRACES) yybegin(ATTRIBUTE_VALUE_DQ);
+    if (yystate() == ATTRIBUTE_VALUE_SQ_BRACES) yybegin(ATTRIBUTE_VALUE_SQ);
+    return SvelteTokenTypes.END_MUSTACHE;
+  }
 }
 
 <YYINITIAL, ATTRIBUTE_VALUE_DQ, ATTRIBUTE_VALUE_SQ> {
