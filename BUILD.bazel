@@ -72,6 +72,7 @@ jvm_library(
 
 jvm_library(
   name = "svelte_test_lib",
+  testonly = True,
   module_name = "intellij.svelte",
   visibility = ["//visibility:public"],
   srcs = glob([], allow_empty = True),
@@ -191,6 +192,7 @@ jvm_library(
 
 jvm_library(
   name = "svelte-tests_test_lib",
+  testonly = True,
   visibility = ["//visibility:public"],
   srcs = glob(["src/test/java/**/*.kt", "src/test/java/**/*.java", "src/test/java/**/*.form"], allow_empty = True),
   resources = [":svelte-tests_test_resources"],
