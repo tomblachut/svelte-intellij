@@ -9,7 +9,7 @@ import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageS
 import com.intellij.lang.typescript.lsp.JSFrameworkLspAnnotationErrorFilter
 import com.intellij.lang.typescript.lsp.JSFrameworkLspTypeScriptService
 import com.intellij.lang.typescript.lsp.LspAnnotationError
-import com.intellij.lang.typescript.lsp.LspAnnotationErrorFilter
+import com.intellij.lang.typescript.lsp.TypeScriptLspDiagnosticsFilter
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
@@ -76,14 +76,14 @@ class SvelteLspTypeScriptService(project: Project)
     return TypeScriptLanguageServiceUtil.getMergeStrategyForPosition(context, isJavaScript)
   }
 
-  override fun createAnnotationErrorFilter(): LspAnnotationErrorFilter = SvelteLspAnnotationErrorFilter(project)
+  override fun createLspDiagnosticsFilter(): TypeScriptLspDiagnosticsFilter = SvelteLspAnnotationErrorFilter(project)
 }
 
 private class SvelteLspAnnotationErrorFilter(project: Project) : JSFrameworkLspAnnotationErrorFilter(project) {
   private val showA11yWarnings = getSvelteServiceSettings(project).showA11yWarnings
 
-  override fun isProblemEnabled(diagnostic: Diagnostic): Boolean {
+  override fun accept(diagnostic: Diagnostic): Boolean {
     if (!showA11yWarnings && diagnostic.code?.left?.startsWith("a11y") == true) return false
-    return super.isProblemEnabled(diagnostic)
+    return super.accept(diagnostic)
   }
 }
