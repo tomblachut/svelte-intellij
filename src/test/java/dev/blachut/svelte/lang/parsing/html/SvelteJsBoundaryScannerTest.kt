@@ -196,4 +196,75 @@ class SvelteJsBoundaryScannerTest : BasePlatformTestCase() {
     val result = SvelteJsBoundaryScanner.findUnbalancedRbrace(buf, 0, buf.length)
     assertEquals(buf.length - 1, result)
   }
+
+  fun testHostLexerCrashFile_NoOversizedCodeFragment() {
+    val text = """<script lang="ts">
+    let isDark = false
+</script>
+<div class="layout" class:dark={isDark}>
+    <button onclick="
+    {@render children()}
+</div>
+<SnippenComponent>
+    {#snippet title()}My Title{/snippet}
+    {#snippet body()}My Body{/snippet}
+</SnippenComponent>
+<style>
+    .layout { padding: 20px; transition: background 0.3s; }
+    .dark { background: #333; color: white; }
+</style>
+"""
+    val lexer = SvelteHtmlLexer(false)
+    lexer.start(text)
+    var maxFragmentLen = 0
+    while (lexer.tokenType != null) {
+      if (lexer.tokenType == dev.blachut.svelte.lang.psi.SvelteTokenTypes.CODE_FRAGMENT) {
+        maxFragmentLen = maxOf(maxFragmentLen, lexer.tokenEnd - lexer.tokenStart)
+      }
+      lexer.advance()
+    }
+    // Pre-fix, one CODE_FRAGMENT was 192 chars (engulfed snippet blocks, closing
+    // tags, and the entire <style> block). All fragments should now be small
+    // expression-sized chunks; we assert <50 as a generous ceiling.
+    assertTrue("Expected all CODE_FRAGMENT spans to be small; got max=$maxFragmentLen",
+               maxFragmentLen < 50)
+  }
+
+  // --- Fix: leading `/` skip
+  fun testLeadingSlashThenKeyword() = assertReturnsAt("/snippet}r", 8)
+  fun testLeadingSlashThenIdent() = assertReturnsAt("/foo}r", 4)
+
+  // --- Fix: whitespace before the leading `/`
+  fun testLeadingSpaceThenSlash() = assertReturnsAt(" /snippet}r", 9)
+  fun testLeadingNewlineThenSlash() = assertReturnsAt("\n/snippet}r", 9)
+  fun testLeadingTabThenSlash() = assertReturnsAt("\t/snippet}r", 9)
+  fun testLeadingSpaceThenSlashThenIdent() = assertReturnsAt(" /foo}r", 5)
+  fun testLeadingFormFeedThenSlash() = assertReturnsAt("\u000C/foo}r", 5)
+  fun testLeadingLineSeparatorThenSlash() = assertReturnsAt("\u2028/foo}r", 5)
+
+  // --- Fix: Svelte-aligned `/` condition (skip unless followed by `/` or `*`)
+  fun testLeadingSlashThenDigit() = assertReturnsAt("/2}r", 2)
+  fun testLeadingSlashThenCloseBrace() = assertReturnsAt("/}r", 1)
+  fun testLeadingSlashThenOperator() = assertReturnsAt("/+x}r", 3)
+
+  // --- Preserved: comments and regex literals lex via the JS lexer
+  fun testLeadingRegexLiteralTerminatesAtSecondSlash() = assertReturnsAt("/abc/g}r", 6)
+  fun testLeadingBlockComment() = assertReturnsAt("/* c */}r", 7)
+  fun testLeadingLineCommentTerminatesAtNewline() = assertReturnsAt("//c\n}r", 4)
+  fun testLeadingDqStringTerminatesAtNewline() = assertReturnsAt("\"unterm\n }r", 9)
+
+  // --- Preserved: non-JS-prefix chars lex without overshoot
+  fun testLeadingHash() = assertReturnsAt("#foo}r", 4)
+  fun testLeadingColon() = assertReturnsAt(":foo}r", 4)
+  fun testLeadingAt() = assertReturnsAt("@foo}r", 4)
+  fun testLeadingMemberAccess() = assertReturnsAt(".x}r", 2)
+  fun testLeadingAssignmentOp() = assertReturnsAt("=x}r", 2)
+  fun testLeadingUnaryBang() = assertReturnsAt("!x}r", 2)
+  fun testLeadingBackslash() = assertReturnsAt("\\x}r", 2)
+
+  private fun assertReturnsAt(input: String, expected: Int) {
+    val actual = SvelteJsBoundaryScanner.findUnbalancedRbrace(input, 0, input.length)
+    val shown = input.replace("\n", "\\n").replace("\t", "\\t")
+    assertEquals("Scanner mismatch for input \"$shown\"", expected, actual)
+  }
 }

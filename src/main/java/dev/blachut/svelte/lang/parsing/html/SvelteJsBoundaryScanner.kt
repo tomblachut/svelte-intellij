@@ -12,13 +12,28 @@ object SvelteJsBoundaryScanner {
    * @param start     offset to start scanning (typically right after the opening `{`)
    * @param end       maximum offset to scan (typically buffer end)
    * @return offset of the unbalanced `}`, or [end] if no unbalanced `}` was found
-   *         (interpolation reaches EOF — caller treats this as an unterminated expression
-   *         and emits a CODE_FRAGMENT spanning [start, end])
+   *         (interpolation reaches EOF — caller treats this as an unterminated
+   *         expression and emits a CODE_FRAGMENT spanning [start, end])
    */
   fun findUnbalancedRbrace(buf: CharSequence, start: Int, end: Int): Int {
-    // initialState 0 = _JavaScriptLexer.YYINITIAL (fresh expression context)
+    // Mirror the real Svelte compiler's `tag()` entry dispatch
+    // (packages/svelte/src/compiler/phases/1-parse/state/tag.js): skip
+    // whitespace, then skip a leading `/` unless it's the start of a `//`
+    // line comment or `/*` block comment. Without this skip,
+    // `JSFlexAdapter(JS_WITH_JSX)` in YYINITIAL would lex a leading `/` as
+    // the start of a regex literal and consume the buffer until the next
+    // `/` or EOF — wrong for Svelte block-close markers like `{/snippet}`,
+    // `{/if}`, and also for any malformed `{/<non-identifier>}` shape the
+    // real compiler routes to its block-close parser.
+    var scanFrom = start
+    while (scanFrom < end && isHostFlexWhitespace(buf[scanFrom])) scanFrom++
+    if (scanFrom + 1 < end && buf[scanFrom] == '/') {
+      val next = buf[scanFrom + 1]
+      if (next != '/' && next != '*') scanFrom++
+    }
+
     val js = JSFlexAdapter(DialectOptionHolder.JS_WITH_JSX)
-    js.start(buf, start, end, 0)
+    js.start(buf, scanFrom, end, 0)
     var depth = 0
     while (js.tokenType != null) {
       when (js.tokenType) {
@@ -33,8 +48,16 @@ object SvelteJsBoundaryScanner {
       }
       js.advance()
     }
-    // No unbalanced `}` found — unterminated expression. Caller emits CODE_FRAGMENT
-    // spanning [start, end) and the lexer reaches EOF without END_MUSTACHE.
     return end
+  }
+
+  /**
+   * Matches the host JFlex's `WHITE_SPACE_CHARS=[ \n\r\t\f\u2028\u2029\u0085]+`
+   * definition. Keeping this aligned ensures the scanner skips exactly what the
+   * host lexer would consume as whitespace before invoking us.
+   */
+  private fun isHostFlexWhitespace(c: Char): Boolean = when (c) {
+    ' ', '\t', '\n', '\r', '\u000C', '\u0085', '\u2028', '\u2029' -> true
+    else -> false
   }
 }
