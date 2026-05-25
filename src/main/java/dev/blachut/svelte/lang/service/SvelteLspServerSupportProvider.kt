@@ -11,6 +11,7 @@ import com.intellij.platform.lsp.api.LspServer
 import com.intellij.platform.lsp.api.lsWidget.LspServerWidgetItem
 import dev.blachut.svelte.lang.service.settings.SvelteServiceConfigurable
 import icons.SvelteIcons
+import org.eclipse.lsp4j.ClientCapabilities
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification
 import org.eclipse.lsp4j.services.LanguageServer
 
@@ -27,8 +28,14 @@ internal class SvelteLspServerSupportProvider : JSFrameworkLspServerSupportProvi
 /**
  * @see SvelteLspTypeScriptService
  */
-internal class SvelteLspServerDescriptor(project: Project) : JSFrameworkLspServerDescriptor(project, SvelteLspServerActivationRule, "Svelte") {
+internal class SvelteLspServerDescriptor(project: Project) :
+  JSFrameworkLspServerDescriptor(project, SvelteLspServerActivationRule, "Svelte") {
   override val lsp4jServerClass: Class<out LanguageServer> = SvelteLsp4jServer::class.java
+
+  override val clientCapabilities: ClientCapabilities
+    get() = super.clientCapabilities.apply {
+      textDocument?.diagnostic = null
+    }
 }
 
 internal interface SvelteLsp4jServer : JSFrameworkLsp4jServer {
