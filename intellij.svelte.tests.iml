@@ -60,7 +60,7 @@
     <orderEntry type="module" module-name="intellij.javascript.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass.plugin" scope="TEST" />
     <orderEntry type="module" module-name="intellij.jade" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.postcss" scope="TEST" />
+    <orderEntry type="module" module-name="intellij.postcss.paid" />
     <orderEntry type="module" module-name="intellij.stylus" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.lsp.testFramework" scope="TEST" />

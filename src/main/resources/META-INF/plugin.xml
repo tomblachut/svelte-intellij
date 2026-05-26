@@ -29,6 +29,9 @@
     </ul>
   ]]></description>
 
+  <!--suppress PluginXmlValidity -->
+  <content namespace="jetbrains" />
+
   <!-- region Generated dependencies - run `Generate Product Layouts` to regenerate -->
   <dependencies>
     <module name="intellij.javascript.psi.impl"/>
@@ -38,6 +41,7 @@
     <module name="intellij.javascript.backend.css"/>
     <module name="intellij.javascript.parser"/>
     <module name="intellij.platform.webide.impl"/>
+    <module name="intellij.postcss.paid"/>
     <module name="intellij.xml.analysis"/>
     <module name="intellij.xml.emmet"/>
     <module name="intellij.xml.impl"/>
