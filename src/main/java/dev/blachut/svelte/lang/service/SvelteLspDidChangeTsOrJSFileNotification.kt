@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.platform.lsp.api.LspServerManager
-import com.intellij.platform.lsp.impl.LspDidChangeUtil
+import com.intellij.platform.lsp.impl.documentSync.LspDidChangeUtil
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent
 
 /**
