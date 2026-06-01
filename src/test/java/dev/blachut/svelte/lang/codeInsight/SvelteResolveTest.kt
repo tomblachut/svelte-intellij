@@ -4,7 +4,7 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.JSTestUtils.checkResolveToDestination
 import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
-import com.intellij.polySymbols.search.PsiSourcedPolySymbol
+import com.intellij.polySymbols.search.PsiLinkedPolySymbol
 import com.intellij.polySymbols.testFramework.multiResolvePolySymbolReference
 import com.intellij.polySymbols.testFramework.resolvePolySymbolReference
 import com.intellij.psi.css.CssClass
@@ -602,7 +602,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
     TestCase.assertTrue(
       "<svelte:component> is excluded from class expression scope; must not resolve to the .foo CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+      symbols.none { (it as? PsiLinkedPolySymbol)?.source is CssClass }
     )
   }
 
@@ -617,7 +617,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
     assertTrue(
       "Component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+      symbols.none { (it as? PsiLinkedPolySymbol)?.source is CssClass }
     )
   }
 
@@ -632,7 +632,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     val symbols = myFixture.multiResolvePolySymbolReference("fo<caret>o:")
     assertTrue(
       "Namespaced component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+      symbols.none { (it as? PsiLinkedPolySymbol)?.source is CssClass }
     )
   }
 
@@ -646,7 +646,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     val symbols = myFixture.multiResolvePolySymbolReference("'unknow<caret>n'")
     TestCase.assertTrue(
       "Unknown class must not resolve to a real CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+      symbols.none { (it as? PsiLinkedPolySymbol)?.source is CssClass }
     )
   }
 
@@ -683,7 +683,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
     TestCase.assertTrue(
       "Function-call wrapped class strings are out of scope; must not resolve to a real CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+      symbols.none { (it as? PsiLinkedPolySymbol)?.source is CssClass }
     )
   }
 
@@ -697,7 +697,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
     val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
     TestCase.assertTrue(
       "id={...} expressions are out of scope for Tier A (class-only); must not resolve to a real CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiSourcedPolySymbol)?.source is CssClass }
+      symbols.none { (it as? PsiLinkedPolySymbol)?.source is CssClass }
     )
   }
 }
