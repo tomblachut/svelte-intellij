@@ -28,14 +28,25 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
   project,
   SvelteLspClientProvider::class.java,
   SvelteLspServerActivationRule,
-  PublishDiagnostics(1),
 ) {
-  override val name = "Svelte LSP"
-  override val prefix = "Svelte"
+  override val name: String = "Svelte LSP"
+  override val prefix: String = "Svelte"
 
   override fun isServiceFallbackResolveEnabled(): Boolean  = true
 
   override fun isServiceNavigationEnabled(): Boolean = true
+
+  /**
+   * Decide the diagnostics mode from the running server's negotiated capabilities, instead of fixing it at
+   * construction time. The `svelte-language-server` version is dynamic (bundled, registry override, or a
+   * user-supplied package), and since [sveltejs/language-tools#2978](https://github.com/sveltejs/language-tools/pull/2978)
+   * the server switches to pull diagnostics when the client advertises the capability, no longer pushing
+   * `publishDiagnostics`. Pull when the server advertises a `diagnosticProvider`; otherwise (including before the
+   * server is initialized) push, awaiting a single `publishDiagnostics` notification.
+   */
+  override val diagnosticsConfiguration: DiagnosticsConfiguration
+    get() = if (getServer()?.initializeResult?.capabilities?.diagnosticProvider != null) PullDiagnostics
+            else PublishDiagnostics(1)
 
   /**
    * Skip LSP navigation for namespaced component tag names (e.g. `Forms.Input`) when called
