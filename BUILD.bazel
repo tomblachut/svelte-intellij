@@ -208,10 +208,7 @@ jvm_library(
     ),
     module_name = "intellij.svelte.tests",
     visibility = ["//visibility:public"],
-    runtime_deps = [
-        # do not sort,
-        "//contrib/postcss/paid",
-    ],
+    runtime_deps = ["//contrib/postcss/paid"],
 )
 
 jvm_library(
