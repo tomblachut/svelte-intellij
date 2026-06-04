@@ -138,6 +138,52 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertNull(variable)
   }
 
+  fun testConstTagResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {#if true}
+                {const greeting = "hi"}
+                {<caret>greeting}
+            {/if}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+    TestCase.assertEquals("greeting", (variable as com.intellij.lang.javascript.psi.JSVariable).name)
+  }
+
+  fun testLetTagResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {#if true}
+                {let counter = 0}
+                {<caret>counter}
+            {/if}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = reference!!.resolve()
+    TestCase.assertNotNull(variable)
+    TestCase.assertFalse((variable as com.intellij.lang.javascript.psi.JSVariable).isConst)
+  }
+
+  fun testLetTagBlockScope() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {#if true}
+                {let scoped = 1}
+            {/if}
+            {<caret>scoped}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    TestCase.assertNull(reference!!.resolve())
+  }
+
   fun testEachWithoutAsClauseIndexResolve() {
     myFixture.configureByText(
       "Example.svelte", """

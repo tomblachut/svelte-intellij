@@ -277,6 +277,29 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "localOne", "localTwo")
   }
 
+  fun testLetTagCompletion() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {#if true}
+                {let myValue = 1}
+                {my<caret>}
+            {/if}
+            """.trimIndent()
+    )
+    val items = myFixture.completeBasic()
+    if (items != null) {
+      hasElements(items, "myValue")
+    }
+    else {
+      myFixture.checkResult("""
+            {#if true}
+                {let myValue = 1}
+                {myValue<caret>}
+            {/if}
+            """.trimIndent())
+    }
+  }
+
   fun testMustache() {
     myFixture.configureByText("Hello.svelte", """
       <script></script>
