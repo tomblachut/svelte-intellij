@@ -1939,6 +1939,26 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testLetTagIsReassignable() {
+    myFixture.configureByText("Example.svelte", """
+      {#if true}
+        {let m = 1}
+        <button on:click={() => m = 2}>{m}</button>
+      {/if}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testConstTagNewSyntaxReassignmentIsError() {
+    myFixture.configureByText("Example.svelte", """
+      {#if true}
+        {const c = 1}
+        <button on:click={() => <error descr="Attempt to assign to const or readonly variable">c</error> = 2}>{c}</button>
+      {/if}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testDeclarationTagsHighlighting() {
     myFixture.configureByText("Example.svelte", """
       {#if true}
