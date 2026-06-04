@@ -1,0 +1,134 @@
+SvelteHtmlFile: LetTag.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteIfBlock
+      SvelteIfPrimaryBranch
+        SvelteInitialTag(IF_START)
+          PsiElement(JS:LBRACE)('{')
+          PsiElement(JS:SHARP)('#')
+          PsiElement(JS:IF_KEYWORD)('if')
+          PsiWhiteSpace(' ')
+          JSLiteralExpression
+            PsiElement(JS:TRUE_KEYWORD)('true')
+          PsiElement(JS:RBRACE)('}')
+        SvelteFragment
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:LET_KEYWORD)('let')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSLetTagVariable
+                PsiElement(JS:IDENTIFIER)('y')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('3')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:LET_KEYWORD)('let')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              JSDestructuringElement
+                JSDestructuringObject
+                  PsiElement(JS:LBRACE)('{')
+                  JSDestructuringShorthandedProperty
+                    SvelteJSLetTagVariable
+                      PsiElement(JS:IDENTIFIER)('x')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSDestructuringShorthandedProperty
+                    SvelteJSLetTagVariable
+                      PsiElement(JS:IDENTIFIER)('z')
+                  PsiElement(JS:RBRACE)('}')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSObjectLiteralExpression
+                  PsiElement(JS:LBRACE)('{')
+                  JSProperty
+                    PsiElement(JS:IDENTIFIER)('x')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:NUMERIC_LITERAL)('1')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSProperty
+                    PsiElement(JS:IDENTIFIER)('z')
+                    PsiElement(JS:COLON)(':')
+                    PsiWhiteSpace(' ')
+                    JSLiteralExpression
+                      PsiElement(JS:NUMERIC_LITERAL)('3')
+                  PsiElement(JS:RBRACE)('}')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:LET_KEYWORD)('let')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              JSDestructuringElement
+                JSDestructuringArray
+                  PsiElement(JS:LBRACKET)('[')
+                  SvelteJSLetTagVariable
+                    PsiElement(JS:IDENTIFIER)('a')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSDestructuringArrayRest
+                    PsiElement(JS:DOT_DOT_DOT)('...')
+                    SvelteJSLetTagVariable
+                      PsiElement(JS:IDENTIFIER)('rest')
+                  PsiElement(JS:RBRACKET)(']')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSArrayLiteralExpression
+                  PsiElement(JS:LBRACKET)('[')
+                  JSLiteralExpression
+                    PsiElement(JS:NUMERIC_LITERAL)('1')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSLiteralExpression
+                    PsiElement(JS:NUMERIC_LITERAL)('2')
+                  PsiElement(JS:COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  JSLiteralExpression
+                    PsiElement(JS:NUMERIC_LITERAL)('3')
+                  PsiElement(JS:RBRACKET)(']')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:LET_KEYWORD)('let')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSLetTagVariable
+                PsiElement(JS:IDENTIFIER)('uninitialized')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            JSReferenceExpression
+              PsiElement(JS:LET_KEYWORD)('let')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            JSReferenceExpression
+              JSReferenceExpression
+                PsiElement(JS:LET_KEYWORD)('let')
+              PsiElement(JS:DOT)('.')
+              PsiElement(JS:IDENTIFIER)('foo')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n')
+      SvelteEndTag(IF_END)
+        PsiElement(JS:LBRACE)('{')
+        PsiElement(JS:DIV)('/')
+        PsiElement(JS:IF_KEYWORD)('if')
+        PsiElement(JS:RBRACE)('}')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

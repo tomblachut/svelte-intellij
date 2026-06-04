@@ -47,7 +47,7 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
   override val assumeExternalBraces: Boolean = false
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
-    val bareKind = consumeBareDeclarationKeyword(builder)
+    val bareKind = consumeBareDeclarationKeyword(builder, parser)
     if (bareKind != null) {
       parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = bareKind)
     }
@@ -60,17 +60,37 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
   }
 
   /**
-   * Detects a bare `{const ...}` declaration (no `@`). `const` is a reserved word, so a leading
-   * `const` always starts a declaration. Returns `true` (isConst) and consumes the keyword, or
-   * `null` if this is not a bare declaration. `let` is handled in a later task.
+   * Detects a bare `{const ...}` / `{let ...}` declaration (no `@`) and consumes the keyword.
+   * Returns `true` for `const`, `false` for `let`, or `null` if this is not a bare declaration.
+   * `const` is a reserved word so it always starts a declaration; `let` may be an identifier and is
+   * disambiguated by [letStartsDeclaration]. (The IDENTIFIER-text branch of [isKeyword] exists for `let`,
+   * which can be lexed as an identifier in sloppy positions; `const` always lexes as CONST_KEYWORD.)
    */
-  private fun consumeBareDeclarationKeyword(builder: PsiBuilder): Boolean? {
+  private fun consumeBareDeclarationKeyword(builder: PsiBuilder, parser: JavaScriptParser): Boolean? {
     if (isKeyword(builder, JSTokenTypes.CONST_KEYWORD, "const")) {
       builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD)
       builder.advanceLexer()
       return true
     }
+    if (isKeyword(builder, JSTokenTypes.LET_KEYWORD, "let") && letStartsDeclaration(builder, parser)) {
+      builder.remapCurrentToken(SvelteTokenTypes.LET_KEYWORD)
+      builder.advanceLexer()
+      return false
+    }
     return null
+  }
+
+  /**
+   * `let` may be an identifier (sloppy mode). Mirrors acorn/Svelte: treat as a declaration only when
+   * the next token can begin a binding target — an identifier, `{` (object pattern) or `[` (array pattern).
+   * Otherwise (e.g. `{let}`, `{let.foo}`) it is a normal expression referencing a variable named `let`.
+   * `parser.isIdentifierToken` is the same language-aware predicate `StatementParser.parseVarName` uses.
+   */
+  private fun letStartsDeclaration(builder: PsiBuilder, parser: JavaScriptParser): Boolean {
+    val next = builder.lookAhead(1)
+    return next === JSTokenTypes.LBRACE ||
+           next === JSTokenTypes.LBRACKET ||
+           parser.isIdentifierToken(next)
   }
 
   private fun isKeyword(builder: PsiBuilder, keywordType: IElementType, text: String): Boolean =
