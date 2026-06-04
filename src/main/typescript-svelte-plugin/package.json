@@ -1,10 +1,10 @@
 {
   "name": "typescript-svelte-plugin",
-  "version": "0.3.50",
+  "version": "0.3.52",
   "private": true,
   "main": "dist/src/index.js",
   "devDependencies": {
-    "typescript-svelte-plugin": "0.3.50",
+    "typescript-svelte-plugin": "0.3.52",
     "esbuild": "^0.20.0"
   },
   "scripts": {

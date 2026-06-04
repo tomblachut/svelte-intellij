@@ -139,14 +139,14 @@ var require_utils = __commonJS({
     function findNodeAtSpan(node, span, predicate) {
       const { start, length } = span;
       const end = start + length;
-      for (const child of node.getChildren()) {
+      return node.forEachChild((child) => {
         const childStart = child.getStart();
         if (end <= childStart) {
           return;
         }
         const childEnd = child.getEnd();
         if (start >= childEnd) {
-          continue;
+          return;
         }
         if (start === childStart && end === childEnd) {
           if (!predicate) {
@@ -160,17 +160,17 @@ var require_utils = __commonJS({
         if (foundInChildren) {
           return foundInChildren;
         }
-      }
+      });
     }
     function findNodeAtPosition(node, pos, predicate) {
-      for (const child of node.getChildren()) {
+      return node.forEachChild((child) => {
         const childStart = child.getStart();
         if (pos < childStart) {
           return;
         }
         const childEnd = child.getEnd();
         if (pos > childEnd) {
-          continue;
+          return;
         }
         const foundInChildren = findNodeAtPosition(child, pos, predicate);
         if (foundInChildren) {
@@ -182,7 +182,7 @@ var require_utils = __commonJS({
         if (predicate(child)) {
           return child;
         }
-      }
+      });
     }
     function isTopLevelExport(ts, node, source) {
       var _a, _b;
@@ -199,9 +199,9 @@ var require_utils = __commonJS({
       if (predicate(node)) {
         dest.push(node);
       } else {
-        for (const child of node.getChildren()) {
+        node.forEachChild((child) => {
           gatherDescendants(child, predicate, dest);
-        }
+        });
       }
       return dest;
     }
@@ -1730,9 +1730,7 @@ var require_update_imports = __commonJS({
           return !(0, utils_12.isSvelteFilePath)(renameLocation.fileName) && !renameLocation.textChanges.some((change) => change.newText.endsWith(".svelte"));
         }).map((renameLocation) => {
           if (path_12.default.basename(renameLocation.fileName).startsWith("+")) {
-            renameLocation.textChanges = renameLocation.textChanges.filter((change) => {
-              return !change.newText.includes(".svelte-kit/types/");
-            });
+            renameLocation.textChanges = renameLocation.textChanges.filter((change) => change.newText.endsWith("/$types.js") || change.newText.endsWith("/$types") || change.newText.endsWith("/$types.d.ts"));
           }
           return renameLocation;
         });
