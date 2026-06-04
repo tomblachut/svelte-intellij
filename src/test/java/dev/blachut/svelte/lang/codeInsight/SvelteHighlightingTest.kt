@@ -1939,6 +1939,17 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testDeclarationTagsHighlighting() {
+    myFixture.configureByText("Example.svelte", """
+      {#if true}
+        {<info descr="null">const</info> <symbolName descr="identifiers//local variable">c</symbolName> = 1}
+        {<info descr="null">let</info> <symbolName descr="identifiers//local variable">m</symbolName> = 2}
+        <p>{<symbolName descr="identifiers//local variable">c</symbolName>}{<symbolName descr="identifiers//local variable">m</symbolName>}</p>
+      {/if}
+    """.trimIndent())
+    JSTestUtils.checkHighlightingWithSymbolNames(myFixture, false, false, true)
+  }
+
   companion object {
     fun configureDefaultLocalInspectionTools(): List<InspectionProfileEntry> {
       val l = mutableListOf<LocalInspectionTool>()

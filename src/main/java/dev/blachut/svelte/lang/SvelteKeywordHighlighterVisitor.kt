@@ -33,6 +33,7 @@ class SvelteKeywordHighlighterVisitor(holder: HighlightInfoHolder) : TypeScriptK
     highlightChildKeywordOfType(element, SvelteTokenTypes.HTML_KEYWORD)
     highlightChildKeywordOfType(element, SvelteTokenTypes.DEBUG_KEYWORD)
     highlightChildKeywordOfType(element, SvelteTokenTypes.CONST_KEYWORD)
+    highlightChildKeywordOfType(element, SvelteTokenTypes.LET_KEYWORD)
     highlightChildKeywordOfType(element, SvelteTokenTypes.RENDER_KEYWORD)
     highlightChildKeywordOfType(element, SvelteTokenTypes.ATTACH_KEYWORD)
 
