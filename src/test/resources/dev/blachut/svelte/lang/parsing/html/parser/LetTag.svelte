@@ -5,4 +5,6 @@
     {let uninitialized}
     {let}
     {let.foo}
+    {let = 1}
+    {let()}
 {/if}

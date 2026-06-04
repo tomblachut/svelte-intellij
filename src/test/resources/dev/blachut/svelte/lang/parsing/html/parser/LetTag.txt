@@ -125,6 +125,29 @@ SvelteHtmlFile: LetTag.svelte
               PsiElement(JS:DOT)('.')
               PsiElement(JS:IDENTIFIER)('foo')
             PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            JSAssignmentExpression
+              JSDefinitionExpression
+                JSReferenceExpression
+                  PsiElement(JS:LET_KEYWORD)('let')
+              PsiWhiteSpace(' ')
+              PsiElement(JS:EQ)('=')
+              PsiWhiteSpace(' ')
+              JSLiteralExpression
+                PsiElement(JS:NUMERIC_LITERAL)('1')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            JSCallExpression
+              JSReferenceExpression
+                PsiElement(JS:LET_KEYWORD)('let')
+              JSArgumentList
+                PsiElement(JS:LPAR)('(')
+                PsiElement(JS:RPAR)(')')
+            PsiElement(JS:RBRACE)('}')
           PsiWhiteSpace('\n')
       SvelteEndTag(IF_END)
         PsiElement(JS:LBRACE)('{')

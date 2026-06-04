@@ -84,7 +84,7 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
    * `let` may be an identifier (sloppy mode). Mirrors acorn/Svelte: treat as a declaration only when
    * the next token can begin a binding target — an identifier, `{` (object pattern) or `[` (array pattern).
    * Otherwise (e.g. `{let}`, `{let.foo}`) it is a normal expression referencing a variable named `let`.
-   * `parser.isIdentifierToken` is the same language-aware predicate `StatementParser.parseVarName` uses.
+   * `parser.isIdentifierToken` is the predicate the JS `StatementParser.parseVarName` uses to start a binding.
    */
   private fun letStartsDeclaration(builder: PsiBuilder, parser: JavaScriptParser): Boolean {
     val next = builder.lookAhead(1)
