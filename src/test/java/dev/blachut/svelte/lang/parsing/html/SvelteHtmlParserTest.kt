@@ -115,6 +115,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testHtmlEntityInExpression() = doTest()
 
   fun testConstTagVariable() = doTest()
+  fun testConstTag() = doTest()
 
   fun testHtmlAutoClosingTags() = doTest()
   fun testHtmlAutoClosingTagsAcrossBlock() = doTest()

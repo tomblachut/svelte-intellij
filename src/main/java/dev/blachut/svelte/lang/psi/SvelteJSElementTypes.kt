@@ -43,6 +43,9 @@ internal object SvelteJSElementTypes {
   fun getConstTagVariable(langMode: SvelteLangMode): IElementType =
     if (langMode == SvelteLangMode.HAS_TS) CONST_TAG_VARIABLE_TS else CONST_TAG_VARIABLE
 
+  fun getDeclarationTagVariable(langMode: SvelteLangMode, isConst: Boolean): IElementType =
+    getConstTagVariable(langMode) // let variants added in a later task
+
   val PARAMETER: JSParameterElementType = object : JSParameterElementType("EMBEDDED_PARAMETER") {
     override fun construct(node: ASTNode) = SvelteJSParameter(node)
 

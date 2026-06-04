@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.JSElementTypes
 import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.lang.javascript.parsing.JavaScriptParserBase
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import dev.blachut.svelte.lang.SvelteBundle
 import dev.blachut.svelte.lang.SvelteLangMode
@@ -46,15 +47,37 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
   override val assumeExternalBraces: Boolean = false
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
-    if (parseAtModifiers(builder)) {
-      parseSvelteDeclaringAssignmentExpression(builder, parser)
+    val bareKind = consumeBareDeclarationKeyword(builder)
+    if (bareKind != null) {
+      parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = bareKind)
+    }
+    else if (parseAtModifiers(builder)) {
+      parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = true)
     }
     else {
       parser.expressionParser.parseExpression()
     }
   }
 
-  private fun parseSvelteDeclaringAssignmentExpression(builder: PsiBuilder, parser: JavaScriptParser) {
+  /**
+   * Detects a bare `{const ...}` declaration (no `@`). `const` is a reserved word, so a leading
+   * `const` always starts a declaration. Returns `true` (isConst) and consumes the keyword, or
+   * `null` if this is not a bare declaration. `let` is handled in a later task.
+   */
+  private fun consumeBareDeclarationKeyword(builder: PsiBuilder): Boolean? {
+    if (isKeyword(builder, JSTokenTypes.CONST_KEYWORD, "const")) {
+      builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD)
+      builder.advanceLexer()
+      return true
+    }
+    return null
+  }
+
+  private fun isKeyword(builder: PsiBuilder, keywordType: IElementType, text: String): Boolean =
+    builder.tokenType === keywordType ||
+    (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == text)
+
+  private fun parseSvelteDeclaringAssignmentExpression(builder: PsiBuilder, parser: JavaScriptParser, isConst: Boolean) {
     val expr: PsiBuilder.Marker = builder.mark()
 
     var openedPar = false
@@ -64,7 +87,7 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
     }
 
     val allowTypeDeclaration = langMode == SvelteLangMode.HAS_TS
-    parser.statementParser.parseVarDeclaration(SvelteJSElementTypes.getConstTagVariable(langMode), allowTypeDeclaration, false)
+    parser.statementParser.parseVarDeclaration(SvelteJSElementTypes.getDeclarationTagVariable(langMode, isConst), allowTypeDeclaration, false)
 
     if (openedPar) {
       JavaScriptParserBase.checkMatches(builder, JSTokenTypes.RPAR, "javascript.parser.message.expected.rparen")
