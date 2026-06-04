@@ -180,6 +180,7 @@ class SvelteHtmlParserTest : ParsingTestCase(
   fun testTsSnippetParameterTypes() = doTest()
   fun testTsSnippetWithConstAndNonNull() = doTest()
   fun testTsConstTag() = doTest()
+  fun testTsDeclarationTags() = doTest()
   fun testTsJsCompatibility() = doTest()
   fun testTsMixedScripts() = doTest()
   fun testTsDirectiveBind() = doTest()
