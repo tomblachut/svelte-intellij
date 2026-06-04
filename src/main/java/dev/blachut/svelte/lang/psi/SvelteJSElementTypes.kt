@@ -17,7 +17,7 @@ import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.CONST_TAG_VARIABLE
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes.CONST_TAG_VARIABLE_TS
 
 internal object SvelteJSElementTypes {
-  const val STUB_VERSION = 3
+  const val STUB_VERSION = 4
 
   val CONST_TAG_VARIABLE: JSVariableElementType = object : JSVariableElementType("CONST_TAG_VARIABLE") {
     override fun construct(node: ASTNode): PsiElement = SvelteJSConstTagVariable(node)
@@ -35,6 +35,18 @@ internal object SvelteJSElementTypes {
     override fun toString(): String = "Svelte$debugName"
   }
 
+  val LET_TAG_VARIABLE: JSVariableElementType = object : JSVariableElementType("LET_TAG_VARIABLE") {
+    override fun construct(node: ASTNode): PsiElement = SvelteJSLetTagVariable(node)
+
+    override fun toString(): String = "Svelte$debugName"
+  }
+
+  val LET_TAG_VARIABLE_TS: TypeScriptVariableElementType = object : TypeScriptVariableElementType("LET_TAG_VARIABLE_TS") {
+    override fun construct(node: ASTNode): PsiElement = SvelteTSLetTagVariable(node)
+
+    override fun toString(): String = "Svelte$debugName"
+  }
+
   /**
    * Returns the appropriate const tag variable element type based on the language mode.
    * @param langMode The detected language mode (from `<script lang="...">`)
@@ -44,7 +56,11 @@ internal object SvelteJSElementTypes {
     if (langMode == SvelteLangMode.HAS_TS) CONST_TAG_VARIABLE_TS else CONST_TAG_VARIABLE
 
   fun getDeclarationTagVariable(langMode: SvelteLangMode, isConst: Boolean): IElementType =
-    getConstTagVariable(langMode) // let variants added in a later task
+    when {
+      isConst -> getConstTagVariable(langMode)
+      langMode == SvelteLangMode.HAS_TS -> LET_TAG_VARIABLE_TS
+      else -> LET_TAG_VARIABLE
+    }
 
   val PARAMETER: JSParameterElementType = object : JSParameterElementType("EMBEDDED_PARAMETER") {
     override fun construct(node: ASTNode) = SvelteJSParameter(node)
