@@ -174,7 +174,7 @@
     <lang.inspectionSuppressor language="JavaScript"
                                implementationClass="dev.blachut.svelte.lang.compatibility.SvelteInspectionSuppressor"/>
 
-    <platform.lsp.serverSupportProvider implementation="dev.blachut.svelte.lang.service.SvelteLspServerSupportProvider"/>
+    <platform.lsp.clientProvider implementation="dev.blachut.svelte.lang.service.SvelteLspClientProvider"/>
     <gotoDeclarationHandler implementation="dev.blachut.svelte.lang.editor.SvelteGotoDeclarationHandler" order="first"/>
     <registryKey key="svelte.service.reference.resolve.gtd" defaultValue="[off|basic*|extended]"
                  description="Treat the references navigatable through Svelte Language Server as resolved"/>

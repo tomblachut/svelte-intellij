@@ -5,7 +5,7 @@ import com.intellij.lang.javascript.TypeScriptFileType
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
 import com.intellij.openapi.project.ProjectManager
-import com.intellij.platform.lsp.api.LspServerManager
+import com.intellij.platform.lsp.api.LspClientManager
 import com.intellij.platform.lsp.impl.documentSync.LspDidChangeUtil
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent
 
@@ -28,7 +28,7 @@ internal class SvelteLspCustomDocumentListener : DocumentListener {
     if (virtualFile.fileType !in workaroundFileTypes) return
 
     for (project in ProjectManager.getInstance().getOpenProjects()) {
-      for (lspServer in LspServerManager.getInstance(project).getServersForProvider(SvelteLspServerSupportProvider::class.java)) {
+      for (lspServer in LspClientManager.getInstance(project).getClientsForProvider(SvelteLspClientProvider::class.java)) {
         val didChangeParams = LspDidChangeUtil.createIncrementalDidChangeParamsBeforeDocumentChange(lspServer, event, virtualFile)
         val params = SvelteLspDidChangeTsOrJsFileParams(didChangeParams.textDocument.uri, didChangeParams.contentChanges)
         lspServer.sendNotification { (it as SvelteLsp4jServer).didChangeTsOrJsFile(params) }

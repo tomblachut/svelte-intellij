@@ -21,12 +21,12 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.eclipse.lsp4j.Diagnostic
 
 /**
- * @see SvelteLspServerSupportProvider
- * @see SvelteLspServerDescriptor
+ * @see SvelteLspClientProvider
+ * @see SvelteLspClientDescriptor
  */
 class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptService(
   project,
-  SvelteLspServerSupportProvider::class.java,
+  SvelteLspClientProvider::class.java,
   SvelteLspServerActivationRule,
   PublishDiagnostics(1),
 ) {
