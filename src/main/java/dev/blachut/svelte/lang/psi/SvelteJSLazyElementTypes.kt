@@ -41,15 +41,18 @@ class AttributeExpressionType private constructor(langMode: SvelteLangMode) : Sv
   }
 }
 
+/** A bare declaration tag keyword: `{const ...}` or `{let ...}` (without the `@`). */
+private enum class DeclarationKind { CONST, LET }
+
 /** Text expressions + html, debug & render + const */
 class ContentExpressionType private constructor(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("CONTENT_EXPRESSION"), langMode) {
   override val noTokensErrorMessage: String = "Expression expected"
   override val assumeExternalBraces: Boolean = false
 
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
-    val bareKind = consumeBareDeclarationKeyword(builder, parser)
-    if (bareKind != null) {
-      parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = bareKind)
+    val declarationKind = consumeBareDeclarationKeyword(builder, parser)
+    if (declarationKind != null) {
+      parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = declarationKind == DeclarationKind.CONST)
     }
     else if (parseAtModifiers(builder)) {
       parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = true)
@@ -61,21 +64,21 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
 
   /**
    * Detects a bare `{const ...}` / `{let ...}` declaration (no `@`) and consumes the keyword.
-   * Returns `true` for `const`, `false` for `let`, or `null` if this is not a bare declaration.
+   * Returns the [DeclarationKind], or `null` if this is not a bare declaration.
    * `const` is a reserved word so it always starts a declaration; `let` may be an identifier and is
    * disambiguated by [letStartsDeclaration]. (The IDENTIFIER-text branch of [isKeyword] exists for `let`,
    * which can be lexed as an identifier in sloppy positions; `const` always lexes as CONST_KEYWORD.)
    */
-  private fun consumeBareDeclarationKeyword(builder: PsiBuilder, parser: JavaScriptParser): Boolean? {
+  private fun consumeBareDeclarationKeyword(builder: PsiBuilder, parser: JavaScriptParser): DeclarationKind? {
     if (isKeyword(builder, JSTokenTypes.CONST_KEYWORD, "const")) {
       builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD)
       builder.advanceLexer()
-      return true
+      return DeclarationKind.CONST
     }
     if (isKeyword(builder, JSTokenTypes.LET_KEYWORD, "let") && letStartsDeclaration(builder, parser)) {
       builder.remapCurrentToken(SvelteTokenTypes.LET_KEYWORD)
       builder.advanceLexer()
-      return false
+      return DeclarationKind.LET
     }
     return null
   }
