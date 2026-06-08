@@ -14,6 +14,7 @@ import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.parsing.html.SvelteHtmlFileElementType
 import dev.blachut.svelte.lang.psi.blocks.SvelteSnippetBlock
+import dev.blachut.svelte.lang.psi.blocks.processConstTagDeclarations
 
 fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
   return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
@@ -98,9 +99,15 @@ class SvelteHtmlFile(viewProvider: FileViewProvider) : HtmlFileImpl(viewProvider
     place: PsiElement,
     document: XmlDocument,
   ): Boolean {
+    // New {const}/{let} tags are valid at the top level; legacy {@const} is not, so skip it here.
+    if (!document.processConstTagDeclarations(processor, state, lastParent, place, skipLegacyAtConst = true)) {
+      return false
+    }
     for (element in document.children) {
       if (element is SvelteSnippetBlock) {
-        element.processDeclarations(processor, state, lastParent, place)
+        if (!element.processDeclarations(processor, state, lastParent, place)) {
+          return false
+        }
       }
     }
     return true

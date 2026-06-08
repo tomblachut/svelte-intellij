@@ -1,6 +1,7 @@
 package dev.blachut.svelte.lang.psi.blocks
 
 import com.intellij.lang.ASTNode
+import com.intellij.lang.javascript.JSTokenTypes
 import com.intellij.lang.javascript.psi.JSRecursiveWalkingElementVisitor
 import com.intellij.lang.javascript.psi.JSVarStatement
 import com.intellij.psi.PsiElement
@@ -29,9 +30,14 @@ class SvelteFragment(node: ASTNode) : SveltePsiElement(node), XmlElement {
 internal fun XmlElement.processConstTagDeclarations(processor: PsiScopeProcessor,
                                                     state: ResolveState,
                                                     lastParent: PsiElement?,
-                                                    place: PsiElement): Boolean {
+                                                    place: PsiElement,
+                                                    skipLegacyAtConst: Boolean = false): Boolean {
   for (element in children) {
     if (element.elementType is ContentExpressionType) {
+      // Legacy `{@const ...}` carries a leading `@` (JS:AT); the new bare `{const}`/`{let}` do not.
+      // At scopes where `{@const}` is not valid (e.g. the file top level) it must stay non-resolving.
+      if (skipLegacyAtConst && element.node.findChildByType(JSTokenTypes.AT) != null) continue
+
       val visitor = object : JSRecursiveWalkingElementVisitor() {
         var result = true
 

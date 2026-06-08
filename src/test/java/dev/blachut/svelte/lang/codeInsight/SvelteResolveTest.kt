@@ -184,6 +184,48 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertNull(reference!!.resolve())
   }
 
+  fun testConstTagTopLevelResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {const greeting = "hi"}
+            {<caret>greeting}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertEquals("greeting", variable.name)
+  }
+
+  fun testLetTagTopLevelResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {
+                let variable = 123
+            }
+            {<caret>variable}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertEquals("variable", variable.name)
+    TestCase.assertFalse("{let} binding should resolve to a mutable variable", variable.isConst)
+  }
+
+  fun testAtConstTagTopLevelStaysUnresolved() {
+    // Legacy {@const} is not valid at the top level in Svelte; keep it non-resolving (unchanged behavior).
+    myFixture.configureByText(
+      "Example.svelte", """
+            {@const variable = 123}
+            {<caret>variable}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    TestCase.assertNull(reference!!.resolve())
+  }
+
   fun testEachWithoutAsClauseIndexResolve() {
     myFixture.configureByText(
       "Example.svelte", """
