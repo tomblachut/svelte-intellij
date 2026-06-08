@@ -150,9 +150,8 @@ class SvelteResolveTest : BasePlatformTestCase() {
     )
     val reference = myFixture.getReferenceAtCaretPosition()
     TestCase.assertNotNull(reference)
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals("greeting", (variable as com.intellij.lang.javascript.psi.JSVariable).name)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertEquals("greeting", variable.name)
   }
 
   fun testLetTagResolve() {
