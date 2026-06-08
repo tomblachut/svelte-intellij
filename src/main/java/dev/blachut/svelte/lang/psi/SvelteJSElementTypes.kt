@@ -48,19 +48,19 @@ internal object SvelteJSElementTypes {
   }
 
   /**
-   * Returns the appropriate const tag variable element type based on the language mode.
-   * @param langMode The detected language mode (from `<script lang="...">`)
-   * @return [CONST_TAG_VARIABLE] for JavaScript, [CONST_TAG_VARIABLE_TS] for TypeScript
+   * Returns the tag-variable element type for a declaration tag, by mutability and language mode.
+   * @param langMode the detected language mode (from `<script lang="...">`)
+   * @param isConst `true` for `{@const}` / `{const}`, `false` for the mutable `{let}`
    */
-  fun getConstTagVariable(langMode: SvelteLangMode): IElementType =
-    if (langMode == SvelteLangMode.HAS_TS) CONST_TAG_VARIABLE_TS else CONST_TAG_VARIABLE
-
-  fun getDeclarationTagVariable(langMode: SvelteLangMode, isConst: Boolean): IElementType =
-    when {
-      isConst -> getConstTagVariable(langMode)
-      langMode == SvelteLangMode.HAS_TS -> LET_TAG_VARIABLE_TS
-      else -> LET_TAG_VARIABLE
+  fun getDeclarationTagVariable(langMode: SvelteLangMode, isConst: Boolean): IElementType {
+    val ts = langMode == SvelteLangMode.HAS_TS
+    return when {
+      isConst && ts -> CONST_TAG_VARIABLE_TS
+      isConst       -> CONST_TAG_VARIABLE
+      ts            -> LET_TAG_VARIABLE_TS
+      else          -> LET_TAG_VARIABLE
     }
+  }
 
   val PARAMETER: JSParameterElementType = object : JSParameterElementType("EMBEDDED_PARAMETER") {
     override fun construct(node: ASTNode) = SvelteJSParameter(node)
