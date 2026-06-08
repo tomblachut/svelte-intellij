@@ -493,6 +493,53 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertNull("Expected unimported namespace to resolve to null", resolved)
   }
 
+  fun testConstTagElementScopeResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <div>
+                {const x = 1}
+                <span>{<caret>x}</span>
+            </div>
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertEquals("x", variable.name)
+  }
+
+  fun testDeclarationTagShadowingResolvesInner() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {const hello = 'hello'}
+            <div>
+                {const hello = 'hi'}
+                {<caret>hello}
+            </div>
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertEquals("'hi'", variable.initializer?.text)
+  }
+
+  fun testDeclarationTagShadowingResolvesOuterAfterElement() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {const hello = 'hello'}
+            <div>
+                {const hello = 'hi'}
+            </div>
+            {<caret>hello}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertEquals("'hello'", variable.initializer?.text)
+  }
+
   private fun doPathResolveTest(destination: String? = null) {
     checkResolveToDestination(destination, myFixture, getTestName(false), "svelte")
   }

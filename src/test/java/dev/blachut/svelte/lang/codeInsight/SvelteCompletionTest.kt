@@ -300,6 +300,25 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     }
   }
 
+  fun testTopLevelDeclarationTagCompletion() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {const myValue = 1}
+            {my<caret>}
+            """.trimIndent()
+    )
+    val items = myFixture.completeBasic()
+    if (items != null) {
+      hasElements(items, "myValue")
+    }
+    else {
+      myFixture.checkResult("""
+            {const myValue = 1}
+            {myValue<caret>}
+            """.trimIndent())
+    }
+  }
+
   fun testMustache() {
     myFixture.configureByText("Hello.svelte", """
       <script></script>
