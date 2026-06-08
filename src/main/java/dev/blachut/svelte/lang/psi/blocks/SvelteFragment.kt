@@ -34,9 +34,8 @@ internal fun XmlElement.processConstTagDeclarations(processor: PsiScopeProcessor
                                                     skipLegacyAtConst: Boolean = false): Boolean {
   for (element in children) {
     if (element.elementType is ContentExpressionType) {
-      // Legacy `{@const ...}` carries a leading `@` (JS:AT); the new bare `{const}`/`{let}` do not.
       // At scopes where `{@const}` is not valid (e.g. the file top level) it must stay non-resolving.
-      if (skipLegacyAtConst && element.node.findChildByType(JSTokenTypes.AT) != null) continue
+      if (skipLegacyAtConst && element.isLegacyAtConstTag()) continue
 
       val visitor = object : JSRecursiveWalkingElementVisitor() {
         var result = true
@@ -57,3 +56,11 @@ internal fun XmlElement.processConstTagDeclarations(processor: PsiScopeProcessor
 
   return true
 }
+
+/**
+ * A content-expression mustache is a legacy `{@const ...}` tag when it carries a leading `@` (`JS:AT`)
+ * token; the modern bare `{const}` / `{let}` declaration tags do not. Used to keep `{@const}` out of
+ * scopes where only the modern tags are valid (e.g. the file top level).
+ */
+private fun PsiElement.isLegacyAtConstTag(): Boolean =
+  node.findChildByType(JSTokenTypes.AT) != null
