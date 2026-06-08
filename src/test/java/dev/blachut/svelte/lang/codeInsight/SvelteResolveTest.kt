@@ -4,6 +4,7 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.JSTestUtils.checkResolveToDestination
 import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
+import com.intellij.lang.javascript.psi.JSVariable
 import com.intellij.polySymbols.search.PsiLinkedPolySymbol
 import com.intellij.polySymbols.testFramework.multiResolvePolySymbolReference
 import com.intellij.polySymbols.testFramework.resolvePolySymbolReference
@@ -165,9 +166,8 @@ class SvelteResolveTest : BasePlatformTestCase() {
     )
     val reference = myFixture.getReferenceAtCaretPosition()
     TestCase.assertNotNull(reference)
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertFalse((variable as com.intellij.lang.javascript.psi.JSVariable).isConst)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertFalse("{let} binding should resolve to a mutable variable", variable.isConst)
   }
 
   fun testLetTagBlockScope() {
