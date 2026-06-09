@@ -27,12 +27,13 @@ import org.eclipse.lsp4j.Diagnostic
 class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptService(
   project,
   SvelteLspClientProvider::class.java,
+  SvelteLspClientDescriptor(project),
   SvelteLspServerActivationRule,
 ) {
   override val name: String = "Svelte LSP"
   override val prefix: String = "Svelte"
 
-  override fun isServiceFallbackResolveEnabled(): Boolean  = true
+  override fun isServiceFallbackResolveEnabled(): Boolean = true
 
   override fun isServiceNavigationEnabled(): Boolean = true
 
@@ -46,7 +47,7 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
    */
   override val diagnosticsConfiguration: DiagnosticsConfiguration
     get() = if (getServer()?.initializeResult?.capabilities?.diagnosticProvider != null) PullDiagnostics
-            else PublishDiagnostics(1)
+    else PublishDiagnostics(1)
 
   /**
    * Skip LSP navigation for namespaced component tag names (e.g. `Forms.Input`) when called
