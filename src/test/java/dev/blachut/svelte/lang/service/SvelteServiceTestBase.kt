@@ -3,9 +3,12 @@ package dev.blachut.svelte.lang.service
 import com.intellij.lang.javascript.service.BaseLspTypeScriptServiceTest
 import com.intellij.lang.javascript.library.typings.TypeScriptExternalDefinitionsRegistry
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
+import com.intellij.lang.typescript.library.TypeScriptServiceDirectoryWatcher
 import com.intellij.lang.typescript.library.download.TypeScriptDefinitionFilesDirectory
+import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.registry.RegistryManager
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.copyBundledSvelteKit
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
@@ -43,6 +46,7 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
 
     val serviceSettings = getSvelteServiceSettings(project)
     val old = serviceSettings.serviceMode
+    serviceSettings.serviceMode = SvelteServiceMode.DISABLED
     TypeScriptLanguageServiceUtil.setUseService(true)
     TypeScriptExternalDefinitionsRegistry.testTypingsRootPath = TypeScriptDefinitionFilesDirectory.getGlobalAutoDownloadTypesDirectoryPath()
 
@@ -50,13 +54,25 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
       serviceSettings.serviceMode = old
       TypeScriptLanguageServiceUtil.setUseService(false)
     }
-    serviceSettings.serviceMode = SvelteServiceMode.ENABLED
 
     RegistryManager.getInstance().get("svelte.language.server.bundled.enabled").setValue(true, testRootDisposable)
     ensureServerDownloaded(SvelteLspServerLoader)
 
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
     performNpmInstallForPackageJson("package.json") // svelte-language-server imports typescript
+    prepareTypeScriptServiceDirectory()
+    // npm installs project-local TypeScript; enable Svelte LSP only after that reload source is stable.
+    serviceSettings.serviceMode = SvelteServiceMode.ENABLED
+  }
+
+  private fun prepareTypeScriptServiceDirectory() {
+    val watcher = TypeScriptServiceDirectoryWatcher.getService(project)
+    ReadAction.runBlocking<Exception> {
+      watcher.calcServiceDirectoryAndRefresh()
+    }
+    runInEdtAndWait {
+      watcher.update()
+    }
   }
 
   protected fun addTypeScriptCommonFiles() {
