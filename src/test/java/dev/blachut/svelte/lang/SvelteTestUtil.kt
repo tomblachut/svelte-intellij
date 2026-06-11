@@ -40,7 +40,7 @@ internal fun CodeInsightTestFixture.configureBundledSvelte() {
 }
 
 internal fun CodeInsightTestFixture.copyBundledSvelteKit() {
-  configureSvelteDependencies(SvelteTestModule.SVELTE_KIT_1)
+  configureSvelteDependencies(SvelteTestModule.SVELTE_KIT_1, SvelteTestModule.SVELTE_KIT_ADAPTER_AUTO_2, *SVELTE_KIT_1_RUNTIME_DEPENDENCIES)
 }
 
 internal fun CodeInsightTestFixture.checkCompletionContains(vararg variants: String) {

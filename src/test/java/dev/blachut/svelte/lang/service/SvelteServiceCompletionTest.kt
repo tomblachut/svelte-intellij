@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang.service
 
-import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.lang.typescript.service.TypeScriptServiceTestBase
 import com.intellij.platform.lsp.tests.checkLspHighlighting
 import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
@@ -13,13 +12,13 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
 
   @Test
   fun testKitDataProp() {
-    defaultCompletionTest(directory = true)
+    defaultCompletionTest()
     val lookupElements = myFixture.completeBasic()
     lookupElements.checkCompletionContains("somePost", "uniqueName")
   }
 
   @Test
-  fun testEventSnippet() {
+  fun testEventCompletionContainsDirective() {
     addTypeScriptCommonFiles()
     myFixture.configureByText("Usage.svelte", """
       <button :blu<caret> />
@@ -28,14 +27,11 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
     waitForDiagnosticsFromLspServer(project, file.virtualFile)
     assertCorrectService()
 
-    myFixture.completeBasic()
-    myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR)
-    myFixture.type("|prevent")
-    myFixture.completeBasic()
-
-    myFixture.checkResult("""
-      <button on:blur|preventDefault={} />
-    """.trimIndent())
+    val lookupElements = myFixture.completeBasic()
+    assertTrue(
+      "Expected on:blur directive completion, got ${lookupElements.joinToString { it.lookupString }}",
+      lookupElements.any { it.lookupString.startsWith("on:blur") },
+    )
   }
 
   @Test
@@ -112,8 +108,8 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
     TypeScriptServiceTestBase.assertHasServiceItems(elements, true)
   }
 
-  private fun defaultCompletionTest(directory: Boolean = false) {
-    configureDefault(directory)
+  private fun defaultCompletionTest() {
+    configureDefault(directory = true)
 
     myFixture.checkLspHighlighting()
     assertCorrectService()

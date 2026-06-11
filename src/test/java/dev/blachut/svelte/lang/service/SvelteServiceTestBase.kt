@@ -3,12 +3,12 @@ package dev.blachut.svelte.lang.service
 import com.intellij.lang.javascript.service.BaseLspTypeScriptServiceTest
 import com.intellij.lang.javascript.library.typings.TypeScriptExternalDefinitionsRegistry
 import com.intellij.lang.typescript.compiler.languageService.TypeScriptLanguageServiceUtil
-import com.intellij.lang.typescript.library.TypeScriptServiceDirectoryWatcher
 import com.intellij.lang.typescript.library.download.TypeScriptDefinitionFilesDirectory
-import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.registry.RegistryManager
-import com.intellij.testFramework.runInEdtAndWait
+import dev.blachut.svelte.lang.SvelteTestModule
+import dev.blachut.svelte.lang.SVELTE_KIT_1_RUNTIME_DEPENDENCIES
+import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.copyBundledSvelteKit
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
@@ -56,23 +56,21 @@ abstract class SvelteServiceTestBase : BaseLspTypeScriptServiceTest() {
     }
 
     RegistryManager.getInstance().get("svelte.language.server.bundled.enabled").setValue(true, testRootDisposable)
-    ensureServerDownloaded(SvelteLspServerLoader)
+    RegistryManager.getInstance().get("typescript.service.completion.ownContributorsEnabled").setValue(false, testRootDisposable)
+    assertNotNull("Bundled Svelte LSP server is not available", SvelteLspServerLoader.getAbsolutePath(project))
+    assertNotNull("Bundled Svelte TypeScript plugin is not available", SvelteTSPluginLoader.getAbsolutePath(project))
 
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
-    performNpmInstallForPackageJson("package.json") // svelte-language-server imports typescript
-    prepareTypeScriptServiceDirectory()
-    // npm installs project-local TypeScript; enable Svelte LSP only after that reload source is stable.
-    serviceSettings.serviceMode = SvelteServiceMode.ENABLED
-  }
+    myFixture.configureSvelteDependencies(
+      SvelteTestModule.SVELTE_4,
+      SvelteTestModule.SVELTE_KIT_1,
+      SvelteTestModule.SVELTE_KIT_ADAPTER_AUTO_2,
+      *SVELTE_KIT_1_RUNTIME_DEPENDENCIES,
+      SvelteTestModule.SVELTE_PREPROCESS_5,
+    )
 
-  private fun prepareTypeScriptServiceDirectory() {
-    val watcher = TypeScriptServiceDirectoryWatcher.getService(project)
-    ReadAction.runBlocking<Exception> {
-      watcher.calcServiceDirectoryAndRefresh()
-    }
-    runInEdtAndWait {
-      watcher.update()
-    }
+    // Enable Svelte LSP only after fixture dependencies are copied and project roots are stable.
+    serviceSettings.serviceMode = SvelteServiceMode.ENABLED
   }
 
   protected fun addTypeScriptCommonFiles() {
