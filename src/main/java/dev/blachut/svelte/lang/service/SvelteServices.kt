@@ -10,9 +10,11 @@ import com.intellij.lang.typescript.lsp.PackageVersion
 import com.intellij.lang.typescript.lsp.ServiceActivationHelper
 import com.intellij.lang.typescript.lsp.TSPluginActivationRule
 import com.intellij.lang.typescript.lsp.TSPluginLoader
+import com.intellij.lang.typescript.lsp.defaultPackageKey
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.registry.Registry
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.util.text.SemVer
 import dev.blachut.svelte.lang.isSvelteContext
 import dev.blachut.svelte.lang.isSvelteProjectContext
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
@@ -20,14 +22,26 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.jetbrains.annotations.ApiStatus
 
 
+private const val SVELTE_LSP_SERVER_VERSION = "0.18.1"
+private val bundledSvelteLspServerVersion = SemVer.parseFromText(SVELTE_LSP_SERVER_VERSION)!!
+
 private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(
   "svelte-language-server",
-  PackageVersion.bundled<SvelteLspServerPackageDescriptor>("0.18.1", "svelte", "src/main/svelte-language-server") {
+  PackageVersion.bundled<SvelteLspServerPackageDescriptor>(SVELTE_LSP_SERVER_VERSION, "svelte", "src/main/svelte-language-server") {
     Registry.`is`("svelte.language.server.bundled.enabled")
   },
   "/bin/server.js"
 ) {
   override val registryVersion: String get() = Registry.stringValue("svelte.language.server.default.version")
+}
+
+internal fun isBundledSvelteLspServerSelected(project: Project): Boolean {
+  if (getSvelteServiceSettings(project).lspServerPackage.systemDependentPath != defaultPackageKey) return false
+  if (!Registry.`is`("svelte.language.server.bundled.enabled")) return false
+
+  val selectedVersion = SemVer.parseFromText(Registry.stringValue("svelte.language.server.default.version"))
+                        ?: bundledSvelteLspServerVersion
+  return selectedVersion == bundledSvelteLspServerVersion
 }
 
 @ApiStatus.Experimental

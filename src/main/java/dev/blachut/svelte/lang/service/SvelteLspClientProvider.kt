@@ -1,10 +1,14 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service
 
+import com.intellij.execution.target.value.TargetValue
+import com.intellij.javascript.nodejs.execution.NodeTargetRun
 import com.intellij.lang.typescript.lsp.JSFrameworkLsp4jServer
 import com.intellij.lang.typescript.lsp.JSFrameworkLspClientDescriptor
 import com.intellij.lang.typescript.lsp.JSFrameworkLspClientProvider
 import com.intellij.lang.typescript.lsp.JSLspClientWidgetItem
+import com.intellij.lang.typescript.lsp.getTypeScriptServiceDirectory
+import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspClient
@@ -30,6 +34,16 @@ internal class SvelteLspClientProvider : JSFrameworkLspClientProvider(SvelteLspS
 internal class SvelteLspClientDescriptor(project: Project) :
   JSFrameworkLspClientDescriptor(project, SvelteLspServerActivationRule, "Svelte") {
   override val lsp4jServerClass: Class<out LanguageServer> = SvelteLsp4jServer::class.java
+
+  override fun getArgumentsForLspServer(target: NodeTargetRun): List<TargetValue<String>> {
+    val baseArguments = super.getArgumentsForLspServer(target)
+    if (!isBundledSvelteLspServerSelected(project)) return baseArguments
+
+    val tsPath = ReadAction.nonBlocking<String> { getTypeScriptServiceDirectory(project) }.executeSynchronously()
+    // --tsdk is consumed by the JetBrains-bundled Svelte server.js TypeScript shim only.
+    // Downloaded/custom servers still rely on the regular Node.js module resolution.
+    return listOf(TargetValue.map(target.path(tsPath)) { "--tsdk=$it" }) + baseArguments
+  }
 }
 
 internal interface SvelteLsp4jServer : JSFrameworkLsp4jServer {

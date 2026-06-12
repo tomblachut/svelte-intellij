@@ -21,13 +21,15 @@ const runtimeDependencies = [
   `svelte2tsx`
 ];
 
+const typeScriptShimPath = path.resolve(__dirname, 'typescript-shim.js');
+
 esbuild.build({
     entryPoints: {
         [packageRelativePath]: `./node_modules/${languageServerPackage}/${packageRelativePath}`,
     },
     outdir: '.',
     bundle: true,
-    external: ['typescript', 'prettier', 'prettier-plugin-svelte'],
+    external: ['prettier', 'prettier-plugin-svelte'],
     format: 'cjs',
     platform: 'node',
     target: 'es2015',
@@ -36,6 +38,12 @@ esbuild.build({
     minify: process.argv.includes('--minify'),
     metafile: process.argv.includes('--metafile'),
     plugins: [
+        {
+            name: 'typescript-shim',
+            setup(build) {
+                build.onResolve({filter: /^typescript$/}, () => ({path: typeScriptShimPath}));
+            },
+        },
         {
             name: 'umd2esm',
             setup(build) {
