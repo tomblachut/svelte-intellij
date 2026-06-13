@@ -6,8 +6,6 @@ import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.mock.MockDocument
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.platform.lsp.tests.checkLspHighlighting
-import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import com.intellij.testFramework.ExpectedHighlightingData
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
@@ -39,7 +37,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <input <warning descr="Svelte: A11y: Avoid using autofocus">autofocus</warning>>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -55,7 +53,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         console.log(hello);
       </script>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -71,7 +69,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         }
       </style>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -88,7 +86,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         console.log(ns, expectError);
       </script>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     WriteCommandAction.runWriteCommandAction(project) {
@@ -107,7 +105,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
     val data = ExpectedHighlightingData(checkDoc, true, true, false)
     data.init()
-    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    myFixture.doHighlighting()
     (myFixture as CodeInsightTestFixtureImpl).collectAndCheckHighlighting(data)
   }
 
@@ -139,7 +137,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <Child <error descr="Svelte: Object literal may only specify known properties, and '\"numBPrivate\"' does not exist in type '{ numA?: number | undefined; numB: number; }'.">numBPrivate</error>={undefined} numB={1} />
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -173,7 +171,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         <p>{model.errorMessage}</p>
       {/if}
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -196,7 +194,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         defaultUser = user;
       </script>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -214,7 +212,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -232,7 +230,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -250,7 +248,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -268,7 +266,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -292,7 +290,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       {sourceAccount}
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -315,7 +313,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         new Wrong;
       </script>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -346,7 +344,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       {x}
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -364,7 +362,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <button on:click={handleClick}>Hello</button>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     JSNavigationTest.doTestGTDU(myFixture, true)
@@ -384,7 +382,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <button on:click={<caret>handleClick}>Hello</button>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     JSNavigationTest.doTestGTDU(myFixture, false)
@@ -401,7 +399,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <p>Foo: {<caret>foo}</p>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     JSNavigationTest.doTestGTDU(myFixture, false)
@@ -417,7 +415,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       {prop1}
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
 
     myFixture.configureByText("usage.ts", """
       import Foo from "./Foo.svelte";
@@ -484,7 +482,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <button on:click|preventDefault={exposedStuff} />
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
 
     checkTypeScriptServiceResolve("usageTS.ts", """
       import Foo from "./Foo.svelte";
@@ -515,7 +513,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         Hello
       </div</warning>>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -536,7 +534,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       	Hello
       </div>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -551,7 +549,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       {value}
     """.trimIndent())
 
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     JSNavigationTest.doTestGTDU(myFixture, false)
@@ -567,7 +565,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       {value}
     """.trimIndent())
 
-    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    myFixture.doHighlighting()
     assertCorrectService()
 
     JSNavigationTest.doTestGTDU(myFixture, true)
@@ -585,7 +583,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    myFixture.doHighlighting()
     assertCorrectService()
 
     val usages = myFixture.findUsages(myFixture.elementAtCaret)
@@ -610,7 +608,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    myFixture.doHighlighting()
     assertCorrectService()
 
     val usages = myFixture.findUsages(myFixture.elementAtCaret)
@@ -632,7 +630,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    myFixture.doHighlighting()
     assertCorrectService()
 
     val usages = myFixture.findUsages(myFixture.elementAtCaret)

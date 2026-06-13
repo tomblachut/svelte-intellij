@@ -1,8 +1,6 @@
 package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.typescript.service.TypeScriptServiceTestBase
-import com.intellij.platform.lsp.tests.checkLspHighlighting
-import com.intellij.platform.lsp.tests.waitForDiagnosticsFromLspServer
 import dev.blachut.svelte.lang.checkCompletionContains
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
 import org.junit.Test
@@ -24,7 +22,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
       <button :blu<caret> />
     """.trimIndent())
 
-    waitForDiagnosticsFromLspServer(project, file.virtualFile)
+    myFixture.doHighlighting()
     assertCorrectService()
 
     val lookupElements = myFixture.completeBasic()
@@ -90,7 +88,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     val elements = myFixture.completeBasic()
@@ -111,7 +109,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
   private fun defaultCompletionTest() {
     configureDefault(directory = true)
 
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 }

@@ -3,7 +3,6 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.ui.TestDialogManager
-import com.intellij.platform.lsp.tests.checkLspHighlighting
 import org.junit.Test
 
 /**
@@ -20,7 +19,7 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
       myFixture.copyDirectoryToProject("dev/blachut/svelte/lang/service/nsRename/$testDir", "")
     }
     myFixture.configureFromTempProjectFile(initFile)
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
   }
 
@@ -43,7 +42,7 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
     setupNsRenameProject()
 
     myFixture.configureFromTempProjectFile("Consumer.svelte")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.editor.caretModel.moveToOffset(myFixture.file.text.indexOf("UI from"))
@@ -57,7 +56,7 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
     setupNsRenameProject()
 
     myFixture.configureFromTempProjectFile("Consumer.svelte")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("lib/UI.ts")
@@ -77,7 +76,7 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
     setupNsRenameProject()
 
     myFixture.configureFromTempProjectFile("Consumer.svelte")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     val tagText = "Nesting.Card"
@@ -95,7 +94,7 @@ class SvelteNsRenameServiceTest : SvelteServiceTestBase() {
     setupNsRenameProject("Label.svelte")
 
     myFixture.configureFromTempProjectFile("Consumer.svelte")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.editor.caretModel.moveToOffset(myFixture.file.text.indexOf("UI from"))

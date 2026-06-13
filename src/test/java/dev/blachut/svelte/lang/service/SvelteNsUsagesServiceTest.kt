@@ -1,7 +1,6 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.service
 
-import com.intellij.platform.lsp.tests.checkLspHighlighting
 import com.intellij.polySymbols.testFramework.fileUsages
 import com.intellij.polySymbols.testFramework.usagesAtCaret
 import junit.framework.TestCase
@@ -27,7 +26,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
 
     myFixture.configureByText("Button.svelte", "<button><slot /></button>")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.addFileToProject("Card.svelte", "<div class=\"card\"><slot /></div>")
@@ -40,7 +39,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
         <UI.Button>Click me</UI.Button>
       </UI.Card>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("Card.svelte")
@@ -77,13 +76,13 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
 
     myFixture.configureByText("Button.svelte", "<button><slot /></button>")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.addFileToProject("Card.svelte", "<div class=\"card\"><slot /></div>")
 
     myFixture.configureFromTempProjectFile("Consumer.svelte")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("UI.ts")
@@ -116,7 +115,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
 
     myFixture.configureByText("Label.svelte", "<span><slot /></span>")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.addFileToProject("Icon.svelte", "<svg><slot /></svg>")
@@ -128,7 +127,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
       <Forms.Button.Label>Submit</Forms.Button.Label>
       <Forms.Button.Icon />
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("Label.svelte")
@@ -163,13 +162,13 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
 
     myFixture.configureByText("Label.svelte", "<span><slot /></span>")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.addFileToProject("Icon.svelte", "<svg><slot /></svg>")
 
     myFixture.configureFromTempProjectFile("Consumer.svelte")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("lib/Button.ts")
@@ -201,7 +200,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
       </script>
       <button>{label}</button>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureByText("Example.svelte", """
@@ -210,7 +209,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
       </script>
       <UI.Button label="Click me" />
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("Button.svelte")
@@ -239,7 +238,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
       </script>
       <button class={variant}><slot /></button>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.addFileToProject("Card.svelte", "<div class=\"card\"><slot /></div>")
@@ -252,7 +251,7 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
         <UI.Button variant="primary">Click me</UI.Button>
       </UI.Card>
     """.trimIndent())
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("Button.svelte")
@@ -289,13 +288,13 @@ class SvelteNsUsagesServiceTest : SvelteServiceTestBase() {
     """.trimIndent())
 
     myFixture.configureByText("Button.svelte", "<button><slot /></button>")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.addFileToProject("Card.svelte", "<div class=\"card\"><slot /></div>")
 
     myFixture.configureFromTempProjectFile("Consumer.svelte")
-    myFixture.checkLspHighlighting()
+    myFixture.checkHighlighting()
     assertCorrectService()
 
     myFixture.configureFromTempProjectFile("UI.ts")
