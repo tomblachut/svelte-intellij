@@ -4,7 +4,7 @@ package dev.blachut.svelte.lang.service
 import com.intellij.javascript.nodejs.execution.NodeTargetRun
 import com.intellij.lang.typescript.lsp.JSFrameworkLsp4jServer
 import com.intellij.lang.typescript.lsp.JSFrameworkLspClientDescriptor
-import com.intellij.lang.typescript.lsp.JSFrameworkLspClientProvider
+import com.intellij.lang.typescript.lsp.JSFrameworkLspIntegrationProvider
 import com.intellij.lang.typescript.lsp.JSLspClientWidgetItem
 import com.intellij.lang.typescript.lsp.getTypeScriptServiceDirectory
 import com.intellij.openapi.application.runReadActionBlocking
@@ -20,7 +20,7 @@ import org.eclipse.lsp4j.services.LanguageServer
 /**
  * @see SvelteLspTypeScriptService
  */
-internal class SvelteLspClientProvider : JSFrameworkLspClientProvider(SvelteLspServerActivationRule) {
+internal class SvelteLspIntegrationProvider : JSFrameworkLspIntegrationProvider(SvelteLspServerActivationRule) {
   override fun createLspServerDescriptor(project: Project): JSFrameworkLspClientDescriptor = SvelteLspClientDescriptor(project)
 
   override fun createWidgetItem(lspClient: LspClient, currentFile: VirtualFile?): LspClientWidgetItem =
