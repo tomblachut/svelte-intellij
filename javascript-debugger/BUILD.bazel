@@ -1,0 +1,67 @@
+load("@rules_jvm//:jvm.bzl", "jvm_library")
+
+### auto-generated section `build intellij.svelte.javascript.debugger` start
+
+jvm_library(
+    name = "javascript-debugger",
+    srcs = glob(
+        [
+            "src/**/*.kt",
+            "src/**/*.java",
+            "src/**/*.form",
+        ],
+        allow_empty = True,
+    ),
+    module_name = "intellij.svelte.javascript.debugger",
+    resource_strip_prefix = "resources",
+    resources = glob(
+        ["resources/**/*"],
+    ),
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort,
+        "//plugins/svelte",
+        "//plugins/JavaScriptDebugger/backend",
+        "//plugins/JavaScriptDebugger/debugger-ui:javascript-debugger-ui",
+        "@community//platform/util/concurrency",
+        "@community//platform/core-api:core",
+        "@community//platform/core-impl",
+        "@community//platform/xdebugger-api:debugger",
+        "@community//platform/editor-ui-api:editor-ui",
+        "@community//platform/lang-api:lang",
+    ],
+)
+
+jvm_library(
+    name = "javascript-debugger_test_lib",
+    testonly = True,
+    srcs = glob(
+        [],
+        allow_empty = True,
+    ),
+    module_name = "intellij.svelte.javascript.debugger",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        # do not sort,
+        ":javascript-debugger",
+        "//plugins/svelte:svelte_test_lib",
+        "//plugins/JavaScriptDebugger/backend:backend_test_lib",
+        "//plugins/JavaScriptDebugger/debugger-ui:javascript-debugger-ui_test_lib",
+        "@community//platform/util/concurrency:concurrency_test_lib",
+        "@community//platform/core-api:core_test_lib",
+        "@community//platform/core-impl:core-impl_test_lib",
+        "@community//platform/xdebugger-api:debugger_test_lib",
+        "@community//platform/editor-ui-api:editor-ui_test_lib",
+        "@community//platform/lang-api:lang_test_lib",
+    ],
+)
+### auto-generated section `build intellij.svelte.javascript.debugger` end
+
+### auto-generated section `iml intellij.svelte.javascript.debugger` start
+exports_files(
+    [
+        "intellij.svelte.javascript.debugger.iml",
+    ],
+    visibility = ["//visibility:public"],
+)
+### auto-generated section `iml intellij.svelte.javascript.debugger` end

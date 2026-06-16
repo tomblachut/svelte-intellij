@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.run
+package com.intellij.svelte.javascript.debugger
 
 import com.intellij.javascript.debugger.JavaScriptDebugAwareBase
 import dev.blachut.svelte.lang.SvelteHtmlFileType

@@ -1,3 +1,6 @@
+- name: lib/modules/intellij.svelte.javascript.debugger.jar
+  contentModules:
+  - name: intellij.svelte.javascript.debugger
 - name: lib/svelte.jar
   modules:
   - name: intellij.svelte

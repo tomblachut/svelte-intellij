@@ -10,7 +10,6 @@
   <depends>JavaScript</depends>
   <depends>com.intellij.css</depends>
   <depends>com.intellij.modules.spellchecker</depends>
-  <depends optional="true" config-file="svelte-js-debugger.xml">JavaScriptDebugger</depends>
 
   <description><![CDATA[
     <p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>
@@ -29,8 +28,9 @@
     </ul>
   ]]></description>
 
-  <!--suppress PluginXmlValidity -->
-  <content namespace="jetbrains" />
+  <content namespace="jetbrains">
+    <module name="intellij.svelte.javascript.debugger" loading="optional"/>
+  </content>
 
   <!-- region Generated dependencies - run `Generate Product Layouts` to regenerate -->
   <dependencies>
@@ -41,8 +41,6 @@
     <module name="intellij.javascript.backend"/>
     <module name="intellij.javascript.backend.css"/>
     <module name="intellij.javascript.codeinsight"/>
-    <module name="intellij.javascript.debugger.backend"/>
-    <module name="intellij.javascript.debugger.ui"/>
     <module name="intellij.javascript.parser"/>
     <module name="intellij.javascript.psi.impl"/>
     <module name="intellij.javascript.ultimate"/>

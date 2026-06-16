@@ -1,0 +1,13 @@
+<idea-plugin>
+  <!-- region Generated dependencies - run `Generate Product Layouts` to regenerate -->
+  <dependencies>
+    <plugin id="dev.blachut.svelte.lang"/>
+    <module name="intellij.javascript.debugger.backend"/>
+    <module name="intellij.javascript.debugger.ui"/>
+  </dependencies>
+  <!-- endregion -->
+
+  <extensions defaultExtensionNs="com.jetbrains">
+    <javaScriptDebugAware implementation="com.intellij.svelte.javascript.debugger.SvelteDebugAware"/>
+  </extensions>
+</idea-plugin>
