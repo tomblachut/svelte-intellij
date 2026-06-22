@@ -45,6 +45,8 @@
     <module name="intellij.javascript.psi.impl"/>
     <module name="intellij.javascript.ultimate"/>
     <module name="intellij.javascript.web"/>
+    <module name="intellij.libraries.eclipse.lsp4j"/>
+    <module name="intellij.libraries.eclipse.lsp4j.jsonrpc"/>
     <module name="intellij.platform.lsp.impl"/>
     <module name="intellij.platform.webide.impl"/>
     <module name="intellij.postcss.paid"/>
