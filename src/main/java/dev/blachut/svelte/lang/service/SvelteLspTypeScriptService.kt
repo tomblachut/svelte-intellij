@@ -39,7 +39,7 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
 
   override val diagnosticsConfiguration: DiagnosticsConfiguration
     get() {
-      val server = getServer() ?: return PublishDiagnostics(1)
+      val server = getLspClient() ?: return PublishDiagnostics(1)
       // Svelte can advertise diagnosticProvider even when it selected publish mode
       // from client capabilities.
       val serverSupportsPullDiagnostics = server.initializeResult?.capabilities?.diagnosticProvider != null
