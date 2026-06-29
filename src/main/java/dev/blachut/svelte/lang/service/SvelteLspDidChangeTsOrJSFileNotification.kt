@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.service
 
 import com.intellij.lang.javascript.JavaScriptFileType
 import com.intellij.lang.javascript.TypeScriptFileType
+import com.intellij.lang.typescript.lsp.TypeScriptLspClientCommandExecutor.Companion.tsSendNotification
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
 import com.intellij.openapi.project.ProjectManager
@@ -31,7 +32,7 @@ internal class SvelteLspCustomDocumentListener : DocumentListener {
       for (lspServer in LspClientManager.getInstance(project).getClients(SvelteLspIntegrationProvider::class.java)) {
         val didChangeParams = LspDidChangeUtil.createIncrementalDidChangeParamsBeforeDocumentChange(lspServer, event, virtualFile)
         val params = SvelteLspDidChangeTsOrJsFileParams(didChangeParams.textDocument.uri, didChangeParams.contentChanges)
-        lspServer.sendNotification { (it as SvelteLsp4jServer).didChangeTsOrJsFile(params) }
+        lspServer.tsSendNotification { (it as SvelteLsp4jServer).didChangeTsOrJsFile(params) }
       }
     }
   }
