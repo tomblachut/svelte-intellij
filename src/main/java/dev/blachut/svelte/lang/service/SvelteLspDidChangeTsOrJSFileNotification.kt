@@ -32,7 +32,9 @@ internal class SvelteLspCustomDocumentListener : DocumentListener {
       for (lspServer in LspClientManager.getInstance(project).getClients(SvelteLspIntegrationProvider::class.java)) {
         val didChangeParams = LspDidChangeUtil.createIncrementalDidChangeParamsBeforeDocumentChange(lspServer, event, virtualFile)
         val params = SvelteLspDidChangeTsOrJsFileParams(didChangeParams.textDocument.uri, didChangeParams.contentChanges)
-        lspServer.tsSendNotification { (it as SvelteLsp4jServer).didChangeTsOrJsFile(params) }
+        lspServer.tsSendNotification("\$/onDidChangeTsOrJsFile") {
+          (it as SvelteLsp4jServer).didChangeTsOrJsFile(params)
+        }
       }
     }
   }
