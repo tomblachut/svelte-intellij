@@ -4,12 +4,6 @@
   <category>JavaScript Frameworks and Tools</category>
   <vendor>JetBrains</vendor>
 
-  <depends>com.intellij.modules.lang</depends>
-  <depends>com.intellij.modules.xml</depends>
-  <depends>com.intellij.modules.ultimate</depends>
-  <depends>JavaScript</depends>
-  <depends>com.intellij.modules.spellchecker</depends>
-
   <description><![CDATA[
     <p>Support for <a href="https://svelte.dev/">Svelte</a> in your IDE of choice.</p>
 
@@ -32,8 +26,13 @@
     <module name="intellij.svelte.css"/>
   </content>
 
-  <!-- region Generated dependencies - run `Generate Product Layouts` to regenerate -->
   <dependencies>
+    <plugin id="com.intellij.modules.lang"/>
+    <plugin id="com.intellij.modules.xml"/>
+    <plugin id="com.intellij.modules.ultimate"/>
+    <plugin id="JavaScript"/>
+    <plugin id="com.intellij.modules.spellchecker"/>
+    <!-- region Generated dependencies - run `Generate Product Layouts` to regenerate -->
     <module name="intellij.javascript.analysis.impl"/>
     <module name="intellij.javascript.backend"/>
     <module name="intellij.javascript.codeinsight"/>
@@ -52,8 +51,8 @@
     <module name="intellij.xml.parser"/>
     <module name="intellij.xml.psi"/>
     <module name="intellij.xml.psi.impl"/>
+    <!-- endregion -->
   </dependencies>
-  <!-- endregion -->
   <extensionPoints>
     <extensionPoint qualifiedName="com.intellij.svelte.cssSupport"
                     interface="dev.blachut.svelte.lang.css.SvelteCssSupport" dynamic="true"/>
