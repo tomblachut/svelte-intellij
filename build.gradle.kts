@@ -51,7 +51,11 @@ repositories {
 }
 
 sourceSets.main {
-    java.srcDirs("src/main/java", "src/main/gen")
+    // The plugin is split into optional content modules (see <content> in plugin.xml).
+    // Bazel/JPS builds each as a separate jar, but the Gradle build produces a single jar,
+    // so their sources and descriptors must be added here to keep them packaged for external builds.
+    java.srcDirs("src/main/java", "src/main/gen", "css/src", "javascript-debugger/src")
+    resources.srcDirs("css/resources", "javascript-debugger/resources")
 }
 
 // https://github.com/JetBrains/gradle-intellij-plugin
