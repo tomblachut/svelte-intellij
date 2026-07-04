@@ -13,7 +13,7 @@ import com.intellij.psi.css.resolve.HtmlCssClassOrIdReference
 import dev.blachut.svelte.lang.css.SvelteCssSupport
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 
-internal class SvelteCssSupportImpl : SvelteCssSupport {
+class SvelteCssSupportImpl : SvelteCssSupport {
   override fun getClassReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange): PsiReference? {
     val descriptorProvider = CssDescriptorsUtilCore.findDescriptorProvider(attribute) ?: return null
     return descriptorProvider.getStyleReference(attribute, rangeInElement.startOffset, rangeInElement.endOffset, true)

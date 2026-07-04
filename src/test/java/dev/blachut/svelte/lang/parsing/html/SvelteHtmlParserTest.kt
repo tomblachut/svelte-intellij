@@ -11,13 +11,16 @@ import com.intellij.lang.javascript.JavascriptParserDefinition
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.lang.xml.XmlASTFactory
 import com.intellij.lexer.EmbeddedTokenTypesProvider
+import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.psi.css.CssEmbeddedTokenTypesProvider
 import com.intellij.psi.css.CssHtmlEmbeddedContentSupport
 import com.intellij.psi.css.impl.CssTreeElementFactory
 import com.intellij.psi.xml.StartTagEndTokenProvider
+import com.intellij.svelte.css.SvelteCssSupportImpl
 import com.intellij.testFramework.ParsingTestCase
 import com.intellij.xml.testFramework.XmlElementTypeServiceHelper.registerXmlElementTypeServices
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
+import dev.blachut.svelte.lang.css.SvelteCssSupport
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition
 import dev.blachut.svelte.lang.parsing.ts.SvelteTypeScriptParserDefinition
@@ -62,6 +65,15 @@ class SvelteHtmlParserTest : ParsingTestCase(
 
     registerXmlElementTypeServices(application, testRootDisposable)
     registerJSElementTypeServices(application, testRootDisposable)
+
+    // `<style lang="...">` dialect lookup routes through the optional `com.intellij.svelte.cssSupport`
+    // extension point (see [SvelteCssSupport]). In production it is contributed by the intellij.svelte.css
+    // content module; register its implementation explicitly here so this lightweight parser test can
+    // resolve CSS/SCSS style dialects instead of failing with "Missing extension point".
+    registerExtension(
+      ExtensionPointName.create<SvelteCssSupport>("com.intellij.svelte.cssSupport"),
+      SvelteCssSupportImpl()
+    )
 
     //        registerExtensionPoint(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProvider::class.java)
     //        registerExtension(CssElementDescriptorProvider.EP_NAME, CssElementDescriptorProviderImpl())
