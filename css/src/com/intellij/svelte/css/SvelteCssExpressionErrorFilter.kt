@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.css
+package com.intellij.svelte.css
 
 import com.intellij.codeInsight.highlighting.HighlightErrorFilter
 import com.intellij.psi.PsiErrorElement

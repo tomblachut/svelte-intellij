@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.codeInsight
+package com.intellij.svelte.css
 
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.lang.javascript.psi.JSProperty

@@ -10,18 +10,21 @@ import com.intellij.codeInspection.htmlInspections.HtmlWrongAttributeValueInspec
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.css.CssElement
-import com.intellij.psi.css.inspections.invalid.CssUnresolvedCustomPropertyInspection
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlAttributeValue
 import com.intellij.xml.util.XmlDuplicatedIdInspection
 import com.intellij.xml.util.XmlInvalidIdInspection
+import dev.blachut.svelte.lang.css.SvelteCssSupport
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil
 import dev.blachut.svelte.lang.equalsName
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.isSvelteContext
+
+// Short name of com.intellij.psi.css.inspections.invalid.CssUnresolvedCustomPropertyInspection, referenced by string
+// so that the Svelte plugin does not hard-depend on the CSS plugin (WEB-78194).
+private const val CSS_UNRESOLVED_CUSTOM_PROPERTY_INSPECTION_SHORT_NAME = "CssUnresolvedCustomProperty"
 
 internal class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() {
   private val scriptAttributes = listOf("context", "generics", "module")
@@ -72,11 +75,11 @@ internal class SvelteHtmlInspectionSuppressor : DefaultXmlSuppressionProvider() 
       return true // we'd need to use control flow analysis in XmlDuplicatedIdInspection for if blocks
     }
 
-    if (inspectionId.equalsName<CssUnresolvedCustomPropertyInspection>()) { // WEB-60171
+    if (inspectionId == CSS_UNRESOLVED_CUSTOM_PROPERTY_INSPECTION_SHORT_NAME) { // WEB-60171
       return true // todo rewrite inline style parser to handle expressions, e.g.: style="--myColor: {myColor}; --opacity: {bgOpacity};"
     }
 
-    if (element is CssElement && inspectionId.lowercase().startsWith("css") /* dangerous */) {
+    if (SvelteCssSupport.isCssElement(element) && inspectionId.lowercase().startsWith("css") /* dangerous */) {
       return element.parentOfType<XmlAttributeValue>() != null
     }
 

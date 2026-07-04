@@ -84,6 +84,7 @@
     <orderEntry type="module" module-name="intellij.svelte" scope="TEST" />
     <orderEntry type="module" module-name="intellij.vitejs.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.css.backend" scope="TEST" />
+    <orderEntry type="module" module-name="intellij.svelte.css" scope="TEST" />
     <orderEntry type="module" module-name="intellij.libraries.junit4" scope="TEST" />
   </component>
   <component name="TestModuleProperties" production-module="intellij.svelte" />

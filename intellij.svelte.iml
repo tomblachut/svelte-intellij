@@ -19,7 +19,6 @@
     <orderEntry type="module" module-name="intellij.platform.ide.core" />
     <orderEntry type="library" name="kotlin-stdlib" level="project" />
     <orderEntry type="module" module-name="intellij.platform.ide.impl" />
-    <orderEntry type="module" module-name="intellij.css.common" />
     <orderEntry type="module" module-name="intellij.platform.indexing" />
     <orderEntry type="module" module-name="intellij.platform.projectModel" />
     <orderEntry type="module" module-name="intellij.xml.parser" />
@@ -35,11 +34,8 @@
     <orderEntry type="module" module-name="intellij.platform.analysis.impl" />
     <orderEntry type="module" module-name="intellij.javascript.psi.impl" />
     <orderEntry type="module" module-name="intellij.javascript.backend" />
-    <orderEntry type="module" module-name="intellij.css.backend" />
-    <orderEntry type="module" module-name="intellij.javascript.backend.css" />
     <orderEntry type="module" module-name="intellij.xml.impl" />
     <orderEntry type="module" module-name="intellij.spellchecker" />
-    <orderEntry type="module" module-name="intellij.css.analysis" />
     <orderEntry type="module" module-name="intellij.platform.builtInServer.impl" />
     <orderEntry type="module" module-name="intellij.platform.webide.impl" />
     <orderEntry type="module" module-name="intellij.libraries.jackson" />
@@ -60,7 +56,6 @@
     <orderEntry type="module" module-name="intellij.sass.plugin" scope="TEST" />
     <orderEntry type="module" module-name="intellij.jade" scope="TEST" />
     <orderEntry type="module" module-name="intellij.postcss.plugin" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.postcss.paid" />
     <orderEntry type="module" module-name="intellij.stylus" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.lsp.testFramework" scope="TEST" />

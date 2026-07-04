@@ -4,12 +4,12 @@ import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.lang.css.CSSLanguage
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
 import com.intellij.xml.util.HtmlUtil
+import dev.blachut.svelte.lang.css.SvelteCssSupport
 import java.util.Locale
 
 internal class SvelteAttributeValueCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -52,7 +52,7 @@ internal class SvelteAttributeValueCompletionProvider : CompletionProvider<Compl
   private fun styleLanguages(): Set<String> {
     val result = mutableListOf<String>()
     result.add("css")
-    CSSLanguage.INSTANCE.dialects.forEach {
+    SvelteCssSupport.getStyleDialectLanguages().forEach {
       if (it.displayName != "JQuery-CSS") {
         result.add(it.displayName.lowercase(Locale.US))
       }

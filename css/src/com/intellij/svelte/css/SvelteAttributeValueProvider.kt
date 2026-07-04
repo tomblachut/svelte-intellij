@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.codeInsight
+package com.intellij.svelte.css
 
 import com.intellij.html.impl.providers.HtmlAttributeValueProvider
 import com.intellij.lang.javascript.psi.JSEmbeddedContent
@@ -13,7 +13,6 @@ import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.directives.SvelteDirectiveTypes
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 import dev.blachut.svelte.lang.psi.SvelteHtmlTag
-import dev.blachut.svelte.lang.web.isSvelteClassAttributeTag
 
 /**
  * Required for class directive and class expression CSS references to work.

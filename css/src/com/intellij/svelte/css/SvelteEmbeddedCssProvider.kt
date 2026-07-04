@@ -1,4 +1,4 @@
-package dev.blachut.svelte.lang.css
+package com.intellij.svelte.css
 
 import com.intellij.lang.Language
 import com.intellij.psi.css.EmbeddedCssProvider

@@ -13,12 +13,11 @@ import com.intellij.psi.PsiPolyVariantReferenceBase
 import com.intellij.psi.PsiReference
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.ResolveResult
-import com.intellij.psi.css.impl.util.table.CssDescriptorsUtilCore
-import com.intellij.psi.css.resolve.HtmlCssClassOrIdReference
 import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference
 import dev.blachut.svelte.lang.codeInsight.SvelteReactiveDeclarationsUtil
+import dev.blachut.svelte.lang.css.SvelteCssSupport
 import dev.blachut.svelte.lang.isSvelteComponentTag
 import dev.blachut.svelte.lang.psi.SvelteHtmlAttribute
 
@@ -110,34 +109,20 @@ fun getEventCompletions(
 }
 
 class ScopeAndClassReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :
-  PsiMultiReference(arrayOf(ScopeReference(attribute, rangeInElement),
-                            getClassReference(attribute, rangeInElement)), attribute)
+  PsiMultiReference(
+    listOfNotNull(
+      ScopeReference(attribute, rangeInElement),
+      SvelteCssSupport.getClassReference(attribute, rangeInElement),
+    ).toTypedArray(),
+    attribute,
+  )
 
-fun getClassReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange): PsiReference {
-  val descriptorProvider = CssDescriptorsUtilCore.findDescriptorProvider(attribute)!!
-  return descriptorProvider.getStyleReference(attribute, rangeInElement.startOffset, rangeInElement.endOffset, true)
-}
+// Returns a CSS class reference when the optional CSS support module is available, otherwise `null`.
+fun getClassReference(attribute: SvelteHtmlAttribute, rangeInElement: TextRange): PsiReference? =
+  SvelteCssSupport.getClassReference(attribute, rangeInElement)
 
 fun getClassCompletions(attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) {
-  val directive = attribute.directive!!
-  var reference =
-    attribute.findReferenceAt(directive.specifiers[0].rangeInName.startOffset) as? HtmlCssClassOrIdReference
-
-  if (reference == null) {
-    val rangeInElement = attribute.directive!!.specifiers[0].rangeInName
-    val descriptorProvider = CssDescriptorsUtilCore.findDescriptorProvider(attribute)!!
-    reference = descriptorProvider.getStyleReference(
-      attribute,
-      rangeInElement.startOffset,
-      rangeInElement.endOffset,
-      true
-    ) as? HtmlCssClassOrIdReference
-  }
-
-  if (reference != null) {
-    val prefixMatcher = result.prefixMatcher
-    reference.addCompletions(parameters, prefixMatcher, result::addElement)
-  }
+  SvelteCssSupport.addClassCompletions(attribute, parameters, result)
 }
 
 class ShorthandLetReference(val attribute: SvelteHtmlAttribute, rangeInElement: TextRange) :

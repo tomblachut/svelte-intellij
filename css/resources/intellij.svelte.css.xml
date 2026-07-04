@@ -1,0 +1,28 @@
+<idea-plugin>
+  <!-- region Generated dependencies - run `Generate Product Layouts` to regenerate -->
+  <dependencies>
+    <plugin id="dev.blachut.svelte.lang"/>
+    <module name="intellij.css"/>
+    <module name="intellij.css.backend"/>
+    <module name="intellij.css.common"/>
+    <module name="intellij.css.common.psi"/>
+    <module name="intellij.javascript.backend.css"/>
+    <module name="intellij.javascript.parser"/>
+    <module name="intellij.javascript.psi.impl"/>
+    <module name="intellij.xml.parser"/>
+    <module name="intellij.xml.psi"/>
+    <module name="intellij.xml.psi.impl"/>
+  </dependencies>
+  <!-- endregion -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <css.embeddedCssProvider implementation="com.intellij.svelte.css.SvelteEmbeddedCssProvider"/>
+    <css.inclusionContext implementation="com.intellij.svelte.css.SvelteCssInclusionContext"/>
+    <css.classOrIdUsagesProvider implementation="com.intellij.svelte.css.SvelteCssUsagesProvider"/>
+    <highlightErrorFilter implementation="com.intellij.svelte.css.SvelteCssExpressionErrorFilter"/>
+    <psi.referenceContributor language="SvelteHTML" implementation="com.intellij.svelte.css.SvelteCssReferenceContributor"/>
+    <html.attributeValueProvider implementation="com.intellij.svelte.css.SvelteAttributeValueProvider"/>
+    <polySymbols.queryScopeContributor implementation="com.intellij.svelte.css.SvelteCssClassQueryScopeContributor"/>
+    <svelte.cssSupport implementation="com.intellij.svelte.css.SvelteCssSupportImpl"/>
+  </extensions>
+</idea-plugin>

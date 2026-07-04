@@ -16,9 +16,9 @@ open class DirectiveType(
   val targetValidator: (xmlTag: XmlTag) -> Boolean = { true },
   val modifiers: Set<String> = emptySet(),
   val nestedSpecifiers: Number? = null,
-  val shorthandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference)?,
+  val shorthandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference?)?,
   val shorthandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
-  val longhandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference)?,
+  val longhandReferenceFactory: ((element: SvelteHtmlAttribute, rangeInElement: TextRange) -> PsiReference?)?,
   val longhandCompletionFactory: ((attribute: SvelteHtmlAttribute, parameters: CompletionParameters, result: CompletionResultSet) -> Unit)?,
   val valueElementTypeFactory: ((SvelteLangMode) -> IElementType)? = null,
   val uniquenessSelector: Unit = Unit, // TODO

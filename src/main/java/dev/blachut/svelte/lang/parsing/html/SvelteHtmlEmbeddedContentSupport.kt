@@ -6,7 +6,6 @@ import com.intellij.html.embedding.HtmlEmbedmentInfo
 import com.intellij.html.embedding.HtmlLanguageEmbedmentInfo
 import com.intellij.html.embedding.HtmlTokenEmbeddedContentProvider
 import com.intellij.lang.Language
-import com.intellij.lang.css.CSSLanguage
 import com.intellij.lexer.BaseHtmlLexer
 import com.intellij.lexer.HtmlRawTextTagContentProvider
 import com.intellij.lexer.HtmlScriptStyleEmbeddedContentProvider
@@ -16,6 +15,7 @@ import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteLangMode
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
+import dev.blachut.svelte.lang.css.SvelteCssSupport
 import dev.blachut.svelte.lang.isTSLangValue
 import dev.blachut.svelte.lang.psi.SvelteHtmlRawTextElementType
 import dev.blachut.svelte.lang.psi.SvelteJSElementTypes
@@ -52,7 +52,7 @@ class SvelteHtmlEmbeddedContentSupport : HtmlEmbeddedContentSupport {
       namesEqual(attributeName, HtmlUtil.LANG_ATTRIBUTE_NAME) || super.isInterestedInAttribute(attributeName)
 
     override fun styleLanguage(styleLang: String?): Language? =
-      CSSLanguage.INSTANCE.dialects.firstOrNull { it.id.equals(styleLang, ignoreCase = true) }
+      SvelteCssSupport.getStyleDialectLanguages().firstOrNull { it.id.equals(styleLang, ignoreCase = true) }
       ?: super.styleLanguage(styleLang)
 
     override fun scriptEmbedmentInfo(mimeType: String?): HtmlEmbedmentInfo {
