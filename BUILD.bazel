@@ -2,7 +2,6 @@ load("@community//build:tests-options.bzl", "jps_test")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
 
 ### auto-generated section `build intellij.svelte` start
-
 jvm_library(
     name = "svelte",
     srcs = glob(
@@ -183,7 +182,6 @@ exports_files(
 ### auto-generated section `iml intellij.svelte` end
 
 ### auto-generated section `build intellij.svelte.tests` start
-
 jvm_library(
     name = "svelte-tests",
     srcs = glob(
@@ -384,7 +382,6 @@ exports_files(
 ### auto-generated section `iml intellij.svelte.tests` end
 
 ### auto-generated section `test intellij.svelte.tests` start
-
 jps_test(
     name = "svelte-tests_test",
     runtime_deps = [":svelte-tests_test_lib"],
