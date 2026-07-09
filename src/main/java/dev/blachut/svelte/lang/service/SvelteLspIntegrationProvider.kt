@@ -34,6 +34,13 @@ internal class SvelteLspClientDescriptor(project: Project) :
   JSFrameworkLspClientDescriptor(project, SvelteLspServerActivationRule, "Svelte") {
   override val lsp4jServerClass: Class<out LanguageServer> = SvelteLsp4jServer::class.java
 
+  override fun getDiagnosticsConfiguration(lspClient: LspClient): DiagnosticsConfiguration {
+    // Svelte can advertise diagnosticProvider even when it selected publish mode from client capabilities.
+    val serverSupportsPullDiagnostics = lspClient.initializeResult?.capabilities?.diagnosticProvider != null
+    val clientRequestedPullDiagnostics = clientCapabilities.textDocument?.diagnostic != null
+    return if (serverSupportsPullDiagnostics && clientRequestedPullDiagnostics) PullDiagnostics else PublishDiagnostics(1)
+  }
+
   override fun getNodePathsForLspServer(target: NodeTargetRun): List<String> {
     if (!isBundledSvelteLspServerSelected(project)) return emptyList()
 
