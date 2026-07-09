@@ -37,16 +37,6 @@ class SvelteLspTypeScriptService(project: Project) : JSFrameworkLspTypeScriptSer
 
   override fun isServiceNavigationEnabled(): Boolean = true
 
-  override val diagnosticsConfiguration: DiagnosticsConfiguration
-    get() {
-      val server = getLspClient() ?: return PublishDiagnostics(1)
-      // Svelte can advertise diagnosticProvider even when it selected publish mode
-      // from client capabilities.
-      val serverSupportsPullDiagnostics = server.initializeResult?.capabilities?.diagnosticProvider != null
-      val clientRequestedPullDiagnostics = server.descriptor.clientCapabilities.textDocument?.diagnostic != null
-      return if (serverSupportsPullDiagnostics && clientRequestedPullDiagnostics) PullDiagnostics else PublishDiagnostics(1)
-    }
-
   /**
    * Skip LSP navigation for namespaced component tag names (e.g. `Forms.Input`) when called
    * from [com.intellij.lang.typescript.TypeScriptServiceGotoDeclarationHandler].
