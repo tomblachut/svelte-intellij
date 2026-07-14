@@ -6,7 +6,7 @@ import com.intellij.lang.javascript.JSTestUtils.checkResolveToDestination
 import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
 import com.intellij.lang.javascript.psi.JSVariable
 import com.intellij.polySymbols.search.PsiLinkedPolySymbol
-import com.intellij.polySymbols.testFramework.multiResolvePolySymbolReference
+import com.intellij.polySymbols.testFramework.multiResolveSymbolReference
 import com.intellij.polySymbols.testFramework.resolvePolySymbolReference
 import com.intellij.psi.css.CssClass
 import com.intellij.psi.util.contextOfType
@@ -733,7 +733,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
     TestCase.assertTrue(
       "<svelte:component> is excluded from class expression scope; must not resolve to the .foo CSS rule (got: $symbols)",
       symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
@@ -748,7 +748,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
     assertTrue(
       "Component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
       symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
@@ -763,7 +763,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolvePolySymbolReference("fo<caret>o:")
+    val symbols = myFixture.multiResolveSymbolReference("fo<caret>o:")
     assertTrue(
       "Namespaced component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
       symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
@@ -777,7 +777,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .other { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolvePolySymbolReference("'unknow<caret>n'")
+    val symbols = myFixture.multiResolveSymbolReference("'unknow<caret>n'")
     TestCase.assertTrue(
       "Unknown class must not resolve to a real CSS rule (got: $symbols)",
       symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
@@ -814,7 +814,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
     TestCase.assertTrue(
       "Function-call wrapped class strings are out of scope; must not resolve to a real CSS rule (got: $symbols)",
       symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
@@ -828,7 +828,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
         #foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolvePolySymbolReference("'fo<caret>o'")
+    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
     TestCase.assertTrue(
       "id={...} expressions are out of scope for Tier A (class-only); must not resolve to a real CSS rule (got: $symbols)",
       symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
