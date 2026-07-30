@@ -67,7 +67,6 @@ jvm_library(
         "@community//platform/code-style-impl:codeStyle-impl",
         "@community//libraries/caffeine",
         "//plugins/JavaScriptLanguage/web-platform:javascript-web",
-        "//contrib/postcss/paid",
         "@community//libraries/fastutil",
         "@community//platform/lsp-impl",
         "@lib//:eclipse-lsp4j",
@@ -155,6 +154,7 @@ jvm_library(
         "//contrib/jade:jade_test_lib",
         "//contrib/postcss/plugin",
         "//contrib/postcss/plugin:plugin_test_lib",
+        "//contrib/postcss/paid",
         "//contrib/postcss/paid:paid_test_lib",
         "//plugins/stylus",
         "//plugins/stylus:stylus_test_lib",
@@ -208,7 +208,6 @@ jvm_library(
     ),
     module_name = "intellij.svelte.tests",
     visibility = ["//visibility:public"],
-    runtime_deps = ["//contrib/postcss/paid"],
 )
 
 jvm_library(
