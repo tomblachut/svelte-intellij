@@ -8,6 +8,7 @@ import com.intellij.lang.javascript.psi.JSVariable
 import com.intellij.polySymbols.search.PsiLinkedPolySymbol
 import com.intellij.polySymbols.testFramework.multiResolveSymbolReference
 import com.intellij.polySymbols.testFramework.resolvePolySymbolReference
+import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.css.CssClass
 import com.intellij.psi.util.contextOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -294,6 +295,75 @@ class SvelteResolveTest : BasePlatformTestCase() {
     val variable = reference!!.resolve()
     TestCase.assertNotNull(variable)
     TestCase.assertEquals("item: T", variable?.text)
+  }
+
+  fun testTsGenericConstraintImportResolve() {
+    myFixture.addFileToProject("types.ts", "export interface Foo { name: string }")
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts" generics="T extends Foo">
+                import type { Foo } from './types';
+                export let item: T;
+            </script>
+
+            <div>{item}</div>
+            """.trimIndent()
+    )
+    val text = myFixture.file.text
+    val offset = text.indexOf("Foo", text.indexOf("extends"))
+    val reference = myFixture.file.findReferenceAt(offset)
+    TestCase.assertNotNull("No reference at the constraint 'Foo'", reference)
+    val resolved = reference!!.resolve()
+    TestCase.assertNotNull("Constraint type 'Foo' should resolve to the imported symbol", resolved)
+    val named = assertInstanceOf(resolved, PsiNamedElement::class.java)
+    TestCase.assertEquals(
+      "Constraint 'Foo' should resolve to the imported 'Foo' interface, not some other symbol",
+      "Foo", named.name
+    )
+  }
+
+  /**
+   * A type declared in the `<script>` body is NOT visible from a generics constraint: svelte2tsx
+   * compiles the script to `function render<T extends Base>() { ...body... }` and only hoists
+   * imports above that function, so the Svelte language server reports "Base is not defined".
+   * Only the legacy `$$Generic` syntax hoists body types. Keep the IDE in step with the compiler.
+   */
+  fun testTsGenericConstraintLocalTypeDoesNotResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts" generics="T extends Base">
+                interface Base { id: number }
+                export let item: T;
+            </script>
+
+            <div>{item}</div>
+            """.trimIndent()
+    )
+    val text = myFixture.file.text
+    val offset = text.indexOf("Base", text.indexOf("extends"))
+    val reference = myFixture.file.findReferenceAt(offset)
+    TestCase.assertNotNull("No reference at the constraint 'Base'", reference)
+    TestCase.assertNull(
+      "A <script> body type must not resolve from a generics constraint - svelte2tsx does not hoist it",
+      reference!!.resolve()
+    )
+  }
+
+  fun testTsGenericConstraintUndeclaredStaysUnresolved() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            <script lang="ts" generics="T extends Nonexistent">
+                export let item: T;
+            </script>
+
+            <div>{item}</div>
+            """.trimIndent()
+    )
+    val text = myFixture.file.text
+    val offset = text.indexOf("Nonexistent", text.indexOf("extends"))
+    val reference = myFixture.file.findReferenceAt(offset)
+    TestCase.assertNotNull("No reference at the constraint 'Nonexistent'", reference)
+    TestCase.assertNull("Undeclared constraint type must not resolve", reference!!.resolve())
   }
 
   fun testTsTypeAssertionResolve() {

@@ -197,8 +197,36 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       <script lang="ts" generics="Todo extends string">
         export let something: Todo;
       </script>
-      
+
       {something}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testGenericsConstraintImportNotUnused() {
+    myFixture.addFileToProject("types.ts", "export interface Foo { name: string }")
+    myFixture.configureByText("Test.svelte", """
+      <script lang="ts" generics="T extends Foo">
+        import type { Foo } from './types';
+        export let item: T;
+      </script>
+
+      {item}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  fun testGenericsConstraintModuleScriptImportNotUnused() {
+    myFixture.addFileToProject("types.ts", "export interface Foo { name: string }")
+    myFixture.configureByText("Test.svelte", """
+      <script module lang="ts">
+        import type { Foo } from './types';
+      </script>
+      <script lang="ts" generics="T extends Foo">
+        export let item: T;
+      </script>
+
+      {item}
     """.trimIndent())
     myFixture.testHighlighting()
   }

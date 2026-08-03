@@ -45,6 +45,25 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(myFixture.completeBasic(), """generics="T"""")
   }
 
+  /**
+   * Imports are hoisted above the generated `render()` function by svelte2tsx and so are usable in
+   * a generics constraint; a type declared in the `<script>` body stays inside `render()` and is
+   * not ("Base is not defined"), so it must not be offered here either.
+   */
+  fun testGenericsConstraintCompletesImportedTypesOnly() {
+    myFixture.addFileToProject("types.ts", "export interface Imported { name: string }")
+    myFixture.configureByText("foo.svelte", """
+      <script lang="ts" generics="T extends <caret>">
+        import type { Imported } from './types';
+        interface Local { id: number }
+        export let item: T;
+      </script>
+    """.trimIndent())
+    val items = myFixture.completeBasic()
+    hasElements(items, "Imported")
+    noElements(items, "Local")
+  }
+
   fun testStyleLang() {
     myFixture.configureByText("foo.svelte", """<style lang="<caret>"></style>""")
     hasElements(myFixture.completeBasic(), "css")

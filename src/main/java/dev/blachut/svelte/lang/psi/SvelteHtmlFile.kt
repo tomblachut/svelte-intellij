@@ -17,7 +17,8 @@ import dev.blachut.svelte.lang.psi.blocks.SvelteSnippetBlock
 import dev.blachut.svelte.lang.psi.blocks.processConstTagDeclarations
 
 fun getJsEmbeddedContent(script: PsiElement?): JSEmbeddedContent? {
-  return PsiTreeUtil.getChildOfType(script, JSEmbeddedContent::class.java)
+  // Prefer the stub tree to avoid loading the AST; falls back to AST when no stub is available.
+  return PsiTreeUtil.getStubChildOfType(script, JSEmbeddedContent::class.java)
 }
 
 fun isModuleScript(tag: XmlTag?): Boolean {

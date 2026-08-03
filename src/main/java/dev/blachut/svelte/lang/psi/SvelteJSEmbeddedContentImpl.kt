@@ -12,6 +12,7 @@ import com.intellij.lang.javascript.psi.ecma6.TypeScriptTypeParameterList
 import com.intellij.lang.javascript.psi.ecma6.TypeScriptTypeParameterListOwner
 import com.intellij.lang.javascript.psi.impl.JSEmbeddedContentImpl
 import com.intellij.lang.javascript.psi.stubs.JSEmbeddedContentStub
+import com.intellij.lang.javascript.psi.util.stubSafeGetAttribute
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.PsiScopeProcessor
@@ -107,8 +108,16 @@ class SvelteJSEmbeddedContentImpl : JSEmbeddedContentImpl,
                         ?.takeIf { it.name.equals("script", ignoreCase = true) }
                       ?: return null
 
-      val genericsAttr = scriptTag.getAttribute(GENERICS_ATTRIBUTE_NAME) ?: return null
-      return PsiTreeUtil.findChildOfType(genericsAttr.valueElement, TypeScriptTypeParameterList::class.java)
+      // Prefer stub-based access so this does not force an AST load, mirroring Vue's
+      // VueScriptSetupEmbeddedContentImpl.findScriptSetupTypeParameterList. stubSafeGetAttribute
+      // yields nothing for a tag that is not stub-based, so the AST lookups stay as fallbacks.
+      val genericsAttr = scriptTag.stubSafeGetAttribute(GENERICS_ATTRIBUTE_NAME)
+                         ?: scriptTag.getAttribute(GENERICS_ATTRIBUTE_NAME)
+                         ?: return null
+      val valueElement = genericsAttr.valueElement ?: return null
+
+      return PsiTreeUtil.getStubChildOfType(valueElement, SvelteGenericsExpressionContentImpl::class.java)?.typeParameterList
+             ?: PsiTreeUtil.findChildOfType(valueElement, TypeScriptTypeParameterList::class.java)
     }
   }
 }
