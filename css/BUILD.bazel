@@ -20,7 +20,7 @@ jvm_library(
     deps = [
         # do not sort,
         "@lib//:kotlin-stdlib",
-        "@lib//:jetbrains-annotations",
+        "@community//libraries/jetbrains/annotations",
         "//plugins/svelte",
         "//plugins/css",
         "//plugins/css/common",
@@ -55,6 +55,7 @@ jvm_library(
     runtime_deps = [
         # do not sort,
         ":css",
+        "@community//libraries/jetbrains/annotations:annotations_test_lib",
         "//plugins/svelte:svelte_test_lib",
         "//plugins/css:css_test_lib",
         "//plugins/css/common:common_test_lib",

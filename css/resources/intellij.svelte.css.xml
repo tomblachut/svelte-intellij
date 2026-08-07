@@ -9,6 +9,7 @@
     <module name="intellij.javascript.backend.css"/>
     <module name="intellij.javascript.parser"/>
     <module name="intellij.javascript.psi.impl"/>
+    <module name="intellij.libraries.jetbrains.annotations"/>
     <module name="intellij.platform.analysis"/>
     <module name="intellij.platform.core"/>
     <module name="intellij.platform.core.impl"/>
