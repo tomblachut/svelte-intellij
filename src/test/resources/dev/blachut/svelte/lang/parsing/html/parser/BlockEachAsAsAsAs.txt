@@ -10,7 +10,7 @@ SvelteHtmlFile: BlockEachAsAsAsAs.svelte
           PsiElement(JS:EACH_KEYWORD)('each')
           PsiWhiteSpace(' ')
           JSReferenceExpression
-            PsiElement(JS:AS_KEYWORD)('as')
+            PsiElement(JS:IDENTIFIER)('as')
           PsiWhiteSpace(' ')
           PsiElement(JS:AS_KEYWORD)('as')
           PsiWhiteSpace(' ')
@@ -20,7 +20,7 @@ SvelteHtmlFile: BlockEachAsAsAsAs.svelte
           SvelteTagDependentExpression
             PsiElement(JS:LPAR)('(')
             JSReferenceExpression
-              PsiElement(JS:AS_KEYWORD)('as')
+              PsiElement(JS:IDENTIFIER)('as')
             PsiElement(JS:RPAR)(')')
           PsiElement(JS:RBRACE)('}')
         SvelteFragment
