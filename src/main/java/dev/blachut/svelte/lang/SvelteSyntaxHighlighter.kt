@@ -34,6 +34,10 @@ internal class SvelteSyntaxHighlighter(
       SvelteTokenTypes.SNIPPET_KEYWORD,
       -> KEYWORDS
 
+      // Comments inside a start tag header are JS syntax, so they use the JS comment colors directly.
+      SvelteTokenTypes.TAG_LINE_COMMENT -> TAG_LINE_COMMENTS
+      SvelteTokenTypes.TAG_BLOCK_COMMENT -> TAG_BLOCK_COMMENTS
+
       else -> super.getTokenHighlights(tokenType)
     }
   }
@@ -41,5 +45,8 @@ internal class SvelteSyntaxHighlighter(
   companion object {
     private val KEYWORD = createTextAttributesKey("SVELTE_KEYWORD", JSHighlighter.JS_KEYWORD)
     private val KEYWORDS = pack(KEYWORD)
+
+    private val TAG_LINE_COMMENTS = pack(JSHighlighter.JS_LINE_COMMENT)
+    private val TAG_BLOCK_COMMENTS = pack(JSHighlighter.JS_BLOCK_COMMENT)
   }
 }

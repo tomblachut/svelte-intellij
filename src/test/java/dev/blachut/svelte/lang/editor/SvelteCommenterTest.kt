@@ -250,6 +250,186 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  // WEB-77758: inside a start tag header a line comment must be `//`, not `<!-- -->`,
+  // see https://github.com/sveltejs/svelte/pull/17671
+  fun testStartTagLineCommentForAttribute() {
+    doCommentLineTest(
+      textBefore = """
+      <MyComponent
+          attribute={123}
+          <caret>commentedAttribute={456}
+          s="a string"
+      />
+      """.trimIndent(),
+      textAfter = """
+      <MyComponent
+          attribute={123}
+          // commentedAttribute={456}
+          s="a string"
+      />
+      """.trimIndent(),
+    )
+  }
+
+  fun testStartTagLineUncommentForAttribute() {
+    doCommentLineTest(
+      textBefore = """
+      <MyComponent
+          attribute={123}
+          // <caret>commentedAttribute={456}
+          s="a string"
+      />
+      """.trimIndent(),
+      textAfter = """
+      <MyComponent
+          attribute={123}
+          commentedAttribute={456}
+          s="a string"
+      />
+      """.trimIndent(),
+    )
+  }
+
+  fun testStartTagLineCommentForSeveralAttributes() {
+    doCommentLineTest(
+      textBefore = """
+      <Component
+          <selection>first={1}
+          second={2}</selection><caret>
+      />
+      """.trimIndent(),
+      textAfter = """
+      <Component
+          // first={1}
+          // second={2}
+      />
+      """.trimIndent(),
+    )
+  }
+
+  fun testStartTagLineUncommentForSeveralAttributes() {
+    doCommentLineTest(
+      textBefore = """
+      <Component
+          <selection>// first={1}
+          // second={2}</selection><caret>
+      />
+      """.trimIndent(),
+      textAfter = """
+      <Component
+          first={1}
+          second={2}
+      />
+      """.trimIndent(),
+    )
+  }
+
+  fun testStartTagLineCommentKeepsTagEndOnItsOwnLine() {
+    doCommentLineTest(
+      textBefore = """
+      <div
+          <caret>class="value"
+      >
+          Content
+      </div>
+      """.trimIndent(),
+      textAfter = """
+      <div
+          // class="value"
+      >
+          Content
+      </div>
+      """.trimIndent(),
+    )
+  }
+
+  fun testStartTagBlockCommentForAttribute() {
+    doCommentBlockTest(
+      textBefore = """
+      <Component
+          <selection>attribute={123}</selection><caret>
+          s="a string"
+      />
+      """.trimIndent(),
+      textAfter = """
+      <Component
+          /*attribute={123}*/
+          s="a string"
+      />
+      """.trimIndent(),
+    )
+  }
+
+  fun testTagContentLineCommentIsStillHtmlComment() {
+    doCommentLineTest(
+      textBefore = """
+      <div
+          class="value"
+      >
+      Content<caret>
+      </div>
+      """.trimIndent(),
+      textAfter = """
+      <div
+          class="value"
+      >
+      <!--Content-->
+      </div>
+      """.trimIndent(),
+    )
+  }
+
+  // On a line holding only the tag end, `// >` at least uses the right comment dialect for the header,
+  // while the HTML `<!-- -->` fallback would be invalid there.
+  fun testStartTagLineCommentOnTagEndLine() {
+    doCommentLineTest(
+      textBefore = """
+      <div
+          class="value"
+      <caret>>
+          Content
+      </div>
+      """.trimIndent(),
+      textAfter = """
+      <div
+          class="value"
+      // >
+          Content
+      </div>
+      """.trimIndent(),
+    )
+  }
+
+  // The compiler reads top-level <script>/<style> attributes with read_static_attribute, which accepts
+  // no comments, so `//` must not be offered there.
+  fun testTopLevelScriptTagHeaderStaysHtmlCommenter() {
+    doCommentLineTest(
+      textBefore = """
+      <script
+          <caret>lang="ts"
+      >
+      </script>
+      """.trimIndent(),
+      textAfter = """
+      <script
+      <!--    lang="ts"-->
+      >
+      </script>
+      """.trimIndent(),
+    )
+  }
+
+  fun testSingleLineTagLineCommentIsStillHtmlComment() {
+    doCommentLineTest(
+      textBefore = """
+      <div class="value">Content<caret></div>
+      """.trimIndent(),
+      textAfter = """
+      <!--<div class="value">Content</div>-->
+      """.trimIndent(),
+    )
+  }
+
   private fun doCommentLineTest(
     textBefore: String,
     textAfter: String,

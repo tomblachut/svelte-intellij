@@ -22,6 +22,12 @@ class SvelteFormatterTest : FormatterTestCase() {
     fun testScriptContentsSingleLine() = doTest()
     fun testScriptStyleEmpty() = doTest()
 
+    // WEB-77758: `//` and `/* */` comments inside start tags, see
+    // https://github.com/sveltejs/svelte/pull/17671.
+    // TagAttributes is the comment free baseline of TagComments: the two have to be indented alike.
+    fun testTagAttributes() = doTest()
+    fun testTagComments() = doTest()
+
     fun testMultilineExpression() = doTest()
     fun todoMultilineProp() = doTest()
 

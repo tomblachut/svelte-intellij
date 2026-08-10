@@ -1,0 +1,55 @@
+SvelteHtmlFile: TagBlockComment.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: Component
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('Component')
+      PsiWhiteSpace('\n    ')
+      PsiComment(TAG_BLOCK_COMMENT)('/* leading block */')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: attribute
+        XmlToken:XML_NAME('attribute')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSLiteralExpression
+                PsiElement(JS:NUMERIC_LITERAL)('123')
+            PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      PsiComment(TAG_BLOCK_COMMENT)('/* trailing block */')
+      PsiWhiteSpace('\n    ')
+      PsiComment(TAG_BLOCK_COMMENT)('/* multi\n       line */')
+      PsiWhiteSpace('\n    ')
+      SvelteHtmlAttribute: s
+        XmlToken:XML_NAME('s')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('a string')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace('\n')
+      XmlToken:XML_EMPTY_ELEMENT_END('/>')
+    PsiWhiteSpace('\n')
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      PsiComment(TAG_BLOCK_COMMENT)('/* inline */')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: class
+        XmlToken:XML_NAME('class')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('value')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('Content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

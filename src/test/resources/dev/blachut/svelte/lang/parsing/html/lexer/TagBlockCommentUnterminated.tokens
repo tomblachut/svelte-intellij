@@ -1,0 +1,4 @@
+XML_START_TAG_START ('<')
+XML_TAG_NAME ('div')
+TAG_WHITE_SPACE (' ')
+TAG_BLOCK_COMMENT ('/* this block comment is never closed, so it runs to the end of the file\n    class="value">\n    Content\n</div>')

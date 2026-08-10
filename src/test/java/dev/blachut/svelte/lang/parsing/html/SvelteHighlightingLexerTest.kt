@@ -57,6 +57,13 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
   fun testEscapedCharInExpression() = doTest()
   fun testRegexLiteralWithQuoteInExpression() = doTest()
 
+  // WEB-77758: `//` and `/* */` comments inside start tags, see
+  // https://github.com/sveltejs/svelte/pull/17671
+  fun testTagLineComment() = doTest()
+  fun testTagBlockComment() = doTest()
+  fun testTagBlockCommentUnterminated() = doTest()
+  fun testTagCommentInEndTag() = doTest()
+
   fun testCommentInRawTextExpression() = doTest()
   fun testBlockCommentInRawTextExpression() = doTest()
   fun testEscapedCharInRawTextExpression() = doTest()

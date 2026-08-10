@@ -21,6 +21,7 @@ import com.intellij.util.containers.ContainerUtil
 import dev.blachut.svelte.lang.SvelteHTMLLanguage
 import dev.blachut.svelte.lang.SvelteJSLanguage
 import dev.blachut.svelte.lang.SvelteTypeScriptLanguage
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 import dev.blachut.svelte.lang.psi.isSingleDollarPrefixedName
 import kotlin.experimental.or
 
@@ -89,6 +90,7 @@ internal class SvelteFilterLexer(occurrenceConsumer: OccurrenceConsumer, origina
 
     private val COMMENTS = orSet(
       JSElementTypes.COMMENTS,
+      SvelteTokenTypes.TAG_COMMENTS,
       create(XmlTokenType.XML_COMMENT_CHARACTERS)
     )
 

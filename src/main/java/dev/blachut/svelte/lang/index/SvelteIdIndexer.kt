@@ -20,6 +20,6 @@ class SvelteIdIndexer : LexingIdIndexer {
   }
 
   override fun getVersion(): Int {
-    return 1
+    return 2 // 2: tag-header comments (WEB-77758) indexed as IN_COMMENTS
   }
 }

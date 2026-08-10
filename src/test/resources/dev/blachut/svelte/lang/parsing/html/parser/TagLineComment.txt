@@ -1,0 +1,33 @@
+SvelteHtmlFile: TagLineComment.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: MyComponent
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('MyComponent')
+      PsiWhiteSpace('\n    ')
+      SvelteHtmlAttribute: attribute
+        XmlToken:XML_NAME('attribute')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSLiteralExpression
+                PsiElement(JS:NUMERIC_LITERAL)('123')
+            PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace('\n    ')
+      PsiComment(TAG_LINE_COMMENT)('// commentedAttribute={456}')
+      PsiWhiteSpace('\n    ')
+      PsiComment(TAG_LINE_COMMENT)('// another comment')
+      PsiWhiteSpace('\n    ')
+      SvelteHtmlAttribute: s
+        XmlToken:XML_NAME('s')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('a string')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace('\n')
+      XmlToken:XML_EMPTY_ELEMENT_END('/>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

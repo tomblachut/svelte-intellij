@@ -133,10 +133,19 @@ class SvelteHtmlParsing(builder: PsiBuilder) : HtmlParsing(builder) {
   }
 
   override fun hasCustomTagHeaderContent(): Boolean {
-    return token() === SvelteTokenTypes.START_MUSTACHE
+    val token = token()
+    return token === SvelteTokenTypes.START_MUSTACHE || SvelteTokenTypes.TAG_COMMENTS.contains(token)
   }
 
   override fun parseCustomTagHeaderContent() {
+    // A `//` or `/* */` comment standing in for an attribute, see
+    // https://github.com/sveltejs/svelte/pull/17671. It becomes a PsiComment leaf of the tag,
+    // which is why it needs no wrapping marker.
+    if (SvelteTokenTypes.TAG_COMMENTS.contains(token())) {
+      advance()
+      return
+    }
+
     val att = mark()
     val elementType = if (isAttachExpression()) {
       SvelteJSLazyElementTypes.getAttachExpression(langMode)

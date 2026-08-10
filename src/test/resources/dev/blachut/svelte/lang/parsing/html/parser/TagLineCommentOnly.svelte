@@ -1,0 +1,4 @@
+<Component
+    // first
+    // second
+/>

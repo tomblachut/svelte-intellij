@@ -1,0 +1,23 @@
+SvelteHtmlFile: TagLineCommentTrailing.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: Component
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('Component')
+      PsiWhiteSpace('\n    ')
+      SvelteHtmlAttribute: attribute
+        XmlToken:XML_NAME('attribute')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSLiteralExpression
+                PsiElement(JS:NUMERIC_LITERAL)('123')
+            PsiElement(END_MUSTACHE)('}')
+      PsiWhiteSpace(' ')
+      PsiComment(TAG_LINE_COMMENT)('// trailing comment')
+      PsiWhiteSpace('\n')
+      XmlToken:XML_EMPTY_ELEMENT_END('/>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')
