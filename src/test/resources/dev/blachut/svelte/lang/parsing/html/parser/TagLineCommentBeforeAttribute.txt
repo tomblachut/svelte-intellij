@@ -1,0 +1,27 @@
+SvelteHtmlFile: TagLineCommentBeforeAttribute.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace('\n    ')
+      PsiComment(TAG_LINE_COMMENT)('// comment')
+      PsiWhiteSpace('\n    ')
+      SvelteHtmlAttribute: class
+        XmlToken:XML_NAME('class')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('value')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiWhiteSpace('\n')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        PsiWhiteSpace('\n    ')
+        XmlToken:XML_DATA_CHARACTERS('Content')
+        PsiWhiteSpace('\n')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

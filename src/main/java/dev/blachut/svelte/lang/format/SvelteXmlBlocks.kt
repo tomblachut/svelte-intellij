@@ -14,6 +14,7 @@ import com.intellij.psi.formatter.xml.XmlTagBlock
 import com.intellij.psi.impl.source.SourceTreeToPsiMap
 import com.intellij.psi.xml.XmlTag
 import dev.blachut.svelte.lang.psi.ContentExpressionType
+import dev.blachut.svelte.lang.psi.SvelteTokenTypes
 import dev.blachut.svelte.lang.psi.blocks.SvelteBlock
 
 class SvelteXmlBlock(
@@ -73,6 +74,20 @@ abstract class SvelteXmlTagBlockBase(
   indent: Indent?,
   preserveSpace: Boolean
 ) : XmlTagBlock(node, wrap, alignment, policy, indent, preserveSpace) {
+  /**
+   * A comment inside a start tag header stands in for an attribute, see
+   * [sveltejs/svelte#17671](https://github.com/sveltejs/svelte/pull/17671), so it takes part in attribute
+   * alignment as well. The base implementation aligns attributes only, which makes the first real attribute
+   * the alignment anchor: a comment sharing its line would then push every following attribute behind it.
+   */
+  override fun chooseAlignment(child: ASTNode, attrAlignment: Alignment?, textAlignment: Alignment?): Alignment? {
+    if (SvelteTokenTypes.TAG_COMMENTS.contains(child.elementType) && myXmlFormattingPolicy.shouldAlignAttributes) {
+      return attrAlignment
+    }
+
+    return super.chooseAlignment(child, attrAlignment, textAlignment)
+  }
+
   // start getTag related overrides
   override fun getTag(): XmlTag {
     return super.getTag() ?: getFakeTag(myNode)

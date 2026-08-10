@@ -1,0 +1,44 @@
+SvelteHtmlFile: TagLineCommentAdjacent.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: Component
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('Component')
+      PsiComment(TAG_LINE_COMMENT)('// right after the tag name')
+      PsiWhiteSpace('\n    ')
+      SvelteHtmlAttribute: attribute
+        XmlToken:XML_NAME('attribute')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          SveltePsiElement
+            PsiElement(START_MUSTACHE)('{')
+            SvelteJS: ATTRIBUTE_EXPRESSION
+              JSLiteralExpression
+                PsiElement(JS:NUMERIC_LITERAL)('123')
+            PsiElement(END_MUSTACHE)('}')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('// right')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: after
+        XmlToken:XML_NAME('after')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: an
+        XmlToken:XML_NAME('an')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: expression
+        XmlToken:XML_NAME('expression')
+      PsiWhiteSpace(' ')
+      SvelteHtmlAttribute: attribute
+        XmlToken:XML_NAME('attribute')
+      PsiWhiteSpace('\n    ')
+      SvelteHtmlAttribute: other
+        XmlToken:XML_NAME('other')
+        XmlToken:XML_EQ('=')
+        PsiElement(XML_ATTRIBUTE_VALUE)
+          XmlToken:XML_ATTRIBUTE_VALUE_START_DELIMITER('"')
+          XmlToken:XML_ATTRIBUTE_VALUE_TOKEN('x')
+          XmlToken:XML_ATTRIBUTE_VALUE_END_DELIMITER('"')
+      PsiComment(TAG_LINE_COMMENT)('// right after a quoted attribute')
+      PsiWhiteSpace('\n')
+      XmlToken:XML_EMPTY_ELEMENT_END('/>')
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

@@ -1,0 +1,12 @@
+SvelteHtmlFile: TagBlockCommentUnterminated.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      PsiWhiteSpace(' ')
+      PsiComment(TAG_BLOCK_COMMENT)('/* this block comment is never closed, so it runs to the end of the file\n    class="value">\n    Content\n</div>')
+      PsiErrorElement:Tag start is not closed
+        <empty list>
+  PsiElement(SVELTE_LANG_MODE_NO_TS)('')

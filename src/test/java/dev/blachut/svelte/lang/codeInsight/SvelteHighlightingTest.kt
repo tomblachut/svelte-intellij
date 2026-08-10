@@ -873,6 +873,20 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  // WEB-77758: commented-out attributes are PsiComments, invisible to attribute inspections,
+  // see https://github.com/sveltejs/svelte/pull/17671
+  fun testTagHeaderCommentsProduceNoWarnings() {
+    myFixture.enableInspections(com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection())
+    myFixture.configureByText("Foo.svelte", """
+      <div
+          // notanattribute={456}
+          /* another commentedattr="x" */
+          class="live"
+      >Content</div>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testRunesCommonJS() = doTestWithLangFromTestNameSuffix(runesCommon)
 
   fun testRunesCommonTS() = doTestWithLangFromTestNameSuffix(runesCommon)

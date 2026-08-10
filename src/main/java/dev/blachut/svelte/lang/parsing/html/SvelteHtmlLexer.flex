@@ -14,6 +14,8 @@ import dev.blachut.svelte.lang.parsing.html.SvelteJsBoundaryScanner;
 
 %{
   public int rawTag = 0;
+  /** 1 while lexing an end tag header. End tags take no attributes and no JS-style comments. */
+  public int isEndTag = 0;
 
   public _SvelteHtmlLexer() {
     this((java.io.Reader)null);
@@ -144,8 +146,9 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
   [^]                { yybegin(SVELTE_INTERPOLATION); yypushback(yylength()); }
 }
 
-<START_TAG_NAME> {RAW_TAG_NAME} { rawTag = 1; yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
-<START_TAG_NAME, END_TAG_NAME> {TAG_NAME} { rawTag = 0; yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
+<START_TAG_NAME> {RAW_TAG_NAME} { rawTag = 1; isEndTag = 0; yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
+<START_TAG_NAME> {TAG_NAME} { rawTag = 0; isEndTag = 0; yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
+<END_TAG_NAME> {TAG_NAME} { rawTag = 0; isEndTag = 1; yybegin(BEFORE_TAG_ATTRIBUTES); return XmlTokenType.XML_NAME; }
 
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, TAG_CHARACTERS, ATTRIBUTE_VALUE_START, ATTRIBUTE_VALUE_AFTER_BRACES> ">" {
   yybegin(rawTag == 1 ? RAW_CONTENT : YYINITIAL); return XmlTokenType.XML_TAG_END;
@@ -157,6 +160,21 @@ CONDITIONAL_COMMENT_CONDITION=({ALPHA})({ALPHA}|{WHITE_SPACE_CHARS}|{DIGIT}|"."|
 <TAG_ATTRIBUTES> {ATTRIBUTE_NAME} { return XmlTokenType.XML_NAME; }
 <TAG_ATTRIBUTES> "{" { yybegin(ATTRIBUTE_BRACES); return SvelteTokenTypes.START_MUSTACHE; }
 <TAG_ATTRIBUTES> "=" { yybegin(ATTRIBUTE_VALUE_START); return XmlTokenType.XML_EQ; }
+/* Svelte allows JS-style comments wherever an attribute name may start in a start tag header, see
+   https://github.com/sveltejs/svelte/pull/17671 -- read_comment is called from read_attribute only,
+   so end tags take no comments and fall through to the junk handling below, like before.
+   A line comment runs to the next "\n" (the compiler reads it with read_until(/\n/)) and therefore
+   also swallows a ">" or "/>" placed on the same line, just like in the compiler.
+   An unterminated block comment runs to the end of the file: the compiler reads it with
+   read_until on the terminator and a non-required eat, so it is a valid comment there as well. */
+<BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES> "//" [^\n]* {
+  if (isEndTag == 0) { yybegin(TAG_ATTRIBUTES); return SvelteTokenTypes.TAG_LINE_COMMENT; }
+  yybegin(YYINITIAL); yypushback(yylength()); break;
+}
+<BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES> "/*" !([^]* "*/" [^]*) ("*/")? {
+  if (isEndTag == 0) { yybegin(TAG_ATTRIBUTES); return SvelteTokenTypes.TAG_BLOCK_COMMENT; }
+  yybegin(YYINITIAL); yypushback(yylength()); break;
+}
 <BEFORE_TAG_ATTRIBUTES, TAG_ATTRIBUTES, START_TAG_NAME, END_TAG_NAME> [^] { yybegin(YYINITIAL); yypushback(1); break; }
 
 <TAG_CHARACTERS> [^] { return XmlTokenType.XML_TAG_CHARACTERS; }

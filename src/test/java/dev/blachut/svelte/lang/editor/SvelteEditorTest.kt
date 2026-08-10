@@ -102,4 +102,57 @@ class SvelteEditorTest : BasePlatformTestCase() {
   private fun doTestFolding() {
     myFixture.testFoldingWithCollapseStatus(testDataPath + "/" + basePath + "/" + getTestName(false) + ".svelte")
   }
+
+  // WEB-77758: a `/` typed mid-header of a closed tag may begin a comment, so it inserts plainly --
+  // in particular it must not break the header and re-close the already closed tag with a second `>`.
+  fun testSlashInsertsPlainlyMidHeader() {
+    myFixture.configureByText("Foo.svelte", "<div <caret> ></div>")
+    myFixture.type('/')
+    myFixture.checkResult("<div /<caret> ></div>")
+  }
+
+  // Directly at the tag end the platform assists stay, matching JSX.
+  fun testSlashConvertsEmptyTagToSelfClosing() {
+    myFixture.configureByText("Foo.svelte", "<div <caret>></div>")
+    myFixture.type('/')
+    myFixture.checkResult("<div /<caret>>")
+  }
+
+  fun testSlashTypesOverEmptyElementEnd() {
+    myFixture.configureByText("Foo.svelte", "<Foo <caret>/>")
+    myFixture.type('/')
+    myFixture.checkResult("<Foo /<caret>>")
+  }
+
+  fun testTagHeaderCommentInClosedTag() {
+    myFixture.configureByText("Foo.svelte", "<div <caret>>x</div>")
+    myFixture.type("// c")
+    myFixture.checkResult("<div // c<caret>>x</div>")
+  }
+
+  fun testSlashInsertsPlainlyBetweenAttributes() {
+    myFixture.configureByText("Foo.svelte", """<div <caret> class="x">t</div>""")
+    myFixture.type('/')
+    myFixture.checkResult("""<div /<caret> class="x">t</div>""")
+  }
+
+  fun testLineCommentTypedOnOwnHeaderLine() {
+    myFixture.configureByText("Foo.svelte", "<div \n<caret>\n>\n    \n</div>")
+    myFixture.type("// c")
+    myFixture.checkResult("<div \n// c<caret>\n>\n    \n</div>")
+  }
+
+  // An unclosed tag keeps the platform `/` -> `/>` auto-close.
+  fun testSlashAutoClosesUnclosedTag() {
+    myFixture.configureByText("Foo.svelte", "<div <caret>")
+    myFixture.type('/')
+    myFixture.checkResult("<div /><caret>")
+  }
+
+  // The `</` end-tag completion must keep working.
+  fun testSlashStillCompletesEndTag() {
+    myFixture.configureByText("Foo.svelte", "<div>x<<caret>")
+    myFixture.type('/')
+    myFixture.checkResult("<div>x</div><caret>")
+  }
 }

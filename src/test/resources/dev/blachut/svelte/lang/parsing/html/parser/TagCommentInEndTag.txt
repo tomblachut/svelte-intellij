@@ -1,0 +1,110 @@
+SvelteHtmlFile: TagCommentInEndTag.svelte
+  PsiElement(HTML_DOCUMENT)
+    PsiElement(XML_PROLOG)
+      <empty list>
+    SvelteHtmlTag: div
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('div')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('Content')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('div')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      XmlToken:XML_DATA_CHARACTERS('//')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('not')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('a')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('comment')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('in')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('an')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('end')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('tag>')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace('\n')
+      PsiErrorElement:Closing tag is not valid
+        <empty list>
+    SvelteHtmlTag: span
+      XmlToken:XML_START_TAG_START('<')
+      XmlToken:XML_NAME('span')
+      XmlToken:XML_TAG_END('>')
+      XmlText
+        XmlToken:XML_DATA_CHARACTERS('Inline')
+      XmlToken:XML_END_TAG_START('</')
+      XmlToken:XML_NAME('span')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      XmlToken:XML_DATA_CHARACTERS('/*')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('not')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('a')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('comment')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('either')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      XmlToken:XML_DATA_CHARACTERS('*/>')
+      PsiErrorElement:Unexpected token
+        <empty list>
+      PsiElement(SVELTE_LANG_MODE_NO_TS)('')
+      PsiErrorElement:Closing tag is not valid
+        <empty list>

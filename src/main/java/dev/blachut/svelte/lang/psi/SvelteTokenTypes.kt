@@ -15,6 +15,29 @@ object SvelteTokenTypes {
   @JvmField
   val END_MUSTACHE: IElementType = SvelteElementType("END_MUSTACHE")
 
+  /**
+   * A JavaScript-style `//` comment inside a start tag header, e.g. `<div // comment`.
+   * Svelte accepts these wherever an attribute name may start; the comment runs to the end of the line,
+   * so it also swallows a `>` or `/>` placed on the same line.
+   *
+   * See [sveltejs/svelte#17671](https://github.com/sveltejs/svelte/pull/17671).
+   */
+  @JvmField
+  val TAG_LINE_COMMENT: IElementType = SvelteElementType("TAG_LINE_COMMENT")
+
+  /**
+   * A JavaScript-style slash-star block comment inside a start tag header. Unlike [TAG_LINE_COMMENT]
+   * it can be terminated, so attributes may follow it on the same line; an unterminated one runs to
+   * the end of the file, which is how the compiler reads it as well.
+   *
+   * See [sveltejs/svelte#17671](https://github.com/sveltejs/svelte/pull/17671).
+   */
+  @JvmField
+  val TAG_BLOCK_COMMENT: IElementType = SvelteElementType("TAG_BLOCK_COMMENT")
+
+  /** Comments that may appear inside a start tag header, in place of an attribute. */
+  val TAG_COMMENTS: TokenSet = TokenSet.create(TAG_LINE_COMMENT, TAG_BLOCK_COMMENT)
+
   @JvmField
   val IF_KEYWORD: IElementType = JSTokenTypes.IF_KEYWORD
 

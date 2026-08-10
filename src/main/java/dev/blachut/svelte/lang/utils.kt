@@ -10,9 +10,9 @@ import com.intellij.polySymbols.context.PolyContext
 import com.intellij.polySymbols.framework.PolySymbolFramework.Companion.KIND_FRAMEWORK
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
+import com.intellij.psi.xml.XmlTag
 import com.intellij.xml.util.HtmlUtil
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
-import dev.blachut.svelte.lang.psi.SvelteHtmlTag
 
 fun isSvelteContext(context: PsiElement): Boolean {
   return context.containingFile is SvelteHtmlFile
@@ -49,7 +49,7 @@ fun PsiBuilder.isTokenAfterWhiteSpace(): Boolean {
   return lastRawToken === TokenType.WHITE_SPACE
 }
 
-fun SvelteHtmlTag.isScriptOrStyleTag(): Boolean {
+fun XmlTag.isScriptOrStyleTag(): Boolean {
   return this.name == HtmlUtil.SCRIPT_TAG_NAME || this.name == HtmlUtil.STYLE_TAG_NAME
 }
 

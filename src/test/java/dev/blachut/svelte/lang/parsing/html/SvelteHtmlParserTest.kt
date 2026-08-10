@@ -153,6 +153,20 @@ class SvelteHtmlParserTest : ParsingTestCase(
 
   fun testCommentInExpression() = doTest()
   fun testBlockCommentInExpression() = doTest()
+
+  // WEB-77758: `//` and `/* */` comments inside start tags, see
+  // https://github.com/sveltejs/svelte/pull/17671
+  fun testTagLineComment() = doTest()
+  fun testTagLineCommentBeforeAttribute() = doTest()
+  fun testTagLineCommentOnly() = doTest()
+  fun testTagLineCommentTrailing() = doTest()
+  fun testTagLineCommentAdjacent() = doTest()
+  fun testTagLineCommentSwallowsTagEnd() = doTest()
+  fun testTagBlockComment() = doTest()
+  fun testTagBlockCommentAdjacent() = doTest()
+  fun testTagBlockCommentUnterminated() = doTest()
+  fun testTagCommentInEndTag() = doTest()
+
   fun testEscapedCharInExpression() = doTest()
   fun testRegexLiteralWithQuoteInExpression() = doTest()
   fun testCommentInRawTextExpression() = doTest()
