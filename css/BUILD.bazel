@@ -83,6 +83,7 @@ jvm_library(
 exports_files(
     [
         "intellij.svelte.css.iml",
+        "resources/intellij.svelte.css.xml",
     ],
     visibility = ["//visibility:public"],
 )

@@ -60,6 +60,7 @@ jvm_library(
 exports_files(
     [
         "intellij.svelte.javascript.debugger.iml",
+        "resources/intellij.svelte.javascript.debugger.xml",
     ],
     visibility = ["//visibility:public"],
 )
