@@ -2,7 +2,6 @@
 package dev.blachut.svelte.lang.tsc
 
 import com.intellij.javascript.types.TSType
-import com.intellij.lang.javascript.JSTestUtils
 import com.intellij.lang.javascript.psi.JSType
 import com.intellij.lang.javascript.psi.JSVariable
 import com.intellij.lang.typescript.compiler.TypeScriptServiceHolder
@@ -13,6 +12,7 @@ import com.intellij.lang.typescript.tsc.types.TypeScriptCompilerObjectTypeImpl
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.psi.PsiElement
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.service.SveltePluginTypeScriptService
@@ -32,7 +32,7 @@ class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTyp
     serviceSettings.serviceMode = SvelteServiceMode.ENABLED
     Disposer.register(testRootDisposable) { serviceSettings.serviceMode = oldMode }
 
-    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5)
+    runInEdtAndWait { myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5) }
     TypeScriptServiceTestMixin.setUpTypeScriptService(myFixture) {
       it is SveltePluginTypeScriptService
     }
@@ -40,12 +40,18 @@ class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTyp
 
   override fun calculateType(element: PsiElement, typeRequestKind: TypeScriptTypeRequestKind): JSType? {
     return super.calculateType(element, typeRequestKind).also {
-      assertInstanceOf(TypeScriptServiceHolder.getForFile(project, file.virtualFile), SveltePluginTypeScriptService::class.java)
+      assertServiceIsSveltePlugin()
     }
   }
 
   override fun calculateTSType(element: PsiElement, typeRequestKind: TypeScriptTypeRequestKind): TSType? {
     return super.calculateTSType(element, typeRequestKind).also {
+      assertServiceIsSveltePlugin()
+    }
+  }
+
+  private fun assertServiceIsSveltePlugin() {
+    inReadAction {
       assertInstanceOf(TypeScriptServiceHolder.getForFile(project, file.virtualFile), SveltePluginTypeScriptService::class.java)
     }
   }
@@ -53,7 +59,7 @@ class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTyp
   @Test
   fun testCompletePropsSvelte() {
     // Match the tsconfig used in SvelteServiceTestBase.addTypeScriptCommonFiles()
-    myFixture.addFileToProject("tsconfig.json", """
+    addFileToProject("tsconfig.json", """
       {
         "compilerOptions": {
           "allowJs": true,
@@ -68,25 +74,25 @@ class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTyp
     """.trimIndent())
 
     // Ambient declarations used in the original working test
-    myFixture.addFileToProject("ambient.d.ts", """
+    addFileToProject("ambient.d.ts", """
       /// <reference types="svelte" />
 
       declare function __sveltets_2_invalidate<T>(getValue: () => T): T;
     """.trimIndent())
 
-    myFixture.addFileToProject("Button.svelte", """
+    addFileToProject("Button.svelte", """
       <script lang="ts">
         export let label: string;
       </script>
       <button>{label}</button>
     """.trimIndent())
 
-    myFixture.configureByText("usage.ts", """
+    configureByText("usage.ts", """
       import Button from "./Button.svelte";
       const btn = new Button({target: document.body, props: {label: "hi"}});
     """.trimIndent())
 
-    val element = JSTestUtils.findElementByText(myFixture, "btn", JSVariable::class.java)
+    val element = findElement("btn", JSVariable::class)
     val type = calculateType(element)
     assertNotNull("Type should not be null", type)
     assertInstanceOf(type, TypeScriptCompilerObjectTypeImpl::class.java)
