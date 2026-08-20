@@ -78,7 +78,50 @@ class SvelteHighlightingLexerTest : LexerTestCase() {
   fun testTsSnippetParameterTypes() = doTest()
   fun testTsJsCompatibility() = doTest()
 
-  // fun testRestart() = checkCorrectRestartOnEveryToken("""<img alt={{foo: {}}}>""")
+  // The `doTest` files above are all checked for correct restart already, see LexerTestCase.doTest;
+  // the cases below cover what no test file does.
+
+  fun testRestart() = checkCorrectRestart("""<img alt={{foo: {}}}>""")
+
+  // The lexer stops inside the unterminated `<style>`, leaving `rawTag` set; restarting at the `>` of
+  // `<div>` -- a state the lexer reports as restartable -- must not take that over and lex the rest of
+  // the file as raw content, see SvelteHtmlBaseLexer.resetTagKind. The token list is asserted as well,
+  // because a restart is only checked against this same lexer's full pass.
+  fun testRestartRawTag() = doTest(
+    "<div>x<style>y",
+    """
+    XML_START_TAG_START ('<')
+    XML_TAG_NAME ('div')
+    XML_TAG_END ('>')
+    XML_DATA_CHARACTERS ('x')
+    XML_START_TAG_START ('<')
+    XML_TAG_NAME ('style')
+    XML_TAG_END ('>')
+    CSS_IDENT ('y')
+    """.trimIndent()
+  )
+
+  // The attribute expression ends its embedment inside the end tag header, which resumes the base lexer
+  // mid-header; that must not lose `isEndTag` and let the `/* */` become a comment token.
+  fun testEndTagCommentAfterExpr() = doTest(
+    "</div a={x} /* c */>",
+    """
+    XML_END_TAG_START ('</')
+    XML_TAG_NAME ('div')
+    TAG_WHITE_SPACE (' ')
+    XML_NAME ('a')
+    XML_EQ ('=')
+    START_MUSTACHE ('{')
+    JS:IDENTIFIER ('x')
+    END_MUSTACHE ('}')
+    TAG_WHITE_SPACE (' ')
+    XML_DATA_CHARACTERS ('/*')
+    TAG_WHITE_SPACE (' ')
+    XML_DATA_CHARACTERS ('c')
+    TAG_WHITE_SPACE (' ')
+    XML_DATA_CHARACTERS ('*/>')
+    """.trimIndent()
+  )
 
   private fun doTest() = doFileTest("svelte")
 }

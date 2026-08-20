@@ -17,6 +17,15 @@ class SvelteHtmlLexer(
 
   var lexedLangMode: SvelteLangMode = langMode
 
+  override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
+    // Starting is the one point where the tag kind cannot be carried over: `initialState` does not encode it,
+    // see SvelteHtmlBaseLexer.resetTagKind. Restarts that resume a pass in the middle of a tag header go
+    // through the base lexer directly and keep the flags. This has to run before super.start(), which
+    // already lexes the first token.
+    (delegate as SvelteHtmlBaseLexer).resetTagKind()
+    super.start(buffer, startOffset, endOffset, initialState)
+  }
+
   override fun acceptEmbeddedContentProvider(provider: HtmlEmbeddedContentProvider): Boolean =
     provider::class != HtmlScriptStyleEmbeddedContentProvider::class
     && provider::class != HtmlRawTextTagContentProvider::class
