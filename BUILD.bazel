@@ -179,7 +179,6 @@ exports_files(
     [
         "intellij.svelte.iml",
         "src/main/resources/META-INF/plugin.xml",
-        "plugin-content.yaml",
     ],
     visibility = ["//visibility:public"],
 )
