@@ -1,5 +1,6 @@
 load("@community//build:tests-options.bzl", "jps_test")
 load("@community//platform/build-scripts/bazel-rules:dev_dist_content.bzl", "dev_dist_plugin_content")
+load("@community//platform/build-scripts/bazel-rules:dev_dist_plugin.bzl", "dev_dist_plugin")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
 
 ### auto-generated section `build intellij.svelte` start
@@ -184,15 +185,15 @@ exports_files(
 )
 ### auto-generated section `iml intellij.svelte` end
 
-### auto-generated section `dev content intellij.svelte` start
-dev_dist_plugin_content(
+### auto-generated section `dev intellij.svelte` start
+dev_dist_plugin(
     descriptor_module = ":svelte",
     prepacked_content_modules = [
         "//plugins/svelte/css:css_content_module_jar",
         "//plugins/svelte/javascript-debugger:javascript-debugger_content_module_jar",
     ],
 )
-### auto-generated section `dev content intellij.svelte` end
+### auto-generated section `dev intellij.svelte` end
 
 ### auto-generated section `build intellij.svelte.tests` start
 jvm_library(
