@@ -25,6 +25,8 @@ enum class SvelteTestModule(
   SVELTE_KIT_ADAPTER_AUTO_2("sveltejs-adapter-auto/2", "@sveltejs/adapter-auto"),
   SVELTE_KIT_1("sveltejs-kit/1", "@sveltejs/kit"),
   SVELTE_PREPROCESS_5("svelte-preprocess/5", "svelte-preprocess"),
+  SVELTE_FA_4("svelte-fa/4", "svelte-fa"),
+  LUCIDE_SVELTE_1("lucide-svelte/1", "@lucide/svelte"),
   ;
 
   override val packageNames: List<String>

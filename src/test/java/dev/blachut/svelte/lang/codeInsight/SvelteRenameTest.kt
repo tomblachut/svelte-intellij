@@ -1,6 +1,8 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.JSAbstractRenameTest
+import dev.blachut.svelte.lang.SvelteTestModule
+import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 
 class SvelteRenameTest : JSAbstractRenameTest() {
@@ -24,6 +26,62 @@ class SvelteRenameTest : JSAbstractRenameTest() {
   fun testRenameGeneric() {
     val name = getTestName(false)
     doTestForFilesWithCheckAll("Entity", "$name.svelte")
+  }
+
+  /**
+   * WEB-57512: a rename of a package component's import must carry the template tag with it. That
+   * needs the reference search to report `<Fa />` as a usage of the binding.
+   */
+  fun testPackageComponentRename() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import <caret>Fa from 'svelte-fa';
+      </script>
+
+      <Fa />
+    """.trimIndent())
+    myFixture.renameElementAtCaret("FaIcon")
+    myFixture.checkResult("""
+      <script lang="ts">
+        import FaIcon from 'svelte-fa';
+      </script>
+
+      <FaIcon />
+    """.trimIndent())
+  }
+
+  /**
+   * The name-match fallback serves the import only. A rename of the same-named `{#each}` variable
+   * must leave the import's tag alone.
+   */
+  fun testEachVariableRenameKeepsTag() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import Fa from 'svelte-fa';
+        const items: string[] = [];
+      </script>
+
+      <Fa />
+
+      {#each items as <caret>Fa}
+        <span>{Fa}</span>
+      {/each}
+    """.trimIndent())
+    myFixture.renameElementAtCaret("Item")
+    myFixture.checkResult("""
+      <script lang="ts">
+        import Fa from 'svelte-fa';
+        const items: string[] = [];
+      </script>
+
+      <Fa />
+
+      {#each items as Item}
+        <span>{Item}</span>
+      {/each}
+    """.trimIndent())
   }
 
   // TypeScript in markup rename tests

@@ -13,6 +13,7 @@ import dev.blachut.svelte.lang.codeInsight.SvelteGenericsInspectionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
 import dev.blachut.svelte.lang.codeInsight.SvelteKitTest
 import dev.blachut.svelte.lang.codeInsight.SvelteNavigationTest
+import dev.blachut.svelte.lang.codeInsight.SvelteOptimizeImportsTest
 import dev.blachut.svelte.lang.codeInsight.SvelteRenameTest
 import dev.blachut.svelte.lang.codeInsight.SvelteResolveTest
 import dev.blachut.svelte.lang.codeInsight.SvelteTypeScriptCompletionTest
@@ -56,6 +57,7 @@ import org.junit.runners.Suite
   SvelteCompletionTest::class,
   SvelteComponentAutoImportTest::class,
   SvelteHighlightingTest::class,
+  SvelteOptimizeImportsTest::class,
   SvelteRenameTest::class,
   SvelteResolveTest::class,
   SvelteNavigationTest::class,

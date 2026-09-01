@@ -8,7 +8,9 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.testFramework.ExpectedHighlightingData
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
+import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
+import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import junit.framework.TestCase
 import org.junit.Test
@@ -36,6 +38,28 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       {acceptNumber(<error descr="Svelte: Argument of type 'boolean' is not assignable to parameter of type 'number'.">true</error>)}
       
       <input <warning descr="Svelte: A11y: Avoid using autofocus">autofocus</warning>>
+    """.trimIndent())
+    myFixture.checkHighlighting()
+    assertCorrectService()
+  }
+
+  /**
+   * WEB-57512 with the LSP running, which is the condition `SvelteHighlightingTest` cannot cover.
+   * Short name on purpose: long ones blow the per-test temp path on Windows.
+   */
+  @Test
+  fun testFaImportUsed() {
+    addTypeScriptCommonFiles()
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import Fa from 'svelte-fa';
+
+        // svelte-fa declares `icon` as required, and with the service running the LSP checks it
+        const icon: any = null;
+      </script>
+
+      <Fa {icon} />
     """.trimIndent())
     myFixture.checkHighlighting()
     assertCorrectService()

@@ -1,11 +1,16 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.lang.ecmascript6.psi.ES6ImportDeclaration
 import com.intellij.lang.javascript.JSAbstractFindUsagesTest
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.testFramework.UsefulTestCase
+import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.SvelteTestScenario
 import dev.blachut.svelte.lang.configureBundledSvelte
+import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 
@@ -52,6 +57,60 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
   private fun doTest() {
     val usages = doFindUsages()
     UsefulTestCase.assertSize(8, usages) // 8 + 1 false positive - 1 false negative
+  }
+
+  /**
+   * WEB-57512: Find Usages passes a project-wide [com.intellij.psi.search.GlobalSearchScope]. The
+   * template usage must be found on that path too. The unused-imports check covers only the
+   * `<script>`-scoped path.
+   */
+  fun testPackageComponentUsages() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import <caret>Fa from 'svelte-fa';
+      </script>
+
+      <Fa />
+    """.trimIndent())
+    UsefulTestCase.assertSize(1, doFindUsages())
+  }
+
+  /**
+   * The name-match fallback serves the import only. The tag `<Fa />` belongs to the import, so a
+   * search for the same-named `{#each}` variable must not report it.
+   */
+  fun testEachVariableUsagesExcludeTag() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import Fa from 'svelte-fa';
+        const items: string[] = [];
+      </script>
+
+      <Fa />
+
+      {#each items as <caret>Fa}
+        <span>{Fa}</span>
+      {/each}
+    """.trimIndent())
+    UsefulTestCase.assertSize(1, doFindUsages())
+  }
+
+  /** ReferencesSearch must keep its results inside the scope the caller passed. */
+  fun testImportSearchRespectsCallerScope() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import <caret>Fa from 'svelte-fa';
+      </script>
+
+      <Fa />
+    """.trimIndent())
+    val binding = myFixture.elementAtCaret
+    val importDeclaration = PsiTreeUtil.getParentOfType(binding, ES6ImportDeclaration::class.java)!!
+    val references = ReferencesSearch.search(binding, LocalSearchScope(importDeclaration)).findAll()
+    UsefulTestCase.assertEmpty(references)
   }
 
   fun testFindUsagesOfCssClassIncludesSvelteElement() {

@@ -55,8 +55,10 @@ import com.sixrr.inspectjs.confusing.CommaExpressionJSInspection
 import com.sixrr.inspectjs.confusing.PointlessBooleanExpressionJSInspection
 import com.sixrr.inspectjs.control.UnnecessaryLabelJSInspection
 import com.sixrr.inspectjs.validity.UnreachableCodeJSInspection
+import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.SvelteTestScenario
 import dev.blachut.svelte.lang.configureBundledSvelte
+import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
@@ -266,6 +268,99 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     <script>
       <warning>import Usage from "./Usage.svelte";</warning>
     </script>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  /**
+   * WEB-57512: only the template tag uses this default import of a package component. The
+   * unused-imports check must find that usage through
+   * [dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch].
+   */
+  fun testPackageComponentImport() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <Fa />
+
+      <script lang="ts">
+        import Fa from 'svelte-fa';
+      </script>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  /**
+   * The tag resolves to the `{#each}` block variable, not to the import, so the import really is
+   * unused. Guards the name-matching in `PlainComponentResultProcessor` against claiming a shadowed
+   * tag as a usage.
+   */
+  fun testShadowedComponentImport() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        <warning descr="Unused import Fa from 'svelte-fa';">import Fa from 'svelte-fa';</warning>
+        const items: string[] = [];
+      </script>
+
+      {#each items as Fa}
+        <Fa />
+      {/each}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  /**
+   * WEB-57512: highlight-usages-at-caret scopes by `LocalSearchScope(file)`, whose scope element is
+   * the `.svelte` file rather than the `<script>` embedded content.
+   */
+  fun testPackageComponentUsageHighlight() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import <highlight><caret>Fa</highlight> from 'svelte-fa';
+      </script>
+
+      <<highlight>Fa</highlight> />
+    """.trimIndent())
+    JSTestUtils.checkHighlightUsages(myFixture, false)
+  }
+
+  /** The same import, but the tag is nested inside another component tag. */
+  fun testNestedPackageComponentImport() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    myFixture.configureByText("Button.svelte", "<button><slot /></button>")
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import Fa from 'svelte-fa';
+        import Button from './Button.svelte';
+      </script>
+
+      <div class="flex">
+        <Button>
+          <Fa size="1x" />
+        </Button>
+      </div>
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
+  /**
+   * `@lucide/svelte` resolves `icons/send` through an `exports` wildcard whose types and
+   * runtime land on different basenames. The named `Send` import is the control: it takes
+   * the `isUnusedSpecifier` path, which never flags a tag usage.
+   */
+  fun testDeepPackageComponentImport() {
+    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.LUCIDE_SVELTE_1)
+    myFixture.configureByText("Usage.svelte", """
+      <script lang="ts">
+        import { Send } from '@lucide/svelte';
+        import SendIcon from '@lucide/svelte/icons/send';
+        import SquareIcon from '@lucide/svelte/icons/square';
+      </script>
+
+      <Send />
+      <SendIcon />
+      <SquareIcon />
     """.trimIndent())
     myFixture.testHighlighting()
   }
