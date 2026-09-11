@@ -35,7 +35,7 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
   override val dataFlavor: DataFlavor
     get() = SVELTE_TEMPLATE_EXPRESSIONS_IMPORTS_FLAVOR
 
-  @RequiresEdt
+  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
   override fun isAcceptableCopyContext(file: PsiFile, contextElements: List<PsiElement>): Boolean {
     val settings = JSApplicationSettings.getInstance()
     if (file !is SvelteHtmlFile) return false
@@ -45,13 +45,13 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
            || (!isTS && settings.isUseJavaScriptAutoImport)
   }
 
-  @RequiresEdt
+  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
   override fun isAcceptablePasteContext(context: PsiElement): Boolean =
     context.containingFile is SvelteHtmlFile
     && context.parentOfTypes(JSExecutionScope::class, XmlTag::class, XmlDocument::class, withSelf = true)
       .let { it !is JSExecutionScope && it != null }
 
-  @RequiresEdt
+  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
   override fun hasUnsupportedContentInCopyContext(parent: PsiElement, textRange: TextRange): Boolean {
     var result = false
     parent.accept(object : JSRecursiveWalkingElementVisitor() {
@@ -65,11 +65,11 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
     return result || parent.parents(true).any { it is JSEmbeddedContentImpl }
   }
 
-  @RequiresEdt
+  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
   override fun createTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>): SvelteTemplateExpressionsImportsTransferableData =
     SvelteTemplateExpressionsImportsTransferableData(importedElementsDeferred)
 
-  @RequiresEdt
+  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
   override fun getExportScope(file: PsiFile, caret: Int): PsiElement? =
     super.getExportScope(file, caret)
     ?: WriteAction.compute<PsiElement, Throwable> {
@@ -77,8 +77,8 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
         file as? SvelteHtmlFile ?: return@compute null)
     }
 
-  @RequiresReadLock
-  @RequiresBackgroundThread
+  @RequiresReadLock(generateAssertion = false /* IJPL-115548 */)
+  @RequiresBackgroundThread(generateAssertion = false /* IJPL-115548 */)
   override fun prepareInsertingRequiredImports(
     pasteContext: PsiElement,
     data: SvelteTemplateExpressionsImportsTransferableData,

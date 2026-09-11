@@ -51,7 +51,7 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
            || (!isTS && settings.isUseJavaScriptAutoImport)
   }
 
-  @RequiresEdt
+  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
   override fun isAcceptablePasteContext(context: PsiElement): Boolean =
     context.containingFile is SvelteHtmlFile
     && context.parentOfTypes(JSExecutionScope::class, XmlTag::class, XmlDocument::class, withSelf = true)
@@ -76,8 +76,8 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
       prepareInstanceScriptContent(file as? SvelteHtmlFile ?: return@compute null)
     }
 
-  @RequiresReadLock
-  @RequiresBackgroundThread
+  @RequiresReadLock(generateAssertion = false /* IJPL-115548 */)
+  @RequiresBackgroundThread(generateAssertion = false /* IJPL-115548 */)
   override fun processTextRanges(textRanges: List<Pair<PsiElement, TextRange>>): Set<ImportedElement> {
     ThreadingAssertions.assertReadAccess()
     ThreadingAssertions.assertBackgroundThread()
@@ -107,12 +107,12 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
     return result
   }
 
-  @RequiresEdt
+  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
   override fun createTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>): SvelteComponentImportsTransferableData =
     SvelteComponentImportsTransferableData(importedElementsDeferred)
 
-  @RequiresReadLock
-  @RequiresBackgroundThread
+  @RequiresReadLock(generateAssertion = false /* IJPL-115548 */)
+  @RequiresBackgroundThread(generateAssertion = false /* IJPL-115548 */)
   override fun prepareInsertingRequiredImports(
     pasteContext: PsiElement,
     data: SvelteComponentImportsTransferableData,
