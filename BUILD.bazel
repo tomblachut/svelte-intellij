@@ -1,7 +1,10 @@
 load("@community//build:tests-options.bzl", "jps_test")
 load("@community//platform/build-scripts/bazel-rules:dev_dist_plugin.bzl", "dev_dist_plugin")
+load("@community//platform/build-scripts/bazel-rules:ij_plugin.bzl", "ij_plugin")
+load("@community//platform/build-scripts/bazel-rules:ij_plugin_module.bzl", "ij_plugin_module")
 load("@jps_dynamic_deps_ultimate//:targets.bzl", "MODULE_TARGETS")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
 ### auto-generated section `dev intellij.svelte` start
 dev_dist_plugin(
@@ -15,8 +18,26 @@ dev_dist_plugin(
 )
 ### auto-generated section `dev intellij.svelte` end
 
+pkg_files(
+    name = "svelte_language_server_resources",
+    srcs = glob(["src/main/svelte-language-server/**"]),
+    strip_prefix = strip_prefix.from_pkg(),
+)
+
+pkg_files(
+    name = "typescript_svelte_plugin_resources",
+    srcs = glob(["src/main/typescript-svelte-plugin/**"]),
+    strip_prefix = strip_prefix.from_pkg(),
+)
+
+pkg_files(
+    name = "svelte_service_resources",
+    srcs = glob(["src/main/svelte-service/**"]),
+    strip_prefix = strip_prefix.from_pkg(),
+)
+
 ### auto-generated section `build intellij.svelte` start
-jvm_library(
+ij_plugin_module(
     name = "svelte",
     srcs = glob(
         [
@@ -29,6 +50,12 @@ jvm_library(
         allow_empty = True,
     ),
     module_name = "intellij.svelte",
+    # manually written attribute
+    non_classpath_data = [
+        ":svelte_language_server_resources",
+        ":typescript_svelte_plugin_resources",
+        ":svelte_service_resources",
+    ],
     resource_strip_prefix = "src/main/resources",
     resources = glob(
         ["src/main/resources/**/*"],
@@ -185,6 +212,17 @@ jvm_library(
         "@community//libraries/kotlinx/collections-immutable:libraries-kotlinx-collections-immutable_test_lib",
         "//plugins/JavaScriptLanguage/js-analysis-impl:javascript-analysis-impl_test_lib",
     ],
+)
+
+ij_plugin(
+    name = "svelte_plugin",
+    descriptor_module = ":svelte_plugin_module",
+    content_modules = [
+        # do not sort,
+        "//plugins/svelte/javascript-debugger",
+        "//plugins/svelte/css",
+    ],
+    visibility = ["//visibility:public"],
 )
 ### auto-generated section `build intellij.svelte` end
 
