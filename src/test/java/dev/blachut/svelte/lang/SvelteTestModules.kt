@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang
 
 import com.intellij.javascript.testFramework.web.WebFrameworkTestModule
 import com.intellij.javascript.testFramework.web.configureDependencies
-import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 
@@ -64,6 +64,6 @@ fun CodeInsightTestFixture.configureSvelteDependencies(
 }
 
 private fun refreshDependencySource(path: String) {
-  LocalFileSystem.getInstance().refreshAndFindFileByPath(path)
+  StandardFileSystems.local().refreshAndFindFileByPath(path)
     ?.let { UsefulTestCase.refreshRecursively(it) }
 }
