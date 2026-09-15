@@ -4,6 +4,7 @@
     <plugin id="dev.blachut.svelte.lang"/>
     <module name="intellij.javascript.debugger.backend"/>
     <module name="intellij.javascript.debugger.ui"/>
+    <module name="intellij.platform.concurrency"/>
     <module name="intellij.platform.core"/>
     <module name="intellij.platform.core.impl"/>
     <module name="intellij.platform.debugger"/>
