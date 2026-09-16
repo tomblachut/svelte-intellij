@@ -1,20 +1,18 @@
 load("@community//build:tests-options.bzl", "jps_test")
-load("@community//platform/build-scripts/bazel-rules:dev_dist_plugin.bzl", "dev_dist_plugin")
 load("@community//platform/build-scripts/bazel-rules:ij_plugin.bzl", "ij_plugin")
 load("@community//platform/build-scripts/bazel-rules:ij_plugin_module.bzl", "ij_plugin_module")
-load("@jps_dynamic_deps_ultimate//:targets.bzl", "MODULE_TARGETS")
+load("@jps_dynamic_deps_ultimate//:targets.bzl", "dev_dist_plugin")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
 ### auto-generated section `dev intellij.svelte` start
 dev_dist_plugin(
-    main_module = "intellij.svelte",
-    module_targets = MODULE_TARGETS,
-    prepacked_content_modules = [
+    content_modules = [
         # do not sort,
-        "intellij.svelte.css",
         "intellij.svelte.javascript.debugger",
+        "intellij.svelte.css",
     ],
+    main_module = "intellij.svelte",
 )
 ### auto-generated section `dev intellij.svelte` end
 
