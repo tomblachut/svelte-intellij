@@ -2,6 +2,7 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.ecmascript6.psi.ES6ImportDeclaration
 import com.intellij.lang.javascript.JSAbstractFindUsagesTest
+import com.intellij.openapi.application.runReadActionBlocking
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
@@ -109,7 +110,7 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
     """.trimIndent())
     val binding = myFixture.elementAtCaret
     val importDeclaration = PsiTreeUtil.getParentOfType(binding, ES6ImportDeclaration::class.java)!!
-    val references = ReferencesSearch.search(binding, LocalSearchScope(importDeclaration)).findAll()
+    val references = runReadActionBlocking { ReferencesSearch.search(binding, LocalSearchScope(importDeclaration)).findAll() }
     UsefulTestCase.assertEmpty(references)
   }
 
