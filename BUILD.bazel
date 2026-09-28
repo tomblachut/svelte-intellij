@@ -43,6 +43,12 @@ dev_dist_plugin(
         "lib/svelte.jar": ["intellij.svelte"],
     },
     main_module = "intellij.svelte",
+    mode_refused_content_modules = {
+        "frontend": [
+            "intellij.svelte.javascript.debugger",
+            "intellij.svelte.css",
+        ],
+    },
 )
 ### auto-generated section `dev intellij.svelte` end
 
