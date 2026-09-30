@@ -25,10 +25,6 @@ dev_dist_plugin(
         "intellij.svelte.css",
     ],
     descriptor = "src/main/resources/META-INF/plugin.xml",
-    descriptor_modules = [
-        "intellij.svelte.css",
-        "intellij.svelte.javascript.debugger",
-    ],
     file_prefixes = {
         "src/main/svelte-language-server": "plugins/svelte/src/main/svelte-language-server",
         "src/main/svelte-service": "plugins/svelte/src/main/svelte-service",
