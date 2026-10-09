@@ -68,6 +68,7 @@
     <orderEntry type="module" module-name="intellij.libraries.eclipse.lsp4j.jsonrpc" scope="TEST" />
     <orderEntry type="module" module-name="intellij.vitejs" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.polySymbols" scope="TEST" />
+    <orderEntry type="module" module-name="intellij.platform.polySymbols.backend" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.polySymbols.testFramework" scope="TEST" />
     <orderEntry type="module" module-name="intellij.javascript.web.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.testFramework" scope="TEST" />
