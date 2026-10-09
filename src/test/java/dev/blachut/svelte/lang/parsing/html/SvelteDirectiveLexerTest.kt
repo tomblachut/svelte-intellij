@@ -1,16 +1,15 @@
 package dev.blachut.svelte.lang.parsing.html
 
-import com.intellij.lexer.Lexer
-import com.intellij.testFramework.LexerTestCase
+import com.intellij.platform.testFramework.junit5.codeInsight.fixture.lexerFixture
+import com.intellij.testFramework.junit5.fixture.TestFixtures
+import org.junit.jupiter.api.Test
 
-class SvelteDirectiveLexerTest : LexerTestCase() {
-  override fun getDirPath(): String = throw NotImplementedError()
+@TestFixtures
+class SvelteDirectiveLexerTest {
+  private val lexer by lexerFixture("") { SvelteDirectiveLexer() }
 
-  override fun createLexer(): Lexer {
-    return SvelteDirectiveLexer()
-  }
-
-  fun testOn() = doTest("on:click|once|capture", """
+  @Test
+  fun testOn() = lexer.doTest("on:click|once|capture", """
     JS:IDENTIFIER ('on:')
     JS:IDENTIFIER ('click')
     JS:OR ('|')
@@ -19,19 +18,22 @@ class SvelteDirectiveLexerTest : LexerTestCase() {
     XML_NAME ('capture')
   """.trimIndent())
 
-  fun testLet() = doTest("let:slottedVariable", """
+  @Test
+  fun testLet() = lexer.doTest("let:slottedVariable", """
     JS:IDENTIFIER ('let:')
     JS:IDENTIFIER ('slottedVariable')
   """.trimIndent())
 
-  fun testUseDotted() = doTest("use:obj.action", """
+  @Test
+  fun testUseDotted() = lexer.doTest("use:obj.action", """
     JS:IDENTIFIER ('use:')
     JS:IDENTIFIER ('obj')
     JS:DOT ('.')
     JS:IDENTIFIER ('action')
   """.trimIndent())
 
-  fun testOutDottedWithModifiers() = doTest("out:obj.fade|local", """
+  @Test
+  fun testOutDottedWithModifiers() = lexer.doTest("out:obj.fade|local", """
     JS:IDENTIFIER ('out:')
     JS:IDENTIFIER ('obj')
     JS:DOT ('.')
