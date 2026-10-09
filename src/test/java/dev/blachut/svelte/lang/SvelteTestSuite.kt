@@ -7,6 +7,7 @@ import dev.blachut.svelte.lang.codeInsight.SvelteCopyPasteTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateFunctionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateImportTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateVariableTest
+import dev.blachut.svelte.lang.codeInsight.SvelteFileRefactoringTest
 import dev.blachut.svelte.lang.codeInsight.SvelteFindUsagesTest
 import dev.blachut.svelte.lang.codeInsight.SvelteGenericsInspectionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
@@ -51,6 +52,7 @@ import org.junit.runners.Suite
   SvelteHighlightingTest::class,
   SvelteOptimizeImportsTest::class,
   SvelteRenameTest::class,
+  SvelteFileRefactoringTest::class,
   SvelteResolveTest::class,
   SvelteNavigationTest::class,
   SvelteFindUsagesTest::class,
