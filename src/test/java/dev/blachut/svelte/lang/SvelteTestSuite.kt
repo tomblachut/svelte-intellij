@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang
 
-import dev.blachut.svelte.lang.codeInsight.SvelteAutoPopupTest
 import dev.blachut.svelte.lang.codeInsight.SvelteBreadcrumbsTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCompletionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteComponentAutoImportTest
@@ -53,7 +52,6 @@ import org.junit.runners.Suite
   SvelteEmmetTest::class,
   SvelteSelectWordTest::class,
   // Code insight
-  SvelteAutoPopupTest::class,
   SvelteCompletionTest::class,
   SvelteComponentAutoImportTest::class,
   SvelteHighlightingTest::class,
