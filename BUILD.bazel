@@ -237,7 +237,11 @@ jvm_library(
     ),
     module_name = "intellij.svelte.tests",
     visibility = ["//visibility:public"],
-    runtime_deps = ["//contrib/postcss/paid"],
+    runtime_deps = [
+        # do not sort,
+        "//contrib/postcss/paid",
+        "//plugins/ultimate-plugin",
+    ],
 )
 
 jvm_library(
@@ -266,6 +270,7 @@ jvm_library(
         "@community//platform/ide-core-impl:ide-core-impl_test_lib",
         "@community//platform/ide-core:ide-core_test_lib",
         "@community//platform/platform-impl:ide-impl_test_lib",
+        "//plugins/ultimate-plugin:ultimate-plugin_test_lib",
     ],
     deps = [
         # do not sort,
