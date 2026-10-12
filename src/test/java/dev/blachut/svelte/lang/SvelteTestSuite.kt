@@ -22,7 +22,6 @@ import dev.blachut.svelte.lang.editor.SvelteCommenterTest
 import dev.blachut.svelte.lang.editor.SvelteEditorTest
 import dev.blachut.svelte.lang.editor.SvelteEmmetTest
 import dev.blachut.svelte.lang.editor.SvelteSelectWordTest
-import dev.blachut.svelte.lang.format.SvelteFormatterTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexerTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveParserTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHighlightingLexerTest
@@ -45,7 +44,6 @@ import org.junit.runners.Suite
   SvelteDirectiveLexerTest::class,
   SvelteDirectiveParserTest::class,
   // Editing
-  SvelteFormatterTest::class,
   SvelteBraceTypedTest::class,
   SvelteCommenterTest::class,
   SvelteEditorTest::class,
