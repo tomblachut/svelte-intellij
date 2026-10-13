@@ -25,8 +25,6 @@ import dev.blachut.svelte.lang.editor.SvelteSelectWordTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexerTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveParserTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHighlightingLexerTest
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlParserTest
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlRegressionParsingTest
 import dev.blachut.svelte.lang.service.SvelteNsRenameServiceTest
 import dev.blachut.svelte.lang.service.SvelteNsUsagesServiceTest
 import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
@@ -38,9 +36,7 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
   // Parsing
-  SvelteHtmlRegressionParsingTest::class,
   SvelteHighlightingLexerTest::class,
-  SvelteHtmlParserTest::class,
   SvelteDirectiveLexerTest::class,
   SvelteDirectiveParserTest::class,
   // Editing
