@@ -51,7 +51,7 @@ class SvelteComponentCopyPasteProcessor : ES6CopyPasteProcessorBase<SvelteCompon
            || (!isTS && settings.isUseJavaScriptAutoImport)
   }
 
-  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
+  @RequiresEdt
   override fun isAcceptablePasteContext(context: PsiElement): Boolean =
     context.containingFile is SvelteHtmlFile
     && context.parentOfTypes(JSExecutionScope::class, XmlTag::class, XmlDocument::class, withSelf = true)

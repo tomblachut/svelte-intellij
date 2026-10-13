@@ -45,7 +45,7 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
            || (!isTS && settings.isUseJavaScriptAutoImport)
   }
 
-  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
+  @RequiresEdt
   override fun isAcceptablePasteContext(context: PsiElement): Boolean =
     context.containingFile is SvelteHtmlFile
     && context.parentOfTypes(JSExecutionScope::class, XmlTag::class, XmlDocument::class, withSelf = true)
@@ -69,7 +69,7 @@ class SvelteTemplateExpressionsCopyPasteProcessor : ES6CopyPasteProcessorBase<Sv
   override fun createTransferableData(importedElementsDeferred: Deferred<List<ImportedElement>>): SvelteTemplateExpressionsImportsTransferableData =
     SvelteTemplateExpressionsImportsTransferableData(importedElementsDeferred)
 
-  @RequiresEdt(generateAssertion = false /* IJPL-115548 */)
+  @RequiresEdt
   override fun getExportScope(file: PsiFile, caret: Int): PsiElement? =
     super.getExportScope(file, caret)
     ?: WriteAction.compute<PsiElement, Throwable> {
