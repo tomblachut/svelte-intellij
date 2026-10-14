@@ -8,7 +8,6 @@ import com.intellij.lang.typescript.compiler.TypeScriptServiceHolder
 import com.intellij.lang.typescript.compiler.languageService.protocol.commands.TypeScriptTypeRequestKind
 import com.intellij.lang.typescript.tsc.TypeScriptServiceGetElementTypeTest
 import com.intellij.lang.typescript.tsc.TypeScriptServiceTestMixin
-import com.intellij.lang.typescript.tsc.types.TypeScriptCompilerObjectTypeImpl
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.psi.PsiElement
@@ -95,6 +94,7 @@ class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTyp
     val element = findElement("btn", JSVariable::class)
     val type = calculateType(element)
     assertNotNull("Type should not be null", type)
-    assertInstanceOf(type, TypeScriptCompilerObjectTypeImpl::class.java)
+    val typeText = inReadAction { type!!.getTypeText(JSType.TypeTextFormat.PRESENTABLE) }
+    assertTrue("The type must have the props of the component: $typeText", typeText.startsWith("SvelteComponent<{label: string}"))
   }
 }

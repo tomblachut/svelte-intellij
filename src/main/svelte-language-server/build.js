@@ -17,9 +17,19 @@ if (ownPackageJson.version !== theirPackageJson.version) {
     throw new Error(`Make sure that the version in package.json matches the version of official server distribution (${theirPackageJson.version})`);
 }
 
+// typescript-svelte-plugin loads svelte2tsx from bin/node_modules, so the dependencies of svelte2tsx must be there too
+const svelte2tsx = `svelte2tsx`;
 const runtimeDependencies = [
-  `svelte2tsx`
+  svelte2tsx,
+  `dedent-js`,
+  `scule`,
 ];
+
+const svelte2tsxDependencies = Object.keys(require(`./node_modules/${svelte2tsx}/package.json`).dependencies ?? {});
+const missingDependencies = svelte2tsxDependencies.filter(dependency => !runtimeDependencies.includes(dependency));
+if (missingDependencies.length > 0) {
+    throw new Error(`Add the svelte2tsx dependencies to runtimeDependencies: ${missingDependencies.join(', ')}`);
+}
 
 esbuild.build({
     entryPoints: {
