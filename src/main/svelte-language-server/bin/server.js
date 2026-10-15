@@ -33463,7 +33463,12 @@ var require_importPackage = __commonJS({
       };
     }
     function importPrettier(fromPath) {
-      const pkg = getPackageInfo("prettier", fromPath);
+      let pkg;
+      try {
+        pkg = getPackageInfo("prettier", fromPath);
+      } catch (e) {
+        return { resolveConfig: () => Promise.resolve(null) };
+      }
       const main = (0, path_1.resolve)(pkg.path);
       logger_1.Logger.debug("Using Prettier v" + pkg.version.full, "from", main);
       return dynamicRequire(main);

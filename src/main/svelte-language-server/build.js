@@ -47,6 +47,34 @@ esbuild.build({
     metafile: process.argv.includes('--metafile'),
     plugins: [
         {
+            // The server reads the Prettier config before completions, quick fixes and organize imports.
+            // importPrettier throws when the project has no prettier, because prettier is not shipped next to server.js.
+            // Return a stub without a config instead, so the server uses its default format settings.
+            // The IDE disables LSP formatting, so the server never formats with the stub.
+            name: 'optional-prettier',
+            setup(build) {
+                build.onLoad({filter: /svelte-language-server[\\/]dist[\\/]src[\\/]importPackage\.js$/}, args => {
+                    const contents = fs.readFileSync(args.path, 'utf8');
+                    const eager =
+                        'function importPrettier(fromPath) {\n' +
+                        '    const pkg = getPackageInfo(\'prettier\', fromPath);\n';
+                    if (!contents.includes(eager)) {
+                        throw new Error('importPackage.js layout changed; update optional-prettier in build.js');
+                    }
+                    const tolerant =
+                        'function importPrettier(fromPath) {\n' +
+                        '    let pkg;\n' +
+                        '    try {\n' +
+                        '        pkg = getPackageInfo(\'prettier\', fromPath);\n' +
+                        '    }\n' +
+                        '    catch (e) {\n' +
+                        '        return { resolveConfig: () => Promise.resolve(null) };\n' +
+                        '    }\n';
+                    return {contents: contents.replace(eager, tolerant), loader: 'js'};
+                });
+            },
+        },
+        {
             name: 'umd2esm',
             setup(build) {
                 build.onResolve({filter: /^(vscode-.*-languageservice|jsonc-parser)/}, args => {
