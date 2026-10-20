@@ -1,15 +1,22 @@
 // Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.SvelteCodeInsightTestCase
+import org.junit.jupiter.api.Test
 
+@TestApplication
 class SvelteCssUsageHighlightingTest : SvelteCodeInsightTestCase("css/usageHighlighting") {
 
-  fun testClassInStringLiteralExpression() = doUsageHighlightingTest()
+  @Test
+  fun testClassInStringLiteralExpression() = web.doUsageHighlightingTest()
 
-  fun testClassInObjectPropertyKey() = doUsageHighlightingTest()
+  @Test
+  fun testClassInObjectPropertyKey() = web.doUsageHighlightingTest()
 
-  fun testClassInArrayLiteral() = doUsageHighlightingTest()
+  @Test
+  fun testClassInArrayLiteral() = web.doUsageHighlightingTest()
 
-  fun testClassInDirective() = doUsageHighlightingTest()
+  @Test
+  fun testClassInDirective() = web.doUsageHighlightingTest()
 }

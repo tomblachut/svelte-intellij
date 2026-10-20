@@ -5,8 +5,10 @@ import com.intellij.javascript.testFramework.web.checkImports
 import com.intellij.javascript.testFramework.web.moveFiles
 import com.intellij.javascript.testFramework.web.renameFile
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.SvelteCodeInsightTestCase
 import dev.blachut.svelte.lang.SvelteTestModule
+import org.junit.jupiter.api.Test
 
 /**
  * Moves or renames the files that `src/pages/index.svelte` imports, or moves the page itself.
@@ -15,32 +17,39 @@ import dev.blachut.svelte.lang.SvelteTestModule
  * The `pathAlias` project adds the `@components` path alias and imports through it.
  * The `tsconfig.json` sets `allowJs`, as the Astro base config does, so the three framework tests check the same case.
  */
+@TestApplication
 class SvelteFileRefactoringTest : SvelteCodeInsightTestCase("refactoring/file") {
+  @Test
   fun testMoveComponentRelativeImport() =
     doMoveComponentsTest("relativeImport",
                          "../components/sub/Hello.svelte -> src/components/sub/Hello.svelte",
                          "../components/sub/animals.js -> src/components/sub/animals.ts")
 
+  @Test
   fun testMoveComponentPathAlias() =
     doMoveComponentsTest("pathAlias",
                          "@components/sub/Hello.svelte -> src/components/sub/Hello.svelte",
                          "@components/sub/animals.js -> src/components/sub/animals.ts")
 
+  @Test
   fun testMovePageRelativeImport() =
     doMovePageTest("relativeImport",
                    "../../components/Hello.svelte -> src/components/Hello.svelte",
                    "../../components/animals.js -> src/components/animals.ts")
 
+  @Test
   fun testMovePagePathAlias() =
     doMovePageTest("pathAlias",
                    "@components/Hello.svelte -> src/components/Hello.svelte",
                    "@components/animals.js -> src/components/animals.ts")
 
+  @Test
   fun testRenameComponentRelativeImport() =
     doRenameComponentsTest("relativeImport",
                            "../components/Greeting.svelte -> src/components/Greeting.svelte",
                            "../components/pets.js -> src/components/pets.ts")
 
+  @Test
   fun testRenameComponentPathAlias() =
     doRenameComponentsTest("pathAlias",
                            "@components/Greeting.svelte -> src/components/Greeting.svelte",
@@ -68,7 +77,7 @@ class SvelteFileRefactoringTest : SvelteCodeInsightTestCase("refactoring/file") 
     expectedImports: Array<out String>,
     refactoring: CodeInsightTestFixture.() -> Unit,
   ) =
-    doConfiguredTest(SvelteTestModule.SVELTE_5, dir = true, dirName = project, configureFileName = "src/pages/index.svelte") {
+    web.doConfiguredTest(SvelteTestModule.SVELTE_5, dir = true, dirName = project, configureFileName = "src/pages/index.svelte") {
       refactoring()
       checkImports(importingFile, *expectedImports)
     }
