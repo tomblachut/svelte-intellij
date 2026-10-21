@@ -1,6 +1,5 @@
 package dev.blachut.svelte.lang
 
-import dev.blachut.svelte.lang.codeInsight.SvelteAutoPopupTest
 import dev.blachut.svelte.lang.codeInsight.SvelteBreadcrumbsTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCompletionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteComponentAutoImportTest
@@ -8,6 +7,7 @@ import dev.blachut.svelte.lang.codeInsight.SvelteCopyPasteTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateFunctionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateImportTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateVariableTest
+import dev.blachut.svelte.lang.codeInsight.SvelteFileRefactoringTest
 import dev.blachut.svelte.lang.codeInsight.SvelteFindUsagesTest
 import dev.blachut.svelte.lang.codeInsight.SvelteGenericsInspectionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
@@ -23,12 +23,9 @@ import dev.blachut.svelte.lang.editor.SvelteCommenterTest
 import dev.blachut.svelte.lang.editor.SvelteEditorTest
 import dev.blachut.svelte.lang.editor.SvelteEmmetTest
 import dev.blachut.svelte.lang.editor.SvelteSelectWordTest
-import dev.blachut.svelte.lang.format.SvelteFormatterTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexerTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveParserTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHighlightingLexerTest
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlParserTest
-import dev.blachut.svelte.lang.parsing.html.SvelteHtmlRegressionParsingTest
 import dev.blachut.svelte.lang.service.SvelteNsRenameServiceTest
 import dev.blachut.svelte.lang.service.SvelteNsUsagesServiceTest
 import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
@@ -40,25 +37,22 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
   // Parsing
-  SvelteHtmlRegressionParsingTest::class,
   SvelteHighlightingLexerTest::class,
-  SvelteHtmlParserTest::class,
   SvelteDirectiveLexerTest::class,
   SvelteDirectiveParserTest::class,
   // Editing
-  SvelteFormatterTest::class,
   SvelteBraceTypedTest::class,
   SvelteCommenterTest::class,
   SvelteEditorTest::class,
   SvelteEmmetTest::class,
   SvelteSelectWordTest::class,
   // Code insight
-  SvelteAutoPopupTest::class,
   SvelteCompletionTest::class,
   SvelteComponentAutoImportTest::class,
   SvelteHighlightingTest::class,
   SvelteOptimizeImportsTest::class,
   SvelteRenameTest::class,
+  SvelteFileRefactoringTest::class,
   SvelteResolveTest::class,
   SvelteNavigationTest::class,
   SvelteFindUsagesTest::class,

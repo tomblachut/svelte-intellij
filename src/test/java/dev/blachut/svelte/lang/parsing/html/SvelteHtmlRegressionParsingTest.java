@@ -2,14 +2,14 @@
 package dev.blachut.svelte.lang.parsing.html;
 
 import com.intellij.javascript.testFramework.web.JSHtmlParsingTest;
-import com.intellij.lang.LanguageASTFactory;
-import com.intellij.lexer.EmbeddedTokenTypesProvider;
-import dev.blachut.svelte.lang.SvelteHTMLLanguage;
+import com.intellij.testFramework.junit5.TestApplication;
 import dev.blachut.svelte.lang.parsing.js.SvelteJSParserDefinition;
-import org.junit.AssumptionViolatedException;
+import org.junit.jupiter.api.Test;
 
 import static dev.blachut.svelte.lang.SvelteTestUtilKt.getSvelteTestDataPath;
+import static org.junit.jupiter.api.Assumptions.abort;
 
+@TestApplication
 public class SvelteHtmlRegressionParsingTest extends JSHtmlParsingTest {
   public SvelteHtmlRegressionParsingTest() {
     super("svelte",
@@ -22,20 +22,15 @@ public class SvelteHtmlRegressionParsingTest extends JSHtmlParsingTest {
     return getSvelteTestDataPath() + "/dev/blachut/svelte/lang/parsing/html/regressionHtml";
   }
 
-  @Override
-  protected void setUp() {
-    super.setUp();
-    addExplicitExtension(LanguageASTFactory.INSTANCE, SvelteHTMLLanguage.INSTANCE, new SvelteHtmlASTFactory());
-    registerExtensionPoint(EmbeddedTokenTypesProvider.EXTENSION_POINT_NAME, EmbeddedTokenTypesProvider.class);
-  }
-
+  @Test
   @Override
   public void testSpecialTagsParsing() {
-    throw new AssumptionViolatedException("Ignore");
+    abort("Ignore");
   }
 
+  @Test
   @Override
   public void testScriptWithinScript() {
-    throw new AssumptionViolatedException("Ignore");
+    abort("Ignore");
   }
 }

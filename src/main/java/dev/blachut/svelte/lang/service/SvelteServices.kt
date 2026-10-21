@@ -22,7 +22,7 @@ import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
 import org.jetbrains.annotations.ApiStatus
 
 
-private const val SVELTE_LSP_SERVER_VERSION = "0.18.1"
+private const val SVELTE_LSP_SERVER_VERSION = "0.18.4"
 private val bundledSvelteLspServerVersion = SemVer.parseFromText(SVELTE_LSP_SERVER_VERSION)!!
 
 private object SvelteLspServerPackageDescriptor : LspServerPackageDescriptor(

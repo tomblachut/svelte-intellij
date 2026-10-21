@@ -1,7 +1,7 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.idea.IJIgnore
 import com.intellij.codeInsight.lookup.LookupElement
+import com.intellij.idea.IJIgnore
 import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.blachut.svelte.lang.SvelteTestScenario
@@ -156,7 +156,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "Hello1", "Hello2")
   }
 
-  @IJIgnore(issue = "IJI-3451")
+  @IJIgnore(issue = "AT-4013")
   fun testComponentImportVariants() {
     myFixture.addFileToProject("Hello1.svelte", "<h1>Test</h1>")
     myFixture.addFileToProject("lib.ts", """
