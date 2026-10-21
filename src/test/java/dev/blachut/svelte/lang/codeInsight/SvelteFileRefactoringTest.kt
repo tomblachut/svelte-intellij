@@ -1,13 +1,14 @@
 // Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.javascript.testFramework.web.WebFrameworkFixture
 import com.intellij.javascript.testFramework.web.checkImports
 import com.intellij.javascript.testFramework.web.moveFiles
 import com.intellij.javascript.testFramework.web.renameFile
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.testFramework.junit5.TestApplication
-import dev.blachut.svelte.lang.SvelteCodeInsightTestCase
 import dev.blachut.svelte.lang.SvelteTestModule
+import dev.blachut.svelte.lang.svelteFixture
 import org.junit.jupiter.api.Test
 
 /**
@@ -18,7 +19,10 @@ import org.junit.jupiter.api.Test
  * The `tsconfig.json` sets `allowJs`, as the Astro base config does, so the three framework tests check the same case.
  */
 @TestApplication
-class SvelteFileRefactoringTest : SvelteCodeInsightTestCase("refactoring/file") {
+class SvelteFileRefactoringTest {
+
+  private val web: WebFrameworkFixture by svelteFixture("refactoring/file")
+
   @Test
   fun testMoveComponentRelativeImport() =
     doMoveComponentsTest("relativeImport",

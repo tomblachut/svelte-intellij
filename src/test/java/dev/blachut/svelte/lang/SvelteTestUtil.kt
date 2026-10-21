@@ -1,10 +1,14 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.codeInsight.lookup.LookupElement
+import com.intellij.javascript.testFramework.web.WebFrameworkFixture
+import com.intellij.javascript.testFramework.web.webFrameworkFixture
 import com.intellij.lang.javascript.BaseJSCompletionTestCase
 import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.testFramework.fixtures.IdeaTestExecutionPolicy
+import com.intellij.testFramework.junit5.fixture.TestFixture
+import org.jetbrains.annotations.TestOnly
 
 private const val SVELTE_TEST_DATA_PATH = "/svelte/src/test/resources"
 
@@ -96,3 +100,15 @@ internal object SvelteTestHelperContext {
   const val effect = "\$effect" // to trick Kotlin
   const val host = "\$host" // to trick Kotlin
 }
+/**
+ * Creates the [WebFrameworkFixture] of a Svelte code insight test.
+ * The test data root is the Svelte test data path, and the default extension is `svelte`.
+ * [testCasePath] is the directory of the test class under the root.
+ */
+@TestOnly
+fun svelteFixture(testCasePath: String): TestFixture<WebFrameworkFixture> =
+  webFrameworkFixture(
+    testDataRoot = getSvelteTestDataPath(),
+    testCasePath = testCasePath,
+    defaultExtension = "svelte",
+  )
