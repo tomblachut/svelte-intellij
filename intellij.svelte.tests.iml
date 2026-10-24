@@ -38,18 +38,9 @@
     <orderEntry type="module" module-name="intellij.javascript.debugger.ui" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.debugger" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.impl" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.spellchecker" scope="TEST" />
     <orderEntry type="module" module-name="intellij.css.analysis" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.platform.builtInServer.impl" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.jackson" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.jackson.databind" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.commons.compress" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.stream" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.gson" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.core.ui" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.codeStyle.impl" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.caffeine" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.javascript.web" scope="TEST" />
     <orderEntry type="module" module-name="intellij.javascript.analysis.impl" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.usageView" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.testFramework" scope="TEST" />
@@ -62,10 +53,6 @@
     <orderEntry type="module" module-name="intellij.stylus" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.lsp.testFramework" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.fastutil" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.platform.lsp.impl" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.eclipse.lsp4j" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.eclipse.lsp4j.jsonrpc" scope="TEST" />
     <orderEntry type="module" module-name="intellij.vitejs" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.polySymbols" scope="TEST" />
     <orderEntry type="module" module-name="intellij.platform.polySymbols.backend" scope="TEST" />
@@ -77,10 +64,7 @@
     <orderEntry type="module" module-name="intellij.sass" scope="TEST" />
     <orderEntry type="module" module-name="intellij.sass.common" scope="TEST" />
     <orderEntry type="module" module-name="intellij.xml.analysis" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.xml.emmet" scope="TEST" />
     <orderEntry type="module" module-name="intellij.javascript.codeinsight" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.javascript.ultimate" scope="TEST" />
-    <orderEntry type="module" module-name="intellij.libraries.kotlinx.collections.immutable" scope="TEST" />
     <orderEntry type="module" module-name="intellij.svelte" scope="TEST" />
     <orderEntry type="module" module-name="intellij.vitejs.tests" scope="TEST" />
     <orderEntry type="module" module-name="intellij.css.backend" scope="TEST" />
