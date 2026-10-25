@@ -241,6 +241,7 @@ jvm_library(
         # do not sort,
         "//contrib/postcss/paid",
         "//plugins/ultimate-plugin",
+        "@community//platform/main/intellij.platform.monolith.main:monolith-main",
     ],
 )
 
@@ -271,6 +272,7 @@ jvm_library(
         "@community//platform/ide-core:ide-core_test_lib",
         "@community//platform/platform-impl:ide-impl_test_lib",
         "//plugins/ultimate-plugin:ultimate-plugin_test_lib",
+        "@community//platform/main/intellij.platform.monolith.main:monolith-main_test_lib",
     ],
     deps = [
         # do not sort,
