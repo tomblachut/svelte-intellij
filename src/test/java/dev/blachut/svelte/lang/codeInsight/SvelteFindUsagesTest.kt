@@ -1,33 +1,43 @@
 package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.ecmascript6.psi.ES6ImportDeclaration
-import com.intellij.lang.javascript.JSAbstractFindUsagesTest
+import com.intellij.lang.javascript.JSFindUsagesFixture.Companion.jsFindUsagesFixture
+import com.intellij.lang.javascript.JSFixtureOptions
+import com.intellij.lang.javascript.jsProjectFixture
+import com.intellij.openapi.application.EDT
 import com.intellij.openapi.application.runReadActionBlocking
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
-import com.intellij.testFramework.UsefulTestCase
+import com.intellij.testFramework.common.timeoutRunBlocking
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.SvelteTestScenario
 import dev.blachut.svelte.lang.configureBundledSvelte
 import dev.blachut.svelte.lang.configureSvelteDependencies
-import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
 import dev.blachut.svelte.lang.getSvelteTestDataPath
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
+@TestApplication
+class SvelteFindUsagesTest {
+  private val projectFixture = jsProjectFixture()
+  private val js by jsFindUsagesFixture(projectFixture, JSFixtureOptions(getSvelteTestDataPath(), "js"))
 
-class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
-  override fun getBasePath(): String = ""
-  override fun getTestDataPath(): String = getSvelteTestDataPath()
+  @Test
+  fun testStoreImportedJS(): Unit = storeImported.perform(js.getTestName(false))
 
-  fun testStoreImportedJS() = doTestWithLangFromTestNameSuffix(storeImported)
-
-  fun testStoreImportedTS() = doTestWithLangFromTestNameSuffix(storeImported)
+  @Test
+  fun testStoreImportedTS(): Unit = storeImported.perform(js.getTestName(false))
 
   private val storeImported = SvelteTestScenario { langExt, _ ->
-    myFixture.configureBundledSvelte()
+    js.fixture.configureBundledSvelte()
     val count = "\$count" // to trick Kotlin
-    myFixture.configureByText("Foo.svelte", """
+    js.fixture.configureByText("Foo.svelte", """
       <script lang="$langExt" module>
         import { count } from "./stores";
 
@@ -47,7 +57,7 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
       <main>{$count}</main>
       <section>{count}</section>
     """.trimIndent())
-    myFixture.configureByText("stores.$langExt", """
+    js.fixture.configureByText("stores.$langExt", """
       import { writable } from "svelte/store";
     
       export const <caret>count = writable(5);
@@ -56,8 +66,8 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
   }
 
   private fun doTest() {
-    val usages = doFindUsages()
-    UsefulTestCase.assertSize(8, usages) // 8 + 1 false positive - 1 false negative
+    val usages = js.doFindUsages()
+    assertEquals(8, usages.size) // 8 + 1 false positive - 1 false negative
   }
 
   /**
@@ -65,25 +75,27 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
    * template usage must be found on that path too. The unused-imports check covers only the
    * `<script>`-scoped path.
    */
+  @Test
   fun testPackageComponentUsages() {
-    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
-    myFixture.configureByText("Usage.svelte", """
+    js.fixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    js.fixture.configureByText("Usage.svelte", """
       <script lang="ts">
         import <caret>Fa from 'svelte-fa';
       </script>
 
       <Fa />
     """.trimIndent())
-    UsefulTestCase.assertSize(1, doFindUsages())
+    assertEquals(1, js.doFindUsages().size)
   }
 
   /**
    * The name-match fallback serves the import only. The tag `<Fa />` belongs to the import, so a
    * search for the same-named `{#each}` variable must not report it.
    */
+  @Test
   fun testEachVariableUsagesExcludeTag() {
-    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
-    myFixture.configureByText("Usage.svelte", """
+    js.fixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    js.fixture.configureByText("Usage.svelte", """
       <script lang="ts">
         import Fa from 'svelte-fa';
         const items: string[] = [];
@@ -95,51 +107,54 @@ class SvelteFindUsagesTest : JSAbstractFindUsagesTest() {
         <span>{Fa}</span>
       {/each}
     """.trimIndent())
-    UsefulTestCase.assertSize(1, doFindUsages())
+    assertEquals(1, js.doFindUsages().size)
   }
 
   /** ReferencesSearch must keep its results inside the scope the caller passed. */
+  @Test
   fun testImportSearchRespectsCallerScope() {
-    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
-    myFixture.configureByText("Usage.svelte", """
+    js.fixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    js.fixture.configureByText("Usage.svelte", """
       <script lang="ts">
         import <caret>Fa from 'svelte-fa';
       </script>
 
       <Fa />
     """.trimIndent())
-    val binding = myFixture.elementAtCaret
+    val binding = timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.elementAtCaret } }
     val importDeclaration = PsiTreeUtil.getParentOfType(binding, ES6ImportDeclaration::class.java)!!
     val references = runReadActionBlocking { ReferencesSearch.search(binding, LocalSearchScope(importDeclaration)).findAll() }
-    UsefulTestCase.assertEmpty(references)
+    assertTrue(references.isEmpty())
   }
 
+  @Test
   fun testFindUsagesOfCssClassIncludesSvelteElement() {
-    myFixture.configureByText("Foo.svelte", """
+    js.fixture.configureByText("Foo.svelte", """
       <svelte:element this={'div'} class="my-class"></svelte:element>
       <style>
         .my-cl<caret>ass { color: red; }
       </style>
     """.trimIndent())
-    val usages = myFixture.findUsages(myFixture.elementAtCaret)
-    val svelteElementUsages = usages.filter { usage ->
-      PsiTreeUtil.getParentOfType(usage.element, XmlTag::class.java)?.name == "svelte:element"
+    val usages = js.fixture.findUsages(timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.elementAtCaret } })
+    val svelteElementUsages = runReadActionBlocking {
+      usages.filter { usage -> PsiTreeUtil.getParentOfType(usage.element, XmlTag::class.java)?.name == "svelte:element" }
     }
-    assertEquals("Expected exactly one usage inside <svelte:element>", 1, svelteElementUsages.size)
+    assertEquals(1, svelteElementUsages.size, "Expected exactly one usage inside <svelte:element>")
   }
 
+  @Test
   fun testFindUsagesOfCssClassInMultiClassAttribute() {
-    myFixture.configureByText("Foo.svelte", """
+    js.fixture.configureByText("Foo.svelte", """
       <svelte:element this={'div'} class="my-class other-class"></svelte:element>
       <style>
         .my-cl<caret>ass { color: red; }
         .other-class { color: blue; }
       </style>
     """.trimIndent())
-    val usages = myFixture.findUsages(myFixture.elementAtCaret)
-    val svelteElementUsages = usages.filter { usage ->
-      PsiTreeUtil.getParentOfType(usage.element, XmlTag::class.java)?.name == "svelte:element"
+    val usages = js.fixture.findUsages(timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.elementAtCaret } })
+    val svelteElementUsages = runReadActionBlocking {
+      usages.filter { usage -> PsiTreeUtil.getParentOfType(usage.element, XmlTag::class.java)?.name == "svelte:element" }
     }
-    assertEquals("Expected exactly one usage of .my-class (not .other-class)", 1, svelteElementUsages.size)
+    assertEquals(1, svelteElementUsages.size, "Expected exactly one usage of .my-class (not .other-class)")
   }
 }

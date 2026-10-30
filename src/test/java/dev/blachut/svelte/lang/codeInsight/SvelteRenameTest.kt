@@ -1,48 +1,66 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.lang.javascript.JSAbstractRenameTest
+import com.intellij.lang.javascript.JSFixtureOptions
+import com.intellij.lang.javascript.JSRenameFixture.Companion.jsRenameFixture
+import com.intellij.lang.javascript.jsProjectFixture
+import com.intellij.openapi.application.EDT
+import com.intellij.testFramework.common.timeoutRunBlocking
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.getSvelteTestDataPath
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.junit.jupiter.api.Test
 
-class SvelteRenameTest : JSAbstractRenameTest() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath() + "/dev/blachut/svelte/lang/codeInsight/rename"
+@TestApplication
+class SvelteRenameTest {
+  private val projectFixture = jsProjectFixture()
+  private val js by jsRenameFixture(
+    projectFixture,
+    JSFixtureOptions(getSvelteTestDataPath() + "/dev/blachut/svelte/lang/codeInsight/rename", "js"),
+  )
 
+  @Test
   fun testStoreSubscriptionJS() {
-    val name = getTestName(false)
-    doTestForFilesWithCheckAll("betterCount", "$name.svelte", "$name.js")
+    val name = js.getTestName(false)
+    js.doTestForFilesWithCheckAll("betterCount", "$name.svelte", "$name.js")
   }
 
+  @Test
   fun testStoreSubscriptionTS() {
-    val name = getTestName(false)
-    doTestForFilesWithCheckAll("betterCount", "$name.svelte", "$name.ts")
+    val name = js.getTestName(false)
+    js.doTestForFilesWithCheckAll("betterCount", "$name.svelte", "$name.ts")
   }
 
+  @Test
   fun testStoreDeclaration() {
-    val name = getTestName(false)
-    doTestForFilesWithCheckAll("betterCount", "$name.ts", "${name}JS.svelte", "${name}TS.svelte")
+    val name = js.getTestName(false)
+    js.doTestForFilesWithCheckAll("betterCount", "$name.ts", "${name}JS.svelte", "${name}TS.svelte")
   }
 
+  @Test
   fun testRenameGeneric() {
-    val name = getTestName(false)
-    doTestForFilesWithCheckAll("Entity", "$name.svelte")
+    val name = js.getTestName(false)
+    js.doTestForFilesWithCheckAll("Entity", "$name.svelte")
   }
 
   /**
    * WEB-57512: a rename of a package component's import must carry the template tag with it. That
    * needs the reference search to report `<Fa />` as a usage of the binding.
    */
+  @Test
   fun testPackageComponentRename() {
-    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
-    myFixture.configureByText("Usage.svelte", """
+    js.fixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    js.fixture.configureByText("Usage.svelte", """
       <script lang="ts">
         import <caret>Fa from 'svelte-fa';
       </script>
 
       <Fa />
     """.trimIndent())
-    myFixture.renameElementAtCaret("FaIcon")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("FaIcon") } }
+    js.fixture.checkResult("""
       <script lang="ts">
         import FaIcon from 'svelte-fa';
       </script>
@@ -55,9 +73,10 @@ class SvelteRenameTest : JSAbstractRenameTest() {
    * The name-match fallback serves the import only. A rename of the same-named `{#each}` variable
    * must leave the import's tag alone.
    */
+  @Test
   fun testEachVariableRenameKeepsTag() {
-    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
-    myFixture.configureByText("Usage.svelte", """
+    js.fixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
+    js.fixture.configureByText("Usage.svelte", """
       <script lang="ts">
         import Fa from 'svelte-fa';
         const items: string[] = [];
@@ -69,8 +88,8 @@ class SvelteRenameTest : JSAbstractRenameTest() {
         <span>{Fa}</span>
       {/each}
     """.trimIndent())
-    myFixture.renameElementAtCaret("Item")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("Item") } }
+    js.fixture.checkResult("""
       <script lang="ts">
         import Fa from 'svelte-fa';
         const items: string[] = [];
@@ -85,8 +104,9 @@ class SvelteRenameTest : JSAbstractRenameTest() {
   }
 
   // TypeScript in markup rename tests
+  @Test
   fun testTsVariableRenameInExpression() {
-    myFixture.configureByText(
+    js.fixture.configureByText(
       "Example.svelte", """
             <script lang="ts">
                 let <caret>count: number = 0;
@@ -96,8 +116,8 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             <button on:click={() => count++}>Increment</button>
             """.trimIndent()
     )
-    myFixture.renameElementAtCaret("total")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("total") } }
+    js.fixture.checkResult("""
             <script lang="ts">
                 let total: number = 0;
             </script>
@@ -107,8 +127,9 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             """.trimIndent())
   }
 
+  @Test
   fun testTsInterfacePropertyRename() {
-    myFixture.configureByText(
+    js.fixture.configureByText(
       "Example.svelte", """
             <script lang="ts">
                 interface User {
@@ -120,8 +141,8 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             <div>{user.name}</div>
             """.trimIndent()
     )
-    myFixture.renameElementAtCaret("fullName")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("fullName") } }
+    js.fixture.checkResult("""
             <script lang="ts">
                 interface User {
                     fullName: string;
@@ -133,8 +154,9 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             """.trimIndent())
   }
 
+  @Test
   fun testTsEachBlockVariableRename() {
-    myFixture.configureByText(
+    js.fixture.configureByText(
       "Example.svelte", """
             <script lang="ts">
                 interface Item { id: number; }
@@ -146,8 +168,8 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             {/each}
             """.trimIndent()
     )
-    myFixture.renameElementAtCaret("element")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("element") } }
+    js.fixture.checkResult("""
             <script lang="ts">
                 interface Item { id: number; }
                 let items: Item[] = [{ id: 1 }];
@@ -159,8 +181,9 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             """.trimIndent())
   }
 
+  @Test
   fun testTsAwaitBlockVariableRename() {
-    myFixture.configureByText(
+    js.fixture.configureByText(
       "Example.svelte", """
             <script lang="ts">
                 interface User { name: string; }
@@ -172,8 +195,8 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             {/await}
             """.trimIndent()
     )
-    myFixture.renameElementAtCaret("data")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("data") } }
+    js.fixture.checkResult("""
             <script lang="ts">
                 interface User { name: string; }
                 let promise: Promise<User> = Promise.resolve({ name: 'Alice' });
@@ -185,8 +208,9 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             """.trimIndent())
   }
 
+  @Test
   fun testTsSnippetParameterRename() {
-    myFixture.configureByText(
+    js.fixture.configureByText(
       "Example.svelte", """
             <script lang="ts">
                 interface User { name: string; }
@@ -197,8 +221,8 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             {/snippet}
             """.trimIndent()
     )
-    myFixture.renameElementAtCaret("person")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("person") } }
+    js.fixture.checkResult("""
             <script lang="ts">
                 interface User { name: string; }
             </script>
@@ -209,15 +233,16 @@ class SvelteRenameTest : JSAbstractRenameTest() {
             """.trimIndent())
   }
 
+  @Test
   fun testRenameClassFromSvelteElement() {
-    myFixture.configureByText("Foo.svelte", """
+    js.fixture.configureByText("Foo.svelte", """
       <svelte:element this={'div'} class="my-class"></svelte:element>
       <style>
         .my-cl<caret>ass { color: red; }
       </style>
     """.trimIndent())
-    myFixture.renameElementAtCaret("renamed-class")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("renamed-class") } }
+    js.fixture.checkResult("""
       <svelte:element this={'div'} class="renamed-class"></svelte:element>
       <style>
         .renamed-class { color: red; }
@@ -225,16 +250,17 @@ class SvelteRenameTest : JSAbstractRenameTest() {
     """.trimIndent())
   }
 
+  @Test
   fun testRenameClassFromSvelteElementWithMultipleClasses() {
-    myFixture.configureByText("Foo.svelte", """
+    js.fixture.configureByText("Foo.svelte", """
       <svelte:element this={'div'} class="my-class other-class"></svelte:element>
       <style>
         .my-cl<caret>ass { color: red; }
         .other-class { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.renameElementAtCaret("renamed-class")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("renamed-class") } }
+    js.fixture.checkResult("""
       <svelte:element this={'div'} class="renamed-class other-class"></svelte:element>
       <style>
         .renamed-class { color: red; }
@@ -243,15 +269,16 @@ class SvelteRenameTest : JSAbstractRenameTest() {
     """.trimIndent())
   }
 
+  @Test
   fun testRenameClassFromCssSelectorToExpression() {
-    myFixture.configureByText("Foo.svelte", """
+    js.fixture.configureByText("Foo.svelte", """
       <div class={'my-class'}></div>
       <style>
         .my-cl<caret>ass { color: red; }
       </style>
     """.trimIndent())
-    myFixture.renameElementAtCaret("renamed-class")
-    myFixture.checkResult("""
+    timeoutRunBlocking { withContext(Dispatchers.EDT) { js.fixture.renameElementAtCaret("renamed-class") } }
+    js.fixture.checkResult("""
       <div class={'renamed-class'}></div>
       <style>
         .renamed-class { color: red; }
