@@ -32,11 +32,11 @@
     <orderEntry type="module" module-name="intellij.svelte" />
     <orderEntry type="module" module-name="intellij.javascript.debugger.backend" />
     <orderEntry type="module" module-name="intellij.javascript.debugger.ui" />
-    <orderEntry type="module" module-name="intellij.platform.concurrency" />
+    <orderEntry type="module" module-name="intellij.platform.concurrency" scope="RUNTIME" />
     <orderEntry type="module" module-name="intellij.platform.core" />
     <orderEntry type="module" module-name="intellij.platform.core.impl" />
-    <orderEntry type="module" module-name="intellij.platform.debugger" />
-    <orderEntry type="module" module-name="intellij.platform.editor.ui" />
+    <orderEntry type="module" module-name="intellij.platform.debugger" scope="RUNTIME" />
+    <orderEntry type="module" module-name="intellij.platform.editor.ui" scope="RUNTIME" />
     <orderEntry type="module" module-name="intellij.platform.lang" />
   </component>
 </module>
