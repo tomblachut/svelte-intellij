@@ -22,6 +22,11 @@ jvm_library(
         ["resources/**/*"],
     ),
     visibility = ["//visibility:public"],
+    runtime_deps = [
+        # do not sort,
+        "@community//platform/projectModel-api:projectModel",
+        "@community//platform/polySymbols/backend",
+    ],
     deps = [
         # do not sort,
         "@lib//:kotlin-stdlib",
@@ -40,9 +45,7 @@ jvm_library(
         "@community//platform/lang-api:lang",
         "@community//platform/editor-ui-api:editor-ui",
         "@community//platform/util",
-        "@community//platform/projectModel-api:projectModel",
         "@community//platform/polySymbols/shared:polySymbols",
-        "@community//platform/polySymbols/backend",
         "@community//xml/xml-psi-api:psi",
         "@community//xml/xml-psi-impl:psi-impl",
         "@community//xml/xml-parser:parser",
