@@ -2,7 +2,7 @@ package dev.blachut.svelte.lang.parsing.js
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiBuilder
-import com.intellij.lang.javascript.dialects.ECMA6ParserDefinition
+import com.intellij.lang.javascript.JavascriptParserDefinition
 import com.intellij.lang.javascript.parsing.JavaScriptParser
 import com.intellij.lang.javascript.types.JSFileElementType
 import com.intellij.psi.PsiElement
@@ -12,7 +12,7 @@ import dev.blachut.svelte.lang.psi.SvelteElementTypes
 
 internal val SVELTEJS_FILE: IFileElementType = JSFileElementType.create(SvelteJSLanguage.INSTANCE)
 
-internal class SvelteJSParserDefinition : ECMA6ParserDefinition() {
+internal class SvelteJSParserDefinition : JavascriptParserDefinition() {
   override fun getFileNodeType(): IFileElementType {
     return SVELTEJS_FILE
   }
