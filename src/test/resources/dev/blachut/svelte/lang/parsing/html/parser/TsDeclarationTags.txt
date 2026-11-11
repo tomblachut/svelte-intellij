@@ -139,6 +139,27 @@ SvelteHtmlFile: TsDeclarationTags.svelte
                   PsiElement(JS:IDENTIFIER)('obj')
             PsiElement(JS:RBRACE)('}')
           XmlText
+            PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION_TS
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteTSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('typedSemicolon')
+                PsiElement(JS:COLON)(':')
+                PsiWhiteSpace(' ')
+                TypeScriptSingleType
+                  JSReferenceExpression
+                    PsiElement(JS:NUMBER_KEYWORD)('number')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('1')
+              PsiElement(JS:SEMICOLON)(';')
+            PsiElement(JS:RBRACE)('}')
+          XmlText
             PsiWhiteSpace('\n')
       SvelteEndTag(IF_END)
         PsiElement(JS:LBRACE)('{')

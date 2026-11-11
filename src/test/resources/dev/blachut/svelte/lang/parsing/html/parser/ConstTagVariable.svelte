@@ -8,4 +8,5 @@
     {@const onlyEqualsIsSupported += 3}
     {@const y = 3, commaIsUnsupported = 4}
     {@const (y = 3, commaIsUnsupported = 4)}
+    {@const semicolonIsUnsupported = 3;}
 {/if}

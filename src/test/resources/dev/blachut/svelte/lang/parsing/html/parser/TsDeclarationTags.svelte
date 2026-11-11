@@ -6,4 +6,5 @@
     {const typed: number = 1}
     {let counter: number = base}
     {const {a, b}: { a: number; b: string } = obj}
+    {const typedSemicolon: number = 1;}
 {/if}

@@ -155,6 +155,21 @@ class SvelteResolveTest : BasePlatformTestCase() {
     TestCase.assertEquals("greeting", variable.name)
   }
 
+  fun testConstTagWithSemicolonResolve() {
+    myFixture.configureByText(
+      "Example.svelte", """
+            {#if true}
+                {const greeting = "hi";}
+                {<caret>greeting}
+            {/if}
+            """.trimIndent()
+    )
+    val reference = myFixture.getReferenceAtCaretPosition()
+    TestCase.assertNotNull(reference)
+    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
+    TestCase.assertEquals("greeting", variable.name)
+  }
+
   fun testLetTagResolve() {
     myFixture.configureByText(
       "Example.svelte", """

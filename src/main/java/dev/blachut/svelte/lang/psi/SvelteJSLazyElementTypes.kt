@@ -41,8 +41,15 @@ class AttributeExpressionType private constructor(langMode: SvelteLangMode) : Sv
   }
 }
 
-/** A bare declaration tag keyword: `{const ...}` or `{let ...}` (without the `@`). */
-private enum class DeclarationKind { CONST, LET }
+/**
+ * The kind of a declaration tag. Svelte parses a bare `{const ...}` or `{let ...}` tag as a statement
+ * and the legacy `{@const ...}` tag as a pattern with an expression.
+ */
+private enum class DeclarationTagKind(val isConst: Boolean, val isStatement: Boolean) {
+  CONST(isConst = true, isStatement = true),
+  LET(isConst = false, isStatement = true),
+  LEGACY_CONST(isConst = true, isStatement = false),
+}
 
 /** Text expressions + html, debug & render + const */
 class ContentExpressionType private constructor(langMode: SvelteLangMode) : SvelteExpressionElementType(langMode.toElementTypeName("CONTENT_EXPRESSION"), langMode) {
@@ -52,10 +59,10 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
   override fun parseTokens(builder: PsiBuilder, parser: JavaScriptParser) {
     val declarationKind = consumeBareDeclarationKeyword(builder, parser)
     if (declarationKind != null) {
-      parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = declarationKind == DeclarationKind.CONST)
+      parseSvelteDeclaringAssignmentExpression(builder, parser, declarationKind)
     }
     else if (parseAtModifiers(builder)) {
-      parseSvelteDeclaringAssignmentExpression(builder, parser, isConst = true)
+      parseSvelteDeclaringAssignmentExpression(builder, parser, DeclarationTagKind.LEGACY_CONST)
     }
     else {
       parser.expressionParser.parseExpression()
@@ -64,21 +71,21 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
 
   /**
    * Detects a bare `{const ...}` / `{let ...}` declaration (no `@`) and consumes the keyword.
-   * Returns the [DeclarationKind], or `null` if this is not a bare declaration.
+   * Returns the [DeclarationTagKind], or `null` if this is not a bare declaration.
    * `const` is a reserved word so it always starts a declaration; `let` may be an identifier and is
    * disambiguated by [letStartsDeclaration]. (The IDENTIFIER-text branch of [isKeyword] exists for `let`,
    * which can be lexed as an identifier in sloppy positions; `const` always lexes as CONST_KEYWORD.)
    */
-  private fun consumeBareDeclarationKeyword(builder: PsiBuilder, parser: JavaScriptParser): DeclarationKind? {
+  private fun consumeBareDeclarationKeyword(builder: PsiBuilder, parser: JavaScriptParser): DeclarationTagKind? {
     if (isKeyword(builder, JSTokenTypes.CONST_KEYWORD, "const")) {
       builder.remapCurrentToken(SvelteTokenTypes.CONST_KEYWORD)
       builder.advanceLexer()
-      return DeclarationKind.CONST
+      return DeclarationTagKind.CONST
     }
     if (isKeyword(builder, JSTokenTypes.LET_KEYWORD, "let") && letStartsDeclaration(builder, parser)) {
       builder.remapCurrentToken(SvelteTokenTypes.LET_KEYWORD)
       builder.advanceLexer()
-      return DeclarationKind.LET
+      return DeclarationTagKind.LET
     }
     return null
   }
@@ -100,7 +107,11 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
     builder.tokenType === keywordType ||
     (builder.tokenType === JSTokenTypes.IDENTIFIER && builder.tokenText == text)
 
-  private fun parseSvelteDeclaringAssignmentExpression(builder: PsiBuilder, parser: JavaScriptParser, isConst: Boolean) {
+  /**
+   * Parses the declaration of a `{const ...}`, `{let ...}` or `{@const ...}` tag into a `JSVarStatement`.
+   * For a statement [kind], one `;` after the declaration joins the statement, as in a script.
+   */
+  private fun parseSvelteDeclaringAssignmentExpression(builder: PsiBuilder, parser: JavaScriptParser, kind: DeclarationTagKind) {
     val expr: PsiBuilder.Marker = builder.mark()
 
     var openedPar = false
@@ -110,10 +121,14 @@ class ContentExpressionType private constructor(langMode: SvelteLangMode) : Svel
     }
 
     val allowTypeDeclaration = langMode == SvelteLangMode.HAS_TS
-    parser.statementParser.parseVarDeclaration(SvelteJSElementTypes.getDeclarationTagVariable(langMode, isConst), allowTypeDeclaration, false)
+    val variableType = SvelteJSElementTypes.getDeclarationTagVariable(langMode, kind.isConst)
+    parser.statementParser.parseVarDeclaration(variableType, allowTypeDeclaration, false)
 
     if (openedPar) {
       JavaScriptParserBase.checkMatches(builder, JSTokenTypes.RPAR, "javascript.parser.message.expected.rparen")
+    }
+    if (kind.isStatement) {
+      parser.statementParser.checkForSemicolon()
     }
 
     expr.done(JSElementTypes.VAR_STATEMENT)
