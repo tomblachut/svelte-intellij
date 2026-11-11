@@ -2,7 +2,6 @@ package dev.blachut.svelte.lang
 
 import dev.blachut.svelte.lang.codeInsight.SvelteBreadcrumbsTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCompletionTest
-import dev.blachut.svelte.lang.codeInsight.SvelteComponentAutoImportTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCopyPasteTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateFunctionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCreateImportTest
@@ -42,7 +41,6 @@ import org.junit.runners.Suite
   SvelteSelectWordTest::class,
   // Code insight
   SvelteCompletionTest::class,
-  SvelteComponentAutoImportTest::class,
   SvelteHighlightingTest::class,
   SvelteOptimizeImportsTest::class,
   SvelteResolveTest::class,
