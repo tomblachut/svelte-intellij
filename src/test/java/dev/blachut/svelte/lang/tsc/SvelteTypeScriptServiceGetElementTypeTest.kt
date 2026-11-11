@@ -17,7 +17,10 @@ import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.service.SveltePluginTypeScriptService
 import dev.blachut.svelte.lang.service.settings.SvelteServiceMode
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertInstanceOf
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTypeTest() {
 
@@ -51,7 +54,7 @@ class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTyp
 
   private fun assertServiceIsSveltePlugin() {
     inReadAction {
-      assertInstanceOf(TypeScriptServiceHolder.getForFile(project, file.virtualFile), SveltePluginTypeScriptService::class.java)
+      assertInstanceOf(SveltePluginTypeScriptService::class.java, TypeScriptServiceHolder.getForFile(project, file.virtualFile))
     }
   }
 
@@ -93,8 +96,8 @@ class SvelteTypeScriptServiceGetElementTypeTest : TypeScriptServiceGetElementTyp
 
     val element = findElement("btn", JSVariable::class)
     val type = calculateType(element)
-    assertNotNull("Type should not be null", type)
+    assertNotNull(type, "Type should not be null")
     val typeText = inReadAction { type!!.getTypeText(JSType.TypeTextFormat.PRESENTABLE) }
-    assertTrue("The type must have the props of the component: $typeText", typeText.startsWith("SvelteComponent<{label: string}"))
+    assertTrue(typeText.startsWith("SvelteComponent<{label: string}"), "The type must have the props of the component: $typeText")
   }
 }
