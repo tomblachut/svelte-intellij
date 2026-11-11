@@ -101,6 +101,21 @@ SvelteHtmlFile: ConstTag.svelte
                     PsiElement(JS:NUMERIC_LITERAL)('3')
                   PsiElement(JS:RBRACKET)(']')
             PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:CONST_KEYWORD)('const')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSConstTagVariable
+                PsiElement(JS:IDENTIFIER)('semicolon')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('4')
+              PsiElement(JS:SEMICOLON)(';')
+            PsiElement(JS:RBRACE)('}')
           PsiWhiteSpace('\n')
       SvelteEndTag(IF_END)
         PsiElement(JS:LBRACE)('{')

@@ -1586,6 +1586,25 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  fun testDeclarationTagTrailingSemicolonJS() = doTestWithLangFromTestNameSuffix(declarationTagTrailingSemicolon)
+
+  fun testDeclarationTagTrailingSemicolonTS() = doTestWithLangFromTestNameSuffix(declarationTagTrailingSemicolon)
+
+  private val declarationTagTrailingSemicolon = SvelteTestScenario { langExt, _ ->
+    myFixture.configureByText("Foo.svelte", """
+      <script lang="$langExt">
+        let base = 1;
+      </script>
+
+      {#if true}
+        {const total = base + 1;}
+        {let count = 2;}
+        <p>{total + count}</p>
+      {/if}
+    """.trimIndent())
+    myFixture.testHighlighting()
+  }
+
   fun testJSOverSvelte() {
     myFixture.configureByText("usage.svelte", """
       <script>console.log("hello")</script>

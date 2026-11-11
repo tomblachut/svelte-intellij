@@ -113,6 +113,49 @@ SvelteHtmlFile: LetTag.svelte
           PsiWhiteSpace('\n    ')
           SvelteJS: CONTENT_EXPRESSION
             PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:LET_KEYWORD)('let')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSLetTagVariable
+                PsiElement(JS:IDENTIFIER)('semicolon')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('3')
+              PsiElement(JS:SEMICOLON)(';')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:LET_KEYWORD)('let')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSLetTagVariable
+                PsiElement(JS:IDENTIFIER)('uninitializedSemicolon')
+              PsiElement(JS:SEMICOLON)(';')
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
+            PsiElement(JS:LET_KEYWORD)('let')
+            PsiWhiteSpace(' ')
+            JSVarStatement
+              SvelteJSLetTagVariable
+                PsiElement(JS:IDENTIFIER)('twice')
+                PsiWhiteSpace(' ')
+                PsiElement(JS:EQ)('=')
+                PsiWhiteSpace(' ')
+                JSLiteralExpression
+                  PsiElement(JS:NUMERIC_LITERAL)('6')
+              PsiElement(JS:SEMICOLON)(';')
+            PsiElement(JS:SEMICOLON)(';')
+            PsiErrorElement:Unexpected token
+              <empty list>
+            PsiElement(JS:RBRACE)('}')
+          PsiWhiteSpace('\n    ')
+          SvelteJS: CONTENT_EXPRESSION
+            PsiElement(JS:LBRACE)('{')
             JSReferenceExpression
               PsiElement(JS:IDENTIFIER)('let')
             PsiElement(JS:RBRACE)('}')

@@ -3,6 +3,9 @@
     {let {x, z} = {x: 1, z: 3}}
     {let [a, ...rest] = [1, 2, 3]}
     {let uninitialized}
+    {let semicolon = 3;}
+    {let uninitializedSemicolon;}
+    {let twice = 6;;}
     {let}
     {let.foo}
     {let = 1}
