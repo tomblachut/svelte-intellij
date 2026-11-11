@@ -1,42 +1,47 @@
 package dev.blachut.svelte.lang.service
 
-import com.intellij.lang.typescript.service.TypeScriptServiceTestBase
+import com.intellij.lang.typescript.service.TypeScriptServiceFixture
+import com.intellij.testFramework.junit5.TestApplication
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.checkCompletionContains
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
-import org.junit.Test
+import dev.blachut.svelte.lang.service.SvelteServiceFixture.Companion.svelteServiceFixture
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
-class SvelteServiceCompletionTest : SvelteServiceTestBase() {
-  override fun getBasePath(): String = getRelativeSvelteTestDataPath() + "/dev/blachut/svelte/lang/service/completion"
+@TestApplication
+class SvelteServiceCompletionTest {
+  private val svelte by svelteServiceFixture(getRelativeSvelteTestDataPath() + "/dev/blachut/svelte/lang/service/completion")
 
   @Test
   fun testKitDataProp() {
     defaultCompletionTest()
-    val lookupElements = myFixture.completeBasic()
+    val lookupElements = svelte.fixture.completeBasic()
     lookupElements.checkCompletionContains("somePost", "uniqueName")
   }
 
   @Test
   fun testEventCompletionContainsDirective() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Usage.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Usage.svelte", """
       <button :blu<caret> />
     """.trimIndent())
 
-    myFixture.doHighlighting()
-    assertCorrectService()
+    svelte.fixture.doHighlighting()
+    svelte.assertCorrectService()
 
-    val lookupElements = myFixture.completeBasic()
+    val lookupElements = svelte.fixture.completeBasic()
     assertTrue(
-      "Expected on:blur directive completion, got ${lookupElements.joinToString { it.lookupString }}",
       lookupElements.any { it.lookupString.startsWith("on:blur") },
+      "Expected on:blur directive completion, got ${lookupElements.joinToString { it.lookupString }}",
     )
   }
 
   @Test
   fun testPropertiesOnNullableReferences() { // WEB-63103
-    addTypeScriptCommonFiles()
+    svelte.addTypeScriptCommonFiles()
 
-    myFixture.addFileToProject("api.ts", """
+    svelte.fixture.addFileToProject("api.ts", """
       declare const uniqueSymbol: unique symbol;
       
       interface UniqueInterface {
@@ -78,7 +83,7 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
       export type ActionData = Expand<AwaitedActions<typeof actions>> | null;
     """.trimIndent())
 
-    myFixture.configureByText("Usage.svelte", """
+    svelte.fixture.configureByText("Usage.svelte", """
       <script lang="ts">
         import type { ActionData } from './api';
       
@@ -88,13 +93,13 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
 
-    val elements = myFixture.completeBasic()
-    myFixture.type('\t')
+    val elements = svelte.fixture.completeBasic()
+    runInEdtAndWait { svelte.fixture.type('\t') }
 
-    myFixture.checkResult("""
+    svelte.fixture.checkResult("""
       <script lang="ts">
         import type { ActionData } from './api';
       
@@ -103,13 +108,13 @@ class SvelteServiceCompletionTest : SvelteServiceTestBase() {
         form?.data;
       </script>
     """.trimIndent(), true)
-    TypeScriptServiceTestBase.assertHasServiceItems(elements, true)
+    TypeScriptServiceFixture.assertHasServiceItems(elements, true)
   }
 
   private fun defaultCompletionTest() {
-    configureDefault(directory = true)
+    svelte.configureDefault(directory = true)
 
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 }

@@ -23,11 +23,6 @@ import dev.blachut.svelte.lang.editor.SvelteSelectWordTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexerTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveParserTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHighlightingLexerTest
-import dev.blachut.svelte.lang.service.SvelteNsRenameServiceTest
-import dev.blachut.svelte.lang.service.SvelteNsUsagesServiceTest
-import dev.blachut.svelte.lang.service.SvelteServiceCompletionTest
-import dev.blachut.svelte.lang.service.SvelteServiceDocumentationTest
-import dev.blachut.svelte.lang.service.SvelteServiceTest
 import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
@@ -68,18 +63,6 @@ class SvelteAggregatorTestSuite
 @Ignore("Manual only")
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-  SvelteServiceTest::class,
-  SvelteServiceCompletionTest::class,
-  SvelteServiceDocumentationTest::class,
-  SvelteNsUsagesServiceTest::class,
-  SvelteNsRenameServiceTest::class,
-)
-class SvelteServiceTestSuite
-
-@Ignore("Manual only")
-@RunWith(Suite::class)
-@Suite.SuiteClasses(
   SvelteAggregatorTestSuite::class,
-  SvelteServiceTestSuite::class,
 )
 class SvelteTestSuite

@@ -4,27 +4,37 @@ package dev.blachut.svelte.lang.service
 import com.intellij.lang.javascript.JSNavigationTest
 import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.mock.MockDocument
-import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.readActionBlocking
+import com.intellij.openapi.application.runReadActionBlocking
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.ExpectedHighlightingData
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
+import com.intellij.testFramework.common.timeoutRunBlocking
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
 import dev.blachut.svelte.lang.configureSvelteDependencies
+import dev.blachut.svelte.lang.service.SvelteServiceFixture.Companion.svelteServiceFixture
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
-import junit.framework.TestCase
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-class SvelteServiceTest : SvelteServiceTestBase() {
-  override fun setUp() {
-    super.setUp()
-    myFixture.enableInspections(*SvelteHighlightingTest.configureDefaultLocalInspectionTools().toTypedArray())
+@TestApplication
+class SvelteServiceTest {
+  private val svelte by svelteServiceFixture()
+
+  @BeforeEach
+  fun setUp() {
+    svelte.fixture.enableInspections(*SvelteHighlightingTest.configureDefaultLocalInspectionTools().toTypedArray())
   }
 
   @Test
   fun testServiceWorks() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
         let <error descr="Svelte: Type 'number' is not assignable to type 'string'.">local</error>: string = 1;
         local;
@@ -39,8 +49,8 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <input <warning descr="Svelte: A11y: Avoid using autofocus">autofocus</warning>>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   /**
@@ -49,9 +59,9 @@ class SvelteServiceTest : SvelteServiceTestBase() {
    */
   @Test
   fun testFaImportUsed() {
-    addTypeScriptCommonFiles()
-    myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_FA_4)
-    myFixture.configureByText("Usage.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureSvelteDependencies(SvelteTestModule.SVELTE_FA_4)
+    svelte.fixture.configureByText("Usage.svelte", """
       <script lang="ts">
         import Fa from 'svelte-fa';
 
@@ -61,8 +71,8 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
       <Fa {icon} />
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
@@ -70,39 +80,39 @@ class SvelteServiceTest : SvelteServiceTestBase() {
     // This test checks if we properly process Diagnostics without code.
     // It's important because exceptions in our highlighting are swallowed but appear to affect performance.
     // Would be good to actually completely hide this annotation, but then I'm not sure how to still verify the above.
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts"><EOLError descr="Svelte: [svelte-preprocess] Encountered type error"></EOLError>
         let hello = "hello"<error descr="Svelte: ',' expected."><error descr="Newline or semicolon expected">w</error>rong</error>;
         console.log(hello);
       </script>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testStyleLangNoCrash() {
     // Svelte LS will print long error "Cannot find module 'sass'" with require stack.
     // Description is not important, in 2023.3 the LS crashed instead of showing any errors.
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <style lang="scss"><EOLError></EOLError>
         div {
           color: red;
         }
       </style>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testNotificationsForTSFileChanges() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("helper.ts", "") // empty file will trigger "not a module" error
-    val helperDocument = myFixture.editor.document
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("helper.ts", "") // empty file will trigger "not a module" error
+    val helperDocument = svelte.fixture.editor.document
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
         import * as ns from <error>"./helper"</error>;
         
@@ -110,10 +120,10 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         console.log(ns, expectError);
       </script>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
 
-    WriteCommandAction.runWriteCommandAction(project) {
+    WriteCommandAction.runWriteCommandAction(svelte.project) {
       helperDocument.insertString(0, "export {};")
     }
 
@@ -129,14 +139,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
     val data = ExpectedHighlightingData(checkDoc, true, true, false)
     data.init()
-    myFixture.doHighlighting()
-    (myFixture as CodeInsightTestFixtureImpl).collectAndCheckHighlighting(data)
+    svelte.fixture.doHighlighting()
+    (svelte.fixture as CodeInsightTestFixtureImpl).collectAndCheckHighlighting(data)
   }
 
   @Test
   fun testTypeCheckingForProps() {
-    addTypeScriptCommonFiles()
-    myFixture.addFileToProject("Child.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.addFileToProject("Child.svelte", """
       <script lang="ts">
         export let numA: number = 1;
         let numBPrivate: number;
@@ -147,7 +157,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{numA}</p>
       <p>{numBPrivate}</p>
     """.trimIndent())
-    myFixture.configureByText("Hello.svelte", """
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
         import Child from "./Child.svelte";
       </script>
@@ -161,14 +171,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <Child <error descr="Svelte: Object literal may only specify known properties, and '\"numBPrivate\"' does not exist in type '{ numA?: number | undefined; numB: number; }'.">numBPrivate</error>={undefined} numB={1} />
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testTypeNarrowing() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
         type SuccessModel = {
           success: true;
@@ -195,14 +205,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         <p>{model.errorMessage}</p>
       {/if}
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testTypesFromSeparateScriptTags() { // WEB-54516
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Foo.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Foo.svelte", """
       <script context="module" lang="ts">
         export interface User {
           foo: number;
@@ -218,14 +228,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         defaultUser = user;
       </script>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testReactiveDeclarationDestructuredObjectJS() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Foo.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Foo.svelte", """
       <script>
         $: ({ foo1 } = { foo1: 1 });
       
@@ -236,14 +246,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testReactiveDeclarationDestructuredObjectTS() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Foo.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Foo.svelte", """
       <script lang="ts">
         $: ({ foo1 } = { foo1: 1 });
       
@@ -254,14 +264,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testReactiveDeclarationDestructuredArrayJS() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Foo.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Foo.svelte", """
       <script>
         $: [foo1] = [1];
       
@@ -272,14 +282,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'."><error descr="Unresolved variable or type foo2">foo2</error></error>}</p>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testReactiveDeclarationDestructuredArrayTS() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Foo.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Foo.svelte", """
       <script lang="ts">
         $: [foo1] = [1];
       
@@ -290,14 +300,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       <p>{foo1}</p>
       <p>{<error descr="Svelte: Cannot find name 'foo2'.">foo2</error>}</p>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testDestructuredAssignmentAssignability() { // WEB-60202
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Foo.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Foo.svelte", """
       <script lang="ts">
         class Account {
         }
@@ -314,21 +324,21 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       {sourceAccount}
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testImportFromModuleScriptJS() {
-    addTypeScriptCommonFiles()
-    myFixture.addFileToProject("Helper.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.addFileToProject("Helper.svelte", """
       <script context="module">
         export class Inner {
           foo = true;
         }
       </script>
     """.trimIndent())
-    myFixture.configureByText("Foo.svelte", """
+    svelte.fixture.configureByText("Foo.svelte", """
       <script>
         import { Inner, Inner as Renamed, <error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?"><weak_warning descr="Cannot resolve symbol 'Wrong'">Wrong</weak_warning></error> } from "./Helper.svelte";
       
@@ -337,14 +347,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         new Wrong;
       </script>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testImportFromModuleScriptTS() {
-    addTypeScriptCommonFiles()
-    myFixture.addFileToProject("Helper.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.addFileToProject("Helper.svelte", """
       <script context="module" lang="ts">
         export class Inner {
           foo = true;
@@ -355,7 +365,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         }
       </script>
     """.trimIndent())
-    myFixture.configureByText("Foo.svelte", """
+    svelte.fixture.configureByText("Foo.svelte", """
       <script lang="ts">
         import { Inner, Inner as Renamed, <error descr="Svelte: Module '\"./Helper.svelte\"' has no exported member 'Wrong'. Did you mean to use 'import Wrong from \"./Helper.svelte\"' instead?">Wrong</error>, type Foo } from "./Helper.svelte";
       
@@ -368,14 +378,14 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       {x}
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testFunctionDeclarationGTDU() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
         function <caret>handleClick() {
           console.log("clicked!");
@@ -386,16 +396,16 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <button on:click={handleClick}>Hello</button>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
 
-    JSNavigationTest.doTestGTDU(myFixture, true)
+    JSNavigationTest.doTestGTDU(svelte.fixture, true)
   }
 
   @Test
   fun testFunctionReferenceGTDU() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
         function handleClick() {
           console.log("clicked!");
@@ -406,53 +416,53 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <button on:click={<caret>handleClick}>Hello</button>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
 
-    JSNavigationTest.doTestGTDU(myFixture, false)
+    JSNavigationTest.doTestGTDU(svelte.fixture, false)
   }
 
   @Test
   fun testReactiveDeclarationReferenceGTDU() {
-    addTypeScriptCommonFiles()
+    svelte.addTypeScriptCommonFiles()
     // todo hide internal errors for destructured reactive declaration references
-    myFixture.configureByText("Hello.svelte", """
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
         $: ({ foo } = { foo: 1 });
       </script>
       
       <p>Foo: {<caret>foo}</p>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
 
-    JSNavigationTest.doTestGTDU(myFixture, false)
+    JSNavigationTest.doTestGTDU(svelte.fixture, false)
   }
 
   @Test
   fun testTypeScriptPluginWorks() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Foo.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Foo.svelte", """
       <script lang="ts">
         export let prop1 = 5;
       </script>
       
       {prop1}
     """.trimIndent())
-    myFixture.checkHighlighting()
+    svelte.fixture.checkHighlighting()
 
-    myFixture.configureByText("usage.ts", """
+    svelte.fixture.configureByText("usage.ts", """
       import Foo from "./Foo.svelte";
 
       new Foo({props: {<error descr="TS2322: Type 'string' is not assignable to type 'number'.">prop1</error>: "foo"}});
       let <error descr="TS2322: Type 'number' is not assignable to type 'typeof Foo__SvelteComponent_'.">foo</error>: typeof Foo = 5;
       console.log(foo);
     """.trimIndent())
-    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
-    assertCorrectServiceForTsFile()
+    svelte.fixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    svelte.assertCorrectServiceForTsFile()
 
     // typescript-plugin-svelte for now doesn't check the path, only file name
-    myFixture.configureByText("+page.server.ts", """
+    svelte.fixture.configureByText("+page.server.ts", """
       export async function load(event<error descr="TS2307: Cannot find module './${"$"}types.js' or its corresponding type declarations. (this likely means that SvelteKit's type generation didn't run yet - try running it by executing 'npm run dev' or 'npm run build')">)</error> {
         helper(event);
         return {};
@@ -467,23 +477,23 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         return implicitAny;
       }
     """.trimIndent())
-    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    svelte.fixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
 
 
     // todo suppress "Method expression is not of Function type"
-    myFixture.configureByText("anotherUsage.js", """
+    svelte.fixture.configureByText("anotherUsage.js", """
       import Foo from "./Foo.svelte";
 
       new <weak_warning>Foo</weak_warning>({props: {<error descr="TS2322: Type 'string' is not assignable to type 'number'.">prop1</error>: "foo"}});
     """.trimIndent())
-    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
-    assertCorrectServiceForTsFile()
+    svelte.fixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    svelte.assertCorrectServiceForTsFile()
   }
 
   @Test
   fun testTypeScriptServiceResolve() {
-    addTypeScriptCommonFiles()
-    myFixture.addFileToProject("randomFile.ts", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.addFileToProject("randomFile.ts", """
       export async function run() {
         return {
           /**
@@ -494,7 +504,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       }
     """.trimIndent())
 
-    myFixture.configureByText("Foo.svelte", """
+    svelte.fixture.configureByText("Foo.svelte", """
       <script lang="ts">
         /**
          * docs!
@@ -506,7 +516,7 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       
       <button on:click|preventDefault={exposedStuff} />
     """.trimIndent())
-    myFixture.checkHighlighting()
+    svelte.fixture.checkHighlighting()
 
     checkTypeScriptServiceResolve("usageTS.ts", """
       import Foo from "./Foo.svelte";
@@ -526,8 +536,8 @@ class SvelteServiceTest : SvelteServiceTestBase() {
 
   @Test
   fun testA11yWarningsEnabled() {
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
       	const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
         console.log(expectError);
@@ -537,18 +547,18 @@ class SvelteServiceTest : SvelteServiceTestBase() {
         Hello
       </div</warning>>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testA11yWarningsDisabled() {
-    val settings = getSvelteServiceSettings(project)
+    val settings = getSvelteServiceSettings(svelte.project)
     settings.showA11yWarnings = false
-    disposeOnTearDown(Disposable { settings.showA11yWarnings = true })
+    Disposer.register(svelte.testRootDisposable) { settings.showA11yWarnings = true }
 
-    addTypeScriptCommonFiles()
-    myFixture.configureByText("Hello.svelte", """
+    svelte.addTypeScriptCommonFiles()
+    svelte.fixture.configureByText("Hello.svelte", """
       <script lang="ts">
       	const <error descr="Svelte: Type 'boolean' is not assignable to type 'string'.">expectError</error>: string = true;
         console.log(expectError);
@@ -558,47 +568,49 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       	Hello
       </div>
     """.trimIndent())
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
   }
 
   @Test
   fun testGenericGoToDeclaration() {
-    addTypeScriptCommonFiles()
+    svelte.addTypeScriptCommonFiles()
 
-    myFixture.configureByText("TestComponent.svelte", """
+    svelte.fixture.configureByText("TestComponent.svelte", """
       <script lang="ts" generics="T extends string">
         export let value: <caret>T;
       </script>
       {value}
     """.trimIndent())
 
-    myFixture.checkHighlighting()
-    assertCorrectService()
+    svelte.fixture.checkHighlighting()
+    svelte.assertCorrectService()
 
-    JSNavigationTest.doTestGTDU(myFixture, false)
+    JSNavigationTest.doTestGTDU(svelte.fixture, false)
   }
 
+  @Test
   fun testGenericFindUsages() {
-    addTypeScriptCommonFiles()
+    svelte.addTypeScriptCommonFiles()
 
-    myFixture.configureByText("TestComponent.svelte", """
+    svelte.fixture.configureByText("TestComponent.svelte", """
       <script lang="ts" generics="<caret>T extends string">
         export let value: T;
       </script>
       {value}
     """.trimIndent())
 
-    myFixture.doHighlighting()
-    assertCorrectService()
+    svelte.fixture.doHighlighting()
+    svelte.assertCorrectService()
 
-    JSNavigationTest.doTestGTDU(myFixture, true)
+    JSNavigationTest.doTestGTDU(svelte.fixture, true)
   }
 
+  @Test
   fun testFindUsagesFromTypeParameterDeclaration() {
-    addTypeScriptCommonFiles()
+    svelte.addTypeScriptCommonFiles()
 
-    myFixture.configureByText("TestComponent.svelte", """
+    svelte.fixture.configureByText("TestComponent.svelte", """
       <script lang="ts" generics="<caret>T extends string">
         export let value: T;
         function process(item: T): T {
@@ -607,23 +619,24 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    myFixture.doHighlighting()
-    assertCorrectService()
+    svelte.fixture.doHighlighting()
+    svelte.assertCorrectService()
 
-    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+    val usages = runReadActionBlocking { svelte.fixture.findUsages(svelte.fixture.elementAtCaret) }
 
     // Should find: value: T, item: T, return type: T
-    assertTrue("Expected at least 3 usages of T", usages.size >= 3)
+    assertTrue(usages.size >= 3, "Expected at least 3 usages of T")
 
     // Verify usages are in expected contexts
-    val usageTexts = usages.map { it.element?.text }
-    assertTrue("Should find usage in 'value: T'", usageTexts.any { it == "T" })
+    val usageTexts = runReadActionBlocking { usages.map { it.element?.text } }
+    assertTrue(usageTexts.any { it == "T" }, "Should find usage in 'value: T'")
   }
 
+  @Test
   fun testFindUsagesFromUsageSite() {
-    addTypeScriptCommonFiles()
+    svelte.addTypeScriptCommonFiles()
 
-    myFixture.configureByText("TestComponent.svelte", """
+    svelte.fixture.configureByText("TestComponent.svelte", """
       <script lang="ts" generics="T extends string">
         export let value: <caret>T;
         function process(item: T): T {
@@ -632,19 +645,20 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    myFixture.doHighlighting()
-    assertCorrectService()
+    svelte.fixture.doHighlighting()
+    svelte.assertCorrectService()
 
-    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+    val usages = runReadActionBlocking { svelte.fixture.findUsages(svelte.fixture.elementAtCaret) }
 
     // Should resolve from usage back to declaration and find all usages
-    assertTrue("Should find all usages from usage site", usages.size >= 3)
+    assertTrue(usages.size >= 3, "Should find all usages from usage site")
   }
 
+  @Test
   fun testFindUsagesMultipleTypeParameters() {
-    addTypeScriptCommonFiles()
+    svelte.addTypeScriptCommonFiles()
 
-    myFixture.configureByText("TestComponent.svelte", """
+    svelte.fixture.configureByText("TestComponent.svelte", """
       <script lang="ts" generics="T extends string, <caret>U extends number">
         export let first: T;
         export let second: U;
@@ -654,30 +668,34 @@ class SvelteServiceTest : SvelteServiceTestBase() {
       </script>
     """.trimIndent())
 
-    myFixture.doHighlighting()
-    assertCorrectService()
+    svelte.fixture.doHighlighting()
+    svelte.assertCorrectService()
 
-    val usages = myFixture.findUsages(myFixture.elementAtCaret)
+    val usages = runReadActionBlocking { svelte.fixture.findUsages(svelte.fixture.elementAtCaret) }
 
     // Should find only U usages, not T usages
-    assertTrue("Should find usages of U", usages.size >= 2)
+    assertTrue(usages.size >= 2, "Should find usages of U")
 
     // Verify U is found but not T
-    val usageParents = usages.mapNotNull { it.element?.parent?.parent?.text }
-    assertTrue("Should find 'second: U'", usageParents.any { it.contains("second") })
-    assertTrue("Should find 'b: U'", usageParents.any { it.contains("b:") })
+    val usageParents = runReadActionBlocking { usages.mapNotNull { it.element?.parent?.parent?.text } }
+    assertTrue(usageParents.any { it.contains("second") }, "Should find 'second: U'")
+    assertTrue(usageParents.any { it.contains("b:") }, "Should find 'b: U'")
   }
 
 
   private fun checkTypeScriptServiceResolve(fileName: String, text: String) {
-    myFixture.configureByText(fileName, text)
-    myFixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
-    assertCorrectServiceForTsFile()
-    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
-    ref as JSReferenceExpression
-    TestCase.assertEquals(1, ref.multiResolve(false).size)
-    val target = ref.resolve()!!
-    TestCase.assertEquals("Foo.svelte", target.containingFile?.name)
+    svelte.fixture.configureByText(fileName, text)
+    svelte.fixture.checkHighlighting() // no checkLspHighlighting for ts server protocol
+    svelte.assertCorrectServiceForTsFile()
+    timeoutRunBlocking {
+      readActionBlocking {
+        val ref = svelte.fixture.getReferenceAtCaretPositionWithAssertion()
+        ref as JSReferenceExpression
+        assertEquals(1, ref.multiResolve(false).size)
+        val target = ref.resolve()!!
+        assertEquals("Foo.svelte", target.containingFile?.name)
+      }
+    }
     // we'd love to double check what's the target of navigation but Svelte service works differently in prod and in tests
     //target as JSFunctionDeclaration
     //TestCase.assertEquals("exposedStuff", target.name)

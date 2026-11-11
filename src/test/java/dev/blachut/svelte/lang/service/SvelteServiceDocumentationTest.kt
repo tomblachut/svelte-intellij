@@ -3,78 +3,85 @@ package dev.blachut.svelte.lang.service
 import com.intellij.lang.javascript.JSAbstractDocumentationTest
 import com.intellij.lang.javascript.service.JSLanguageServiceUtil
 import com.intellij.lang.typescript.documentation.TypeScriptDocumentationTargetProvider
+import com.intellij.openapi.application.readActionBlocking
 import com.intellij.openapi.util.registry.RegistryManager
 import com.intellij.platform.backend.documentation.PsiDocumentationTargetProvider
 import com.intellij.platform.lsp.tests.waitUntilFileOpenedByLspServer
 import com.intellij.polySymbols.testFramework.checkDocumentationAtCaret
+import com.intellij.testFramework.common.timeoutRunBlocking
+import com.intellij.testFramework.junit5.TestApplication
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.getRelativeSvelteTestDataPath
-import org.junit.Test
+import dev.blachut.svelte.lang.service.SvelteServiceFixture.Companion.svelteServiceFixture
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 /**
  * @see com.intellij.lang.javascript.typescript.service.TypeScriptServiceDocumentationTest
  */
-class SvelteServiceDocumentationTest : SvelteServiceTestBase() {
-  override fun getBasePath(): String = getRelativeSvelteTestDataPath() + "/dev/blachut/svelte/lang/service/documentation"
+@TestApplication
+class SvelteServiceDocumentationTest {
+  private val svelte by svelteServiceFixture(getRelativeSvelteTestDataPath() + "/dev/blachut/svelte/lang/service/documentation")
 
-  override fun setUp() {
-    super.setUp()
-    RegistryManager.getInstance().get("typescript.show.own.type").setValue(true, testRootDisposable)
+  @BeforeEach
+  fun setUp() {
+    RegistryManager.getInstance().get("typescript.show.own.type").setValue(true, svelte.testRootDisposable)
 
     PsiDocumentationTargetProvider.EP_NAME.point
-      .registerExtension(TypeScriptDocumentationTargetProvider(), testRootDisposable)
+      .registerExtension(TypeScriptDocumentationTargetProvider(), svelte.testRootDisposable)
 
-    JSLanguageServiceUtil.setTimeout(10_000, testRootDisposable)
+    JSLanguageServiceUtil.setTimeout(10_000, svelte.testRootDisposable)
   }
 
   @Test
-  fun testNullChecks() = defaultComboTest()
+  fun testNullChecks(): Unit = defaultComboTest()
 
   @Test
-  fun testTypeNarrowing() = defaultComboTest()
+  fun testTypeNarrowing(): Unit = defaultComboTest()
 
   @Test
-  fun testGenericType() = defaultComboTest()
+  fun testGenericType(): Unit = defaultComboTest()
 
   @Test
-  fun testQualifiedReferenceToMethod() = defaultComboTest()
+  fun testQualifiedReferenceToMethod(): Unit = defaultComboTest()
 
   @Test
-  fun testQualifiedReferenceToProperty() = defaultComboTest()
+  fun testQualifiedReferenceToProperty(): Unit = defaultComboTest()
 
   @Test
-  fun testNoDummyResolve() = defaultComboTest()
+  fun testNoDummyResolve(): Unit = defaultComboTest()
 
   @Test
-  fun testNoDummyResolve2() = defaultComboTest()
+  fun testNoDummyResolve2(): Unit = defaultComboTest()
 
   @Test
-  fun testKitDataProp() = defaultComboTest(true)
+  fun testKitDataProp(): Unit = defaultComboTest(true)
 
   private fun defaultComboTest(directory: Boolean = false) {
-    configureDefault(directory)
+    svelte.configureDefault(directory)
 
-    waitUntilFileOpenedByLspServer(project, file.virtualFile)
-    assertCorrectService()
+    runInEdtAndWait { waitUntilFileOpenedByLspServer(svelte.project, svelte.fixture.file.virtualFile) }
+    svelte.assertCorrectService()
 
-    val quickNavigateText = JSAbstractDocumentationTest.getQuickNavigateText(myFixture)
+    val quickNavigateText = JSAbstractDocumentationTest.getQuickNavigateText(svelte.fixture)
     JSAbstractDocumentationTest.checkExpected(quickNavigateText, "$testFileAbsolutePathWithoutExtension.nav.expected.html")
 
     if (directory) {
-      val savedTestDataPath = myFixture.testDataPath
-      myFixture.testDataPath = testDataPath + "/" + getTestName(false)
+      val savedTestDataPath = svelte.fixture.testDataPath
+      svelte.fixture.testDataPath = svelte.testDataPath + "/" + svelte.getTestName(false)
       try {
-        myFixture.checkDocumentationAtCaret()
+        runInEdtAndWait { svelte.fixture.checkDocumentationAtCaret() }
       }
       finally {
-        myFixture.testDataPath = savedTestDataPath
+        svelte.fixture.testDataPath = savedTestDataPath
       }
     }
     else {
-      val doc = JSAbstractDocumentationTest.getQuickDocumentationText(myFixture) ?: "No documentation found."
+      val doc = timeoutRunBlocking { readActionBlocking { JSAbstractDocumentationTest.getQuickDocumentationText(svelte.fixture) } } ?: "No documentation found."
       JSAbstractDocumentationTest.checkExpected(doc, "$testFileAbsolutePathWithoutExtension.doc.expected.html")
     }
   }
 
   private val testFileAbsolutePathWithoutExtension
-    get() = testDataPath + "/" + getTestName(false)
+    get() = svelte.testDataPath + "/" + svelte.getTestName(false)
 }
