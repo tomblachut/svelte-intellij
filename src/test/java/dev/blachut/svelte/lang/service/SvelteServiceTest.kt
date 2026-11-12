@@ -13,7 +13,7 @@ import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import com.intellij.testFramework.common.timeoutRunBlocking
 import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.SvelteTestModule
-import dev.blachut.svelte.lang.codeInsight.SvelteHighlightingTest
+import dev.blachut.svelte.lang.codeInsight.configureDefaultLocalInspectionTools
 import dev.blachut.svelte.lang.configureSvelteDependencies
 import dev.blachut.svelte.lang.service.SvelteServiceFixture.Companion.svelteServiceFixture
 import dev.blachut.svelte.lang.service.settings.getSvelteServiceSettings
@@ -28,7 +28,7 @@ class SvelteServiceTest {
 
   @BeforeEach
   fun setUp() {
-    svelte.fixture.enableInspections(*SvelteHighlightingTest.configureDefaultLocalInspectionTools().toTypedArray())
+    svelte.fixture.enableInspections(*configureDefaultLocalInspectionTools().toTypedArray())
   }
 
   @Test

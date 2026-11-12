@@ -21,7 +21,7 @@ class SvelteComponentAutoImportTest {
 
   @BeforeEach
   fun enableSvelteInspections() {
-    symlinks.fixture.enableInspections(*SvelteHighlightingTest.configureDefaultLocalInspectionTools().toTypedArray())
+    symlinks.fixture.enableInspections(*configureDefaultLocalInspectionTools().toTypedArray())
   }
 
   @Test

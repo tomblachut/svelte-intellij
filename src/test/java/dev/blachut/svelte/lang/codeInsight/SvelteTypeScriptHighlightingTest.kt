@@ -10,7 +10,7 @@ class SvelteTypeScriptHighlightingTest : BasePlatformTestCase() {
 
   override fun setUp() {
     super.setUp()
-    myFixture.enableInspections(*SvelteHighlightingTest.configureDefaultLocalInspectionTools().toTypedArray())
+    myFixture.enableInspections(*configureDefaultLocalInspectionTools().toTypedArray())
   }
 
   fun testSimpleWithType() {
