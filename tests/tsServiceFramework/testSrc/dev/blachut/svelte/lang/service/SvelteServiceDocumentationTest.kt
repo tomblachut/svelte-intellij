@@ -1,6 +1,6 @@
 package dev.blachut.svelte.lang.service
 
-import com.intellij.lang.javascript.JSAbstractDocumentationTest
+import com.intellij.lang.javascript.JSDocumentationFixture
 import com.intellij.lang.javascript.service.JSLanguageServiceUtil
 import com.intellij.lang.typescript.documentation.TypeScriptDocumentationTargetProvider
 import com.intellij.openapi.application.readActionBlocking
@@ -63,8 +63,8 @@ class SvelteServiceDocumentationTest {
     runInEdtAndWait { waitUntilFileOpenedByLspServer(svelte.project, svelte.fixture.file.virtualFile) }
     svelte.assertCorrectService()
 
-    val quickNavigateText = JSAbstractDocumentationTest.getQuickNavigateText(svelte.fixture)
-    JSAbstractDocumentationTest.checkExpected(quickNavigateText, "$testFileAbsolutePathWithoutExtension.nav.expected.html")
+    val quickNavigateText = JSDocumentationFixture.getQuickNavigateText(svelte.fixture)
+    JSDocumentationFixture.checkExpected(quickNavigateText, "$testFileAbsolutePathWithoutExtension.nav.expected.html")
 
     if (directory) {
       val savedTestDataPath = svelte.fixture.testDataPath
@@ -77,8 +77,8 @@ class SvelteServiceDocumentationTest {
       }
     }
     else {
-      val doc = timeoutRunBlocking { readActionBlocking { JSAbstractDocumentationTest.getQuickDocumentationText(svelte.fixture) } } ?: "No documentation found."
-      JSAbstractDocumentationTest.checkExpected(doc, "$testFileAbsolutePathWithoutExtension.doc.expected.html")
+      val doc = timeoutRunBlocking { readActionBlocking { JSDocumentationFixture.getQuickDocumentationText(svelte.fixture) } } ?: "No documentation found."
+      JSDocumentationFixture.checkExpected(doc, "$testFileAbsolutePathWithoutExtension.doc.expected.html")
     }
   }
 

@@ -1,85 +1,111 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.lang.javascript.JSTestUtils
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.testFramework.junit5.TestApplication
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Test
 
-class SvelteEmmetTest : BasePlatformTestCase() {
-    fun testFirstThingEOF() = doTest(
+@TestApplication
+class SvelteEmmetTest {
+    companion object {
+        private val projectFixture = svelteProjectFixture()
+    }
+
+    private val myFixture by svelteCodeInsightFixture(projectFixture)
+
+    @Test
+    fun testFirstThingEOF(): Unit = doTest(
         """.foo<caret>""",
         """<div class="foo"></div>"""
     )
 
-    fun testFirstThing() = doTest(
+    @Test
+    fun testFirstThing(): Unit = doTest(
         """.foo<caret><div class="existing"></div>""",
         """<div class="foo"></div><div class="existing"></div>"""
     )
 
-    fun testFirstIfEOF() = doTest(
+    @Test
+    fun testFirstIfEOF(): Unit = doTest(
         """if<caret>""",
         """{#if }{/if}"""
     )
 
-    fun testFirstEachEOF() = doTest(
+    @Test
+    fun testFirstEachEOF(): Unit = doTest(
         """each<caret>""",
         """{#each  as }{/each}"""
     )
 
-    fun testFirstAwaitEOF() = doTest(
+    @Test
+    fun testFirstAwaitEOF(): Unit = doTest(
         """await<caret>""",
         """{#await }{/await}"""
     )
 
-    fun testFirstKeyEOF() = doTest(
+    @Test
+    fun testFirstKeyEOF(): Unit = doTest(
         """key<caret>""",
         """{#key }{/key}"""
     )
 
-    fun testElse() = doTest(
+    @Test
+    fun testElse(): Unit = doTest(
         """{#if true}else<caret>{/if}""",
         """{#if true}{:else}{/if}"""
     )
 
-    fun testElseIf() = doTest(
+    @Test
+    fun testElseIf(): Unit = doTest(
         """{#if true}elseif<caret>{/if}""",
         """{#if true}{:else if }{/if}"""
     )
 
-    fun testThen() = doTest(
+    @Test
+    fun testThen(): Unit = doTest(
         """{#await promise}then<caret>{/await}""",
         """{#await promise}{:then }{/await}"""
     )
 
-    fun testCatch() = doTest(
+    @Test
+    fun testCatch(): Unit = doTest(
         """{#await promise}catch<caret>{/await}""",
         """{#await promise}{:catch }{/await}"""
     )
 
-    fun testAfterBlockEOF() = doTest(
+    @Test
+    fun testAfterBlockEOF(): Unit = doTest(
         """{#if true}{/if}.foo<caret>""",
         """{#if true}{/if}<div class="foo"></div>"""
     )
 
-    fun testAfterBlock() = doTest(
+    @Test
+    fun testAfterBlock(): Unit = doTest(
         """{#if true}{/if}.foo<caret><div class="existing"></div>""",
         """{#if true}{/if}<div class="foo"></div><div class="existing"></div>"""
     )
 
-    fun testInsideBlock() = doTest(
+    @Test
+    fun testInsideBlock(): Unit = doTest(
         """{#if true}.foo<caret>{/if}""",
         """{#if true}<div class="foo"></div>{/if}"""
     )
 
-    fun testInsideBlockTag() = doTest(
+    @Test
+    fun testInsideBlockTag(): Unit = doTest(
         """{#if .foo<caret>}{/if}""",
         """{#if .foo   }{/if}"""
     )
 
-    fun testAfterBlockStartTag() = doTest(
+    @Test
+    fun testAfterBlockStartTag(): Unit = doTest(
         """{#if true}.foo<caret>""",
         """{#if true}<div class="foo"></div>"""
     )
 
-    fun testComplexExpression() = doTest(
+    @Test
+    fun testComplexExpression(): Unit = doTest(
         """if>ul.mb-2*2>each>li<caret>""", """
         {#if }
             <ul class="mb-2">

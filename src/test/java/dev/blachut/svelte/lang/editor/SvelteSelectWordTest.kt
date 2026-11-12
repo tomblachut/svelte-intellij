@@ -1,16 +1,28 @@
 package dev.blachut.svelte.lang.editor
 
 import com.intellij.openapi.actionSystem.IdeActions
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import com.intellij.testFramework.junit5.TestApplication
 import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.SvelteTestScenario
-import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
+import dev.blachut.svelte.lang.SvelteTestScriptLang
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Test
 
-class SvelteSelectWordTest : BasePlatformTestCase() {
-  fun testStoreSubscriptionAfterDollarJS() = doTestWithLangFromTestNameSuffix(storeSubscriptionAfterDollar)
+@TestApplication
+class SvelteSelectWordTest {
+  companion object {
+    private val projectFixture = svelteProjectFixture()
+  }
 
-  fun testStoreSubscriptionAfterDollarTS() = doTestWithLangFromTestNameSuffix(storeSubscriptionAfterDollar)
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
+
+  @Test
+  fun testStoreSubscriptionAfterDollarJS(): Unit = storeSubscriptionAfterDollar.perform(SvelteTestScriptLang.JS)
+
+  @Test
+  fun testStoreSubscriptionAfterDollarTS(): Unit = storeSubscriptionAfterDollar.perform(SvelteTestScriptLang.TS)
 
   private val storeSubscriptionAfterDollar = SvelteTestScenario { langExt, _ ->
     val storedCount = "\$storedCount" // to trick Kotlin
@@ -45,9 +57,11 @@ class SvelteSelectWordTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
-  fun testStoreSubscriptionBeforeIdentifierJS() = doTestWithLangFromTestNameSuffix(storeSubscriptionBeforeIdentifier)
+  @Test
+  fun testStoreSubscriptionBeforeIdentifierJS(): Unit = storeSubscriptionBeforeIdentifier.perform(SvelteTestScriptLang.JS)
 
-  fun testStoreSubscriptionBeforeIdentifierTS() = doTestWithLangFromTestNameSuffix(storeSubscriptionBeforeIdentifier)
+  @Test
+  fun testStoreSubscriptionBeforeIdentifierTS(): Unit = storeSubscriptionBeforeIdentifier.perform(SvelteTestScriptLang.TS)
 
   private val storeSubscriptionBeforeIdentifier = SvelteTestScenario { langExt, _ ->
     val storedCount = "\$storedCount" // to trick Kotlin

@@ -2,18 +2,25 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.idea.IJIgnore
-import com.intellij.testFramework.UsefulTestCase
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.SvelteTestScenario
+import dev.blachut.svelte.lang.SvelteTestScriptLang
 import dev.blachut.svelte.lang.configureBundledSvelte
-import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
-import dev.blachut.svelte.lang.getSvelteTestDataPath
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
-class SvelteCompletionTest : BasePlatformTestCase() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath()
+@TestApplication
+class SvelteCompletionTest {
+  private val projectFixture = svelteProjectFixture()
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
 
   private val props = "\$props" // to trick Kotlin
 
+  @Test
   fun testScriptKeywordsJS() {
     myFixture.configureByText("Component.svelte", "<script><caret></script>")
     val items = myFixture.completeBasic()
@@ -21,26 +28,31 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "interface")
   }
 
+  @Test
   fun testScriptKeywordsTS() {
     myFixture.configureByText("Component.svelte", """<script lang="ts"><caret></script>""")
     hasElements(myFixture.completeBasic(), "export", "interface")
   }
 
+  @Test
   fun testContextModuleAttribute() {
     myFixture.configureByText("foo.svelte", "<script c<caret>></script>")
     hasElements(myFixture.completeBasic(), """context="module"""")
   }
 
+  @Test
   fun testExistContextAttribute() {
     myFixture.configureByText("foo.svelte", """<script context="module" c<caret>></script>""")
     noElements(myFixture.completeBasic(), """context="module"""")
   }
 
+  @Test
   fun testGenericsAttribute() {
     myFixture.configureByText("foo.svelte", "<script g<caret>></script>")
     hasElements(myFixture.completeBasic(), """generics="T"""")
   }
 
+  @Test
   fun testExistGenericsAttribute() {
     myFixture.configureByText("foo.svelte", """<script generics="T" g<caret>></script>""")
     noElements(myFixture.completeBasic(), """generics="T"""")
@@ -51,6 +63,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
    * a generics constraint; a type declared in the `<script>` body stays inside `render()` and is
    * not ("Base is not defined"), so it must not be offered here either.
    */
+  @Test
   fun testGenericsConstraintCompletesImportedTypesOnly() {
     myFixture.addFileToProject("types.ts", "export interface Imported { name: string }")
     myFixture.configureByText("foo.svelte", """
@@ -65,34 +78,40 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "Local")
   }
 
+  @Test
   fun testStyleLang() {
     myFixture.configureByText("foo.svelte", """<style lang="<caret>"></style>""")
     hasElements(myFixture.completeBasic(), "css")
   }
 
+  @Test
   fun testSimpleTagAttribute() {
     myFixture.configureByText("foo.svelte", "<div c<caret>></div>")
     noElements(myFixture.completeBasic(), """context="module"""")
   }
 
+  @Test
   fun testSimpleTag() {
     myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
     myFixture.configureByText("foo.svelte", "<<caret>")
     hasElements(myFixture.completeBasic(), "div", "main", "svelte:body", "svelte:self", "svelte:element")
   }
 
+  @Test
   fun testSimpleTagNested() {
     myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
     myFixture.configureByText("foo.svelte", "<div><<caret></div>")
     hasElements(myFixture.completeBasic(), "div", "svelte:body", "svelte:self", "svelte:element")
   }
 
+  @Test
   fun testSimpleSvelteNamespace() {
     myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
     myFixture.configureByText("foo.svelte", "<svelte:<caret>")
     hasElements(myFixture.completeBasic(), "body", "self", "element")
   }
 
+  @Test
   fun testComponentImportNoScript() {
     myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
     myFixture.configureByText("Usage.svelte", """
@@ -108,6 +127,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  @Test
   fun testComponentImportWithScript() {
     myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
     myFixture.configureByText("Usage.svelte", """
@@ -127,6 +147,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  @Test
   fun testComponentImportSyncTagEditing() {
     myFixture.configureByText("Hello.svelte", "<h1>Test</h1>")
     myFixture.configureByText("Usage.svelte", """
@@ -142,6 +163,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  @Test
   fun testComponentsTopLevel() {
     myFixture.configureByText("Hello1.svelte", "<h1>Test</h1>")
     myFixture.configureByText("Hello2.svelte", "<h1>Test</h1>")
@@ -149,6 +171,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "Hello1", "Hello2")
   }
 
+  @Test
   fun testComponentCaseSensitivity() {
     myFixture.configureByText("Hello1.svelte", "<h1>Test</h1>")
     myFixture.configureByText("Hello2.svelte", "<h1>Test</h1>")
@@ -156,6 +179,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "Hello1", "Hello2")
   }
 
+  @Test
   @IJIgnore(issue = "AT-4013")
   fun testComponentImportVariants() {
     myFixture.addFileToProject("Hello1.svelte", "<h1>Test</h1>")
@@ -178,9 +202,11 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "HelloInvalid", "SvelteComponent", "SvelteComponentTyped")
   }
 
-  fun testAfterDollarJS() = doTestWithLangFromTestNameSuffix(storeAfterDollar)
+  @Test
+  fun testAfterDollarJS(): Unit = storeAfterDollar.perform(SvelteTestScriptLang.JS)
 
-  fun testAfterDollarTS() = doTestWithLangFromTestNameSuffix(storeAfterDollar)
+  @Test
+  fun testAfterDollarTS(): Unit = storeAfterDollar.perform(SvelteTestScriptLang.TS)
 
   private val storeAfterDollar = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
@@ -202,9 +228,11 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "$count")
   }
 
-  fun testWithoutDollarJS() = doTestWithLangFromTestNameSuffix(storeWithoutDollar)
+  @Test
+  fun testWithoutDollarJS(): Unit = storeWithoutDollar.perform(SvelteTestScriptLang.JS)
 
-  fun testWithoutDollarTS() = doTestWithLangFromTestNameSuffix(storeWithoutDollar)
+  @Test
+  fun testWithoutDollarTS(): Unit = storeWithoutDollar.perform(SvelteTestScriptLang.TS)
 
   private val storeWithoutDollar = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
@@ -226,6 +254,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "$count")
   }
 
+  @Test
   fun testReactiveStatement() {
     myFixture.configureByText("Test.svelte", """
       <script>
@@ -238,9 +267,10 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
     val items = myFixture.completeBasic()
     hasElements(items, "hello11", "hello11Local", "hello11Reactive")
-    UsefulTestCase.assertSize(3, items)
+    assertEquals(3, items.size)
   }
 
+  @Test
   fun testInterpolation() {
     myFixture.configureByText("Test.svelte", """
       <script>
@@ -254,6 +284,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "hello11", "hello11Local", "hello11Reactive")
   }
 
+  @Test
   fun testInterpolationInAttribute() {
     myFixture.configureByText("Test.svelte", """
       <script>
@@ -265,9 +296,10 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
     val items = myFixture.completeBasic()
     hasElements(items, "hello11", "hello11Local", "hello11Reactive")
-    UsefulTestCase.assertSize(3, items)
+    assertEquals(3, items.size)
   }
 
+  @Test
   fun testKeywords() {
     myFixture.configureByText("Test.svelte", """
       <div>{<caret>}</div>
@@ -276,6 +308,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "#if", "#each", "#await", "#snippet", "@html", "@debug", "@render", "@const")
   }
 
+  @Test
   fun testKeywords2() {
     myFixture.configureByText("Test.svelte", """
       <div>{#aw<caret>}</div>
@@ -287,6 +320,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  @Test
   fun testConstTagVariables() {
     myFixture.configureByText("Test.svelte", """
       {#if true}
@@ -298,6 +332,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "localOne", "localTwo")
   }
 
+  @Test
   fun testLetTagCompletion() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -321,6 +356,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     }
   }
 
+  @Test
   fun testTopLevelDeclarationTagCompletion() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -340,6 +376,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     }
   }
 
+  @Test
   fun testMustache() {
     myFixture.configureByText("Hello.svelte", """
       <script></script>
@@ -349,6 +386,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "true", "false")
   }
 
+  @Test
   fun testSnippetParameterUsage() {
     myFixture.configureByText("Hello.svelte", """
       {#snippet figure(one, two)}
@@ -358,6 +396,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "one", "two")
   }
 
+  @Test
   fun testSnippetRender() {
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
@@ -377,6 +416,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "children", "figure")
   }
 
+  @Test
   fun testSnippetFromScript() {
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
@@ -394,12 +434,14 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(myFixture.completeBasic(), "children", "figure")
   }
 
+  @Test
   fun testDirectivesOnElement() {
     myFixture.configureByText("Usage.svelte", "<h1 <caret>>Test</h1>")
     val items = myFixture.completeBasic()
     hasElements(items, "bind:", "on:", "class:", "use:", "transition:", "in:", "out:", "animate:", "let:")
   }
 
+  @Test
   fun testDirectivesOnComponent() {
     myFixture.configureByText("Usage.svelte", "<Box <caret>>Test</Box>")
     val items = myFixture.completeBasic()
@@ -407,6 +449,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "class:", "use:", "transition:", "in:", "out:", "animate:")
   }
 
+  @Test
   fun testBindDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -419,6 +462,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "onclick", "localVariable")
   }
 
+  @Test
   fun testOnDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -431,6 +475,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "onclick", "localVariable")
   }
 
+  @Test
   fun testClassDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -445,6 +490,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "localVariable", "localClass")
   }
 
+  @Test
   fun testUseDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -456,6 +502,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "action")
   }
 
+  @Test
   fun testTransitionDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -467,6 +514,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "fade")
   }
 
+  @Test
   fun testInDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -478,6 +526,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "fade")
   }
 
+  @Test
   fun testOutDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -489,6 +538,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "fade")
   }
 
+  @Test
   fun testAnimateDirective() {
     myFixture.configureByText("Usage.svelte", """
       <script>
@@ -500,6 +550,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "fade")
   }
 
+  @Test
   fun testPrefetchAttribute() {
     myFixture.configureByText("Test.svelte", """
       <a svp<caret>>Hello</a>
@@ -510,6 +561,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     """.trimIndent())
   }
 
+  @Test
   fun testGenericType() {
     myFixture.configureByText("Test.svelte", """
       <script lang="ts" generics="Generic extends string">
@@ -526,6 +578,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
   }
 
   // TypeScript in markup completion tests
+  @Test
   fun testTsGenericCompletion() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -540,6 +593,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "name", "age")
   }
 
+  @Test
   fun testTsInterfacePropertyCompletion() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -559,6 +613,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "name", "email", "age")
   }
 
+  @Test
   fun testTsEachBlockItemCompletion() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -580,6 +635,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "id", "name", "description")
   }
 
+  @Test
   fun testTsAwaitBlockValueCompletion() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -600,6 +656,7 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "data", "status")
   }
 
+  @Test
   fun testTsSnippetParameterCompletion() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -620,24 +677,28 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     hasElements(items, "name", "email", "age")
   }
 
+  @Test
   fun testAttachCompletionInCurlyBraces() {
     myFixture.configureByText("Component.svelte", "<div {<caret>}></div>")
     val items = myFixture.completeBasic()
     hasElements(items, "@attach")
   }
 
+  @Test
   fun testAttachCompletionAfterAt() {
     myFixture.configureByText("Component.svelte", "<div {@<caret>}></div>")
     val items = myFixture.completeBasic()
     hasElements(items, "@attach")
   }
 
+  @Test
   fun testAttachCompletionWithPartialKeyword() {
     myFixture.configureByText("Component.svelte", "<div {@att<caret>}></div>")
     myFixture.completeBasic()
     myFixture.checkResult("<div {@attach <caret>}></div>")
   }
 
+  @Test
   fun testAttachCompletionNotInScript() {
     myFixture.configureByText("Component.svelte", """
       <script>
@@ -648,18 +709,21 @@ class SvelteCompletionTest : BasePlatformTestCase() {
     noElements(items, "@attach")
   }
 
+  @Test
   fun testAttachCompletionNotInRegularAttribute() {
     myFixture.configureByText("Component.svelte", """<div class="<caret>"></div>""")
     val items = myFixture.completeBasic()
     noElements(items, "@attach")
   }
 
+  @Test
   fun testAttachCompletionWithOtherAttributes() {
     myFixture.configureByText("Component.svelte", """<div class="test" {<caret>}></div>""")
     val items = myFixture.completeBasic()
     hasElements(items, "@attach")
   }
 
+  @Test
   fun testAttachCompletionMultiple() {
     myFixture.configureByText("Component.svelte", """<div {@attach first} {<caret>}></div>""")
     val items = myFixture.completeBasic()
@@ -676,10 +740,10 @@ class SvelteCompletionTest : BasePlatformTestCase() {
       if (matched.size == variants.size) break
     }
     if (expected) {
-      UsefulTestCase.assertTrue("Actual: ${items.map { it.lookupString }}", matched.size == variants.size)
+      assertTrue(matched.size == variants.size, "Actual: ${items.map { it.lookupString }}")
     }
     else {
-      UsefulTestCase.assertTrue("Actual: ${items.map { it.lookupString }}", matched.isEmpty())
+      assertTrue(matched.isEmpty(), "Actual: ${items.map { it.lookupString }}")
     }
   }
 

@@ -69,7 +69,6 @@ jvm_library(
         "//plugins/svelte",
         "//plugins/css/backend",
         "//plugins/svelte/css",
-        "@community//libraries/junit4",
         "@community//libraries/junit6",
         "@community//platform/testFramework/junit5",
         "//plugins/ultimate-plugin",

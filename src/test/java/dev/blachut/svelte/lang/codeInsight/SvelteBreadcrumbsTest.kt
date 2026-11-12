@@ -1,9 +1,21 @@
 package dev.blachut.svelte.lang.codeInsight
 
-import com.intellij.testFramework.UsefulTestCase
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.openapi.application.runReadActionBlocking
+import com.intellij.testFramework.junit5.TestApplication
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-class SvelteBreadcrumbsTest : BasePlatformTestCase() {
+@TestApplication
+class SvelteBreadcrumbsTest {
+  companion object {
+    private val projectFixture = svelteProjectFixture()
+  }
+
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
+
+  @Test
   fun testSvelteBlock() {
     myFixture.configureByText("Sticky.svelte", """
       <div>
@@ -19,8 +31,10 @@ class SvelteBreadcrumbsTest : BasePlatformTestCase() {
       </div>
     """.trimIndent())
 
-    val breadcrumbs = myFixture.breadcrumbsAtCaret
-    val texts = breadcrumbs.map { it.text }
-    UsefulTestCase.assertOrderedEquals(texts, listOf("div", "svelte:element", "{#if}", "Bar", "span"))
+    val texts = runReadActionBlocking {
+      val breadcrumbs = myFixture.breadcrumbsAtCaret
+      breadcrumbs.map { it.text }
+    }
+    assertEquals(listOf("div", "svelte:element", "{#if}", "Bar", "span"), texts)
   }
 }

@@ -3,13 +3,20 @@ package dev.blachut.svelte.lang.editor
 
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_COMMENT_BLOCK
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_COMMENT_LINE
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import dev.blachut.svelte.lang.getSvelteTestDataPath
+import com.intellij.testFramework.junit5.TestApplication
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Test
 
-class SvelteCommenterTest : BasePlatformTestCase() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath()
-  override fun getBasePath(): String = "dev/blachut/svelte/lang/editor"
+@TestApplication
+class SvelteCommenterTest {
+  companion object {
+    private val projectFixture = svelteProjectFixture()
+  }
 
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
+
+  @Test
   fun testScriptLineCommentForFirstLine() {
     doCommentLineTest(
       textBefore = """
@@ -29,6 +36,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testScriptLineCommentForFirstLine_ts() {
     doCommentLineTest(
       textBefore = """
@@ -48,6 +56,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testScriptLineCommentForLastLine() {
     doCommentLineTest(
       textBefore = """
@@ -67,6 +76,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testScriptLineCommentForAllLines() {
     doCommentLineTest(
       textBefore = """
@@ -86,6 +96,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testScriptLineCommentForAllLines_ts() {
     doCommentLineTest(
       textBefore = """
@@ -105,6 +116,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testInlineJsLineCommentForFirstLine() {
     doCommentLineTest(
       textBefore = """
@@ -128,6 +140,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testInlineJsLineCommentForLastLine() {
     doCommentLineTest(
       textBefore = """
@@ -151,6 +164,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testInlineJsLineCommentForAllLines() {
     doCommentLineTest(
       textBefore = """
@@ -174,6 +188,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testInlineJsBlockCommentForWholeBlock() {
     doCommentBlockTest(
       textBefore = """
@@ -197,6 +212,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testInlineJsBlockCommentForAttributeValue() {
     doCommentBlockTest(
       textBefore = """
@@ -220,6 +236,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testSvelteStartTag() {
     doCommentLineTest(
       textBefore = """
@@ -235,6 +252,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testSvelteEndTag() {
     doCommentLineTest(
       textBefore = """
@@ -252,6 +270,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
 
   // WEB-77758: inside a start tag header a line comment must be `//`, not `<!-- -->`,
   // see https://github.com/sveltejs/svelte/pull/17671
+  @Test
   fun testStartTagLineCommentForAttribute() {
     doCommentLineTest(
       textBefore = """
@@ -271,6 +290,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testStartTagLineUncommentForAttribute() {
     doCommentLineTest(
       textBefore = """
@@ -290,6 +310,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testStartTagLineCommentForSeveralAttributes() {
     doCommentLineTest(
       textBefore = """
@@ -307,6 +328,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testStartTagLineUncommentForSeveralAttributes() {
     doCommentLineTest(
       textBefore = """
@@ -324,6 +346,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testStartTagLineCommentKeepsTagEndOnItsOwnLine() {
     doCommentLineTest(
       textBefore = """
@@ -343,6 +366,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testStartTagBlockCommentForAttribute() {
     doCommentBlockTest(
       textBefore = """
@@ -360,6 +384,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testTagContentLineCommentIsStillHtmlComment() {
     doCommentLineTest(
       textBefore = """
@@ -381,6 +406,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
 
   // On a line holding only the tag end, `// >` at least uses the right comment dialect for the header,
   // while the HTML `<!-- -->` fallback would be invalid there.
+  @Test
   fun testStartTagLineCommentOnTagEndLine() {
     doCommentLineTest(
       textBefore = """
@@ -402,6 +428,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
 
   // The compiler reads top-level <script>/<style> attributes with read_static_attribute, which accepts
   // no comments, so `//` must not be offered there.
+  @Test
   fun testTopLevelScriptTagHeaderStaysHtmlCommenter() {
     doCommentLineTest(
       textBefore = """
@@ -419,6 +446,7 @@ class SvelteCommenterTest : BasePlatformTestCase() {
     )
   }
 
+  @Test
   fun testSingleLineTagLineCommentIsStillHtmlComment() {
     doCommentLineTest(
       textBefore = """

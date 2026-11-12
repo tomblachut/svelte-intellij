@@ -3,19 +3,25 @@ package dev.blachut.svelte.lang.codeInsight
 import com.intellij.psi.css.inspections.CssUnusedSymbolInspection
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection
 import com.intellij.lang.javascript.JSTestUtils
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.testFramework.junit5.TestApplication
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.SvelteTestScenario
+import dev.blachut.svelte.lang.SvelteTestScriptLang
 import dev.blachut.svelte.lang.configureBundledSvelte
 import dev.blachut.svelte.lang.configureSvelteDependencies
-import dev.blachut.svelte.lang.doTestWithLangFromTestNameSuffix
-import dev.blachut.svelte.lang.getSvelteTestDataPath
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-class SvelteHighlightingTest : BasePlatformTestCase() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath()
+@TestApplication
+class SvelteHighlightingTest {
+  private val projectFixture = svelteProjectFixture()
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
 
-  override fun setUp() {
-    super.setUp()
+  @BeforeEach
+  fun setUp() {
     myFixture.enableInspections(*configureDefaultLocalInspectionTools().toTypedArray())
   }
 
@@ -23,6 +29,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.configureByText(name, "<script>export var test=\"\"</script>")
   }
 
+  @Test
   fun testUnresolvedComponent() {
     configureComponentWithAttribute("Foo.svelte")
     myFixture.configureByText("Usage.svelte", "<<error>Fo<caret>o</error> />")
@@ -38,6 +45,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting() // no errors after import
   }
 
+  @Test
   fun testNamespacedComponent() {
     myFixture.configureByText("Usage.svelte", """
       <<error descr="Cannot resolve symbol 'Unresolved'"><error descr="Unresolved Svelte component">Unresolved</error></error> test="" />
@@ -47,6 +55,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testNamespacedComponentImportNotUnused() {
     myFixture.configureByText("Button.svelte", "<button><slot /></button>")
     myFixture.configureByText("Card.svelte", "<div class=\"card\"><slot /></div>")
@@ -68,6 +77,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testComponentAttribute() {
     configureComponentWithAttribute("Foo.svelte")
     myFixture.configureByText("Usage.svelte", """
@@ -80,6 +90,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testShorthandAttributeRequired() {
     configureComponentWithAttribute("Foo.svelte")
     myFixture.configureByText("Usage.svelte", """
@@ -94,6 +105,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testNoWrongAttributeValueForDynamicExpressions() {
     myFixture.configureByText("Test.svelte", """
       <script>
@@ -110,6 +122,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testNoInvalidIdReference() {
     myFixture.configureByText("Test.svelte", """
       <script lang="ts">
@@ -124,6 +137,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testNoDuplicateIdReference() {
     myFixture.configureByText("Test.svelte", """
       {#if true}
@@ -135,6 +149,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testEmptyTagWarningHidden() {
     myFixture.configureByText("Test.svelte", """
       <div />
@@ -142,6 +157,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testGenerics() {
     myFixture.configureByText("Test.svelte", """
       <script lang="ts" generics="Todo extends string">
@@ -153,6 +169,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testGenericsConstraintImportNotUnused() {
     myFixture.addFileToProject("types.ts", "export interface Foo { name: string }")
     myFixture.configureByText("Test.svelte", """
@@ -166,6 +183,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testGenericsConstraintModuleScriptImportNotUnused() {
     myFixture.addFileToProject("types.ts", "export interface Foo { name: string }")
     myFixture.configureByText("Test.svelte", """
@@ -181,6 +199,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testHandler() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -193,6 +212,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testHtmlDirectiveTag() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -203,6 +223,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnknownTag() {
     myFixture.configureByText("Foo.svelte", """
       <<warning>unknown</warning> />
@@ -210,6 +231,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedImport() {
     configureComponentWithAttribute("Foo.svelte")
     myFixture.configureByText("Usage.svelte", """
@@ -225,6 +247,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
    * unused-imports check must find that usage through
    * [dev.blachut.svelte.lang.codeInsight.SvelteReferencesSearch].
    */
+  @Test
   fun testPackageComponentImport() {
     myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
     myFixture.configureByText("Usage.svelte", """
@@ -242,6 +265,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
    * unused. Guards the name-matching in `PlainComponentResultProcessor` against claiming a shadowed
    * tag as a usage.
    */
+  @Test
   fun testShadowedComponentImport() {
     myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
     myFixture.configureByText("Usage.svelte", """
@@ -261,6 +285,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
    * WEB-57512: highlight-usages-at-caret scopes by `LocalSearchScope(file)`, whose scope element is
    * the `.svelte` file rather than the `<script>` embedded content.
    */
+  @Test
   fun testPackageComponentUsageHighlight() {
     myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
     myFixture.configureByText("Usage.svelte", """
@@ -270,10 +295,13 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 
       <<highlight>Fa</highlight> />
     """.trimIndent())
-    JSTestUtils.checkHighlightUsages(myFixture, false)
+    runInEdtAndWait {
+      JSTestUtils.checkHighlightUsages(myFixture, false)
+    }
   }
 
   /** The same import, but the tag is nested inside another component tag. */
+  @Test
   fun testNestedPackageComponentImport() {
     myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
     myFixture.configureByText("Button.svelte", "<button><slot /></button>")
@@ -297,6 +325,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
    * runtime land on different basenames. The named `Send` import is the control: it takes
    * the `isUnusedSpecifier` path, which never flags a tag usage.
    */
+  @Test
   fun testDeepPackageComponentImport() {
     myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.LUCIDE_SVELTE_1)
     myFixture.configureByText("Usage.svelte", """
@@ -313,6 +342,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedVariable() {
     myFixture.configureByText("Foo.svelte", """
     <script>
@@ -326,6 +356,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testSpread() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -338,6 +369,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConditionIfBlock() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -350,6 +382,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConditionIfElse() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -364,6 +397,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConditionIfElseIf() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -378,6 +412,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testEach() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -395,6 +430,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testEachWithId() {
     configureComponentWithAttribute("Foo.svelte")
     myFixture.configureByText("Foo.svelte", """
@@ -409,6 +445,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testAwaitPromise() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -426,6 +463,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testAwaitThenWithoutVariable() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -440,6 +478,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testAwaitCatchWithoutVariable() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -454,6 +493,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testInlineAwaitThenWithoutVariable() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -466,6 +506,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testInlineAwaitCatchWithoutVariable() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -478,6 +519,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testHtmlEntityInExpression() {
     myFixture.configureByText("Foo.svelte", """
       <main>{"&auml;"}</main>
@@ -485,6 +527,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testDoubleQuotesInAttributeExpression() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -495,6 +538,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testQuoteInJsCommentInMarkup() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -508,6 +552,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRegexLiteralWithQuoteInExpression() {
     myFixture.configureByText("Foo.svelte", """
       {#if true}
@@ -521,6 +566,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRegexInsideStringLiteral() {
     myFixture.configureByText("Foo.svelte", """
       <p>{"foo /bar/ baz"}</p>
@@ -528,6 +574,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testDivisionChainNotMisreadAsRegex() {
     myFixture.configureByText("Foo.svelte", """
       <script>let a = 6, b = 2, c = 1;</script>
@@ -536,6 +583,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRegexWithCharClassContainingSlash() {
     myFixture.configureByText("Foo.svelte", """
       <script>let s = 'a/b';</script>
@@ -544,6 +592,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRegexWithEscapedDelimiter() {
     myFixture.configureByText("Foo.svelte", """
       <script>let s = 'a/b';</script>
@@ -552,6 +601,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testLineCommentContainingSlashes() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -565,6 +615,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testMultipleRegexLiteralsOnOneLine() {
     myFixture.configureByText("Foo.svelte", """
       <script>let s = 'a"b\'c';</script>
@@ -573,6 +624,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRegexInAttributeInterpolation() {
     myFixture.configureByText("Foo.svelte", """
       <script>let s = 'a"b';</script>
@@ -581,6 +633,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRegexBraceInExpression() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -593,6 +646,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testQuoteInJsCommentInRawText() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -603,6 +657,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRegexBraceInRawTextExpression() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -613,6 +668,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testTemplateLiteralSubstitution() {
     myFixture.configureByText("Foo.svelte", """
       <script>let name = 'world';</script>
@@ -621,6 +677,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testJsxSelfClosingInInterpolation() {
     myFixture.configureByText("Foo.svelte", """
       <p>{<<error descr="Missing import statement"><warning descr="Cannot resolve symbol 'Foo'">Foo</warning></error> />}</p>
@@ -628,6 +685,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testJsxWithExpressionContainerInInterpolation() {
     myFixture.configureByText("Foo.svelte", """
       <script>let value = 1; let nested = 2;</script>
@@ -636,6 +694,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testComparisonLessThanIsNotJsx() {
     myFixture.configureByText("Foo.svelte", """
       <script>let a = 1; let b = 2;</script>
@@ -644,6 +703,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testComparisonGreaterThanIsNotJsx() {
     myFixture.configureByText("Foo.svelte", """
       <script>let a = 1; let b = 2;</script>
@@ -652,6 +712,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testEachWithDestructuring() {
     myFixture.configureByText("Foo.svelte", """
       <script>let items = [{id: 1, name: 'a'}, {id: 2, name: 'b'}];</script>
@@ -662,6 +723,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testAwaitThenBlock() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -674,6 +736,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testSnippetWithArgumentExpression() {
     myFixture.configureByText("Foo.svelte", """
       {#snippet <warning descr="Unused function foo">foo</warning>(name, count)}
@@ -683,6 +746,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRenderWithFunctionCall() {
     myFixture.configureByText("Foo.svelte", """
       {#snippet greet(name)}
@@ -693,6 +757,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConstWithComplexExpression() {
     myFixture.configureByText("Foo.svelte", """
       <script>let items = [1, 2, 3];</script>
@@ -704,6 +769,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRawTextTitleWithCommentAndAmpersand() {
     myFixture.configureByText("Foo.svelte", """
       <script>let x = 1, y = 2;</script>
@@ -712,6 +778,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRawTextTitleWithEscapedQuote() {
     myFixture.configureByText("Foo.svelte", """
       <title>{'foo\'bar'}</title>
@@ -719,6 +786,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testRawTextTitleWithTemplateSubstitution() {
     myFixture.configureByText("Foo.svelte", """
       <script>let name = 'world';</script>
@@ -727,6 +795,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testTsTypeAssertionInInterpolation() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">let x: unknown = 42;</script>
@@ -735,6 +804,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testTsSatisfiesInInterpolation() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
@@ -746,6 +816,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testTsGenericArrowInInterpolation() {
     // §2.3 risk validation in full pipeline.
     // The generic arrow MUST be inside the Svelte interpolation `{...}` so the
@@ -761,6 +832,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testShortAwaitPromise() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -774,6 +846,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testSnippet() {
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
@@ -794,6 +867,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testSnippetWithConstAndNonNull() {
     myFixture.configureByText("Hello.svelte", """
       <script lang="ts">
@@ -815,6 +889,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testSnippetAsComponentPropNotUnused() {
     myFixture.configureByText("SnippetComponent.svelte", "<div></div>")
     myFixture.configureByText("Usage.svelte", """
@@ -829,6 +904,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedSnippetAtRootStillWarned() {
     myFixture.configureByText("Foo.svelte", """
       {#snippet <warning descr="Unused function unused">unused</warning>()}<div></div>{/snippet}
@@ -838,6 +914,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testTypeScriptAsAssertionInBlocks() {
     myFixture.configureByText("TypeScriptAs.svelte", """
       <script lang="ts">
@@ -866,6 +943,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testBlockKeywords() {
     myFixture.configureByText("Foo.svelte", """
       {#each [] <info descr="null">as</info> <symbolName descr="identifiers//parameter">local</symbolName>}{/each}
@@ -878,6 +956,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     JSTestUtils.checkHighlightingWithSymbolNames(myFixture, false, false, true)
   }
 
+  @Test
   fun testEventsWithModifiers() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -893,6 +972,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testMultipleSelect() {
     myFixture.configureByText("Foo.svelte", """
     <script>
@@ -909,6 +989,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testNoErrorForUnresolvedPathAttribute() {
     myFixture.configureByText("Foo.svelte", """
       <a href="/notexisting">Test</a>
@@ -918,6 +999,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
 
   // WEB-77758: commented-out attributes are PsiComments, invisible to attribute inspections,
   // see https://github.com/sveltejs/svelte/pull/17671
+  @Test
   fun testTagHeaderCommentsProduceNoWarnings() {
     myFixture.enableInspections(com.intellij.codeInspection.htmlInspections.HtmlUnknownAttributeInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -930,9 +1012,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testRunesCommonJS() = doTestWithLangFromTestNameSuffix(runesCommon)
+  @Test
+  fun testRunesCommonJS(): Unit = runesCommon.perform(SvelteTestScriptLang.JS)
 
-  fun testRunesCommonTS() = doTestWithLangFromTestNameSuffix(runesCommon)
+  @Test
+  fun testRunesCommonTS(): Unit = runesCommon.perform(SvelteTestScriptLang.TS)
 
   private val runesCommon = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
@@ -963,9 +1047,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testRuneHostJS() = doTestWithLangFromTestNameSuffix(runeHost)
+  @Test
+  fun testRuneHostJS(): Unit = runeHost.perform(SvelteTestScriptLang.JS)
 
-  fun testRuneHostTS() = doTestWithLangFromTestNameSuffix(runeHost)
+  @Test
+  fun testRuneHostTS(): Unit = runeHost.perform(SvelteTestScriptLang.TS)
 
   private val runeHost = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
@@ -985,9 +1071,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testRuneUnknownJS() = doTestWithLangFromTestNameSuffix(runeUnknown)
+  @Test
+  fun testRuneUnknownJS(): Unit = runeUnknown.perform(SvelteTestScriptLang.JS)
 
-  fun testRuneUnknownTS() = doTestWithLangFromTestNameSuffix(runeUnknown)
+  @Test
+  fun testRuneUnknownTS(): Unit = runeUnknown.perform(SvelteTestScriptLang.TS)
 
   private val runeUnknown = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
@@ -1001,9 +1089,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testStoreEvaluationLocalJS() = doTestWithLangFromTestNameSuffix(storeEvaluationLocal)
+  @Test
+  fun testStoreEvaluationLocalJS(): Unit = storeEvaluationLocal.perform(SvelteTestScriptLang.JS)
 
-  fun testStoreEvaluationLocalTS() = doTestWithLangFromTestNameSuffix(storeEvaluationLocal)
+  @Test
+  fun testStoreEvaluationLocalTS(): Unit = storeEvaluationLocal.perform(SvelteTestScriptLang.TS)
 
   private val storeEvaluationLocal = SvelteTestScenario { langExt, langWarning ->
     myFixture.configureBundledSvelte()
@@ -1051,9 +1141,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testStoreEvaluationImportedJS() = doTestWithLangFromTestNameSuffix(storeEvaluationImported)
+  @Test
+  fun testStoreEvaluationImportedJS(): Unit = storeEvaluationImported.perform(SvelteTestScriptLang.JS)
 
-  fun testStoreEvaluationImportedTS() = doTestWithLangFromTestNameSuffix(storeEvaluationImported)
+  @Test
+  fun testStoreEvaluationImportedTS(): Unit = storeEvaluationImported.perform(SvelteTestScriptLang.TS)
 
   private val storeEvaluationImported = SvelteTestScenario { langExt, langWarning ->
     myFixture.configureBundledSvelte()
@@ -1106,9 +1198,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testStoreHighlightUsagesLocalJS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesLocal)
+  @Test
+  fun testStoreHighlightUsagesLocalJS(): Unit = storeHighlightUsagesLocal.perform(SvelteTestScriptLang.JS)
 
-  fun testStoreHighlightUsagesLocalTS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesLocal)
+  @Test
+  fun testStoreHighlightUsagesLocalTS(): Unit = storeHighlightUsagesLocal.perform(SvelteTestScriptLang.TS)
 
   /**
    * @see [SvelteFindUsagesTest]
@@ -1133,12 +1227,16 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       <div>{<highlight>$count</highlight>}</div>
       <div>{<highlight>count</highlight>}</div>
     """.trimIndent())
-    JSTestUtils.checkHighlightUsages(myFixture, false)
+    runInEdtAndWait {
+      JSTestUtils.checkHighlightUsages(myFixture, false)
+    }
   }
 
-  fun testStoreHighlightUsagesImportedJS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesImported)
+  @Test
+  fun testStoreHighlightUsagesImportedJS(): Unit = storeHighlightUsagesImported.perform(SvelteTestScriptLang.JS)
 
-  fun testStoreHighlightUsagesImportedTS() = doTestWithLangFromTestNameSuffix(storeHighlightUsagesImported)
+  @Test
+  fun testStoreHighlightUsagesImportedTS(): Unit = storeHighlightUsagesImported.perform(SvelteTestScriptLang.TS)
 
   /**
    * @see [SvelteFindUsagesTest]
@@ -1166,12 +1264,16 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
       <div>{<highlight>$count</highlight>}</div>
       <div>{<highlight>count</highlight>}</div>
     """.trimIndent())
-    JSTestUtils.checkHighlightUsages(myFixture, false)
+    runInEdtAndWait {
+      JSTestUtils.checkHighlightUsages(myFixture, false)
+    }
   }
 
-  fun testStoreUnusedImportsJS() = doTestWithLangFromTestNameSuffix(storeUnusedImports)
+  @Test
+  fun testStoreUnusedImportsJS(): Unit = storeUnusedImports.perform(SvelteTestScriptLang.JS)
 
-  fun testStoreUnusedImportsTS() = doTestWithLangFromTestNameSuffix(storeUnusedImports)
+  @Test
+  fun testStoreUnusedImportsTS(): Unit = storeUnusedImports.perform(SvelteTestScriptLang.TS)
 
   private val storeUnusedImports = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
@@ -1200,9 +1302,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testStoreShorthandAssignmentJS() = doTestWithLangFromTestNameSuffix(storeShorthandAssignment)
+  @Test
+  fun testStoreShorthandAssignmentJS(): Unit = storeShorthandAssignment.perform(SvelteTestScriptLang.JS)
 
-  fun testStoreShorthandAssignmentTS() = doTestWithLangFromTestNameSuffix(storeShorthandAssignment)
+  @Test
+  fun testStoreShorthandAssignmentTS(): Unit = storeShorthandAssignment.perform(SvelteTestScriptLang.TS)
 
   private val storeShorthandAssignment = SvelteTestScenario { langExt, _ ->
     myFixture.configureBundledSvelte()
@@ -1221,6 +1325,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testArrayReassignment() {
     // TODO check if resolved variable is declared directly in instance script
     myFixture.configureByText("Foo.svelte", """
@@ -1237,6 +1342,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testNullablePropFallback() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1250,6 +1356,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testPropIsInitialised() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
@@ -1263,6 +1370,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testReactiveLabelKeywordJS() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1276,6 +1384,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testFile("Foo.svelte").checkSymbolNames().test()
   }
 
+  @Test
   fun testReactiveLabelKeywordTS() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
@@ -1289,6 +1398,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testFile("Foo.svelte").checkSymbolNames().test()
   }
 
+  @Test
   fun testNoRedundancyFromReactiveStatement() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
@@ -1306,6 +1416,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testReactiveStatementsIsolatedForNullChecks() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
@@ -1326,6 +1437,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testReactiveDeclarationReferenceJS() { // WEB-59293 + WEB-63611
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1345,6 +1457,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testReactiveDeclarationReferenceTS() { // WEB-59293 + WEB-63611
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
@@ -1364,6 +1477,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testReactiveDeclarationDestructuredJS() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1382,6 +1496,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testReactiveDeclarationDestructuredTS() {
     myFixture.configureByText("Foo.svelte", """
       <script lang="ts">
@@ -1400,6 +1515,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testBindDirective() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1414,6 +1530,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testClassDirective() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1429,6 +1546,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUseDirective() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1443,6 +1561,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testTransitionDirective() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1460,6 +1579,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testStyleDirective() {
     myFixture.configureByText("Foo.svelte", """
       <button style:color="red">Hello</button>
@@ -1467,6 +1587,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testLetDirectiveShorthand() {
     myFixture.configureByText("Foo.svelte", """
       <div let:opened>Lorem ipsum {opened}</div>
@@ -1474,6 +1595,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testExpressionInStyleAttribute() {
     myFixture.configureByText("Foo.svelte", """
       <div style="--custom: {'dynamic'}"></div>
@@ -1482,6 +1604,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testStyleTagErrorsOriginatingInInlineStyleSuppressed() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -1501,6 +1624,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConstTagDisallowNestedAssignment() {
     myFixture.configureByText("Foo.svelte", """
       {#if true}
@@ -1511,6 +1635,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConstTagReassignment() {
     myFixture.configureByText("Foo.svelte", """
       {#if true}
@@ -1523,6 +1648,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConstTagUseBeforeDeclare() {
     myFixture.configureByText("Foo.svelte", """
       {#if true}
@@ -1534,9 +1660,11 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
-  fun testDeclarationTagTrailingSemicolonJS() = doTestWithLangFromTestNameSuffix(declarationTagTrailingSemicolon)
+  @Test
+  fun testDeclarationTagTrailingSemicolonJS(): Unit = declarationTagTrailingSemicolon.perform(SvelteTestScriptLang.JS)
 
-  fun testDeclarationTagTrailingSemicolonTS() = doTestWithLangFromTestNameSuffix(declarationTagTrailingSemicolon)
+  @Test
+  fun testDeclarationTagTrailingSemicolonTS(): Unit = declarationTagTrailingSemicolon.perform(SvelteTestScriptLang.TS)
 
   private val declarationTagTrailingSemicolon = SvelteTestScenario { langExt, _ ->
     myFixture.configureByText("Foo.svelte", """
@@ -1553,6 +1681,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testJSOverSvelte() {
     myFixture.configureByText("usage.svelte", """
       <script>console.log("hello")</script>
@@ -1569,6 +1698,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testTSResolveToAmbientModule() {
     myFixture.configureByText("friend.d.ts", """
       export {}
@@ -1627,6 +1757,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
   }
 
 
+  @Test
   fun testDebugTagNoCommaExpressionWarnings() {
     myFixture.configureByText("Commas.svelte", """
       <script>
@@ -1646,6 +1777,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testEachWithoutAsClause() {
     myFixture.configureByText("EachWithoutAs.svelte", """
       <script>
@@ -1667,6 +1799,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testHeadTag() {
     myFixture.configureByText("head.svelte", """
       <script>
@@ -1678,6 +1811,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testAreaTag() {
     myFixture.configureByText("area.svelte", """
       <script>
@@ -1691,6 +1825,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testImportFromModuleScriptJS() {
     myFixture.addFileToProject("Helper.svelte", """
       <script module>
@@ -1721,6 +1856,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testImportFromModuleScriptTS() {
     myFixture.addFileToProject("Helper.svelte", """
       <script module lang="ts">
@@ -1763,6 +1899,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testImportFromModuleScriptLegacyJS() {
     myFixture.addFileToProject("Helper.svelte", """
       <script context="module">
@@ -1793,6 +1930,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testImportFromModuleScriptLegacyTS() {
     myFixture.addFileToProject("Helper.svelte", """
       <script context="module" lang="ts">
@@ -1835,6 +1973,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testStylePropOnComponentNotCss() {
     myFixture.configureByText("StyledComponent.svelte", """
       <script>
@@ -1852,6 +1991,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testCssSelectorOnSvelteElement() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1870,6 +2010,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInExpression() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1881,6 +2022,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInMultiClassExpression() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1893,6 +2035,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInMixedClassAttribute() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1909,6 +2052,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInClassDirective() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1921,6 +2065,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInObjectLiteralExpression() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1934,6 +2079,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInObjectLiteralOnSvelteSelf() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1946,6 +2092,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInTernaryExpression() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1959,6 +2106,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInArrayLiteral() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1971,6 +2119,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorFlaggedWhenWrappedInFunctionCall() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1983,6 +2132,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorNotFlaggedWhenUsedInClassExpressionOnSvelteElement() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -1995,6 +2145,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorFlaggedWhenNotUsedAnywhere() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -2007,6 +2158,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorFlaggedOnSvelteComponent() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -2019,6 +2171,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorFlaggedOnComponentClassProp() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -2031,6 +2184,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testUnusedCssSelectorFlaggedOnNamespacedComponentClassProp() {
     myFixture.enableInspections(CssUnusedSymbolInspection())
     myFixture.configureByText("Foo.svelte", """
@@ -2043,6 +2197,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testLetTagIsReassignable() {
     myFixture.configureByText("Example.svelte", """
       {#if true}
@@ -2053,6 +2208,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testConstTagNewSyntaxReassignmentIsError() {
     myFixture.configureByText("Example.svelte", """
       {#if true}
@@ -2063,6 +2219,7 @@ class SvelteHighlightingTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testDeclarationTagsHighlighting() {
     myFixture.configureByText("Example.svelte", """
       {#if true}

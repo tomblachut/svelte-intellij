@@ -2,10 +2,16 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.codeInsight.actions.OptimizeImportsAction
 import com.intellij.ide.DataManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.openapi.application.runReadActionBlocking
+import com.intellij.testFramework.junit5.TestApplication
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.SvelteTestModule
 import dev.blachut.svelte.lang.configureSvelteDependencies
-import dev.blachut.svelte.lang.getSvelteTestDataPath
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 /**
  * Optimize Imports reaches `.svelte` files through `ES6ScriptTagImportOptimizer`, registered on
@@ -13,9 +19,12 @@ import dev.blachut.svelte.lang.getSvelteTestDataPath
  * so the tests enable no inspection. A false "unused" verdict deletes working code. That is the
  * half of WEB-57512 that users hit through reformat-on-save.
  */
-class SvelteOptimizeImportsTest : BasePlatformTestCase() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath()
+@TestApplication
+class SvelteOptimizeImportsTest {
+  private val projectFixture = svelteProjectFixture()
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
 
+  @Test
   fun testKeepsPackageComponentImport() {
     myFixture.configureSvelteDependencies(SvelteTestModule.SVELTE_5, SvelteTestModule.SVELTE_FA_4)
     myFixture.configureByText("Usage.svelte", """
@@ -28,10 +37,11 @@ class SvelteOptimizeImportsTest : BasePlatformTestCase() {
 
     optimizeImports()
 
-    val text = myFixture.editor.document.text
-    assertTrue("import used only by <Fa /> must survive Optimize Imports, got:\n$text", text.contains("import Fa from"))
+    val text = runReadActionBlocking { myFixture.editor.document.text }
+    assertTrue(text.contains("import Fa from"), "import used only by <Fa /> must survive Optimize Imports, got:\n$text")
   }
 
+  @Test
   fun testRemovesTrulyUnusedImport() {
     myFixture.configureByText("Unused.svelte", "<div>unused</div>")
     myFixture.configureByText("Usage.svelte", """
@@ -44,10 +54,12 @@ class SvelteOptimizeImportsTest : BasePlatformTestCase() {
 
     optimizeImports()
 
-    assertFalse("genuinely unused import should still be removed", myFixture.editor.document.text.contains("import Unused"))
+    assertFalse(runReadActionBlocking { myFixture.editor.document.text }.contains("import Unused"), "genuinely unused import should still be removed")
   }
 
   private fun optimizeImports() {
-    OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.editor.contentComponent))
+    runInEdtAndWait {
+      OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.editor.contentComponent))
+    }
   }
 }

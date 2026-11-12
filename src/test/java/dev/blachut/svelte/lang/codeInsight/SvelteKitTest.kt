@@ -4,27 +4,51 @@ import com.intellij.lang.javascript.inspections.JSUnusedGlobalSymbolsInspection
 import com.intellij.lang.javascript.inspections.JSUnusedLocalSymbolsInspection
 import com.intellij.lang.javascript.psi.ecma6.TypeScriptModule
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult
+import com.intellij.openapi.application.readAction
 import com.intellij.psi.PsiPolyVariantReference
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.testFramework.PlatformTestUtil
+import com.intellij.testFramework.common.timeoutRunBlocking
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.copyBundledSvelteKit
-import dev.blachut.svelte.lang.getSvelteTestDataPath
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
 import dev.blachut.svelte.lang.svelteKitPackageJson
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Assertions.assertInstanceOf
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInfo
 
-class SvelteKitTest : BasePlatformTestCase() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath()
-  override fun getBasePath(): String = "dev/blachut/svelte/lang/codeInsight/svelteKit"
+@TestApplication
+class SvelteKitTest {
+  companion object {
+    private const val BASE_PATH = "dev/blachut/svelte/lang/codeInsight/svelteKit"
+  }
 
+  private val projectFixture = svelteProjectFixture()
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
+
+  private lateinit var testNameLowercased: String
+
+  @BeforeEach
+  fun setUp(testInfo: TestInfo) {
+    testNameLowercased = PlatformTestUtil.getTestName(testInfo.testMethod.get().name, true)
+  }
+
+  @Test
   fun testResolveAppModules() {
-    val base = basePath + "/" + getTestName(true)
+    val base = BASE_PATH + "/" + testNameLowercased
     myFixture.copyDirectoryToProject(base, "")
     myFixture.copyBundledSvelteKit()
     myFixture.configureFromTempProjectFile("src/routes/+page.svelte")
 
-    val ref = myFixture.getReferenceAtCaretPositionWithAssertion() as PsiPolyVariantReference
+    timeoutRunBlocking { readAction {
+      val ref = myFixture.getReferenceAtCaretPositionWithAssertion() as PsiPolyVariantReference
 
-    assertInstanceOf(JSResolveResult.resolve(ref.multiResolve(false)), TypeScriptModule::class.java)
+      assertInstanceOf(TypeScriptModule::class.java, JSResolveResult.resolve(ref.multiResolve(false)))
+    } }
   }
 
+  @Test
   fun testImplicitlyUsedExportsDontApplyToSvelteFiles() {
     myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)
     myFixture.enableInspections(JSUnusedGlobalSymbolsInspection::class.java)
@@ -40,6 +64,7 @@ class SvelteKitTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testImplicitlyUsedSnapshot() {
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
     myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)
@@ -63,6 +88,7 @@ class SvelteKitTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testImplicitlyUsedLoadFunction() {
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
     myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)
@@ -84,6 +110,7 @@ class SvelteKitTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testSvelteKitUniversalHooks() {
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
     myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)
@@ -97,6 +124,7 @@ class SvelteKitTest : BasePlatformTestCase() {
     myFixture.testHighlighting()
   }
 
+  @Test
   fun testSvelteKitServerHooks() {
     myFixture.addFileToProject("package.json", svelteKitPackageJson)
     myFixture.enableInspections(JSUnusedLocalSymbolsInspection::class.java)

@@ -4,17 +4,19 @@ import com.intellij.openapi.util.TextRange
 import dev.blachut.svelte.lang.directives.SvelteDirectiveTypes
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil.Directive
 import dev.blachut.svelte.lang.directives.SvelteDirectiveUtil.DirectiveSegment
-import junit.framework.TestCase
-import org.junit.Assert
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-class SvelteDirectiveParserTest : TestCase() {
+class SvelteDirectiveParserTest {
+  @Test
   fun testNonDirectiveClass() {
     val result = SvelteDirectiveParser.parse("class")
-    Assert.assertEquals(result, null)
+    assertEquals(result, null)
   }
 
+  @Test
   fun testOn() {
-    Assert.assertEquals(
+    assertEquals(
       SvelteDirectiveParser.parse("on:click|once|capture"),
       Directive(
         SvelteDirectiveTypes.ON,
@@ -24,8 +26,9 @@ class SvelteDirectiveParserTest : TestCase() {
     )
   }
 
+  @Test
   fun testClass() {
-    Assert.assertEquals(
+    assertEquals(
       SvelteDirectiveParser.parse("class:foo"),
       Directive(
         SvelteDirectiveTypes.CLASS,
@@ -35,8 +38,9 @@ class SvelteDirectiveParserTest : TestCase() {
     )
   }
 
+  @Test
   fun testUse() {
-    Assert.assertEquals(
+    assertEquals(
       SvelteDirectiveParser.parse("use:foo.bar"),
       Directive(
         SvelteDirectiveTypes.USE,

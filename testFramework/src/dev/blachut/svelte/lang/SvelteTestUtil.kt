@@ -3,8 +3,7 @@ package dev.blachut.svelte.lang
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.javascript.testFramework.web.WebFrameworkFixture
 import com.intellij.javascript.testFramework.web.webFrameworkFixture
-import com.intellij.lang.javascript.BaseJSCompletionTestCase
-import com.intellij.testFramework.UsefulTestCase
+import com.intellij.lang.javascript.JSCompletionFixture
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.testFramework.fixtures.IdeaTestExecutionPolicy
 import com.intellij.testFramework.junit5.fixture.TestFixture
@@ -49,15 +48,15 @@ fun CodeInsightTestFixture.copyBundledSvelteKit() {
 
 fun CodeInsightTestFixture.checkCompletionContains(vararg variants: String) {
   val elements = completeBasic()
-  BaseJSCompletionTestCase.checkWeHaveInCompletion(elements, *variants)
+  JSCompletionFixture.checkWeHaveInCompletion(elements, *variants)
 }
 
 fun Array<LookupElement>.checkCompletionContains(vararg variants: String) {
-  BaseJSCompletionTestCase.checkWeHaveInCompletion(this, *variants)
+  JSCompletionFixture.checkWeHaveInCompletion(this, *variants)
 }
 
 internal fun Array<LookupElement>.checkCompletionExcludes(vararg variants: String) {
-  BaseJSCompletionTestCase.checkNoCompletion(this, *variants)
+  JSCompletionFixture.checkNoCompletion(this, *variants)
 }
 
 enum class SvelteTestScriptLang(val langExt: String, val langWarning: String) {
@@ -76,11 +75,6 @@ fun interface SvelteTestScenario {
     val lang = getScriptLangFromTestNameSuffix(testName)
     perform(lang)
   }
-}
-
-fun UsefulTestCase.doTestWithLangFromTestNameSuffix(testScenarioFactory: SvelteTestScenario) {
-  val testName = UsefulTestCase.getTestName(name, false)
-  testScenarioFactory.perform(testName)
 }
 
 private fun getScriptLangFromTestNameSuffix(testName: String): SvelteTestScriptLang {

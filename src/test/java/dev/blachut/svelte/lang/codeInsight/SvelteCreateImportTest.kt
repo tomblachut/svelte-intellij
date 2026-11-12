@@ -2,14 +2,24 @@ package dev.blachut.svelte.lang.codeInsight
 
 import com.intellij.lang.javascript.inspections.JSUnresolvedReferenceInspection
 import com.intellij.lang.typescript.inspections.TypeScriptUnresolvedReferenceInspection
+import com.intellij.testFramework.junit5.TestApplication
 import dev.blachut.svelte.lang.inspections.SvelteUnresolvedComponentInspection
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
+@TestApplication
+class SvelteCreateImportTest : AbstractSvelteCreateStatementTest(projectFixture) {
+    companion object {
+        private val projectFixture = svelteProjectFixture()
+    }
+
     private val requestedActionHint: String = """Insert 'import"""
     private val createdStatement: String = """import {exported} from "./utils";"""
 
     private val caret = "<caret>"
 
+    @Test
     override fun testScriptMissing() {
         doTest(
             """
@@ -25,6 +35,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testScriptCollapsed() {
         doTest(
             """
@@ -42,6 +53,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testScriptEmpty() {
         doTest(
             """
@@ -59,6 +71,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testScriptBlank() {
         doTest(
             """
@@ -76,6 +89,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
             """.trimIndent())
     }
 
+    @Test
     override fun testScriptNonEmpty() {
         doTest(
             """
@@ -97,6 +111,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testNonConventionalScriptOrder() {
         doTest(
             """
@@ -118,6 +133,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testInsideScriptStillWorksJS() {
         doTest(
             """
@@ -139,6 +155,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testInsideScriptStillWorksTS() {
         doTest(
             """
@@ -161,6 +178,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testScriptMissingWithAdjacentModuleScript() {
         doTest(
             """
@@ -183,6 +201,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     override fun testInsideModuleScriptWithAdjacentInstanceScript() {
         doTest(
             """
@@ -206,6 +225,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     fun testComponentBasic() {
         doTest(
             """
@@ -221,6 +241,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     fun testComponentReexport() {
         myFixture.configureByText("barrel.ts", """
             import Hello from "./Hello.svelte";
@@ -242,6 +263,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     fun testComponentAddDefaultImportToExistingStatement() {
         doTest(
             """
@@ -261,6 +283,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     fun testComponentDynamic() {
         doTest(
             """
@@ -276,6 +299,7 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         )
     }
 
+    @Test
     fun testComponentInsideJSFile() {
         myFixture.configureByText(
             "main.js",
@@ -302,8 +326,8 @@ class SvelteCreateImportTest : AbstractSvelteCreateStatementTest() {
         myFixture.checkResult(after)
     }
 
-    override fun setUp() {
-        super.setUp()
+    @BeforeEach
+    fun setUp() {
         myFixture.configureByText("utils.ts", """export const exported = 42;""")
         myFixture.configureByText("Hello.svelte", """Hello World""")
         myFixture.enableInspections(

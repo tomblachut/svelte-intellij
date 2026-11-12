@@ -1,15 +1,26 @@
 package dev.blachut.svelte.lang
 
 import com.intellij.lang.javascript.JSTestUtils
+import com.intellij.openapi.application.runReadActionBlocking
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.testFramework.junit5.TestApplication
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.psi.SvelteHtmlFile
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 /**
  * Tests for [SvelteLangMode] detection and persistence.
  */
-class SvelteLangModeTest : BasePlatformTestCase() {
+@TestApplication
+class SvelteLangModeTest {
+  companion object {
+    private val projectFixture = svelteProjectFixture()
+  }
 
+  private val myFixture by svelteCodeInsightFixture(projectFixture)
+
+  @Test
   fun testLangModeDetectionJavaScript() {
     val file = myFixture.configureByText("Test.svelte", """
       <script>
@@ -22,9 +33,10 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals(SvelteLangMode.NO_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.NO_TS, runReadActionBlocking { svelteFile.langMode })
   }
 
+  @Test
   fun testLangModeDetectionTypeScript() {
     val file = myFixture.configureByText("Test.svelte", """
       <script lang="ts">
@@ -37,9 +49,10 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals(SvelteLangMode.HAS_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { svelteFile.langMode })
   }
 
+  @Test
   fun testLangModeDetectionTypeScriptLong() {
     val file = myFixture.configureByText("Test.svelte", """
       <script lang="typescript">
@@ -48,9 +61,10 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals(SvelteLangMode.HAS_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { svelteFile.langMode })
   }
 
+  @Test
   fun testLangModeDetectionJavaScriptExplicit() {
     val file = myFixture.configureByText("Test.svelte", """
       <script lang="js">
@@ -59,9 +73,10 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals(SvelteLangMode.NO_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.NO_TS, runReadActionBlocking { svelteFile.langMode })
   }
 
+  @Test
   fun testGetLatestKnownLangFromProjectAndFile() {
     val virtualFile = myFixture.addFileToProject("LangModeHelper.svelte", """
       <script lang="ts">
@@ -70,21 +85,24 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent()).virtualFile
 
     // Test the helper method used by SyntaxHighlighterFactory
-    val langMode = SvelteLangMode.getLatestKnownLang(project, virtualFile)
+    val langMode = runReadActionBlocking { SvelteLangMode.getLatestKnownLang(myFixture.project, virtualFile) }
     assertEquals(SvelteLangMode.HAS_TS, langMode)
   }
 
+  @Test
   fun testGetLatestKnownLangNullProject() {
     val langMode = SvelteLangMode.getLatestKnownLang(null, null)
     assertEquals(SvelteLangMode.DEFAULT, langMode)
   }
 
+  @Test
   fun testCanonicalAttrValue() {
     assertEquals("ts", SvelteLangMode.HAS_TS.canonicalAttrValue)
     assertEquals("js", SvelteLangMode.NO_TS.canonicalAttrValue)
     assertEquals("js", SvelteLangMode.PENDING.canonicalAttrValue)
   }
 
+  @Test
   fun testFromAttrValue() {
     assertEquals(SvelteLangMode.HAS_TS, SvelteLangMode.fromAttrValue("ts"))
     assertEquals(SvelteLangMode.HAS_TS, SvelteLangMode.fromAttrValue("typescript"))
@@ -96,6 +114,7 @@ class SvelteLangModeTest : BasePlatformTestCase() {
 
   // region Multiple script tags tests
 
+  @Test
   fun testMultipleScriptsModuleJsInstanceTs() {
     val file = myFixture.configureByText("Test.svelte", """
       <script context="module">
@@ -112,9 +131,10 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals("Any TS script should make the whole file TS", SvelteLangMode.HAS_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { svelteFile.langMode }, "Any TS script should make the whole file TS")
   }
 
+  @Test
   fun testMultipleScriptsModuleTsInstanceJs() {
     val file = myFixture.configureByText("Test.svelte", """
       <script context="module" lang="ts">
@@ -131,9 +151,10 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals("Any TS script should make the whole file TS", SvelteLangMode.HAS_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { svelteFile.langMode }, "Any TS script should make the whole file TS")
   }
 
+  @Test
   fun testMultipleScriptsBothJs() {
     val file = myFixture.configureByText("Test.svelte", """
       <script context="module">
@@ -150,9 +171,10 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals("Two JS scripts should stay NO_TS", SvelteLangMode.NO_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.NO_TS, runReadActionBlocking { svelteFile.langMode }, "Two JS scripts should stay NO_TS")
   }
 
+  @Test
   fun testMultipleScriptsBothTs() {
     val file = myFixture.configureByText("Test.svelte", """
       <script context="module" lang="ts">
@@ -169,13 +191,14 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals(SvelteLangMode.HAS_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { svelteFile.langMode })
   }
 
   // endregion
 
   // region Reparse on lang attribute change
 
+  @Test
   fun testLangModeChangesFromJsToTsOnTyping() {
     myFixture.configureByText("Test.svelte", """
       <script lang="<caret>js">
@@ -187,19 +210,22 @@ class SvelteLangModeTest : BasePlatformTestCase() {
       {/if}
     """.trimIndent())
 
-    assertEquals(SvelteLangMode.NO_TS, (myFixture.file as SvelteHtmlFile).langMode)
+    assertEquals(SvelteLangMode.NO_TS, runReadActionBlocking { (myFixture.file as SvelteHtmlFile).langMode })
 
     // Select "js" and replace with "ts" — avoids broken intermediate HTML from unmatched quotes
-    myFixture.editor.selectionModel.setSelection(
-      myFixture.caretOffset,
-      myFixture.caretOffset + 2
-    )
+    runInEdtAndWait {
+      myFixture.editor.selectionModel.setSelection(
+        myFixture.caretOffset,
+        myFixture.caretOffset + 2
+      )
+    }
     myFixture.type("ts")
-    PsiDocumentManager.getInstance(project).commitAllDocuments()
+    runInEdtAndWait { PsiDocumentManager.getInstance(myFixture.project).commitAllDocuments() }
 
-    assertEquals(SvelteLangMode.HAS_TS, (myFixture.file as SvelteHtmlFile).langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { (myFixture.file as SvelteHtmlFile).langMode })
   }
 
+  @Test
   fun testLangModeChangesFromTsToJsOnTyping() {
     myFixture.configureByText("Test.svelte", """
       <script lang="<caret>ts">
@@ -211,22 +237,25 @@ class SvelteLangModeTest : BasePlatformTestCase() {
       {/if}
     """.trimIndent())
 
-    assertEquals(SvelteLangMode.HAS_TS, (myFixture.file as SvelteHtmlFile).langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { (myFixture.file as SvelteHtmlFile).langMode })
 
-    myFixture.editor.selectionModel.setSelection(
-      myFixture.caretOffset,
-      myFixture.caretOffset + 2
-    )
+    runInEdtAndWait {
+      myFixture.editor.selectionModel.setSelection(
+        myFixture.caretOffset,
+        myFixture.caretOffset + 2
+      )
+    }
     myFixture.type("js")
-    PsiDocumentManager.getInstance(project).commitAllDocuments()
+    runInEdtAndWait { PsiDocumentManager.getInstance(myFixture.project).commitAllDocuments() }
 
-    assertEquals(SvelteLangMode.NO_TS, (myFixture.file as SvelteHtmlFile).langMode)
+    assertEquals(SvelteLangMode.NO_TS, runReadActionBlocking { (myFixture.file as SvelteHtmlFile).langMode })
   }
 
   // endregion
 
   // region Highlighting transition tests
 
+  @Test
   fun testKeywordHighlightingInJavaScriptMode() {
     val file = myFixture.configureByText("Test.svelte", """
       <script>
@@ -239,11 +268,12 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals(SvelteLangMode.NO_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.NO_TS, runReadActionBlocking { svelteFile.langMode })
 
     JSTestUtils.checkHighlightingWithSymbolNames(myFixture, false, false, true)
   }
 
+  @Test
   fun testKeywordHighlightingInTypeScriptMode() {
     // Use `satisfies` - a TypeScript-only keyword - to verify TS highlighting works in markup expressions
     val file = myFixture.configureByText("Test.svelte", """
@@ -260,7 +290,7 @@ class SvelteLangModeTest : BasePlatformTestCase() {
     """.trimIndent())
 
     val svelteFile = file as SvelteHtmlFile
-    assertEquals(SvelteLangMode.HAS_TS, svelteFile.langMode)
+    assertEquals(SvelteLangMode.HAS_TS, runReadActionBlocking { svelteFile.langMode })
 
     JSTestUtils.checkHighlightingWithSymbolNames(myFixture, false, false, true)
   }

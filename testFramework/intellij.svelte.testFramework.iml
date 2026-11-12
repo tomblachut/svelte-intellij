@@ -61,7 +61,6 @@
     <orderEntry type="module" module-name="intellij.svelte" />
     <orderEntry type="module" module-name="intellij.css.backend" />
     <orderEntry type="module" module-name="intellij.svelte.css" />
-    <orderEntry type="module" module-name="intellij.libraries.junit4" />
     <orderEntry type="module" module-name="intellij.libraries.junit6" />
     <orderEntry type="module" module-name="intellij.platform.testFramework.junit5" />
     <orderEntry type="module" module-name="intellij.ultimate.plugin" />

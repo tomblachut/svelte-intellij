@@ -1,11 +1,16 @@
 package dev.blachut.svelte.lang.codeInsight
 
+import com.intellij.openapi.project.Project
+import com.intellij.testFramework.junit5.fixture.TestFixture
+import org.junit.jupiter.api.Test
+
 abstract class BaseSvelteCreateStatementTest(
+    projectFixture: TestFixture<Project>,
     private val requestedAction: String,
     private val createdStatement: String,
     private val afterCaret: String,
     private val optionalLine: String = "",
-) : AbstractSvelteCreateStatementTest() {
+) : AbstractSvelteCreateStatementTest(projectFixture) {
     protected val caret = "<caret>"
     protected val basicResult // getter so that indentation is aligned
         get() = """
@@ -17,12 +22,14 @@ $createdStatement
         """.trimIndent()
 
 
+    @Test
     override fun testScriptMissing() {
         doTest("""
             {unresolved$caret$afterCaret}
         """.trimIndent(), basicResult)
     }
 
+    @Test
     override fun testScriptCollapsed() {
         doTest(
             """
@@ -32,6 +39,7 @@ $createdStatement
         """.trimIndent(), basicResult)
     }
 
+    @Test
     override fun testScriptEmpty() {
         doTest("""
             <script></script>
@@ -40,6 +48,7 @@ $createdStatement
         """.trimIndent(), basicResult)
     }
 
+    @Test
     override fun testScriptBlank() {
         doTest("""
             <script>
@@ -49,6 +58,7 @@ $createdStatement
         """.trimIndent(), basicResult)
     }
 
+    @Test
     override fun testScriptNonEmpty() {
         doTest("""
             <script>
@@ -67,6 +77,7 @@ $optionalLine$createdStatement
         )
     }
 
+    @Test
     override fun testNonConventionalScriptOrder() {
         doTest("""
             {unresolved$caret$afterCaret}
@@ -85,6 +96,7 @@ $optionalLine$createdStatement
         )
     }
 
+    @Test
     override fun testInsideScriptStillWorksJS() {
         doTest("""
             <script>
@@ -103,6 +115,7 @@ $createdStatement$optionalLine
         )
     }
 
+    @Test
     override fun testInsideScriptStillWorksTS() {
         doTest("""
             <script lang="ts">
@@ -121,6 +134,7 @@ $createdStatement$optionalLine
         )
     }
 
+    @Test
     override fun testScriptMissingWithAdjacentModuleScript() {
         doTest("""
             <script module>
@@ -141,6 +155,7 @@ $createdStatement
         )
     }
 
+    @Test
     override fun testInsideModuleScriptWithAdjacentInstanceScript() {
         doTest("""
             <script context="module">

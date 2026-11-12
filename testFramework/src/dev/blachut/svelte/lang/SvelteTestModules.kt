@@ -3,7 +3,9 @@ package dev.blachut.svelte.lang
 import com.intellij.javascript.testFramework.web.WebFrameworkTestModule
 import com.intellij.javascript.testFramework.web.configureDependencies
 import com.intellij.openapi.vfs.StandardFileSystems
-import com.intellij.testFramework.UsefulTestCase
+import com.intellij.openapi.vfs.VfsUtilCore
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.VirtualFileVisitor
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 
 enum class SvelteTestModule(
@@ -65,5 +67,15 @@ fun CodeInsightTestFixture.configureSvelteDependencies(
 
 private fun refreshDependencySource(path: String) {
   StandardFileSystems.local().refreshAndFindFileByPath(path)
-    ?.let { UsefulTestCase.refreshRecursively(it) }
+    ?.let { refreshRecursively(it) }
+}
+
+private fun refreshRecursively(file: VirtualFile) {
+  VfsUtilCore.visitChildrenRecursively(file, object : VirtualFileVisitor<Void>() {
+    override fun visitFile(file: VirtualFile): Boolean {
+      file.children
+      return true
+    }
+  })
+  file.refresh(false, true)
 }

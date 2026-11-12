@@ -1,5 +1,6 @@
 package dev.blachut.svelte.lang
 
+import com.intellij.idea.IJIgnore
 import dev.blachut.svelte.lang.codeInsight.SvelteBreadcrumbsTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCompletionTest
 import dev.blachut.svelte.lang.codeInsight.SvelteCopyPasteTest
@@ -22,13 +23,11 @@ import dev.blachut.svelte.lang.editor.SvelteSelectWordTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveLexerTest
 import dev.blachut.svelte.lang.parsing.html.SvelteDirectiveParserTest
 import dev.blachut.svelte.lang.parsing.html.SvelteHighlightingLexerTest
-import org.junit.Ignore
-import org.junit.runner.RunWith
-import org.junit.runners.Suite
+import org.junit.platform.suite.api.SelectClasses
+import org.junit.platform.suite.api.Suite
 
-@Ignore("Manual only")
-@RunWith(Suite::class)
-@Suite.SuiteClasses(
+@Suite
+@SelectClasses(
   // Parsing
   SvelteHighlightingLexerTest::class,
   SvelteDirectiveLexerTest::class,
@@ -56,11 +55,5 @@ import org.junit.runners.Suite
   SvelteCreateImportTest::class,
   SvelteKitTest::class,
 )
-class SvelteAggregatorTestSuite
-
-@Ignore("Manual only")
-@RunWith(Suite::class)
-@Suite.SuiteClasses(
-  SvelteAggregatorTestSuite::class,
-)
+@IJIgnore(issue = "Manual only")
 class SvelteTestSuite

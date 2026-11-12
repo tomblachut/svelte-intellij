@@ -5,21 +5,49 @@ import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
 import com.intellij.lang.javascript.JSTestUtils.checkResolveToDestination
 import com.intellij.lang.javascript.psi.JSTagEmbeddedContent
 import com.intellij.lang.javascript.psi.JSVariable
+import com.intellij.openapi.application.readAction
+import com.intellij.openapi.application.runReadActionBlocking
 import com.intellij.polySymbols.search.PsiLinkedPolySymbol
 import com.intellij.polySymbols.testFramework.multiResolveSymbolReference
 import com.intellij.polySymbols.testFramework.resolvePolySymbolReference
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.css.CssClass
 import com.intellij.psi.util.contextOfType
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.testFramework.PlatformTestUtil
+import com.intellij.testFramework.common.timeoutRunBlocking
+import com.intellij.testFramework.junit5.TestApplication
+import com.intellij.testFramework.runInEdtAndWait
 import dev.blachut.svelte.lang.getSvelteTestDataPath
 import dev.blachut.svelte.lang.psi.blocks.SvelteEachPrimaryBranch
-import junit.framework.TestCase
+import dev.blachut.svelte.lang.svelteCodeInsightFixture
+import dev.blachut.svelte.lang.svelteProjectFixture
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertInstanceOf
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInfo
 
-class SvelteResolveTest : BasePlatformTestCase() {
-  override fun getTestDataPath(): String = getSvelteTestDataPath() + "/" + basePath
-  override fun getBasePath(): String = "dev/blachut/svelte/lang/resolve"
+@TestApplication
+class SvelteResolveTest {
+  companion object {
+    private const val BASE_PATH = "dev/blachut/svelte/lang/resolve"
+  }
 
+  private val projectFixture = svelteProjectFixture()
+  private val myFixture by svelteCodeInsightFixture(projectFixture, getSvelteTestDataPath() + "/" + BASE_PATH)
+
+  private lateinit var testName: String
+
+  @BeforeEach
+  fun setUp(testInfo: TestInfo) {
+    testName = PlatformTestUtil.getTestName(testInfo.testMethod.get().name, false)
+  }
+
+  @Test
   fun testBlock() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -32,14 +60,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/await}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals(variable?.text, "value")
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertEquals("value", variable?.text)
+    } }
   }
 
+  @Test
   fun testBranchIsolation() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -54,13 +85,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/await}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNull(variable)
+      val variable = reference!!.resolve()
+      assertNull(variable)
+    } }
   }
 
+  @Test
   fun testEachKeyExpression() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -76,14 +110,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/each}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals(variable?.text, "id")
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertEquals("id", variable?.text)
+    } }
   }
 
+  @Test
   fun testVariableShadowing() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -96,14 +133,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/await}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertNotNull(variable!!.contextOfType<JSTagEmbeddedContent>())
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertNotNull(variable!!.contextOfType<JSTagEmbeddedContent>())
+    } }
   }
 
+  @Test
   fun testConstTagVariableShadowing() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -117,14 +157,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/each}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertNotNull(variable!!.contextOfType<SvelteEachPrimaryBranch>())
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertNotNull(variable!!.contextOfType<SvelteEachPrimaryBranch>())
+    } }
   }
 
+  @Test
   fun testConstTagBlockScope() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -133,13 +176,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/each}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNull(variable)
+      val variable = reference!!.resolve()
+      assertNull(variable)
+    } }
   }
 
+  @Test
   fun testConstTagResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -149,12 +195,15 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/if}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertEquals("greeting", variable.name)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertEquals("greeting", variable.name)
+    } }
   }
 
+  @Test
   fun testConstTagWithSemicolonResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -164,12 +213,15 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/if}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertEquals("greeting", variable.name)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertEquals("greeting", variable.name)
+    } }
   }
 
+  @Test
   fun testLetTagResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -179,12 +231,15 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/if}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertFalse("{let} binding should resolve to a mutable variable", variable.isConst)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertFalse(variable.isConst, "{let} binding should resolve to a mutable variable")
+    } }
   }
 
+  @Test
   fun testLetTagBlockScope() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -194,11 +249,14 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {<caret>scoped}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    TestCase.assertNull(reference!!.resolve())
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      assertNull(reference!!.resolve())
+    } }
   }
 
+  @Test
   fun testConstTagTopLevelResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -206,12 +264,15 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {<caret>greeting}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertEquals("greeting", variable.name)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertEquals("greeting", variable.name)
+    } }
   }
 
+  @Test
   fun testLetTagTopLevelResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -221,13 +282,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {<caret>variable}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertEquals("variable", variable.name)
-    TestCase.assertFalse("{let} binding should resolve to a mutable variable", variable.isConst)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertEquals("variable", variable.name)
+      assertFalse(variable.isConst, "{let} binding should resolve to a mutable variable")
+    } }
   }
 
+  @Test
   fun testAtConstTagTopLevelStaysUnresolved() {
     // Legacy {@const} is not valid at the top level in Svelte; keep it non-resolving (unchanged behavior).
     myFixture.configureByText(
@@ -236,11 +300,14 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {<caret>variable}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    TestCase.assertNull(reference!!.resolve())
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      assertNull(reference!!.resolve())
+    } }
   }
 
+  @Test
   fun testEachWithoutAsClauseIndexResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -253,47 +320,58 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/each}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals(variable?.text, "i")
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertEquals("i", variable?.text)
+    } }
   }
 
+  @Test
   fun testAHrefIndexResolve() {
     doPathResolveTest("+page.svelte")
   }
 
+  @Test
   fun testAHrefDirectoryResolve() {
     doPathResolveTest("insideDeclaration")
   }
 
+  @Test
   fun testCustomLinkHrefFileResolve() {
     doPathResolveTest("component.svelte")
   }
 
+  @Test
   fun testAHrefFileWithExtensionResolve() {
     doPathResolveTest("component.svelte")
   }
 
+  @Test
   fun testNotRoutesResolve() {
     doPathResolveTest("+page.svelte")
   }
 
+  @Test
   fun testUnresolvedDirectoryResolve() {
     doPathResolveTest()
   }
 
+  @Test
   fun testRoutePathImportNotResolve() {
     doPathResolveTest()
   }
 
+  @Test
   fun testPathImportResolve() {
     doPathResolveTest("component.svelte")
   }
 
   // TypeScript in markup resolution tests
+  @Test
   fun testTsGenericResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -304,14 +382,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <div>{<caret>item.name}</div>
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals("item: T", variable?.text)
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertEquals("item: T", variable?.text)
+    } }
   }
 
+  @Test
   fun testTsGenericConstraintImportResolve() {
     myFixture.addFileToProject("types.ts", "export interface Foo { name: string }")
     myFixture.configureByText(
@@ -324,17 +405,19 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <div>{item}</div>
             """.trimIndent()
     )
-    val text = myFixture.file.text
-    val offset = text.indexOf("Foo", text.indexOf("extends"))
-    val reference = myFixture.file.findReferenceAt(offset)
-    TestCase.assertNotNull("No reference at the constraint 'Foo'", reference)
-    val resolved = reference!!.resolve()
-    TestCase.assertNotNull("Constraint type 'Foo' should resolve to the imported symbol", resolved)
-    val named = assertInstanceOf(resolved, PsiNamedElement::class.java)
-    TestCase.assertEquals(
-      "Constraint 'Foo' should resolve to the imported 'Foo' interface, not some other symbol",
-      "Foo", named.name
-    )
+    timeoutRunBlocking { readAction {
+      val text = myFixture.file.text
+      val offset = text.indexOf("Foo", text.indexOf("extends"))
+      val reference = myFixture.file.findReferenceAt(offset)
+      assertNotNull(reference, "No reference at the constraint 'Foo'")
+      val resolved = reference!!.resolve()
+      assertNotNull(resolved, "Constraint type 'Foo' should resolve to the imported symbol")
+      val named = assertInstanceOf(PsiNamedElement::class.java, resolved)
+      assertEquals(
+        "Foo", named.name,
+        "Constraint 'Foo' should resolve to the imported 'Foo' interface, not some other symbol"
+      )
+    } }
   }
 
   /**
@@ -343,6 +426,7 @@ class SvelteResolveTest : BasePlatformTestCase() {
    * imports above that function, so the Svelte language server reports "Base is not defined".
    * Only the legacy `$$Generic` syntax hoists body types. Keep the IDE in step with the compiler.
    */
+  @Test
   fun testTsGenericConstraintLocalTypeDoesNotResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -354,16 +438,19 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <div>{item}</div>
             """.trimIndent()
     )
-    val text = myFixture.file.text
-    val offset = text.indexOf("Base", text.indexOf("extends"))
-    val reference = myFixture.file.findReferenceAt(offset)
-    TestCase.assertNotNull("No reference at the constraint 'Base'", reference)
-    TestCase.assertNull(
-      "A <script> body type must not resolve from a generics constraint - svelte2tsx does not hoist it",
-      reference!!.resolve()
-    )
+    timeoutRunBlocking { readAction {
+      val text = myFixture.file.text
+      val offset = text.indexOf("Base", text.indexOf("extends"))
+      val reference = myFixture.file.findReferenceAt(offset)
+      assertNotNull(reference, "No reference at the constraint 'Base'")
+      assertNull(
+        reference!!.resolve(),
+        "A <script> body type must not resolve from a generics constraint - svelte2tsx does not hoist it"
+      )
+    } }
   }
 
+  @Test
   fun testTsGenericConstraintUndeclaredStaysUnresolved() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -374,13 +461,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <div>{item}</div>
             """.trimIndent()
     )
-    val text = myFixture.file.text
-    val offset = text.indexOf("Nonexistent", text.indexOf("extends"))
-    val reference = myFixture.file.findReferenceAt(offset)
-    TestCase.assertNotNull("No reference at the constraint 'Nonexistent'", reference)
-    TestCase.assertNull("Undeclared constraint type must not resolve", reference!!.resolve())
+    timeoutRunBlocking { readAction {
+      val text = myFixture.file.text
+      val offset = text.indexOf("Nonexistent", text.indexOf("extends"))
+      val reference = myFixture.file.findReferenceAt(offset)
+      assertNotNull(reference, "No reference at the constraint 'Nonexistent'")
+      assertNull(reference!!.resolve(), "Undeclared constraint type must not resolve")
+    } }
   }
 
+  @Test
   fun testTsTypeAssertionResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -394,13 +484,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <div>{(<caret>user as User).name}</div>
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+    } }
   }
 
+  @Test
   fun testTsEachBlockResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -414,14 +507,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/each}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals(variable?.text, "item")
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertEquals("item", variable?.text)
+    } }
   }
 
+  @Test
   fun testTsAwaitBlockResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -435,14 +531,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/await}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals(variable?.text, "user")
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertEquals("user", variable?.text)
+    } }
   }
 
+  @Test
   fun testTsSnippetParameterResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -455,14 +554,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {/snippet}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
 
-    val variable = reference!!.resolve()
-    TestCase.assertNotNull(variable)
-    TestCase.assertEquals("user: User", variable?.text)
+      val variable = reference!!.resolve()
+      assertNotNull(variable)
+      assertEquals("user: User", variable?.text)
+    } }
   }
 
+  @Test
   fun testNsSegmentResolves() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -473,14 +575,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <For<caret>ms.Input />
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val resolved = reference!!.resolve()
-    TestCase.assertNotNull("Expected Forms namespace import binding to be resolved", resolved)
-    TestCase.assertTrue("Expected ES6ImportedBinding, got ${resolved?.javaClass}", resolved is ES6ImportedBinding)
-    TestCase.assertEquals("Forms", (resolved as ES6ImportedBinding).name)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val resolved = reference!!.resolve()
+      assertNotNull(resolved, "Expected Forms namespace import binding to be resolved")
+      assertTrue(resolved is ES6ImportedBinding, "Expected ES6ImportedBinding, got ${resolved?.javaClass}")
+      assertEquals("Forms", (resolved as ES6ImportedBinding).name)
+    } }
   }
 
+  @Test
   fun testNsComponentSegmentResolves() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -491,14 +596,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <Forms.Inp<caret>ut />
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull("Expected a reference on the component segment", reference)
-    val resolved = reference!!.resolve()
-    // Resolves to namespace binding for hover underline; actual component-level navigation is via LSP
-    TestCase.assertNotNull("Expected component segment to resolve to namespace binding", resolved)
-    TestCase.assertTrue("Expected ES6ImportedBinding", resolved is ES6ImportedBinding)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference, "Expected a reference on the component segment")
+      val resolved = reference!!.resolve()
+      // Resolves to namespace binding for hover underline; actual component-level navigation is via LSP
+      assertNotNull(resolved, "Expected component segment to resolve to namespace binding")
+      assertTrue(resolved is ES6ImportedBinding, "Expected ES6ImportedBinding")
+    } }
   }
 
+  @Test
   fun testNsAllRefsPresent() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -509,25 +617,28 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <Forms.Input />
             """.trimIndent()
     )
-    val tag = myFixture.file.findElementAt(myFixture.editor.document.text.indexOf("Forms.Input"))!!.parent
-    TestCase.assertTrue("Expected SvelteHtmlTag, got ${tag.javaClass}", tag is dev.blachut.svelte.lang.psi.SvelteHtmlTag)
+    timeoutRunBlocking { readAction {
+      val tag = myFixture.file.findElementAt(myFixture.editor.document.text.indexOf("Forms.Input"))!!.parent
+      assertTrue(tag is dev.blachut.svelte.lang.psi.SvelteHtmlTag, "Expected SvelteHtmlTag, got ${tag.javaClass}")
 
-    val allRefs = tag.references
-    val refInfo = allRefs.map { "${it.javaClass.simpleName}: range=${it.rangeInElement}, resolves=${it.resolve() != null}" }
-    // Should have at least: SvelteNamespacePrefixReference (Forms) + SvelteTagNameReference (Input)
-    TestCase.assertTrue(
-      "Expected at least 2 references on namespaced tag, got ${allRefs.size}: $refInfo",
-      allRefs.size >= 2
-    )
+      val allRefs = tag.references
+      val refInfo = allRefs.map { "${it.javaClass.simpleName}: range=${it.rangeInElement}, resolves=${it.resolve() != null}" }
+      // Should have at least: SvelteNamespacePrefixReference (Forms) + SvelteTagNameReference (Input)
+      assertTrue(
+        allRefs.size >= 2,
+        "Expected at least 2 references on namespaced tag, got ${allRefs.size}: $refInfo"
+      )
 
-    val namespaceRef = allRefs.find { it.rangeInElement.substring(tag.text) == "Forms" }
-    TestCase.assertNotNull("Expected a reference covering 'Forms', refs: $refInfo", namespaceRef)
-    TestCase.assertNotNull("Forms reference should resolve", namespaceRef!!.resolve())
+      val namespaceRef = allRefs.find { it.rangeInElement.substring(tag.text) == "Forms" }
+      assertNotNull(namespaceRef, "Expected a reference covering 'Forms', refs: $refInfo")
+      assertNotNull(namespaceRef!!.resolve(), "Forms reference should resolve")
 
-    val componentRef = allRefs.find { it.rangeInElement.substring(tag.text) == "Input" }
-    TestCase.assertNotNull("Expected a reference covering 'Input', refs: $refInfo", componentRef)
+      val componentRef = allRefs.find { it.rangeInElement.substring(tag.text) == "Input" }
+      assertNotNull(componentRef, "Expected a reference covering 'Input', refs: $refInfo")
+    } }
   }
 
+  @Test
   fun testNsUsagesFromImport() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -539,10 +650,11 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <Forms.Button />
             """.trimIndent()
     )
-    val usages = myFixture.findUsages(myFixture.elementAtCaret)
-    TestCase.assertTrue("Expected at least 2 template usages of Forms", usages.size >= 2)
+    val usages = myFixture.findUsages(runReadActionBlocking { myFixture.elementAtCaret })
+    assertTrue(usages.size >= 2, "Expected at least 2 template usages of Forms")
   }
 
+  @Test
   fun testNsUsagesFromTag() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -555,13 +667,14 @@ class SvelteResolveTest : BasePlatformTestCase() {
             """.trimIndent()
     )
     val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull("Expected reference at Forms position in tag", reference)
-    val resolved = reference!!.resolve()
-    TestCase.assertNotNull("Expected Forms to resolve", resolved)
+    assertNotNull(reference, "Expected reference at Forms position in tag")
+    val resolved = timeoutRunBlocking { readAction { reference!!.resolve() } }
+    assertNotNull(resolved, "Expected Forms to resolve")
     val usages = myFixture.findUsages(resolved!!)
-    TestCase.assertTrue("Expected at least 2 usages of Forms from tag position, got ${usages.size}", usages.size >= 2)
+    assertTrue(usages.size >= 2, "Expected at least 2 usages of Forms from tag position, got ${usages.size}")
   }
 
+  @Test
   fun testNsUnresolvedReturnsNull() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -571,12 +684,15 @@ class SvelteResolveTest : BasePlatformTestCase() {
             <For<caret>ms.Input />
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val resolved = reference!!.resolve()
-    TestCase.assertNull("Expected unimported namespace to resolve to null", resolved)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val resolved = reference!!.resolve()
+      assertNull(resolved, "Expected unimported namespace to resolve to null")
+    } }
   }
 
+  @Test
   fun testConstTagElementScopeResolve() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -586,12 +702,15 @@ class SvelteResolveTest : BasePlatformTestCase() {
             </div>
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertEquals("x", variable.name)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertEquals("x", variable.name)
+    } }
   }
 
+  @Test
   fun testDeclarationTagShadowingResolvesInner() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -602,12 +721,15 @@ class SvelteResolveTest : BasePlatformTestCase() {
             </div>
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertEquals("'hi'", variable.initializer?.text)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertEquals("'hi'", variable.initializer?.text)
+    } }
   }
 
+  @Test
   fun testDeclarationTagShadowingResolvesOuterAfterElement() {
     myFixture.configureByText(
       "Example.svelte", """
@@ -618,16 +740,21 @@ class SvelteResolveTest : BasePlatformTestCase() {
             {<caret>hello}
             """.trimIndent()
     )
-    val reference = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNotNull(reference)
-    val variable = assertInstanceOf(reference!!.resolve(), JSVariable::class.java)
-    TestCase.assertEquals("'hello'", variable.initializer?.text)
+    timeoutRunBlocking { readAction {
+      val reference = myFixture.getReferenceAtCaretPosition()
+      assertNotNull(reference)
+      val variable = assertInstanceOf(JSVariable::class.java, reference!!.resolve())
+      assertEquals("'hello'", variable.initializer?.text)
+    } }
   }
 
   private fun doPathResolveTest(destination: String? = null) {
-    checkResolveToDestination(destination, myFixture, getTestName(false), "svelte")
+    runInEdtAndWait {
+      checkResolveToDestination(destination, myFixture, testName, "svelte")
+    }
   }
 
+  @Test
   fun testClassReferenceFromSvelteElement() {
     myFixture.configureByText("Foo.svelte", """
       <svelte:element this={'div'} class="my-cl<caret>ass"></svelte:element>
@@ -635,11 +762,14 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .my-class { color: red; }
       </style>
     """.trimIndent())
-    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
-    val resolved = ref.resolve()
-    TestCase.assertNotNull("Class reference on <svelte:element> should resolve to the CSS selector", resolved)
+    timeoutRunBlocking { readAction {
+      val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+      val resolved = ref.resolve()
+      assertNotNull(resolved, "Class reference on <svelte:element> should resolve to the CSS selector")
+    } }
   }
 
+  @Test
   fun testIdReferenceFromSvelteElement() {
     myFixture.configureByText("Foo.svelte", """
       <svelte:element this={'div'} id="my-i<caret>d"></svelte:element>
@@ -647,11 +777,14 @@ class SvelteResolveTest : BasePlatformTestCase() {
         #my-id { color: blue; }
       </style>
     """.trimIndent())
-    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
-    val resolved = ref.resolve()
-    TestCase.assertNotNull("Id reference on <svelte:element> should resolve to the CSS selector", resolved)
+    timeoutRunBlocking { readAction {
+      val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+      val resolved = ref.resolve()
+      assertNotNull(resolved, "Id reference on <svelte:element> should resolve to the CSS selector")
+    } }
   }
 
+  @Test
   fun testClassReferenceNotCreatedOnRegularDiv() {
     myFixture.configureByText("Foo.svelte", """
       <div class="my-cl<caret>ass"></div>
@@ -659,15 +792,18 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .my-class { color: red; }
       </style>
     """.trimIndent())
-    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
-    val resolved = ref.resolve()
-    TestCase.assertNotNull(
-      "Class reference on a regular <div> must still resolve " +
-      "(via platform provider, not ours) — verifies our filter does not displace platform behavior",
-      resolved,
-    )
+    timeoutRunBlocking { readAction {
+      val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+      val resolved = ref.resolve()
+      assertNotNull(
+        resolved,
+        "Class reference on a regular <div> must still resolve " +
+        "(via platform provider, not ours) — verifies our filter does not displace platform behavior",
+      )
+    } }
   }
 
+  @Test
   fun testClassReferenceFromSvelteSelf() {
     myFixture.configureByText("Foo.svelte", """
       <svelte:self class="my-cl<caret>ass"></svelte:self>
@@ -675,11 +811,14 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .my-class { color: red; }
       </style>
     """.trimIndent())
-    val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
-    val resolved = ref.resolve()
-    TestCase.assertNotNull("Class reference on <svelte:self> should resolve to the CSS selector (same scoped CSS as <svelte:element>)", resolved)
+    timeoutRunBlocking { readAction {
+      val ref = myFixture.getReferenceAtCaretPositionWithAssertion()
+      val resolved = ref.resolve()
+      assertNotNull(resolved, "Class reference on <svelte:self> should resolve to the CSS selector (same scoped CSS as <svelte:element>)")
+    } }
   }
 
+  @Test
   fun testClassReferenceNotCreatedOnSvelteComponent() {
     myFixture.configureByText("Foo.svelte", """
       <script>
@@ -690,14 +829,17 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .my-class { color: red; }
       </style>
     """.trimIndent())
-    val ref = myFixture.getReferenceAtCaretPosition()
-    TestCase.assertNull(
-      "<svelte:component> forwards class to a differently-scoped child component; " +
-      "local .my-class should NOT resolve (scope boundary vs. <svelte:element> / <svelte:self>)",
-      ref,
-    )
+    timeoutRunBlocking { readAction {
+      val ref = myFixture.getReferenceAtCaretPosition()
+      assertNull(
+        ref,
+        "<svelte:component> forwards class to a differently-scoped child component; " +
+        "local .my-class should NOT resolve (scope boundary vs. <svelte:element> / <svelte:self>)",
+      )
+    } }
   }
 
+  @Test
   fun testClassReferenceInStringLiteralExpression() {
     myFixture.configureByText("Foo.svelte", """
       <div class={'my-cl<caret>ass'}></div>
@@ -705,9 +847,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .my-class { color: red; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'my-cl<caret>ass'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'my-cl<caret>ass'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInConditionalExpressionThenBranch() {
     myFixture.configureByText("Foo.svelte", """
       <script>let cond = true;</script>
@@ -717,9 +862,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .bar { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInConditionalExpressionElseBranch() {
     myFixture.configureByText("Foo.svelte", """
       <script>let cond = true;</script>
@@ -729,9 +877,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .bar { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'ba<caret>r'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'ba<caret>r'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInArrayLiteralFirstElement() {
     myFixture.configureByText("Foo.svelte", """
       <div class={['fo<caret>o', 'bar']}></div>
@@ -740,9 +891,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .bar { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInArrayLiteralSecondElement() {
     myFixture.configureByText("Foo.svelte", """
       <div class={['foo', 'ba<caret>r']}></div>
@@ -751,9 +905,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .bar { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'ba<caret>r'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'ba<caret>r'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInObjectLiteralInsideArrayLiteral() {
     myFixture.configureByText("Foo.svelte", """
       <script>let cond = true;</script>
@@ -763,9 +920,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .active { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("ac<caret>tive:")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("ac<caret>tive:")
+    } }
   }
 
+  @Test
   fun testClassReferenceInArrayLiteralInsideConditionalExpression() {
     myFixture.configureByText("Foo.svelte", """
       <script>let cond = true;</script>
@@ -774,9 +934,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInObjectLiteralPropertyKey() {
     myFixture.configureByText("Foo.svelte", """
       <script>let cond = true;</script>
@@ -785,9 +948,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("fo<caret>o:")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("fo<caret>o:")
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionOnSvelteElement() {
     myFixture.configureByText("Foo.svelte", """
       <script>let t = 'div';</script>
@@ -796,9 +962,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'fo<caret>o'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionOnSvelteSelf() {
     myFixture.configureByText("Foo.svelte", """
       <script>let cond = true;</script>
@@ -807,9 +976,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("fo<caret>o:")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("fo<caret>o:")
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionNotCreatedOnSvelteComponent() {
     myFixture.configureByText("Foo.svelte", """
       <script>import Foo from './Foo.svelte';</script>
@@ -818,13 +990,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
-    TestCase.assertTrue(
-      "<svelte:component> is excluded from class expression scope; must not resolve to the .foo CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
-    )
+    timeoutRunBlocking { readAction {
+      val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
+      assertTrue(
+        symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass },
+        "<svelte:component> is excluded from class expression scope; must not resolve to the .foo CSS rule (got: $symbols)"
+      )
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionNotCreatedOnComponentTag() {
     myFixture.configureByText("Foo.svelte", """
       <script>import Foo from './Foo.svelte';</script>
@@ -833,13 +1008,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
-    assertTrue(
-      "Component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
-    )
+    timeoutRunBlocking { readAction {
+      val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
+      assertTrue(
+        symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass },
+        "Component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)"
+      )
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionNotCreatedOnNamespacedComponentTag() {
     myFixture.configureByText("Foo.svelte", """
       <script>let Forms = { Button: null };</script>
@@ -848,13 +1026,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolveSymbolReference("fo<caret>o:")
-    assertTrue(
-      "Namespaced component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
-    )
+    timeoutRunBlocking { readAction {
+      val symbols = myFixture.multiResolveSymbolReference("fo<caret>o:")
+      assertTrue(
+        symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass },
+        "Namespaced component class props are scoped to the child component; must not resolve to the local .foo CSS rule (got: $symbols)"
+      )
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionResolvesToNullForUnknownClass() {
     myFixture.configureByText("Foo.svelte", """
       <div class={'unknow<caret>n'}></div>
@@ -862,13 +1043,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .other { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolveSymbolReference("'unknow<caret>n'")
-    TestCase.assertTrue(
-      "Unknown class must not resolve to a real CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
-    )
+    timeoutRunBlocking { readAction {
+      val symbols = myFixture.multiResolveSymbolReference("'unknow<caret>n'")
+      assertTrue(
+        symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass },
+        "Unknown class must not resolve to a real CSS rule (got: $symbols)"
+      )
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionMultiClassLiteralFirst() {
     myFixture.configureByText("Foo.svelte", """
       <div class={'fo<caret>o bar'}></div>
@@ -877,9 +1061,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .bar { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'fo<caret>o bar'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'fo<caret>o bar'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionMultiClassLiteralSecond() {
     myFixture.configureByText("Foo.svelte", """
       <div class={'foo ba<caret>r'}></div>
@@ -888,9 +1075,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .bar { color: blue; }
       </style>
     """.trimIndent())
-    myFixture.resolvePolySymbolReference("'foo ba<caret>r'")
+    timeoutRunBlocking { readAction {
+      myFixture.resolvePolySymbolReference("'foo ba<caret>r'")
+    } }
   }
 
+  @Test
   fun testClassReferenceInExpressionFromFunctionCallNotResolved() {
     myFixture.configureByText("Foo.svelte", """
       <script>function cn(s) { return s; }</script>
@@ -899,13 +1089,16 @@ class SvelteResolveTest : BasePlatformTestCase() {
         .foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
-    TestCase.assertTrue(
-      "Function-call wrapped class strings are out of scope; must not resolve to a real CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
-    )
+    timeoutRunBlocking { readAction {
+      val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
+      assertTrue(
+        symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass },
+        "Function-call wrapped class strings are out of scope; must not resolve to a real CSS rule (got: $symbols)"
+      )
+    } }
   }
 
+  @Test
   fun testIdReferenceInExpressionIsNotCreated() {
     myFixture.configureByText("Foo.svelte", """
       <div id={'fo<caret>o'}></div>
@@ -913,10 +1106,12 @@ class SvelteResolveTest : BasePlatformTestCase() {
         #foo { color: red; }
       </style>
     """.trimIndent())
-    val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
-    TestCase.assertTrue(
-      "id={...} expressions are out of scope for Tier A (class-only); must not resolve to a real CSS rule (got: $symbols)",
-      symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass }
-    )
+    timeoutRunBlocking { readAction {
+      val symbols = myFixture.multiResolveSymbolReference("'fo<caret>o'")
+      assertTrue(
+        symbols.none { (it as? PsiLinkedPolySymbol)?.linkedElement is CssClass },
+        "id={...} expressions are out of scope for Tier A (class-only); must not resolve to a real CSS rule (got: $symbols)"
+      )
+    } }
   }
 }
