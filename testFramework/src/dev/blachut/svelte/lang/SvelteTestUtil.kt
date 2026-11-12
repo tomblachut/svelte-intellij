@@ -12,7 +12,7 @@ import org.jetbrains.annotations.TestOnly
 
 private const val SVELTE_TEST_DATA_PATH = "/svelte/src/test/resources"
 
-internal val svelteKitPackageJson = """
+val svelteKitPackageJson = """
   {
     "name": "svelte-test",
     "version": "0.0.1",
@@ -39,20 +39,20 @@ fun getSvelteTestDataPath(): String {
   return "${IdeaTestExecutionPolicy.getHomePathWithPolicy()}/plugins$SVELTE_TEST_DATA_PATH"
 }
 
-internal fun CodeInsightTestFixture.configureBundledSvelte() {
+fun CodeInsightTestFixture.configureBundledSvelte() {
   configureSvelteDependencies(SvelteTestModule.SVELTE_5)
 }
 
-internal fun CodeInsightTestFixture.copyBundledSvelteKit() {
+fun CodeInsightTestFixture.copyBundledSvelteKit() {
   configureSvelteDependencies(SvelteTestModule.SVELTE_KIT_1, SvelteTestModule.SVELTE_KIT_ADAPTER_AUTO_2, *SVELTE_KIT_1_RUNTIME_DEPENDENCIES)
 }
 
-internal fun CodeInsightTestFixture.checkCompletionContains(vararg variants: String) {
+fun CodeInsightTestFixture.checkCompletionContains(vararg variants: String) {
   val elements = completeBasic()
   BaseJSCompletionTestCase.checkWeHaveInCompletion(elements, *variants)
 }
 
-internal fun Array<LookupElement>.checkCompletionContains(vararg variants: String) {
+fun Array<LookupElement>.checkCompletionContains(vararg variants: String) {
   BaseJSCompletionTestCase.checkWeHaveInCompletion(this, *variants)
 }
 
@@ -65,7 +65,7 @@ enum class SvelteTestScriptLang(val langExt: String, val langWarning: String) {
   TS("ts", "error")
 }
 
-internal fun interface SvelteTestScenario {
+fun interface SvelteTestScenario {
   fun SvelteTestHelperContext.perform(langExt: String, langWarning: String)
 
   fun perform(lang: SvelteTestScriptLang) {
@@ -78,7 +78,7 @@ internal fun interface SvelteTestScenario {
   }
 }
 
-internal fun UsefulTestCase.doTestWithLangFromTestNameSuffix(testScenarioFactory: SvelteTestScenario) {
+fun UsefulTestCase.doTestWithLangFromTestNameSuffix(testScenarioFactory: SvelteTestScenario) {
   val testName = UsefulTestCase.getTestName(name, false)
   testScenarioFactory.perform(testName)
 }
@@ -92,7 +92,7 @@ private fun getScriptLangFromTestNameSuffix(testName: String): SvelteTestScriptL
 }
 
 @Suppress("ConstPropertyName")
-internal object SvelteTestHelperContext {
+object SvelteTestHelperContext {
   const val props = "\$props" // to trick Kotlin
   const val bindable = "\$bindable" // to trick Kotlin
   const val state = "\$state" // to trick Kotlin

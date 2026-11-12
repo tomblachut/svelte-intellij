@@ -36,7 +36,7 @@ enum class SvelteTestModule(
     get() = "$location/node_modules"
 }
 
-internal val SVELTE_KIT_1_RUNTIME_DEPENDENCIES = arrayOf(
+val SVELTE_KIT_1_RUNTIME_DEPENDENCIES = arrayOf(
   SvelteTestModule.SVELTE_KIT_DEVALUE_4,
   SvelteTestModule.SVELTE_KIT_ESM_ENV_1,
   SvelteTestModule.SVELTE_KIT_KLEUR_4,
