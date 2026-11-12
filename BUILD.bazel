@@ -258,6 +258,8 @@ jvm_library(
         "@community//libraries/junit6",
         "@community//platform/testFramework/junit5",
         "@community//platform/testFramework/junit5/codeInsight",
+        "//plugins/svelte/testFramework",
+        "//plugins/svelte/tests/tsServiceFramework:tsServiceFramework_test_lib",
         "@community//platform/scratch/plugin",
     ],
 )

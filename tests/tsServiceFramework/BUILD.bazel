@@ -1,0 +1,108 @@
+load("@community//build:tests-options.bzl", "jps_test")
+load("@rules_jvm//:jvm.bzl", "jvm_library")
+
+### auto-generated section `build intellij.svelte.tests.tsServiceFramework` start
+jvm_library(
+    name = "tsServiceFramework_test_lib",
+    testonly = True,
+    srcs = glob(
+        [
+            "testSrc/**/*.kt",
+            "testSrc/**/*.java",
+            "testSrc/**/*.form",
+        ],
+        allow_empty = True,
+    ),
+    associates = ["//plugins/svelte"],
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        # do not sort,
+        "//plugins/ultimate-plugin",
+        "@community//platform/main/intellij.platform.monolith.main:monolith-main",
+    ],
+    deps = [
+        # do not sort,
+        "@community//platform/analysis-api:analysis",
+        "@community//platform/code-style-api:codeStyle",
+        "@community//platform/editor-ui-api:editor-ui",
+        "@community//platform/platform-api:ide",
+        "@community//platform/ide-core-impl",
+        "@community//platform/ide-core",
+        "@lib//:kotlin-stdlib",
+        "@community//platform/platform-impl:ide-impl",
+        "//plugins/css/common",
+        "@community//platform/indexing-api:indexing",
+        "@community//platform/projectModel-api:projectModel",
+        "@community//xml/xml-parser:parser",
+        "@community//plugins/htmltools:html-tools",
+        "@community//platform/indexing-impl",
+        "//plugins/JavaScriptLanguage/javascript-parser",
+        "@community//xml/xml-psi-api:psi",
+        "@community//platform/lang-api:lang",
+        "@community//platform/lang-impl",
+        "@community//xml/xml-psi-impl:psi-impl",
+        "@community//platform/core-impl",
+        "@community//platform/core-api:core",
+        "@community//platform/analysis-impl",
+        "//plugins/JavaScriptLanguage/javascript-psi-impl",
+        "//plugins/JavaScriptLanguage/javascript-backend",
+        "//plugins/JavaScriptDebugger/backend",
+        "//plugins/JavaScriptDebugger/debugger-ui:javascript-debugger-ui",
+        "@community//platform/xdebugger-api:debugger",
+        "@community//xml/impl",
+        "//plugins/css/codeinsight/analysis",
+        "@community//platform/core-ui",
+        "@community//platform/code-style-impl:codeStyle-impl",
+        "//plugins/JavaScriptLanguage/js-analysis-impl:javascript-analysis-impl",
+        "@community//platform/usageView",
+        "@community//platform/testFramework",
+        "//plugins/JavaScriptLanguage/testFramework",
+        "@community//plugins/copyright",
+        "//plugins/JavaScriptLanguage/tests/unitTests:javascript-tests_test_lib",
+        "//plugins/sass/plugin",
+        "//contrib/jade",
+        "//contrib/postcss/paid",
+        "//plugins/stylus",
+        "@community//xml/tests:tests_test_lib",
+        "@community//platform/lsp/testFramework",
+        "//plugins/vitejs",
+        "@community//platform/polySymbols/shared:polySymbols",
+        "@community//platform/polySymbols/backend",
+        "@community//platform/polySymbols/testFramework",
+        "//plugins/JavaScriptLanguage/web-platform:javascript-web-tests_test_lib",
+        "@community//xml/testFramework",
+        "//plugins/css/common/psi",
+        "//plugins/sass/backend",
+        "//plugins/sass",
+        "//plugins/sass/common",
+        "@community//xml/xml-analysis-api:analysis",
+        "//plugins/JavaScriptLanguage/javascript-codeinsight",
+        "//plugins/vitejs:vitejs-tests_test_lib",
+        "//plugins/css/backend",
+        "//plugins/svelte/css",
+        "@community//libraries/junit4",
+        "@community//libraries/junit6",
+        "@community//platform/testFramework/junit5",
+        "@community//platform/testFramework/junit5/codeInsight",
+        "@community//platform/scratch/plugin",
+        "//plugins/svelte/testFramework",
+        "//plugins/JavaScriptLanguage/tests/unitTests/tsService:tsService_test_lib",
+    ],
+)
+### auto-generated section `build intellij.svelte.tests.tsServiceFramework` end
+
+### auto-generated section `iml intellij.svelte.tests.tsServiceFramework` start
+exports_files(
+    [
+        "intellij.svelte.tests.tsServiceFramework.iml",
+    ],
+    visibility = ["//visibility:public"],
+)
+### auto-generated section `iml intellij.svelte.tests.tsServiceFramework` end
+
+### auto-generated section `test intellij.svelte.tests.tsServiceFramework` start
+jps_test(
+    name = "tsServiceFramework_test",
+    runtime_deps = [":tsServiceFramework_test_lib"],
+)
+### auto-generated section `test intellij.svelte.tests.tsServiceFramework` end
