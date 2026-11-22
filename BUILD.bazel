@@ -1,13 +1,13 @@
 load("@community//build:tests-options.bzl", "jps_test")
 load("@community//platform/build-scripts/bazel-rules:ij_plugin.bzl", "ij_plugin")
 load("@community//platform/build-scripts/bazel-rules:ij_plugin_module.bzl", "ij_plugin_module")
-load("@jps_dynamic_deps_ultimate//:targets.bzl", "dev_dist_plugin")
+load("@jps_dynamic_deps_ultimate//:targets.bzl", "dist_plugin")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
 ### auto-generated section `dev intellij.svelte` start
 filegroup(
-    name = "dev_dist_resources",
+    name = "dist_resources",
     srcs = glob(
         [
             "src/main/svelte-language-server/**",
@@ -18,7 +18,7 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-dev_dist_plugin(
+dist_plugin(
     content_modules = [
         # do not sort,
         "intellij.svelte.javascript.debugger",
@@ -31,9 +31,9 @@ dev_dist_plugin(
         "src/main/typescript-svelte-plugin": "plugins/svelte/src/main/typescript-svelte-plugin",
     },
     files = {
-        "src/main/svelte-language-server": "//plugins/svelte:dev_dist_resources",
-        "src/main/svelte-service": "//plugins/svelte:dev_dist_resources",
-        "src/main/typescript-svelte-plugin": "//plugins/svelte:dev_dist_resources",
+        "src/main/svelte-language-server": "//plugins/svelte:dist_resources",
+        "src/main/svelte-service": "//plugins/svelte:dist_resources",
+        "src/main/typescript-svelte-plugin": "//plugins/svelte:dist_resources",
     },
     jars = {
         "lib/svelte.jar": ["intellij.svelte"],
