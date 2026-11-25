@@ -20,16 +20,11 @@ filegroup(
 )
 
 dist_plugin(
-    content_modules = [
-        # do not sort,
-        "intellij.svelte.javascript.debugger",
-        "intellij.svelte.css",
-    ],
-    descriptor = "src/main/resources/META-INF/plugin.xml",
-    descriptors = {
-        "//plugins/svelte/css:resources/intellij.svelte.css.xml": "intellij.svelte.css.xml",
-        "//plugins/svelte/javascript-debugger:resources/intellij.svelte.javascript.debugger.xml": "intellij.svelte.javascript.debugger.xml",
+    content_modules = {
+        "intellij.svelte.javascript.debugger": "//plugins/svelte/javascript-debugger",
+        "intellij.svelte.css": "//plugins/svelte/css",
     },
+    descriptor = "src/main/resources/META-INF/plugin.xml",
     file_prefixes = {
         "src/main/svelte-language-server": "plugins/svelte/src/main/svelte-language-server",
         "src/main/svelte-service": "plugins/svelte/src/main/svelte-service",
@@ -40,9 +35,7 @@ dist_plugin(
         "src/main/svelte-service": "//plugins/svelte:dist_resources",
         "src/main/typescript-svelte-plugin": "//plugins/svelte:dist_resources",
     },
-    jars = {
-        "lib/svelte.jar": ["intellij.svelte"],
-    },
+    jars = {"lib/svelte.jar": ["intellij.svelte"]},
     main_module = "intellij.svelte",
     mode_refused_content_modules = {
         "frontend": [
@@ -50,11 +43,11 @@ dist_plugin(
             "intellij.svelte.css",
         ],
     },
-    module_labels = {
-        "intellij.svelte": "//plugins/svelte:svelte",
-        "intellij.svelte.css": "//plugins/svelte/css:css",
-        "intellij.svelte.javascript.debugger": "//plugins/svelte/javascript-debugger:javascript-debugger",
-    },
+    module_descriptors = [
+        "//plugins/svelte/css:resources/intellij.svelte.css.xml",
+        "//plugins/svelte/javascript-debugger:resources/intellij.svelte.javascript.debugger.xml",
+    ],
+    module_labels = {"intellij.svelte": "//plugins/svelte"},
 )
 ### auto-generated section `dev intellij.svelte` end
 
