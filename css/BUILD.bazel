@@ -1,3 +1,4 @@
+load("@community//build:jps_module.bzl", "jps_module")
 load("@community//platform/build-scripts/bazel-rules:content_module_jar.bzl", "content_module_jar")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
 
@@ -54,11 +55,9 @@ jvm_library(
 ### auto-generated section `build intellij.svelte.css` end
 
 ### auto-generated section `iml intellij.svelte.css` start
-exports_files(
-    [
-        "intellij.svelte.css.iml",
-        "resources/intellij.svelte.css.xml",
-    ],
-    visibility = ["//visibility:public"],
+jps_module(
+    name = "intellij.svelte.css",
+    descriptors = ["resources/intellij.svelte.css.xml"],
+    target = "css",
 )
 ### auto-generated section `iml intellij.svelte.css` end

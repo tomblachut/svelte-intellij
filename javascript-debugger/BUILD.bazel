@@ -1,3 +1,4 @@
+load("@community//build:jps_module.bzl", "jps_module")
 load("@community//platform/build-scripts/bazel-rules:content_module_jar.bzl", "content_module_jar")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
 
@@ -41,11 +42,9 @@ jvm_library(
 ### auto-generated section `build intellij.svelte.javascript.debugger` end
 
 ### auto-generated section `iml intellij.svelte.javascript.debugger` start
-exports_files(
-    [
-        "intellij.svelte.javascript.debugger.iml",
-        "resources/intellij.svelte.javascript.debugger.xml",
-    ],
-    visibility = ["//visibility:public"],
+jps_module(
+    name = "intellij.svelte.javascript.debugger",
+    descriptors = ["resources/intellij.svelte.javascript.debugger.xml"],
+    target = "javascript-debugger",
 )
 ### auto-generated section `iml intellij.svelte.javascript.debugger` end

@@ -1,7 +1,8 @@
+load("@community//build:jps_module.bzl", "jps_module")
 load("@community//build:tests-options.bzl", "jps_test")
+load("@community//platform/build-scripts/bazel-rules:dist_plugin.bzl", "dist_plugin")
 load("@community//platform/build-scripts/bazel-rules:ij_plugin.bzl", "ij_plugin")
 load("@community//platform/build-scripts/bazel-rules:ij_plugin_module.bzl", "ij_plugin_module")
-load("@jps_dynamic_deps_ultimate//:targets.bzl", "dist_plugin")
 load("@rules_jvm//:jvm.bzl", "jvm_library")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
@@ -25,6 +26,10 @@ dist_plugin(
         "intellij.svelte.css",
     ],
     descriptor = "src/main/resources/META-INF/plugin.xml",
+    descriptors = {
+        "//plugins/svelte/css:resources/intellij.svelte.css.xml": "intellij.svelte.css.xml",
+        "//plugins/svelte/javascript-debugger:resources/intellij.svelte.javascript.debugger.xml": "intellij.svelte.javascript.debugger.xml",
+    },
     file_prefixes = {
         "src/main/svelte-language-server": "plugins/svelte/src/main/svelte-language-server",
         "src/main/svelte-service": "plugins/svelte/src/main/svelte-service",
@@ -44,6 +49,11 @@ dist_plugin(
             "intellij.svelte.javascript.debugger",
             "intellij.svelte.css",
         ],
+    },
+    module_labels = {
+        "intellij.svelte": "//plugins/svelte:svelte",
+        "intellij.svelte.css": "//plugins/svelte/css:css",
+        "intellij.svelte.javascript.debugger": "//plugins/svelte/javascript-debugger:javascript-debugger",
     },
 )
 ### auto-generated section `dev intellij.svelte` end
@@ -162,12 +172,11 @@ ij_plugin(
 ### auto-generated section `plugin intellij.svelte` end
 
 ### auto-generated section `iml intellij.svelte` start
-exports_files(
-    [
-        "intellij.svelte.iml",
-        "src/main/resources/META-INF/plugin.xml",
-    ],
-    visibility = ["//visibility:public"],
+jps_module(
+    name = "intellij.svelte",
+    descriptors = ["src/main/resources/META-INF/plugin.xml"],
+    plugin = True,
+    target = "svelte",
 )
 ### auto-generated section `iml intellij.svelte` end
 
@@ -266,11 +275,9 @@ jvm_library(
 ### auto-generated section `build intellij.svelte.tests` end
 
 ### auto-generated section `iml intellij.svelte.tests` start
-exports_files(
-    [
-        "intellij.svelte.tests.iml",
-    ],
-    visibility = ["//visibility:public"],
+jps_module(
+    name = "intellij.svelte.tests",
+    target = "svelte-tests_test_lib",
 )
 ### auto-generated section `iml intellij.svelte.tests` end
 
