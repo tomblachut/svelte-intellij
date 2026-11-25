@@ -43,10 +43,6 @@ dist_plugin(
             "intellij.svelte.css",
         ],
     },
-    module_descriptors = [
-        "//plugins/svelte/css:resources/intellij.svelte.css.xml",
-        "//plugins/svelte/javascript-debugger:resources/intellij.svelte.javascript.debugger.xml",
-    ],
     module_labels = {"intellij.svelte": "//plugins/svelte"},
 )
 ### auto-generated section `dev intellij.svelte` end
